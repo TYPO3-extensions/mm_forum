@@ -1,0 +1,121 @@
+
+<!-- ###TEMPLATE_CREATE### begin
+        Form for creation of a new fe_users record
+
+        In this case, you can only create this record if you're not already logged in. That means the record will NOT get any fe_uid attached.
+        You're totally free to choose whether TEMPLATE_CREATE or TEMPLATE_CREATE_LOGIN is used to display the form. If you use LOGIN then users must be logged in in order to create the records and thus the records will be tagged with the fe_uid so they can be re-edited.
+-->  
+<form name="###FORM_NAME###" method="post" action="###FORM_URL###">
+	<table class="tx-mmforum-table" width="100%">
+		<tr>
+			<th colspan="2" class="tx-mmforum-th">###LABEL_REGISTRATION###</th>
+		</tr>
+		<tr>
+			<td colspan="2" class="tx-mmforum-subth2" style="text-align: left;">###LABEL_REQUIRED###</td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###LABEL_USERNAME### *</td>
+			<td class="tx-mmforum-td"><input type="text" name="tx_mmforum_pi2[reg][username]" value="###VALUE_username###" /><div class="error">###ERROR_username###</div></td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###LABEL_NAME### *</td>
+			<td class="tx-mmforum-td"><input type="text" name="tx_mmforum_pi2[reg][name]" value="###VALUE_name###" /><div class="error">###ERROR_name###</div></td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###LABEL_PASSWORD### *</td>
+			<td class="tx-mmforum-td"><input type="password" name="tx_mmforum_pi2[reg][password]" /><div class="error">###ERROR_password###</div></td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###LABEL_PASSWORDREPEAT### *</td>
+			<td class="tx-mmforum-td"><input type="password" name="tx_mmforum_pi2[reg][password_again]" /></td>
+		</tr>
+		<!-- ###CAPTCHA### begin -->
+		<tr>
+			<td class="tx-mmforum-td">###LABEL_CAPTCHA### *</td>
+			<td class="tx-mmforum-td">###CAPTCHA_IMAGE### <input type="text" size="10" name="tx_mmforum_pi2[reg][captcha]" /><div class="error">###ERROR_captcha###</div></td>
+		</tr>
+		<!-- ###CAPTCHA### end -->
+		<tr>
+			<td class="tx-mmforum-td">###LABEL_EMAIL### *</td>
+			<td class="tx-mmforum-td"><input type="text" name="tx_mmforum_pi2[reg][email]" value="###VALUE_email###" /><div class="error">###ERROR_email###</div></td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###LABEL_LOCATION###</td>
+			<td class="tx-mmforum-td"><input type="text" name="tx_mmforum_pi2[reg][address]" value="###VALUE_address###" /></td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###LABEL_PROFESSION###</td>
+			<td class="tx-mmforum-td"><input type="text" name="tx_mmforum_pi2[reg][beruf]" value="###VALUE_beruf###" /></td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###LABEL_INTERESTS###</td>
+			<td class="tx-mmforum-td"><input type="text" name="tx_mmforum_pi2[reg][interessen]" value="###VALUE_interessen###" /></td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###LABEL_WEBSITE###</td>
+			<td class="tx-mmforum-td"><input type="text" name="tx_mmforum_pi2[reg][www]" value="###VALUE_www###" /></td>
+		</tr>
+		<!-- ###USERFIELDS### begin -->
+		<tr>
+			<td class="tx-mmforum-td">###USERFIELD_LABEL###</td>
+			<td class="tx-mmforum-td"><!--###DEFUSERFIELD###--><input type="text" name="tx_mmforum_pi2[userfields][###USERFIELD_UID###]" value="###USERFIELD_VALUE###" /><!--###DEFUSERFIELD###--></td>
+		</tr>
+		<!-- ###USERFIELDS### end -->
+		<tr>
+			<td class="tx-mmforum-td">###IMG_MSN###</td>
+			<td class="tx-mmforum-td"><input type="text" name="tx_mmforum_pi2[reg][msn]" value="###VALUE_msn###" /></td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###IMG_YIM###</td>
+			<td class="tx-mmforum-td"><input type="text" name="tx_mmforum_pi2[reg][yim]" value="###VALUE_yim###" /></td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###IMG_AIM###</td>
+			<td class="tx-mmforum-td"><input type="text" name="tx_mmforum_pi2[reg][aim]" value="###VALUE_aim###" /></td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###IMG_ICQ###</td>
+			<td class="tx-mmforum-td"><input type="text" name="tx_mmforum_pi2[reg][icq]" value="###VALUE_icq###" /></td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###IMG_SKYPE###</td>
+			<td class="tx-mmforum-td"><input type="text" name="tx_mmforum_pi2[reg][skype]" value="###VALUE_skype###" /></td>
+		</tr>
+		<tr>
+			<td colspan="2" class="tx-mmforum-subth">
+				###HIDDENFIELDS###
+				<input type="hidden" name="tx_mmforum_pi2[reg][action]" value="user_anlegen" />
+				<input type="Submit" name="submit" class="tx-mmforum-button" value="###LABEL_CREATE###" />
+			</td>
+		</tr>
+	</table>
+</form>
+<!-- ###TEMPLATE_CREATE### end-->
+
+<!-- ###FEHLER### OLD begin -->
+<b>###LABEL_ERRORGENERAL###</b><br><br>
+###LABEL_PLEASECONTACT###
+<!-- ###FEHLER### OLD end -->
+
+<!-- ###TEMPLATE_VALIDATION_OK### begin -->
+###LABEL_HELLO###,
+<p>###LABEL_ACTIVATED###<p>
+###LABEL_YOURS###
+
+<!-- ###TEMPLATE_VALIDATION_OK### end -->
+
+
+<!-- ###TEMPLATE_CREATE_LOGIN_OK### begin -->
+<b>###LABEL_THANKYOU###</b>
+<p>###LABEL_EMAILISSENT###<p>
+###LABEL_YOURS###
+
+<!-- ###TEMPLATE_CREATE_LOGIN_OK### end -->
+
+
+<!-- ###EMAIL_VALIDATION### begin -->###LABEL_HELLO###,
+###LABEL_PLEASEACTIVATE###
+###EMAIL_URL###
+
+###LABEL_YOURS###
+<!-- ###EMAIL_VALIDATION### end -->

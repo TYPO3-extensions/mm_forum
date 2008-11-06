@@ -1,0 +1,1084 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+    <meta type="array">
+        <description></description>
+        <type></type>
+        <csh_table></csh_table>
+        <fileId>EXT:mm_forum/locallang_db.xml</fileId>
+    </meta>
+    <data type="array">
+        <!-- ENGLISH LANGUAGE DATA -->
+        <languageKey index="default" type="array">
+            <label index="fe_users.tx_mmforum_avatar">Avatar</label>
+            <label index="fe_users.tx_mmforum_icq">ICQ</label>
+            <label index="fe_users.tx_mmforum_aim">AIM</label>
+            <label index="fe_users.tx_mmforum_yim">YIM</label>
+            <label index="fe_users.tx_mmforum_msn">MSN</label>
+            <label index="fe_users.tx_mmforum_skype">Skype</label>
+            <label index="fe_users.tx_mmforum_md5">MD5 encrypted password</label>
+            <label index="fe_users.tx_mmforum_posts">Posts</label>
+            <label index="fe_users.tx_mmforum_user_sig">Signature</label>
+            <label index="fe_users.tx_mmforum_prelogin">Last login</label>
+            <label index="fe_users.tx_mmforum_interests">Interests</label>
+            <label index="fe_users.tx_mmforum_occ">Occupation</label>
+            <label index="fe_users.tx_mmforum_reg_hash">Activation hash</label>
+
+            <label index="tx_mmforum_forums">mm_forum : Board</label>
+            <label index="tx_mmforum_forums.forum_name">Name</label>
+            <label index="tx_mmforum_forums.forum_desc">Description</label>
+            <label index="tx_mmforum_forums.forum_posts">Posts</label>
+            <label index="tx_mmforum_forums.forum_last_post_id">Last post</label>
+            <label index="tx_mmforum_forums.forum_order">Order</label>
+            <label index="tx_mmforum_forums.forum_topics">Topic count</label>
+            <label index="tx_mmforum_forums.forum_grouprights_read">Groups allowed to read</label>
+            <label index="tx_mmforum_forums.forum_grouprights_write">Groups allowed to write</label>
+            <label index="tx_mmforum_forums.forum_grouprights_mod">Groups allowed to moderate</label>
+            <label index="tx_mmforum_forums.forum_userrights_read">userrights read</label>
+            <label index="tx_mmforum_forums.forum_userrights_write">userrights write</label>
+            <label index="tx_mmforum_forums.forum_userrights_mod">userrights mod</label>
+            <label index="tx_mmforum_forums.forum_internal">Internal</label>
+            <label index="tx_mmforum_forums.parentID">Parent board</label>
+            
+            <label index="tx_mmforum_topics">mm_forum : Topic</label>
+            <label index="tx_mmforum_topics.topic_title">Title</label>
+            <label index="tx_mmforum_topics.topic_poster">Poster</label>
+            <label index="tx_mmforum_topics.topic_time">Time</label>
+            <label index="tx_mmforum_topics.topic_views">Views</label>
+            <label index="tx_mmforum_topics.topic_replies">Replies</label>
+            <label index="tx_mmforum_topics.topic_last_post_id">Last post</label>
+            <label index="tx_mmforum_topics.topic_is">Prefix</label>
+            <label index="tx_mmforum_topics.at_top_flag">At top</label>
+            <label index="tx_mmforum_topics.closed_flag">Closed</label>
+            <label index="tx_mmforum_topics.solved">Solved</label>
+            <label index="tx_mmforum_topics.forum_id">Board</label>
+            <label index="tx_mmforum_topics.topic_first_post_id">First post</label>
+            <label index="tx_mmforum_topics.poll_id">Poll</label>
+            <label index="tx_mmforum_topics.shadow_tid">Shadow topic</label>
+            <label index="tx_mmforum_topics.shadow_fid">Shadow board</label>
+            <label index="tx_mmforum_topics.tx_mmforumsearch_index_write">Last indexed</label>
+            
+            <label index="tx_mmforum_posts">mm_forum : Post</label>
+            <label index="tx_mmforum_posts.topic_id">Topic</label>
+            <label index="tx_mmforum_posts.forum_id">Board</label>
+            <label index="tx_mmforum_posts.poster_id">Poster</label>
+            <label index="tx_mmforum_posts.post_time">Time</label>
+            <label index="tx_mmforum_posts.poster_ip">Poster's IP</label>
+            <label index="tx_mmforum_posts.edit_time">Editing time</label>
+            <label index="tx_mmforum_posts.edit_count">Edit count</label>
+            <label index="tx_mmforum_posts.attachment">File attachment</label> 
+            <label index="tx_mmforum_posts.tx_mmforumsearch_index_write">Last indexed</label>
+            
+            <label index="tx_mmforum_posts_text">mm_forum : Post text</label>
+            <label index="tx_mmforum_posts_text.post_id">Post</label>
+            <label index="tx_mmforum_posts_text.post_text">Text</label>
+            
+            <label index="tx_mmforum_smilies">mm_forum : Smily</label>
+            <label index="tx_mmforum_smilies.code">Code tag</label>
+            <label index="tx_mmforum_smilies.smile_url">Smilie URL</label>
+            <label index="tx_mmforum_smilies.emoticon">Emoticon</label>
+            
+            <label index="tx_mmforum_mailkey">mailkey</label>
+            <label index="tx_mmforum_mailkey.code">code</label>
+            
+            <label index="tx_mmforum_postsread">mm_forum : Posts read</label>
+            <label index="tx_mmforum_postsread.user">User</label>
+            <label index="tx_mmforum_postsread.topic_id">Topic</label>
+            
+            <label index="tx_mmforum_topicmail">mm_forum : Mail subscription</label>
+            <label index="tx_mmforum_topicmail.user_id">User</label>
+            <label index="tx_mmforum_topicmail.topic_id">Topic</label>
+            
+            <label index="tx_mmforum_favorites">mm_forum : Favorite</label>
+            <label index="tx_mmforum_favorites.user_id">User</label>
+            <label index="tx_mmforum_favorites.topic_id">Topic</label>
+                                                                          
+            <label index="tx_mmforum_pminbox">mm_forum : Private Message</label>
+            <label index="tx_mmforum_pminbox.sendtime">Time</label>
+            <label index="tx_mmforum_pminbox.from_uid">Sender</label>
+            <label index="tx_mmforum_pminbox.from_name">Sender name</label>
+            <label index="tx_mmforum_pminbox.to_uid">Receipient</label>
+            <label index="tx_mmforum_pminbox.to_name">Receipient name</label>
+            <label index="tx_mmforum_pminbox.subject">Subject</label>
+            <label index="tx_mmforum_pminbox.message">Message</label>
+            <label index="tx_mmforum_pminbox.read_flg">Read</label>
+            <label index="tx_mmforum_pminbox.mess_type">Message type</label>
+            <label index="tx_mmforum_pminbox.mess_type.inbox">Inbox</label>
+            <label index="tx_mmforum_pminbox.mess_type.outbox">Outbox</label>
+            <label index="tx_mmforum_pminbox.mess_type.archive">Archive</label>
+                                                                                            
+            <label index="tx_mmforum_wordlist">mm_forum : Indexed word</label>
+            <label index="tx_mmforum_wordlist.word">Word</label>
+            <label index="tx_mmforum_wordlist.metaphone">Metaphone</label>
+            
+            <label index="tx_mmforum_wordmatch">mm_forum : Indexed word positions</label>
+            <label index="tx_mmforum_wordmatch.word_id">Word</label>
+            <label index="tx_mmforum_wordmatch.post_id">Post</label>
+            <label index="tx_mmforum_wordmatch.is_header">Header</label>
+            <label index="tx_mmforum_wordmatch.topic_id">Topic</label>
+            <label index="tx_mmforum_wordmatch.forum_id">Board</label>
+            <label index="tx_mmforum_wordmatch.solved">Solved</label>
+            <label index="tx_mmforum_wordmatch.topic_title">Title</label>
+            <label index="tx_mmforum_wordmatch.topic_views">Views</label>
+            <label index="tx_mmforum_wordmatch.topic_replies">Replies</label>
+            
+            <label index="tx_mmforum_searchresults">mm_forum : Search results</label>
+            <label index="tx_mmforum_searchresults.search_string">Search string</label>
+            <label index="tx_mmforum_searchresults.array_string">Results</label>
+            <label index="tx_mmforum_searchresults.solved">Solved</label>
+            <label index="tx_mmforum_searchresults.search_place">Search place</label>
+            <label index="tx_mmforum_searchresults.search_order">Search order</label>
+            <label index="tx_mmforum_searchresults.search_order.dateDesc">Date descending</label>
+            <label index="tx_mmforum_searchresults.search_order.dateAsc">Date ascending</label>
+            <label index="tx_mmforum_searchresults.search_order.repliesMost">Replies descending</label>
+            <label index="tx_mmforum_searchresults.search_order.repliesLeast">Replies ascending</label>
+            <label index="tx_mmforum_searchresults.groupPost">Group results</label>
+            <label index="tx_mmforum_searchresults.user_group">User groups</label>
+            
+            <label index="tx_mmforum_userfields">mm_forum : Custom user field</label>
+            <label index="tx_mmforum_userfields.label">Label</label>
+            <label index="tx_mmforum_userfields.config">Setup</label>
+            <label index="tx_mmforum_userfields.tabDefault">Default</label>
+            <label index="tx_mmforum_userfields.tabExtended">Extended</label>
+            
+            <label index="tx_mmforum_attachments">mm_forum : File attachment</label>
+            <label index="tx_mmforum_attachments.file_type">File type</label>
+            <label index="tx_mmforum_attachments.file_name">File name</label>
+            <label index="tx_mmforum_attachments.file_path">File path</label>
+            <label index="tx_mmforum_attachments.file_size">File size</label>
+            <label index="tx_mmforum_attachments.downloads">Downloads</label>
+            <label index="tx_mmforum_attachments.post_id">Post</label>
+            
+            <label index="tx_mmforum_polls">mm_forum : Poll</label>
+            <label index="tx_mmforum_polls.endtime">Expires on</label>
+            <label index="tx_mmforum_polls.question">Question</label>
+            <label index="tx_mmforum_polls.votes">Vote count</label>
+            
+            <label index="tx_mmforum_polls_answers">mm_forum : Poll answer</label>
+            <label index="tx_mmforum_polls_answers.answer">Answer text</label>
+            <label index="tx_mmforum_polls_answers.votes">Vote count</label>
+            <label index="tx_mmforum_polls_answers.poll_id">Poll</label>
+            
+            <label index="tx_mmforum_polls_votes">mm_forum : Poll vote</label>
+            <label index="tx_mmforum_polls_votes.poll_id">Poll</label>
+            <label index="tx_mmforum_polls_votes.answer_id">Answer</label>
+            <label index="tx_mmforum_polls_votes.user_id">User</label>
+            
+            <label index="tt_content.list_type_pi1">mm_forum :: Forum</label>
+            <label index="tt_content.list_type_pi2">mm_forum :: User registration</label>
+            <label index="tt_content.list_type_pi3">mm_forum :: Private messaging</label>
+            <label index="tt_content.list_type_pi4">mm_forum :: Search</label>
+            <label index="tt_content.list_type_pi5">mm_forum :: User settings</label>
+            <label index="tt_content.list_type_pi6">mm_forum :: Portal information</label>
+            
+            <!-- ADDED IN 0.1.2 -->
+            <label index="tx_mmforum_ranks">mm_forum : User rank</label>
+            <label index="tx_mmforum_ranks.title">Title (HTML is allowed)</label>
+            <label index="tx_mmforum_ranks.color">Color</label>
+            <label index="tx_mmforum_ranks.icon">Icon</label>
+            <label index="tx_mmforum_ranks.minPosts">Minimal post count (only if not special rank)</label>
+            <label index="tx_mmforum_ranks.special">Special rank</label>
+            <label index="fe_groups.tx_mmforum_rank">Default user rank</label>
+            <label index="fe_groups.tx_mmforum_rank_excl">User rank is exclusive (no other user ranks for members of this group)</label>
+            
+            <label index="tx_mmforum_postqueue">mm_forum : Queued post</label>
+            <label index="tx_mmforum_postqueue.topic">Create new topic</label>
+            <label index="tx_mmforum_postqueue.topic_forum">Topic's parent board</label>
+            <label index="tx_mmforum_postqueue.topic_title">Topic title</label>
+            <label index="tx_mmforum_postqueue.topic_poll">Poll</label>
+            <label index="tx_mmforum_postqueue.topic_subscribe">Automatically subscribe</label>
+            <label index="tx_mmforum_postqueue.post_parent">Parent topic</label>
+            <label index="tx_mmforum_postqueue.post_text">Post text</label>
+            <label index="tx_mmforum_postqueue.post_user">Author</label>
+            <label index="tx_mmforum_postqueue.post_time">Post time</label>
+            <label index="tx_mmforum_postqueue.post_attachment">Attachment</label>
+            <label index="tx_mmforum_postqueue.post_ip">Poster IP address</label>
+            
+            <!-- ADDED IN 0.1.5 -->
+            <label index="fe_users.tx_mmforum_pmnotifymode">PM notification mode</label>
+            <label index="fe_users.tx_mmforum_pmnotifymode.0">Send email at once</label>
+            <label index="fe_users.tx_mmforum_pmnotifymode.1">Send accumulative email</label>
+            <label index="fe_users.tx_mmforum_pmnotifymode.2">Do not notify at all</label>
+        </languageKey>
+        <!-- GERMAN LANGUAGE DATA -->
+        <languageKey index="de" type="array">
+            <label index="fe_users.tx_mmforum_avatar">Avatar</label>
+            <label index="fe_users.tx_mmforum_icq">ICQ</label>
+            <label index="fe_users.tx_mmforum_aim">AIM</label>
+            <label index="fe_users.tx_mmforum_yim">YIM</label>
+            <label index="fe_users.tx_mmforum_msn">MSN</label>
+            <label index="fe_users.tx_mmforum_skype">Skype</label>
+            <label index="fe_users.tx_mmforum_md5">MD5-verschlüsseltes Passwort</label>
+            <label index="fe_users.tx_mmforum_posts">Beiträge</label>
+            <label index="fe_users.tx_mmforum_user_sig">Signatur</label>       
+            <label index="fe_users.tx_mmforum_prelogin">Letzter Login</label>
+            <label index="fe_users.tx_mmforum_interests">Interessen</label>
+            <label index="fe_users.tx_mmforum_occ">Beruf</label>
+            <label index="fe_users.tx_mmforum_reg_hash">Aktivierungsschlüssel</label>
+
+            <label index="tx_mmforum_forums">mm_forum : Forum</label>
+            <label index="tx_mmforum_forums.forum_name">Name</label>
+            <label index="tx_mmforum_forums.forum_desc">Beschreibung</label>
+            <label index="tx_mmforum_forums.forum_posts">Beiträge</label>
+            <label index="tx_mmforum_forums.forum_last_post_id">Letzter Beitrag</label>
+            <label index="tx_mmforum_forums.forum_order">Reihenfolge</label>
+            <label index="tx_mmforum_forums.forum_topics">Themen</label>
+            <label index="tx_mmforum_forums.forum_grouprights_read">Leseberechtigte Gruppen</label>
+            <label index="tx_mmforum_forums.forum_grouprights_write">Schreibberechtigte Gruppen</label>
+            <label index="tx_mmforum_forums.forum_grouprights_mod">Moderationsberechtigte Gruppen</label>
+            <label index="tx_mmforum_forums.forum_userrights_read">userrights read</label>
+            <label index="tx_mmforum_forums.forum_userrights_write">userrights write</label>
+            <label index="tx_mmforum_forums.forum_userrights_mod">userrights mod</label>
+            <label index="tx_mmforum_forums.forum_internal">Intern</label>
+            <label index="tx_mmforum_forums.parentID">Übergeordnetes Forum</label>
+            
+            <label index="tx_mmforum_topics">mm_forum : Thema</label>
+            <label index="tx_mmforum_topics.topic_title">Titel</label>
+            <label index="tx_mmforum_topics.topic_poster">Verfasser</label>
+            <label index="tx_mmforum_topics.topic_time">Zeit</label>
+            <label index="tx_mmforum_topics.topic_views">Aufrufe</label>
+            <label index="tx_mmforum_topics.topic_replies">Antworten</label>
+            <label index="tx_mmforum_topics.topic_last_post_id">Letzter Beitrag</label>
+            <label index="tx_mmforum_topics.topic_is">Präfix</label>
+            <label index="tx_mmforum_topics.at_top_flag">Oben</label>
+            <label index="tx_mmforum_topics.closed_flag">Geschlossen</label>
+            <label index="tx_mmforum_topics.solved">Gelöst</label>
+            <label index="tx_mmforum_topics.forum_id">Forum</label>
+            <label index="tx_mmforum_topics.topic_first_post_id">Erster Beitrag</label>
+            <label index="tx_mmforum_topics.poll_id">Umfrage</label>
+            <label index="tx_mmforum_topics.shadow_tid">Schattenthema</label>
+            <label index="tx_mmforum_topics.shadow_fid">Schattenforum</label>
+            <label index="tx_mmforum_topics.tx_mmforumsearch_index_write">Zuletzt indiziert</label>
+            
+            <label index="tx_mmforum_posts">mm_forum : Beitrag</label>
+            <label index="tx_mmforum_posts.topic_id">Thema</label>
+            <label index="tx_mmforum_posts.forum_id">Forum</label>
+            <label index="tx_mmforum_posts.poster_id">Thema</label>
+            <label index="tx_mmforum_posts.post_time">Zeit</label>
+            <label index="tx_mmforum_posts.poster_ip">IP des Verfassers</label>
+            <label index="tx_mmforum_posts.edit_time">Bearbeitungszeit</label>
+            <label index="tx_mmforum_posts.edit_count">Bearbeitungsanzahl</label>
+            <label index="tx_mmforum_posts.attachment">Dateianhang</label>  
+            <label index="tx_mmforum_posts.tx_mmforumsearch_index_write">Zuletzt indiziert</label>
+            
+            <label index="tx_mmforum_posts_text">mm_forum : Beitragstext</label>
+            <label index="tx_mmforum_posts_text.post_id">Beitrag</label>
+            <label index="tx_mmforum_posts_text.post_text">Text</label>
+            
+            <label index="tx_mmforum_smilies">mm_forum : Smily</label>
+            <label index="tx_mmforum_smilies.code">Code</label>
+            <label index="tx_mmforum_smilies.smile_url">Smilie-URL</label>
+            <label index="tx_mmforum_smilies.emoticon">Emoticon</label>
+            
+            <label index="tx_mmforum_mailkey">mailkey</label>
+            <label index="tx_mmforum_mailkey.code">code</label>
+            
+            <label index="tx_mmforum_postsread">mm_forum : Gelesene Beiträge</label>
+            <label index="tx_mmforum_postsread.user">Benutzer</label>
+            <label index="tx_mmforum_postsread.topic_id">Thema</label>
+            
+            <label index="tx_mmforum_topicmail">mm_forum : E-Mail-Abonnement</label>
+            <label index="tx_mmforum_topicmail.user_id">Benutzer</label>
+            <label index="tx_mmforum_topicmail.topic_id">Thema</label>
+            
+            <label index="tx_mmforum_favorites">mm_forum : Favorit</label>
+            <label index="tx_mmforum_favorites.user_id">Benutzer</label>
+            <label index="tx_mmforum_favorites.topic_id">Thema</label>
+                                                                          
+            <label index="tx_mmforum_pminbox">mm_forum : Private Nachricht</label>
+            <label index="tx_mmforum_pminbox.sendtime">Zeit</label>
+            <label index="tx_mmforum_pminbox.from_uid">Absender</label>
+            <label index="tx_mmforum_pminbox.from_name">Absendername</label>
+            <label index="tx_mmforum_pminbox.to_uid">Empfänger</label>
+            <label index="tx_mmforum_pminbox.to_name">Empfängername</label>
+            <label index="tx_mmforum_pminbox.subject">Betreff</label>
+            <label index="tx_mmforum_pminbox.message">Nachricht</label>
+            <label index="tx_mmforum_pminbox.read_flg">Gelesen</label>
+            <label index="tx_mmforum_pminbox.mess_type">Nachrichtentyp</label>
+            <label index="tx_mmforum_pminbox.mess_type.inbox">Posteingang</label>
+            <label index="tx_mmforum_pminbox.mess_type.outbox">Postausgang</label>
+            <label index="tx_mmforum_pminbox.mess_type.archive">Archiv</label>
+                                                                                            
+            <label index="tx_mmforum_wordlist">mm_forum : Indiziertes Wort</label>
+            <label index="tx_mmforum_wordlist.word">Wort</label>
+            <label index="tx_mmforum_wordlist.metaphone">Aussprache</label>
+            
+            <label index="tx_mmforum_wordmatch">mm_forum : Indizierte Wortposition</label>
+            <label index="tx_mmforum_wordmatch.word_id">Wort</label>
+            <label index="tx_mmforum_wordmatch.post_id">Beitrag</label>
+            <label index="tx_mmforum_wordmatch.is_header">Im Titel</label>
+            <label index="tx_mmforum_wordmatch.topic_id">Thema</label>
+            <label index="tx_mmforum_wordmatch.forum_id">Forum</label>
+            <label index="tx_mmforum_wordmatch.solved">Gelöst</label>
+            <label index="tx_mmforum_wordmatch.topic_title">Titel</label>
+            <label index="tx_mmforum_wordmatch.topic_views">Aufrufe</label>
+            <label index="tx_mmforum_wordmatch.topic_replies">Antworten</label>
+            
+            <label index="tx_mmforum_searchresults">mm_forum : Suchergebnis</label>
+            <label index="tx_mmforum_searchresults.search_string">Suchbegriff</label>
+            <label index="tx_mmforum_searchresults.array_string">Ergebnisse</label>
+            <label index="tx_mmforum_searchresults.solved">Gelöst</label>
+            <label index="tx_mmforum_searchresults.search_place">Suchort</label>
+            <label index="tx_mmforum_searchresults.search_order">Suchreihenfolge</label>
+            <label index="tx_mmforum_searchresults.search_order.dateDesc">Datum absteigend</label>
+            <label index="tx_mmforum_searchresults.search_order.dateAsc">Datum aufsteigend</label>
+            <label index="tx_mmforum_searchresults.search_order.repliesMost">Antworten absteigend</label>
+            <label index="tx_mmforum_searchresults.search_order.repliesLeast">Antworten aufsteigend</label>
+            <label index="tx_mmforum_searchresults.groupPost">Ergebnisse gruppieren</label>
+            <label index="tx_mmforum_searchresults.user_group">Benutzergruppen</label>
+            
+            <label index="tx_mmforum_userfields">mm_forum : Benutzerdefiniertes Profilfeld</label>
+            <label index="tx_mmforum_userfields.label">Beschriftung</label>
+            <label index="tx_mmforum_userfields.config">Konfiguration</label>
+            <label index="tx_mmforum_userfields.tabDefault">Standard</label>
+            <label index="tx_mmforum_userfields.tabExtended">Erweitert</label>
+            
+            <label index="tx_mmforum_attachments">mm_forum : Dateianhang</label>
+            <label index="tx_mmforum_attachments.file_type">Dateityp</label>
+            <label index="tx_mmforum_attachments.file_name">Dateiname</label>
+            <label index="tx_mmforum_attachments.file_path">Dateipfad</label>
+            <label index="tx_mmforum_attachments.file_size">Dateigröße</label>
+            <label index="tx_mmforum_attachments.downloads">Downloads</label>
+            <label index="tx_mmforum_attachments.post_id">Beitrag</label>
+            
+            <label index="tx_mmforum_polls">mm_forum : Umfrage</label>
+            <label index="tx_mmforum_polls.endtime">Läuft bis</label>
+            <label index="tx_mmforum_polls.question">Frage</label>
+            <label index="tx_mmforum_polls.votes">Anzahl Stimmen</label>
+            
+            <label index="tx_mmforum_polls_answers">mm_forum : Antwortvorschlag für Umfrage</label>
+            <label index="tx_mmforum_polls_answers.answer">Antworttext</label>
+            <label index="tx_mmforum_polls_answers.votes">Anzahl Stimmen</label>
+            <label index="tx_mmforum_polls_answers.poll_id">Umfrage</label>
+            
+            <label index="tx_mmforum_polls_votes">mm_forum : Stimme in Umfrage</label>
+            <label index="tx_mmforum_polls_votes.poll_id">Umfrage</label>
+            <label index="tx_mmforum_polls_votes.answer_id">Antwort</label>
+            <label index="tx_mmforum_polls_votes.user_id">Benutzer</label>
+            
+            <label index="tt_content.list_type_pi1">mm_forum :: Forum</label>
+            <label index="tt_content.list_type_pi2">mm_forum :: Benutzerregistrierung</label>
+            <label index="tt_content.list_type_pi3">mm_forum :: Private Nachrichten</label>
+            <label index="tt_content.list_type_pi4">mm_forum :: Suche</label>
+            <label index="tt_content.list_type_pi5">mm_forum :: Benutzereinstellungen</label>
+            <label index="tt_content.list_type_pi6">mm_forum :: Portalinformationen</label>
+            
+            <!-- ADDED IN 0.1.2 -->
+            <label index="tx_mmforum_ranks">mm_forum : Benutzerrang</label>
+            <label index="tx_mmforum_ranks.title">Titel (HTML ist erlaubt)</label>
+            <label index="tx_mmforum_ranks.color">Farbe</label>
+            <label index="tx_mmforum_ranks.icon">Icon</label>
+            <label index="tx_mmforum_ranks.minPosts">Mindestbeitragszahl (nur wenn kein Sonderrang)</label>
+            <label index="tx_mmforum_ranks.special">Sonderrang</label>
+            <label index="fe_groups.tx_mmforum_rank">Standardbenutzerang</label>
+            <label index="fe_groups.tx_mmforum_rank_excl">Exklusiver Benutzerrang (Mitglieder dieser Gruppe haben keinen anderen Rang)</label>
+            
+            <label index="tx_mmforum_postqueue">mm_forum : Freizuschaltender Beitrag</label>
+            <label index="tx_mmforum_postqueue.topic">Neues Thema erstellen</label>
+            <label index="tx_mmforum_postqueue.topic_forum">Forum des neuen Themas</label>
+            <label index="tx_mmforum_postqueue.topic_title">Thementitel</label>
+            <label index="tx_mmforum_postqueue.topic_poll">Umfrage</label>
+            <label index="tx_mmforum_postqueue.topic_subscribe">Thema automatisch abonnieren</label>
+            <label index="tx_mmforum_postqueue.post_parent">Übergeordnetes Thema</label>
+            <label index="tx_mmforum_postqueue.post_text">Beitragstext</label>
+            <label index="tx_mmforum_postqueue.post_user">Autor</label>
+            <label index="tx_mmforum_postqueue.post_time">Beitragszeit</label>
+            <label index="tx_mmforum_postqueue.post_attachment">Dateianhang</label>
+            <label index="tx_mmforum_postqueue.post_ip">IP-Adresse des Verfasser</label>
+            
+            <!-- ADDED IN 0.1.5 -->
+            <label index="fe_users.tx_mmforum_pmnotifymode">PN-Benachrichtigungsmodus</label>
+            <label index="fe_users.tx_mmforum_pmnotifymode.0">Sofort eine E-Mail schicken</label>
+            <label index="fe_users.tx_mmforum_pmnotifymode.1">Sammelemail schicken</label>
+            <label index="fe_users.tx_mmforum_pmnotifymode.2">Keine E-Mail schicken</label>
+        </languageKey>
+        <!-- FINNISH LANGUAGE DATA -->
+        <languageKey index="fi" type="array">
+			<label index="fe_users.tx_mmforum_md5">MD5-kryptattu salasana</label>
+			<label index="fe_users.tx_mmforum_posts">Viestit</label>
+			<label index="fe_users.tx_mmforum_user_sig">Allekirjoitus</label>
+			<label index="fe_users.tx_mmforum_prelogin">Viimeinen kirjautuminen</label>
+			<label index="fe_users.tx_mmforum_interests">Kiinnostuksen aiheet</label>
+			<label index="fe_users.tx_mmforum_occ">Ammatti</label>
+			<label index="tx_mmforum_forums">mm_forum: Keskustelu</label>
+			<label index="tx_mmforum_forums.forum_name">Nimi</label>
+			<label index="tx_mmforum_forums.forum_desc">Kuvaus</label>
+			<label index="tx_mmforum_forums.forum_posts">Viestit</label>
+			<label index="tx_mmforum_forums.forum_last_post_id">Viimeinen viesti</label>
+			<label index="tx_mmforum_forums.forum_order">Järjestys</label>
+			<label index="tx_mmforum_forums.forum_topics">Aiheet</label>
+			<label index="tx_mmforum_forums.forum_grouprights_read">Lukuoikeusryhmät</label>
+			<label index="tx_mmforum_forums.forum_grouprights_write">Kirjoitusoikeusryhmät</label>
+			<label index="tx_mmforum_forums.forum_grouprights_mod">Moderointioikeusryhmät</label>
+			<label index="tx_mmforum_forums.forum_userrights_read">käyttäjän lukuoikeus</label>
+			<label index="tx_mmforum_forums.forum_userrights_write">käyttäjän kirjoitusoikeus</label>
+			<label index="tx_mmforum_forums.forum_userrights_mod">käyttäjän moderointioikeus</label>
+			<label index="tx_mmforum_forums.forum_internal">Sisäinen</label>
+			<label index="tx_mmforum_topics">mm_forum: Aihe</label>
+			<label index="tx_mmforum_topics.topic_title">Otsikko</label>
+			<label index="tx_mmforum_topics.topic_poster">Lähettäjä</label>
+			<label index="tx_mmforum_topics.topic_time">Aika</label>
+			<label index="tx_mmforum_topics.topic_views">Katsomiskerrat</label>
+			<label index="tx_mmforum_topics.topic_replies">Vastaukset</label>
+			<label index="tx_mmforum_topics.topic_last_post_id">Viimeinen viesti</label>
+			<label index="tx_mmforum_topics.topic_is">Etuliite</label>
+			<label index="tx_mmforum_topics.closed_flag">Suljettu</label>
+			<label index="tx_mmforum_topics.solved">Ratkaistu</label>
+			<label index="tx_mmforum_topics.forum_id">Keskustelu</label>
+			<label index="tx_mmforum_topics.topic_first_post_id">Ensimmäinen viesti</label>
+			<label index="tx_mmforum_topics.poll_id">Kysely</label>
+			<label index="tx_mmforum_topics.shadow_tid">Varjoaihe</label>
+			<label index="tx_mmforum_topics.shadow_fid">Varjokeskustelu</label>
+			<label index="tx_mmforum_topics.tx_mmforumsearch_index_write">Viimeksi indeksoitu</label>
+			<label index="tx_mmforum_posts">mm_forum: Viesti</label>
+			<label index="tx_mmforum_posts.topic_id">Aihe</label>
+			<label index="tx_mmforum_posts.forum_id">Keskustelu</label>
+			<label index="tx_mmforum_posts.poster_id">Lähettäjä</label>
+			<label index="tx_mmforum_posts.post_time">Aika</label>
+			<label index="tx_mmforum_posts.poster_ip">Lähettäjän IP-osoite</label>
+			<label index="tx_mmforum_posts.edit_time">Muokkausaika</label>
+			<label index="tx_mmforum_posts.edit_count">Muokkauskerrat</label>
+			<label index="tx_mmforum_posts.attachment">Liitetiedosto</label>
+			<label index="tx_mmforum_posts.tx_mmforumsearch_index_write">Viimeksi indeksoitu</label>
+			<label index="tx_mmforum_posts_text">mm_forum: Viestin kirjoitus</label>
+			<label index="tx_mmforum_posts_text.post_id">Viesti</label>
+			<label index="tx_mmforum_posts_text.post_text">Teksti</label>
+			<label index="tx_mmforum_smilies">mm_forum: Hymiö</label>
+			<label index="tx_mmforum_smilies.code">Koodi</label>
+			<label index="tx_mmforum_smilies.smile_url">Hymiö-URL</label>
+			<label index="tx_mmforum_smilies.emoticon">Hymiökuvake</label>
+			<label index="tx_mmforum_mailkey.code">koodi</label>
+			<label index="tx_mmforum_postsread">mm_forum: Viestien luku</label>
+			<label index="tx_mmforum_postsread.user">Käyttäjä</label>
+			<label index="tx_mmforum_postsread.topic_id">Aihe</label>
+			<label index="tx_mmforum_topicmail">mm_forum: Keskusteluseuranta sähköpostitilaus</label>
+			<label index="tx_mmforum_topicmail.user_id">Käyttäjä</label>
+			<label index="tx_mmforum_topicmail.topic_id">Aihe</label>
+			<label index="tx_mmforum_favorites">mm_forum: Suosikit</label>
+			<label index="tx_mmforum_favorites.user_id">Käyttäjä</label>
+			<label index="tx_mmforum_favorites.topic_id">Aihe</label>
+			<label index="tx_mmforum_pminbox">mm_forum: Yksityisviestit</label>
+			<label index="tx_mmforum_pminbox.sendtime">Aika</label>
+			<label index="tx_mmforum_pminbox.from_uid">Lähettäjä</label>
+			<label index="tx_mmforum_pminbox.from_name">Lähettäjän nimi</label>
+			<label index="tx_mmforum_pminbox.to_uid">Vastaanottaja</label>
+			<label index="tx_mmforum_pminbox.to_name">Vastaanottajan nimi</label>
+			<label index="tx_mmforum_pminbox.subject">Otsikko</label>
+			<label index="tx_mmforum_pminbox.message">Viesti</label>
+			<label index="tx_mmforum_pminbox.read_flg">Lue</label>
+			<label index="tx_mmforum_pminbox.mess_type">Viestin tyyppi</label>
+			<label index="tx_mmforum_pminbox.mess_type.inbox">Saapuneet</label>
+			<label index="tx_mmforum_pminbox.mess_type.outbox">Lähteneet</label>
+			<label index="tx_mmforum_pminbox.mess_type.archive">Arkisto</label>
+			<label index="tx_mmforum_wordlist">mm_forum: Sanaindeksointi</label>
+			<label index="tx_mmforum_wordlist.word">Sana</label>
+			<label index="tx_mmforum_wordmatch">mm_forum: Indeksointi, sanan tila</label>
+			<label index="tx_mmforum_wordmatch.word_id">Sana</label>
+			<label index="tx_mmforum_wordmatch.post_id">Viesti</label>
+			<label index="tx_mmforum_wordmatch.topic_id">Aihe</label>
+			<label index="tx_mmforum_wordmatch.forum_id">Keskustelu</label>
+			<label index="tx_mmforum_wordmatch.solved">Ratkaistu</label>
+			<label index="tx_mmforum_wordmatch.topic_title">Otsikko</label>
+			<label index="tx_mmforum_wordmatch.topic_views">Katsomiset</label>
+			<label index="tx_mmforum_wordmatch.topic_replies">Vastaukset</label>
+			<label index="tx_mmforum_searchresults">mm_forum: Hakutulokset</label>
+			<label index="tx_mmforum_searchresults.search_string">Hakusana</label>
+			<label index="tx_mmforum_searchresults.array_string">Tulokset</label>
+			<label index="tx_mmforum_searchresults.solved">Ratkaistu</label>
+			<label index="tx_mmforum_searchresults.search_place">Hakusijainti</label>
+			<label index="tx_mmforum_searchresults.search_order">Hakujärjestys</label>
+			<label index="tx_mmforum_searchresults.search_order.dateDesc">Pvm laskeva</label>
+			<label index="tx_mmforum_searchresults.search_order.dateAsc">Pvm nouseva</label>
+			<label index="tx_mmforum_searchresults.search_order.repliesMost">Vastaukset laskevasti</label>
+			<label index="tx_mmforum_searchresults.search_order.repliesLeast">Vastaukset nousevasti</label>
+			<label index="tx_mmforum_searchresults.groupPost">Ryhmätulokset</label>
+			<label index="tx_mmforum_searchresults.user_group">Käyttäjäryhmät</label>
+			<label index="tx_mmforum_userfields">mm_forum: Omat käyttäjäkentät</label>
+			<label index="tx_mmforum_userfields.label">Nimi</label>
+			<label index="tx_mmforum_userfields.config">Asetukset</label>
+			<label index="tx_mmforum_userfields.tabDefault">Oletus</label>
+			<label index="tx_mmforum_userfields.tabExtended">Laajennettu</label>
+			<label index="tx_mmforum_attachments">mm_forum : Tiedostoliite</label>
+			<label index="tx_mmforum_attachments.file_type">Tiedostomuoto</label>
+			<label index="tx_mmforum_attachments.file_name">Tiedostonimi</label>
+			<label index="tx_mmforum_attachments.file_path">Tiedostopolku</label>
+			<label index="tx_mmforum_attachments.file_size">Tiedostokoko</label>
+			<label index="tx_mmforum_attachments.downloads">Imuroinnit</label>
+			<label index="tx_mmforum_attachments.post_id">Viesti</label>
+			<label index="tx_mmforum_polls">mm_forum: Kysely</label>
+			<label index="tx_mmforum_polls.endtime">Vanhenee</label>
+			<label index="tx_mmforum_polls.question">Kysymys</label>
+			<label index="tx_mmforum_polls.votes">Äänestysluku</label>
+			<label index="tx_mmforum_polls_answers">mm_forum: Kyselyvastaus</label>
+			<label index="tx_mmforum_polls_answers.answer">Vastausteksti</label>
+			<label index="tx_mmforum_polls_answers.votes">Äänestysluku</label>
+			<label index="tx_mmforum_polls_answers.poll_id">Kysely</label>
+			<label index="tx_mmforum_polls_votes">mm_forum : Kyselyäänestys</label>
+			<label index="tx_mmforum_polls_votes.poll_id">Kysely</label>
+			<label index="tx_mmforum_polls_votes.answer_id">Vastaus</label>
+			<label index="tx_mmforum_polls_votes.user_id">Käyttäjä</label>
+			<label index="tt_content.list_type_pi1">mm_forum :: Forum</label>
+			<label index="tt_content.list_type_pi2">mm_forum :: Käyttäjärekisteröinti</label>
+			<label index="tt_content.list_type_pi3">mm_forum :: Yksityisviestit</label>
+			<label index="tt_content.list_type_pi4">mm_forum :: Haku</label>
+			<label index="tt_content.list_type_pi5">mm_forum :: Käyttäjäasetukset</label>
+			<label index="tt_content.list_type_pi6">mm_forum :: Portal-informaatio</label>
+		</languageKey>
+		<!-- DUTCH LANGUAGE DATA -->
+		<languageKey index="nl" type="array">
+            <label index="fe_users.tx_mmforum_avatar">Avatar</label>
+            <label index="fe_users.tx_mmforum_icq">ICQ</label>
+            <label index="fe_users.tx_mmforum_aim">AIM</label>
+            <label index="fe_users.tx_mmforum_yim">YIM</label>
+            <label index="fe_users.tx_mmforum_msn">MSN</label>
+            <label index="fe_users.tx_mmforum_skype">Skype</label>
+            <label index="fe_users.tx_mmforum_md5">MD5 versleuteld wachtwoord</label>
+            <label index="fe_users.tx_mmforum_posts">Berichten</label>
+            <label index="fe_users.tx_mmforum_user_sig">Handtekening</label>
+            <label index="fe_users.tx_mmforum_prelogin">Laatste login</label>
+            <label index="fe_users.tx_mmforum_interests">Interesses</label>
+            <label index="fe_users.tx_mmforum_occ">Beroep</label>
+            <label index="fe_users.tx_mmforum_reg_hash">Activation hash</label>
+
+            <label index="tx_mmforum_forums">mm_forum : Forum</label>
+            <label index="tx_mmforum_forums.forum_name">Naam</label>
+            <label index="tx_mmforum_forums.forum_desc">Omschrijving</label>
+            <label index="tx_mmforum_forums.forum_posts">Berichten</label>
+            <label index="tx_mmforum_forums.forum_last_post_id">Laatste bericht</label>
+            <label index="tx_mmforum_forums.forum_order">Volgorde</label>
+            <label index="tx_mmforum_forums.forum_topics">Aantal onderwerpen</label>
+            <label index="tx_mmforum_forums.forum_grouprights_read">Groepen met leesrechten</label>
+            <label index="tx_mmforum_forums.forum_grouprights_write">Groepen met schrijfrechten</label>
+            <label index="tx_mmforum_forums.forum_grouprights_mod">Groepen met beheerrechten</label>
+            <label index="tx_mmforum_forums.forum_userrights_read">gebruikersleesrechten</label>
+            <label index="tx_mmforum_forums.forum_userrights_write">Gebruikersschrijfrechten</label>
+            <label index="tx_mmforum_forums.forum_userrights_mod">Gebruikersbeheerrechten</label>
+            <label index="tx_mmforum_forums.forum_internal">Intern</label>
+            <label index="tx_mmforum_forums.parentID">Bovenliggend forum</label>
+            
+            <label index="tx_mmforum_topics">mm_forum : Onderwerp</label>
+            <label index="tx_mmforum_topics.topic_title">Titel</label>
+            <label index="tx_mmforum_topics.topic_poster">Auteur</label>
+            <label index="tx_mmforum_topics.topic_time">Tijd</label>
+            <label index="tx_mmforum_topics.topic_views">Bekeken</label>
+            <label index="tx_mmforum_topics.topic_replies">Antwoorden</label>
+            <label index="tx_mmforum_topics.topic_last_post_id">Laatste bericht</label>
+            <label index="tx_mmforum_topics.topic_is">Voorvoegsel</label>
+            <label index="tx_mmforum_topics.at_top_flag">Bovenaan</label>
+            <label index="tx_mmforum_topics.closed_flag">Gesloten</label>
+            <label index="tx_mmforum_topics.solved">Opgelost</label>
+            <label index="tx_mmforum_topics.forum_id">Forum</label>
+            <label index="tx_mmforum_topics.topic_first_post_id">Eerste bericht</label>
+            <label index="tx_mmforum_topics.poll_id">Enquete</label>
+            <label index="tx_mmforum_topics.shadow_tid">Schaduw onderwerp</label>
+            <label index="tx_mmforum_topics.shadow_fid">Schaduw forum</label>
+            <label index="tx_mmforum_topics.tx_mmforumsearch_index_write">Laatst geindexeerd</label>
+            
+            <label index="tx_mmforum_posts">mm_forum : Bericht</label>
+            <label index="tx_mmforum_posts.topic_id">Onderwerp</label>
+            <label index="tx_mmforum_posts.forum_id">Forum</label>
+            <label index="tx_mmforum_posts.poster_id">Auteur</label>
+            <label index="tx_mmforum_posts.post_time">Tijd</label>
+            <label index="tx_mmforum_posts.poster_ip">IP van auteur</label>
+            <label index="tx_mmforum_posts.edit_time">Bewerktijd</label>
+            <label index="tx_mmforum_posts.edit_count">Edit count</label>
+            <label index="tx_mmforum_posts.attachment">Toegevoegd bestand</label> 
+            <label index="tx_mmforum_posts.tx_mmforumsearch_index_write">Laatst geindexeerd</label>
+            
+            <label index="tx_mmforum_posts_text">mm_forum : Bericht</label>
+            <label index="tx_mmforum_posts_text.post_id">Bericht</label>
+            <label index="tx_mmforum_posts_text.post_text">Tekst</label>
+            
+            <label index="tx_mmforum_smilies">mm_forum : Smiley</label>
+            <label index="tx_mmforum_smilies.code">Code tag</label>
+            <label index="tx_mmforum_smilies.smile_url">Smiley URL</label>
+            <label index="tx_mmforum_smilies.emoticon">Emoticon</label>
+            
+            <label index="tx_mmforum_mailkey">mailsleutel</label>
+            <label index="tx_mmforum_mailkey.code">code</label>
+            
+            <label index="tx_mmforum_postsread">mm_forum : Gelezen berichten</label>
+            <label index="tx_mmforum_postsread.user">Gebruiker</label>
+            <label index="tx_mmforum_postsread.topic_id">Onderwerp</label>
+            
+            <label index="tx_mmforum_topicmail">mm_forum : Mail abbonnement</label>
+            <label index="tx_mmforum_topicmail.user_id">Gebruiker</label>
+            <label index="tx_mmforum_topicmail.topic_id">Onderwerp</label>
+            
+            <label index="tx_mmforum_favorites">mm_forum : Favoriet</label>
+            <label index="tx_mmforum_favorites.user_id">Gebruiker</label>
+            <label index="tx_mmforum_favorites.topic_id">Onderwerp</label>
+                                                                          
+            <label index="tx_mmforum_pminbox">mm_forum : Prive bericht</label>
+            <label index="tx_mmforum_pminbox.sendtime">Tijd</label>
+            <label index="tx_mmforum_pminbox.from_uid">Afzender</label>
+            <label index="tx_mmforum_pminbox.from_name">Naam afzender</label>
+            <label index="tx_mmforum_pminbox.to_uid">Ontvanger</label>
+            <label index="tx_mmforum_pminbox.to_name">Ontvanger naam</label>
+            <label index="tx_mmforum_pminbox.subject">Obderwerp</label>
+            <label index="tx_mmforum_pminbox.message">Bericht</label>
+            <label index="tx_mmforum_pminbox.read_flg">Lees</label>
+            <label index="tx_mmforum_pminbox.mess_type">Type bericht</label>
+            <label index="tx_mmforum_pminbox.mess_type.inbox">Postvak in</label>
+            <label index="tx_mmforum_pminbox.mess_type.outbox">Postvak uit</label>
+            <label index="tx_mmforum_pminbox.mess_type.archive">Archief</label>
+                                                                                            
+            <label index="tx_mmforum_wordlist">mm_forum : Geindexeerd woord</label>
+            <label index="tx_mmforum_wordlist.word">Woord</label>
+            <label index="tx_mmforum_wordlist.metaphone">Metaphone</label>
+            
+            <label index="tx_mmforum_wordmatch">mm_forum : Geindexeerde woorden posities</label>
+            <label index="tx_mmforum_wordmatch.word_id">Woord</label>
+            <label index="tx_mmforum_wordmatch.post_id">Bericht</label>
+            <label index="tx_mmforum_wordmatch.is_header">Kop</label>
+            <label index="tx_mmforum_wordmatch.topic_id">Onderwerp</label>
+            <label index="tx_mmforum_wordmatch.forum_id">Forum</label>
+            <label index="tx_mmforum_wordmatch.solved">Opgelost</label>
+            <label index="tx_mmforum_wordmatch.topic_title">Titel</label>
+            <label index="tx_mmforum_wordmatch.topic_views">Bekeken</label>
+            <label index="tx_mmforum_wordmatch.topic_replies">Antwoorden</label>
+            
+            <label index="tx_mmforum_searchresults">mm_forum : Zoekresultaten</label>
+            <label index="tx_mmforum_searchresults.search_string">Zoekwoord</label>
+            <label index="tx_mmforum_searchresults.array_string">Resultaten</label>
+            <label index="tx_mmforum_searchresults.solved">Opgelost</label>
+            <label index="tx_mmforum_searchresults.search_place">Zoekplaats</label>
+            <label index="tx_mmforum_searchresults.search_order">Zoekvolgorde</label>
+            <label index="tx_mmforum_searchresults.search_order.dateDesc">Datum, aflopend</label>
+            <label index="tx_mmforum_searchresults.search_order.dateAsc">Datum, oplopend</label>
+            <label index="tx_mmforum_searchresults.search_order.repliesMost">Antwoorden aflopend</label>
+            <label index="tx_mmforum_searchresults.search_order.repliesLeast">Antwoorden oplopend</label>
+            <label index="tx_mmforum_searchresults.groupPost">Groepresultaten</label>
+            <label index="tx_mmforum_searchresults.user_group">Gebruikersgroepen</label>
+            
+            <label index="tx_mmforum_userfields">mm_forum : Eigen invoerveld</label>
+            <label index="tx_mmforum_userfields.label">Label</label>
+            <label index="tx_mmforum_userfields.config">Instelling</label>
+            <label index="tx_mmforum_userfields.tabDefault">Standaardwaarde</label>
+            <label index="tx_mmforum_userfields.tabExtended">Uitgebreid</label>
+            
+            <label index="tx_mmforum_attachments">mm_forum : Toegevoegd bestand</label>
+            <label index="tx_mmforum_attachments.file_type">Bestandstype</label>
+            <label index="tx_mmforum_attachments.file_name">Bestandsnaam</label>
+            <label index="tx_mmforum_attachments.file_path">Bestandspad</label>
+            <label index="tx_mmforum_attachments.file_size">Bestandsgrootte</label>
+            <label index="tx_mmforum_attachments.downloads">Downloads</label>
+            <label index="tx_mmforum_attachments.post_id">Bericht</label>
+            
+            <label index="tx_mmforum_polls">mm_forum : Enquete</label>
+            <label index="tx_mmforum_polls.endtime">Verloopt op</label>
+            <label index="tx_mmforum_polls.question">Vraag</label>
+            <label index="tx_mmforum_polls.votes">Aantal stemmen</label>
+            
+            <label index="tx_mmforum_polls_answers">mm_forum : Enquete antwoord</label>
+            <label index="tx_mmforum_polls_answers.answer">Antwoord</label>
+            <label index="tx_mmforum_polls_answers.votes">Aantal stemmen</label>
+            <label index="tx_mmforum_polls_answers.poll_id">Enquete</label>
+            
+            <label index="tx_mmforum_polls_votes">mm_forum : Enquete stem</label>
+            <label index="tx_mmforum_polls_votes.poll_id">Enquete</label>
+            <label index="tx_mmforum_polls_votes.answer_id">Antwoord</label>
+            <label index="tx_mmforum_polls_votes.user_id">Gebruiker</label>
+            
+            <label index="tt_content.list_type_pi1">mm_forum :: Forum</label>
+            <label index="tt_content.list_type_pi2">mm_forum :: Gebruikersregistratie</label>
+            <label index="tt_content.list_type_pi3">mm_forum :: Prive berichten</label>
+            <label index="tt_content.list_type_pi4">mm_forum :: Zoeken</label>
+            <label index="tt_content.list_type_pi5">mm_forum :: Gebruikersinstellingen</label>
+            <label index="tt_content.list_type_pi6">mm_forum :: Foruminformatie</label>
+            
+            <!-- ADDED IN 0.1.2 -->
+            <label index="tx_mmforum_ranks">mm_forum : Gebruikersrang</label>
+            <label index="tx_mmforum_ranks.title">Titel (HTML is toegestaan)</label>
+            <label index="tx_mmforum_ranks.color">Kleur</label>
+            <label index="tx_mmforum_ranks.icon">Icoon</label>
+            <label index="tx_mmforum_ranks.minPosts">Minimaal aantal berichten (alleen bij niet-speciale rangen)</label>
+            <label index="tx_mmforum_ranks.special">Speciale rang</label>
+            <label index="fe_groups.tx_mmforum_rank">Standaard gebruikersrang</label>
+            <label index="fe_groups.tx_mmforum_rank_excl">Gebruikersrang is exclusief (geen andere rang voor leden van deze groep)</label>
+            
+            <label index="tx_mmforum_postqueue">mm_forum : Berichten in wachtrij</label>
+            <label index="tx_mmforum_postqueue.topic">Maak nieuw onderwerp</label>
+            <label index="tx_mmforum_postqueue.topic_forum">Bovenliggend forum</label>
+            <label index="tx_mmforum_postqueue.topic_title">Titel ondererp</label>
+            <label index="tx_mmforum_postqueue.topic_poll">Enquete</label>
+            <label index="tx_mmforum_postqueue.topic_subscribe">Abbonneer automatisch</label>
+            <label index="tx_mmforum_postqueue.post_parent">Bovenliggend onderwerp</label>
+            <label index="tx_mmforum_postqueue.post_text">Bericht</label>
+            <label index="tx_mmforum_postqueue.post_user">Auteur</label>
+            <label index="tx_mmforum_postqueue.post_time">Plaatsingstijd</label>
+            <label index="tx_mmforum_postqueue.post_attachment">Toegevoegd bestand</label>
+            <label index="tx_mmforum_postqueue.post_ip">IP adres van auteur</label>
+        </languageKey>
+        <languageKey index="fr" type="array">
+            <label index="fe_users.tx_mmforum_avatar">Avatar</label>
+            <label index="fe_users.tx_mmforum_icq">ICQ</label>
+            <label index="fe_users.tx_mmforum_aim">AIM</label>
+            <label index="fe_users.tx_mmforum_yim">YIM</label>
+            <label index="fe_users.tx_mmforum_msn">MSN</label>
+            <label index="fe_users.tx_mmforum_skype">Skype</label>
+            <label index="fe_users.tx_mmforum_md5">Mot de passe codé MD5</label>
+            <label index="fe_users.tx_mmforum_posts">Interventions</label>
+            <label index="fe_users.tx_mmforum_user_sig">Signature</label>       
+            <label index="fe_users.tx_mmforum_prelogin">Dernier login</label>
+            <label index="fe_users.tx_mmforum_interests">Centre d'intérêts</label>
+            <label index="fe_users.tx_mmforum_occ">Métier</label>
+            <label index="fe_users.tx_mmforum_reg_hash">Clé d'activation</label>
+
+            <label index="tx_mmforum_forums">mm_forum : Forum</label>
+            <label index="tx_mmforum_forums.forum_name">Nom</label>
+            <label index="tx_mmforum_forums.forum_desc">Description</label>
+            <label index="tx_mmforum_forums.forum_posts">Interventions</label>
+            <label index="tx_mmforum_forums.forum_last_post_id">Dernière intervention</label>
+            <label index="tx_mmforum_forums.forum_order">Classement</label>
+            <label index="tx_mmforum_forums.forum_topics">Fils</label>
+            <label index="tx_mmforum_forums.forum_grouprights_read">Groupe avec autorisation de lire</label>
+            <label index="tx_mmforum_forums.forum_grouprights_write">Groupe avec autorisation d'écrire</label>
+            <label index="tx_mmforum_forums.forum_grouprights_mod">Groupe avec autorisation de modérer</label>
+            <label index="tx_mmforum_forums.forum_userrights_read">Utilisateurs avec autorisation de lire</label>
+            <label index="tx_mmforum_forums.forum_userrights_write">Utilisateurs avec autorisation d'écrire</label>
+            <label index="tx_mmforum_forums.forum_userrights_mod">Utilisateurs avec autorisation de modérer</label>
+            <label index="tx_mmforum_forums.forum_internal">Interne</label>
+            <label index="tx_mmforum_forums.parentID">Forum parent</label>
+            
+            <label index="tx_mmforum_topics">mm_forum : Fil</label>
+            <label index="tx_mmforum_topics.topic_title">Titre</label>
+            <label index="tx_mmforum_topics.topic_poster">Auteur</label>
+            <label index="tx_mmforum_topics.topic_time">Heure</label>
+            <label index="tx_mmforum_topics.topic_views">visites</label>
+            <label index="tx_mmforum_topics.topic_replies">interventions</label>
+            <label index="tx_mmforum_topics.topic_last_post_id">Dernière intervention</label>
+            <label index="tx_mmforum_topics.topic_is">Préfixe</label>
+            <label index="tx_mmforum_topics.at_top_flag">En haut</label>
+            <label index="tx_mmforum_topics.closed_flag">clos</label>
+            <label index="tx_mmforum_topics.solved">solutionné</label>
+            <label index="tx_mmforum_topics.forum_id">Thème</label>
+            <label index="tx_mmforum_topics.topic_first_post_id">Première intervention</label>
+            <label index="tx_mmforum_topics.poll_id">Vote</label>
+            <label index="tx_mmforum_topics.shadow_tid">Fil-phantôme</label>
+            <label index="tx_mmforum_topics.shadow_fid">Thèm-phantôme</label>
+            <label index="tx_mmforum_topics.tx_mmforumsearch_index_write">Dernière indexation</label>
+            
+            <label index="tx_mmforum_posts">mm_forum : Intervention</label>
+            <label index="tx_mmforum_posts.topic_id">Fil</label>
+            <label index="tx_mmforum_posts.forum_id">Thème</label>
+            <label index="tx_mmforum_posts.poster_id">Fil</label>
+            <label index="tx_mmforum_posts.post_time">Heure</label>
+            <label index="tx_mmforum_posts.poster_ip">IP de l'auteur</label>
+            <label index="tx_mmforum_posts.edit_time">Heure de saisie</label>
+            <label index="tx_mmforum_posts.edit_count">Nombre d'accès</label>
+            <label index="tx_mmforum_posts.attachment">Pièce jointe</label>  
+            <label index="tx_mmforum_posts.tx_mmforumsearch_index_write">Dernière indexation</label>
+            
+            <label index="tx_mmforum_posts_text">mm_forum : Texte de l'intervention</label>
+            <label index="tx_mmforum_posts_text.post_id">Intervention</label>
+            <label index="tx_mmforum_posts_text.post_text">Texte</label>
+            
+            <label index="tx_mmforum_smilies">mm_forum : émoticon</label>
+            <label index="tx_mmforum_smilies.code">Code</label>
+            <label index="tx_mmforum_smilies.smile_url">URL-émoticons</label>
+            <label index="tx_mmforum_smilies.emoticon">Emoticon</label>
+            
+            <label index="tx_mmforum_mailkey">mailkey</label>
+            <label index="tx_mmforum_mailkey.code">code</label>
+            
+            <label index="tx_mmforum_postsread">mm_forum : Interventions lues</label>
+            <label index="tx_mmforum_postsread.user">Intervenant</label>
+            <label index="tx_mmforum_postsread.topic_id">Fil</label>
+            
+            <label index="tx_mmforum_topicmail">mm_forum : Abonnement e-mail</label>
+            <label index="tx_mmforum_topicmail.user_id">Intervenant</label>
+            <label index="tx_mmforum_topicmail.topic_id">Fil</label>
+            
+            <label index="tx_mmforum_favorites">mm_forum : Favoris</label>
+            <label index="tx_mmforum_favorites.user_id">Intervenant</label>
+            <label index="tx_mmforum_favorites.topic_id">Fil</label>
+                                                                          
+            <label index="tx_mmforum_pminbox">mm_forum : Messages privés</label>
+            <label index="tx_mmforum_pminbox.sendtime">Heure</label>
+            <label index="tx_mmforum_pminbox.from_uid">Expéditeur</label>
+            <label index="tx_mmforum_pminbox.from_name">Nom de l'expéditeur</label>
+            <label index="tx_mmforum_pminbox.to_uid">Destinataire</label>
+            <label index="tx_mmforum_pminbox.to_name">Nom du destinataire</label>
+            <label index="tx_mmforum_pminbox.subject">Concerne</label>
+            <label index="tx_mmforum_pminbox.message">Message</label>
+            <label index="tx_mmforum_pminbox.read_flg">Lu</label>
+            <label index="tx_mmforum_pminbox.mess_type">Type de message</label>
+            <label index="tx_mmforum_pminbox.mess_type.inbox">Courrier entrant</label>
+            <label index="tx_mmforum_pminbox.mess_type.outbox">Courrier sortant</label>
+            <label index="tx_mmforum_pminbox.mess_type.archive">Archives</label>
+                                                                                            
+            <label index="tx_mmforum_wordlist">mm_forum : Mot indexé</label>
+            <label index="tx_mmforum_wordlist.word">Mot</label>
+            <label index="tx_mmforum_wordlist.metaphone">Prononciation</label>
+            
+            <label index="tx_mmforum_wordmatch">mm_forum : Position du mot indexée</label>
+            <label index="tx_mmforum_wordmatch.word_id">Mot</label>
+            <label index="tx_mmforum_wordmatch.post_id">Intervention</label>
+            <label index="tx_mmforum_wordmatch.is_header">Dans le titre</label>
+            <label index="tx_mmforum_wordmatch.topic_id">Fil</label>
+            <label index="tx_mmforum_wordmatch.forum_id">Thème</label>
+            <label index="tx_mmforum_wordmatch.solved">clos</label>
+            <label index="tx_mmforum_wordmatch.topic_title">Titre</label>
+            <label index="tx_mmforum_wordmatch.topic_views">Visites</label>
+            <label index="tx_mmforum_wordmatch.topic_replies">Interventions</label>
+            
+            <label index="tx_mmforum_searchresults">mm_forum : Résultat de recherche</label>
+            <label index="tx_mmforum_searchresults.search_string">Critère de recherche</label>
+            <label index="tx_mmforum_searchresults.array_string">Résultats</label>
+            <label index="tx_mmforum_searchresults.solved">Clos</label>
+            <label index="tx_mmforum_searchresults.search_place">Lieu de recherche</label>
+            <label index="tx_mmforum_searchresults.search_order">Classement des résultats</label>
+            <label index="tx_mmforum_searchresults.search_order.dateDesc">Date descendante</label>
+            <label index="tx_mmforum_searchresults.search_order.dateAsc">Date ascendante</label>
+            <label index="tx_mmforum_searchresults.search_order.repliesMost">Réponses pas ordre descendant</label>
+            <label index="tx_mmforum_searchresults.search_order.repliesLeast">Réponses pas ordre ascendant</label>
+            <label index="tx_mmforum_searchresults.groupPost">Grouper les résultats</label>
+            <label index="tx_mmforum_searchresults.user_group">Groupes d'intervenants</label>
+            
+            <label index="tx_mmforum_userfields">mm_forum : Profile d'intervenant - Champ ajouté</label>
+            <label index="tx_mmforum_userfields.label">Description</label>
+            <label index="tx_mmforum_userfields.config">Configuration</label>
+            <label index="tx_mmforum_userfields.tabDefault">Standard</label>
+            <label index="tx_mmforum_userfields.tabExtended">Etendu</label>
+            
+            <label index="tx_mmforum_attachments">mm_forum : Pièce jointe</label>
+            <label index="tx_mmforum_attachments.file_type">Type de fichier</label>
+            <label index="tx_mmforum_attachments.file_name">Nom de fichier</label>
+            <label index="tx_mmforum_attachments.file_path">Chemin</label>
+            <label index="tx_mmforum_attachments.file_size">Taille</label>
+            <label index="tx_mmforum_attachments.downloads">Téléchargements</label>
+            <label index="tx_mmforum_attachments.post_id">Intervention</label>
+            
+            <label index="tx_mmforum_polls">mm_forum : Vote</label>
+            <label index="tx_mmforum_polls.endtime">Date d'échéance</label>
+            <label index="tx_mmforum_polls.question">Question</label>
+            <label index="tx_mmforum_polls.votes">Nombre de voix</label>
+            
+            <label index="tx_mmforum_polls_answers">mm_forum : Proposition de réponse à un vote</label>
+            <label index="tx_mmforum_polls_answers.answer">Réponse</label>
+            <label index="tx_mmforum_polls_answers.votes">Nombre de voix</label>
+            <label index="tx_mmforum_polls_answers.poll_id">Vote</label>
+            
+            <label index="tx_mmforum_polls_votes">mm_forum : Voix dans un vote</label>
+            <label index="tx_mmforum_polls_votes.poll_id">Vote</label>
+            <label index="tx_mmforum_polls_votes.answer_id">Réponse</label>
+            <label index="tx_mmforum_polls_votes.user_id">Intervenant</label>
+            
+            <label index="tt_content.list_type_pi1">mm_forum :: Forum</label>
+            <label index="tt_content.list_type_pi2">mm_forum :: Enregistrement</label>
+            <label index="tt_content.list_type_pi3">mm_forum :: Messages privés</label>
+            <label index="tt_content.list_type_pi4">mm_forum :: Moteur de recherche</label>
+            <label index="tt_content.list_type_pi5">mm_forum :: Profil d'utilisateur</label>
+            <label index="tt_content.list_type_pi6">mm_forum :: Portail d'informations</label>
+			
+			            <!-- ADDED IN 0.1.2 -->
+            <label index="tx_mmforum_ranks">mm_forum : User rank</label>
+            <label index="tx_mmforum_ranks.title">Title (HTML is allowed)</label>
+            <label index="tx_mmforum_ranks.color">Color</label>
+            <label index="tx_mmforum_ranks.icon">Icon</label>
+            <label index="tx_mmforum_ranks.minPosts">Minimal post count (only if not special rank)</label>
+            <label index="tx_mmforum_ranks.special">Special rank</label>
+            <label index="fe_groups.tx_mmforum_rank">Default user rank</label>
+            <label index="fe_groups.tx_mmforum_rank_excl">User rank is exclusive (no other user ranks for members of this group)</label>
+            
+            <label index="tx_mmforum_postqueue">mm_forum : Queued post</label>
+            <label index="tx_mmforum_postqueue.topic">Create new topic</label>
+            <label index="tx_mmforum_postqueue.topic_forum">Topic's parent board</label>
+            <label index="tx_mmforum_postqueue.topic_title">Topic title</label>
+            <label index="tx_mmforum_postqueue.topic_poll">Poll</label>
+            <label index="tx_mmforum_postqueue.topic_subscribe">Automatically subscribe</label>
+            <label index="tx_mmforum_postqueue.post_parent">Parent topic</label>
+            <label index="tx_mmforum_postqueue.post_text">Post text</label>
+            <label index="tx_mmforum_postqueue.post_user">Author</label>
+            <label index="tx_mmforum_postqueue.post_time">Post time</label>
+            <label index="tx_mmforum_postqueue.post_attachment">Attachment</label>
+            <label index="tx_mmforum_postqueue.post_ip">Poster IP address</label>
+        </languageKey>
+        <!-- RUSSIAN LANGUAGE DATA -->
+		<languageKey index="ru" type="array">
+			<label index="fe_users.tx_mmforum_avatar">Аватар</label>
+			<label index="fe_users.tx_mmforum_icq">ICQ</label>
+			<label index="fe_users.tx_mmforum_aim">AIM</label>
+			<label index="fe_users.tx_mmforum_yim">YIM</label>
+			<label index="fe_users.tx_mmforum_msn">MSN</label>
+			<label index="fe_users.tx_mmforum_skype">Skype</label>
+			<label index="fe_users.tx_mmforum_md5">Сумма MD5 пароля</label>
+			<label index="fe_users.tx_mmforum_posts">Сообщения</label>
+			<label index="fe_users.tx_mmforum_user_sig">Подпись</label>
+			<label index="fe_users.tx_mmforum_prelogin">Время последнего посещения</label>
+			<label index="fe_users.tx_mmforum_interests">Интересы</label>
+			<label index="fe_users.tx_mmforum_occ">Род деятельности</label>
+			<label index="fe_users.tx_mmforum_reg_hash">Ключ активации</label>
+			
+			<label index="tx_mmforum_forums">mm_forum : Форум</label>
+			<label index="tx_mmforum_forums.forum_name">Имя</label>
+			<label index="tx_mmforum_forums.forum_desc">Описание</label>
+			<label index="tx_mmforum_forums.forum_posts">Сообщения</label>
+			<label index="tx_mmforum_forums.forum_last_post_id">Последнее сообщение</label>
+			<label index="tx_mmforum_forums.forum_order">Последовательность</label>
+			<label index="tx_mmforum_forums.forum_topics">Количество тем</label>
+			<label index="tx_mmforum_forums.forum_grouprights_read">Группы которые имеют право чтения</label>
+			<label index="tx_mmforum_forums.forum_grouprights_write">Группы которые имеют право записи</label>
+			<label index="tx_mmforum_forums.forum_grouprights_mod">Группы модераторов</label>
+			<label index="tx_mmforum_forums.forum_userrights_read">право чтения</label>
+			<label index="tx_mmforum_forums.forum_userrights_write">право записи</label>
+			<label index="tx_mmforum_forums.forum_userrights_mod">модерирование</label>
+			<label index="tx_mmforum_forums.forum_internal">Внутренний</label>
+			<label index="tx_mmforum_forums.parentID">Родительский форум</label>
+			
+			<label index="tx_mmforum_topics">mm_forum : Тема</label>
+			<label index="tx_mmforum_topics.topic_title">Заголовок</label>
+			<label index="tx_mmforum_topics.topic_poster">Автор</label>
+			<label index="tx_mmforum_topics.topic_time">Время</label>
+			<label index="tx_mmforum_topics.topic_views">Просмотров</label>
+			<label index="tx_mmforum_topics.topic_replies">Ответов</label>
+			<label index="tx_mmforum_topics.topic_last_post_id">Последнее сообщение</label>
+			<label index="tx_mmforum_topics.topic_is">Префикс</label>
+			<label index="tx_mmforum_topics.at_top_flag">На верх</label>
+			<label index="tx_mmforum_topics.closed_flag">Закрыта</label>
+			<label index="tx_mmforum_topics.solved">Решена</label>
+			<label index="tx_mmforum_topics.forum_id">Форум</label>
+			<label index="tx_mmforum_topics.topic_first_post_id">Первое сообщение</label>
+			<label index="tx_mmforum_topics.poll_id">Опрос</label>
+			<label index="tx_mmforum_topics.shadow_tid">Скрытая тема</label>
+			<label index="tx_mmforum_topics.shadow_fid">Скрытый форум</label>
+			<label index="tx_mmforum_topics.tx_mmforumsearch_index_write">Последняя индексированная</label>
+			
+			<label index="tx_mmforum_posts">mm_forum : Сообщения</label>
+			<label index="tx_mmforum_posts.topic_id">Тема</label>
+			<label index="tx_mmforum_posts.forum_id">Форум</label>
+			<label index="tx_mmforum_posts.poster_id">Автор</label>
+			<label index="tx_mmforum_posts.post_time">Время</label>
+			<label index="tx_mmforum_posts.poster_ip">Адрес IP автора</label>
+			<label index="tx_mmforum_posts.edit_time">Время изменения</label>
+			<label index="tx_mmforum_posts.edit_count">Количество изменений</label>
+			<label index="tx_mmforum_posts.attachment">Вложенный файл</label> 
+			<label index="tx_mmforum_posts.tx_mmforumsearch_index_write">Последнее индексированное</label>
+			
+			<label index="tx_mmforum_posts_text">mm_forum : Текст сообщения</label>
+			<label index="tx_mmforum_posts_text.post_id">Сообщение</label>
+			<label index="tx_mmforum_posts_text.post_text">Текст</label>
+			
+			<label index="tx_mmforum_smilies">mm_forum : Смайл</label>
+			<label index="tx_mmforum_smilies.code">Код смайла</label>
+			<label index="tx_mmforum_smilies.smile_url">URL смайла</label>
+			<label index="tx_mmforum_smilies.emoticon">Иконка</label>
+			
+			<label index="tx_mmforum_mailkey">Код email адреса</label>
+			<label index="tx_mmforum_mailkey.code">код</label>
+			
+			<label index="tx_mmforum_postsread">mm_forum : Прочитанные посты</label>
+			<label index="tx_mmforum_postsread.user">Пользователь</label>
+			<label index="tx_mmforum_postsread.topic_id">Тема</label>
+			
+			<label index="tx_mmforum_topicmail">mm_forum : Подписка</label>
+			<label index="tx_mmforum_topicmail.user_id">Пользователь</label>
+			<label index="tx_mmforum_topicmail.topic_id">Тема</label>
+			
+			<label index="tx_mmforum_favorites">mm_forum : Избранное</label>
+			<label index="tx_mmforum_favorites.user_id">Пользователь</label>
+			<label index="tx_mmforum_favorites.topic_id">Тема</label>
+			
+			<label index="tx_mmforum_pminbox">mm_forum : Личное сообщение</label>
+			<label index="tx_mmforum_pminbox.sendtime">Время</label>
+			<label index="tx_mmforum_pminbox.from_uid">Отправитель</label>
+			<label index="tx_mmforum_pminbox.from_name">Имя отправителя</label>
+			<label index="tx_mmforum_pminbox.to_uid">Получатель</label>
+			<label index="tx_mmforum_pminbox.to_name">Имя получателя</label>
+			<label index="tx_mmforum_pminbox.subject">Тема</label>
+			<label index="tx_mmforum_pminbox.message">Сообщение</label>
+			<label index="tx_mmforum_pminbox.read_flg">Прочитано</label>
+			<label index="tx_mmforum_pminbox.mess_type">Тип</label>
+			<label index="tx_mmforum_pminbox.mess_type.inbox">Входящее</label>
+			<label index="tx_mmforum_pminbox.mess_type.outbox">Исходящее</label>
+			<label index="tx_mmforum_pminbox.mess_type.archive">В архиве</label>
+			
+			<label index="tx_mmforum_wordlist">mm_forum : Индексированное слово</label>
+			<label index="tx_mmforum_wordlist.word">Слово</label>
+			<label index="tx_mmforum_wordlist.metaphone">Произношение (Metaphone)</label>
+			
+			<label index="tx_mmforum_wordmatch">mm_forum : Позиция индексированного слова</label>
+			<label index="tx_mmforum_wordmatch.word_id">Слово</label>
+			<label index="tx_mmforum_wordmatch.post_id">Сообщения</label>
+			<label index="tx_mmforum_wordmatch.is_header">Входит в заголовок</label>
+			<label index="tx_mmforum_wordmatch.topic_id">Тема</label>
+			<label index="tx_mmforum_wordmatch.forum_id">Форум</label>
+			<label index="tx_mmforum_wordmatch.solved">Входит в решенные</label>
+			<label index="tx_mmforum_wordmatch.topic_title">Заголовок</label>
+			<label index="tx_mmforum_wordmatch.topic_views">Просмотров</label>
+			<label index="tx_mmforum_wordmatch.topic_replies">Ответов</label>
+			
+			<label index="tx_mmforum_searchresults">mm_forum : Результаты поиска</label>
+			<label index="tx_mmforum_searchresults.search_string">Строка поиска</label>
+			<label index="tx_mmforum_searchresults.array_string">Результаты</label>
+			<label index="tx_mmforum_searchresults.solved">Решено</label>
+			<label index="tx_mmforum_searchresults.search_place">Позиция в поиске</label>
+			<label index="tx_mmforum_searchresults.search_order">Сортировка поиска</label>
+			<label index="tx_mmforum_searchresults.search_order.dateDesc">По убыванию даты</label>
+			<label index="tx_mmforum_searchresults.search_order.dateAsc">По возрастанию даты</label>
+			<label index="tx_mmforum_searchresults.search_order.repliesMost">По убыванию кол-ва ответов</label>
+			<label index="tx_mmforum_searchresults.search_order.repliesLeast">По возрастанию кол-ва ответов</label>
+			<label index="tx_mmforum_searchresults.groupPost">Группированные результаты</label>
+			<label index="tx_mmforum_searchresults.user_group">Группы пользователя</label>
+			
+			<label index="tx_mmforum_userfields">mm_forum : Дополнительное поле пользователя</label>
+			<label index="tx_mmforum_userfields.label">Название</label>
+			<label index="tx_mmforum_userfields.config">Установки</label>
+			<label index="tx_mmforum_userfields.tabDefault">По-умолчанию</label>
+			<label index="tx_mmforum_userfields.tabExtended">Дополнительно</label>
+			
+			<label index="tx_mmforum_attachments">mm_forum : Вложенные файлы</label>
+			<label index="tx_mmforum_attachments.file_type">Тип файла</label>
+			<label index="tx_mmforum_attachments.file_name">Имя файла</label>
+			<label index="tx_mmforum_attachments.file_path">Путь к файлу</label>
+			<label index="tx_mmforum_attachments.file_size">Размер файла</label>
+			<label index="tx_mmforum_attachments.downloads">Загрузок</label>
+			<label index="tx_mmforum_attachments.post_id">Сообщение</label>
+			
+			<label index="tx_mmforum_polls">mm_forum : Опрос</label>
+			<label index="tx_mmforum_polls.endtime">Истекает</label>
+			<label index="tx_mmforum_polls.question">Вопрос</label>
+			<label index="tx_mmforum_polls.votes">Количество голосов</label>
+			
+			<label index="tx_mmforum_polls_answers">mm_forum : Вариант ответа в опросе</label>
+			<label index="tx_mmforum_polls_answers.answer">Текст ответа</label>
+			<label index="tx_mmforum_polls_answers.votes">Количество голосов</label>
+			<label index="tx_mmforum_polls_answers.poll_id">Опрос</label>
+			
+			<label index="tx_mmforum_polls_votes">mm_forum : Голос в опросе</label>
+			<label index="tx_mmforum_polls_votes.poll_id">Опрос</label>
+			<label index="tx_mmforum_polls_votes.answer_id">Вариант ответа</label>
+			<label index="tx_mmforum_polls_votes.user_id">Пользователь</label>
+			
+			<label index="tt_content.list_type_pi1">mm_forum :: Форум</label>
+			<label index="tt_content.list_type_pi2">mm_forum :: Регистрация пользователя</label>
+			<label index="tt_content.list_type_pi3">mm_forum :: Личное сообщение</label>
+			<label index="tt_content.list_type_pi4">mm_forum :: Поиск</label>
+			<label index="tt_content.list_type_pi5">mm_forum :: Установки пользователя</label>
+			<label index="tt_content.list_type_pi6">mm_forum :: Информация и статистика сайта</label>
+			
+			<!-- ADDED IN 0.1.2 -->
+			<label index="tx_mmforum_ranks">mm_forum : Статус пользователя</label>
+			<label index="tx_mmforum_ranks.title">Заголовок (HTML разрешен)</label>
+			<label index="tx_mmforum_ranks.color">Цвет</label>
+			<label index="tx_mmforum_ranks.icon">Иконка</label>
+			<label index="tx_mmforum_ranks.minPosts">Минимум сообщений для получения статуса (только если не специальный статус)</label>
+			<label index="tx_mmforum_ranks.special">Специальный ранг</label>
+			<label index="fe_groups.tx_mmforum_rank">Ранг пользователя по умолчанию</label>
+			<label index="fe_groups.tx_mmforum_rank_excl">Эксклюзивный ранг пользователя (другие пользователи не могут получить этот статус)</label>
+			
+			<label index="tx_mmforum_postqueue">mm_forum : Очередь сообщений</label>
+			<label index="tx_mmforum_postqueue.topic">Создать новую тему</label>
+			<label index="tx_mmforum_postqueue.topic_forum">Родительский форум темы</label>
+			<label index="tx_mmforum_postqueue.topic_title">Заголовок темы</label>
+			<label index="tx_mmforum_postqueue.topic_poll">Опрос</label>
+			<label index="tx_mmforum_postqueue.topic_subscribe">Подписывать автоматически</label>
+			<label index="tx_mmforum_postqueue.post_parent">Родительская тема</label>
+			<label index="tx_mmforum_postqueue.post_text">Текст сообщения</label>
+			<label index="tx_mmforum_postqueue.post_user">Автор</label>
+			<label index="tx_mmforum_postqueue.post_time">Время создания</label>
+			<label index="tx_mmforum_postqueue.post_attachment">Приложение</label>
+			<label index="tx_mmforum_postqueue.post_ip">Адрес IP автора</label>
+        </languageKey>
+    </data>
+</T3locallang>

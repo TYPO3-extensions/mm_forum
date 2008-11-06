@@ -1,0 +1,261 @@
+<!-- ###MAIN### -->
+  <form method="post" action="###FORMACTION###">
+    <table class="tx-mmforum-table" width="100%">
+      <tr>
+        <th class="tx-mmforum-th" colspan="2">
+        </th>
+        <th class="tx-mmforum-th" >
+            ###USERNAME###
+        </th>
+      </tr>
+      <tr>
+        <td rowspan="2" style="width:75px;" align="center">###SETTINGS_ICON###</td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft" style="width:150px;">
+            ###DESCR_DATE###:
+        </td>
+        <td class="tx-mmforum-td">
+            ###CRDATE###
+        </td>
+      </tr>
+      <tr>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
+            ###DESCR_NAME###:
+        </td>
+        <td class="tx-mmforum-td">
+            <input type="text" name="tx_mmforum_pi5[name]" value="###NAME###" style="width: 98%;" />
+        </td>
+      </tr>
+      <tr>
+      	<td style="width:50px;"></td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
+            ###DESCR_ZIP### / ###DESCR_CITY###:
+        </td>
+        <td class="tx-mmforum-td">
+            <input type="text" name="tx_mmforum_pi5[zip]" value="###ZIP###" size="5" />
+            / 
+            <input type="text" name="tx_mmforum_pi5[city]" value="###CITY###" />
+        </td>
+      </tr>
+      <tr>
+      	<td style="width:50px;"></td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
+            ###DESCR_WWW###:
+        </td>
+        <td class="tx-mmforum-td">
+            <input type="text" name="tx_mmforum_pi5[www]" value="###WWW###" style="width: 98%;" />
+        </td>
+      </tr>
+      <tr>
+      	<td style="width:50px;"></td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
+            ###DESCR_EMAIL### (*):
+        </td>
+        <td class="tx-mmforum-td">
+            <input type="text"  name="tx_mmforum_pi5[email]" value="###EMAIL###" style="width: 98%;" />
+        </td>
+      </tr>
+      <tr>
+      	<td style="width:50px;"></td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
+            ###DESCR_TX_MMFORUM_OCC###:
+        </td>
+        <td class="tx-mmforum-td">
+            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_occ]" value="###TX_MMFORUM_OCC###" style="width: 98%;" />
+        </td>
+      </tr>
+      <tr>
+      	<td style="width:50px;"></td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
+            ###DESCR_TX_MMFORUM_INTERESTS###:
+        </td>
+        <td class="tx-mmforum-td">
+            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_interests]" value="###TX_MMFORUM_INTERESTS###" style="width: 98%;" />
+        </td>
+      </tr>
+      <!-- ###USERFIELDS### begin -->
+      <tr>
+      	<td style="width:50px;"></td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
+            ###USERFIELD_LABEL###
+        </td>
+        <td class="tx-mmforum-td">
+            <!--###DEFUSERFIELD###--><input type="text"  name="tx_mmforum_pi5[userfield][###USERFIELD_UID###]" value="###USERFIELD_VALUE###" style="width: 98%;" /><!--###DEFUSERFIELD###-->
+        </td>
+      </tr>
+      <!-- ###USERFIELDS### end -->
+      <tr>
+      	<td style="width:50px;"></td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
+            ###IMG_MSN###
+        </td>
+        <td class="tx-mmforum-td">
+            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_msn]" value="###TX_MMFORUM_MSN###" style="width: 98%;" />
+        </td>
+      </tr>
+      <tr>
+      	<td style="width:50px;"></td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
+            ###IMG_YIM###
+        </td>
+        <td class="tx-mmforum-td">
+            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_yim]" value="###TX_MMFORUM_YIM###" style="width: 98%;" />
+        </td>
+      </tr>
+      <tr>
+      	<td style="width:50px;"></td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
+            ###IMG_AIM###
+        </td>
+        <td class="tx-mmforum-td">
+            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_aim]" value="###TX_MMFORUM_AIM###" style="width: 98%;" />
+        </td>
+      </tr>
+      <tr>
+      	<td style="width:50px;"></td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
+            ###IMG_ICQ###
+        </td>
+        <td class="tx-mmforum-td">
+            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_icq]" value="###TX_MMFORUM_ICQ###" maxlength="10" style="width: 98%;" />
+        </td>
+      </tr>
+      <tr>
+      	<td style="width:50px;"></td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
+            ###IMG_SKYPE###
+        </td>
+        <td class="tx-mmforum-td">
+            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_skype]" value="###TX_MMFORUM_SKYPE###" maxlength="30" style="width: 98%;" />
+        </td>
+      </tr>
+      <tr>
+      	<td style="width:50px;"></td>
+        <td valign="top" class="tx-mmforum-td tx-mmforum-pi5-configleft" >
+            ###DESCR_TX_MMFORUM_USER_SIG###:
+        </td>
+        <td class="tx-mmforum-td">
+		  	<textarea  name="tx_mmforum_pi5[tx_mmforum_user_sig]" rows="5" cols="50">###TX_MMFORUM_USER_SIG###</textarea>
+        </td>
+      </tr>
+      <tr>
+      	<td style="width:50px;"></td>
+        <td valign="top" class="tx-mmforum-td tx-mmforum-pi5-configleft">
+            ###DESCR_SIGNATUR_PREVIEW###:
+        </td>
+        <td class="tx-mmforum-td">
+          	###SIGNATUR_PREVIEW###
+        </td>
+      </tr>
+
+      <tr>
+      	<td class="tx-mmforum-subth" style="width:50px;"></td>
+      	<td class="tx-mmforum-subth"></td>
+        <td class="tx-mmforum-subth">
+          <input type="submit" class="tx-mmforum-button" value="###SEND###" />
+        </td>
+      </tr>
+    </table>
+    
+    <br />
+    
+    <table width="100%" class="tx-mmforum-table">
+    	<tr>
+    		<th colspan="3" class="tx-mmforum-th">###LABEL_SETTINGS2###</th>
+    	</tr>
+    	<tr>
+    		<td rowspan="1" style="width:75px" align="center">###SETTINGS2_ICON###</td>
+    		<td class="tx-mmforum-td tx-mmforum-pi5-configleft" style="width:150px;">
+    			###LABEL_PMNOTIFY###:
+    		</td>
+    		<td class="tx-mmforum-td">
+    			<input type="radio" name="tx_mmforum_pi5[tx_mmforum_pmnotifymode]" value="0" ###PMNOTIFY_0###> ###LABEL_PMNOTIFY_0###<br />
+    			<input type="radio" name="tx_mmforum_pi5[tx_mmforum_pmnotifymode]" value="1" ###PMNOTIFY_1###> ###LABEL_PMNOTIFY_1###<br />
+    			<input type="radio" name="tx_mmforum_pi5[tx_mmforum_pmnotifymode]" value="2" ###PMNOTIFY_2###> ###LABEL_PMNOTIFY_2###<br />
+    		</td>
+		</tr>
+		<tr>
+			<td style="width:50px;" class="tx-mmforum-subth"></td>
+			<td class="tx-mmforum-subth"></td>
+			<td class="tx-mmforum-subth">
+				<input type="submit" class="tx-mmforum-button" value="###SEND###" />
+			</td>
+		</tr>
+    </table>
+    <input type="hidden" name="action" value="change_data" />
+  </form>
+  
+  
+  <br />
+  
+  
+  <form enctype="multipart/form-data" method="POST" action="###ACTIONLINK###">
+    <table width="100%" class="tx-mmforum-table" >
+      <tr>
+        <th colspan="3" class="tx-mmforum-th">
+            ###LABEL_UPLOADAVATAR###
+        </th>
+      </tr>
+      <tr>
+        <td rowspan="2" style="width:75px;" align="center">###AVATAR_ICON###</td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft" style="width:150px;">
+          ###LABEL_AVATAR###:
+        </td>
+        <td class="tx-mmforum-td">
+          ###AVATAR###<br />###AVATAR_DEL###
+        </td>
+      </tr>
+      <tr>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
+          ###FILENAME###:
+        </td>
+        <td colspan="3" class="tx-mmforum-td">
+          <input name="tx_mmforum_pi5[file]" type="file" id="tx_mmforum_pi5[file]" size="30" />
+        </td>
+      </tr>
+      <tr>
+      	<td class="tx-mmforum-subth"></td><td class="tx-mmforum-subth"></td>
+        <td class="tx-mmforum-subth">
+          <input type="submit" value="###SEND###" class="tx-mmforum-button" name="tx_mmforum_pi5[upload]" />
+          <input type="hidden" name="action" value="avatar_upload" />
+        </td>
+      </tr>
+    </table>
+  </form>
+
+<br />
+<form method="post" action="###ACTIONLINK###">
+<table width="100%" class="tx-mmforum-table" >
+	<tr>
+		<th colspan="4" class="tx-mmforum-th">
+			###LABEL_CHANGEPASSWORD###
+		</th>
+	</tr>
+	<tr>
+        <td rowspan="2" style="width:75px;" align="center">###PASSWORD_ICON###</td>
+        <td class="tx-mmforum-td tx-mmforum-pi5-configleft" style="width:150px;">###LABEL_OLDPW###:</td>
+		<td class="tx-mmforum-td"><input type="password"  name="tx_mmforum_pi5[oldpass]" /></td>
+	</tr>
+	<tr>
+		<td class="tx-mmforum-td tx-mmforum-pi5-configleft">###LABEL_NEWPW###:</td>
+		<td class="tx-mmforum-td"><input type="password"  name="tx_mmforum_pi5[newpass1]" /></td>
+	</tr>
+	<tr>
+		<td></td>
+		<td class="tx-mmforum-td tx-mmforum-pi5-configleft">###LABEL_REPEAT###:</td>
+		<td class="tx-mmforum-td"><input type="password"  name="tx_mmforum_pi5[newpass2]" /></td>
+	</tr>
+	<tr>               
+      	<td class="tx-mmforum-subth"></td>
+		<td class="tx-mmforum-subth"></td>
+		<td class="tx-mmforum-subth">
+			<input type="submit" class="tx-mmforum-button" value="###LABEL_CHANGE###" />
+			<input type="hidden" name="action" value="change_pass" />
+		</td>
+	</tr>
+</table>
+</form>
+<!-- ###MAIN### -->
+
+<!-- ###ERROR### -->
+<div class="tx-mmforum-error">###ERROR_MSG###</div>
+<!-- ###ERROR### -->

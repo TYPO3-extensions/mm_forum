@@ -1,0 +1,254 @@
+<T3DataStructure>
+    <meta>
+        <langDisable>1</langDisable>
+    </meta>
+    <sheets>
+        <general>
+            <ROOT>
+                <TCEforms>
+                    <sheetTitle>LLL:EXT:mm_forum/locallang.xml:flex.general</sheetTitle>
+                    <sheetDescription>LLL:EXT:mm_forum/locallang.xml:flex.general.desc</sheetDescription>
+                </TCEforms>
+                <type>array</type>
+                <el>
+                    <code>
+                        <TCEforms>
+                            <exclude>1</exclude>
+                            <label>LLL:EXT:mm_forum/locallang.xml:flex.code</label>
+                            <config>
+                                <type>select</type>
+							    <items type="array">
+								    <numIndex index="0" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.code.empty</numIndex>
+									    <numIndex index="1">BOARD</numIndex>
+								    </numIndex>
+									<numIndex index="1" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.code.latest</numIndex>
+								        <numIndex index="1">LATEST</numIndex>
+								    </numIndex>
+									<numIndex index="2" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.code.havealook</numIndex>
+								        <numIndex index="1">HAVEALOOK</numIndex>
+								    </numIndex>
+									<numIndex index="3" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.code.favorites</numIndex>
+								        <numIndex index="1">FAVORITES</numIndex>
+								    </numIndex>
+									<numIndex index="4" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.code.postalertlist</numIndex>
+								        <numIndex index="1">POSTALERTLIST</numIndex>
+								    </numIndex>
+									<numIndex index="5" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.code.listposts</numIndex>
+								        <numIndex index="1">LIST_POSTS</numIndex>
+								    </numIndex>
+									<numIndex index="6" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.code.userlist</numIndex>
+								        <numIndex index="1">USERLIST</numIndex>
+								    </numIndex>
+									<numIndex index="7" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.code.postqueue</numIndex>
+								        <numIndex index="1">POSTQUEUE</numIndex>
+								    </numIndex>
+									<numIndex index="8" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.code.rss</numIndex>
+								        <numIndex index="1">RSS</numIndex>
+								    </numIndex>
+							    </items>	
+							    <maxitems>1</maxitems>
+							    <size>6</size>
+                            </config>
+                        </TCEforms>
+                    </code>
+                    <userlist_fields>
+                        <TCEforms>
+                            <exclude>1</exclude>
+                            <label>LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields</label>
+                            <config>
+                                <type>select</type>
+                                <items type="array">
+								    <numIndex index="0" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.username</numIndex>
+									    <numIndex index="1">username</numIndex>
+								    </numIndex>
+								    <numIndex index="1" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.usergroup</numIndex>
+									    <numIndex index="1">usergroup</numIndex>
+								    </numIndex>
+								    <numIndex index="2" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.crdate</numIndex>
+									    <numIndex index="1">crdate</numIndex>
+								    </numIndex>
+								    <numIndex index="3" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.name</numIndex>
+									    <numIndex index="1">name</numIndex>
+								    </numIndex>
+								    <numIndex index="4" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.email</numIndex>
+									    <numIndex index="1">email</numIndex>
+								    </numIndex>
+								    <numIndex index="5" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.pm</numIndex>
+									    <numIndex index="1">__pm</numIndex>
+								    </numIndex>
+								    <numIndex index="6" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.city</numIndex>
+									    <numIndex index="1">city</numIndex>
+								    </numIndex>
+								    <numIndex index="7" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.www</numIndex>
+									    <numIndex index="1">www</numIndex>
+								    </numIndex>
+								    <numIndex index="8" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.icq</numIndex>
+									    <numIndex index="1">tx_mmforum_icq</numIndex>
+								    </numIndex>
+								    <numIndex index="9" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.aim</numIndex>
+									    <numIndex index="1">tx_mmforum_aim</numIndex>
+								    </numIndex>
+								    <numIndex index="10" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.yim</numIndex>
+									    <numIndex index="1">tx_mmforum_yim</numIndex>
+								    </numIndex>
+								    <numIndex index="11" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.msn</numIndex>
+									    <numIndex index="1">tx_mmforum_msn</numIndex>
+								    </numIndex>
+								    <numIndex index="12" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.skype</numIndex>
+									    <numIndex index="1">tx_mmforum_skype</numIndex>
+								    </numIndex>
+								    <numIndex index="13" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.posts</numIndex>
+									    <numIndex index="1">tx_mmforum_posts</numIndex>
+								    </numIndex>
+								    <numIndex index="14" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.interests</numIndex>
+									    <numIndex index="1">tx_mmforum_interests</numIndex>
+								    </numIndex>
+								    <numIndex index="15" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.userlist_fields.occ</numIndex>
+									    <numIndex index="1">tx_mmforum_occ</numIndex>
+								    </numIndex>
+							    </items>
+                                <foreign_table>tx_mmforum_userfields</foreign_table>
+                                <foreign_table_where>
+                                        AND tx_mmforum_userfields.deleted = 0
+                                        ORDER BY tx_mmforum_userfields.sorting
+                                </foreign_table_where>
+                                <allowNonIdValues>1</allowNonIdValues>
+                                <size>15</size>
+                                <minitems>0</minitems>
+                                <maxitems>100</maxitems>
+                            </config>
+                            <displayCond>FIELD:code:=:USERLIST</displayCond>
+                        </TCEforms>
+                    </userlist_fields>
+                    <userlist_limit>
+                        <TCEforms>
+                            <exclude>1</exclude>
+                            <label>LLL:EXT:mm_forum/locallang.xml:flex.userlist_limit</label>
+                            <config>
+                                <type>input</type>
+                                <eval>int</eval>
+                                <default>30</default>
+                                <size>8</size>
+                            </config>
+                            <displayCond>FIELD:code:=:USERLIST</displayCond>
+                        </TCEforms>
+                    </userlist_limit>
+                    <exclCategories>
+                        <TCEforms>
+                            <exclude>1</exclude>
+                            <label>LLL:EXT:mm_forum/locallang.xml:flex.exclCategories</label>
+                            <config>
+                                <type>select</type>
+                                <foreign_table>tx_mmforum_forums</foreign_table>
+                                <foreign_table_where>
+                                        AND tx_mmforum_forums.parentID = 0
+                                        AND tx_mmforum_forums.deleted = 0
+                                        ORDER BY tx_mmforum_forums.sorting
+                                </foreign_table_where>
+                                <size>5</size>
+                                <minitems>0</minitems>
+                                <maxitems>100</maxitems>
+                            </config>
+                            <displayCond>FIELD:code:=:BOARD</displayCond>
+                        </TCEforms>
+                    </exclCategories>
+                    <exclCategories_latest>
+                        <TCEforms>
+                            <exclude>1</exclude>
+                            <label>LLL:EXT:mm_forum/locallang.xml:flex.exclCategories</label>
+                            <config>
+                                <type>select</type>
+                                <foreign_table>tx_mmforum_forums</foreign_table>
+                                <foreign_table_where>
+                                        AND tx_mmforum_forums.parentID = 0
+                                        AND tx_mmforum_forums.deleted = 0
+                                        ORDER BY tx_mmforum_forums.sorting
+                                </foreign_table_where>
+                                <size>5</size>
+                                <minitems>0</minitems>
+                                <maxitems>100</maxitems>
+                            </config>
+                            <displayCond>FIELD:code:=:LATEST</displayCond>
+                        </TCEforms>
+                    </exclCategories_latest>
+                    <latest_limit>
+                        <TCEforms>
+                            <exclude>1</exclude>
+                            <label>LLL:EXT:mm_forum/locallang.xml:flex.latest_limit</label>
+                            <config>
+                                <type>input</type>
+                                <eval>int</eval>
+                                <default>10</default>
+                                <size>8</size>
+                            </config>
+                            <displayCond>FIELD:code:=:LATEST</displayCond>
+                        </TCEforms>
+                    </latest_limit>
+                    <redirectSpecial>
+                        <TCEforms>
+                            <exclude>1</exclude>
+                            <label>LLL:EXT:mm_forum/locallang.xml:flex.redirectSpecial</label>
+                            <config>
+                                <type>select</type>
+                                <items type="array">
+                                    <numIndex index="0" type="array">
+                                        <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.redirectSpecial.none</numIndex>
+                                        <numIndex index="1">0</numIndex>
+                                    </numIndex>
+                                    <numIndex index="1" type="array">
+                                        <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.redirectSpecial.list_unans</numIndex>
+                                        <numIndex index="1">list_unans</numIndex>
+                                    </numIndex>
+                                    <numIndex index="2" type="array">
+                                        <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.redirectSpecial.list_unread</numIndex>
+                                        <numIndex index="1">list_unread</numIndex>
+                                    </numIndex>
+                                    <numIndex index="3" type="array">
+                                        <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.redirectSpecial.list_prefix</numIndex>
+                                        <numIndex index="1">list_prefix</numIndex>
+                                    </numIndex>
+                                </items>
+                            </config>
+                            <displayCond>FIELD:code:=:BOARD</displayCond>
+                        </TCEforms>
+                    </redirectSpecial>
+                    <prefix>
+                        <TCEforms>
+                            <exclude>1</exclude>
+                            <label>LLL:EXT:mm_forum/locallang.xml:flex.prefix</label>
+                            <config>
+                                <type>input</type>
+                            </config>
+                            <displayCond>FIELD:redirectSpecial:=:list_prefix</displayCond>
+                        </TCEforms>
+                    </prefix>
+                </el>
+            </ROOT>
+        </general>
+    </sheets>
+</T3DataStructure>

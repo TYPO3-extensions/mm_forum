@@ -1,0 +1,1251 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;tools_txmmforumM1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="title">mm_forum</label>
+			<label index="indev">In development...</label>
+			
+			<label index="menu.useradmin">User administration</label>
+			<label index="menu.boardadmin">Board administration</label>
+			<label index="menu.template">Templates</label>
+			<label index="menu.tools">Tools</label>
+			<label index="menu.statistics">Statistics</label>
+			<label index="menu.mailing">Mailing</label>
+			<label index="menu.importexport">Data Import/Export</label>
+			<label index="menu.phpbbimport">phpBB Data import</label>
+            <label index="menu.import">Data import</label>
+            <label index="menu.install">Install</label>
+            <label index="menu.userFields">Extend user profile</label>
+			
+			<label index="error">Error</label>
+			<label index="error.noSettings">The backend module was not properly configured in the extension manager. Please fill out the missing fields in the configuration form in the extension manager. You will have to enter the UIDs of the regular user group, the moderator user group and the administrator group. Furthermore, you will have to specify the UID of the page where all mm_forum data is stored on. See the documentation for a more detailed description on how to do this.</label>
+
+			<label index="page.page">Page</label>
+			<label index="page.first">First</label>
+			<label index="page.last">Last</label>
+			
+			<label index="useradmin.filter">Filter</label>
+			<label index="useradmin.filter.clear">Clear filter</label>
+			<label index="useradmin.edit">Edit</label>
+			<label index="useradmin.age">Age</label>
+			<label index="useradmin.username">User name</label>
+			<label index="useradmin.usergroup">User groups</label>
+			<label index="useradmin.usercount">Display users %s-%s of %s total</label>
+			<label index="useradmin.searchfor">Search for</label>
+			
+			<label index="boardadmin.maincategories">Main categories</label>
+			<label index="boardadmin.newcategory">Create new category</label>
+			<label index="boardadmin.hidden">Hidden</label>
+			<label index="boardadmin.boards">boards</label>
+			<label index="boardadmin.posoption.beginning">At the beginning</label>
+			<label index="boardadmin.posoption.after">After</label>
+			<label index="boardadmin.newcat">New category</label>
+			<label index="boardadmin.editcat">Edit category</label>
+			<label index="boardadmin.name">Name</label>
+			<label index="boardadmin.description">Description</label>
+			<label index="boardadmin.position">Position</label>
+			<label index="boardadmin.delete">Delete</label>
+			<label index="boardadmin.hide">Hide</label>
+			<label index="boardadmin.unhide">Unhide</label>
+			<label index="boardadmin.save">Save</label>
+			<label index="boardadmin.internal">Internal</label>
+			<label index="boardadmin.moveto">Move to</label>
+			<label index="boardadmin.grouprights_read">Read</label>
+			<label index="boardadmin.grouprights_write">Write</label>
+			
+			<label index="boardadmin.newcat.name">New category</label>
+			<label index="boardadmin.newcat.desc">Description</label>
+			
+			<label index="boardadmin.boardsof">Boards of "%s"</label>
+			<label index="boardadmin.posts">posts</label>
+			<label index="boardadmin.newboard">Create new board</label>
+			<label index="boardadmin.newboard2">New board</label>
+			<label index="boardadmin.editboard">Edit board</label>
+			
+			<label index="boardadmin.newboard.name">New board</label>
+			<label index="boardadmin.newboard.desc">Description</label>
+			
+			<label index="tmpl.saveError">Error saving File %s!</label>
+			<label index="tmpl.saveSuccess">File %s was saved (%s Bytes)</label>
+			<label index="tmpl.select">Select template...</label>
+			<label index="tmpl.file">Template file</label>
+			<label index="tmpl.tmpldir">Template directory</label>
+			<label index="tmpl.edit">Edit "%s"</label>
+			<label index="tmpl.reset">Reset template</label>
+			<label index="tmpl.save">Save template</label>
+            <label index="tmpl.noTemplate">No template found</label>
+            
+            <label index="tmpl_select_title">Select template</label>
+            <label index="tmpl_selectTheme">Select design set</label>
+            <label index="tmpl_selectTemplate">Select template</label>
+            <label index="tmpl_selectThemeFirst">Please select a design set first</label>
+            <label index="tmpl_createTheme">Create a new design set</label>
+            <label index="tmpl_createTheme_desc">This creates a new design set by copying the default design set into a new directory.</label>
+            <label index="tmpl_createTheme_name">Design set name</label>
+            <label index="tmpl_createTheme_submit">Create</label>
+            <label index="tmpl_createTheme_error">A design set with this name does already exist.</label>
+            <label index="tmpl_createTheme_error">The design set was successfully created.</label>
+            <label index="tmpl_editTemplate_title">Edit template "%s"</label>
+            <label index="tmpl_editTemplate_submit">Save</label>
+            <label index="tmpl_editTemplate_reset">Undo changes</label>
+            <label index="tmpl_editTemplate_toDefault">Reset to default</label>
+            <label index="tmpl_editTemplate_noedit">Templates in the default design set cannot be edited. Please create a new design set.</label>
+            <label index="tmpl_themeActive">This design set is active.</label>
+            <label index="tmpl_themeInactive">This design set is not active.</label>
+            <label index="tmpl_themeActivate">Activate</label>
+			
+			<label index="tools.bbcodes">BB Codes</label>
+			<label index="tools.smilies">Smilies</label>
+			<label index="tools.syntaxhighlighter">Syntax Highlighting</label>
+			
+			<label index="tools.fe_inserticon">Icon</label>
+			<label index="tools.lang_title">Title</label>
+			<label index="tools.lang_pattern">RegExp Pattern</label>
+			<label index="tools.lang_code">Source</label>
+			
+			<label index="tools.bbcode">BB Code</label>
+			<label index="tools.pattern">Pattern</label>
+			<label index="tools.replacement">Replacement</label>
+			<label index="tools.options">Hide/Delete</label>
+			<label index="tools.save">Save</label>
+			<label index="tools.hide">Hide</label>
+			<label index="tools.unhide">Unhide</label>
+			<label index="tools.delete">Delete</label>
+			<label index="tools.create">Create</label>
+			
+			<label index="tools.code">Code</label>
+			<label index="tools.smilie">Smilie</label>
+			<label index="tools.file">File</label>
+			<label index="tools.editcode">Edit code</label>
+			<label index="tools.new">New</label>
+			<label index="tools.create">Create</label>
+			
+            <label index="import.stepX">Step %s</label>
+            <label index="import.stepXofY">Step %s of %s</label>
+            <label index="import.step0">Select import procedure</label>
+            <label index="import.step0.phpBB">phpBB</label>
+            <label index="import.step0.phpBB.desc">Import data from an existing phpBB message board.</label>
+            <label index="import.step0.CHC">CHC Forum</label>
+            <label index="import.step0.CHC.desc">Import data from an existing instance of the CHC Forum TYPO3 extension.</label>
+            <label index="import.step0.continue">Continue</label>
+            <label index="import.step0.error">You must select an import procedure before continuing.</label>
+            <label index="import.step1">Select database connection</label>
+            <label index="import.step1.localDB">Use local TYPO3 database</label>
+            <label index="import.step1.extDB">Use external database</label>
+            <label index="import.step1.ext.server">Server</label>
+            <label index="import.step1.ext.user">User name</label>
+            <label index="import.step1.ext.password">Password</label>
+            <label index="import.step1.ext.dbname">Database name</label>
+            <label index="import.step1.continue">Continue</label>
+            <label index="import.step1.error_server">No server specified</label>
+            <label index="import.step1.error_user">No user name specified</label>
+            <label index="import.step1.error_dbname">No database name specified</label>
+            <label index="import.step1.error_connect">Could not connect to the specified server.</label>
+            <label index="import.step1.error_selectdb">Could not select the specified database.</label>
+            
+            <label index="chc.success">Import of CHC Forum data was successful.</label>
+            <label index="chc.categories">Categories</label>
+            <label index="chc.boards">Message boards</label>
+            <label index="chc.topics">Topics</label>
+            <label index="chc.step3">Step 3 of 4: Select import data</label>
+            <label index="chc.import.chc">CHC Forum</label>
+            <label index="chc.import.chc.desc">Import categories and boards from the CHC Forum extension.</label>
+            <label index="chc.import.cwt">CWT Community</label>
+            <label index="chc.import.cwt.desc">Import private messages from the CWT Community extension.</label>
+            <label index="chc.import.continue">Continue</label>
+            <label index="chc.step4">Step 4 of 4: Conduct import</label>
+            <label index="chc.posts">Posts</label>
+            <label index="cwt.success">Import of CWT Community data was successful.</label>
+            <label index="cwt.pms">Private messages</label>
+            
+			<label index="phpbb.general.prefix">MySQL Table prefix</label>
+			<label index="phpbb.general.update">Update</label>
+			<label index="phpbb.general.stepXofY">Step %s of %s</label>
+			<label index="phpbb.general.continue">Continue</label>
+			<label index="phpbb.general.yes">Yes</label>
+			<label index="phpbb.general.no">No</label>
+			
+			<label index="phpbb.step1">Define table prefix</label>
+			<label index="phpbb.step1.checking">Checking tables...</label>
+			<label index="phpbb.step1.notfound">Table &lt;i&gt;%s&lt;/i&gt; does not exist in database.</label>
+			<label index="phpbb.step1.fatalError">None of the tables required for data import were not found. Please check, if the table prefix you specified is correct.</label>
+			<label index="phpbb.step1.error">Some of the tables possibly required for data import were not found (see above).</label>
+			<label index="phpbb.step1.ok">All tables required for data import were found. Proceed with next step.</label>
+			<label index="phpbb.step1.warning">WARNING: Some tables used in the phpBB board were not found in your database. Since not all phpBB tables are used during data import, so this fact is not necessarily of importance. Do you want to continue anyway?</label>
+			
+			<label index="phpbb.step2">Select import data</label>
+			<label index="phpbb.step2.instruction">Select which data you want to import from your phpBB board. Note that there are some data fields that depend on other data to be also imported.</label>
+			<label index="phpbb.step2.dependsOn">Depends on</label>
+			<label index="phpbb.step2.alreadyImported">already imported</label>
+			<label index="phpbb.step2.dependencyError">Some required data are not being imported. Please remember the interdependence between some of the data.</label>
+			<label index="phpbb.step2.boards/categories">Boards and categories</label>
+			<label index="phpbb.step2.users/usergroups">Users and user groups</label>
+			<label index="phpbb.step2.topics/posts">Topics and posts</label>
+			<label index="phpbb.step2.pms">Private messages</label>
+			<label index="phpbb.step2.search">Search index</label>
+			<label index="phpbb.step2.smilies">Smilies</label>
+			<label index="phpbb.step2.subscr">Email subscriptions</label>
+			<label index="phpbb.step2.tablesrequired">Required tables</label>
+			<label index="phpbb.step2.note">&lt;i&gt;Note:&lt;/i&gt; Table names marked read mean that this table does not exist. Trying to import these data fields will lead to an error.</label>
+			<label index="phpbb.step2.noSelectNote">You have to select at least one data field before proceeding.</label>
+			
+			<label index="phpbb.step3">Specify import options</label>
+			<label index="phpbb.step3.import0.pid">Storage page UID</label>
+			<label index="phpbb.step3.import1.pid">Storage page UID</label>
+			<label index="phpbb.step3.import1.moderators">Moderator group</label>
+			<label index="phpbb.step3.import1.mods.create">Create new fe_user group</label>
+			<label index="phpbb.step3.import1.mods.import">Import into existing group (group UID)</label>
+			<label index="phpbb.step3.import1.mods.nothing">No moderators</label>
+			<label index="phpbb.step3.import1.admins">Administrator group</label>
+			<label index="phpbb.step3.import1.admins.create">Create new fe_user group</label>
+			<label index="phpbb.step3.import1.admins.import">Import into existing group (group UID)</label>
+			<label index="phpbb.step3.import1.admins.nothing">No admins</label>
+			<label index="phpbb.step3.import1.users">Regular user group</label>
+			<label index="phpbb.step3.import1.users.create">Create new fe_user group</label>
+			<label index="phpbb.step3.import1.users.import">Import into existing group (group UID)</label>
+			<label index="phpbb.step3.import1.users.nothing">No user group</label>
+			<label index="phpbb.step3.import1.createSingleUserGroups">Import single user groups</label>
+			<label index="phpbb.step3.import1.avatarpath">Path to avatar folder</label>
+			<label index="phpbb.step3.import2.pid">Storage page UID</label>
+			<label index="phpbb.step3.import3.pid">Storage page UID</label>
+			<label index="phpbb.step3.import4.pid">Storage page UID</label>
+			<label index="phpbb.step3.import4.group_post">Group search results by thread</label>
+			<label index="phpbb.step3.import5.pid">Storage page UID</label>
+			<label index="phpbb.step3.import5.phpbb_smilie_url">URL of phpBB smilie dir</label>
+			<label index="phpbb.step3.import5.mmforum_smilie_url">URL of mm_forum smilie dir</label>
+			<label index="phpbb.step3.import6.pid">Storage page UID</label>
+			                                                         
+			<label index="phpbb.step4">Perform import</label>
+			<label index="phpbb.step4.new_adminGroup">Administrators</label>
+			<label index="phpbb.step4.new_modGroup">Moderators</label>
+			<label index="phpbb.step4.new_modGroup">Users</label>
+			<label index="phpbb.step4.groupimport_report">Imported %s user groups.</label>
+			<label index="phpbb.step4.userimport_report">Imported %s users.</label>
+			<label index="phpbb.step4.errorUsergroupImport">Could not import user group &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.errorUsergroupImport">Could not import user &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.errorAdmingroupCreate">Could not create administrator group.</label>
+			<label index="phpbb.step4.errorModgroupCreate">Could not create moderator group.</label>
+			<label index="phpbb.step4.errorUsergroupCreate">Could not create user group.</label>
+			<label index="phpbb.step4.errorCategoryImport">Could not import category &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.errorBoardImport">Could not import board &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.categoryimport_report">Imported %s categories.</label>
+			<label index="phpbb.step4.boardimport_report">Imported %s message boards.</label>
+			<label index="phpbb.step4.errorTopicImport">Could not import topic &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.errorPostImport">Could not import post &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.topicimport_report">Imported %s topics.</label>
+			<label index="phpbb.step4.postimport_report">Imported %s posts.</label>
+			<label index="phpbb.step4.errorPMImport">Could not import private message &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.postimport_report">Imported %s posts.</label>
+			<label index="phpbb.step4.wordlistimport_report">Imported %s indexed words.</label>
+			<label index="phpbb.step4.searchresultimport_report">Imported %s search queries.</label>
+			<label index="phpbb.step4.matchesimport_report">Imported %s word matches.</label>
+			<label index="phpbb.step4.smilieimport_report">Imported %s smilies.</label>
+			<label index="phpbb.step4.subscrimport_report">Imported %s email subscriptions.</label>
+			<label index="phpbb.step4.pmimport_report">Imported %s private message.</label>
+			
+			<label index="phpbb.step3.import0.pid.warning">WARNING: No PID specified. 0 will be used instead.</label>
+			<label index="phpbb.step3.import.pid.0">WARNING: Storing records on the root level is not recommended.</label>
+			<label index="phpbb.step3.import1.mods.emptyError">ERROR: No UID specified.</label>
+			<label index="phpbb.step3.import1.mods.neError">ERROR: Group does not exists.</label>
+			<label index="phpbb.step3.import1.avatarpath.emptyWarning">WARNING: No avatar path specified. The default path (uploads/tx_mmforum/) will be used.</label>
+			<label index="phpbb.step3.import5.phpbbSmilie_url.emptyError">ERROR: No path was specified.</label>
+			<label index="phpbb.step3.import5.mmforumSmilie_url.emptyError">ERROR: No path was specified.</label>
+			<label index="phpbb.step3.error1">An error occurred while processing your data. Please correct this error before proceeding with the next step.</label>
+			<label index="phpbb.step3.errors">%s errors occurred while processing your data. Please correct these errors before proceeding with the next step.</label>
+			<label index="phpbb.step3.warning">One or more problems occurred while processing your data. These will not cause any errors in the next step, but might lead to unwanted results. Please check your inputs before processing with the next step.</label>
+
+			<label index="phpbb.step4.startNote">The phpBB data are ready to be imported. Press the start button to begin the import process. Please notice that the import procedure may take some time, dependent of the amount of data and your import settings.</label>
+			<label index="phpbb.step4.startButton">Start import</label>
+			
+			<label index="phpbb.step3.clearAll">Clear all regarding mm_forum tables before importing</label>
+			<label index="phpbb.step3.clearReallyAll">Clear &lt;strong&gt;all&lt;/strong&gt; mm_forum tables before importing</label>
+			<label index="phpbb.step4.clearAllNote">You checked several mm_forum tables to be cleared before importing. Since this also affects the global fe_user and fe_groups table, you can now specify which users and user groups should NOT be deleted. You may enter a list of UID of users/usergroups that are not to be deleted or specify a MySQL-WHERE clause doing the same effect while being more flexible.</label>
+			<label index="phpbb.step4.clear.userUID">User UIDs</label>
+			<label index="phpbb.step4.clear.userWHERE">User WHERE clause</label>
+			<label index="phpbb.step4.clear.usergroupUID">User group UIDs</label>
+			<label index="phpbb.step4.clear.usergroupWHERE">User group WHERE clause</label>
+			<label index="phpbb.step4.clear.uidEx">Example: 1,2,3</label>
+			<label index="phpbb.step4.clear.whereEx">Example: WHERE uid NOT IN (1,2,3)</label>
+            
+			<label index="phpbb.step2.polls">Polls</label>
+            <label index="phpbb.step3.polls.pid">Storage page UID</label>
+            <label index="phpbb.step4.pollimport_report">Imported %s polls.</label>
+            
+            <!-- ADDED IN 0.1.2 -->
+            <label index="menu.ranks">User ranks</label>
+            <label index="ranks.title">Title</label>
+            <label index="ranks.icon">Icon</label>
+            <label index="ranks.posts">Posts</label>
+            <label index="ranks.noicon">No icon</label>
+            <label index="ranks.special">Special rank</label>
+            
+            <!-- ADDED IN 0.1.7 -->
+            <label index="menu.updater">Updater</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="title">mm_forum</label>
+			<label index="indev">In Arbeit...</label>
+			
+			<label index="menu.useradmin">Benutzerverwaltung</label>
+			<label index="menu.boardadmin">Forenverwaltung</label>
+			<label index="menu.template">Designvorlagen</label>
+			<label index="menu.tools">Werkzeuge</label>
+			<label index="menu.statistics">Statistiken</label>
+			<label index="menu.mailing">Mailing</label>
+			<label index="menu.importexport">Datenimport/-export</label>
+			<label index="menu.phpbbimport">phpBB-Datenimport</label>
+            <label index="menu.import">Datenimport</label>
+            <label index="menu.install">Installation</label>
+            <label index="menu.userFields">Benutzerprofil erweitern</label>
+
+			<label index="error">Fehler</label>
+			<label index="error.noSettings">Das Backend-Modul wurde nicht ordnungsgemäß im Erweiterungsmanager konfiguriert. Bitte füllen Sie die noch fehlenden Felder im Konfigurationsformular im Erweiterungsmanager aus. Sie müssen die UIDs der Benutzergruppe für reguläre Benutzer sowie der Moderatoren- und Administratorengruppen angeben. Des weiteren müssen Sie die UID der Seite, auf der die Daten des mm_forum gespeichert werden, angeben. Eine detailliertere Beschreibung hierzu finden Sie in der Dokumentation.</label>
+
+			<label index="page.page">Seite</label>
+			<label index="page.first">Erste</label>
+			<label index="page.last">Letzte</label>
+			
+			<label index="useradmin.filter">Filter</label>
+			<label index="useradmin.filter.clear">Filter leeren</label>
+			<label index="useradmin.edit">Bearbeiten</label>
+			<label index="useradmin.age">Alter</label>
+			<label index="useradmin.username">Benutzername</label>
+			<label index="useradmin.usergroup">Gruppen</label>
+			<label index="useradmin.usercount">Zeige Benutzer %s-%s von %s gesamt</label>
+			<label index="useradmin.searchfor">Suchen nach</label>
+			
+			<label index="boardadmin.maincategories">Kategorien</label>
+			<label index="boardadmin.newcategory">Neue Kategorie erstellen</label>
+			<label index="boardadmin.hidden">Versteckt</label>
+			<label index="boardadmin.boards">Foren</label>
+			<label index="boardadmin.posoption.beginning">Am Anfang</label>
+			<label index="boardadmin.posoption.after">Nach</label>
+			<label index="boardadmin.newcat">Neue Kategorie</label>
+			<label index="boardadmin.editcat">Kategorie bearbeiten</label>
+			<label index="boardadmin.name">Name</label>
+			<label index="boardadmin.description">Beschreibung</label>
+			<label index="boardadmin.position">Position</label>
+			<label index="boardadmin.delete">Löschen</label>
+			<label index="boardadmin.hide">Verstecken</label>
+			<label index="boardadmin.unhide">Sichtbar machen</label>
+			<label index="boardadmin.save">Speichern</label>
+			<label index="boardadmin.internal">Intern</label>
+			<label index="boardadmin.moveto">Verschieben</label>
+			<label index="boardadmin.grouprights_read">Lesen</label>
+			<label index="boardadmin.grouprights_write">Schreiben</label>
+			
+			<label index="boardadmin.newcat.name">Neue Kategorie</label>
+			<label index="boardadmin.newcat.desc">Beschreibung</label>
+			
+			<label index="boardadmin.boardsof">Foren in "%s"</label>
+			<label index="boardadmin.posts">Beiträge</label>
+			<label index="boardadmin.newboard">Neues Forum erstellen</label>
+			<label index="boardadmin.newboard2">Neues Forum</label>
+			<label index="boardadmin.editboard">Forum bearbeiten</label>
+			
+			<label index="boardadmin.newboard.name">Neues Forum</label>
+			<label index="boardadmin.newboard.desc">Beschreibung</label>
+			
+			<label index="tmpl.saveError">Fehler beim Schreiben der Datei %s!</label>
+			<label index="tmpl.saveSuccess">Datei %s wurde gespeichert (%s Bytes)</label>
+			<label index="tmpl.select">Designvorlage auswählen...</label>
+			<label index="tmpl.file">Designvorlage</label>
+			<label index="tmpl.tmpldir">Vorlagenverzeichnis</label>
+			<label index="tmpl.edit">"%s" bearbeiten</label>
+			<label index="tmpl.reset">Vorlage zurücksetzen</label>
+			<label index="tmpl.save">Vorlage speichern</label>
+            <label index="tmpl.noTemplate">Keine Designvorlage gefunden</label>
+            
+            <label index="tmpl_select_title">Designvorlage auswählen</label>
+            <label index="tmpl_selectTheme">Designset auswählen</label>
+            <label index="tmpl_selectTemplate">Designvorlage auswählen</label>
+            <label index="tmpl_selectThemeFirst">Bitte wählen Sie zunächst ein Designset aus.</label>
+            <label index="tmpl_createTheme">Neues Designset anlegen</label>
+            <label index="tmpl_createTheme_desc">Dieser Vorgang legt ein neues Designset angelegt, indem das Standarddesignset in ein neues Verzeichnis kopiert wird.</label>
+            <label index="tmpl_createTheme_name">Designset-name</label>
+            <label index="tmpl_createTheme_submit">Anlegen</label>
+            <label index="tmpl_createTheme_error">Ein Designset mit diesem Namen existiert bereits.</label>
+            <label index="tmpl_createTheme_error">Das Designset wurde erfolgreich angelegt.</label>
+            <label index="tmpl_editTemplate_title">Designvorlage "%s" bearbeiten</label>
+            <label index="tmpl_editTemplate_submit">Speichern</label>
+            <label index="tmpl_editTemplate_reset">Änderungen rückgängig</label>
+            <label index="tmpl_editTemplate_toDefault">Auf Standard zurücksetzen</label>
+            <label index="tmpl_editTemplate_noedit">Designvorlagen aus dem Standarddesignset können nicht bearbeitet werden. Bitte legen Sie ein neues Designset an.</label>
+            <label index="tmpl_themeActive">Dieses Designset ist aktiv.</label>
+            <label index="tmpl_themeInactive">Dieses Designset ist nicht aktiv.</label>
+            <label index="tmpl_themeActivate">Aktivieren</label>
+            
+			<label index="tools.bbcodes">BB-Codes</label>
+			<label index="tools.smilies">Smilies</label>
+			<label index="tools.syntaxhighlighter">Quelltext-Hervorhebung</label>
+			
+			<label index="tools.fe_inserticon">Bild</label>
+			<label index="tools.lang_title">Titel</label>
+			<label index="tools.lang_pattern">Suchmuster</label>
+			<label index="tools.lang_code">Quelltext</label>
+			
+			<label index="tools.bbcode">BB-Code</label>
+			<label index="tools.pattern">Muster</label>
+			<label index="tools.replacement">Ersatz</label>
+			<label index="tools.options">Verst./Löschen</label>
+			<label index="tools.save">Speichern</label>
+			<label index="tools.hide">Verst.</label>
+			<label index="tools.unhide">Sichtbar machen</label>
+			<label index="tools.delete">Löschen</label>
+			<label index="tools.create">Erstellen</label>
+			
+			<label index="tools.code">Code</label>
+			<label index="tools.smilie">Smilie</label>
+			<label index="tools.file">Datei</label>
+			<label index="tools.editcode">Code bearbeiten</label>
+			<label index="tools.new">Neu</label>
+
+            <label index="import.stepX">Schritt %s</label>
+            <label index="import.stepXofY">Schritt %s von %s</label>
+            <label index="import.step0">Importmethode auswählen</label>
+            <label index="import.step0.phpBB">phpBB</label>
+            <label index="import.step0.phpBB.desc">Importiert Daten aus einem bestehenden phpBB-Forum.</label>
+            <label index="import.step0.CHC">CHC Forum</label>
+            <label index="import.step0.CHC.desc">Importiert Daten aus einer bestehenden Instanz der TYPO3-Erweiterung CHC-Forum.</label>
+            <label index="import.step0.continue">Weiter</label>
+            <label index="import.step0.error">Sie müssen eine Importmethode auswählen, bevor Sie fortfahren.</label>
+            <label index="import.step1">Datenbankverbindung auswählen</label>
+            <label index="import.step1.localDB">Lokale TYPO3-Datenbank verwenden</label>
+            <label index="import.step1.extDB">Externe Datenbank verwenden</label>
+            <label index="import.step1.ext.server">Server</label>
+            <label index="import.step1.ext.user">Benutzername</label>
+            <label index="import.step1.ext.password">Passwort</label>
+            <label index="import.step1.ext.dbname">Datenbankname</label>
+            <label index="import.step1.continue">Weiter</label>
+            <label index="import.step1.error_server">Kein Server angegeben</label>
+            <label index="import.step1.error_user">Kein Benutzername angegeben</label>
+            <label index="import.step1.error_dbname">Kein Datenbankname angegeben</label>
+            <label index="import.step1.error_connect">Konnte keine Verbindung zu dem angegebenen Server herstellen.</label>
+            <label index="import.step1.error_selectdb">Konnte nicht auf die angegebene Datenbank zugreifen.</label>
+            
+            <label index="chc.success">Der Datenimport der CHC Forum-Daten war erfolgreich.</label>
+            <label index="chc.categories">Kategorien</label>
+            <label index="chc.boards">Foren</label>
+            <label index="chc.topics">Themen</label>
+            <label index="chc.step3">Schritt 3 von 4: Importdaten auswählen</label>
+            <label index="chc.import.chc">CHC Forum</label>
+            <label index="chc.import.chc.desc">Importiert Kategorien und Foren der CHC Forum-Erweiterung.</label>
+            <label index="chc.import.cwt">CWT Community</label>
+            <label index="chc.import.cwt.desc">Importiert private Nachrichten aus der CWT Community-Erweiterung.</label>
+            <label index="chc.import.continue">Weiter</label>
+            <label index="chc.step4">Schritt 4 von 4: Import durchführen</label>
+            <label index="chc.posts">Beiträge</label>
+            <label index="cwt.success">Der Datenimport der CWT Community-Daten war erfolgreich.</label>
+            <label index="cwt.pms">Private Nachrichten</label>
+			
+			<label index="phpbb.general.prefix">MySQL Tabellenpräfix</label>
+			<label index="phpbb.general.update">Aktualisieren</label>
+			<label index="phpbb.general.stepXofY">Schritt %s von %s</label>
+			<label index="phpbb.general.continue">Weiter</label>
+			<label index="phpbb.general.yes">Ja</label>
+			<label index="phpbb.general.no">Nein</label>
+			
+			<label index="phpbb.step1">Tabellenpräfix festlegen</label>
+			<label index="phpbb.step1.checking">Überprüfe Tabellen</label>
+			<label index="phpbb.step1.notfound">Die Tabelle &lt;i&gt;%s&lt;/i&gt; existiert nicht in der Datenbank.</label>
+			<label index="phpbb.step1.fatalError">Keine der für den Datenimport erforderlichen Tabellen wurde gefunden. Überprüfen Sie, ob das angegebene Tabellenpräfix korrekt ist.</label>
+			<label index="phpbb.step1.error">Einige Tabellen, die möglicherweise für den Datenimport benötigt werden, wurden nicht gefunden (siehe oben).</label>
+			<label index="phpbb.step1.ok">Alle für den Datenimport benötigten Tabellen wurden gefunden. Fahren Sie mit dem nächsten Schritt fort.</label>
+			<label index="phpbb.step1.warning">WARNUNG: Einige vom phpBB-Forum benutzte Tabellen wurden in Ihrer Datenbank nicht gefunden. Da jedoch nicht alle phpBB-Tabellen für den Datenimport benötigt werden, muss dies den Import nicht notwendigerweise beeinträchtigen. Wollen Sie trotzdem fortfahren?</label>
+			
+			<label index="phpbb.step2">Zu importierende Daten auswählen</label>
+			<label index="phpbb.step2.instruction">Wälen Sie, welche Daten Sie aus dem phpBB-Forum importieren wollen. Beachten Sie, dass manche Daten davon abhängig sind, dass andere Daten ebenfalls importiert werden.</label>
+			<label index="phpbb.step2.dependsOn">Abhängig von</label>
+			<label index="phpbb.step2.alreadyImported">Schon importiert</label>
+			<label index="phpbb.step2.dependencyError">Einige benötigte Daten werden nicht importiert. Bitte beachten Sie die Abhängigkeiten zwischen den verschiedenen Datenbereichen.</label>
+			<label index="phpbb.step2.boards/categories">Foren und Kategorien</label>
+			<label index="phpbb.step2.users/usergroups">Benutzer und Benutzergruppen</label>
+			<label index="phpbb.step2.topics/posts">Themen und Beiträge</label>
+			<label index="phpbb.step2.pms">Private Nachrichten</label>
+			<label index="phpbb.step2.search">Suchindex</label>
+			<label index="phpbb.step2.smilies">Smilies</label>
+			<label index="phpbb.step2.subscr">E-Mail-Abonnements</label>
+			<label index="phpbb.step2.tablesrequired">Benötigte Tabellen</label>
+			<label index="phpbb.step2.note">&lt;i&gt;Anmerkung:&lt;/i&gt; Die rot markierten Tabellen existieren nicht. Der Versuch, die betreffenden Daten zu importieren, wird zu einem Fehler führen.</label>
+			<label index="phpbb.step2.noSelectNote">Sie müssen mindestens einen Datenbereich auswählen, bevor Sie fortfahren.</label>
+			
+			<label index="phpbb.step3">Importeinstellungen vornehmen</label>
+			<label index="phpbb.step3.import0.pid">Seiten-ID</label>
+			<label index="phpbb.step3.import1.pid">Seiten-ID</label>
+			<label index="phpbb.step3.import1.moderators">Moderatorengruppe</label>
+			<label index="phpbb.step3.import1.mods.create">Neue Benutzergruppe anlegen</label>
+			<label index="phpbb.step3.import1.mods.import">In bestehende Gruppe importieren (Gruppen-ID)</label>
+			<label index="phpbb.step3.import1.mods.nothing">Keine Moderatoren</label>
+			<label index="phpbb.step3.import1.admins">Administratorengruppe</label>
+			<label index="phpbb.step3.import1.admins.create">Neue Benutzergruppe anlegen</label>
+			<label index="phpbb.step3.import1.admins.import">In bestehende Gruppe importieren (Gruppen-ID)</label>
+			<label index="phpbb.step3.import1.admins.nothing">Keine Administratoren</label>
+			<label index="phpbb.step3.import1.users">Reguläre Benutzergruppe</label>
+			<label index="phpbb.step3.import1.users.create">Neue Benutzergruppe anlegen</label>
+			<label index="phpbb.step3.import1.users.import">In bestehende Gruppe importieren (Gruppen-ID)</label>
+			<label index="phpbb.step3.import1.users.nothing">Keine Benutzergruppe</label>
+			<label index="phpbb.step3.import1.avatarpath">Pfad zum Avatar-Verzeichnis</label>
+			<label index="phpbb.step3.import1.createSingleUserGroups">Einzelbenutzergruppen importieren</label>
+			<label index="phpbb.step3.import2.pid">Seiten-ID</label>
+			<label index="phpbb.step3.import3.pid">Seiten-ID</label>
+			<label index="phpbb.step3.import4.pid">Seiten-ID</label>
+			<label index="phpbb.step3.import4.group_post">Suchergebnisse nach Thema gruppieren</label>
+			<label index="phpbb.step3.import5.pid">Seiten-ID</label>
+			<label index="phpbb.step3.import5.phpbb_smilie_url">URL des phpBB-Smilieordners</label>
+			<label index="phpbb.step3.import5.mmforum_smilie_url">URL des mm_forum-Smilieordners</label>
+			<label index="phpbb.step3.import6.pid">Seiten-ID</label>
+			                                                         
+			<label index="phpbb.step4">Datenimport durchführen</label>
+			<label index="phpbb.step4.new_adminGroup">Administratoren</label>
+			<label index="phpbb.step4.new_modGroup">Moderatoren</label>
+			<label index="phpbb.step4.groupimport_report">Es wurden %s Benutzergruppen importiert.</label>
+			<label index="phpbb.step4.userimport_report">Es wurden %s Benutzer importiert.</label>
+			<label index="phpbb.step4.errorUsergroupImport">Die Benutzergruppe &lt;i&gt;%s&lt;/i&gt; konnte nicht importiert werden.</label>
+			<label index="phpbb.step4.errorUsergroupImport">Der Benutzer &lt;i&gt;%s&lt;/i&gt; konnte nicht importiert werden.</label>
+			<label index="phpbb.step4.errorAdmingroupCreate">Es konnte keine Administratorengruppe angelegt werden.</label>
+			<label index="phpbb.step4.errorModgroupCreate">Es konnte keine Moderatorengruppe angelegt werden.</label>
+			<label index="phpbb.step4.errorUsergroupCreate">Es konnte keine Benutzergruppe angelegt werden.</label>
+			<label index="phpbb.step4.errorCategoryImport">Die Kategorie &lt;i&gt;%s&lt;/i&gt; konnte nicht importiert werden.</label>
+			<label index="phpbb.step4.errorBoardImport">Das Forum &lt;i&gt;%s&lt;/i&gt; konnte nicht importiert werden.</label>
+			<label index="phpbb.step4.categoryimport_report">Es wurden %s Kategorien importiert.</label>
+			<label index="phpbb.step4.boardimport_report">Es wurden %s Foren importiert.</label>
+			<label index="phpbb.step4.errorTopicImport">Das Thema &lt;i&gt;%s&lt;/i&gt; konnte nicht importiert werden.</label>
+			<label index="phpbb.step4.errorPostImport">Das Beitrag &lt;i&gt;%s&lt;/i&gt; konnte nicht importiert werden.</label>
+			<label index="phpbb.step4.topicimport_report">Es wurden %s Themen importiert.</label>
+			<label index="phpbb.step4.postimport_report">Es wurden %s Beiträge importiert.</label>
+			<label index="phpbb.step4.wordlistimport_report">Es wurden %s indizierte Wörter importiert.</label>
+			<label index="phpbb.step4.searchresultimport_report">Es wurden %s Suchabfragen importiert.</label>
+			<label index="phpbb.step4.matchesimport_report">Es wurden %s Wortzuordnungen importiert.</label>
+			<label index="phpbb.step4.smilieimport_report">Es wurden %s Smilies importiert.</label>
+			<label index="phpbb.step4.subscrimport_report">Es wurden %s E-Mail-Benachrichtigungen importiert.</label>
+			<label index="phpbb.step4.pmimport_report">Imported %s private message.</label>
+			
+			<label index="phpbb.step3.import0.pid.warning">WARNUNG: Es wurde keine PID angegeben. Stattdessen wird 0 benutzt.</label>
+			<label index="phpbb.step3.import.pid.0">WARNUNG: Es wird empfohlen, Einträge nicht auf der Rootebene zu speichern.</label>
+			<label index="phpbb.step3.import1.mods.emptyError">FEHLER: Keine ID angegeben.</label>
+			<label index="phpbb.step3.import1.mods.neError">FEHLER: Gruppe existiert nicht.</label>
+			<label index="phpbb.step3.import1.avatarpath.emptyWarning">WARNUNG: Kein Avatarpfad angegeben. Der Standardpfad (uploads/tx_mmforum/) wird verwendet.</label>
+			<label index="phpbb.step3.import5.phpbbSmilie_url.emptyError">FEHLER: Kein Pfad angegeben.</label>
+			<label index="phpbb.step3.import5.mmforumSmilie_url.emptyError">ERROR: Kein Pfad angegeben.</label>
+			<label index="phpbb.step3.error1">Während der Verarbeitung Ihrer Eingabe ist ein Fehler aufgetreten. Bitte korrigieren Sie diesen, bevor Sie mit dem nächsten Schritt fortfahren.</label>
+			<label index="phpbb.step3.errors">Während der Verarbeitung Ihrer Eingabe sind %s Fehler aufgetreten. Bitte korrigieren Sie diese, bevor Sie mit dem nächsten Schritt fortfahren.</label>
+			<label index="phpbb.step3.warning">Während der Verarbeitung Ihrer Eingabe sind ein oder mehrere Probleme aufgetrete. Diese werden im nächsten Schritt zwar keine Fehler verursachen, könnten aber zu ungewünschten Ergebnissen führen. Bitte überprüfen Sie Ihre Eingaben, bevor sie mit dem nächsten Schritt fortfahren.</label>
+
+			<label index="phpbb.step4.startNote">Die phpBB-Daten können jetzt importiert werden. Drücken Sie den Start-Button, um den Importvorgang zu starten. Beachten Sie, dass der Datenimport unter Umständen eine gewisse Zeit dauern könnte, abhängig von der Datenmenge und Ihren Importeinstellungen.</label>
+			<label index="phpbb.step4.startButton">Import starten</label>
+			
+			<label index="phpbb.step3.clearAll">Vor dem Importieren alle betreffenden mm_forum-Tabellen leeren</label>
+			<label index="phpbb.step3.clearReallyAll">Vor dem Importieren &lt;strong&gt;alle&lt;/strong&gt; mm_forum-Tabellen löschen</label>
+			<label index="phpbb.step4.clearAllNote">Sie haben mehrere mm_forum-Tabellen zum Leeren ausgewählt. Da sich dies auch auf die globalen fe_user- und fe_groups-Tabellen auswirkt, können Sie jetzt angeben, welche Benutzer und Benutzergruppen NICHT gelöscht werden sollen. Sie können eine Liste von UIDs verschiedener Benutzer/Benutzergruppen, die nicht gelöscht werden sollen, angeben oder eine MySQL-WHERE-Anweisung spezifizieren, die denselben Effekt erfüllt, aber flexibler ist.</label>
+			
+			<label index="phpbb.step4.clear.userUID">Benutzer-UIDs</label>
+			<label index="phpbb.step4.clear.userWHERE">Benutzer-WHERE-Anweisung</label>
+			<label index="phpbb.step4.clear.usergroupUID">Benutzergruppen-UIDs</label>
+			<label index="phpbb.step4.clear.usergroupWHERE">Benutzergruppen-WHERE-Anweisung</label>
+			<label index="phpbb.step4.clear.uidEx">Beispiel: 1,2,3</label>
+			<label index="phpbb.step4.clear.whereEx">Beispiel: WHERE uid NOT IN (1,2,3)</label>
+            
+			<label index="phpbb.step2.polls">Umfragen</label>
+            <label index="phpbb.step3.polls.pid">Seiten-ID</label>
+            <label index="phpbb.step4.pollimport_report">Es wurden %s Umfragen importiert.</label>
+		</languageKey>
+        
+        <languageKey index="fi" type="array">
+			<label index="indev">Kehitteillä</label>
+			<label index="menu.useradmin">Käyttäjähallinta</label>
+			<label index="menu.boardadmin">Keskusteluhallinta</label>
+			<label index="menu.template">Templatet</label>
+			<label index="menu.tools">Työkalut</label>
+			<label index="menu.statistics">Tilastot</label>
+			<label index="menu.mailing">Postitustoiminnot</label>
+			<label index="menu.importexport">Data-importointi/eksportointi</label>
+			<label index="menu.phpbbimport">phpBB data-importointi</label>
+			<label index="menu.import">Data-importointi</label>
+			<label index="menu.install">Asennus</label>
+			<label index="menu.userFields">Käyttäjäprofiilin laajennus</label>
+			<label index="error">Virhe</label>
+			<label index="error.noSettings">BE-modulia ei ole konfiguroitu loppuun EM:ssä (extension manager). Ole hyvä ja anna tiedot puuttuviin kenttiin. Sinun täytyy antaa UIDt perus-, moderaattori- ja hallinnoijaryhmälle. Lisäksi sinun täytyy määritellä sivu-UID, missä kaikki mm_forum data sijaitsee. Katso lisätietoja dokumentaatiosta.</label>
+			<label index="page.page">Sivu</label>
+			<label index="page.first">Ensimmäinen</label>
+			<label index="page.last">Viimeinen</label>
+			<label index="useradmin.filter">Filtteri</label>
+			<label index="useradmin.filter.clear">Poista filtteri</label>
+			<label index="useradmin.edit">Muokkaa</label>
+			<label index="useradmin.age">Ikä</label>
+			<label index="useradmin.username">Käyttäjänimi</label>
+			<label index="useradmin.usergroup">Käyttäjäryhmät</label>
+			<label index="useradmin.usercount">Näytä %s-%s / %s (yht.)</label>
+			<label index="useradmin.searchfor">Hae</label>
+			<label index="boardadmin.maincategories">Pääkategoriat</label>
+			<label index="boardadmin.newcategory">Luo uusi kategoria</label>
+			<label index="boardadmin.hidden">Piilotettu</label>
+			<label index="boardadmin.boards">keskustelut</label>
+			<label index="boardadmin.posoption.beginning">Alussa</label>
+			<label index="boardadmin.posoption.after">Jälkeen</label>
+			<label index="boardadmin.newcat">Uusi kategoria</label>
+			<label index="boardadmin.editcat">Muokkaa kategoriaa</label>
+			<label index="boardadmin.name">Nimi</label>
+			<label index="boardadmin.description">Kuvaus</label>
+			<label index="boardadmin.position">Sijainti</label>
+			<label index="boardadmin.delete">Poista</label>
+			<label index="boardadmin.hide">Piilota</label>
+			<label index="boardadmin.unhide">Esiin</label>
+			<label index="boardadmin.save">Tallenna</label>
+			<label index="boardadmin.internal">Sisäinen</label>
+			<label index="boardadmin.moveto">Siirrä</label>
+			<label index="boardadmin.grouprights_read">Luku</label>
+			<label index="boardadmin.grouprights_write">Kirjoitus</label>
+			<label index="boardadmin.newcat.name">Uusi kategoria</label>
+			<label index="boardadmin.newcat.desc">Kuvaus</label>
+			<label index="boardadmin.boardsof">&quot;%s&quot;:n keskustelut</label>
+			<label index="boardadmin.posts">viestiä</label>
+			<label index="boardadmin.newboard">Luo uusi keskustelu</label>
+			<label index="boardadmin.newboard2">Uusi keskustelu</label>
+			<label index="boardadmin.editboard">Muokkaa keskustelua</label>
+			<label index="boardadmin.newboard.name">Uusi keskustelu</label>
+			<label index="boardadmin.newboard.desc">Kuvaus</label>
+			<label index="tmpl.saveError">Virhe tallenttaessa tiedostoa %s!</label>
+			<label index="tmpl.saveSuccess">Tiedosto %s tallennettu (%s tavua)</label>
+			<label index="tmpl.select">Valitse template...</label>
+			<label index="tmpl.file">Template-tiedosto</label>
+			<label index="tmpl.tmpldir">Template-hakemisto</label>
+			<label index="tmpl.edit">Muokkaa &quot;%s&quot;</label>
+			<label index="tmpl.reset">Resetoi template</label>
+			<label index="tmpl.save">Tallenna template</label>
+			<label index="tmpl.noTemplate">Templatea ei löydy</label>
+			<label index="tmpl_select_title">Valitse template</label>
+			<label index="tmpl_selectTheme">Valitse tyyli</label>
+			<label index="tmpl_selectTemplate">Valitse template</label>
+			<label index="tmpl_selectThemeFirst">Ole hyvä ja valitse tyyli ensin</label>
+			<label index="tmpl_createTheme">Luo uusi tyyli</label>
+			<label index="tmpl_createTheme_desc">Tällä luodaan uusi tyyli kopioimalla oletustyyli uuteen kansioon</label>
+			<label index="tmpl_createTheme_name">Tyylin nimi</label>
+			<label index="tmpl_createTheme_submit">Luo</label>
+			<label index="tmpl_createTheme_error">Uusi tyyli luotu.</label>
+			<label index="tmpl_editTemplate_title">Muokkaa templatea &quot;%s&quot;</label>
+			<label index="tmpl_editTemplate_submit">Tallenna</label>
+			<label index="tmpl_editTemplate_reset">Peruuta muutokset</label>
+			<label index="tmpl_editTemplate_toDefault">Palauta oletusarvoon</label>
+			<label index="tmpl_editTemplate_noedit">Oletustyylin templateja ei voi muokata. Ole hyvä ja luo uusi tyyli.</label>
+			<label index="tmpl_themeActive">Tämä tyyli on aktiivinen.</label>
+			<label index="tmpl_themeInactive">Tämä tyyli ei ole aktiivinen.</label>
+			<label index="tmpl_themeActivate">Aktivoi</label>
+			<label index="tools.bbcodes">BB koodit</label>
+			<label index="tools.smilies">Hymiöt</label>
+			<label index="tools.syntaxhighlighter">Syntaksikorostus</label>
+			<label index="tools.fe_inserticon">Kuvake</label>
+			<label index="tools.lang_title">Otsikko</label>
+			<label index="tools.lang_code">Lähdekoodi</label>
+			<label index="tools.bbcode">BB koodi</label>
+			<label index="tools.replacement">Korvaaminen</label>
+			<label index="tools.options">Piilota/Poista</label>
+			<label index="tools.save">Tallenna</label>
+			<label index="tools.hide">Piilota</label>
+			<label index="tools.unhide">Esiin</label>
+			<label index="tools.delete">Poista</label>
+			<label index="tools.create">Luo</label>
+			<label index="tools.code">Koodi</label>
+			<label index="tools.smilie">Hymiö</label>
+			<label index="tools.file">Tedosto</label>
+			<label index="tools.editcode">Muokkaa koodia</label>
+			<label index="tools.new">Uusi</label>
+			<label index="import.stepX">Askel %s</label>
+			<label index="import.stepXofY">Askel %s / %s</label>
+			<label index="import.step0">Valitse importointitapa</label>
+			<label index="import.step0.phpBB.desc">Importoi data olemassaolevasta phpBB-keskustelusta.</label>
+			<label index="import.step0.CHC.desc">Importoi data olemassaolevasta CHC Forumista.</label>
+			<label index="import.step0.continue">Jatka</label>
+			<label index="import.step0.error">Sinun täytyy valita importointitapa ennen jatkamista.</label>
+			<label index="import.step1">Valitse tietokantayhteys</label>
+			<label index="import.step1.localDB">Paikallinen TYPO3-tietokanta</label>
+			<label index="import.step1.extDB">Ulkopuolinen tietokanta</label>
+			<label index="import.step1.ext.server">Palvelin</label>
+			<label index="import.step1.ext.user">Käyttäjänimi</label>
+			<label index="import.step1.ext.password">Salasana</label>
+			<label index="import.step1.ext.dbname">Tietokannan nimi</label>
+			<label index="import.step1.continue">Jatka</label>
+			<label index="import.step1.error_server">Määrittelemätön palvelin</label>
+			<label index="import.step1.error_user">Määrittelemätön käyttäjänimi</label>
+			<label index="import.step1.error_dbname">Määrittelemätön tietokannan nimi</label>
+			<label index="import.step1.error_connect">Ei saatu yhteyttä määriteltyyn palvelimeen</label>
+			<label index="import.step1.error_selectdb">Ei voitu valita määriteltyä tietokantaa</label>
+			<label index="chc.success">CHC Forum -data importoitu.</label>
+			<label index="chc.categories">Kategoriat</label>
+			<label index="chc.boards">Keskustelut</label>
+			<label index="chc.topics">Aiheet</label>
+			<label index="chc.step3">Askel 3/4: Valitse importoitava data</label>
+			<label index="chc.import.chc">CHC Forum</label>
+			<label index="chc.import.chc.desc">Importoi kategoriat ja keskustelut CHC Forumista</label>
+			<label index="chc.import.cwt.desc">Importoi yksityisviestit CWT Communitystä</label>
+			<label index="chc.import.continue">Jatka</label>
+			<label index="chc.step4">Askel 4/4: Suorita importointi</label>
+			<label index="chc.posts">Viestit</label>
+			<label index="cwt.success">CWT Community data importoitu.</label>
+			<label index="cwt.pms">Yksityisviestit</label>
+			<label index="phpbb.general.update">Päivitä</label>
+			<label index="phpbb.general.stepXofY">Askel %s / %s</label>
+			<label index="phpbb.general.continue">Jatka</label>
+			<label index="phpbb.general.yes">Kyllä</label>
+			<label index="phpbb.general.no">Ei</label>
+		</languageKey>
+        <!-- FRENCH LANGUAGE DATA -->
+        <languageKey index="fr" type="array">
+			<label index="title">mm_forum</label>
+			<label index="indev">Au travail...</label>
+			
+			<label index="menu.useradmin">Gestion des intervenants</label>
+			<label index="menu.boardadmin">Gestion du forum</label>
+			<label index="menu.template">Gabarits de design</label>
+			<label index="menu.tools">Outils</label>
+			<label index="menu.statistics">Statistiques</label>
+			<label index="menu.mailing">Mailing</label>
+			<label index="menu.importexport">Import/-export de données</label>
+			<label index="menu.phpbbimport">phpBB-Importation de données</label>
+            <label index="menu.import">Importation de données</label>
+            <label index="menu.install">Installation</label>
+            <label index="menu.userFields">Etendre le profil d'intervenants</label>
+
+			<label index="error">Erreur</label>
+			<label index="error.noSettings">Le module backend n'est pas configuré correctement dans le manager d'extensions. Merci de remplir les champs manquants dans le formulaire de configuration. Les UIDs des groupes d'intervenants, des animateurs et des administrateurs doivent etre indiquées. Les UID des pages qui contiennent les données de mm_forum doivent etre indiquées. Merci de consulter la documentation.</label>
+
+			<label index="page.page">Page</label>
+			<label index="page.first">Première</label>
+			<label index="page.last">Dernière</label>
+			
+			<label index="useradmin.filter">Filtre</label>
+			<label index="useradmin.filter.clear">Vider le filtre</label>
+			<label index="useradmin.edit">Editer</label>
+			<label index="useradmin.age">Age</label>
+			<label index="useradmin.username">Nom de l'utilisateur</label>
+			<label index="useradmin.usergroup">Groupes</label>
+			<label index="useradmin.usercount">Liste l'intervenant %s-%s de %s (total)</label>
+			<label index="useradmin.searchfor">Rechercher...</label>
+			
+			<label index="boardadmin.maincategories">Thèmes</label>
+			<label index="boardadmin.newcategory">Créer un thème</label>
+			<label index="boardadmin.hidden">Caché</label>
+			<label index="boardadmin.boards">Thèmes</label>
+			<label index="boardadmin.posoption.beginning">Au début</label>
+			<label index="boardadmin.posoption.after">Après</label>
+			<label index="boardadmin.newcat">Nouveau thème</label>
+			<label index="boardadmin.editcat">Modifier thème</label>
+			<label index="boardadmin.name">Nom</label>
+			<label index="boardadmin.description">Description</label>
+			<label index="boardadmin.position">Position</label>
+			<label index="boardadmin.delete">Supprimer</label>
+			<label index="boardadmin.hide">Cacher</label>
+			<label index="boardadmin.unhide">Rendre visible</label>
+			<label index="boardadmin.save">Enregistrer</label>
+			<label index="boardadmin.internal">Interne</label>
+			<label index="boardadmin.moveto">Déplacer</label>
+			<label index="boardadmin.grouprights_read">Lire</label>
+			<label index="boardadmin.grouprights_write">Ecrire</label>
+			
+			<label index="boardadmin.newcat.name">Nouveau thème</label>
+			<label index="boardadmin.newcat.desc">Description</label>
+			
+			<label index="boardadmin.boardsof">Fils dans "%s"</label>
+			<label index="boardadmin.posts">Interventions</label>
+			<label index="boardadmin.newboard">Créer un thème</label>
+			<label index="boardadmin.newboard2">Nouveau thème</label>
+			<label index="boardadmin.editboard">Editer un thème</label>
+			
+			<label index="boardadmin.newboard.name">Nouveau thème</label>
+			<label index="boardadmin.newboard.desc">Description</label>
+			
+			<label index="tmpl.saveError">Erreur lors de l'écriture du fichier %s!</label>
+			<label index="tmpl.saveSuccess">Fichier %s enregistré (%s Bytes)</label>
+			<label index="tmpl.select">Choix du gabarit de design...</label>
+			<label index="tmpl.file">Gabarit de design</label>
+			<label index="tmpl.tmpldir">Répertoire des gabarits</label>
+			<label index="tmpl.edit">Editer "%s"</label>
+			<label index="tmpl.reset">Valeurs par défaut</label>
+			<label index="tmpl.save">Enregistrer le gabarit</label>
+            <label index="tmpl.noTemplate">Aucun gabarit trouvé</label>
+            
+            <label index="tmpl_select_title">Choisir un gabarit de design</label>
+            <label index="tmpl_selectTheme">choisir des parametres de design</label>
+            <label index="tmpl_selectTemplate">Choisir un gabarit de design</label>
+            <label index="tmpl_selectThemeFirst">Merci de d'abord choisir un paramétrage de gabarit.</label>
+            <label index="tmpl_createTheme">Créer un nouveau paramétrage de gabarit</label>
+            <label index="tmpl_createTheme_desc">cette action va créer un nouveau paramétrage de gabarit en copiant le paramétrage de gabarit par défaut dans un nouveau répertoire.</label>
+            <label index="tmpl_createTheme_name">Nom du paramétrage de gabarit</label>
+            <label index="tmpl_createTheme_submit">Créer</label>
+            <label index="tmpl_createTheme_error">Ce nom existe déjà.</label>
+            <label index="tmpl_createTheme_error">Création du paramétrage de gabarit terminée.</label>
+            <label index="tmpl_editTemplate_title">Designvorlage "%s" bearbeiten</label>
+            <label index="tmpl_editTemplate_submit">Speichern</label>
+            <label index="tmpl_editTemplate_reset">Änderungen rückgängig</label>
+            <label index="tmpl_editTemplate_toDefault">Auf Standard zurücksetzen</label>
+            <label index="tmpl_editTemplate_noedit">Designvorlagen aus dem Standarddesignset können nicht bearbeitet werden. Bitte legen Sie ein neues Designset an.</label>
+            <label index="tmpl_themeActive">Ce gabarit de design est actif.</label>
+            <label index="tmpl_themeInactive">Ce gabarit de design n'est pas actif.</label>
+            <label index="tmpl_themeActivate">Activer</label>
+            
+			<label index="tools.bbcodes">BB-Codes</label>
+			<label index="tools.smilies">Emoticons</label>
+			<label index="tools.syntaxhighlighter">Mise en valeur de textes</label>
+			
+			<label index="tools.fe_inserticon">Image</label>
+			<label index="tools.lang_title">Titre</label>
+			<label index="tools.lang_pattern">Critère de recherche</label>
+			<label index="tools.lang_code">Code-source</label>
+			
+			<label index="tools.bbcode">BB-Code</label>
+			<label index="tools.pattern">Exemple</label>
+			<label index="tools.replacement">remplacement</label>
+			<label index="tools.options">Cahcer/Supprimer</label>
+			<label index="tools.save">Enregistrer</label>
+			<label index="tools.hide">Caché</label>
+			<label index="tools.unhide">Masquer</label>
+			<label index="tools.delete">Supprimer</label>
+			<label index="tools.create">Créer</label>
+			
+			<label index="tools.code">Code</label>
+			<label index="tools.smilie">Smilie</label>
+			<label index="tools.file">Fichier</label>
+			<label index="tools.editcode">Intervenir dans le code</label>
+			<label index="tools.new">Nouveau</label>
+
+            <label index="import.stepX">Etape %s</label>
+            <label index="import.stepXofY">Etape %s de %s</label>
+            <label index="import.step0">Choix de la méthode d'importation</label>
+            <label index="import.step0.phpBB">phpBB</label>
+            <label index="import.step0.phpBB.desc">Importe des données d'un forum phpBB existant.</label>
+            <label index="import.step0.CHC">CHC Forum</label>
+            <label index="import.step0.CHC.desc">Importe des données d'une instance existante de l'extension TYPO3 CHC-Forum.</label>
+            <label index="import.step0.continue">Continuer</label>
+            <label index="import.step0.error">Vous devez choisir une méthode d'importation avant de poursuivre.</label>
+            <label index="import.step1">Choix de la liaison vers la banque de données</label>
+            <label index="import.step1.localDB">Utiliser la banque de données locale de TYPO3</label>
+            <label index="import.step1.extDB">Utiliser une banque de données externe</label>
+            <label index="import.step1.ext.server">Serveur</label>
+            <label index="import.step1.ext.user">Identifiant</label>
+            <label index="import.step1.ext.password">Mot de passe</label>
+            <label index="import.step1.ext.dbname">Nom de la banque de données </label>
+            <label index="import.step1.continue">continuer</label>
+            <label index="import.step1.error_server">Indiquez un serveur !</label>
+            <label index="import.step1.error_user">indiquez un identifiant !</label>
+            <label index="import.step1.error_dbname">Indiquer le nom de la banque de données !</label>
+            <label index="import.step1.error_connect">Liaison vers le serveur indiqué impossible !</label>
+            <label index="import.step1.error_selectdb">Ouverture de la banque de données indiquée impossible !</label>
+            
+            <label index="chc.success">L'importation des données de CHC Forum est terminée.</label>
+            <label index="chc.categories">Forums</label>
+            <label index="chc.boards">Thèmes</label>
+            <label index="chc.topics">Fils</label>
+            <label index="chc.step3">Etape 3 de 4 : Choisir les données à importer</label>
+            <label index="chc.import.chc">CHC Forum</label>
+            <label index="chc.import.chc.desc">Importe les forums et thèmes de l'extension CHC Forum.</label>
+            <label index="chc.import.cwt">CWT Community</label>
+            <label index="chc.import.cwt.desc">Importe les messages privés de l'extension CWT Community.</label>
+            <label index="chc.import.continue">Continuer</label>
+            <label index="chc.step4">Etape 4 de 4 : Lancer l'importation</label>
+            <label index="chc.posts">Interventions</label>
+            <label index="cwt.success">L'importation de CWT Community est terminée.</label>
+            <label index="cwt.pms">Messages privés</label>
+			
+			<label index="phpbb.general.prefix">Préfixe de tableau MySQL</label>
+			<label index="phpbb.general.update">Actualiser</label>
+			<label index="phpbb.general.stepXofY">Etape %s de %s</label>
+			<label index="phpbb.general.continue">Continuer</label>
+			<label index="phpbb.general.yes">Oui</label>
+			<label index="phpbb.general.no">Non</label>
+			
+			<label index="phpbb.step1">Fixer le préfixe de tableau</label>
+			<label index="phpbb.step1.checking">Vérification des tableaux</label>
+			<label index="phpbb.step1.notfound">´Le tableau &lt;i&gt;%s&lt;/i&gt; n'existe pas dans cette banque de données.</label>
+			<label index="phpbb.step1.fatalError">Aucun des tableaux nécessaires à l'importation ne peut être trouvé. Merci de vérifier la pertinence du préfixe indiqué.</label>
+			<label index="phpbb.step1.error">Certains tableaux nécessaires à l'importation n'ont pu être trouvés. Voir ci-dessus.</label>
+			<label index="phpbb.step1.ok">Tous les tableaux nécessaires à l'importation ont été trouvés. Poursuivez avec l'étape suivante.</label>
+			<label index="phpbb.step1.warning">AVERTISSEMENT: Certains tableaux utilisés par phpBB-Forum n'nt pu être trouvés dans cette banque de données. Vu que pas tous les tableaux sont nécessaires à l'importation, ceci ne mettra pas nécessairement en péril l'importation. Désirez-vous poursuivre ?</label>
+			
+			<label index="phpbb.step2">Choisir les données à importer</label>
+			<label index="phpbb.step2.instruction">Choisissez quelles données vous désirez importer de phpBB-Forum. A savoir que l'importation de certaines données nécessite l'importation d'autres données.</label>
+			<label index="phpbb.step2.dependsOn">dépend de </label>
+			<label index="phpbb.step2.alreadyImported">déjà importé</label>
+			<label index="phpbb.step2.dependencyError">Certaines données ne sont pas importées. Merci de vérifier les dépendances entre diverses données.</label>
+			<label index="phpbb.step2.boards/categories">Forums et thèmes</label>
+			<label index="phpbb.step2.users/usergroups">Utilisateurs et groupes d'utilisateurs </label>
+			<label index="phpbb.step2.topics/posts">Fils et interventions</label>
+			<label index="phpbb.step2.pms">Messages privés</label>
+			<label index="phpbb.step2.search">Index de recherche</label>
+			<label index="phpbb.step2.smilies">Emoticons</label>
+			<label index="phpbb.step2.subscr">Abonnements e-mail</label>
+			<label index="phpbb.step2.tablesrequired">Tableaux nécessaires</label>
+			<label index="phpbb.step2.note">&lt;i&gt;Commentaire :&lt;/i&gt; Les tableaux marqués en rouge n'existent pas. La tentative d'importer des données mènera à un échec.</label>
+			<label index="phpbb.step2.noSelectNote">Choisissez au moins une catégorie de données avant de poursuivre.</label>
+			
+			<label index="phpbb.step3">Paramétrage de l'importation</label>
+			<label index="phpbb.step3.import0.pid">ID de la page</label>
+			<label index="phpbb.step3.import1.pid">ID de la page</label>
+			<label index="phpbb.step3.import1.moderators">Groupe des animateurs</label>
+			<label index="phpbb.step3.import1.mods.create">Créer un groupe d'utilisateurs</label>
+			<label index="phpbb.step3.import1.mods.import">Importer dans un groupe existant (ID du groupe)</label>
+			<label index="phpbb.step3.import1.mods.nothing">Non-animateurs</label>
+			<label index="phpbb.step3.import1.admins">Groupe des administrateurs</label>
+			<label index="phpbb.step3.import1.admins.create">Créer un groupe d'utilisateurs</label>
+			<label index="phpbb.step3.import1.admins.import">Importer dans un groupe existant (ID du groupe)</label>
+			<label index="phpbb.step3.import1.admins.nothing">Non-Administrateurs</label>
+			<label index="phpbb.step3.import1.users">Groupe des íntervenants</label>
+			<label index="phpbb.step3.import1.users.create">Créer un groupe d'utilisateurs</label>
+			<label index="phpbb.step3.import1.users.import">Importer dans un groupe existant (ID du groupe)</label>
+			<label index="phpbb.step3.import1.users.nothing">Non-Intervenant</label>
+			<label index="phpbb.step3.import1.avatarpath">Dossier des Avatars</label>
+			<label index="phpbb.step3.import1.createSingleUserGroups">Importer un groupe d'intervenants</label>
+			<label index="phpbb.step3.import2.pid">ID de la page</label>
+			<label index="phpbb.step3.import3.pid">ID de la page</label>
+			<label index="phpbb.step3.import4.pid">ID de la page</label>
+			<label index="phpbb.step3.import4.group_post">Classer les résultats par fil</label>
+			<label index="phpbb.step3.import5.pid">ID de la page</label>
+			<label index="phpbb.step3.import5.phpbb_smilie_url">URL du dossier des émoticons phpBB</label>
+			<label index="phpbb.step3.import5.mmforum_smilie_url">URL du dossier des émoticons mm_forum</label>
+			<label index="phpbb.step3.import6.pid">ID de la page</label>
+			                                                         
+			<label index="phpbb.step4">Lancer l'importation</label>
+			<label index="phpbb.step4.new_adminGroup">Administrateurs</label>
+			<label index="phpbb.step4.new_modGroup">Animateurs</label>
+			<label index="phpbb.step4.groupimport_report">%s groupes d'intervenants importés.</label>
+			<label index="phpbb.step4.userimport_report">%s intervenants importés.</label>
+			<label index="phpbb.step4.errorUsergroupImport">Le groupe d'intervenants &lt;i&gt;%s&lt;/i&gt; n'a pu être importé.</label>
+			<label index="phpbb.step4.errorUsergroupImport">L'intervenant &lt;i&gt;%s&lt;/i&gt; n'a pu être importé.</label>
+			<label index="phpbb.step4.errorAdmingroupCreate">Le groupe des administrateurs n'a pu être créé.</label>
+			<label index="phpbb.step4.errorModgroupCreate">Le groupe des animateurs n'a pu être créé.</label>
+			<label index="phpbb.step4.errorUsergroupCreate">Le groupe des administrateurs n'a pu être créé.</label>
+			<label index="phpbb.step4.errorCategoryImport">La catégorie &lt;i&gt;%s&lt;/i&gt; n'a pu être importée.</label>
+			<label index="phpbb.step4.errorBoardImport">Le forum &lt;i&gt;%s&lt;/i&gt; n'a pu être importé.</label>
+			<label index="phpbb.step4.categoryimport_report">%s Catégories importées.</label>
+			<label index="phpbb.step4.boardimport_report">%s Forums importés.</label>
+			<label index="phpbb.step4.errorTopicImport">Le fil &lt;i&gt;%s&lt;/i&gt; n'a pu être importé.</label>
+			<label index="phpbb.step4.errorPostImport">L'intervention &lt;i&gt;%s&lt;/i&gt; n'a pu être importée.</label>
+			<label index="phpbb.step4.topicimport_report">%s fils importés.</label>
+			<label index="phpbb.step4.postimport_report">%s interventions importées.</label>
+			<label index="phpbb.step4.wordlistimport_report">%s mots indexés importés.</label>
+			<label index="phpbb.step4.searchresultimport_report">%s recherches importées.</label>
+			<label index="phpbb.step4.matchesimport_report">%s mot-clés importés.</label>
+			<label index="phpbb.step4.smilieimport_report">%s émoticons importés.</label>
+			<label index="phpbb.step4.subscrimport_report">%s notifications par mail importées.</label>
+			<label index="phpbb.step4.pmimport_report">%s messages privés importés.</label>
+			
+			<label index="phpbb.step3.import0.pid.warning">Avertissement : Aucune PID indiquée. 0 sera utilisé en lieu et place.</label>
+			<label index="phpbb.step3.import.pid.0">Avertissement : Il n'est pas conseillé de stocker des enregistrements dans la racine.</label>
+			<label index="phpbb.step3.import1.mods.emptyError">ERREUR : Aucune ID indiquée.</label>
+			<label index="phpbb.step3.import1.mods.neError">ERREUR: groupe inexistant.</label>
+			<label index="phpbb.step3.import1.avatarpath.emptyWarning">AVERTISSEMENT: Dossier des avatars non-défini. Le chemin par défaut sera utilisé (uploads/tx_mmforum/).</label>
+			<label index="phpbb.step3.import5.phpbbSmilie_url.emptyError">ERREUR: Pas de chemin indiqué.</label>
+			<label index="phpbb.step3.import5.mmforumSmilie_url.emptyError">ERREUR: Pas de chemin indiqué.</label>
+			<label index="phpbb.step3.error1">Lors du traitement de l'information indiquée par vos soin, une erreur est survenue. Merci de corriger avant de poursuivre avec l'étape suivante.</label>
+			<label index="phpbb.step3.errors">Lors du traitement de l'information indiquée par vos soin, %s erreurs sont survenues. Merci de corriger avant de poursuivre avec l'étape suivante.</label>
+			<label index="phpbb.step3.warning">Lors du traitement de l'information indiquée par vos soin, il y a eu au moins une erreur. Merci de corriger avant de poursuivre avec l'étape suivante. Ceci ne produira pas d'erreur lors de l'étape suivante, mais il est conseillé de vérifier vos données indiquées.</label>
+
+			<label index="phpbb.step4.startNote">Vous pouvez maintenant démarrer l'importation des données phpBB. L'importation va durée un certain temps, selon la masse de données et les paramètre fixés.</label>
+			<label index="phpbb.step4.startButton">Démarrer l'importation</label>
+			
+			<label index="phpbb.step3.clearAll">Avant importation, vider les tableaux de mm_forum</label>
+			<label index="phpbb.step3.clearReallyAll">Avant importation supprimer &lt;strong&gt;tous&lt;/strong&gt; les tableaux mm_forum</label>
+			<label index="phpbb.step4.clearAllNote">Vous avez indiqué que plusieurs tableaux mm_forum doivent être vidés. Ceci influe sur les tableaux globaux fe_user- et fe_groups. Merci de préciser quels groupes et utilisateurs ne doivent pas être supprimés. Vous pouvez indiquer une liste des UIDs à ne pas supprimer ou vous pouvez spécifier une instruction MySQL-WHERE, qui remplira cette fonction, mais qui pourra être plus flexible.</label>
+			
+			<label index="phpbb.step4.clear.userUID">UIDs-Utilisateurs</label>
+			<label index="phpbb.step4.clear.userWHERE">Instruction WHERE pour les utilisateurs</label>
+			<label index="phpbb.step4.clear.usergroupUID">UIDs des groupes d'utilisateurs</label>
+			<label index="phpbb.step4.clear.usergroupWHERE">Instruction WHERE pour les groupes d'utilisateurs</label>
+			<label index="phpbb.step4.clear.uidEx">Exemple : 1,2,3</label>
+			<label index="phpbb.step4.clear.whereEx">Exemple : WHERE uid NOT IN (1,2,3)</label>
+            
+			<label index="phpbb.step2.polls">Votes</label>
+            <label index="phpbb.step3.polls.pid">ID de la page</label>
+            <label index="phpbb.step4.pollimport_report">%s Votes importés.</label>
+			            
+            <!-- ADDED IN 0.1.2 -->
+            <label index="menu.ranks">Classement des utilisateurs</label>
+            <label index="ranks.title">Titre</label>
+            <label index="ranks.icon">Icône</label>
+            <label index="ranks.posts">Interventions</label>
+            <label index="ranks.noicon">Pas d'icône</label>
+            <label index="ranks.special">Rang spécial</label>
+		</languageKey>
+        <!-- RUSSIAN LANGUAGE DATA -->
+		<languageKey index="ru" type="array">
+			<label index="title">mm_forum</label>
+			<label index="indev">В разработке...</label>
+			
+			<label index="menu.useradmin">Управление пользователями</label>
+			<label index="menu.boardadmin">Управление форумом</label>
+			<label index="menu.template">Шаблоны</label>
+			<label index="menu.tools">Инструменты</label>
+			<label index="menu.statistics">Статистика</label>
+			<label index="menu.mailing">Mailing</label>
+			<label index="menu.importexport">Импорт/Экспорт данных</label>
+			<label index="menu.phpbbimport">Импорт данных из phpBB</label>
+			<label index="menu.import">Импорт данных</label>
+			<label index="menu.install">Установки</label>
+			<label index="menu.userFields">Расширить профиль пользователя</label>
+			
+			<label index="error">Ошибка</label>
+			<label index="error.noSettings">Обнаружены проблемы конфигурации модуля backend в менеджере расширений (extension manager). Пожалуйста, заполните пропущенные поля формы конфигурации в менеджере расширений (extension manager). Вам нужно будет указать UID общей группы пользователей, групп модераторов и администраторов. Кроме того, Вам необходимо указать UID страницы где хранятся все данные расширения mm_forum. Для более подробной информацией, как это сделать, обратитесь к документации.</label>
+			
+			<label index="page.page">Страница</label>
+			<label index="page.first">Первая</label>
+			<label index="page.last">Последняя</label>
+			
+			<label index="useradmin.filter">Фильтр</label>
+			<label index="useradmin.filter.clear">Сбросить фильтр</label>
+			<label index="useradmin.edit">Редактировать</label>
+			<label index="useradmin.age">Давность</label>
+			<label index="useradmin.username">Имя пользователя</label>
+			<label index="useradmin.usergroup">Группы пользователя</label>
+			<label index="useradmin.usercount">Показать %s-%s пользователей из всего %s</label>
+			<label index="useradmin.searchfor">Искать</label>
+			
+			<label index="boardadmin.maincategories">Главные категории</label>
+			<label index="boardadmin.newcategory">Создать новую категорию</label>
+			<label index="boardadmin.hidden">Скрыть</label>
+			<label index="boardadmin.boards">форумы</label>
+			<label index="boardadmin.posoption.beginning">В начале</label>
+			<label index="boardadmin.posoption.after">После</label>
+			<label index="boardadmin.newcat">Новая категория</label>
+			<label index="boardadmin.editcat">Редактировать категорию</label>
+			<label index="boardadmin.name">Имя</label>
+			<label index="boardadmin.description">Описание</label>
+			<label index="boardadmin.position">Позиция</label>
+			<label index="boardadmin.delete">Удалить</label>
+			<label index="boardadmin.hide">Скрыть</label>
+			<label index="boardadmin.unhide">Показать</label>
+			<label index="boardadmin.save">Сохранить</label>
+			<label index="boardadmin.internal">Внутренний</label>
+			<label index="boardadmin.moveto">Переместить в</label>
+			<label index="boardadmin.grouprights_read">Чтение</label>
+			<label index="boardadmin.grouprights_write">Запись</label>
+			
+			<label index="boardadmin.newcat.name">Новая категория</label>
+			<label index="boardadmin.newcat.desc">Описание</label>
+			
+			<label index="boardadmin.boardsof">Форумов из "%s"</label>
+			<label index="boardadmin.posts">сообщений</label>
+			<label index="boardadmin.newboard">Создать новый форум</label>
+			<label index="boardadmin.newboard2">Новый форум</label>
+			<label index="boardadmin.editboard">Редактировать форум</label>
+			
+			<label index="boardadmin.newboard.name">Новый форум</label>
+			<label index="boardadmin.newboard.desc">Описание</label>
+			
+			<label index="tmpl.saveError">Ошибка при сохранении файла %s!</label>
+			<label index="tmpl.saveSuccess">Файл %s сохранен (%s Bytes)</label>
+			<label index="tmpl.select">Выбрать шаблон...</label>
+			<label index="tmpl.file">Файл шаблона</label>
+			<label index="tmpl.tmpldir">Папка шаблонов</label>
+			<label index="tmpl.edit">Редактировать "%s"</label>
+			<label index="tmpl.reset">Изменить шаблон</label>
+			<label index="tmpl.save">Сохранить шаблон</label>
+			<label index="tmpl.noTemplate">Шаблон не найден</label>
+			
+			<label index="tmpl_select_title">Выбрать шаблон</label>
+			<label index="tmpl_selectTheme">Выбрать дизайн</label>
+			<label index="tmpl_selectTemplate">Выбрать шаблон</label>
+			<label index="tmpl_selectThemeFirst">Пожалуйста, выберите сначала дизайн</label>
+			<label index="tmpl_createTheme">Создать новый дизайн</label>
+			<label index="tmpl_createTheme_desc">Создание нового дизайна путем копирования дизайна по умолчанию в новую папку.</label>
+			<label index="tmpl_createTheme_name">Название дизайна</label>
+			<label index="tmpl_createTheme_submit">Создать</label>
+			<label index="tmpl_createTheme_error">Уже существует дизайн с таким названием.</label>
+			<label index="tmpl_createTheme_error">Дизайн успешно создан.</label>
+			<label index="tmpl_editTemplate_title">Редактировать шаблон "%s"</label>
+			<label index="tmpl_editTemplate_submit">Сохранить</label>
+			<label index="tmpl_editTemplate_reset">Отменить изменения</label>
+			<label index="tmpl_editTemplate_toDefault">Вернуть установку по умолчанию</label>
+			<label index="tmpl_editTemplate_noedit">Шаблоны дизайна по умолчанию не могут быть изменены. Пожалуйста, создайте новый дизайн.</label>
+			<label index="tmpl_themeActive">Используется этот дизайн.</label>
+			<label index="tmpl_themeInactive">Этот дизайн не используется.</label>
+			<label index="tmpl_themeActivate">Активировать</label>
+			
+			<label index="tools.bbcodes">BB Codes</label>
+			<label index="tools.smilies">Смайлы</label>
+			<label index="tools.syntaxhighlighter">Подсветка синтаксиса</label>
+			
+			<label index="tools.fe_inserticon">Иконка</label>
+			<label index="tools.lang_title">Заголовок</label>
+			<label index="tools.lang_pattern">Шаблон регулярного выражения (RegExp)</label>
+			<label index="tools.lang_code">Исходный код</label>
+			
+			<label index="tools.bbcode">BB код</label>
+			<label index="tools.pattern">Шаблон</label>
+			<label index="tools.replacement">Замена</label>
+			<label index="tools.options">Скрыть/Удалить</label>
+			<label index="tools.save">Сохранить</label>
+			<label index="tools.hide">Скрыть</label>
+			<label index="tools.unhide">Показать</label>
+			<label index="tools.delete">Удалить</label>
+			<label index="tools.create">Создать</label>
+			
+			<label index="tools.code">Код</label>
+			<label index="tools.smilie">Смайлы</label>
+			<label index="tools.file">Файл</label>
+			<label index="tools.editcode">Редактировать код</label>
+			<label index="tools.new">Новый</label>
+			<label index="tools.create">Создать</label>
+			
+			<label index="import.stepX">Шаг %s</label>
+			<label index="import.stepXofY">Шаг %s из %s</label>
+			<label index="import.step0">Выберите процедуру импорта</label>
+			<label index="import.step0.phpBB">phpBB</label>
+			<label index="import.step0.phpBB.desc">Импортировать данные из существующего форума phpBB.</label>
+			<label index="import.step0.CHC">CHC Forum</label>
+			<label index="import.step0.CHC.desc">Импортировать данные из существующего экземпляра расширения CHC Forum TYPO3.</label>
+			<label index="import.step0.continue">Продолжить</label>
+			<label index="import.step0.error">Вы должны выбрать процедуру импорта перед тем как продолжить.</label>
+			<label index="import.step1">Выберите подключение к базе данных</label>
+			<label index="import.step1.localDB">Использовать локальную базу данных TYPO3</label>
+			<label index="import.step1.extDB">Использовать внешнюю базу данных</label>
+			<label index="import.step1.ext.server">Сервер</label>
+			<label index="import.step1.ext.user">Имя пользователя</label>
+			<label index="import.step1.ext.password">Пароль</label>
+			<label index="import.step1.ext.dbname">Имя базы данных</label>
+			<label index="import.step1.continue">Продолжить</label>
+			<label index="import.step1.error_server">Сервер не указан</label>
+			<label index="import.step1.error_user">Имя пользователя не указано</label>
+			<label index="import.step1.error_dbname">Имя базы данных не указано</label>
+			<label index="import.step1.error_connect">Невозможно подключиться к серверу.</label>
+			<label index="import.step1.error_selectdb">Невозможно выбрать указанную базу данных.</label>
+			
+			<label index="chc.success">Импорт данных из CHC Forum завершен успешно.</label>
+			<label index="chc.categories">Категории</label>
+			<label index="chc.boards">Форумы</label>
+			<label index="chc.topics">Темы</label>
+			<label index="chc.step3">Шаг 3 из 4: Выбор данных для импорта</label>
+			<label index="chc.import.chc">CHC Forum</label>
+			<label index="chc.import.chc.desc">Импорт категорий и форумов из расширения CHC Forum.</label>
+			<label index="chc.import.cwt">CWT Community</label>
+			<label index="chc.import.cwt.desc">Импорт личных сообщений из расширения CWT Community extension.</label>
+			<label index="chc.import.continue">Продолжить</label>
+			<label index="chc.step4">Шаг 4 из 4: Импорт</label>
+			<label index="chc.posts">Сообщения</label>
+			<label index="cwt.success">Данные из CWT Community успешно импортированы.</label>
+			<label index="cwt.pms">Личные сообщения</label>
+			
+			<label index="phpbb.general.prefix">Префикс таблицы MySQL</label>
+			<label index="phpbb.general.update">Обновить</label>
+			<label index="phpbb.general.stepXofY">Шаг %s из %s</label>
+			<label index="phpbb.general.continue">Продолжить</label>
+			<label index="phpbb.general.yes">Да</label>
+			<label index="phpbb.general.no">Нет</label>
+			
+			<label index="phpbb.step1">Укажите префикс таблицы</label>
+			<label index="phpbb.step1.checking">Проверка таблиц...</label>
+			<label index="phpbb.step1.notfound">Таблица &lt;i&gt;%s&lt;/i&gt; в базе данных не найдена.</label>
+			<label index="phpbb.step1.fatalError">Не найдена ни одна из таблиц для импорта. Пожалуйста, проверьте правильно ли указан префикс таблиц.</label>
+			<label index="phpbb.step1.error">Некоторые из таблиц необходимых для импорта данных не обнаружены (см. выше).</label>
+			<label index="phpbb.step1.ok">Все таблицы необходимые для импорта найдены. Перейдите к следующему шагу.</label>
+			<label index="phpbb.step1.warning">ПРЕДУПРЕЖДЕНИЕ: Некоторые таблицы используемые в форуме phpBB не были обнаружены в Вашей базе данных. Так как не все таблицы форума phpBB используются во время импорта, это может никак не отразится на самом процессе импорта. Продолжить в любом случае?</label>
+			
+			<label index="phpbb.step2">Выбрать данные для импорта</label>
+			<label index="phpbb.step2.instruction">Выберите данные которые необходимо импортировать из вашего форума phpBB. Обратите внимание, что некоторые поля зависящие от выбранных данных также будут импортированы.</label>
+			<label index="phpbb.step2.dependsOn">Зависит от</label>
+			<label index="phpbb.step2.alreadyImported">уже импортировано</label>
+			<label index="phpbb.step2.dependencyError">Некоторые обязательные данные не были импортированы. Пожалуйста, помните о внутренних связях между некоторыми данными.</label>
+			<label index="phpbb.step2.boards/categories">Форумы и категории</label>
+			<label index="phpbb.step2.users/usergroups">Пользователи и группы</label>
+			<label index="phpbb.step2.topics/posts">Темы и сообщения</label>
+			<label index="phpbb.step2.pms">Личные сообщения</label>
+			<label index="phpbb.step2.search">Индекс поиска</label>
+			<label index="phpbb.step2.smilies">Смайлы</label>
+			<label index="phpbb.step2.subscr">Подписка email</label>
+			<label index="phpbb.step2.tablesrequired">Обязательные таблицы</label>
+			<label index="phpbb.step2.note">&lt;i&gt;Замечание:&lt;/i&gt; Красным отмечены имена несуществующих таблиц. Попытка импортировать эти данные приведет к ошибке.</label>
+			<label index="phpbb.step2.noSelectNote">Вы должны выбрать по крайней мере один ряд данных перед тем как продолжать.</label>
+			
+			<label index="phpbb.step3">Определите опции импорта</label>
+			<label index="phpbb.step3.import0.pid">UID страницы хранилища данных</label>
+			<label index="phpbb.step3.import1.pid">UID страницы хранилища данных</label>
+			<label index="phpbb.step3.import1.moderators">Группа модераторов</label>
+			<label index="phpbb.step3.import1.mods.create">Создать новую группу fe_user</label>
+			<label index="phpbb.step3.import1.mods.import">Импортировать в существующую группу (UID группы)</label>
+			<label index="phpbb.step3.import1.mods.nothing">Без модераторов</label>
+			<label index="phpbb.step3.import1.admins">Группа администраторов</label>
+			<label index="phpbb.step3.import1.admins.create">Создать новою группу fe_user</label>
+			<label index="phpbb.step3.import1.admins.import">Импортировать в существующую группу (UID группы)</label>
+			<label index="phpbb.step3.import1.admins.nothing">Без администраторов</label>
+			<label index="phpbb.step3.import1.users">Группа обычных пользователей</label>
+			<label index="phpbb.step3.import1.users.create">Создать новую группу fe_user</label>
+			<label index="phpbb.step3.import1.users.import">Импортировать в существующую группу (UID группы)</label>
+			<label index="phpbb.step3.import1.users.nothing">Без группы пользователей</label>
+			<label index="phpbb.step3.import1.createSingleUserGroups">Импортировать группу одного пользователя</label>
+			<label index="phpbb.step3.import1.avatarpath">Путь к папке с аватарами</label>
+			<label index="phpbb.step3.import2.pid">UID страницы хранилища данных</label>
+			<label index="phpbb.step3.import3.pid">UID страницы хранилища данных</label>
+			<label index="phpbb.step3.import4.pid">UID страницы хранилища данных</label>
+			<label index="phpbb.step3.import4.group_post">Группировать результаты поиска по цепочке сообщений</label>
+			<label index="phpbb.step3.import5.pid">UID страницы хранилища данных</label>
+			<label index="phpbb.step3.import5.phpbb_smilie_url">URL папки со смайлами форума phpBB</label>
+			<label index="phpbb.step3.import5.mmforum_smilie_url">URL папки со смайлами форума mm_forum</label>
+			<label index="phpbb.step3.import6.pid">UID страницы хранилища данных</label>
+			
+			<label index="phpbb.step4">Импортировать</label>
+			<label index="phpbb.step4.new_adminGroup">Администраторы</label>
+			<label index="phpbb.step4.new_modGroup">Модераторы</label>
+			<label index="phpbb.step4.new_modGroup">Пользователи</label>
+			<label index="phpbb.step4.groupimport_report">Импортировано %s групп пользователей.</label>
+			<label index="phpbb.step4.userimport_report">Импортировано %s пользователей.</label>
+			<label index="phpbb.step4.errorUsergroupImport">Не удалось импортировать группу пользователей &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.errorUsergroupImport">Не удалось импортировать пользователя &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.errorAdmingroupCreate">Не удалось создать группу администраторов.</label>
+			<label index="phpbb.step4.errorModgroupCreate">Не удалось создать группу модераторов.</label>
+			<label index="phpbb.step4.errorUsergroupCreate">Не удалось создать группу пользователей.</label>
+			<label index="phpbb.step4.errorCategoryImport">Не удалось импортировать категорию &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.errorBoardImport">Не удалось импортировать форум &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.categoryimport_report">Импортировано %s категорий.</label>
+			<label index="phpbb.step4.boardimport_report">Импортировано %s форумов.</label>
+			<label index="phpbb.step4.errorTopicImport">Не удалось импортировать тему &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.errorPostImport">Не удалось импортировать сообщение &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.topicimport_report">Импортировано %s тем.</label>
+			<label index="phpbb.step4.postimport_report">Импортировано %s сообщений.</label>
+			<label index="phpbb.step4.errorPMImport">Не удалось импортировать личное сообщение &lt;i&gt;%s&lt;/i&gt;.</label>
+			<label index="phpbb.step4.postimport_report">Импортировано %s сообщений.</label>
+			<label index="phpbb.step4.wordlistimport_report">Импортировано %s индексированных слов.</label>
+			<label index="phpbb.step4.searchresultimport_report">Импортировано %s запросов поиска.</label>
+			<label index="phpbb.step4.matchesimport_report">Импортировано %s совпадающих слов.</label>
+			<label index="phpbb.step4.smilieimport_report">Импортировано %s смайлов.</label>
+			<label index="phpbb.step4.subscrimport_report">Импортировано %s подписок email.</label>
+			<label index="phpbb.step4.pmimport_report">Импортировано %s личных сообщений.</label>
+			
+			<label index="phpbb.step3.import0.pid.warning">ПРЕДУПРЕЖДЕНИЕ: Не указан PID. Будет использовано значение 0.</label>
+			<label index="phpbb.step3.import.pid.0">ПРЕДУПРЕЖДЕНИЕ: Сортировка записей на корневом уровне не рекомендуется.</label>
+			<label index="phpbb.step3.import1.mods.emptyError">ОШИБКА: Не указан UID.</label>
+			<label index="phpbb.step3.import1.mods.neError">ОШИБКА: Группа не существует.</label>
+			<label index="phpbb.step3.import1.avatarpath.emptyWarning">ПРЕДУПРЕЖДЕНИЕ: Не указан путь к папке с аватарами. Будет использован путь по умолчанию (uploads/tx_mmforum/).</label>
+			<label index="phpbb.step3.import5.phpbbSmilie_url.emptyError">ОШИБКА: Не указан путь.</label>
+			<label index="phpbb.step3.import5.mmforumSmilie_url.emptyError">ОШИБКА: Не указан путь.</label>
+			<label index="phpbb.step3.error1">При обработке данных произошла ошибка. Пожалуйста, исправьте ошибку перед тем как перейти к следующему шагу.</label>
+			<label index="phpbb.step3.errors">Возвращено %s ошибок во время обработки данных. Пожалуйста,исправьте ошибку перед тем как перейти к следующему шагу.</label>
+			<label index="phpbb.step3.warning">Одна или более проблем обнаружены при обработке данных. Это не должно привести к ошибкам на следующем шаге, но может привести к непредвиденным и нежелательным результатам. Пожалуйста, проверьте настройки перед переходом к следующему шагу.</label>
+			
+			<label index="phpbb.step4.startNote">Данные phpBB форума готовы к импорту. Нажмите кнопку "Импортировать", чтобы начать импорт. Пожалуйста, помните, что процесс импорта может занять некоторое время, в зависимости от объема данных и установок импорта.</label>
+			<label index="phpbb.step4.startButton">Импортировать</label>
+			
+			<label index="phpbb.step3.clearAll">Очистить все таблицы mm_forum перед импортом</label>
+			<label index="phpbb.step3.clearReallyAll">Очистить &lt;strong&gt;все&lt;/strong&gt; таблицы mm_forum перед импортом</label>
+			<label index="phpbb.step4.clearAllNote">Вы отметили несколько таблиц mm_forum, которые должны быть очищены перед импортом данных. Так как этом может повлиять на данные в глобальных таблицах fe_user и fe_groups, Вы можете указать каких пользователей и какие группы  НЕ удалять. Вы можете указать список UID пользователей/групп, которые не должны удаляться или можно указать условие MySQL-WHERE, что делает тоже самое но позволяет создать более гибкий запрос.</label>
+			<label index="phpbb.step4.clear.userUID">UID пользователей</label>
+			<label index="phpbb.step4.clear.userWHERE">Условие WHERE для пользователей</label>
+			<label index="phpbb.step4.clear.usergroupUID">UID групп</label>
+			<label index="phpbb.step4.clear.usergroupWHERE">Условие WHERE для групп</label>
+			<label index="phpbb.step4.clear.uidEx">Пример: 1,2,3</label>
+			<label index="phpbb.step4.clear.whereEx">Пример: WHERE uid NOT IN (1,2,3)</label>
+			
+			<label index="phpbb.step2.polls">Опросы</label>
+			<label index="phpbb.step3.polls.pid">UID страницы хранилища данных</label>
+			<label index="phpbb.step4.pollimport_report">Импортировано %s опросов.</label>
+			
+			<!-- ADDED IN 0.1.2 -->
+			<label index="menu.ranks">Статусы пользователей</label>
+			<label index="ranks.title">Название</label>
+			<label index="ranks.icon">Иконка</label>
+			<label index="ranks.posts">Сообщений</label>
+			<label index="ranks.noicon">Без иконки</label>
+			<label index="ranks.special">Специальный статус</label>
+		</languageKey>
+	</data>
+</T3locallang>

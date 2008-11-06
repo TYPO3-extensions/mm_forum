@@ -1,0 +1,379 @@
+    <!-- ###LIST_FORUM_BEGIN### begin -->
+        <table border="1" class="tx-mmforum-pi1-listforum" width="100%">
+    <!-- ###LIST_FORUM_BEGIN### end -->
+    <!-- ###LIST_CAT### begin -->
+        <tr>
+            <td class="tx-mmforum-pi1-listforum_catname" colspan="5">###CATNAME###</td>
+        </tr>
+        <tr>
+            <td class="tx-mmforum-pi1-listforum_forumname"><font style="color:#BF2236; font-size:10px;">Forum</font></td>
+            <td class="tx-mmforum-pi1-listforum_themes"><font style="color:#BF2236; font-size:10px;">Themen</font></td>
+            <td class="tx-mmforum-pi1-listforum_posts"><font style="color:#BF2236; font-size:10px;">Posts</font></td>
+            <td class="tx-mmforum-pi1-listforum_lastpost"><font style="color:#BF2236; font-size:10px; text-align:center;">letzter Post</font></td>
+        </tr>
+    <!-- ###LIST_CAT### end -->
+    <!-- ###LIST_FORUM### begin -->
+        <tr>
+            <td class="tx-mmforum-pi1-listforum_forumname">
+                <div style="float:left;">###READIMAGE###</div>
+                <div class="tx-mmforum-pi1-listforum-name"><strong>###FORUMNAME###</strong></div>
+                <div class="tx-mmforum-pi1-listforum-desc">###FORUMDESC###</div>
+            </td>
+                <td class="tx-mmforum-pi1-listforum_themes">###THEMES###</td>
+                <td class="tx-mmforum-pi1-listforum_posts">###POSTS###</td>
+                <td class="tx-mmforum-pi1-listforum_lastpost">###LASTPOSTS###</td>
+
+        </tr>
+    <!-- ###LIST_FORUM### end -->
+    <!-- ###LIST_FORUM_END### begin -->
+        </table>
+    <!-- ###LIST_FORUM_END### end -->
+
+
+<!-- ###MENUE_START### begin-->
+    <script language="JavaScript">
+        function usrlist(type) {
+            var url = document.forms["dummy"].realurl.value;
+            if(type == 1) {
+                self.location.href= url+'&sub=usrsperre';
+                return;
+            }
+            if(type == 2) {
+                self.location.href= url+'&sub=usrfrei';
+                return;
+            }
+            if(type == 3) {
+                self.location.href= url+'&sub=usredit';
+                return;
+            }
+            if(type == 4) {
+                self.location.href= url+'&sub=usrneu';
+                return;
+            }
+            if(type == 5) {
+                self.location.href= url+'&sub=uplavatar';
+                return;
+            }
+            if(type == 6) {
+                self.location.href= url+'&sub=kategorien';
+                return;
+            }
+            if(type == 7) {
+                self.location.href= url+'&sub=test';
+                return;
+            }
+        }
+
+    </script>
+<form name="dummy" action="" method="post">
+    <table width="100%" border="1" class="tx-mmforum-pi1-listforum">
+        <tr>
+            <td class="tx-mmforum-pi1-listforum_catname" colspan="4">User-Verwaltung</td>
+        </tr>
+        <tr>
+            <td width="25%">
+                <font style="color:#BF2236; font-size:10px;">
+                    <input type="button" style="width:150px;" name="sperren" value="User sperren" onClick="usrlist(1);" />
+                </font>    
+            </td>
+            <td width="25%">
+                <font style="color:#BF2236; font-size:10px;">
+                    <input type="button" style="width:150px;" name="freigeben" value="User freigeben" onClick="usrlist(2);" />
+                </font>
+            </td>
+            <td width="25%">
+                <font style="color:#BF2236; font-size:10px;">
+                    <input type="button" style="width:150px;" name="edit" value="Userdaten bearbeiten " onClick="usrlist(3);" />
+                </font>
+            </td>
+            <td width="25%">
+                <font style="color:#BF2236; font-size:10px;">
+                    <input type="button" style="width:150px;" name="neu" value="Neuen User anlegen" onClick="usrlist(4);" />
+                    <input type="hidden" name="realurl" value="###REALURL###" />
+                </font>
+            </td>
+        </tr>
+        <tr>
+            <td class="tx-mmforum-pi1-listforum_catname" colspan="4">Tests</td>
+        </tr>
+        <tr>
+            <td width="25%">
+                <font style="color:#BF2236; font-size:10px;">
+                    <input type="button" style="width:150px;" name="test1" value="Avatar upload" onClick="usrlist(5);" />
+                </font>
+            </td>
+            <td width="25%">
+                <font style="color:#BF2236; font-size:10px;">
+                    <input type="button" style="width:150px;" name="test2" value="Kategorien" onClick="usrlist(6);" />
+                </font>
+            </td>
+            <td width="25%">
+                <font style="color:#BF2236; font-size:10px;">
+                    <input type="button" style="width:150px;" name="test3" value="Ungelesene Posts" onClick="usrlist(7);" />
+                </font>
+            </td>
+            <td width="25%">
+                <font style="color:#BF2236; font-size:10px;">
+                    <input type="button" style="width:150px;" name="test3" value="Test" onClick="usrlist(8);" />
+                </font>
+            </td>
+        </tr>
+    </table>
+</form>
+<!-- ###MENUE_START### end-->
+
+<!-- ###USR_LIST### begin-->
+    <script language="JavaScript">
+        function usrlist(type) {
+            if(type == 1) {
+                var usrtyp   = document.forms["user"].usrtype.value;
+                self.location.href= 'index.php?id=13&action=admin_gui&sub=usrlist'+'&act='+usrtyp;
+                //self.location.href= 'index.php?id=13&action=admin_gui&sub=usrlist';
+                return;
+            }
+            if(type == 2) {
+                var usrtyp   = document.forms["user"].usrtype.value;
+                var suchtext = document.forms["user"].text.value;
+                self.location.href= 'index.php?id=13&action=admin_gui&sub=usrsuche&text='+suchtext+'&act='+usrtyp;
+                return;
+            }
+        }
+    </script>
+<!--    <style type="text/css">
+        a:visited { color:#FFFFFF; text-decoration:underline }
+    </style>
+-->
+    <form name="user" action="">
+    <table width="100%" border="1" class="tx-mmforum-pi1-listforum">
+        <tr>
+            <td class="listforum_catname" colspan="4">
+                ###ART###&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <font style="color:#FFFFFF; font-size:12px;">
+                    <a href="index.php?id=13&action=admin_gui">Zurück</a>
+                </font>
+            </td>
+        </tr>
+        <tr>
+            <td width="25%">
+                <font style="color:#BF2236; font-size:10px;">
+                    <input type="button" style="width:150px;" name="alphaliste" value="Alphabetische Liste" onClick="usrlist(1);" />
+                </font>
+            </td>
+            <td width="25%">
+                <font style="color:#BF2236; font-size:10px;">
+                    <input type="text" style="width:150px;" name="text" value="" />
+                </font>
+            </td>
+            <td width="25%">
+                <font style="color:#BF2236; font-size:10px;">
+                    <input type="button" style="width:150px;" name="suche" value="Suchen" onClick="usrlist(2);" />
+                </font>
+            </td>
+            <td width="25%">
+                <font style="color:#BF2236; font-size:10px;">
+                    <input type="hidden" name="usrtype" value="###USRTYPE###" />&nbsp;
+                </font>
+            </td>
+        </tr>
+    </table>
+    </form>
+<!-- ###USR_LIST### end-->
+
+<!-- ###USR_ALPHALIST### begin-->
+    <script language="JavaScript">
+        function usrsubmit(type, usrid, usrname) {
+            if(type == 'usrsperre') {
+                re = confirm('User '+usrname+' sperren ?');
+                if(re) self.location.href= 'index.php?id=13&action=admin_gui&sub=usrsperren&uid='+usrid;
+                return;
+            }
+            if(type == 'usrfrei') {
+                re = confirm('User '+usrname+' wieder freigaben ?');
+                if(re) self.location.href= 'index.php?id=13&action=admin_gui&sub=usrfreigabe&uid='+usrid;
+                return;
+            }
+            if(type == 'usredit') {
+                self.location.href= 'index.php?id=13&action=admin_gui&sub=usreditieren&uid='+usrid;
+                return;
+            }
+        }
+
+        function usrlist(type) {
+            if(type == 1) {
+                var usrtyp   = document.forms["user"].usrtype.value;
+                self.location.href= 'index.php?id=13&action=admin_gui&sub=usrlist'+'&act='+usrtyp;
+                //self.location.href= 'index.php?id=13&action=admin_gui&sub=usrlist';
+                return;
+            }
+            if(type == 2) {
+                var usrtyp   = document.forms["user"].usrtype.value;
+                var suchtext = document.forms["user"].text.value;
+                self.location.href= 'index.php?id=13&action=admin_gui&sub=usrsuche&text='+suchtext+'&act='+usrtyp;
+                return;
+            }
+        }
+    </script>
+<!--    <style type="text/css">
+        a:visited { color:#FFFFFF; text-decoration:underline }
+    </style>
+-->
+    <form name="user" action="">
+    <table width="100%" border="1" class="tx-mmforum-pi1-listforum">
+        <tr>
+            <td class="listforum_catname" colspan="4">
+                ###ART###&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                <font style="color:#FFFFFF; font-size:12px;"><a href="index.php?id=13&action=admin_gui">Zurück</a></font></td>
+        </tr>
+        <tr>
+            <td colspan="2" align="left"><font style="color:#BF2236; font-size:10px;">###PAGE###</font></td>
+            <td colspan="2" align="center" style="text-decoration:none;"><font style="color:#BF2236; font-size:10px;">###NAVI###</font></td>
+        </tr>
+        <tr>
+            <td width="25%"><font style="color:#BF2236; font-size:10px;">Username</font></td>
+            <td width="25%"><font style="color:#BF2236; font-size:10px;">Name</font></td>
+            <td width="25%"><font style="color:#BF2236; font-size:10px;">eMail</font></td>
+            <td width="25%"><font style="color:#BF2236; font-size:10px;"><input type="hidden" name="usrtype" value="###USRTYPE###"></font></td>
+        </tr>
+        ###USRDATA###
+    </table>
+    </form>
+<!-- ###USR_ALPHALIST### end-->
+
+
+<!-- ###USR_SEARCH### begin-->
+    <script language="JavaScript">
+        function usrsubmit(type, usrid, usrname) {
+            if(type == 'usrsperre') {
+                re = confirm('User '+usrname+' sperren ?');
+                if(re) self.location.href= 'index.php?id=13&action=admin_gui&sub=usrsperren&uid='+usrid;
+                return;
+            }
+            if(type == 'usrfrei') {
+                re = confirm('User '+usrname+' wieder freigaben ?');
+                if(re) self.location.href= 'index.php?id=13&action=admin_gui&sub=usrfreigabe&uid='+usrid;
+                return;
+            }
+            if(type == 'usredit') {
+                self.location.href= 'index.php?id=13&action=admin_gui&sub=usreditieren&uid='+usrid;
+                return;
+            }
+        }
+    </script>
+<!--    <style type="text/css">
+        a:visited { color:#FFFFFF; text-decoration:underline }
+    </style>
+-->
+    <form name="user" action="">
+    <table width="100%" border="1" class="listforum">
+        <tr>
+            <td class="listforum_catname" colspan="4">User-Suchergebnis&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<font style="color:#FFFFFF; font-size:12px;"><a href="index.php?id=13&action=admin_gui">Zurück</a></font></td>
+            <!--<td class="listforum_catname" colspan="4">User-Suchergebnis</td>-->
+        </tr>
+        <tr>
+            <td width="25%"><font style="color:#BF2236; font-size:10px;">Username</font></td>
+            <td width="25%"><font style="color:#BF2236; font-size:10px;">Name</font></td>
+            <td width="25%"><font style="color:#BF2236; font-size:10px;">eMail</font></td>
+            <td width="25%"><font style="color:#BF2236; font-size:10px;"><input type="hidden" name="usrtype" value="###USRTYPE###"></font></td>
+        </tr>
+        ###USRDATA###
+    </table>
+    </form>
+<!-- ###USR_SEARCH### end-->
+
+<!-- ###ADMINUSERDETAIL### begin-->
+<script language="JavaScript">
+    function chksubmit() {
+        self.location.href= 'index.php?id=13&action=admin_gui&sub=usrupdate;
+    }
+</script>
+<form name="userdetail" action="###ACTION2###" method="post">
+<div class="profil">
+<table>
+        <tr bgcolor="#BF2236">
+          <td width="16%" align="center"><div class="profil-header">Avatar</div></td>
+          <td width="16%"><div  class="profil-header">Alles &uuml;ber:</div></td>
+          <td width="68%" ><div  class="profil-header">###USER###</div></td>
+        </tr>
+        <tr>
+          <td rowspan="18" align="center" valign="top" style="padding-top:20px">###AVATAR###</td>
+          <td><div align="right">Anmeldungsdatum:</div></td>
+          <td><div align="left">###DATUM###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right">Username:</div></td>
+          <td><div align="left">###USERNAME###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right">Name:</div></td>
+          <td><div align="left">###NAME###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right">Passwort:</div></td>
+          <td><div align="left">###PW###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right">Gruppe(n):</div></td>
+          <td><div align="left">###GRUPPEN###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right">Beitr&auml;ge insgesamt</div></td>
+          <td><div align="left">###BEITRAEGE###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right">Last Posts:</div></td>
+          <td><div align="left">###POSTS###</div>
+              <div align="left">###POSTS2###</div>
+              <div align="left">###POSTS3###</div>
+          </td>
+        </tr>
+        <tr>
+          <td><div align="right">Wohnort:<br>
+          </div></td>
+          <td><div align="left">###ORT###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right">Website:<br>
+          </div></td>
+          <td><div align="left">###WEBSITE###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right">Beruf:<br>
+          </div></td>
+          <td><div align="left">###BERUF###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right">Interessen:</div></td>
+          <td><div align="left">###INTERESSEN###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right"><a href="#"><img src="../fileadmin/img/mm_forum/mail.gif" width="70" height="30" border="0"></a></div></td>
+          <td><div align="left">###MAIL###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right"><a href="#"><img src="../fileadmin/img/mm_forum/msn.gif" width="70" height="30" border="0"></a></div></td>
+          <td><div align="left">###MSN###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right"><a href="#"><img src="../fileadmin/img/mm_forum/yim.gif" width="70" height="30" border="0"></a></div></td>
+          <td><div align="left">###YIM###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right"><a href="#"><img src="../fileadmin/img/mm_forum/aim.gif" width="70" height="30" border="0"></a></div></td>
+          <td><div align="left">###AIM###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right"><a href="#"><img src="../fileadmin/img/mm_forum/icq.gif" width="70" height="30" border="0"></a></div></td>
+          <td><div align="left">###ICQ###</div></td>
+        </tr>
+        <tr>
+          <td><div align="right">Erstellte Themen:</div></td>
+          <td><div align="left">###THEMEN###<input type="hidden" name="uid" value="###UID###"></div></td>
+        </tr>
+        <tr>
+          <td><div align="left"><input type="submit" name="submit" value="Update"></div></td>
+        </tr>
+
+      </table>
+</div>
+</form>
+<!-- ###ADMINUSERDETAIL### end-->

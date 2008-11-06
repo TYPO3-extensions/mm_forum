@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;tools_txmmforumM1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+            <label index="updater.currentRevision">Current Revision: %s</label>
+            <label index="updater.newestRevision">Newest Revision: %s</label>
+            <label index="updater.noUpdate">No update required.</label>
+            <label index="updater.updatePossible">A new version is available. Click the button below to update.</label>
+            <label index="updater.updateNow">Update!</label>
+            <label index="updater.intro">This is the mm_forum updater. You can use it to update your version of the mm_forum
+            	Extension to the newest available version from the official mm_forum SVN repository (svn.typo3.net). You
+            	should however consider that the versions available in the SVN repository are development versions that are
+            	not necessarily stable.</label>
+            <label index="updater.title">Update</label>
+            <label index="updater.progress.success">Success</label>
+            <label index="updater.progress.failure">Failure</label>
+            <label index="updater.progress.loadTarball">Loading Tarball from SVN repository... </label>
+            <label index="updater.progress.storeToHD">Store Tarball into filesystem... </label>
+            <label index="updater.progress.moveInstaller">Move update installer into ext/ directory... </label>
+            <label index="updater.progress.performInstallation">Perform installation... </label>
+            <label index="updater.noURLfopen">The SVN repository could not be contacted. Please make sure that allow_url_fopen is enabled.</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+            <label index="updater.currentRevision">Aktuelle Revision: %s</label>
+            <label index="updater.newestRevision">Neueste Revision: %s</label>
+            <label index="updater.noUpdate">Keine Aktualisierung erforderlich.</label>
+            <label index="updater.updatePossible">Es steht eine neue Version zur Verfügung.
+            	Klicken Sie auf untenstehenden Button, um ein Update durchzuführen.</label>
+            <label index="updater.updateNow">Aktualisieren!</label>
+            <label index="updater.intro">Dies ist der mm_forum-Updater. Sie können ihn benutzen, um Ihre mm_forum-Version
+            	auf die neuste Version, die im offiziellen mm_forum-SVN-Repository (svn.typo3.net) zur Verfügung steht,
+            	zu aktualisieren. Sie sollten jedoch bedenken, dass die im SVN-Repository zur Verfügung gestellten Versionen
+            	Entwicklungsversionen sind, die nicht unbedingt stabil laufen müssen.</label>
+            <label index="updater.title">Aktualisieren</label>
+            <label index="updater.progress.success">Erfolg</label>
+            <label index="updater.progress.failure">Fehler</label>
+            <label index="updater.progress.loadTarball">Lade Tarball aus SVN-Repository... </label>
+            <label index="updater.progress.storeToHD">Speichere Tarball im Dateisystem... </label>
+            <label index="updater.progress.moveInstaller">Verschiebe Installer ins ext/-Verzeichnis... </label>
+            <label index="updater.progress.performInstallation">Führe Installation durch... </label>
+            <label index="updater.noURLfopen">Das SVN-Repository konnte nicht erreicht werden. Bitte stellen Sie sicher, dass allow_url_fopen aktiviert ist.</label>
+		</languageKey>
+	</data>
+</T3locallang>

@@ -1,0 +1,55 @@
+<!-- ###SENDMAIL### -->
+<FORM  method="POST">
+     <table border="1" class="listtopics" width="100%" cellpadding="5px">
+        <tr>
+            <td colspan="2" valign="top" bgcolor="#BF2236" class="profil-header">Email versenden</td>
+        </tr>
+        <tr>
+            <td bgcolor="#F1F2F2">
+                <strong>Empfänger:</strong>
+            </td>
+            <td valign="top" bgcolor="#F1F2F2">
+                ###USERMAILNAME###
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#FBFBFB">
+                <strong>Betreff:</strong>
+            </td>
+            <td valign="top" bgcolor="#FBFBFB">
+                <INPUT  TYPE="TEXT" name="subject" size="80">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top">
+                <strong>Nachrichtentext:</strong>
+            </td>
+            <td valign="top">
+                <textarea id="text" name="text" rows="20" cols="60"></textarea>
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#FBFBFB">
+                <strong>Optionen</strong>
+            </td>
+            <td valign="top" bgcolor="#FBFBFB">
+                <INPUT TYPE="CHECKBOX"  name="tome" checked> Eine Kopie der Mail auch an meine Adresse schicken.
+            </td>
+        </tr>
+        <tr>
+            <td bgcolor="#F1F2F2">
+
+            </td>
+            <td valign="top" bgcolor="#F1F2F2">
+                <INPUT TYPE="HIDDEN"  name="send" value="ok">
+                <INPUT TYPE="HIDDEN"  name="authcode" value="###MAILCODE###">
+                <INPUT TYPE="SUBMIT" value="Senden"><INPUT TYPE="RESET" value="alles löschen">
+            </td>
+        </tr>
+    </table>
+</FORM>
+<!-- ###SENDMAIL### -->
+
+<!-- ###MAILSTATUS### -->
+    ###MAIL_MESSAGE###
+<!-- ###MAILSTATUS### -->

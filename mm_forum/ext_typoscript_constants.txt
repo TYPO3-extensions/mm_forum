@@ -1,0 +1,173 @@
+plugin.tx_mmforum {
+    # cat=plugin.mm_forum - general//; type=boolean; label=Enable RealURL special links: Set this property to enable RealURL special links containing more parameters to create niver URLs.
+    realUrl_specialLinks = 0
+
+    # cat=plugin.mm_forum - general//; type=int+; label=Storage PID: The page ID of the mm_forum data storage page (set -1 to disable)
+    storagePID = 
+
+    # cat=plugin.mm_forum - general//; type=int+; label=User PID: The page ID of the fe_user storage page
+    userPID =
+
+    # cat=plugin.mm_forum - general//; type=int+; label=User Group: Default usergroup for new registered users
+    userGroup =
+
+    # cat=plugin.mm_forum - general//; type=int+; label=Moderator Group: Default usergroup for moderators 
+    # moderatorGroup =
+
+    # cat=plugin.mm_forum - general//; type=int+; label=Administrator Group: Default usergroup for administrators
+    adminGroup =
+
+    # cat=plugin.mm_forum - file paths//; type=string; label=Image Directory: Defines the directory, the image files are stored in
+    path_img = EXT:mm_forum/res/img/default/
+
+    img_border = 0
+
+    # cat=plugin.mm_forum - file paths//; type=string; label=Smilie Directory: Defines the directory where the smilies are stored in
+    path_smilie = EXT:mm_forum/res/smilies/
+
+
+    # cat=plugin.mm_forum - general//; type=string; label=Site Name: Defines the name of the website. Used e.g. in mails sent by the message board.
+    site_name = your-domain.com
+
+    # cat=plugin.mm_forum - general//; type=string; label=Team Name: The name of the team responsible for the message board. Used for references to the support crew.
+    team_name = Your team
+
+    # cat=plugin.mm_forum - general//; type=string; label=Support email address: The email address of the support crew.
+    support_mail = support@your-domain.com
+
+    # cat=plugin.mm_forum - general//; type=string; label=PHP mailer email address: The email address displayed as sender of PHP-generated mails
+    mailer_mail = noreply@your-domain.com
+
+    # cat=plugin.mm_forum - general//; type=string; label=Date format: The default date format (PHP-date syntax)
+    dateFormat =  %d.&nbsp;%m.&nbsp;%G&nbsp;[%H:%M]
+
+    # cat=plugin.mm_forum - search//; type=string; label=Indexing password hash: The MD5 hash of the indexing password. This password will have to be specified during the regular indexing call.
+    indexingPassword = 21232f297a57a5a743894a0e4a801fc3
+
+
+    # cat=plugin.mm_forum - search//; type=int+; label=Threads to index : Number of Threads to Index
+    indexCount = 50
+
+
+    # cat=plugin.mm_forum - message board//; type=int+; label=Threads per page: Specifies how many threads there are to be shown on one page
+    threadsPerPage = 30
+
+    # cat=plugin.mm_forum - message board//; type=int+; label=Posts per page: Specifies how many posts there are to be shown on one page
+    postsPerPage = 10
+
+    # cat=plugin.mm_forum - message board//; type=int+; label=Board PID: The page UID of the page the plugin is placed on
+    boardPID =
+
+    # cat=plugin.mm_forum - message board//; type=int+; label=RSS PID: The page UID of the page the mm_forum RSS feed plugin is placed on
+    rssPID =
+
+    # cat=plugin.mm_forum - private messaging//; type=int+; label=Private Messaging PID: The page UID of the page the Private Messaging plugin is placed on
+    pmPID = 
+
+    # cat=plugin.mm_forum - message board//; type=string; label=Notification mail sender: The sender of mails notifying users about new posts
+    notifyMail_sender =
+
+    # cat=plugin.mm_forum - message board//; type=string; label=Board name: The name of the message board
+    boardName =
+
+    # cat=plugin.mm_forum - message board//; type=boolean; label=Display real names: Displays the users' real name in addition to the user name in post listing view
+    displayRealName = 1
+
+    # cat=plugin.mm_forum - file paths//; type=string; label=BB Code insertion buttons path
+    postparser.insertButton_path = EXT:mm_forum/res/img/default/editor_icons/
+
+    # cat=plugin.mm_forum - general//; type=boolean; label=Disable rootline: Disables the mm_forum rootline allowing you to integrate a dynamic rootline into your already existing rootline menu.
+    disableRootline = 0
+
+    # cat=plugin.mm_forum - message board//; type=int+; label=Hot topic post limit: Number of posts necessary to make a topic a hot topic
+    topic_hotPosts = 10
+
+    # cat=plugin.mm_forum - message board//; type=int+; label=Post award limit: Number of posts a user has to write in order to recieve a special award
+    user_hotPosts = 5000
+
+    # cat=plugin.mm_forum - message board//; type=string; label=Prefixes: Prefixes to be used in the forum
+    prefixes = HowTo,Info,Test
+
+    # cat=plugin.mm_forum - message board//; type=string; label=Spamblock interval: The time a user has to wait between writing two posts.
+    spamblock_interval = 20
+
+    # cat=plugin.mm_forum - message board//; type=string; label=Maximum signature length: The maximum user signature length in lines.
+    signatureLimit = 6
+
+    # cat=plugin.mm_forum - private messaging//; type=string; label=Message block time: The time a user has to wait between writing two messages.
+    pmBlocktime = 30
+
+    # cat=plugin.mm_forum - search//; type=string; label=Minimum search word length
+    sword_minLength = 2
+
+    # cat=plugin.mm_forum - search//; type=string; label=Search results per page
+    resultsPerPage = 10
+
+    # cat=plugin.mm_forum - file paths//; type=string; label=Template directory
+    path_template = EXT:mm_forum/res/tmpl/
+
+    # cat=plugin.mm_forum - file paths//; type=string; label=Alternative template directory
+    path_altTemplate = fileadmin/ext/mm_forum/tmpl/
+
+    # cat=plugin.mm_forum - message board//; type=boolean; label=Enable file attachments
+    attachment_enable = 1
+    
+    # cat=plugin.mm_forum - message board//; type=string; label=Allowed file extensions for attachments: Set to "*" to allow all.
+    attachment_allow = *
+    
+    # cat=plugin.mm_forum - message board//; type=string; label=Denied file extensions for attachment: Overrides allowed extension list
+    attachment_deny = php,php3,php4,php5
+    
+    # cat=plugin.mm_forum - message board//; type=int+; label=Maximum attachment size
+    attachment_filesize = 1048576
+    
+    # cat=plugin.mm_forum - message board//; type=boolean; label=Enable preview images for image attachments
+    attachment_preview = 1
+
+    # cat=plugin.mm_forum - message board//; type=boolean; label=Enable polls
+    polls_enable = 1
+    
+    # cat=plugin.mm_forum - message board//; type=boolean; label=Shadow topics: If set, a shadow topic remains after moving a topic to another forum.
+    enableShadows = 1
+    
+    # cat=plugin.mm_forum - message board//; type=boolean; label=BBCodes in signatures
+    signatureBBCodes = 1
+    
+    # cat=plugin.mm_forum - message board//; type=boolean; label=Enable user ranks
+    enableRanks = 1
+    
+    # cat=plugin.mm_forum - message board//; type=boolean; label=Moderated forum: If set, new entries and topics have to be approved by a moderator before being displayed in the forum.
+    moderatedBoard = 0
+    
+    # cat=plugin.mm_forum - general//; type=boolean; label=Informal: Use informal language. Affects only german language set (different use of Sie and Du).
+    informal = 0
+    
+    # cat=plugin.mm_forum - general//; type=boolean; label=Use Captcha: Enables use of the captcha library. Requires the captcha library to be installed.
+    useCaptcha = 1
+    
+    # cat=plugin.mm_forum - general//; type=string; label=Database field used for a user's username
+    userNameField = username
+    
+    # cat=plugin.mm_forum - message board//; type=string; label=Icon mode: Set to 'classic' in order to use the classic forum and topic icons, or to 'modern' to use new icons
+    topicIconMode = modern
+    
+    # cat=plugin.mm_forum - message board//; type=int+; label=Attachment count: Maximum amount of attachments for one post.
+    attachment_count = 1
+    
+    cron_htmlemail					= 0
+    cron_notifyPublish_group		= 
+    cron_lang						= en
+    cron_sitetitle					= mm_forum
+    cron_postqueue_link				= http://www.typo3.net
+    cron_notifyPublishSender		= "mm_forum" <mm_forum@typo3.net>
+    cron_pathTmpl					= typo3conf/ext/mm_forum/res/tmpl/cron/
+    cron_pm_readlink				= http://www.typo3.net/?id=messages&tx_mmforum_pi3[action]=message_read&tx_mmforum_pi3[messid]=%s
+    cron_pm_realUID					= 1
+    cron_index_count				= 10
+    cron_verbose					= all
+    
+    style=default
+    style_path=EXT:mm_forum/res/tmpl/default
+}
+
+<INCLUDE_TYPOSCRIPT: source="FILE: typo3conf/tx_mmforum_config.ts"> 

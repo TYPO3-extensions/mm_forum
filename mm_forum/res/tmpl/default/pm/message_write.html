@@ -1,0 +1,43 @@
+<!-- ###MESSAGE_WRITE### begin-->
+
+<form method="post" action="###ACTION###" name="write_newPM" onsubmit="if(userSearch.userSearchVisible) return false;">
+<table class="tx-mmforum-table" cellspacing="0">
+	<tr>
+		<th class="tx-mmforum-th" colspan="2">
+			###LABEL_WRITEMESSAGE###
+		</th>
+	</tr>
+	<tr>
+		<td class="tx-mmforum-pi1-newpost-left">###LABEL_TO###:</td>
+		<td class="tx-mmforum-pi1-newpost-left" style="text-align:left;">
+			<table cellspacing="0" cellpadding="0"><tr>
+            	<td><input type="text" id="username" name="tx_mmforum_pi3[user]" onkeyup="userSearch.refreshUserSearch(this, event);" value="###TO_USER###" /></td>
+                <td><input onfocus="userSearch.hideUserSearch();" class="tx-mmforum-button" type="submit" name="tx_mmforum_pi3[save]" value="###LABEL_SEARCH###" /></td>
+            </tr></table>
+                <div style="display:none;" id="tx_mmforum_pi3_quicksearch"><ul id="userlist"></ul></div>
+            
+		</td>
+	</tr>
+	<tr>
+	    <td class="tx-mmforum-pi1-newpost-left">###LABEL_SUBJECT###:</td>
+	    <td class="tx-mmforum-pi1-newpost-left"><input type="text"  name="tx_mmforum_pi3[subject]" size="80" value="###SUBJECT###" /></td>
+	</tr>
+	<tr>
+	    <td class="tx-mmforum-pi1-newpost-right" colspan="2" align="right">
+	        <textarea  name="tx_mmforum_pi3[message]" cols="82" rows="20">###MESSAGE###</textarea>
+	    </td>
+	</tr>
+	<tr>
+		<td class="tx-mmforum-pi1-newpost-right" colspan="2">
+			<input onfocus="userSearch.hideUserSearch();" class="tx-mmforum-button" type="submit" name="tx_mmforum_pi3[save]" value="###LABEL_SEND###" accesskey="s" />
+			<input onfocus="userSearch.hideUserSearch();" type="reset" class="tx-mmforum-button" style="margin-left:10px;" value="###LABEL_RESET###" />
+		</td>
+	</tr>
+</table>
+<script type="text/javascript">
+	userSearch.ajaxURL		= '###AJAX_URL###';
+	document.getElementById('username').setAttribute('autocomplete','off');
+</script>
+    <!-- <INPUT TYPE="HIDDEN"  name="action" value="message_send">-->
+</form>
+<!-- ###MESSAGE_WRITE### end-->

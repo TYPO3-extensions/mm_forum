@@ -1,0 +1,1079 @@
+page.includeCSS {
+	mm_forum = {$plugin.tx_mmforum.style_path}/css/mm_forum.css
+}
+
+#
+# tx_mmforum_pi1 // Main Forum Class
+#################################
+plugin.tx_mmforum_pi1 = USER_INT
+plugin.tx_mmforum_pi1 {
+	# Data storage PID
+		storagePID			= {$plugin.tx_mmforum.storagePID}
+		
+	# User storage PID
+		userPID 			= {$plugin.tx_mmforum.userPID}
+
+    # RSS feed PID
+        rssPID              = {$plugin.tx_mmforum.rssPID}
+
+	# Moderated board
+		moderated			= {$plugin.tx_mmforum.moderatedBoard}
+
+	# Informal language
+		informal			= {$plugin.tx_mmforum.informal}
+
+    # Path for the avatars
+		path_avatar         = uploads/tx_mmforum/
+    
+    # Avatar image dimensions
+	    avatar_height       = 100
+	    avatar_width        = 100
+
+	# Path to the forum images    
+		path_img       	    = {$plugin.tx_mmforum.style_path}/img/default/
+
+	# Path for the smilies
+		path_smilie         = {$plugin.tx_mmforum.path_smilie} 
+
+	# Page ID the board is placed on
+		pid_forum       	= {$plugin.tx_mmforum.boardPID}
+
+	# Number of posts to make a topic as a hot topic 
+		hotposts       	    = {$plugin.tx_mmforum.topic_hotPosts}
+
+	# Number of posts to make a user have a special icon
+		user_hotposts		= {$plugin.tx_mmforum.user_hotPosts}
+
+	# User Group ID for the admins
+		grp_admin      	    = {$plugin.tx_mmforum.adminGroup}
+
+	# User Group ID for the moderators 
+		grp_mod        	    = {$plugin.tx_mmforum.moderatorGroup}
+
+	# Page ID for Private Messages
+		pm_id         	    = {$plugin.tx_mmforum.pmPID}
+
+	# Number of posts which are displayed on a topic page
+		post_limit	        = {$plugin.tx_mmforum.postsPerPage}
+
+	# mail debugger
+		maillog		        = 1
+
+	# Mail address for the Debugger
+		maillog_mail	    = 	
+
+	# Sets the numbers of topics which are displayed in topic list
+		topic_count         = {$plugin.tx_mmforum.threadsPerPage}
+
+	# Date format
+		dateFormat          = {$plugin.tx_mmforum.dateFormat}
+	
+		code.field			= select_key
+	
+	# Prefixes for threads
+		prefixes			= {$plugin.tx_mmforum.prefixes}
+	
+	# Prefixes not listed in list_prefix view
+		noListPrefixes		= Test
+	
+	# Spamblock interval, time between postings
+		spamblock_interval	= {$plugin.tx_mmforum.spamblock_interval}
+	
+	# Maximum lines in signature
+		signatureLimit		= {$plugin.tx_mmforum.signatureLimit}
+        
+    # Enable BB codes in signature
+        signatureBBCodes    = {$plugin.tx_mmforum.signatureBBCodes}
+		
+	# RealUrl special links
+		realUrl_specialLinks = {$plugin.tx_mmforum.realUrl_specialLinks}
+		
+	# Disable rootline
+		disableRootline = {$plugin.tx_mmforum.disableRootline}
+
+	# Options for notification mails
+		notifyingMail {
+			# Notification mail sender
+				sender				        = {$plugin.tx_mmforum.notifyMail_sender}
+			# Link prefix override value
+				topicLinkPrefix_override    = 
+		}
+	
+	# Post alert options
+		postalerts {
+			# Colors for different states
+				statusColors {
+					open		= #FFDDDD
+					work		= #FFFFDD
+					done		= #DDFFDD
+				}
+		}
+	
+	# This board's name
+		boardName           = {$plugin.tx_mmforum.boardName}
+        
+    # Enable shadow topics
+        enableShadows       = {$plugin.tx_mmforum.enableShadows}
+        
+    # Polls
+        polls {
+            # Enable polls
+                enable      = {$plugin.tx_mmforum.polls_enable}
+                
+            # Minimum number of answers
+                minAnswers  = 2
+            
+            # stdWrap for poll expire date label
+                expired_stdWrap {
+                    wrap    = <div class="tx-mmforum-poll-expireson"> | </div>
+                }
+            
+            # Defines colors for poll result bars
+                pollBar_colorMap {
+                    1 = #ff0000
+                    2 = #00ff00
+                    3 = #0000ff
+                    4 = #ff00ff
+                    default = #ff0000
+                }
+                
+            # Restricts poll creation to following groups
+                restrictToGroups = {$plugin.tx_mmforum.polls_restrict}
+                
+            # Poll icon
+            	poll_icon = IMAGE
+            	poll_icon {
+            		file = {$plugin.tx_mmforum.style_path}/img/default/poll.png
+            		
+            		stdWrap.wrap = <div class="tx-mmforum-poll-icon"> | </div>
+            	}
+        }
+        
+    # File attachments
+        attachments {
+            # Enable file attachments
+                enable          = {$plugin.tx_mmforum.attachment_enable}
+                
+            # Maximum file size for attachments (in bytes)
+                maxFileSize     = {$plugin.tx_mmforum.attachment_filesize}
+                
+            # Allowed file extensions
+                allow           = {$plugin.tx_mmforum.attachment_allow}
+                
+            # Denyed file extensions
+                deny            = {$plugin.tx_mmforum.attachment_deny}
+                
+            # Directory for attachments
+                attachmentDir   = uploads/tx_mmforum/
+            
+            # stdWrap for maximum file size label
+                maxFileSize_stdWrap.wrap = <br /><br /> |
+            
+            # Enables preview images for image attachments
+                imagePreview = {$plugin.tx_mmforum.attachment_preview}
+            
+            # Configuration for preview images
+                imagePreviewObj = IMAGE
+                imagePreviewObj {
+                    file.width = 120
+                    file.maxH = 120
+                    
+                    wrap = <div style="float:right;"> | </div>
+                }
+            
+            # stdWrap for attachment section in post listing view
+                attachment_stdWrap.wrap = <hr /> |
+            
+            # stdWrap for "file attachments" label
+                attachmentLabel_stdWrap {
+                    wrap = <div class="tx-mmforum-pi1-attachmentlabel"> | </div>
+                }
+            
+            # stdWrap for attachment link
+                attachmentLink_stdWrap {
+                    wrap = <div class="tx-mmforum-pi1-attachment"> | </div>
+                }
+                
+            # stdWrap for attachment label in edit mode
+                attachmentEditLabel_stdWrap {
+                    wrap = <div style="font-weight:bold;"> | </div>
+                }
+                
+            # Maximum attachment count
+            	maxCount = {$plugin.tx_mmforum.attachment_count}
+        }
+        
+    # Fields to be displayed in user list
+        userlist_fields = username,email,tx_mmforum_posts
+        
+    # Number of users to be displayed in user list
+        userlist_limit  = 30
+        
+    # Database field used for the user name
+    	userNameField = {$plugin.tx_mmforum.userNameField}
+        
+        userlist_item = CASE
+        userlist_item {
+            key.field   = fieldname
+            
+            username = TEXT
+            username {
+                field = username
+                typolink.parameter = {$plugin.tx_mmforum.boardPID}
+                typolink.additionalParams.field = uid
+                typolink.additionalParams.wrap = &tx_mmforum_pi1[action]=forum_view_profil&tx_mmforum_pi1[user_id]=|
+            }
+            usergroup = TEXT
+            usergroup {
+                field = usergroup
+                postUserFunc = tx_mmforum_tools->getUserGroupList
+            }
+            email = TEXT
+            email {
+                field = email
+                typolink.parameter.field = email
+            }
+            crdate = TEXT
+            crdate {
+                field = crdate
+                strftime = {$plugin.tx_mmforum.dateFormat}
+                wrap = <div style="white-space:nowrap;"> | </div>
+            }
+            www = TEXT
+            www {
+                field = www
+                typolink.parameter.field = www
+            }
+            tx_mmforum_icq = IMAGE
+            tx_mmforum_icq {
+                file = {$plugin.tx_mmforum.path_img}icq.gif
+                
+                stdWrap.if.isTrue.field = tx_mmforum_icq
+                stdWrap.typolink {
+                    parameter.field = tx_mmforum_icq
+                    parameter.wrap = http://www.icq.com/ |
+                }
+            }
+            tx_mmforum_yim = IMAGE
+            tx_mmforum_yim {
+                file = {$plugin.tx_mmforum.path_img}yim.gif
+                
+                stdWrap.if.isTrue.field = tx_mmforum_yim
+                stdWrap.typolink {
+                    parameter.field = tx_mmforum_yim
+                    parameter.wrap = http://edit.yahoo.com/config/send_webmesg?.target= | &.src=pg
+                }
+            }
+            tx_mmforum_aim = IMAGE
+            tx_mmforum_aim {
+                file = {$plugin.tx_mmforum.path_img}aim.gif
+                
+                stdWrap.if.isTrue.field = tx_mmforum_aim
+                stdWrap.typolink {
+                    parameter.field = tx_mmforum_aim
+                    parameter.wrap = aim:goim?screenname= | &message=Hello+Are+you+there?
+                }
+            }
+            __pm = IMAGE
+            __pm {
+                file = {$plugin.tx_mmforum.path_img}pm.gif
+                params = style="border:0px;"
+                
+                stdWrap.typolink {
+                    parameter = {$plugin.tx_mmforum.pmPID}
+                    additionalParams.field = uid
+                    additionalParams.wrap = &tx_mmforum_pi3[action]=message_write&tx_mmforum_pi3[messid]=new&tx_mmforum_pi3[userid]=|&tx_mmforum_pi3[folder]=inbox
+                }
+            }
+            
+            default = TEXT
+            default.field = fieldvalue
+        }
+        
+    # User ranks
+        ranks {
+            enable = {$plugin.tx_mmforum.enableRanks}
+            
+            title_stdWrap {
+            }
+            
+            icon_stdWrap {
+            }
+            
+            rank_stdWrap {
+                wrap = <div> | </div>
+            }
+            
+            all_stdWrap {
+            }
+        }
+
+	# Topic listing display options
+		list_topics {                     
+			# Wrap for prefixes
+		 		prefix_wrap = <span class="tx-mmforum-pi1-listtopic-prefix">[ | ]</span>&nbsp;
+		 	# Wrap for page navigation
+			 	pagenav_wrap = <div class="tx-mmforum-pi1-listtopic-pages"> | </div>
+		 	# Wrap for page navigation in the unread topic listing
+		 		listunread_pagenav_wrap = <div class="tx-mmforum-pi1-listtopic-pages" style="display:inline; padding:0px;">(&nbsp; | &nbsp;)</div>
+		 	
+		 	# stdWrap for last post date info
+		 		lastPostDate_stdWrap {
+		 			#date = D d.m.Y [H:i]
+		 			strftime = %a&nbsp;%e.%m.%Y&nbsp;[%H:%M]
+		 			#strftime = %c
+		 			wrap = |<br />
+		 		}
+                
+            # Display topic title in last post information
+                lastPostTopicTitle = 1
+                
+            # Wrap for topic title
+                lastPostTopicTitle_outerStdWrap {
+                    wrap = <div class="tx-mmforum-pi1-listtopic-lastpost-title"><strong>|</strong></div>
+                }
+                
+                lastPostTopicTitle_innerStdWrap {
+                }
+                
+            # Wrap for user name
+                lastPostUserName_stdWrap {
+                    wrap = <div class="tx-mmforum-pi1-listtopic-lastpost-user"><strong>|</strong></div>
+                }
+		}
+		
+	# Post listing display options
+		list_posts {
+            # stdWraps for user information fields
+                userinfo {
+                    username_stdWrap.wrap = <div style="font-weight: bold;"> | </div>
+                    realname_stdWrap {
+                        if.isTrue = {$plugin.tx_mmforum.displayRealName}
+                        wrap = <div style="font-size: 10px;"> | </div>
+                    }
+                    crdate_stdWrap.date = d.m.Y
+                    creator_stdWrap.wrap = <div style="font-size: 10px; font-weight: bold; margin: 4px 0px;"> | </div>
+                    avatar_cObj = IMAGE
+                    avatar_cObj {
+                        file.maxW = 100
+                        file.maxH = 100
+                    }
+                }
+                
+            # stdWrap for user signature
+                signature_stdWrap {
+                    wrap = <br /><hr /><div class="tx-mmforum-signature"> | </div>
+                }
+                
+            # Prefix object
+            	prefix = TEXT
+            	prefix {
+            		field = topic_is
+            		if.isTrue.field = topic_is
+            		noTrimWrap = |<span class="tx-mmforum-pi1-listposts-prefix">[|]</span> |
+            	}
+            	
+            # Closed object
+            	closed = TEXT
+            	closed {
+            		if.isTrue.field = closed_flag
+            		data = LLL:EXT:mm_forum/pi1/locallang.xml:topic-closed
+            		noTrimWrap = | <span class="tx-mmforum-pi1-listposts-closed">[|]</span> |
+            	}
+            	
+            	optImgWrap {
+            	}
+            	optLinkWrap.wrap = <div style="font-size:smaller">|</div>
+            	optItemWrap.wrap = <table cellspacing="0" cellpadding="3" border="0"><tr><td style="text-align:center;">|</td></tr></table>
+        
+			# Wraps for user information fields
+            # DEPRECATED. Just for backwards compatibility.
+				userinfo_topicauthor_wrap = <span style="font-size:10px; font-weight: bold;">[ | ]</span><br />
+				userinfo_content_wrap = <span style="font-size:10px;"> | </span><br />
+				userinfo_admin_wrap = <span class="tx-mmforum-pi1-administrator">[ | ]</span>
+				userinfo_moderator_wrap = <span class="tx-mmforum-pi1-moderator">[ | ]</span>
+                userinfo_realName = {$plugin.tx_mmforum.displayRealName}
+                userinfo_realName_wrap = <span style="font-size:10px;"> | </span><br />
+			# Wrap for highlighted search words
+				highlight_wrap = <span class="tx-mmforum-pi1-highlight"> | </span>
+		}
+		
+	# General display options
+		display {
+			# Separator between rootline elements
+				rootline.separator = &nbsp;&raquo;&nbsp;
+			# CSS class of button-like links
+				linkButton.cssClass = tx-mmforum-button
+			# Even list item class
+				listItem.evenClass = tx-mmforum-list-even
+			# Odd list item class
+				listItem.oddClass = tx-mmforum-list-odd
+		}
+		
+	# Post creation function
+		postForm {
+			smiliesAsDiv = 0
+			smiliesAsDiv {
+				allWrap = <div class="tx-mmforum-pi1-smilies"> | </div>
+				itemWrap = <div class="tx-mmforum-pi1-smilie"> | </div>
+			}
+		}
+		
+	# User profile
+		user_profile {
+			crdate_stdWrap.date = d. m. Y
+		}
+
+	# Template files
+		template { 
+	        main                = {$plugin.tx_mmforum.style_path}/forum/main.html
+	        header              = {$plugin.tx_mmforum.style_path}/forum/header.html
+			list_topic			= {$plugin.tx_mmforum.style_path}/forum/list_topic.html
+			list_post			= {$plugin.tx_mmforum.style_path}/forum/list_post.html
+			login_error			= {$plugin.tx_mmforum.style_path}/forum/login_error.html
+			error				= {$plugin.tx_mmforum.style_path}/forum/error.html
+			new_topic			= {$plugin.tx_mmforum.style_path}/forum/new_topic.html
+			new_post			= {$plugin.tx_mmforum.style_path}/forum/new_post.html
+			send_email			= {$plugin.tx_mmforum.style_path}/forum/send_email.html
+			userdetail			= {$plugin.tx_mmforum.style_path}/forum/userdetail.html
+			admin_gui			= {$plugin.tx_mmforum.style_path}/forum/admin_gui.html
+			post_del			= {$plugin.tx_mmforum.style_path}/forum/post_del.html
+			change_userdata		= {$plugin.tx_mmforum.style_path}/forum/change_userdata.html
+			new_post_mail		= {$plugin.tx_mmforum.style_path}/forum/mail_newpost.html
+			havealook			= {$plugin.tx_mmforum.style_path}/forum/havealook.html
+			favorites			= {$plugin.tx_mmforum.style_path}/forum/favorites.html
+			search				= {$plugin.tx_mmforum.style_path}/forum/search.html
+			userconf			= {$plugin.tx_mmforum.style_path}/forum/userconf.html
+			post_alert			= {$plugin.tx_mmforum.style_path}/forum/post_alert.html
+            polls               = {$plugin.tx_mmforum.style_path}/forum/polls.html
+            latest              = {$plugin.tx_mmforum.style_path}/forum/latest.html
+            userlist            = {$plugin.tx_mmforum.style_path}/forum/userlist.html
+            postqueue			= {$plugin.tx_mmforum.style_path}/forum/postqueue.html
+            rss					= {$plugin.tx_mmforum.style_path}/forum/rss.xml
+	        
+	        footer              = {$plugin.tx_mmforum.style_path}/forum/footer.html
+		}
+
+	# Image filenames
+	    images {
+	        www                 = www.gif
+	        icq                 = icq.gif
+	        yim                 = yim.gif
+	        aim                 = aim.gif
+	        msn                 = msn.gif
+	        skype               = skype.gif
+	        profile             = profile.gif
+	        quote               = quote.gif
+	        favorite            = favorit.gif
+	        favorite_on         = favorit_on.png
+	        favorite_off        = favorit_off.png
+	        info_mail_on        = info_mail_on.png
+	        info_mail_off       = info_mail_off.png
+	        reply               = reply.gif
+	        post-alert          = post-alert.gif
+	        pm                  = pm.gif
+	        delete              = delete_grey.gif
+	        edit                = edit_grey.gif
+	        solved              = solved.gif
+	        solved_on			= solved_on.png
+	        solved_off			= solved_off.png
+	        plus                = plus.gif
+	        minus               = minus.gif
+	        read                = read.gif
+	        read_new            = read_new.gif
+	        read_question_new   = read_question_new.gif
+	        read_question       = read_question.gif
+	        read_flame_new      = read_flame_new.gif
+	        read_flame          = read_flame.gif
+	        closed_icon_unread  = closed_icon_unread.gif
+	        closed_icon_read    = closed_icon_read.gif
+	        jump_to             = jump_to.gif
+	        5kstar              = 5kstar.gif
+	        new_topic           = new_topic.gif
+	        mail                = mail.gif
+	        imageReply          = pm-reply.gif
+ 			imageDelete         = pm-delete.gif
+ 			imageInbox          = pm-inbox.gif
+ 			imageArchiv         = pm-archiv.gif
+ 			imageOutbox         = pm-outbox.gif
+ 			imageNewPm          = pm-newpm.gif
+	        start_search        = start_search.gif
+	        poll				= poll.gif
+	        
+	        forum				= forum.png
+	        forum_new			= forum_new.png
+	        closed_forum		= closed_forum.png
+	        closed_forum_new	= closed_forum_new.png
+	        
+	        topicicon			= topic.png
+	        topicicon_new		= topic_new.png
+	        topicicon_closed	= topic_closed.png
+	        topicicon_closed_new= topic_closed_new.png
+	        topicicon_hot		= topic_hot.png
+	        topicicon_hot_new	= topic_hot_new.png
+	        topicicon_unanswered= topic_unanswered.png
+	        topicicon_unanswered_new = topic_unanswered_new.png
+            topicicon_shadow    = topic_shadow.png
+            topicicon_pinned	= topic_pinned.png
+            topicicon_pinned_hot = topic_pinned.png
+            topicicon_pinned_hot_new = topic_pinned.png
+            topicicon_pinned_closed = topic_pinned_closed.png
+            topicicon_pinned_closed_new = topic_pinned_closed.png
+            topicicon_pinned_unanswered_new = topic_pinned.png
+            topicicon_pinned_unanswered = topic_pinned.png
+            
+            pmicon				= pm.png
+            pmicon_new			= pm_new.png
+	    }
+	    
+	# Text editor JavScript
+		scripts.editor           = typo3conf/ext/mm_forum/res/scripts/editor_javascript.inc.js
+		
+	# Post parser configuration
+		postparser {
+            buttonPath          = {$plugin.tx_mmforum.postparser.insertButton_path}
+        
+			bb_code_linktarget	= _blank
+			bb_code_linkclass	= link_10
+			bb_code_bullet_img	= EXT:mm_forum/res/img/postparser-bb_code_bullet.gif
+			bb_code_path_smilie	= {$plugin.tx_mmforum.path_smilie}
+			bb_code_parser		= 1
+			code_protection		= 1
+			syntaxHighlighter	= 1
+			smilie_generator	= 1
+			zitat_div			= 1
+			links				= 1
+			sh_linestyle_bg		= #gggggg
+			sh_linestyle_bg2	= #ghfghf
+			tsrefUrl			= www.typo3.net
+			
+			quoteClass			= tx-mmforum-pi1-pt-quote
+			codeClass			= tx-mmforum-pi1-pt-code
+		}
+        
+    # Topic icons
+        topicIcon = IMAGE
+        topicIcon {
+            file = GIFBUILDER
+            file {
+                XY = 32,32
+                
+                2 = BOX
+                2 {
+                    dimensions = 1,1,30,30
+                    color = #f0f0f0;
+                    if.isFalse.field = unread
+                }
+                
+                1 = BOX
+                1 {
+                    dimensions = 0,0,32,32
+                    color = #1555A0;
+                }
+                
+                10 = IMAGE
+                10 {
+                    file = {$plugin.tx_mmforum.style_path}/img/default/mini_unanswered.gif
+                    offset = 3,3
+                    if.isTrue.field = unanswered
+                }
+                
+                20 = IMAGE
+                20 {
+                    file = {$plugin.tx_mmforum.style_path}/img/default/mini_closed.gif
+                    offset = 17,3
+                    if.isTrue.field = closed
+                }
+                
+                30 = IMAGE
+                30 {
+                    file = {$plugin.tx_mmforum.style_path}/img/default/mini_solved.gif
+                    offset = 3,17
+                    if.isTrue.field = solved
+                }
+                
+                40 = IMAGE
+                40 {
+                    file = {$plugin.tx_mmforum.style_path}/img/default/mini_hot.gif
+                    offset = 17,17
+                    if.isTrue.field = hot
+                }
+            }
+        }
+		
+	# Button configuration
+		
+        buttons_image {
+			normal = IMAGE
+			normal {
+				file = GIFBUILDER
+				file {
+					XY = [10.w]+[30.w]+[50.w]+[26.w]+2,25
+					
+					10 = IMAGE
+					10 {
+						file = {$plugin.tx_mmforum.style_path}/img/default/buttons/button_left.png
+						#file.width = 12
+						#file.height = 25
+						offset = 0,0
+					}
+					
+					25 = IMAGE
+					25 {
+						file = {$plugin.tx_mmforum.style_path}/img/default/buttons/button_middle.png
+						file.width = 400
+						file.height = 25
+						offset = [10.w],0
+					}
+					
+					26 = IMAGE
+					26 {
+						file.import = {$plugin.tx_mmforum.style_path}/img/default/buttons/icons/
+						file.import.field = button_iconname
+						file.maxH = 25
+						offset = [10.w]-3,0
+						if.isTrue.field = button_iconname
+					}
+					
+					30 = TEXT
+					30 {
+						text.field = button_label
+						offset = [10.w]+[26.w],17
+						fontSize = 10
+						fontColor = #1555A0;
+					}
+					
+					50 = IMAGE
+					50 {
+						file = {$plugin.tx_mmforum.style_path}/img/default/buttons/button_right.png
+						#file.width = 12
+						#file.height = 25
+						offset = [10.w]+[26.w]+[30.w]+2,0
+						#if.isFalse.field = button_iconname
+					}
+				}
+				altText.field = button_label
+				stdWrap.typolink {
+					extTarget = 
+					parameter.field = button_link
+					ATagParams.field = button_atagparams
+				}
+			}
+			
+			small < .normal
+			small.file {
+				XY = [10.w]+[30.w]+[50.w]+[26.w]+2,25
+				10.file.height = 18
+				50.file.height = 18
+				25.file.height = 18
+				#26.file.maxH = 18
+				30 {
+					fontSize = 8
+					offset = [10.w]+[26.w],15
+				}
+				
+				25.offset = [10.w],3
+				#30.offset = [10.w]+[26.w],17
+				10.offset = 0,3
+				50.offset = [10.w]+[26.w]+[30.w]+2,3
+			}
+        }
+        
+        buttons_text {
+            normal = COA
+            normal {
+                1 = IMAGE
+                1 {
+                    file = GIFBUILDER
+                    file {
+                        XY = 16,16
+                        
+                        10 = IMAGE
+                        10 {
+                            file.import = {$plugin.tx_mmforum.style_path}/img/default/buttons/icons/
+                            file.import.field = button_iconname
+                            file.maxW = 16
+                            file.maxH = 16
+                        }
+                        transparentBackground = 1
+                        transparentColor = #ffffff
+                        
+                        format = gif
+                    }
+                    
+                    #wrap = <div class="tx-mmforum-buttonicon"> | </div>
+                }
+                2 = TEXT
+                2 {
+                    field = button_label
+                    #wrap = <div class="tx-mmforum-buttontext"> | </div>
+                    wrap = <span class="tx-mmforum-buttontext"> | </span>
+                }
+                stdWrap.wrap = <div class="tx-mmforum-textbutton"> | </div>
+                stdWrap.typolink {
+                    extTarget = 
+                    parameter.field = button_link
+                    ATagParams.field = button_atagparams
+                }
+            }
+			
+			small < .normal
+			small.file {
+				XY = [10.w]+[30.w]+[50.w]+[26.w]+2,25
+				10.file.height = 18
+				50.file.height = 18
+				25.file.height = 18
+				#26.file.maxH = 18
+				30 {
+					fontSize = 10
+					offset = [10.w]+[26.w],15
+				}
+				
+				25.offset = [10.w],3
+				#30.offset = [10.w]+[26.w],17
+				10.offset = 0,3
+				50.offset = [10.w]+[26.w]+[30.w]+2,3
+			}
+		}
+        
+        # Button mode
+        # Change to "buttons < plugin.tx_mmforum_pi1.buttons_image" to use image buttons.
+            buttons < plugin.tx_mmforum_pi1.buttons_text
+            
+        # Topic icon mode
+            topicIconMode = {$plugin.tx_mmforum.topicIconMode}
+            
+            validatorSettings {
+            	quotes = none
+            	charset = auto
+            	stripTags = 0
+            	replace = specialchars
+            }
+}
+		
+#
+# tx_mmforum_pi2 // User Registration
+##################################
+plugin.tx_mmforum_pi2 {
+
+	# Template file
+		templateFile			= {$plugin.tx_mmforum.style_path}/fe_user_reg/fe_user_registrierung.html
+		
+	# Image path
+		path_img       	        = {$plugin.tx_mmforum.style_path}/img/default/
+		
+	# Image border
+        img_border 				= {$plugin.tx_mmforum.img_border}
+		
+	# The name of the administrating team or company
+		teamName 				= {$plugin.tx_mmforum.team_name}
+		
+	# The name of the parent website
+		siteName 				= {$plugin.tx_mmforum.site_name}
+		
+	# The email address of the support team
+		supportMail 			= {$plugin.tx_mmforum.support_mail}
+		
+	# User PID
+		userPID 				= {$plugin.tx_mmforum.userPID}
+        
+    # Storage PID
+        storagePID              = {$plugin.tx_mmforum.storagePID}
+		
+	# User group
+		userGroup 				= {$plugin.tx_mmforum.userGroup}
+		
+    # Email sender
+    	Emailsender 			= {$plugin.tx_mmforum.support_mail} 
+    	
+    # Image filenames
+    	images 					< plugin.tx_mmforum_pi1.images
+        
+    # Allowed characters for user name
+        username_allowed        = a-z0-9äüö_.ß
+        
+    # Minimal length for user names
+        username_minLength      = 3
+    
+    # Maximal length for user names
+        username_maxLength      = 30
+
+	# Informal language
+		informal                = {$plugin.tx_mmforum.informal}
+	
+	# Button configuration
+		buttons					< plugin.tx_mmforum_pi1.buttons
+		buttons {
+			small.file {
+				XY = 75,25
+				50.offset = 75-[50.w],3
+			}
+			small.stdWrap.wrap = <div class="tx-mmforum-pi2-textbutton"> | </div>
+			normal.stdWrap.wrap = <div class="tx-mmforum-pi2-textbutton"> | </div>
+		}
+		
+	# Use captcha
+		useCaptcha				= {$plugin.tx_mmforum.useCaptcha}
+}
+
+#
+# tx_mmforum_pi3 // Private Messaging
+##################################
+plugin.tx_mmforum_pi3 = USER_INT
+plugin.tx_mmforum_pi3  {
+	# Data storage PID
+		storagePID			    = {$plugin.tx_mmforum.storagePID}
+	
+    # User folder PID
+        userPID                 = {$plugin.tx_mmforum.userPID}
+        
+	# Image file path
+		path_img       	        = {$plugin.tx_mmforum.style_path}/img/default/
+        
+	# Minimum amount of time between two sent PMs in seconds
+		block_time  			= {$plugin.tx_mmforum.pmBlocktime}
+		
+	# The main plugin page UID
+		pid_forum				= {$plugin.tx_mmforum.boardPID}
+		
+	# The private messaging plugin page UID
+		pm_pid 					= {$plugin.tx_mmforum.pmPID}
+
+	# The default date format
+		date					= {$plugin.tx_mmforum.dateFormat}
+
+	# The name of the website.
+		siteName				= {$plugin.tx_mmforum.site_name}
+
+	# The email address of the PHP mailer
+		mailerEmail				= {$plugin.tx_mmforum.mailer_mail}
+		
+	# Wrap for unread messages in list display
+		unreadWrap				= <span class="tx-mmforum-pi3-pminbox-unread"> | </span>
+
+	# RealURL special links
+		realUrl_specialLinks	= {$plugin.tx_mmforum.realUrl_specialLinks}
+
+	# Templates
+		template {
+			error_message		= {$plugin.tx_mmforum.style_path}/pm/error.html
+			navi_top			= {$plugin.tx_mmforum.style_path}/pm/navi_top.html
+			main				= {$plugin.tx_mmforum.style_path}/pm/main.html
+			message_read		= {$plugin.tx_mmforum.style_path}/pm/message_read.html
+			message_write		= {$plugin.tx_mmforum.style_path}/pm/message_write.html
+			user_list			= {$plugin.tx_mmforum.style_path}/pm/user_list.html
+			mail_message		= {$plugin.tx_mmforum.style_path}/pm/mail_message.html
+		}
+	
+	# Image filenames
+    	images                  < plugin.tx_mmforum_pi1.images
+
+	# Informal language
+		informal                = {$plugin.tx_mmforum.informal}
+		
+	# Postparser class
+		postparser              < plugin.tx_mmforum_pi1.postparser
+		
+	# Button configuration
+		buttons					< plugin.tx_mmforum_pi1.buttons
+        
+    # Database field used for the user name
+    	userNameField = {$plugin.tx_mmforum.userNameField}
+}
+	
+#
+# tx_mmforum_pi4 // Search
+##############################
+plugin.tx_mmforum_pi4 = USER_INT
+plugin.tx_mmforum_pi4 {
+
+	# Data storage PID
+		storagePID			= {$plugin.tx_mmforum.storagePID}
+
+    # User Group ID for the admins
+		grp_admin      	    = {$plugin.tx_mmforum.adminGroup}
+        
+	# Template File
+		template            = {$plugin.tx_mmforum.style_path}/search/tmpl_search.html
+
+	# Path to the forum images
+		path_img       	    = {$plugin.tx_mmforum.style_path}/img/default/
+
+	# Board UIDs that are not indexed
+		noIndex_boardUIDs	= 
+		
+	# Page ID of the forum 
+		pid_forum			= {$plugin.tx_mmforum.boardPID}
+		
+	# Minimum search word length
+		sword_minLength		= {$plugin.tx_mmforum.sword_minLength}
+		
+	# Search results to be displayed on one page
+		resultsPerPage		= {$plugin.tx_mmforum.resultsPerPage}
+		
+	# Image filenames
+    	images < plugin.tx_mmforum_pi1.images
+    	
+    # Wrap for search word matches in results
+    	matchWrap           = <strong> | </strong>
+        
+    # Number of Threads to Index
+        indexCount          = {$plugin.tx_mmforum.indexCount}
+            
+    # Indexing password
+        indexingPassword    = {$plugin.tx_mmforum.indexingPassword}
+        
+	# RealUrl special links
+		realUrl_specialLinks = {$plugin.tx_mmforum.realUrl_specialLinks}
+
+	# Informal language
+		informal            = {$plugin.tx_mmforum.informal}
+	
+	# Button configuration
+		buttons             < plugin.tx_mmforum_pi1.buttons
+		
+	# Display search duration
+        displaySearchDuration	= 0
+        
+	# Crop the link to the result (stdWrap)
+		postPath { 
+			crop=50|...
+		}
+        
+    # Database field used for the user name
+    	userNameField = {$plugin.tx_mmforum.userNameField}
+}                                             
+
+#
+# tx_mmforum_pi5 // Private Data
+##############################
+plugin.tx_mmforum_pi5 = USER_INT
+plugin.tx_mmforum_pi5 {
+
+	# Data storage PID
+		storagePID			= {$plugin.tx_mmforum.storagePID}
+
+	# Template file
+		template			= {$plugin.tx_mmforum.style_path}/change_user/main.html
+		
+	# Date format
+		date				= d.m.Y
+		
+	# List of fields the user is allowed to edit
+		userFields			= name,zip,city,www,tx_mmforum_occ,tx_mmforum_interests,email,tx_mmforum_yim,tx_mmforum_msn,tx_mmforum_aim,tx_mmforum_icq,tx_mmforum_skype,tx_mmforum_user_sig,tx_mmforum_pmnotifymode
+
+	# Path to the avatar directory
+		path_avatar			= uploads/tx_mmforum/
+
+	# Path to the forum images 
+		path_img       	    = {$plugin.tx_mmforum.style_path}/img/default/
+
+	# Configuration for the avatar image. See TSRef.
+		avatar = IMAGE
+		avatar {
+			file.maxW = 80
+			file.maxH = 80
+			wrap =
+			imageLinkWrap = 0
+			imageLinkWrap {
+				enable = 1
+				bodyTag = <body bgColor="#dddddd">
+				wrap = <a href="javascript:close();"> | </a>
+				width = 1000m
+				height = 800
+				JSwindow = 1
+				JSwindow.newWindow = 1
+				JSwindow.expand = 17,20
+			}
+		}
+		
+	# Icons
+		icons {
+			settings = IMAGE
+			settings.file = {$plugin.tx_mmforum.style_path}/img/default/settings_icon.png
+			
+			settings2 = IMAGE
+			settings2.file = {$plugin.tx_mmforum.style_path}/img/default/wrench.png
+			
+			avatar = IMAGE
+			avatar.file = {$plugin.tx_mmforum.style_path}/img/default/avatar_icon.png
+			
+			password = IMAGE
+			password.file = {$plugin.tx_mmforum.style_path}/img/default/password_icon.png
+		}
+		
+	# Minimum password length
+		minPasswordLength = 6
+
+	# Post parser configuration
+		postparser < plugin.tx_mmforum_pi1.postparser
+
+	# Informal language
+		informal			= {$plugin.tx_mmforum.informal}
+	
+	# Button configuration
+		buttons					< plugin.tx_mmforum_pi1.buttons
+		buttons {
+			small.file {
+				XY = 75,25
+				50.offset = 75-[50.w],3
+			}
+		}
+}
+
+
+
+#
+# tx_mmforum_pi6 // Portal Information
+##############################
+
+plugin.tx_mmforum_pi6 = USER_INT
+plugin.tx_mmforum_pi6 {
+
+	# Data storage PID
+		storagePID			= {$plugin.tx_mmforum.storagePID}
+	
+    # User folder PID
+        userPID             = {$plugin.tx_mmforum.userPID}
+
+	# Template file
+		templateFile        = {$plugin.tx_mmforum.style_path}/portalinfo/mm_forum_pi6.tmpl
+
+	# The time that has to pass before a user is not counted as online anymore
+		onlineTime          = 600
+	
+	# UID of administrator group
+		adminGroup          = {$plugin.tx_mmforum.adminGroup}
+	# UID of moderator group
+		modGroup            = {$plugin.tx_mmforum.moderatorGroup}
+	
+	# The page UID of the board
+		userInfoPid         = {$plugin.tx_mmforum.boardPID}
+	# Page ID the board is placed on
+		pid_forum       	= {$plugin.tx_mmforum.boardPID}
+	# Determines, whether the counts a user made in the current session is to be counted
+		showPostCount       = 1
+	# Debug var
+		debug               = 0
+		
+	# The wrap for important information in the text
+		importantInformation_wrap = <span style="font-weight:bold;color:#8e8d8d;"> | </span>
+	
+	# The name of the website.
+		siteName            = {$plugin.tx_mmforum.site_name}
+		
+	# User list configuration options
+	userList {
+		# Wrap for group titles
+			groupTitle_wrap = <span style="font-weight:bold;"> | </span>
+	}
+
+	# Informal language
+		informal			= {$plugin.tx_mmforum.informal}
+	
+	# Button configuration
+		buttons					< plugin.tx_mmforum_pi1.buttons
+        
+    # Database field used for the user name
+    	userNameField = {$plugin.tx_mmforum.userNameField}
+}

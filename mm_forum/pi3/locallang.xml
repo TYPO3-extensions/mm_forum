@@ -1,0 +1,419 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+    <meta type="array">
+        <description>Language labels for plugin &quot;tx_mmforum_pi3&quot;</description>
+        <type></type>
+        <csh_table></csh_table>
+        <labelContext type="array">
+        </labelContext>
+    </meta>
+    <data type="array">
+        <!-- ENGLISH LANGUAGE DATA -->
+        <languageKey index="default" type="array">
+            <label index="reply">Answer</label>
+            <label index="delete">Delete</label>
+            <label index="newmessage"> new message</label>
+            <label index="newmessages"> new messages</label>
+            <label index="newmessage2">You have %s unread message</label>
+            <label index="newmessages2">You have %s unread messages</label>
+            <label index="msgError">You must be logged in to use this function</label>
+            <label index="headerTofromInbox">From</label>
+            <label index="headerTofromOutbox">To</label>
+            <label index="headerTofromArchiv">From/to</label>
+            <label index="headerSubject">Subject</label>
+            <label index="headerDate">Date</label>
+            <label index="confirmAction">You are about to edit many private messages. Do you really want to accomplish this action?</label>
+            <label index="selection">Selection</label>
+            <label index="selected">Selected messages</label>
+            <label index="selectedDelete">delete</label>
+            <label index="selectedToArchive">move to archive</label>
+            <label index="selectAll">All</label>
+            <label index="selectNone">None</label>
+            <label index="deleteConfirm">You really want to delete this message?</label>
+            <label index="deleteError">You do not have the authorisation to delete this messsage</label>
+            <label index="errorNoSubject">You must input a new subject&lt;br /&gt;</label>
+            <label index="errorNoMessage">You must input a new message&lt;br /&gt;</label>
+            <label index="errorNoRecipient">You must input a recipient&lt;br /&gt;</label>
+            <label index="errorRecipientNotExists">This username doesn't exists.&lt;br /&gt;</label>
+            <label index="errorBlockinTime">For security reasons, a PM can only be sent each %s seconds.&lt;br /&gt;</label>
+            <label index="errorNoAccess">You do NOT have the authorisation to read this messsage</label>
+            <label index="messageReplyTextPrefix">= </label>
+            <label index="messageReplySubjectPrefix">Re: </label>
+            <label index="imageReplyAlt">Answer</label>
+            <label index="imageInboxAlt">PM Inbox</label>
+            <label index="imageDeleteAlt">Delete PM</label>
+            <label index="imageArchivAlt">PM Archive</label>
+            <label index="imageOutboxAlt">PM Outbox</label>
+            <label index="imageNewPmAlt">Write new PM</label>
+            <label index="main.execute">Execute</label>
+            <label index="main.inbox">Incoming private messages</label>
+            <label index="main.outbox">Outgoing private messages</label>
+            <label index="main.archive">Message archive</label>
+            <label index="delete.confirm">Do you really want to delete this message</label>
+            <label index="read.readMessage">Read message</label>
+            <label index="write.writeMessage">Write message</label>
+            <label index="write.send">Send</label>
+            <label index="write.reset">Reset</label>
+            <label index="write.search">Search</label>
+            <label index="user.deleted">Deleted user</label>
+            <label index="ntfmail.content">Hello ###USERNAME###,
+You have recieved a new private message on ###SITENAME###.
+By clicking on the following link you come directly to the message:
+
+###PMLINK###
+
+ The forum team</label>
+            <label index="ntfmail.sender">###SITENAME### &lt;###EMAIL###&gt;</label>
+            <label index="ntfmail.subject">You have recieved a new message</label>
+            
+            <!-- Added in 0.1.5 -->
+            <label index="button-inbox">Inbox</label>
+            <label index="button-outbox">Outbox</label>
+            <label index="button-archive">Archive</label>
+            <label index="button-newpm">New message</label>
+            <label index="button-pmreply">Reply</label>
+            <label index="button-pmdelete">Delete</label>
+        </languageKey>
+        <!-- GERMAN LANGUAGE DATA -->
+        <languageKey index="de" type="array">
+            <label index="reply">Antworten</label>
+            <label index="delete">Löschen</label>
+            <label index="newmessage"> neue Nachricht</label>
+            <label index="newmessages"> neue Nachrichten</label>
+            <label index="newmessage2">Sie haben %s ungelesene Nachricht</label>
+            <label index="newmessage2-inf">Du hast %s ungelesene Nachricht</label>
+            <label index="newmessages2">Sie haben %s ungelesene Nachrichten</label>
+            <label index="newmessages2-inf">Du hast %s ungelesene Nachrichten</label>
+            <label index="msgError">Sie müssen sich erst einloggen, um diese Funktion zu benutzen</label>
+            <label index="msgError-inf">Du musst dich erst einloggen, um diese Funktion zu benutzen</label>
+            <label index="headerTofromInbox">Von</label>
+            <label index="headerTofromOutbox">An</label>
+            <label index="headerTofromArchiv">Von/An</label>
+            <label index="headerSubject">Betreff</label>
+            <label index="headerDate">Am</label>
+            <label index="confirmAction">Sie sind im Begriff, mehrere Private Nachrichten zu bearbeiten. Wollen Sie diese Aktion wirklich durchführen?</label>
+            <label index="confirmAction-inf">Du bist im Begriff, mehrere Private Nachrichten zu bearbeiten. Willst du diese Aktion wirklich durchführen?</label>
+            <label index="selection">Auswahl</label>
+            <label index="selected">Ausgewählte Nachrichten</label>
+            <label index="selectedDelete">löschen</label>
+            <label index="selectedToArchive">ins Archiv schieben</label>
+            <label index="selectAll">Alle</label>
+            <label index="selectNone">Keine</label>
+            <label index="deleteConfirm">Diese Nachricht wirklich löschen?</label>
+            <label index="deleteError">Sie haben nicht die Berechtigung diese Nachricht zu löschen</label>
+            <label index="deleteError-inf">Du hast nicht die Berechtigung diese Nachricht zu löschen</label>
+            <label index="errorNoSubject">Sie müssen einen Betreff eingeben&lt;br /&gt;</label>
+            <label index="errorNoSubject-inf">Du musst einen Betreff eingeben&lt;br /&gt;</label>
+            <label index="errorNoMessage">Sie müssen eine Nachricht eingeben&lt;br /&gt;</label>
+            <label index="errorNoMessage-inf">Du musst eine Nachricht eingeben&lt;br /&gt;</label>
+            <label index="errorNoRecipient">Sie müssen einen Empfänger eingeben&lt;br /&gt;</label>
+            <label index="errorNoRecipient-inf">Du musst einen Empfänger eingeben&lt;br /&gt;</label>
+            <label index="errorRecipientNotExists">Dieser Name existiert leider nicht&lt;br /&gt;</label>
+            <label index="errorBlockinTime">Aus Sicherheitsgründen kann nur alle %s Sekunden eine PM verschickt werden.&lt;br /&gt;</label>
+            <label index="errorNoAccess">Sie haben nicht die Berechtigung, diese Nachricht zu lesen.</label>
+            <label index="errorNoAccess-inf">Du hast nicht die Berechtigung, diese Nachricht zu lesen.</label>
+            <label index="messageReplyTextPrefix">= </label>
+            <label index="messageReplySubjectPrefix">Re: </label>
+            <label index="imageReplyAlt">Antworten</label>
+            <label index="imageInboxAlt">PM Eingang</label>
+            <label index="imageDeleteAlt">PM L&amp;ouml;schen</label>
+            <label index="imageArchivAlt">PM Archiv</label>
+            <label index="imageOutboxAlt">PM Ausgang</label>
+            <label index="imageNewPmAlt">Neue PM</label>
+            <label index="main.execute">Ausführen</label>
+            <label index="main.inbox">Eingegangene Private Nachrichten</label>
+            <label index="main.outbox">Versandte Private Nachrichten</label>
+            <label index="main.archive">Nachrichtenarchiv</label>
+            <label index="delete.confirm">Soll diese Nachricht wirklich gelöscht werden?</label>
+            <label index="read.readMessage">Nachricht lesen</label>
+            <label index="write.writeMessage">Nachricht schreiben</label>
+            <label index="write.send">Senden</label>
+            <label index="write.reset">Zurücksetzen</label>
+            <label index="write.search">Suchen</label>
+            <label index="user.deleted">Gelöschter Benutzer</label>
+            <label index="ntfmail.content">Hallo ###USERNAME###,
+Sie haben eine neue private Nachricht auf ###SITENAME### bekommen.
+Durch Klicken auf den folgenden Link kommen Sie direkt zur Nachricht:
+
+###PMLINK###
+
+Das Forum-Team</label>
+            <label index="ntfmail.content-inf">Hallo ###USERNAME###,
+du hast eine neue private Nachricht auf ###SITENAME### bekommen.
+Durch Klicken auf den folgenden Link kommst du direkt zur Nachricht:
+
+###PMLINK###
+
+Das Forum-Team</label>
+            <label index="ntfmail.sender">###SITENAME### &lt;###EMAIL###&gt;</label>
+            <label index="ntfmail.subject">Eine neue private Nachricht ist eingetroffen</label>
+            
+            <!-- Added in 0.1.5 -->
+            <label index="button-inbox">Posteingang</label>
+            <label index="button-outbox">Postausgang</label>
+            <label index="button-archive">Archiv</label>
+            <label index="button-newpm">Neue Nachricht</label>
+            <label index="button-pmreply">Antworten</label>
+            <label index="button-pmdelete">Löschen</label>
+        </languageKey>
+        <!-- FINNISH LANGUAGE DATA -->
+        <languageKey index="fi" type="array">
+			<label index="reply">Vastaa</label>
+			<label index="delete">Poista</label>
+			<label index="newmessage">uusi viesti</label>
+			<label index="newmessages">uutta vistiä</label>
+			<label index="newmessage2">Sinulla on %s lukematon viesti</label>
+			<label index="newmessages2">Sinulla on %s lukematonta viestiä</label>
+			<label index="msgError">Sinun täytyy kirjautua sisään käyttääksesi tätä toimintoa</label>
+			<label index="headerTofromInbox">Keneltä</label>
+			<label index="headerTofromOutbox">Kenelle</label>
+			<label index="headerTofromArchiv">Keneltä/kenelle</label>
+			<label index="headerSubject">Otsikko</label>
+			<label index="headerDate">Pvm</label>
+			<label index="confirmAction">Olet muokkaamassa monta yksityisviestiä. Haluatko jatkaa?</label>
+			<label index="selection">Valinta</label>
+			<label index="selected">Valitut viestit</label>
+			<label index="selectedDelete">poista</label>
+			<label index="selectedToArchive">siirrä arkistoon</label>
+			<label index="selectAll">Kaikki</label>
+			<label index="selectNone">Ei mitään</label>
+			<label index="deleteConfirm">Haluatko todella poistaa tämän viestin?</label>
+			<label index="deleteError">Sinulla ei ole oikeuksia poistaa tätä viestiä.</label>
+			<label index="errorNoSubject">Sinun pitää antaa uusi otsikko&lt;br /&gt;</label>
+			<label index="errorNoMessage">Sinun pitää antaa uusi viesti&lt;br /&gt;</label>
+			<label index="errorNoRecipient">Sinun pitää antaa vastaanottaja&lt;br /&gt;</label>
+			<label index="errorRecipientNotExists">Käyttäjänimeä ei ole.&lt;br /&gt;</label>
+			<label index="errorBlockinTime">Turvallisuussyistä yksityisviestejä voi lähettää vain joka %s. sekunti.&lt;br /&gt;</label>
+			<label index="errorNoAccess">Sinulla ei ole oikeutta lukea tätä viestiä</label>
+			<label index="messageReplyTextPrefix">=</label>
+			<label index="messageReplySubjectPrefix">Re:</label>
+			<label index="imageReplyAlt">Vastaus</label>
+			<label index="imageInboxAlt">Yksityiviesti saapuneissa</label>
+			<label index="imageDeleteAlt">Poista yksityisviesti</label>
+			<label index="imageArchivAlt">Yksityisviestiarkisto</label>
+			<label index="imageOutboxAlt">Yksityisviesti lähtevät</label>
+			<label index="imageNewPmAlt">Kirjoita uusi yksityisviesti</label>
+			<label index="main.execute">Suorita</label>
+			<label index="main.inbox">Saapuvat yksityisviestit</label>
+			<label index="main.outbox">Lähtevät yksityisviestit</label>
+			<label index="main.archive">Viestiarkisto</label>
+			<label index="delete.confirm">Haluatko todella poistaa tämän viestin</label>
+			<label index="read.readMessage">Lue viesti</label>
+			<label index="write.writeMessage">Kirjoita viesti</label>
+			<label index="write.send">Lähetä</label>
+			<label index="write.reset">Tyhjennä</label>
+			<label index="write.search">Hae</label>
+			<label index="user.deleted">Poistettu käyttäjä</label>
+			<label index="ntfmail.content">Hei ###USERNAME###,
+Olet saanut yksityisviestin ###SITENAME###.
+Klikkaamalla seuraavaa linkkiä pääset suoraan viestiin:
+###PMLINK###</label>
+			<label index="ntfmail.subject">Olet saanut uuden viestin</label>
+			
+			<!-- Added in 0.1.5 -->
+			<label index="button-inbox">Saapuneet</label>
+			<label index="button-outbox">Lähtevät</label>
+			<label index="button-archive">Arkisto</label>
+			<label index="button-newpm">Uusi viesti</label>
+			<label index="button-pmreply">Vastaa</label>
+			<label index="button-pmdelete">Poista</label> 
+		</languageKey>
+		<!-- DUTCH LANGUAGE DATA -->
+		<languageKey index="nl" type="array">
+            <label index="reply">Antwoord</label>
+            <label index="delete">Verwijder</label>
+            <label index="newmessage"> nieuw bericht</label>
+            <label index="newmessages"> nieuwe berichten</label>
+            <label index="newmessage2">U heeft %s ongelezen bericht</label>
+            <label index="newmessages2">u heeft %s ongelezen berichten</label>
+            <label index="msgError">U moet ingelogd zijn om deze functie te gebruiken</label>
+            <label index="headerTofromInbox">Van</label>
+            <label index="headerTofromOutbox">Naar</label>
+            <label index="headerTofromArchiv">Van/naar</label>
+            <label index="headerSubject">Onderwerp</label>
+            <label index="headerDate">Datum</label>
+            <label index="confirmAction">U staat op het punt om meerdere prive berichten te wijzigen. Weet u zeker dat u wilt doorgaan?</label>
+            <label index="selection">Selectie</label>
+            <label index="selected">Geselecteerde berichten</label>
+            <label index="selectedDelete">verwijder</label>
+            <label index="selectedToArchive">verplaats naar archief</label>
+            <label index="selectAll">Alle</label>
+            <label index="selectNone">Geen</label>
+            <label index="deleteConfirm">Weet u zeker dat u dit bericht wilt verwijderen?</label>
+            <label index="deleteError">U heeft geen rechten om dit bericht te verwijderen</label>
+            <label index="errorNoSubject">U moet een nieuw onderwerp invoeren&lt;br /&gt;</label>
+            <label index="errorNoMessage">U moet een nieuw bericht invoeren&lt;br /&gt;</label>
+            <label index="errorNoRecipient">U moet een ontvanger invoeren&lt;br /&gt;</label>
+            <label index="errorRecipientNotExists">Deze gebruikersnaam bestaat niet.&lt;br /&gt;</label>
+            <label index="errorBlockinTime">U mag, om beveiligingsredenen, slechts 1 prive bericht per %s seconden versturen.&lt;br /&gt;</label>
+            <label index="errorNoAccess">U heeft geen rechten om dit bericht te lezen</label>
+            <label index="messageReplyTextPrefix">= </label>
+            <label index="messageReplySubjectPrefix">Re: </label>
+            <label index="imageReplyAlt">Antwoord</label>
+            <label index="imageInboxAlt">PB postvak in</label>
+            <label index="imageDeleteAlt">Verwijder PB</label>
+            <label index="imageArchivAlt">PB Archief</label>
+            <label index="imageOutboxAlt">PB Postvak uit</label>
+            <label index="imageNewPmAlt">Schrijf nieuw PB</label>
+            <label index="main.execute">Voer uit</label>
+            <label index="main.inbox">Ontvangen prive berichten</label>
+            <label index="main.outbox">Verzonden prive berichten</label>
+            <label index="main.archive">berichten archief</label>
+            <label index="delete.confirm">Weet u zeker dat u dit bericht wilt verwijderen?</label>
+            <label index="read.readMessage">Lees bericht</label>
+            <label index="write.writeMessage">Schijf bericht</label>
+            <label index="write.send">Stuur</label>
+            <label index="write.reset">Herstel</label>
+            <label index="write.search">Zoek</label>
+            <label index="user.deleted">Verwijderde gebruiker</label>
+            <label index="ntfmail.content">Beste ###USERNAME###,
+U heeft een nieuw prive bericht ontvangen op ###SITENAME###.
+U gaat direct naar het bericht via de volgende link:
+
+###PMLINK###
+
+ De beheerders van het forum </label>
+            <label index="ntfmail.sender">###SITENAME### &lt;###EMAIL###&gt;</label>
+            <label index="ntfmail.subject">U heeft een nieuw bericht ontvangen</label>
+            
+            <!-- Added in 0.1.5 -->
+            <label index="button-inbox">Postvak In</label>
+            <label index="button-outbox">Postvak Uit</label>
+            <label index="button-archive">Archif</label>
+            <label index="button-newpm">Nieuw Bericht</label>
+            <label index="button-pmreply">Antwoord</label>
+            <label index="button-pmdelete">Verwijder</label>
+        </languageKey>
+        <languageKey index="fr" type="array">
+            <label index="reply">Répondre</label>
+            <label index="delete">Supprimer</label>
+            <label index="newmessage"> nouveau message</label>
+            <label index="newmessages"> nouveaux messages</label>
+            <label index="newmessage2">Vous avez %s message non-lu</label>
+            <label index="newmessages2">Vous avez %s messages non-lus</label>
+            <label index="msgError">Merci de vous identifier pour pouvoir utiliser cette fonction</label>
+            <label index="headerTofromInbox">De</label>
+            <label index="headerTofromOutbox">Vers</label>
+            <label index="headerTofromArchiv">De/Vers</label>
+            <label index="headerSubject">Concerne</label>
+            <label index="headerDate">Le</label>
+            <label index="confirmAction">Vous allez traiter plusieurs messsages privés - Désirez-vous vraiment poursuivre ?</label>
+            <label index="selection">Sélection</label>
+            <label index="selected">Messages sélectionnés</label>
+            <label index="selectedDelete">supprimer</label>
+            <label index="selectedToArchive">archiver</label>
+            <label index="selectAll">Tous</label>
+            <label index="selectNone">Aucun</label>
+            <label index="deleteConfirm">Désirez-vous vraiment supprimer ce message ?</label>
+            <label index="deleteError">Vous n'avez pas l'autorisation de supprimer ce message</label>
+            <label index="errorNoSubject">Merci d'indiquer un concerne&lt;br /&gt;</label>
+            <label index="errorNoMessage">Merci de rentrer le contenu du message&lt;br /&gt;</label>
+            <label index="errorNoRecipient">Merci de spécifier le destinataire&lt;br /&gt;</label>
+            <label index="errorRecipientNotExists">Ce nom n'existe pas&lt;br /&gt;</label>
+            <label index="errorBlockinTime">Par mesure de sécurité vous ne pouvez envoyer qu'un message toutes les %s secondes.&lt;br /&gt;</label>
+            <label index="errorNoAccess">Vous n'êtes pas autorisé à lire ce message.</label>
+            <label index="messageReplyTextPrefix">= </label>
+            <label index="messageReplySubjectPrefix">Re: </label>
+            <label index="imageReplyAlt">Répondre</label>
+            <label index="imageInboxAlt">MP Entrant</label>
+            <label index="imageDeleteAlt">MP Supprimer</label>
+            <label index="imageArchivAlt">MP Archive</label>
+            <label index="imageOutboxAlt">MP Sortant</label>
+            <label index="imageNewPmAlt">Nouveau MP</label>
+            <label index="main.execute">Exécuter</label>
+            <label index="main.inbox">Messages privés reçus</label>
+            <label index="main.outbox">Messages privés expédiés</label>
+            <label index="main.archive">Messages archivés</label>
+            <label index="delete.confirm">Désirez-vous vraiment supprimer ce message ?</label>
+            <label index="read.readMessage">Lire le message</label>
+            <label index="write.writeMessage">Ecrire un message</label>
+            <label index="write.send">Envoyer</label>
+            <label index="write.reset">Vider le formulaire</label>
+            <label index="write.search">Rechercher</label>
+            <label index="user.deleted">intervenant supprimé</label>
+            <label index="ntfmail.content">Bonjour ###USERNAME###,
+Vous avez reçu un nouveau message sur le forum ###SITENAME###.
+Merci de suivre ce lien :
+
+###PMLINK###
+
+			</label>
+            <label index="ntfmail.sender">###SITENAME### &lt;###EMAIL###&gt;</label>
+            <label index="ntfmail.subject">Vous avez reçu un nouveau message</label>
+            
+            <!-- Added in 0.1.5 -->
+            <label index="button-inbox">MP reçus</label>
+            <label index="button-outbox">MP envoyés</label>
+            <label index="button-archive">MP archivés</label>
+            <label index="button-newpm">MP nouveau</label>
+            <label index="button-pmreply">Répondre</label>
+            <label index="button-pmdelete">Supprimer</label>
+        </languageKey>
+        <!-- RUSSIAN LANGUAGE DATA -->
+        <languageKey index="ru" type="array">
+			<label index="reply">Ответить</label>
+			<label index="delete">Удалить</label>
+			<label index="newmessage"> новое сообщение</label>
+			<label index="newmessages"> новые сообщения</label>
+			<label index="newmessage2">У Вас %s непрочитаное сообщение</label>
+			<label index="newmessages2">Непрочитанных сообщений:  %s </label>
+			<label index="msgError">Чтобы воспользоваться этой функцией, Вы должны быть авторизированы</label>
+			<label index="headerTofromInbox">От кого</label>
+			<label index="headerTofromOutbox">Кому</label>
+			<label index="headerTofromArchiv">От кого/Кому</label>
+			<label index="headerSubject">Тема</label>
+			<label index="headerDate">Дата</label>
+			<label index="confirmAction">Вы собераетесь редактировать несколько личных сообщений. Вы подтверждаете это действие?</label>
+			<label index="selection">Выбрать</label>
+			<label index="selected">Выбранные сообщения</label>
+			<label index="selectedDelete">удалить</label>
+			<label index="selectedToArchive">перенести в архив</label>
+			<label index="selectAll">Все</label>
+			<label index="selectNone">Отменить</label>
+			<label index="deleteConfirm">Вы действительно хотите удалить это сообщение?</label>
+			<label index="deleteError">У Вас нет прав для удаления этого сообщения</label>
+			<label index="errorNoSubject">Вы должны указать тему&lt;br /&gt;</label>
+			<label index="errorNoMessage">Вы должны ввести текст сообщения&lt;br /&gt;</label>
+			<label index="errorNoRecipient">Вы должны указать получателя&lt;br /&gt;</label>
+			<label index="errorRecipientNotExists">Такой пользователь не существует.&lt;br /&gt;</label>
+			<label index="errorBlockinTime">Согласно политики безопасности сайта, следующее ЛС можно отправит только через %s секунд.&lt;br /&gt;</label>
+			<label index="errorNoAccess">У Вас НЕТ прав для просмотра этого сообщения</label>
+			<label index="messageReplyTextPrefix">= </label>
+			<label index="messageReplySubjectPrefix">Re: </label>
+			<label index="imageReplyAlt">Ответить</label>
+			<label index="imageInboxAlt">Входящие ЛС</label>
+			<label index="imageDeleteAlt">Удалить ЛС</label>
+			<label index="imageArchivAlt">Архив ЛС</label>
+			<label index="imageOutboxAlt">Исходящие ЛС</label>
+			<label index="imageNewPmAlt">Создать новое ЛС</label>
+			<label index="main.execute">Выполнить</label>
+			<label index="main.inbox">Входящие личные сообщения</label>
+			<label index="main.outbox">Исходящие личные сообщения</label>
+			<label index="main.archive">Архив сообщений</label>
+			<label index="delete.confirm">Вы действительно хотите удалить это сообщение</label>
+			<label index="read.readMessage">Просмотреть сообщение</label>
+			<label index="write.writeMessage">Написать сообщение</label>
+			<label index="write.send">Отправить</label>
+			<label index="write.reset">Изменить</label>
+			<label index="write.search">Искать</label>
+			<label index="user.deleted">Удалить пользователя</label>
+			<label index="ntfmail.content">Здравствуйте ###USERNAME###,
+				Вам отправлено новое личное сообщение на сайте ###SITENAME###.
+				Чтобы просмотреть сообщение, воспользуйтесь следующей ссылкой:
+				
+				###PMLINK###
+				
+				Администрация форума</label>
+			<label index="ntfmail.sender">###SITENAME### &lt;###EMAIL###&gt;</label>
+			<label index="ntfmail.subject">Для Вас получено новое сообщение</label>
+            
+            <!-- Added in 0.1.5 -->
+            <label index="button-inbox">Входящие</label>
+            <label index="button-outbox">Исходящие</label>
+            <label index="button-archive">Архив</label>
+            <label index="button-newpm">Новое ЛС</label>
+            <label index="button-pmreply">Ответить</label>
+            <label index="button-pmdelete">Удалить</label>
+        </languageKey>
+    </data>
+</T3locallang>

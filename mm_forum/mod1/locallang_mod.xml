@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;tools_txmmforumM1&quot; - header, description</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="mlang_tabs_tab">mm_forum</label>
+			<label index="mlang_labels_tabdescr">Administration environment for the mm_forum extension. Offers functions for user administration, board and category management, in-browser template file editing and various other features.</label>
+			<label index="mlang_labels_tablabel">mm_forum administration</label>
+		</languageKey>
+		<languageKey index="fr" type="array">
+			<label index="mlang_tabs_tab">mm_forum</label>
+			<label index="mlang_labels_tabdescr">Environnement d'administration de mm_forum. Offre les fonctions d'administration de forums, de thèmes, d'utilisateurs, etc.</label>
+			<label index="mlang_labels_tablabel">mm_forum administration</label>
+		</languageKey>
+        <!-- RUSSIAN LANGUAGE DATA -->
+		<languageKey index="ru" type="array">
+			<label index="mlang_tabs_tab">mm_forum</label>
+			<label index="mlang_labels_tabdescr">Среда администрирования расширения mm_forum. Предоставляет возможность для администрирования пользователей, управления форумом и категориями, редактирования файлов шаблонов внешнего вида форума и много других возможностей.</label>
+			<label index="mlang_labels_tablabel">администрирование mm_forum</label>
+		</languageKey>
+	</data>
+</T3locallang>
