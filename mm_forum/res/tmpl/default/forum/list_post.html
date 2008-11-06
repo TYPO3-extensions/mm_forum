@@ -1,0 +1,185 @@
+<!-- ###ADMIN_PANEL### begin -->
+	<script type="text/javascript">
+		function toggleDisplay(id){
+			if (document.getElementById(id).style.display == 'none') {
+				document.getElementById(id).style.display = '';
+				document.getElementById('img-expand').style.display = 'none';
+				document.getElementById('img-collapse').style.display = 'block';
+			} else {
+				document.getElementById(id).style.display = 'none';
+				document.getElementById('img-expand').style.display = 'block';
+				document.getElementById('img-collapse').style.display = 'none';
+			}
+		}
+	</script>
+	<form action="###ACTIONLINK###" method="post">
+	<div style="float:left; padding: 4px 12px;">
+		<img id="img-expand" src="###IMG_EXPAND###" title="###LABEL_EXPAND###" alt="###LABEL_EXPAND###" onclick="javascript:toggleDisplay('admin_options');" />
+		<img style="display:none" id="img-collapse" src="###IMG_COLLAPSE###" title="###LABEL_COLLAPSE###" alt="###LABEL_COLLAPSE###" onclick="javascript:toggleDisplay('admin_options');" />
+	</div>
+	<div style="margin-left: 32px;">
+	<table class="tx-mmforum-table" width="100%" cellspacing="0" cellpadding="0">
+		<tr>
+			<th class="tx-mmforum-th">
+				<div id="menuheader"> ###LABEL_ADMINOPTIONS###</div>
+			</th>
+		</tr>
+		<tr id="admin_options" style="display: none;">
+			<td valign="top">
+				<table class="tx-mmforum-table" style="width:100%" cellspacing="0" cellpadding="0">
+					<tr>
+						<td valign="top" style="width:50%;" >
+							<table class="tx-mmforum-table" cellspacing="0" cellpadding="0" style="width:100%;">
+								<tr>
+									<td class="tx-mmforum-optth" style="width:1px"></td>
+									<td class="tx-mmforum-optth">###LABEL_TOPICTITLE###:</td>
+									<td class="tx-mmforum-optth">
+										<input class="tx-mmforum-input" type="text" name="tx_mmforum_pi1[threadtitel]" value="###TOPICTITEL###" />
+									</td>
+								</tr>
+								<tr>
+									<td class="tx-mmforum-optth"></td>
+									<td class="tx-mmforum-optth">###LABEL_TOPICPREFIX###:</td>
+									<td class="tx-mmforum-optth">
+										<select class="tx-mmforum-select" name="tx_mmforum_pi1[prefix_selected]">
+											###PREFIXES###
+										</select>
+										<input class="tx-mmforum-input" type="text"  name="tx_mmforum_pi1[prefix_user]" size="10" value="###TOPICPREFIX###" />
+									</td>
+								</tr>
+								<tr>
+									<td class="tx-mmforum-optth">
+										<input type="checkbox"  name="tx_mmforum_pi1[at_top]" ###AT_TOP### /></td><td class="tx-mmforum-optth" colspan="2">###LABEL_FIRST###
+									</td>
+								</tr>
+								<tr>
+									<td class="tx-mmforum-optth">
+										<input type="checkbox"  name="tx_mmforum_pi1[read_flag]" ###READ_FLAG### /></td><td class="tx-mmforum-optth" colspan="2">###LABEL_ADMINSONLY###
+									</td>
+								</tr>
+								<tr>
+									<td class="tx-mmforum-optth">
+										<input type="checkbox"  name="tx_mmforum_pi1[closed_flag]" ###CLOSED_FLAG### /></td><td class="tx-mmforum-optth" colspan="2">###LABEL_CLOSED###
+									</td>
+								</tr>
+								<tr>
+									<td class="tx-mmforum-optth">
+										<input type="checkbox"  name="tx_mmforum_pi1[delete_flag]" ###DELETE_FLAG### /></td><td class="tx-mmforum-optth" colspan="2">###LABEL_DELETE###
+									</td>
+								</tr>
+								
+								<tr>
+									<td class="tx-mmforum-optth"></td>
+									<td class="tx-mmforum-optth">###LABEL_MOVE###:</td>
+									<td class="tx-mmforum-optth">
+										###FORUM_BOX###
+									</td>
+								</tr>
+							</table>
+						
+						</td>
+					</tr>
+					<tr>
+						<td class="tx-mmforum-subth">
+							###OPTIONS###
+							<input type="submit" value="###LABEL_SAVE###" class="tx-mmforum-button" />
+							<input type="hidden" name="tx_mmforum_pi1[saveAdmin]" value="1" />
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	</div>
+</form>
+<div style="clear:both"></div>
+<!-- ###ADMIN_PANEL### end -->
+
+
+
+<!-- ###LIST_POSTS_BEGIN### begin -->
+###ADMIN_PANEL###
+<!-- ###ROOTLINE_CONTAINER### begin -->
+	<div class="tx-mmforum-rootline">###FORUMPATH###</div>
+<!-- ###ROOTLINE_CONTAINER### begin -->
+<div class="tx-mmforum-pi1-listpost-topicicon">###TOPICICON###</div>
+<h2>###TOPICNAME###</h2><br/>
+###POLL###
+<div class="tx-mmforum-pagenav">###PAGES###</div>
+<table border="1" class="tx-mmforum-table" width="100%">
+	<tr>
+		<th class="tx-mmforum-th">###LABEL_AUTHOR###</th>
+		<th class="tx-mmforum-th">###LABEL_MESSAGE###</th>
+	</tr>
+<!-- ###LIST_POSTS_BEGIN### end -->
+
+<!-- ###LIST_POSTS### begin -->
+	<tr>
+		<td colspan="2" class="tx-mmforum-subth">
+			###POSTANCHOR###
+			<div class="tx-mmforum-pi1-listpost-date">###POSTDATE###</div>
+			<div class="tx-mmforum-pi1-listpost-options">###POSTOPTIONS###</div>
+		</td>
+	</tr>
+	<tr>
+		<td class="tx-mmforum-td tx-mmforum-pi1-listpost-user" rowspan="2" valign="top">###POSTUSER###</td>
+		<td class="tx-mmforum-td tx-mmforum-pi1-listpost-text" valign="top">
+            ###POSTTEXT###
+            <!-- ###ATTACHMENT_SECTION### -->
+            ###ATTACHMENTS###
+            <!-- ###ATTACHMENT_SECTION### -->
+        </td>
+	</tr>
+	<tr>
+		<td class="tx-mmforum-td tx-mmforum-pi1-listpost-menu" colspan="2">###POSTMENU###</td>
+	</tr>
+<!-- ###LIST_POSTS### end -->
+<!-- ###LIST_POSTS_END### begin -->
+</table>
+<div class="tx-mmforum-pagenav">###PAGES###</div>
+<br />
+###POST_OPTIONEN###
+<br />
+###POSTBOTTOM###
+<!-- ###LIST_POSTS_END### end -->
+
+<!-- ###LIST_POSTS_OPTIONEN### begin -->
+<table class="tx-mmforum-table" border="1" width="100%">
+	<tr>
+		<th class="tx-mmforum-th">
+			###LABEL_OPTIONS###
+		</th>
+	</tr>
+	<tr>
+		<td class="tx-mmforum-td" valign="top" align="center">
+			<table cellpadding="0" cellspacing="0" border="0">
+				<tr>
+					<td style="width:75px;">###POSTMAILLINK###</td>
+					<td style="width:75px;">###FAVORITELINK###</td>
+					<td style="width:75px;">###SOLVEDLINK###</td>
+				</tr>
+			</table>
+		<!-- ###CODE_NUMBERS_LINK### -->
+		</td>
+	</tr>
+</table>
+<!-- ###LIST_POSTS_OPTIONEN### end -->
+
+<!-- ###USERINFO### begin -->
+    <!-- ###USERINFO_DELETED### begin -->
+        <strong>###LLL_DELETED###</strong>
+    <!-- ###USERINFO_DELETED### end -->
+    <!-- ###USERINFO_REGULAR### begin -->
+        ###USERNAME###
+        ###USERREALNAME###
+        ###USERRANKS###
+        ###TOPICCREATOR###
+        ###AVATAR###
+        <div style="font-size:10px;">###LLL_REGSINCE###: ###REGSINCE###</div>
+        <div style="font-size:10px;">###LLL_POSTCOUNT###: ###POSTCOUNT###</div>
+    <!-- ###USERINFO_REGULAR### end -->
+<!-- ###USERINFO### end -->
+
+<!-- ###LIST_ATTACHMENTS### begin -->
+###IMAGE_PREVIEW### <!-- ###DOWNLOADLINK### -->###FILENAME###<!-- ###DOWNLOADLINK### --> (###LABEL_FILETYPE###: ###FILETYPE###, ###LABEL_FILESIZE###: ###FILESIZE###) &mdash; ###NUMDOWNLOADS### ###LABEL_NUMDOWNLOADS###
+<!-- ###LIST_ATTACHMENTS### end -->

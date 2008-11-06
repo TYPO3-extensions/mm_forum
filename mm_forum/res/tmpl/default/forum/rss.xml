@@ -1,0 +1,25 @@
+<!-- ###RSS_FEED### begin --><?xml version="1.0" encoding="###RSS_ENCODING###"?>
+<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+	<channel>
+		<title>###RSS_TITLE###</title>
+		<link>###RSS_URL###</link>
+		<description>###RSS_DESCRIPTION###</description>
+		<language>###RSS_LANGUAGE</language>
+		<lastbuilddate>###RSS_LASTBUILT###</lastbuilddate>
+		<generator>###RSS_GENERATOR###</generator>
+		<ttl>60</ttl>
+		
+		<!-- ###RSS_POST_ITEM### begin -->
+		<item>
+			<title>###RSS_TOPIC_NAME###</title>
+			<link>###RSS_POST_LINK###</link>
+			<pubDate>###RSS_POST_DATE###</pubDate>
+			<description>###RSS_POST_TEXT_SHORT###</description>
+			<content:encoded><![CDATA[###RSS_POST_TEXT###]]></content:encoded>
+			<category>###RSS_FORUM_NAME###</category>
+			<dc:creator>###RSS_POST_AUTHOR###</dc:creator>
+		</item>
+		<!-- ###RSS_POST_ITEM### begin -->
+	</channel>
+</rss>
+<!-- ###RSS_FEED### end -->

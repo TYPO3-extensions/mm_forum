@@ -1,0 +1,11 @@
+page.includeCSS {
+	mm_forum = {$plugin.tx_mmforum.style_path}/css/mm_forum.css
+}
+
+<INCLUDE_TYPOSCRIPT: source="FILE: EXT:mm_forum/res/ts/tx_mmforum_base.ts">
+<INCLUDE_TYPOSCRIPT: source="FILE: EXT:mm_forum/res/ts/tx_mmforum_pi1.ts">
+<INCLUDE_TYPOSCRIPT: source="FILE: EXT:mm_forum/res/ts/tx_mmforum_pi2.ts">
+<INCLUDE_TYPOSCRIPT: source="FILE: EXT:mm_forum/res/ts/tx_mmforum_pi3.ts">
+<INCLUDE_TYPOSCRIPT: source="FILE: EXT:mm_forum/res/ts/tx_mmforum_pi4.ts">
+<INCLUDE_TYPOSCRIPT: source="FILE: EXT:mm_forum/res/ts/tx_mmforum_pi5.ts">
+<INCLUDE_TYPOSCRIPT: source="FILE: EXT:mm_forum/res/ts/tx_mmforum_pi6.ts">

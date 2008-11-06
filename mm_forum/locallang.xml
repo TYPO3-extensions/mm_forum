@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+    <meta type="array">
+        <description></description>
+        <type></type>
+        <csh_table></csh_table>
+        <labelContext type="array">
+        </labelContext>
+    </meta>
+    <data type="array">
+        <!-- ENGLISH LANGUAGE DATA -->
+        <languageKey index="default" type="array">
+            <label index="pi1_title">mm_forum :: Forum</label>
+            <label index="pi2_title">mm_forum :: User registration</label>
+            <label index="pi3_title">mm_forum :: Private messaging</label>
+            <label index="pi4_title">mm_forum :: Search</label>
+            <label index="pi5_title">mm_forum :: User settings</label>
+            <label index="pi6_title">mm_forum :: Portal information</label>
+            <label index="flex.general">Forum options</label>
+            <label index="flex.general.desc">Here you may configure general display options for the mm_forum :: Forum plugin.</label>
+            <label index="flex.code">What to display</label>
+            <label index="flex.code.empty">Message board</label>
+            <label index="flex.code.havealook">Email subscriptions</label>
+            <label index="flex.code.favorites">Favorites</label>
+            <label index="flex.code.postalertlist">Reported posts</label>
+            <label index="flex.code.listposts">List the user's posts</label>
+            <label index="flex.code.latest">List latest posts</label>
+            <label index="flex.redirectSpecial">Show special page</label>
+            <label index="flex.redirectSpecial.none">No</label>
+            <label index="flex.redirectSpecial.list_unans">List unanswered topics</label>
+            <label index="flex.redirectSpecial.list_unread">List unread topics</label>
+            <label index="flex.redirectSpecial.list_prefix">List prefixed topics</label>
+            <label index="flex.prefix">Prefix to be listed by default</label>
+            <label index="flex.exclCategories">Limit display to categories</label>
+            <label index="flex.latest_limit">Number of latest posts</label>
+            
+            <!-- ADDED IN 0.1.1 -->
+            <label index="flex.code.userlist">User list</label>
+            <label index="flex.userlist_fields">Display fields</label>
+            <label index="flex.userlist_fields.username">User name</label>
+            <label index="flex.userlist_fields.usergroup">Groups</label>
+            <label index="flex.userlist_fields.crdate">Registration date</label>
+            <label index="flex.userlist_fields.name">Real name</label>
+            <label index="flex.userlist_fields.email">Email address</label>
+            <label index="flex.userlist_fields.pm">Private message</label>
+            <label index="flex.userlist_fields.city">Location</label>
+            <label index="flex.userlist_fields.www">WWW</label>
+            <label index="flex.userlist_fields.icq">ICQ</label>
+            <label index="flex.userlist_fields.aim">AIM</label>
+            <label index="flex.userlist_fields.yim">YIM</label>
+            <label index="flex.userlist_fields.msn">MSN</label>
+            <label index="flex.userlist_fields.skype">Skype</label>
+            <label index="flex.userlist_fields.posts">Posts</label>
+            <label index="flex.userlist_fields.interests">Interests</label>
+            <label index="flex.userlist_fields.occ">Occupation</label>
+            <label index="flex.userlist_fields.avatar">Avatar</label>
+            <label index="flex.userlist_limit">List size</label>
+            
+            <!-- ADDED IN 0.1.2 -->
+            <label index="flex.code.postqueue">List post queue (only if moderated board)</label>
+            
+            <!-- ADDED IN 0.1.7 -->
+            <label index="pi1_plus_wiz_description">This plugin adds an extremely powerful forum extension to your page.</label>
+            <label index="pi2_plus_wiz_description">This plugin adds an user registration to your page.</label>
+            <label index="pi3_plus_wiz_description">This plugin adds a private messaging system to your page.</label>
+            <label index="pi4_plus_wiz_description">This plugin adds an indexed search for the forum extension.</label>
+            <label index="pi5_plus_wiz_description">This plugin adds an user settings management.</label>
+            <label index="pi6_plus_wiz_description">This plugin adds a portal information field.</label>
+			
+            <label index="flex.code.rss">RSS feed</label>
+        </languageKey>
+        <!-- GERMAN LANGUAGE DATA -->
+        <languageKey index="de" type="array">
+            <label index="pi1_title">mm_forum :: Forum</label>
+            <label index="pi2_title">mm_forum :: Benutzerregistrierung</label>
+            <label index="pi3_title">mm_forum :: Private Nachrichten</label>
+            <label index="pi4_title">mm_forum :: Suche</label>
+            <label index="pi5_title">mm_forum :: Benutzereinstellungen</label>
+            <label index="pi6_title">mm_forum :: Portalinformationen</label>
+            <label index="flex.general">Forumeinstellungen</label>
+            <label index="flex.general.desc">Hier können Sie grundsätzliche Darstellungsoptionen für das mm_forum :: Forum-Plugin einstellen.</label>
+            <label index="flex.code">Darstellen:</label>
+            <label index="flex.code.empty">Forum</label>
+            <label index="flex.code.havealook">E-Mail-Abonnements</label>
+            <label index="flex.code.favorites">Favouriten</label>
+            <label index="flex.code.postalertlist">Gemeldete Beiträge</label>
+            <label index="flex.code.listposts">Liste von Benutzerbeiträgen</label>
+            <label index="flex.code.latest">Neueste Beiträge</label>
+            <label index="flex.redirectSpecial">Sonderseite anzeigen:</label>
+            <label index="flex.redirectSpecial.none">Nein</label>
+            <label index="flex.redirectSpecial.list_unans">Unbeantwortete Themen</label>
+            <label index="flex.redirectSpecial.list_unread">Ungelesene Themen</label>
+            <label index="flex.redirectSpecial.list_prefix">Themen mit Präfix</label>
+            <label index="flex.prefix">Standardmäßig aufzulistendes Präfix:</label>
+            <label index="flex.exclCategories">Darstellung auf Kategorien beschränken:</label>
+            <label index="flex.latest_limit">Anzahl der neuesten Beiträge</label>
+            
+            <!-- ADDED IN 0.1.1 -->
+            <label index="flex.code.userlist">Benutzerliste</label>
+            <label index="flex.userlist_fields">Felder anzeigen</label>
+            <label index="flex.userlist_fields.username">Benutzername</label>
+            <label index="flex.userlist_fields.usergroup">Gruppen</label>
+            <label index="flex.userlist_fields.crdate">Registrierdatum</label>
+            <label index="flex.userlist_fields.name">Echter Name</label>
+            <label index="flex.userlist_fields.email">E-Mail-Adresse</label>
+            <label index="flex.userlist_fields.pm">Private Nachricht</label>
+            <label index="flex.userlist_fields.city">Ort</label>
+            <label index="flex.userlist_fields.www">WWW</label>
+            <label index="flex.userlist_fields.icq">ICQ</label>
+            <label index="flex.userlist_fields.aim">AIM</label>
+            <label index="flex.userlist_fields.yim">YIM</label>
+            <label index="flex.userlist_fields.msn">MSN</label>
+            <label index="flex.userlist_fields.skype">Skype</label>
+            <label index="flex.userlist_fields.posts">Beiträge</label>
+            <label index="flex.userlist_fields.interests">Interessen</label>
+            <label index="flex.userlist_fields.occ">Beruf</label>
+            <label index="flex.userlist_fields.avatar">Avatar</label>
+            <label index="flex.userlist_limit">Anzahl</label>
+            
+            <!-- ADDED IN 0.1.2 -->
+            <label index="flex.code.postqueue">Freizuschaltende Beiträge</label>
+            
+            <!-- ADDED IN 0.1.7 -->
+            <label index="pi1_plus_wiz_description">Dieses Plugin fügt Ihrer Seite eine äußerst mächtige Forenerweiterung hinzu.</label>
+            <label index="pi2_plus_wiz_description">Dieses Plugin fügt Ihrer Seite eine Benutzerregistrierung hinzu.</label>
+            <label index="pi3_plus_wiz_description">Dieses Plugin fügt Ihrer Seite ein Nachrichtensystem hinzu.</label>
+            <label index="pi4_plus_wiz_description">Dieses Plugin fügt Ihrer Seite eine indizierte Suche für das Forum hinzu.</label>
+            <label index="pi5_plus_wiz_description">Dieses Plugin fügt Ihrer Seite eine Benuntzereinstellungsverwaltung hinzu.</label>
+            <label index="pi6_plus_wiz_description">Dieses Plugin fügt Ihrer Seite eine Portalinformationseite hinzu.</label>
+            <label index="flex.code.rss">RSS-Feed</label>
+        </languageKey>
+        <!-- FINNISH LANGUAGE DATA -->
+        <languageKey index="fi" type="array">
+			<label index="pi2_title">mm_forum :: Käyttäjärekisteröinti</label>
+			<label index="pi3_title">mm_forum :: Yksityisviestit</label>
+			<label index="pi4_title">mm_forum :: Haku</label>
+			<label index="pi5_title">mm_forum :: Käyttäjäasetukset</label>
+			<label index="pi6_title">mm_forum :: Portal-informaatio</label>
+			<label index="flex.general">Forum asetukset</label>
+			<label index="flex.general.desc">Täällä voit määritellä yleisiä näyttöasetuksia mm_forum :: Forum plugin:ille</label>
+			<label index="flex.code">Mitä näytetään</label>
+			<label index="flex.code.empty">Keskustelupalsta</label>
+			<label index="flex.code.havealook">Keskusteluseuranta sähköpostitilauksella</label>
+			<label index="flex.code.favorites">Suosikit</label>
+			<label index="flex.code.postalertlist">Raportoidut viestit</label>
+			<label index="flex.code.listposts">Listaa käyttäjän viestit</label>
+			<label index="flex.code.latest">Listaa uusimmat viestit</label>
+			<label index="flex.redirectSpecial">Näytä erityinen sivu</label>
+			<label index="flex.redirectSpecial.none">Ei</label>
+			<label index="flex.redirectSpecial.list_unans">Listaa vastaamattomat aiheet</label>
+			<label index="flex.redirectSpecial.list_unread">Listaa lukemattomat aiheet</label>
+			<label index="flex.redirectSpecial.list_prefix">Listaa etuliitteelliset aiheet</label>
+			<label index="flex.prefix">Oletusarvoisesti listattava etuliite</label>
+			<label index="flex.exclCategories">Rajoita näyttö kategorian mukaan</label>
+			<label index="flex.latest_limit">Uusimpien viestien määrä</label>
+			<label index="flex.code.userlist">Käyttäjälista</label>
+			<label index="flex.userlist_fields">Näytä kentät</label>
+			<label index="flex.userlist_fields.username">Käyttäjänimi</label>
+			<label index="flex.userlist_fields.usergroup">Ryhmät</label>
+			<label index="flex.userlist_fields.crdate">Rekisteröintipvm</label>
+			<label index="flex.userlist_fields.name">Todellinen nimi</label>
+			<label index="flex.userlist_fields.email">Sähköpostiosoite</label>
+			<label index="flex.userlist_fields.pm">Yksityisviesti</label>
+			<label index="flex.userlist_fields.city">Sijainti</label>
+			<label index="flex.userlist_fields.www">Kotisivut</label>
+			<label index="flex.userlist_fields.posts">Viestit</label>
+			<label index="flex.userlist_fields.interests">Kiinnostuksen aiheet</label>
+			<label index="flex.userlist_fields.occ">Ammatti</label>
+			<label index="flex.userlist_limit">Listan koko</label>
+		</languageKey>
+		<!-- DUTCH LANGUAGE DATA -->
+		<languageKey index="nl" type="array">
+            <label index="pi1_title">mm_forum :: Forum</label>
+            <label index="pi2_title">mm_forum :: Gebruiker registratie</label>
+            <label index="pi3_title">mm_forum :: Prive berichten</label>
+            <label index="pi4_title">mm_forum :: Zoeken</label>
+            <label index="pi5_title">mm_forum :: Gebruikersinstellingem</label>
+            <label index="pi6_title">mm_forum :: Portal informatie</label>
+            <label index="flex.general">Forum opties</label>
+            <label index="flex.general.desc">Hier kunt u de algemene weergaveopties instellen voor het mm_forum :: Forum plugin.</label>
+            <label index="flex.code">Wat te tonen</label>
+            <label index="flex.code.empty">Berichten board</label>
+            <label index="flex.code.havealook">Email subscriptions</label>
+            <label index="flex.code.favorites">Favorieten</label>
+            <label index="flex.code.postalertlist">Gemelde berichten</label>
+            <label index="flex.code.listposts">Toon de berichten van een gebruiker</label>
+            <label index="flex.code.latest">Toon laatste berichten</label>
+            <label index="flex.redirectSpecial">Toon speciale pagina</label>
+            <label index="flex.redirectSpecial.none">Nee</label>
+            <label index="flex.redirectSpecial.list_unans">Onbeantwoorde onderwerpen</label>
+            <label index="flex.redirectSpecial.list_unread">Ongelezen onderwerpen</label>
+            <label index="flex.redirectSpecial.list_prefix">Onderwerpen met voorvoegsel</label>
+            <label index="flex.prefix">Voorkeurs voorvoegsel</label>
+            <label index="flex.exclCategories">Beperk weergave tot categorieen</label>
+            <label index="flex.latest_limit">Aantal laatste berichten</label>
+            
+            <!-- ADDED IN 0.1.1 -->
+            <label index="flex.code.userlist">Gebruikerslijst</label>
+            <label index="flex.userlist_fields">Toon velden</label>
+            <label index="flex.userlist_fields.username">Gebruikersnaam</label>
+            <label index="flex.userlist_fields.usergroup">Groepen</label>
+            <label index="flex.userlist_fields.crdate">Registratie datum</label>
+            <label index="flex.userlist_fields.name">Echte naam</label>
+            <label index="flex.userlist_fields.email">Email adres</label>
+            <label index="flex.userlist_fields.pm">Prive bericht</label>
+            <label index="flex.userlist_fields.city">Stad</label>
+            <label index="flex.userlist_fields.www">WWW</label>
+            <label index="flex.userlist_fields.icq">ICQ</label>
+            <label index="flex.userlist_fields.aim">AIM</label>
+            <label index="flex.userlist_fields.yim">YIM</label>
+            <label index="flex.userlist_fields.msn">MSN</label>
+            <label index="flex.userlist_fields.skype">Skype</label>
+            <label index="flex.userlist_fields.posts">berichten</label>
+            <label index="flex.userlist_fields.interests">Interesses</label>
+            <label index="flex.userlist_fields.occ">Beroep</label>
+            <label index="flex.userlist_limit">Gebruikerslijst grootte</label>
+            
+            <!-- ADDED IN 0.1.2 -->
+            <label index="flex.code.postqueue">Toon berichten wachtrij (alleen bij gemodereerd forum)</label>
+        </languageKey>
+        <languageKey index="fr" type="array">
+            <label index="pi1_title">mm_forum :: Forum</label>
+            <label index="pi2_title">mm_forum :: Enregistrement d'intervenant</label>
+            <label index="pi3_title">mm_forum :: Messages privés</label>
+            <label index="pi4_title">mm_forum :: Recherche</label>
+            <label index="pi5_title">mm_forum :: Paramètres des intervenants</label>
+            <label index="pi6_title">mm_forum :: Informations du tableau de bord</label>
+            <label index="flex.general">Paramètres du forum</label>
+            <label index="flex.general.desc">Ici peuvent être réglés les options d'affichage du forum mm_forum :: Options d'affichage.</label>
+            <label index="flex.code">Afficher:</label>
+            <label index="flex.code.empty">Forum</label>
+            <label index="flex.code.havealook">Fils abonnés</label>
+            <label index="flex.code.favorites">Favoris</label>
+            <label index="flex.code.postalertlist">Notifications suite a une intervention</label>
+            <label index="flex.code.listposts">Liste des interventions d'intervenants</label>
+            <label index="flex.code.latest">Dernières interventions</label>
+            <label index="flex.redirectSpecial">Montrer page spéciale :</label>
+            <label index="flex.redirectSpecial.none">Non</label>
+            <label index="flex.redirectSpecial.list_unans">Interventions sans réponse</label>
+            <label index="flex.redirectSpecial.list_unread">Fils non-lus</label>
+            <label index="flex.redirectSpecial.list_prefix">Fils avec préfixe</label>
+            <label index="flex.prefix">Préfixe listé par défaut :</label>
+            <label index="flex.exclCategories">Limiter l'affichage aux thèmes :</label>
+            <label index="flex.latest_limit">Nombre de nouvelles interventions</label>
+            
+            <!-- ADDED IN 0.1.1 -->
+            <label index="flex.code.userlist">Liste des intervenants</label>
+            <label index="flex.userlist_fields">Montrer les champs</label>
+            <label index="flex.userlist_fields.username">Pseudo</label>
+            <label index="flex.userlist_fields.usergroup">Groupes</label>
+            <label index="flex.userlist_fields.crdate">Date d'enregistrement</label>
+            <label index="flex.userlist_fields.name">Nom réel</label>
+            <label index="flex.userlist_fields.email">Adresse e-mail</label>
+            <label index="flex.userlist_fields.pm">Message privé</label>
+            <label index="flex.userlist_fields.city">Ville</label>
+            <label index="flex.userlist_fields.www">WWW</label>
+            <label index="flex.userlist_fields.icq">ICQ</label>
+            <label index="flex.userlist_fields.aim">AIM</label>
+            <label index="flex.userlist_fields.yim">YIM</label>
+            <label index="flex.userlist_fields.msn">MSN</label>
+            <label index="flex.userlist_fields.skype">Skype</label>
+            <label index="flex.userlist_fields.posts">Interventions</label>
+            <label index="flex.userlist_fields.interests">Intérêts</label>
+            <label index="flex.userlist_fields.occ">Métier</label>
+            <label index="flex.userlist_limit">Nombre</label>
+
+            <!-- ADDED IN 0.1.2 -->
+            <label index="flex.code.postqueue">Lister les interventions (seulement pour forum d'animateurs)</label>
+        </languageKey>
+        <!-- RUSSIAN LANGUAGE DATA -->
+        <languageKey index="ru" type="array">
+            <label index="pi1_title">mm_forum :: Форум</label>
+            <label index="pi2_title">mm_forum :: Регистрация пользователя</label>
+            <label index="pi3_title">mm_forum :: Личное сообщение</label>
+            <label index="pi4_title">mm_forum :: Поиск</label>
+            <label index="pi5_title">mm_forum :: Настройки пользователя</label>
+            <label index="pi6_title">mm_forum :: Информация портала</label>
+            <label index="flex.general">Настройки форума</label>
+            <label index="flex.general.desc">Здесь можно изменить конфигурацию общих настроек внешнего вида форума mm_forum :: Forum plugin.</label>
+            <label index="flex.code">Показать</label>
+    	    <label index="flex.code.empty">Форум</label>
+            <label index="flex.code.havealook">Подписка на Email</label>
+            <label index="flex.code.favorites">Избранное</label>
+            <label index="flex.code.postalertlist">Сообщения о нарушениях</label>
+            <label index="flex.code.listposts">Список сообщений пользователя</label>
+            <label index="flex.code.latest">Список последних сообщений</label>
+            <label index="flex.redirectSpecial">Показать специальные страницы:</label>
+            <label index="flex.redirectSpecial.none">Нет</label>
+            <label index="flex.redirectSpecial.list_unans">Список не отвеченных тем</label>
+            <label index="flex.redirectSpecial.list_unread">Список непрочитанных тем</label>
+            <label index="flex.redirectSpecial.list_prefix">Список тем со специальными префиксами</label>
+            <label index="flex.prefix">Список префиксов по-умолчанию</label>
+            <label index="flex.exclCategories">Показывать только выбранные категории</label>
+            <label index="flex.latest_limit">Количество последних сообщений</label>
+
+            <!-- ADDED IN 0.1.1 -->
+            <label index="flex.code.userlist">Список пользователей</label>
+            <label index="flex.userlist_fields">Показывать поля: </label>
+            <label index="flex.userlist_fields.username">Имя пользователя</label>
+            <label index="flex.userlist_fields.usergroup">Группы</label>
+            <label index="flex.userlist_fields.crdate">Дата регистрации</label>
+            <label index="flex.userlist_fields.name">Настоящее имя</label>
+            <label index="flex.userlist_fields.email">Адрес Email</label>
+            <label index="flex.userlist_fields.pm">Личное сообщение</label>
+            <label index="flex.userlist_fields.city">Место жительства</label>
+            <label index="flex.userlist_fields.www">WWW</label>
+            <label index="flex.userlist_fields.icq">ICQ</label>
+            <label index="flex.userlist_fields.aim">AIM</label>
+            <label index="flex.userlist_fields.yim">YIM</label>
+            <label index="flex.userlist_fields.msn">MSN</label>
+            <label index="flex.userlist_fields.skype">Skype</label>
+            <label index="flex.userlist_fields.posts">Сообщения</label>
+            <label index="flex.userlist_fields.interests">Интересы</label>
+            <label index="flex.userlist_fields.occ">Род деятельности</label>
+            <label index="flex.userlist_limit">Размер списка</label>
+
+            <!-- ADDED IN 0.1.2 -->
+            <label index="flex.code.postqueue">Выводить очередь сообщений (только для модерируемых форумов)</label>
+        </languageKey>
+        <!-- UKRAINIAN LANGUAGE DATA -->
+        <languageKey index="ua" type="array">
+            <label index="pi1_title">mm_forum :: Форум</label>
+            <label index="pi2_title">mm_forum :: Реєстрація користувача</label>
+            <label index="pi3_title">mm_forum :: Приватне сповіщення</label>
+            <label index="pi4_title">mm_forum :: Пошук</label>
+            <label index="pi5_title">mm_forum :: Налаштування користувача</label>
+            <label index="pi6_title">mm_forum :: Інформація порталу</label>
+            <label index="flex.general">Налаштування форуму</label>
+            <label index="flex.general.desc">Тут можна змінити конфігурацію загальних налаштувань зовнішнього вигляду форуму mm_forum :: Forum plugin.</label>
+            <label index="flex.code">Показати</label>
+    	    <label index="flex.code.empty">Форум</label>
+            <label index="flex.code.havealook">Підписка на Email</label>
+            <label index="flex.code.favorites">Обране</label>
+            <label index="flex.code.postalertlist">Сповіщення про порушення</label>
+            <label index="flex.code.listposts">Перелік сповіщень користувача</label>
+            <label index="flex.code.latest">Перелік останніх сповіщень</label>
+            <label index="flex.redirectSpecial">Показати спеціальні сторінки:</label>
+            <label index="flex.redirectSpecial.none">Немає</label>
+            <label index="flex.redirectSpecial.list_unans">Перелік тем без відповідей</label>
+            <label index="flex.redirectSpecial.list_unread">Перелік непрочитаних тем</label>
+            <label index="flex.redirectSpecial.list_prefix">Перелік тем зі спеціальними префіксами</label>
+            <label index="flex.prefix">Перелік префіксів по замовченню</label>
+            <label index="flex.exclCategories">Показувати тільки обрані кетегорії</label>
+            <label index="flex.latest_limit">Кількість останіх сповіщень</label>
+
+            <!-- ADDED IN 0.1.1 -->
+            <label index="flex.code.userlist">Перелік користувачів</label>
+            <label index="flex.userlist_fields">Показувати поля: </label>
+            <label index="flex.userlist_fields.username">Ім'я користувача</label>
+            <label index="flex.userlist_fields.usergroup">Групи</label>
+            <label index="flex.userlist_fields.crdate">Дата реєстрації</label>
+            <label index="flex.userlist_fields.name">Справжне ім'я</label>
+            <label index="flex.userlist_fields.email">Адреса Email</label>
+            <label index="flex.userlist_fields.pm">Приватне сповіщення</label>
+            <label index="flex.userlist_fields.city">Місце проживання</label>
+            <label index="flex.userlist_fields.www">WWW</label>
+            <label index="flex.userlist_fields.icq">ICQ</label>
+            <label index="flex.userlist_fields.aim">AIM</label>
+            <label index="flex.userlist_fields.yim">YIM</label>
+            <label index="flex.userlist_fields.msn">MSN</label>
+            <label index="flex.userlist_fields.skype">Skype</label>
+            <label index="flex.userlist_fields.posts">Сповіщення</label>
+            <label index="flex.userlist_fields.interests">Зацікавленості</label>
+            <label index="flex.userlist_fields.occ">Рід діяльності</label>
+	    	<label index="flex.userlist_fields.avatar">Аватар</label>
+            <label index="flex.userlist_limit">Розмір переліку</label>
+
+            <!-- ADDED IN 0.1.2 -->
+            <label index="flex.code.postqueue">Виводити чергу сповіщень (тільки для модерованих форумів)</label>
+        </languageKey>
+    </data>
+</T3locallang>

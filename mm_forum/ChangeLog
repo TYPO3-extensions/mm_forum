@@ -1,0 +1,118 @@
+2008-11-04  Martin Helmich <m.helmich@mittwald.de>
+
+	* Fixed issues 000467 and 000469
+
+2008-11-02  Martin Helmich <m.helmich@mittwald.de>
+
+	* Fixed issues 000460, 0000464, 0000465, 0000463
+	* Included ukrainian language data. Credits go to Roman Savochenko.
+
+2008-10-22  Martin Helmich <m.helmich@mittwald.de>
+
+    * Implemented some caching classes
+    * Fixed issues 000458, 000454, 000437, 000450
+    
+
+2008-10-11  Benjamin Mack  <benni@typo3.org>
+
+	* Added new icons for TCA tables (licensed under the Creative Commons
+	license, by Mark James, from the famfamfam iconset)
+
+2008-10-10  Benjamin Mack  <benni@typo3.org>
+
+	* pi1: Added a new preDispatchHook
+	* pi1: Cleaned up some functions according to CGL
+	* Added userProfilPID constant
+
+2008-10-07  Martin Helmich <m.helmich@mittwald.de>
+
+    * Changed field 'post_attachment' in 'tx_mmforum_postqueue' table from
+      int(10) to varchar(128) to allow multiple attachments and fixed postqueue
+      module to work with multiple attachments.
+    * Fixed some bad english in pi1/locallang.xml
+    * Fixed some bugs (see bugs.typo3.net)
+
+2008-10-04  Benjamin Mack  <benni@typo3.org>
+
+	* pi1-list_prefix: Cleanup, possibility to select no prefix at all, possibility to filter by author
+	* Cleanup of some postfunctions class functions
+	* New Feature: Possibility to have a separate ###LIST_POSTS_FIRST###
+	subpart to have a different look & feel for the first post of a post
+	list (good for having a question and answers)
+	* New Feature: Possibility to style the attachments through a separate
+	subpart in the "list_post" template. Please add a "LIST_ATTACHMENTS"
+	subpart to your template file there.
+
+2008-10-03  Benjamin Mack  <benni@typo3.org>
+
+	* pi1: list-prefix() function speedup through removing of recursive loading of forum / category list
+	* pi3: Removed imgtag() function
+	* Moved imgtag() function to base class
+	* pi1: Cleanup of the list-prefix function
+
+2008-10-02  Benjamin Mack  <benni@typo3.org>
+
+	* TCA: Made the parent board selection a dropdown
+	* pi1: updated list_topic() function
+
+2008-09-27  Benjamin Mack  <benni@typo3.org>
+
+	* Small typo corrections in the new mmforum_base class
+	* pi3: Initial Cleanup
+	* Added a "mm_forum_base" class that subclasses pibase and is the base
+	for all plugin classes to share common functions
+	* Put some fields into mm_forum_tools, that is now available in the
+	pi classes through $this->tools as an instance
+
+2008-09-26  Benjamin Mack  <benni@typo3.org>
+
+	* pi1: Indention cleanup
+
+2008-09-25  Benjamin Mack  <benni@typo3.org>
+
+	* pi1: Indention cleanup
+	* pi1: Cleaned up the mmforum_user Class according to CGL
+	* pi1: Line indention cleanup. Some fixes from yesterdays cleanup
+
+2008-09-24  Benjamin Mack  <benni@typo3.org>
+
+	* pi1: Line indention (now as tabs) and whitespace and CGL cleanup
+
+2008-09-23  Benjamin Mack  <benni@typo3.org>
+
+	* Cleaned up pi1->favorites() and tools class
+	* Added ChangeLog file to track changes
+
+2008-09-18  Benjamin Mack  <benni@typo3.org>
+
+	* pi1: Small cleanup and SQL error cleanup on set_favorite and
+	delete_favorite methods
+	* pi1: Code Cleanup for bb2text, set_favorite, delete_favorite (use
+	t3lib_div::_getIndpVar()), corrected indention
+	* pi1: Replaced all redirects through proper use of
+	t3lib_div::locationHeaderUrl
+	* Cleaned up methods list_latest, page_footer and page_header
+	according to the TYPO3 Coding Guidelines
+
+2008-09-17  Benjamin Mack  <benni@typo3.org>
+
+	* Reordered the TCA fe_user fields to be in a separate tab if
+	dividers2tabs for fe_users is activated. Added colons (:) to the
+	labels
+	* Added colons (:) to the mm_forum_posts TCA labels to make it
+	consistent with the other tca tables, adjusted the labels accordingly
+	and configured the fields for the default type properly
+	* Changed doublequotes (") to singlequotes (') in ext_tables.php, as
+	this is encouraged by the TYPO3 coding guidelines.
+	* Added dividers2tabs (= tabs for TCEforms) for the mm_forum_topics
+	table, cleaned up the TCA.php (old .php endings for
+	locallang-references)
+	* Whitespace cleanup for TCA table tx_mmforum_forums; Added --div-- to
+	type-statement (to make use of the already active dividers2tabs),
+	added colons in labels -- to have a consistent look and feel around
+	the BE.
+
+2008-09-16  Benjamin Mack  <benni@typo3.org>
+
+	* Fixed indention and code of the main function according to TYPO3
+	Coding Guidelines

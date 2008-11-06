@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+    <meta type="array">
+        <description>Language labels for plugin &quot;tx_mmforum_pi6&quot;</description>
+        <type></type>
+        <csh_table></csh_table>
+        <labelContext type="array">
+        </labelContext>
+    </meta>
+    <data type="array">
+    	<!-- ENGLISH LANGUAGE DATA -->
+        <languageKey index="default" type="array">
+            <label index="reg_user-sg">registered user</label>
+            <label index="reg_user-pl">registered users</label>
+            <label index="total_user-sg">user</label>
+            <label index="total_user-pl">users</label>
+            <label index="guest-sg">guest</label>
+            <label index="guest-pl">guests</label>
+            <label index="prd-pr-sg">is</label>
+            <label index="prd-pr-pl">are</label>
+            <label index="prd-vg-sg">was</label>
+            <label index="prd-vg-pl">were</label>
+            <label index="debug">Duration time: ###EXECUTION_TIME### seconds</label>
+            <label index="ext-collapse">Hide additional information</label>
+            <label index="ext-expand">Show additional information</label>
+            <label index="list-users">User</label>
+            <label index="list-moderators">Moderator</label>
+            <label index="list-administrators">Administrator</label>
+            <label index="info-title">Portal information</label>
+            <label index="info-currentTotal">At the time there ###PRD### ###BESUCHER_TOTAL### ###BESUCHER_TOTAL_LABEL### online, thereof ###BESUCHER_REG### ###BESUCHER_REG_LABEL### and ###BESUCHER_GAST### ###BESUCHER_GAST_LABEL###.</label>
+            <label index="info-todayTotal">Today  ###BESUCHER_REG_HEUTE### ###BESUCHER_REG_HEUTE_LABEL### and ###BESUCHER_GAST_HEUTE### ###BESUCHER_GAST_HEUTE_LABEL### ###PRD### already online.</label>
+            <label index="info-currentlyOnline">Now online</label>
+            <label index="info-todayOnline">Today's visitors</label>
+            <label index="info-stats">###SITENAME### has ###BENUTZER_TOTAL### registered user, ###THEMEN_TOTAL### topics and ###ANTWORTEN_TOTAL### answers. On the average ###BEITRAEGE_SCHNITT### posts are written per day.</label>
+        </languageKey>
+        <!-- GERMAN LANGUAGE DATA -->
+        <languageKey index="de" type="array">
+            <label index="reg_user-sg">registrierter Benutzer</label>
+            <label index="reg_user-pl">registrierte Benutzer</label>
+            <label index="total_user-sg">Benutzer</label>
+            <label index="total_user-pl">Benutzer</label>
+            <label index="guest-sg">Gast</label>
+            <label index="guest-pl">Gäste</label>
+            <label index="prd-pr-sg">ist</label>
+            <label index="prd-pr-pl">sind</label>
+            <label index="prd-vg-sg">war</label>
+            <label index="prd-vg-pl">waren</label>
+            <label index="debug">Ausführungszeit: ###EXECUTION_TIME### Sekunden</label>
+            <label index="ext-collapse">Zusätzliche Informationen ausblenden</label>
+            <label index="ext-expand">Zusätzliche Informationen anzeigen</label>
+            <label index="list-users">Benutzer</label>
+            <label index="list-moderators">Moderatoren</label>
+            <label index="list-administrators">Administratoren</label>
+            <label index="info-title">Portalinfo</label>
+            <label index="info-currentTotal">Zur Zeit ###PRD### ###BESUCHER_TOTAL### ###BESUCHER_TOTAL_LABEL### online, davon ###BESUCHER_REG### ###BESUCHER_REG_LABEL### und ###BESUCHER_GAST### ###BESUCHER_GAST_LABEL###.</label>
+            <label index="info-todayTotal">Heute ###PRD### bereits ###BESUCHER_REG_HEUTE### ###BESUCHER_REG_HEUTE_LABEL### und ###BESUCHER_GAST_HEUTE### ###BESUCHER_GAST_HEUTE_LABEL### online.</label>
+            <label index="info-currentlyOnline">Derzeit online</label>
+            <label index="info-todayOnline">Heutige Besucher</label>
+            <label index="info-stats">###SITENAME### hat ###BENUTZER_TOTAL### registrierte Benutzer, ###THEMEN_TOTAL### Themen und ###ANTWORTEN_TOTAL### Antworten. Es werden durchschnittlich ###BEITRAEGE_SCHNITT### Beitr&amp;auml;ge pro Tag erstellt.</label>
+        </languageKey>
+        <!-- FINNISH LANGUAGE DATA -->
+		<languageKey index="fi" type="array">
+			<label index="reg_user-sg">rekisteröitynyt käyttäjä</label>
+			<label index="reg_user-pl">rekisteröitynyttä käyttäjää</label>
+            <label index="total_user-sg">käyttäjä</label>
+            <label index="total_user-pl">käyttäjää</label>
+			<label index="guest-sg">vieras</label>
+			<label index="guest-pl">vierasta</label>
+			<label index="prd-pr-sg">on</label>
+			<label index="prd-pr-pl">ovat</label>
+			<label index="prd-vg-sg">oli</label>
+			<label index="prd-vg-pl">olivat</label>
+			<label index="debug">Kesto: ###EXECUTION_TIME### sekuntia</label>
+			<label index="ext-collapse">Piilota lisätiedot</label>
+			<label index="ext-expand">Näytä lisätiedot</label>
+			<label index="list-users">Käyttäjä</label>
+			<label index="list-moderators">Moderaattori</label>
+			<label index="list-administrators">Hallinnoija</label>
+			<label index="info-title">Portal-tiedot</label>
+			<label index="info-currentTotal">Tällä hetkellä on ###PRD### ###BESUCHER_TOTAL### ###BESUCHER_TOTAL_LABEL### online, joista ###BESUCHER_REG### ###BESUCHER_REG_LABEL### ja ###BESUCHER_GAST### ###BESUCHER_GAST_LABEL###.</label>
+			<label index="info-todayTotal">Tänään ###BESUCHER_REG_HEUTE### ###BESUCHER_REG_HEUTE_LABEL### ja ###BESUCHER_GAST_HEUTE### ###BESUCHER_GAST_HEUTE_LABEL### ###PRD### on ollut online.</label>
+			<label index="info-currentlyOnline">Nyt online</label>
+			<label index="info-todayOnline">Kävijät tänään</label>
+			<label index="info-stats">Sivustolla ###SITENAME### on ###BENUTZER_TOTAL### rekisteröitynyttä käyttäjää, ###THEMEN_TOTAL### keskustelunaihetta ja ###ANTWORTEN_TOTAL### vastausta. Keskimäärin ###BEITRAEGE_SCHNITT### viestiä kirjoitetaan päivittäin.</label>
+		</languageKey>
+		<!-- DUTCH LANGUAGE DATA -->
+        <languageKey index="nl" type="array">
+            <label index="reg_user-sg">geregistreerde gebruiker</label>
+            <label index="reg_user-pl">geregistreerde gebruikers</label>
+            <label index="total_user-sg">gebruiker</label>
+            <label index="total_user-pl">gebruikers</label>
+            <label index="guest-sg">gast</label>
+            <label index="guest-pl">gasten</label>
+            <label index="prd-pr-sg">is</label>
+            <label index="prd-pr-pl">zijn</label>
+            <label index="prd-vg-sg">was</label>
+            <label index="prd-vg-pl">waren</label>
+            <label index="debug">Duur: ###EXECUTION_TIME### seconden</label>
+            <label index="ext-collapse">Verberg additionele informatie</label>
+            <label index="ext-expand">Toon additionele informatie</label>
+            <label index="list-users">Gebruiker</label>
+            <label index="list-moderators">Moderator</label>
+            <label index="list-administrators">Beheerder</label>
+            <label index="info-title">Portal information</label>
+            <label index="info-currentTotal">At the time there ###PRD### ###BESUCHER_TOTAL### ###BESUCHER_TOTAL_LABEL### online, thereof ###BESUCHER_REG### ###BESUCHER_REG_LABEL### and ###BESUCHER_GAST### ###BESUCHER_GAST_LABEL###.</label>
+            <label index="info-todayTotal">Today  ###BESUCHER_REG_HEUTE### ###BESUCHER_REG_HEUTE_LABEL### and ###BESUCHER_GAST_HEUTE### ###BESUCHER_GAST_HEUTE_LABEL### ###PRD### already online.</label>
+            <label index="info-currentlyOnline">Nu online</label>
+            <label index="info-todayOnline">Gasten vandaag</label>
+            <label index="info-stats">###SITENAME### heeft ###BENUTZER_TOTAL### geregistreerde gebruikers, ###THEMEN_TOTAL### onderwerpen en ###ANTWORTEN_TOTAL### berichten. Er worden gemiddeld ###BEITRAEGE_SCHNITT### berichten per dag geplaatst.</label>
+        </languageKey>
+        <!-- FRENCH LANGUAGE DATA -->
+        <languageKey index="fr" type="array">
+            <label index="reg_user-sg">Intervenants identifié</label>
+            <label index="reg_user-pl">intervenants identifiés</label>
+            <label index="total_user-sg">intervenants</label>
+            <label index="total_user-pl">intervenants</label>
+            <label index="guest-sg">Invité</label>
+            <label index="guest-pl">Invités</label>
+            <label index="prd-pr-sg">est</label>
+            <label index="prd-pr-pl">sont</label>
+            <label index="prd-vg-sg">était</label>
+            <label index="prd-vg-pl">étaient</label>
+            <label index="debug">Temps de calcul : ###EXECUTION_TIME### secondes</label>
+            <label index="ext-collapse">Masquer les informations complémentaires</label>
+            <label index="ext-expand">Montrer les informations complémentaires</label>
+            <label index="list-users">Intervenant</label>
+            <label index="list-moderators">Animateur</label>
+            <label index="list-administrators">Administrateur</label>
+            <label index="info-title">Tableau de bord</label>
+            <label index="info-currentTotal">Nombre d'###BESUCHER_TOTAL_LABEL### qui ###PRD### actuellement en ligne : ###BESUCHER_TOTAL###, dont ###BESUCHER_REG### ###BESUCHER_REG_LABEL### et ###BESUCHER_GAST### ###BESUCHER_GAST_LABEL###.</label>
+            <label index="info-todayTotal">Aujourd'hui, ###BESUCHER_REG_HEUTE### ###BESUCHER_REG_HEUTE_LABEL### et ###BESUCHER_GAST_HEUTE### ###BESUCHER_GAST_HEUTE_LABEL### ###PRD### connectés.</label>
+            <label index="info-currentlyOnline">Actuellement connectés</label>
+            <label index="info-todayOnline">Total des visites aujourd'hui</label>
+            <label index="info-stats">###SITENAME### a ###BENUTZER_TOTAL### intervenants enregistrés, ###THEMEN_TOTAL### Thèmes et ###ANTWORTEN_TOTAL### interventions. En Moyenne ###BEITRAEGE_SCHNITT### interventions sont postées par jour.</label>
+        </languageKey>
+        <!-- RUSSIAN LANGUAGE DATA -->
+        <languageKey index="ru" type="array">
+	    <label index="reg_user-sg">зарегистрированный пользователь</label>
+	    <label index="reg_user-pl">зарегистрированных пользователей</label>
+	    <label index="total_user-sg">пользователь</label>
+	    <label index="total_user-pl">пользователей</label>
+	    <label index="guest-sg">гость</label>
+	    <label index="guest-pl">гостей</label>
+	    <label index="prd-pr-sg"> </label>
+	    <label index="prd-pr-pl"> </label>
+	    <label index="prd-vg-sg"> </label>
+	    <label index="prd-vg-pl"> </label>
+	    <label index="debug">Duration time: ###EXECUTION_TIME### seconds</label>
+	    <label index="ext-collapse">Спрятать дополнительную информацию</label>
+	    <label index="ext-expand">Показать дополнительную информацию</label>
+	    <label index="list-users">Пользователь</label>
+	    <label index="list-moderators">Модератор</label>
+	    <label index="list-administrators">Администратор</label>
+	    <label index="info-title">Информация о сайте</label>
+	    <label index="info-currentTotal">В настоящее время ###PRD### ###BESUCHER_TOTAL### ###BESUCHER_TOTAL_LABEL### в онлайн, из них ###BESUCHER_REG### ###BESUCHER_REG_LABEL### и ###BESUCHER_GAST### ###BESUCHER_GAST_LABEL###.</label>
+	    <label index="info-todayTotal">Сегодня в онлайн выходили ###BESUCHER_REG_HEUTE### ###BESUCHER_REG_HEUTE_LABEL### и ###BESUCHER_GAST_HEUTE### ###BESUCHER_GAST_HEUTE_LABEL### ###PRD###.</label>
+	    <label index="info-currentlyOnline">Сейчас в онлайне</label>
+	    <label index="info-todayOnline">Сегодняшние посетители</label>
+	    <label index="info-stats">###SITENAME### has ###BENUTZER_TOTAL### registered user, ###THEMEN_TOTAL### topics and ###ANTWORTEN_TOTAL### answers. On the average ###BEITRAEGE_SCHNITT### posts are written per day.</label>
+	    <label index="info-stats">Всего на сайте ###SITENAME### ###BENUTZER_TOTAL### зарегистрированных пользователей, ###THEMEN_TOTAL### тем и ###ANTWORTEN_TOTAL### сообщений. В среднем создается ###BEITRAEGE_SCHNITT### сообщений в день.</label>
+	</languageKey>
+	<!-- UKRAINIAN LANGUAGE DATA -->
+	<languageKey index="ua" type="array">
+	    <label index="reg_user-sg">зареєстрований користувач</label>
+	    <label index="reg_user-pl">зареєстрованих користувачів</label>
+	    <label index="total_user-sg">користувач</label>
+	    <label index="total_user-pl">користувачів</label>
+	    <label index="guest-sg">гість</label>
+	    <label index="guest-pl">гостей</label>
+	    <label index="prd-pr-sg"> </label>
+	    <label index="prd-pr-pl"> </label>
+	    <label index="prd-vg-sg"> </label>
+	    <label index="prd-vg-pl"> </label>
+	    <label index="debug">Тривалість: ###EXECUTION_TIME### секунд</label>
+	    <label index="ext-collapse">Сховати додаткову інформацію</label>
+	    <label index="ext-expand">Показати додаткову інформацію</label>
+	    <label index="list-users">Користувач</label>
+	    <label index="list-moderators">Модератор</label>
+	    <label index="list-administrators">Адміністратор</label>
+	    <label index="info-title">Інформація про сайт</label>
+	    <label index="info-currentTotal">На цей час ###PRD### ###BESUCHER_TOTAL### ###BESUCHER_TOTAL_LABEL### на сайті, з них ###BESUCHER_REG### ###BESUCHER_REG_LABEL### та ###BESUCHER_GAST### ###BESUCHER_GAST_LABEL###.</label>
+	    <label index="info-todayTotal">Сьогодні до сайту входили ###BESUCHER_REG_HEUTE### ###BESUCHER_REG_HEUTE_LABEL### та ###BESUCHER_GAST_HEUTE### ###BESUCHER_GAST_HEUTE_LABEL### ###PRD###.</label>
+	    <label index="info-currentlyOnline">Зараз на сайті</label>
+	    <label index="info-todayOnline">Відвідувачі на цей день</label>
+	    <label index="info-stats">Всього на сайті ###SITENAME### ###BENUTZER_TOTAL### зареєстрованих користувачів, ###THEMEN_TOTAL### тем та ###ANTWORTEN_TOTAL### сповіщень. У середньому створюється ###BEITRAEGE_SCHNITT### сповіщень в день.</label>
+	</languageKey>
+    </data>
+</T3locallang>

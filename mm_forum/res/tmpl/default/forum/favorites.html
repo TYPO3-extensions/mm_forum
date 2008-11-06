@@ -1,0 +1,59 @@
+<!-- ###FAVORITES_BEGIN### -->
+<form action="###ACTION###" method="post" style="padding:0px; margin: 0px;" onsubmit="return confirm('###LABEL_CONFIRMMULTIPLE###');">
+<table border="1" class="tx-mmforum-table" width="100%">
+	<tr>
+		<th colspan="3" class="tx-mmforum-th">###LABEL_FAVORITES###</th>
+	</tr>
+	<tr>
+		<td class="tx-mmforum-td tx-mmforum-subth2"></td>
+		<td class="tx-mmforum-td tx-mmforum-subth2">###LABEL_TOPICNAME###</td>
+		<td class="tx-mmforum-td tx-mmforum-subth2">###LABEL_OPTIONS###</td>
+	</tr>
+<!-- ###FAVORITES_BEGIN### -->
+<!-- ###LIST_FAVORITES### begin -->
+	<tr>
+		<td class="tx-mmforum-td" style="padding: 5px; width:1px;">
+			###TOPIC_CHECKBOX###
+		</td>
+		<td class="tx-mmforum-td" style="padding: 5px;">
+			<div class="tx-mmforum-pi1-listtopic-image">###TOPICICON###</div>
+			<div class="tx-mmforum-pi1-listtopic-topicname">###TOPICNAME###</div>
+			<div class="tx-mmforum-smalldesc">###TOPICSUB###</div>
+		</td>
+		<td class="tx-mmforum-td" align="center">
+			###TOPICDELLINK###
+		</td>
+	</tr>
+<!-- ###LIST_FAVORITES### end -->
+<!-- ###LIST_FAVORITES_EMPTY### begin -->
+    <tr>
+        <td class="tx-mmforum-tdtext" colspan="3" style="text-align:center;">
+            ###LLL_FAVORITES_EMPTY###
+        </td>
+    </tr>
+<!-- ###LIST_FAVORITES_EMPTY### end -->
+<!-- ###FAVORITES_END### -->
+</table>
+<br />
+###LABEL_MARKEDTOPICS###: 
+<select name="tx_mmforum_pi1[fav][action]" class="tx-mmforum-select">
+	<option value=""></option>
+	<option value="delete">###LABEL_DELETE###</option>
+</select>
+<input class="tx-mmforum-button" type="submit" value="###LABEL_GO###" />
+</form>
+<!-- ###FAVORITES_END### -->
+
+
+<!-- ###FAVORITES_SETTINGS### -->
+<form action="###ACTION###" method="post" name="favourites_settings">
+	###LABEL_ORDERBY###
+	<select class="tx-mmforum-select" name="tx_mmforum_pi1[order]" onchange="document.favourites_settings.submit();">
+		<option value="lpdate" ###ORDER_LPDATE###>###LABEL_ORDER_LPDATE###</option>
+		<option value="alphab" ###ORDER_ALPHAB###>###LABEL_ORDER_ALPHAB###</option>
+		<option value="cat"    ###ORDER_CAT###   >###LABEL_ORDER_CAT###</option>
+		<option value="added"  ###ORDER_ADDED### >###LABEL_ORDER_ADDED###</option>
+	</select>
+</form>
+<br />
+<!-- ###FAVORITES_SETTINGS### -->

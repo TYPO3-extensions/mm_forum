@@ -1,0 +1,40 @@
+<!-- ###POSTQUEUE_LIST### begin -->
+<form action="###ACTION###" method="post">
+	<table style="width:100%;" cellspacing="0" cellpadding="0" class="tx-mmforum-table">
+		<tr>
+			<th class="tx-mmforum-th" colspan="4">###LLL_POSTQUEUE###</th>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td tx-mmforum-subth2">###LLL_PUBLISH###</td>
+			<td class="tx-mmforum-td tx-mmforum-subth2">###LLL_DELETE###</td>
+			<td class="tx-mmforum-td tx-mmforum-subth2">###LLL_IGNORE###</td>
+			<td class="tx-mmforum-td tx-mmforum-subth2">###LLL_POSTTEXT###</td>
+		</tr>
+		<!-- ###POSTQUEUE_ITEMLIST### -->
+			<!-- ###POSTQUEUE_ITEM### -->
+				<tr>
+					<td onclick="document.getElementById('item_###UID###_p').checked=true;" class="tx-mmforum-td" style="text-align:center; cursor:pointer;"><input id="item_###UID###_p" type="radio" name="tx_mmforum_pi1[postqueue][items][###UID###]" value="publish" ###CHECK_PUBLISH### /></td>
+					<td onclick="document.getElementById('item_###UID###_d').checked=true;" class="tx-mmforum-td" style="text-align:center; cursor:pointer;"><input id="item_###UID###_d" type="radio" name="tx_mmforum_pi1[postqueue][items][###UID###]" value="delete"  ###CHECK_DELETE###  /></td>
+					<td onclick="document.getElementById('item_###UID###_i').checked=true;" class="tx-mmforum-td" style="text-align:center; cursor:pointer;"><input id="item_###UID###_i" type="radio" name="tx_mmforum_pi1[postqueue][items][###UID###]" value="ignore"  ###CHECK_IGNORE###  /></td>
+					<td class="tx-mmforum-tdtext">
+						###POST_POSTER### ###LLL_WROTE### (###DATE###):<br />
+						###POST_TEXT###
+						<br /><br /><small>###FORUMPATH### / ###TOPIC_LINK###</small>
+					</td>
+				</tr>
+			<!-- ###POSTQUEUE_ITEM### -->
+			<tr>
+				<td class="tx-mmforum-td" colspan="4" style="text-align:center;">
+					<input type="hidden" name="tx_mmforum_pi1[postqueue][action]" value="commit" />
+					<input type="submit" value="###LLL_PUBLISHBUTTON###" class="tx-mmforum-button" />
+				</td>
+			</tr>
+		<!-- ###POSTQUEUE_ITEMLIST### -->
+		<!-- ###POSTQUEUE_NOITEMS### begin -->
+			<tr>
+				<td colspan="4" class="tx-mmforum-tdtext" style="text-align:center;">###LLL_NOITEMS###</td>
+			</tr>
+		<!-- ###POSTQUEUE_NOITEMS### end -->
+	</table>
+</form>
+<!-- ###POSTQUEUE_LIST### end -->

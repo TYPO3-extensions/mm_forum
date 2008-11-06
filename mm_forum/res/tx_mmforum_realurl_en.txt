@@ -1,0 +1,138 @@
+'fixedPostVars' => array(
+    'mm_forum_pi3' => array(
+		array(
+			'GETvar'            => 'tx_mmforum_pi3[folder]',
+			'valueMap'          => array(
+				'inbox'             => 'inbox',
+				'outbox'            => 'send',
+				'archive'           => 'archiv'
+			)
+		),
+		array(
+			'GETvar'            => 'tx_mmforum_pi3[action]',
+			'valueMap'          => array(
+				'read'				=> 'message_read',
+				'write'			    => 'message_write',
+				'delete'			=> 'message_del'
+			)
+		),
+		array(
+			'GETvar'            => 'tx_mmforum_pi3[messid]',
+			'lookUpTable'       => array(
+				'table'                 => 'tx_mmforum_pminbox' ,
+				'id_field'              => 'uid',
+				'alias_field'           => 'subject',
+				'addWhereClause'        => ' AND NOT deleted',
+				'useUniqueCache'        => 1,
+				'useUniqueCache_conf'   => array(
+					'strtolower'            => 1,
+					'spaceCharacter'        => '_',
+				),
+			),
+		),
+		array(
+			'GETvar'            => 'tx_mmforum_pi3[userid]',
+			'lookUpTable'       => array(
+				'table'                 => 'fe_users' ,
+				'id_field'              => 'uid',
+				'alias_field'           => 'username',
+				'addWhereClause'        => ' AND NOT deleted',
+				'useUniqueCache'        => 1,
+				'useUniqueCache_conf'   => array(
+					'strtolower'            => 1,
+					'spaceCharacter'        => '_',
+				),
+			),
+		)
+	),
+	'mm_forum_pi1' => array(
+		array(
+			'GETvar'            => 'tx_mmforum_pi1[action]',
+			'valueMap'          => array(
+				'topics'                => 'list_topic',
+				'posts'                 => 'list_post',
+				'user'                  => 'forum_view_profil',
+				'reply'                 => 'new_post',
+				'open'                  => 'new_topic',
+				'report'                => 'post_alert',
+				'edit'                  => 'post_edit',
+				'delete'                => 'post_del',
+                'all_posts'             => 'post_history',
+                'unanswered'            => 'list_unans',
+                'unread'                => 'list_unread',
+                'all_read'              => 'reset_read',
+                'subscribe'             => 'set_havealook',
+                'unsubscribe'           => 'del_havealook',
+                'favorite'              => 'set_favorite',
+                'no_favorite'           => 'del_favorite',
+                'prefix'                => 'list_prefix',
+                'attachments'           => 'get_attachment',
+			),
+		),
+		array(
+			'GETvar'            => 'tx_mmforum_pi1[fid]',
+			'lookUpTable'       => array(
+				'table'                 => 'tx_mmforum_forums' ,
+				'id_field'              => 'uid',
+				'alias_field'           => 'forum_name',
+				'addWhereClause'        => ' AND NOT deleted',
+				'useUniqueCache'        => 1,
+				'useUniqueCache_conf'   => array(
+					'strtolower'            => 1,
+					'spaceCharacter'        => '_',
+				),
+			),
+		),
+		array(
+			'GETvar'            => 'tx_mmforum_pi1[tid]',
+			'lookUpTable'       => array(
+				'table'                 => 'tx_mmforum_topics' ,
+				'id_field'              => 'uid',
+				'alias_field'           => 'topic_title',
+				'addWhereClause'        => ' AND NOT deleted',
+				'useUniqueCache'        => 1,
+				'useUniqueCache_conf'   => array(
+					'strtolower'            => 1,
+					'spaceCharacter'        => '_',
+				),
+			),
+		),
+		array(
+			'GETvar'            => 'tx_mmforum_pi1[pid]',  
+		),
+		array(
+			'GETvar'            => 'tx_mmforum_pi1[page]',  
+		),
+		array(
+			'GETvar'            => 'tx_mmforum_pi1[user_id]',
+			'lookUpTable'       => array(
+				'table'                 => 'fe_users' ,
+				'id_field'              => 'uid',
+				'alias_field'           => 'username',
+				'addWhereClause'        => ' AND NOT deleted',
+				'useUniqueCache'        => 1,
+				'useUniqueCache_conf'   => array(
+					'strtolower'            => 1,
+					'spaceCharacter'        => '_',
+				),
+			),
+		),
+		array(
+			'GETvar'            => 'tx_mmforum_pi1[user_id]',
+			'lookUpTable'       => array(
+				'table'                 => 'fe_users' ,
+				'id_field'              => 'uid',
+				'alias_field'           => 'username',
+				'addWhereClause'        => ' AND NOT deleted',
+				'useUniqueCache'        => 1,
+				'useUniqueCache_conf'   => array(
+					'strtolower'            => 1,
+					'spaceCharacter'        => '_',
+				),
+			),
+		),
+										   
+	),
+	'PI1_PID' => 'mm_forum_pi1',
+	'PI3_PID' => 'mm_forum_pi3'
+),

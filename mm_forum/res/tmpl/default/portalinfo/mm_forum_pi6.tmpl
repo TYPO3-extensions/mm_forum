@@ -1,0 +1,87 @@
+<!-- 
+	Subpart PORTALINFO
+		BESUCHER_TOTAL
+			Anzahl der Besucher, die momentan online sind.</td>
+		BESUCHER_REG
+			Anzahl der Besucher, die momentan online und registriert sind.</td>
+		BESUCHER_GAST
+			Anzahl der Besucher, die momentan online und nicht registriert sind.</td>
+		PRD
+			Verb für die Benutzer, die derzeit online sind, abhängig von der Anzahl (also entweder "ist" oder "sind"). Siehe locallang.php</td>
+		BESUCHER_REG_LABEL
+			Bezeichnung für registrierte Benutzer, abhängig von der Anzahl (also entweder
+			"registrierter Benutzer" oder "registrierte Benutzer"). Siehe locallang.php.
+		BESUCHER_GAST_LABEL
+			Bezeichnung für nicht registrierte Benutzer, abhängig von der Anzahl (also entweder
+			"Gast" oder "Gäste"). Siehe locallang.php.
+		PRD2
+			Verb für die Benutzer, die heute online waren, abhängig von der Anzahl (also entweder "ist" oder "sind"). Siehe locallang.php</td>
+		BESUCHER_REG_HEUTE
+			Anzahl der Besucher, die heute online waren und registriert sind.
+		BESUCHER_GAST_HEUTE
+			Anzahl der Besucher, die heute online waren und nicht registriert sind.
+		BESUCHER_REG_HEUTE_LABEL
+			Bezeichnung für registrierte Benutzer, abhängig von der Anzahl (also entweder
+			"registrierter Benutzer" oder "registrierte Benutzer"). Siehe locallang.php.
+		BESUCHER_GAST_HEUTE_LABEL
+			Bezeichnung für nicht registrierte Benutzer, abhängig von der Anzahl (also entweder
+			"Gast" oder "Gäste"). Siehe locallang.php.
+		BESUCHER_LISTE
+			Kommaseparierte und verlinkte Liste aller derzeit eingeloggten Benutzer
+		BESUCHER_LISTE_HEUTE
+			Kommaseparierte und verlinkte Liste aller heute eingeloggten Benutzer
+		BENUTZER_TOTAL
+			Anzahl aller Benutzer
+		THEMEN_TOTAL
+			Anzahl aller Themen
+		ANTWORTEN_TOTAL
+			Anzahl aller Antworten
+		BEITRAEGE_SCHNITT
+			Anzahl der durchschnittlich an einem Tag erstellten Beiträge.
+		COLLAPSE
+			Link, um die erweiterten Funktionen zu verbergen.
+			
+		###PORTALINFO### begin   
+-->
+<div class="tx-mmforum-pi6-container">
+	<div class="tx-mmforum-pi6-us">
+		<h3>###LABEL_INFO###:</h3>
+	</div>
+	<div class="tx-mmforum-pi6-content"> 
+	###LABEL_CURRENT_TOTAL###<br />
+	
+	###LABEL_TODAY_TOTAL### <br /><br />
+	<strong>###LABEL_CURRENTLYONLINE###</strong><br />
+	###BESUCHER_LISTE###<br /><br />
+	<strong>###LABEL_TODAYONLINE###</strong><br />
+	###BESUCHER_LISTE_HEUTE###<br /><br />
+	###LABEL_STATS###
+	<div class="tx-mmforum-pi6-collapselink">###COLLAPSE###</div>    
+	</div>
+</div>
+<!-- ###PORTALINFO### end -->
+
+<!-- 
+	Subpart PORTALINFO_SMALL
+		Wird zur Darstellung der zusammengefassten Portalinformationen verwendet.
+		Marker siehe PORTALINFO
+	
+		###PORTALINFO_SMALL### begin 
+-->
+<div class="tx-mmforum-pi6-container">
+	
+	<div class="tx-mmforum-pi6-us">
+		<h3>###LABEL_INFO###:</h3>
+	</div>
+	
+	<div class="tx-mmforum-pi6-content">
+	###LABEL_CURRENT_TOTAL###<br />
+
+	###LABEL_TODAY_TOTAL###<br /><br />
+	<strong>###LABEL_CURRENTLYONLINE###</strong><br />
+	###BESUCHER_LISTE###<br /><br />
+	###LABEL_STATS###<br />
+	<div class="tx-mmforum-pi6-collapselink">###EXPAND###</div>
+	</div>
+</div>
+<!-- ###PORTALINFO_SMALL### end -->     

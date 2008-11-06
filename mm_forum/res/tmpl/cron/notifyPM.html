@@ -1,0 +1,34 @@
+<!-- ###NOTIFY_HTML### begin -->
+	<html>
+		<head>
+			<title>###NOTIFY_SUBJECT###</title>
+		</head>
+		<body>
+			<p>###NOTIFY_ADDRESS###</p>
+			<p>###NOTIFY_TEXT###</p>
+			<p><a href="###NOTIFY_LINK###">###NOTIFY_LINK###</a></p>
+			<table>
+				<tr>
+					<td>###LABEL_NOTIFY_SUBJECT###</td>
+					<td>###LABEL_NOTIFY_SENDER###</td>
+					<td>###LABEL_NOTIFY_DATE###</td>
+				</tr>
+				<!-- ###NOTIFY_LISTITEM### begin -->
+				<tr>
+					<td><a href="###NOTIFY_LINK###">###NOTIFY_SUBJECT###</a></td>
+					<td>###NOTIFY_SENDER###</td>
+					<td>###NOTIFY_DATE###</td>
+				<!-- ###NOTIFY_LISTITEM### end -->
+			</table>
+		</body>
+	</html>
+<!-- ###NOTIFY_HTML### end -->
+
+<!-- ###NOTIFY_PLAINTEXT### begin -->
+###NOTIFY_ADDRESS###
+
+###NOTIFY_TEXT###
+	<!-- ###NOTIFY_LISTITEM### begin -->
+* "###NOTIFY_SUBJECT###" ###LLL_BY### ###NOTIFY_SENDER### ###LLL_ON### ###NOTIFY_DATE###:
+  ###NOTIFY_LINK###<!-- ###NOTIFY_LISTITEM### end -->
+<!-- ###NOTIFY_PLAINTEXT### end -->

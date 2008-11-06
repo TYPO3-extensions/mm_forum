@@ -1,0 +1,156 @@
+<html>
+<body>
+<!-- ###ALERT_LIST### begin -->
+<script language="JavaScript" type="text/javascript">
+	var mouseX = 0, mouseY = 0;       // beinhalten später die Position des Mauszeigers
+	var xMargin = 2, yMargin = 2;   // zusätzlicher Abstand zum Mauszeiger
+	var ttipDisplayed = false;        // Statusvariable, nicht ändern
+
+	// Event-Handler, speichert ständig die aktuelle Position der Mauszeigers
+	function saveMouseCoords (e)
+	{
+		if (window.Event)   // Netscape
+		{
+			mouseX = e.pageX;
+			mouseY = e.pageY;
+		}
+		else   // MSIE
+		{
+			mouseX = window.event.clientX;
+			mouseY = window.event.clientY;
+		}
+	}
+
+	// Steuert Anzeige und Position des angegebenen Tooltips
+	function toggleTooltip (ttipId)
+	{
+		var elem = document.getElementById (ttipId);
+
+		if (elem != null)
+		{
+			if (elem.style.display == "none"  ||  ttipDisplayed == false)
+			{
+				elem.style.left    = (mouseX + xMargin) + "px";
+				elem.style.top     = (mouseY + yMargin) + "px";
+				elem.style.display = "block";
+				ttipDisplayed      = true;
+			}
+			else
+			{
+				elem.style.display = "none";
+				ttipDisplayed      = false;
+			}
+
+			return true;
+		}
+		else
+			return false;
+	}
+
+	// Einbinden des Event-Handlers
+	if (document.captureEvents)
+		document.captureEvents (Event.MOUSEMOVE);
+
+	document.onmousemove = saveMouseCoords;
+
+</script>
+
+<form action="###FORMACTION###" method="post">
+	<table>
+		<tr>
+			<td valign="top">
+				###LABEL_ORDERBY###:
+				<select class="tx-mmforum-select" name="tx_mmforum_pi1[order_by]" onchange="this.form.submit();">
+					<option value="status" ###ORDERBY_STAT###>###LABEL_ORDERBY_STATUS###</option>
+					<option value="date" ###ORDERBY_DATE###>###LABEL_ORDERBY_DATE###</option>
+					<option value="user" ###ORDERBY_USER###>###LABEL_ORDERBY_USER###</option>
+				</select>
+				<select class="tx-mmforum-select" name="tx_mmforum_pi1[order]" onchange="this.form.submit();">
+					<option value="up" ###ORDERASC###>###LABEL_ORDERASC###</option>
+					<option value="down" ###ORDERDESC###>###LABEL_ORDERDESC###</option>
+				</select>
+			</td>
+			<td valign="top">
+				###LABEL_DISPLAY###:
+			</td>
+			<td valign="top">
+				<input type="checkbox" name="tx_mmforum_pi1[view_open]" onchange="this.form.submit();" ###VIEW_OPEN### value="1">###LABEL_OPEN###<br />
+				<input type="checkbox" name="tx_mmforum_pi1[view_work]" onchange="this.form.submit();" ###VIEW_WORK### value="1">###LABEL_INPROGRESS###<br />
+				<input type="checkbox" name="tx_mmforum_pi1[view_close]" onchange="this.form.submit();" ###VIEW_CLOSE### value="1">###LABEL_DONE###<br />
+			</td>
+		</tr>
+	</table>
+	<table class="tx-mmforum-table" width="100%">
+		<tr>
+			<th colspan="6" class="tx-mmforum-th">###LABEL_POSTALERTS###</th>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td tx-mmforum-subth2" width="20">###LABEL_NR###</td>
+			<td class="tx-mmforum-td tx-mmforum-subth2" width="80">###LABEL_DATE###</td>
+			<td class="tx-mmforum-td tx-mmforum-subth2">###LABEL_PROBLEM###</td>
+			<td class="tx-mmforum-td tx-mmforum-subth2" width="80">###LABEL_POST###</td>
+			<td class="tx-mmforum-td tx-mmforum-subth2" width="80">###LABEL_USER###</td>
+			<td class="tx-mmforum-td tx-mmforum-subth2" width="100">###LABEL_STATUS###</td>
+		</tr>
+		<!-- ###ALERT_LIST_SUB### begin -->
+		<tr>
+			<td class="tx-mmforum-td tx-mmforum-smalltext" rowspan="2" align="center" bgcolor="###STATCOLOR###">###UID###</td>
+			<td class="tx-mmforum-td tx-mmforum-smalltext" colspan="6" >###TOPIC###</td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td" align="center"><div class="tx-mmforum-smalldesc">###DATE###</div></td>
+			<td class="tx-mmforum-td tx-mmforum-smalltext">
+				###TEXT###
+			</td>
+			<td class="tx-mmforum-td tx-mmforum-smalltext">
+				<center><span onmouseover="toggleTooltip ('tooltiptext###UID###')" onmouseout="toggleTooltip ('tooltiptext###UID###')">###LABEL_POSTTEXT###</span></center>
+				<div id="tooltiptext###UID###" class="tx-mmforum-pi1-tooltip">
+					<div class="tx-mmforum-pi1-tooltip-header">###LABEL_POSTTEXT###</div>
+					<div class="tx-mmforum-pi1-tooltip-text">###POST_TEXT###</div>
+				</div>
+			</td>
+			<td class="tx-mmforum-td tx-mmforum-smalltext" style="text-align: center;">###POST_USER###</td> 
+			<td class="tx-mmforum-td" style="text-align: center">
+				<select name="tx_mmforum_pi1[status_###UID###]" onchange="this.form.submit();" class="tx-mmforum-select">
+					###STATUS###
+				</select>
+			</td>
+		</tr>
+		<input type="hidden" name="tx_mmforum_pi1[update]" value="update_status"> 
+		<!-- ###ALERT_LIST_SUB### end -->
+	</table>
+</form>
+<!-- ###ALERT_LIST### end -->
+
+
+<!-- ###POST_ALERT### begin -->
+<form action="###ACTIONLINK###" method="post">
+	<table width="100%" class="tx-mmforum-table">
+		<tr>
+			<th colspan="2" class="tx-mmforum-th">###LABEL_HEADING###</th>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-pi1-newpost-left">###LABEL_POSTTEXT###</td>
+			<td class="tx-mmforum-pi1-newpost-middle" style="text-align:left;">###POSTTEXT###</td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-pi1-newpost-left">###LABEL_REASON###</td>
+			<td class="tx-mmforum-pi1-newpost-middle">
+				<textarea  name="mm_forum[alert_text]" rows="6" cols="60" style="width: 100%;"></textarea>
+				###ERRORMESSAGE###
+			</td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-pi1-newpost-left"></td>
+			<td class="tx-mmforum-pi1-newpost-middle" style="text-align:left;"><input class="tx-mmforum-button" type="submit" name="mm_forum[submit]" value="###LABEL_ALERT###"></td>
+		</tr>
+	</table>
+</form>
+<!-- ###POST_ALERT### end -->
+
+
+
+
+
+</body>
+</html>

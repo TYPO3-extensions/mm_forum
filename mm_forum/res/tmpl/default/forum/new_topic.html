@@ -1,0 +1,115 @@
+<!-- ###NEWTOPIC### begin-->
+<script type="text/javascript"> 
+    function del() {
+        document.getElementById('message').innerHTML = "";
+    }
+    
+    function set_action(param) {
+        document.getElementById('field_text').value = param;
+        document.post.submit();
+    
+    }
+
+</script>
+<form action="###ACTION###" method="post" id="post" enctype="multipart/form-data">
+	<div style="width: 100%;">
+		<table class="tx-mmforum-table" width="100%">
+			<tr>
+				<th colspan="2" class="tx-mmforum-th">###LABEL_CREATETOPIC###</th>
+			</tr>
+			<tr>
+				<td class="tx-mmforum-pi1-newpost-left">
+					###LABEL_TITLE###:
+				</td>
+				<td class="tx-mmforum-pi1-newpost-middle">
+					<input type="text" name="tx_mmforum_pi1[topicname]" size="60" value="###TOPICNAME###" />
+				</td>
+			</tr>
+			<tr align="left" valign="top">
+				<td class="tx-mmforum-pi1-newpost-left">
+					###SMILIES###
+				</td>
+				<td class="tx-mmforum-pi1-newpost-middle">
+					<table width="100%" border="0" cellspacing="0" cellpadding="2">
+						<tr> 
+                            <!-- ###BBCODEBUTTONS### -->
+                            <td>
+                                <img src="###CODE_IMAGE###" alt="###CODE_LABEL###" title="###CODE_LABEL###" onmouseover="this.style.cursor='pointer';" onclick="bbstyle(###CODE_NUMBER###);" />
+                            </td>
+                            <!-- ###BBCODEBUTTONS### -->
+						</tr>
+						<tr> 
+							<td colspan="11">
+								<textarea id="message" name="tx_mmforum_pi1[message]" rows="15" cols="35" style="width:100%" tabindex="3" class="tx-mmforum-post" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">###POSTTEXT###</textarea>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+            <!-- ###ATTACHMENT_SECTION### begin -->
+            <tr>
+                <td class="tx-mmforum-pi1-newpost-left">###LABEL_ATTACHMENT###</td>
+                <td class="tx-mmforum-pi1-newpost-middle" style="text-align: left !important;">
+                    <input type="hidden" name="MAX_FILE_SIZE" value="###MAXFILESIZE###" />
+                    
+                    <!-- ###ATTACHMENT_FIELD### begin -->
+                    <div><input type="file" class="tx-mmforum-pi1-attachment" name="tx_mmforum_pi1_attachment_###ATTACHMENT_NO###" size="64" /></div>
+                    <!-- ###ATTACHMENT_FIELD### end -->
+                    ###MAXFILESIZE_TEXT###
+                </td>
+            </tr>
+            <!-- ###ATTACHMENT_SECTION### end -->
+            <!-- ###POLL_SECTION### begin -->
+            <tr>
+                <td class="tx-mmforum-pi1-newpost-left">###LABEL_POLL###</td>
+                <td class="tx-mmforum-pi1-newpost-middle" style="text-align: left !important;">
+                    <script type="text/javascript">
+                    <!--
+                        function changePoll(caller) {
+                            if(caller.checked) {
+                                document.getElementById('poll').style.display='block';
+                            } else {
+                                document.getElementById('poll').style.display='none';
+                            }
+                        }
+                    //-->
+                    </script>
+                    <input type="checkbox" name="tx_mmforum_pi1[enable_poll]" value="1" onchange="changePoll(this);" ###ENABLE_POLL### style="vertical-align:middle;" /> ###LABEL_POLL###
+                    <div id="poll" ###POLLDIV_STYLE###>
+                        ###POLL###
+                    </div>
+                </td>
+            </tr>
+            <!-- ###POLL_SECTION### end -->
+			<tr>
+				<td>&nbsp;</td>
+				<td><input type="checkbox" name="tx_mmforum_pi1[havealook]" value="havealook" ###HAVEALOOK### /><small>###LABEL_SETHAVEALOOK###</small></td>
+			</tr>
+			<tr align="left" valign="top">
+				<td>
+				</td>
+				<td>
+					<input type="submit" class="tx-mmforum-button" name="tx_mmforum_pi1[button]" value="###LABEL_SEND###" accesskey="s" />
+					<input type="submit" class="tx-mmforum-button" name="tx_mmforum_pi1[button]" value="###LABEL_PREVIEW###" />
+					<input type="reset"  class="tx-mmforum-button" value="###LABEL_RESET###" />
+				</td>
+			</tr>
+		</table>
+	</div>
+</form>
+
+###OLDPOSTTEXT###
+<!-- ###NEWTOPIC### end-->
+
+<!-- ###PREVIEW### begin -->
+<div style="width:100%;">
+	<h2>###TOPIC_TITLE###</h2>
+	<table width="100%" class="tx-mmforum-table" >
+		<tr>
+			<th class="tx-mmforum-th" colspan="2"><strong>###LABEL_PREVIEW###</strong></th>
+		</tr>
+		###PREVIEW_POST###
+	</table>
+</div>
+<br />
+<!-- ###PREVIEW### end -->

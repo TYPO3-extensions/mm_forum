@@ -1,0 +1,61 @@
+<!-- ###MESSAGES_TOP### begin-->
+
+<script type="text/javascript" language="JavaScript">
+ function check() {
+ for(var i=0;i<document.messages.length;++i)
+  {
+   if (document.forms["messages"].elements[i].type == "checkbox") {
+	 document.forms["messages"].elements[i].checked = true;
+   }
+  }
+ }
+ function uncheck() {
+ for(var i=0;i<document.messages.length;++i)
+  {
+   if (document.forms["messages"].elements[i].type == "checkbox") {
+	 document.forms["messages"].elements[i].checked = false;
+   }
+  }
+ }
+ 
+ function confirmAction() {
+  return confirm("###CONFIRM_ACTION###");
+ }
+</script>
+<form name="messages" action="###FORMLINK###" method="post" onsubmit="return confirmAction();">
+
+<table class="tx-mmforum-table" width="100%">
+	<tr>
+		<th class="tx-mmforum-th" colspan="6">###LABEL_INBOX###</th>
+	</tr>
+	<tr>
+		<td class="tx-mmforum-td tx-mmforum-subth2" width="20">&nbsp;</td>
+		<td class="tx-mmforum-td tx-mmforum-subth2">###HEAD_SUBJECT###</td>
+		<td class="tx-mmforum-td tx-mmforum-subth2" width="100">###HEAD_TO_FROM###</td>
+		<td class="tx-mmforum-td tx-mmforum-subth2" width="120">###HEAD_DATE###</td>
+		<td class="tx-mmforum-td tx-mmforum-subth2" width="70">###HEAD_REPLY###</td>
+		<td class="tx-mmforum-td tx-mmforum-subth2" width="70">###HEAD_DELETE###</td>
+	</tr>
+<!-- ###MESSAGES_TOP### end-->
+<!-- ###MESSAGES### begin-->
+	<tr>
+		<td class="tx-mmforum-td tx-mmforum-pi3-pminbox-item">###SELECT###</td>
+		<td class="tx-mmforum-td tx-mmforum-pi3-pminbox-item" style="text-align:left;">
+			<div class="tx-mmforum-pi3-pminbox-icon"><img src="###ICON###" /></div>
+			###SUBJECT###
+		</td>
+		<td class="tx-mmforum-td tx-mmforum-pi3-pminbox-item">###FROM###</td>
+		<td class="tx-mmforum-td tx-mmforum-pi3-pminbox-item" style="font-size:9px;">###DATE###</td>
+		<td class="tx-mmforum-td tx-mmforum-pi3-pminbox-item">###PM###</td>
+		<td class="tx-mmforum-td tx-mmforum-pi3-pminbox-item">###DEL###</td>
+	</tr>
+<!-- ###MESSAGES### end-->
+<!-- ###MESSAGES_END### begin-->
+</table>
+###SELECTION### [<a onClick="check()" href="javascript:void(0);">###SELECT_ALL###</a>][<a onClick="uncheck()" href="javascript:void(0);">###SELECT_NONE###</a>]<br /><br />
+
+###OPTION### <input type="submit" class="tx-mmforum-button" name="###LABEL_EXECUTE###" value="###LABEL_EXECUTE###" />
+</form>
+<br />
+###NEWMESSAGE###
+<!-- ###MESSAGES_END### end-->

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<meta type="array">
+		<type>module</type>
+		<description>Language labels for module &quot;tools_txmmforumM1&quot;</description>
+	</meta>
+	<data type="array">
+		<languageKey index="default" type="array">
+            <label index="statistics.months.1">January</label>
+            <label index="statistics.months.2">February</label>
+            <label index="statistics.months.3">March</label>
+            <label index="statistics.months.4">April</label>
+            <label index="statistics.months.5">May</label>
+            <label index="statistics.months.6">June</label>
+            <label index="statistics.months.7">July</label>
+            <label index="statistics.months.8">August</label>
+            <label index="statistics.months.9">September</label>
+            <label index="statistics.months.10">October</label>
+            <label index="statistics.months.11">November</label>
+            <label index="statistics.months.12">December</label>
+            
+            <label index="statistics.now">Now</label>
+            
+            <label index="statistics.menu.all">All</label>
+            <label index="statistics.menu.table">Display</label>
+            <label index="statistics.menu.table.posts">Posts</label>
+            <label index="statistics.menu.table.topics">Topics</label>
+            <label index="statistics.menu.table.pms">Private messages</label>
+            <label index="statistics.menu.table.users">Users</label>
+            
+            <label index="statistics.menu.group">Group by</label>
+            <label index="statistics.menu.group.tod">Time of day</label>
+            <label index="statistics.menu.group.dom">Day of month</label>
+            <label index="statistics.menu.group.doy">Day of year</label>
+            <label index="statistics.menu.group.month">Month</label>
+            <label index="statistics.menu.group.forum">Forum</label>
+            
+            <label index="statistics.menu.day">Day</label>
+            <label index="statistics.menu.month">Month</label>
+            <label index="statistics.menu.year">Year</label>
+            
+            <label index="statistics.menu.update">Update</label>
+            
+            <label index="statistics.additional.totavg">total/average per day</label>
+            
+            <label index="statistics.error.noMonth">You must specify a month.</label>
+            <label index="statistics.error.noYear">You must specify a year.</label>
+            <label index="statistics.error.noDay">You must specify a day.</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+            <label index="statistics.months.1">Januar</label>
+            <label index="statistics.months.2">Februar</label>
+            <label index="statistics.months.3">März</label>
+            <label index="statistics.months.4">April</label>
+            <label index="statistics.months.5">Mai</label>
+            <label index="statistics.months.6">Juni</label>
+            <label index="statistics.months.7">Juli</label>
+            <label index="statistics.months.8">August</label>
+            <label index="statistics.months.9">September</label>
+            <label index="statistics.months.10">Oktober</label>
+            <label index="statistics.months.11">November</label>
+            <label index="statistics.months.12">Dezember</label>
+            
+            <label index="statistics.now">Jetzt</label>
+            
+            <label index="statistics.menu.all">Alle</label>
+            <label index="statistics.menu.table">Anzeigen</label>
+            <label index="statistics.menu.table.posts">Beiträge</label>
+            <label index="statistics.menu.table.topics">Themen</label>
+            <label index="statistics.menu.table.pms">Private Nachrichten</label>
+            <label index="statistics.menu.table.users">Benutzer</label>
+            
+            <label index="statistics.menu.group">Gruppieren</label>
+            <label index="statistics.menu.group.tod">Tageszeit</label>
+            <label index="statistics.menu.group.dom">Tage/Monat</label>
+            <label index="statistics.menu.group.doy">Tage/Jahr</label>
+            <label index="statistics.menu.group.month">Monat</label>
+            <label index="statistics.menu.group.forum">Forum</label>
+            
+            <label index="statistics.menu.day">Tag</label>
+            <label index="statistics.menu.month">Monat</label>
+            <label index="statistics.menu.year">Jahr</label>
+            
+            <label index="statistics.menu.update">Aktualisieren</label>
+            
+            <label index="statistics.additional.totavg">gesamt/durchschntl. pro Tag</label>
+            
+            <label index="statistics.error.noMonth">Sie müssen einen Monat angeben.</label>
+            <label index="statistics.error.noYear">Sie müssen ein Jahr angeben.</label>
+            <label index="statistics.error.noDay">Sie müssen einen Tag angeben.</label>
+		</languageKey>
+        <languageKey index="fi" type="array">
+			<label index="statistics.months.1">Tammikuu</label>
+			<label index="statistics.months.2">Helmikuu</label>
+			<label index="statistics.months.3">Maaliskuu</label>
+			<label index="statistics.months.4">Huhtikuu</label>
+			<label index="statistics.months.5">Toukokuu</label>
+			<label index="statistics.months.6">Kesäkuu</label>
+			<label index="statistics.months.7">Heinäkuu</label>
+			<label index="statistics.months.8">Elokuu</label>
+			<label index="statistics.months.9">Syyskuu</label>
+			<label index="statistics.months.10">Lokakuu</label>
+			<label index="statistics.months.11">Marraskuu</label>
+			<label index="statistics.months.12">Joulukuu</label>
+			<label index="statistics.now">Nyt</label>
+			<label index="statistics.menu.all">Kaikki</label>
+			<label index="statistics.menu.table">Näytä</label>
+			<label index="statistics.menu.table.posts">Viestit</label>
+			<label index="statistics.menu.table.topics">Aiheet</label>
+			<label index="statistics.menu.table.pms">Yksityisviestit</label>
+			<label index="statistics.menu.table.users">Käyttäjät</label>
+			<label index="statistics.menu.group">Ryhmä</label>
+			<label index="statistics.menu.group.tod">Kellonaika</label>
+			<label index="statistics.menu.group.dom">Kuukaudenaika</label>
+			<label index="statistics.menu.group.doy">Vuodenaika</label>
+			<label index="statistics.menu.group.month">Kuukausi</label>
+			<label index="statistics.menu.day">Päivä</label>
+			<label index="statistics.menu.month">Kuukausi</label>
+			<label index="statistics.menu.year">Vuosi</label>
+			<label index="statistics.menu.update">Päivitä</label>
+			<label index="statistics.additional.totavg">yhteensä/keskiarvo per päivä</label>
+			<label index="statistics.error.noMonth">Anna kuukausi.</label>
+			<label index="statistics.error.noYear">Anna vuosi.</label>
+			<label index="statistics.error.noDay">Anna päivä.</label>
+		</languageKey>
+        <languageKey index="fr" type="array">
+            <label index="statistics.months.1">Janvier</label>
+            <label index="statistics.months.2">Février</label>
+            <label index="statistics.months.3">Mars</label>
+            <label index="statistics.months.4">Avril</label>
+            <label index="statistics.months.5">Mai</label>
+            <label index="statistics.months.6">Juin</label>
+            <label index="statistics.months.7">Juillet</label>
+            <label index="statistics.months.8">Août</label>
+            <label index="statistics.months.9">Septembre</label>
+            <label index="statistics.months.10">Octobre</label>
+            <label index="statistics.months.11">Novembre</label>
+            <label index="statistics.months.12">Décembre</label>
+            
+            <label index="statistics.now">Maintenant</label>
+            
+            <label index="statistics.menu.all">Tous</label>
+            <label index="statistics.menu.table">Lister</label>
+            <label index="statistics.menu.table.posts">Interventions</label>
+            <label index="statistics.menu.table.topics">Fils</label>
+            <label index="statistics.menu.table.pms">Messages privés</label>
+            <label index="statistics.menu.table.users">Intervenants</label>
+            
+            <label index="statistics.menu.group">Grouper</label>
+            <label index="statistics.menu.group.tod">Heure de la journée</label>
+            <label index="statistics.menu.group.dom">Jours/Mois</label>
+            <label index="statistics.menu.group.doy">Jours/Année</label>
+            <label index="statistics.menu.group.month">Mois</label>
+            <label index="statistics.menu.group.forum">Forum</label>
+            
+            <label index="statistics.menu.day">Jour</label>
+            <label index="statistics.menu.month">Mois</label>
+            <label index="statistics.menu.year">Année</label>
+            
+            <label index="statistics.menu.update">Actualiser</label>
+            
+            <label index="statistics.additional.totavg">total/en moyenne par jour</label>
+            
+            <label index="statistics.error.noMonth">Indiquez un mois !</label>
+            <label index="statistics.error.noYear">Indiquez une année !</label>
+            <label index="statistics.error.noDay">Indiquez un jour !</label>
+		</languageKey>
+        <!-- RUSSIAN LANGUAGE DATA -->
+		<languageKey index="ru" type="array">
+			<label index="statistics.months.1">Январь</label>
+			<label index="statistics.months.2">Февраль</label>
+			<label index="statistics.months.3">Март</label>
+			<label index="statistics.months.4">Апрель</label>
+			<label index="statistics.months.5">Май</label>
+			<label index="statistics.months.6">Июнь</label>
+			<label index="statistics.months.7">Июль</label>
+			<label index="statistics.months.8">Август</label>
+			<label index="statistics.months.9">Сентябрь</label>
+			<label index="statistics.months.10">Октябрь</label>
+			<label index="statistics.months.11">Ноябрь</label>
+			<label index="statistics.months.12">Декабрь</label>
+			
+			<label index="statistics.now">Сейчас</label>
+			
+			<label index="statistics.menu.all">Все</label>
+			<label index="statistics.menu.table">Показать</label>
+			<label index="statistics.menu.table.posts">Сообщения</label>
+			<label index="statistics.menu.table.topics">Темы</label>
+			<label index="statistics.menu.table.pms">Личные сообщения</label>
+			<label index="statistics.menu.table.users">Пользователи</label>
+			
+			<label index="statistics.menu.group">Группировать по</label>
+			<label index="statistics.menu.group.tod">Время суток</label>
+			<label index="statistics.menu.group.dom">День в месяце</label>
+			<label index="statistics.menu.group.doy">День в году</label>
+			<label index="statistics.menu.group.month">Месяц</label>
+			<label index="statistics.menu.group.forum">Форум</label>
+			
+			<label index="statistics.menu.day">День</label>
+			<label index="statistics.menu.month">Месяц</label>
+			<label index="statistics.menu.year">Год</label>
+			
+			<label index="statistics.menu.update">Обновить</label>
+			
+			<label index="statistics.additional.totavg">всего/в среднем в день</label>
+			
+			<label index="statistics.error.noMonth">Вы должны указать месяц.</label>
+			<label index="statistics.error.noYear">Вы должны указать год.</label>
+			<label index="statistics.error.noDay">Вы должны указать день.</label>
+		</languageKey>
+	</data>
+</T3locallang>

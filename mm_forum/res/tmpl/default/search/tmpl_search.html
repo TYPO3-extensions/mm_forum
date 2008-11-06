@@ -1,0 +1,194 @@
+<!-- ###SEARCHFORM### begin -->
+<script type="text/javascript">
+function anzeigen() {
+    document.getElementById("info").style.visibility="visible";
+    document.getElementById("infoSelectPlace").style.visibility="hidden";
+    document.getElementById("infoSelectDate").style.visibility="hidden";
+}
+function schliessen() {
+    document.getElementById("info").style.visibility="hidden";
+    document.getElementById("infoSelectPlace").style.visibility="visible";
+    document.getElementById("infoSelectDate").style.visibility="visible";
+}
+
+function show_Index() {
+    document.getElementById("info_index").style.visibility="visible";    
+}
+
+function close_Index() {
+    document.getElementById("info_index").style.visibility="hidden";
+}
+</script>
+<div class="tx-mmforum-pi4-info-box" id="info">
+        <div class="tx-mmforum-pi4-infoBoxHeader">
+            <div style="float:left;padding-left:10px">
+               ###LABEL_QUICKGUIDE###
+            </div>
+            <div style="float:right; padding-right:10px;">
+                <div id="dasx">
+                    <a href="javascript:schliessen()">X</a>
+                </div>
+            </div>
+        </div>
+        <div class="tx-mmforum-pi4-infoBoxContent">
+            <br />
+            <div style="padding-left:40px;width:500px;">
+            <br />
+            <ul class="tx-mmforum-pi4-regeln">
+              <li><strong>###LABEL_WILDCARD_HEADER###</strong><br />
+                ###LABEL_WILDCARD_CONTENT###<br />
+              </li>
+              <li><strong>###LABEL_NEGATIVE_HEADER###</strong><br />
+                ###LABEL_NEGATIVE_CONTENT###
+            <br />
+              </li>
+              <li><strong>###LABEL_USERSEARCH_HEADER###</strong><br />
+                ###LABEL_USERSEARCH_CONTENT###<br />
+              </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+<div class="tx-mmforum-pi4-info-box" id="info_index">
+        <div class="tx-mmforum-pi4-infoBoxHeader">
+            <div style="float:left;padding-left:10px">
+               ###LABEL_QUICKGUIDE_INDEX###
+            </div>
+            <div style="float:right; padding-right:10px;">
+                <div id="dasx">
+                    <a href="javascript:close_Index()">X</a>
+                </div>
+            </div>
+        </div>
+        <div class="tx-mmforum-pi4-infoBoxContent">
+            <br />
+            <div style="padding-left:40px;width:500px;">
+            <br />
+            <ul class="tx-mmforum-pi4-regeln">
+              <li><strong>###LABEL_START_INDEX###</strong><br />
+                ###START_INDEX_CONTENT###<br />
+              </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+
+                  
+<form action="###ACTIONLINK###" method="post">
+    <table class="tx-mmforum-table" style="width:100%;">
+        <tr>
+            <th colspan="3" class="tx-mmforum-th">###LLL_SEARCH###</th>
+        </tr>
+        <tr>
+            <td class="tx-mmforum-td" style="width:25%;">###LLL_SEARCHSTRING###</td>
+            <td class="tx-mmforum-td" colspan="2"><input type="text" name="tx_mmforum_pi4[searchstring]" value="###SEARCHSTRING###" style="width:60%" /></td>
+        </tr>
+        <tr>
+            <td class="tx-mmforum-td" rowspan="4">###LLL_ADVANCED###</td>
+            <td class="tx-mmforum-td">###LLL_SEARCHPLACE###</td>
+            <td class="tx-mmforum-td"> 
+                <select  name="tx_mmforum_pi4[search_place]" id="infoSelectPlace" onchange="this.form.submit();">
+                    ###PLACES###
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="tx-mmforum-td" style="width:25%;">###LLL_SEARCHORDER###</td>
+            <td class="tx-mmforum-td">
+                <select  name="tx_mmforum_pi4[search_order]" id="infoSelectDate">
+                    ###ORDER_OPTION###
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td class="tx-mmforum-td">###LLL_ONLYSOLVED###</td>
+            <td class="tx-mmforum-td">
+                <input type="checkbox" name="tx_mmforum_pi4[solved]" value="1" ###SOLVED### />
+            </td>
+        </tr>
+        <tr>
+            <td class="tx-mmforum-td">###LLL_GROUP###</td>
+            <td class="tx-mmforum-td">
+                <input type="checkbox" name="tx_mmforum_pi4[groupPost]" value="1" ###POSTGROUP### />
+            </td>
+        </tr>
+        <!-- ###INDEXING_SECTION### -->
+        <tr>
+            <td class="tx-mmforum-td" style="width:25%;">###LLL_INDEXING###</td>
+            <td class="tx-mmforum-td" colspan="2">
+                ###INDEX_LINK###
+                <p>###START_INDEX_CONTENT###</p>
+            </td>
+        </tr>
+        <!-- ###INDEXING_SECTION### -->
+        <tr>
+            <td class="tx-mmforum-td" style="width:25%;"></td>
+            <td class="tx-mmforum-td" colspan="2"><a href="javascript:anzeigen()"><strong>###LLL_QUICKGUIDE###</strong></a></td>
+        </tr>
+        <tr>
+            <td class="tx-mmforum-subth"></td>
+            <td class="tx-mmforum-subth" colspan="2"><input type="submit" name="tx_mmforum_pi4[submit]" value="###LLL_SUBMIT###" class="tx-mmforum-button" /></td>
+        </tr>
+    </table>
+</form>
+<!-- ###SEARCHFORM### end -->
+
+<!-- ###SEARCHRESULT### begin -->
+<br />###PAGES###<br /><br />
+<table class="tx-mmforum-table" style="width:100%;">
+    <tr>
+        <th colspan="2" class="tx-mmforum-th">###LLL_SEARCHRESULTS###: ###TREFFER### ###LABEL_RESULTS###</th>
+    </tr>
+<!-- ###SEARCHRESULT_SUB### begin -->
+    <tr>
+        <td class="tx-mmforum-td" colspan="2"><div class="tx-mmforum-pi4-title">###TITLE### ###SOLVEDIMAGE###</div></td>
+    </tr>
+    <tr>
+        <td class="tx-mmforum-td tx-mmforum-pi4-content" valign="top">
+            ###SHORTTEXT###
+            <br /><br />
+            ###POSTPATH###
+        </td>
+        <td class="tx-mmforum-td" style="width:25%">
+            ###LABEL_REPLIES###: ###ANSWERS### <br />
+            ###LABEL_SOLVED###: ###SOLVED### <br />
+            ###LABEL_CRUSER###: ###CRUSER### <br />
+            ###LABEL_CRDATE###: ###CRDATE### <br />
+        </td>
+    </tr>
+<!--
+<div class="tx-mmforum-pi4-search_title">
+    &nbsp;&nbsp;###TITLE### ###SOLVEDIMAGE###
+</div>
+<div class="tx-mmforum-pi4-search-box-aussen" style="background-image: url(###IMG_BACKGROUND###);">
+    <div class="tx-mmforum-pi4-search-box-links">
+        ###SHORTTEXT###
+    </div>
+    <div class="tx-mmforum-pi4-search-box-rechts">
+        <div class="tx-mmforum-pi4-search_infobox">
+            <div class="tx-mmforum-pi4-infobox-titel">
+                ###LABEL_TOPICINFO###
+            </div>
+            <div class="tx-mmforum-pi4-search_info">
+                ###LABEL_REPLIES###: ###ANSWERS### <br />
+                ###LABEL_SOLVED###: ###SOLVED### <br />
+                ###LABEL_CRUSER###: ###CRUSER### <br />
+                ###LABEL_CRDATE###: ###CRDATE### <br />
+            </div>
+        </div>
+    </div>
+    <div class="tx-mmforum-pi4-search-box-unten">
+        <div class="tx-mmforum-pi4-search-link">
+            &#187;&nbsp;###POSTPATH###
+        </div>
+            <img src="###IMG_CORNER###" />
+    </div>
+</div>
+-->
+<!-- ###SEARCHRESULT_SUB### end -->
+</table>
+<br />###PAGES###<br />
+<!-- ###SEARCHRESULT### end -->
