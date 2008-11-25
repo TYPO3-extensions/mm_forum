@@ -304,8 +304,8 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		// Check if email address already exists
 		else {
 			$count = 0;
-			$where = 'deleted=0 AND email =\''.mysql_escape_string($email).'\' AND uid <> '.$GLOBALS['TSFE']->fe_user->user['uid'];
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid, email','fe_users',$where);
+			$where = 'deleted=0 AND email =\''.$GLOBALS['TYPO3_DB']->quoteStr($email,'fe_users').'\' AND uid <> '.$this->getUserID().' AND pid = '.$this->getUserProfilePid();
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid, email','fe_users',$where);
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$count++;
 			}
