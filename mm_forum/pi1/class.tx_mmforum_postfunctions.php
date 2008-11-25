@@ -588,7 +588,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 	            	$quoteParams[$this->prefixId]['fid'] = $row['forum_id'];
                     $quoteParams[$this->prefixId]['pid'] = $this->pi_getLL('realurl.quote');
 	            }
-                $menu .=' '. $this->createButton('quote',$quoteParams,0,true);
+                $menu .= $this->createButton('quote',$quoteParams,0,true);
             }
         }
 
@@ -599,16 +599,16 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
         if ($user['www']) {
             $url = parse_url($user['www']);
             IF (!$url['scheme']) $user['www'] = 'http://'.$user['www'];
-            $profile .=' '.  $this->createButton('www',false,false,true,$user['www']);
+            $profile .= $this->createButton('www',false,false,true,$user['www']);
         }
         if ($user['tx_mmforum_icq'])
-            $profile .=' '.  $this->createButton('icq',false,false,true,'http://www.icq.com/scripts/search.dll?to='.htmlspecialchars($user['tx_mmforum_icq']));
+            $profile .= $this->createButton('icq',false,false,true,'http://www.icq.com/scripts/search.dll?to='.htmlspecialchars($user['tx_mmforum_icq']));
         if ($user['tx_mmforum_aim'])
-            $profile .=' '.  $this->createButton('aim',false,false,true,'aim:goim?screenname='.htmlspecialchars($user['tx_mmforum_aim']).'&message=Hello+Are+you+there?');
+            $profile .= $this->createButton('aim',false,false,true,'aim:goim?screenname='.htmlspecialchars($user['tx_mmforum_aim']).'&message=Hello+Are+you+there?');
         if ($user['tx_mmforum_yim'])
-            $profile .=' '.  $this->createButton('yim',false,false,true,'http://edit.yahoo.com/config/send_webmesg?.target='.htmlspecialchars($user['tx_mmforum_yim']).'&.src=pg');
+            $profile .= $this->createButton('yim',false,false,true,'http://edit.yahoo.com/config/send_webmesg?.target='.htmlspecialchars($user['tx_mmforum_yim']).'&.src=pg');
         if ($user['tx_mmforum_skype'])
-            $profile .=' '.  $this->createButton('skype',false,false,true,'skype:'.htmlspecialchars($user['tx_mmforum_skype']).'?call');
+            $profile .= $this->createButton('skype',false,false,true,'skype:'.htmlspecialchars($user['tx_mmforum_skype']).'?call');
         
         if ($GLOBALS['TSFE']->fe_user->user['username'] && $user['uid']!=$GLOBALS['TSFE']->fe_user->user['uid']){
         	if(intval($this->conf['pm_id']) > 0 && $user && $user['deleted']=='0') {
@@ -620,7 +620,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                     $pmParams['tx_mmforum_pi3']['folder'] = 'inbox';
                     $pmParams['tx_mmforum_pi3']['messid'] = $this->pi_getLL('realurl.pmnew');
                 }
-                $profile .= ' '. $this->createButton( 'pm',$pmParams,$this->conf['pm_id'],true);
+                $profile .= $this->createButton( 'pm',$pmParams,$this->conf['pm_id'],true);
 			}
             
             $alertParams[$this->prefixId] = array(
@@ -631,7 +631,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                 $alertParams[$this->prefixId]['tid'] = $this->piVars['tid'];
                 $alertParams[$this->prefixId]['fid'] = $row['forum_id'];
             }
-            $menu .=' '.  $this->createButton('post-alert',$alertParams,0,true);
+            $menu .= $this->createButton('post-alert',$alertParams,0,true);
 
         }
 
