@@ -47,7 +47,7 @@
  * 
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @copyright  2008 Martin Helmich, Mittwald CM Service
- * @version    2008-06-28
+ * @version    2008-12-08
  * @package    mm_forum
  * @subpackage Includes
  */
@@ -59,11 +59,12 @@ class tx_mmforum_validator {
 	 * configured using TypoScript.
 	 * 
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
-	 * @version 2008-06-28
+	 * @version 2008-12-08
 	 * @param   string $text The text to be validated
 	 * @return  string       The validated text
 	 */
     function specialChars($text) {
+    	
     		// Quote handling
     	switch($this->conf['quotes']) {
     		case 'double':
@@ -90,15 +91,9 @@ class tx_mmforum_validator {
 			$text = strip_tags($text);
 
 			// Replace all specialchars with HTML entities if configured
-		if(phpversion() < '5.2.3') {
-			if($this->conf['replace'] == 'all')
-				return htmlentities($text, $quotes, $charset);
-	    	else return htmlspecialchars($text, $quotes, $charset);
-		} else {
-			if($this->conf['replace'] == 'all')
-				return htmlentities($text, $quotes, $charset, false);
-	    	else return htmlspecialchars($text, $quotes, $charset, false);
-		}
+		if($this->conf['replace'] == 'all')
+			return htmlentities($text, $quotes, $charset);
+	    else return htmlspecialchars($text, $quotes, $charset);
     }
     
 	/**

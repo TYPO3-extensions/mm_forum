@@ -1,3 +1,8 @@
+2008-12-08  Martin Helmich <m.helmich@mittwald.de
+
+	* Fixed postparsing mechanism
+	* Fixed issues 2275, 2258, 2253, 2135, 2132, 2097
+
 2008-11-25  Martin Helmich <m.helmich@mittwald.de>
 
 	* Fixed issues 2204, 2019

@@ -513,7 +513,6 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		$postold = $posttext;
 
 		if ($tstamp > $cache_tstamp || $cache_tstamp == 0) {
-			$posttext = $this->shield($posttext);
 			$posttext = $this->bb2text($posttext,$this->conf);
 			$updateArray = array(
 				'cache_tstamp' => time(),

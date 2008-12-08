@@ -2559,7 +2559,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
                 // Inserting predefined message
                 IF ($this->piVars['message']) {
-                    $marker['###POSTTEXT###'] = $this->piVars['message'];
+                	$marker['###POSTTEXT###'] = $this->escape($this->piVars['message']);
                 }
                 else {
                     // Load post to be quoted
@@ -3418,7 +3418,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $imgInfo['src'] = $conf['path_smilie'].$row['smile_url'];
             $imgInfo['alt'] = $row['emoticon'];
             if($this->conf['postForm.']['smiliesAsDiv']) {
-            	$content .= $this->cObj->wrap("<a href=\"javascript:emoticon('".$row['code']."')\">".$this->buildImageTag($imgInfo)."</a>",$this->conf['postForm.']['smiliesAsDiv.']['allWrap']);
+            	$content .= $this->cObj->wrap("<a href=\"javascript:emoticon('".$row['code']."')\">".$this->buildImageTag($imgInfo)."</a>",$this->conf['postForm.']['smiliesAsDiv.']['itemWrap']);
             } else {
 	            if($i >= 4){
 	                $content .= "\r\n</tr><tr>\r\n";

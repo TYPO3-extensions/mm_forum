@@ -212,7 +212,8 @@ class tx_mmforum_postparser {
 	 * their substitution patterns are loaded from database.
 	 * 
 	 * @author  Björn Detert <b.detert@mittwald.de>
-	 * @version 04.05.2007
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2008-12-08
 	 * @param   string $text   The text to be parsed
 	 * @param   object $parent The calling object (regulary of type tx_mmforum_pi1), so this
 	 *                         object inherits all configuration and language options from the
@@ -221,9 +222,9 @@ class tx_mmforum_postparser {
 	 * @return  string         The parsed string
 	 */
 	function bbcode2html($text,$parent,$conf){  
-		$text = $this->decode_entities($text);
-		$text = str_replace('<','&lt;',$text);
-		$text = str_replace('>','&gt;',$text);
+
+			/* Parse special characters */		
+		$text = $parent->validatorObj->specialChars($text);
 
 		/* SET Buffer markers for Syntax Highlithing Boxes */
 		/* ======================== */

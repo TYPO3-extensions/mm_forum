@@ -25,4 +25,13 @@ t3lib_extMgm::addPItoST43($_EXTKEY,"pi6/class.tx_mmforum_pi6.php","_pi6","list_t
 	 */
 $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] = 'typo3conf/ext/mm_forum/includes/cache/class.tx_mmforum_cache.php:tx_mmforum_cache->clearAllCaches';
 
+	/**
+	 * This config variable adds the 'nav_hide' field to the fields
+	 * that are loaded into the current page's rootline. This allows hidden
+	 * pages to be excluded from the dynamic rootline.
+	 */
+if($GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'])
+	$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] .= ',nav_hide';
+else $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = 'nav_hide';
+
 ?>

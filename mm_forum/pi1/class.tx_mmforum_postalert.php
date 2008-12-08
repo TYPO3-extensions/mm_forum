@@ -172,7 +172,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			$allowedStatus = array(0,-1);
 		}
 		
-		$where = ' AND status IN ('.implode(',',$allowedStatus).') ';
+		$where = count($allowedStatus) ? ' AND status IN ('.implode(',',$allowedStatus).') ' : '';
 		
 		$boards = tx_mmforum_postalert::getModeratorBoards();
 		

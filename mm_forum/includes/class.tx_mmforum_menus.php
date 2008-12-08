@@ -26,7 +26,10 @@ require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_base
 
 class tx_mmforum_menus extends tx_mmforum_base {
 	var $prefixId = 'tx_mmforum_pi1';
-
+	
+		/* VERY dirty hack, but has to be this way in order for the
+		 * plugin to load the pi1 locallang file. */
+    var $scriptRelPath = 'pi1/class.tx_mmforum_pi1.php';
 
 	function menuInit($conf) {
 		$this->prefixId = ($conf['prefixId'] ? $conf['prefixId'] : 'tx_mmforum_pi1');
@@ -240,20 +243,27 @@ class tx_mmforum_menus extends tx_mmforum_base {
 			// User profile
 			// Displays a rootline like "mm_forum page -> User profile: Username"
 			case 'forum_view_profil':
+				
+				if($this->piVars['fid']) {
+		            $user_id = tx_mmforum_tools::get_userid($this->piVars['fid']);
+		        } else $user_id = $this->piVars['user_id'];
+				
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'username',
 					'fe_users',
-					'uid="'.intval($this->piVars['user_id']).'"'
+					'uid="'.intval($user_id).'"'
 				);
 				list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 				$linkParams[$this->prefixId] = array(
 					'action'  => 'forum_view_profil',
 					'user_id' => $this->piVars['user_id']
 				);
+				
 				$result[] = array(
 					'title'          => sprintf($this->pi_getLL('rootline.userprofile'), $username),
 					'_OVERRIDE_HREF' => $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams)
 				);
+			break;
 
 			// List unread or unanswered topics
 			// Displays a rootline like "mm_forum page -> List unread/unanswered topics"
@@ -308,7 +318,16 @@ class tx_mmforum_menus extends tx_mmforum_base {
 		} else {
 			$pageRootline = $GLOBALS['TSFE']->config['rootLine'];
 		}
-		$result = array_merge($pageRootline, $result);
+		
+		if(!$conf['includeNotInMenu']) {
+			$pageRootline_final = array();
+			foreach($pageRootline as $pageRootline_element) {
+				if($pageRootline_element['nav_hide'] != 1)
+					$pageRootline_final[] = $pageRootline_element;
+			}
+		} else $pageRootline_final = $pageRootline;
+		
+		$result = array_merge((array)$pageRootline_final, $result);
 
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['rootlineArray'])) {

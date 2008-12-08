@@ -187,13 +187,13 @@ class tx_mmforum_rss {
 
         foreach($posts as $post) {
             $rowMarker	= array(
-                '###RSS_TOPIC_NAME###'		=> $post['topic_title'],
+                '###RSS_TOPIC_NAME###'		=> $this->pObj->escape($post['topic_title']),
                 '###RSS_POST_LINK###'		=> $this->getPostLink($post['post_uid']),
                 '###RSS_POST_DATE###'       => date('r',$post['post_time']),
                 '###RSS_POST_TEXT_SHORT###' => $this->getPostTextShort($post['post_text']),
                 '###RSS_POST_TEXT###'       => $this->getPostTextComplete($post['post_text']),
-                '###RSS_FORUM_NAME###'      => $post['forum_name'],
-                '###RSS_POST_AUTHOR###'     => $post['username']
+                '###RSS_FORUM_NAME###'      => $this->pObj->escape($post['forum_name']),
+                '###RSS_POST_AUTHOR###'     => $this->pObj->escape($post['username'])
             );
             $rowContent .= $this->cObj->substituteMarkerArray($rowTemplate, $rowMarker);
 
