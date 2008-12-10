@@ -861,10 +861,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$catList = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'uid, forum_name',
-			'tx_mmforum_forums',
-			'deleted = 0 AND hidden = 0 AND parentID=0 AND uid = ' . intval($this->piVars['cid']) .
+			'tx_mmforum_forums f',
+			'f.deleted = 0 AND f.hidden = 0 AND f.parentID=0 AND f.uid = ' . intval($this->piVars['cid']) .
 			$this->getStoragePIDQuery().
-			$this->getMayRead_forum_query()
+			$this->getMayRead_forum_query('f')
 		);
 
 		// loop through every parent forum (= category)
@@ -883,9 +883,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			$forumList = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid, forum_name, forum_desc, forum_topics, forum_posts, forum_last_post_id',
-				'tx_mmforum_forums',
-				'deleted = 0 AND hidden = 0 AND parentID = ' . $row['uid'] .
-					$this->getStoragePIDQuery().
+				'tx_mmforum_forums f',
+				'f.deleted = 0 AND f.hidden = 0 AND f.parentID = ' . $row['uid'] .
+					$this->getStoragePIDQuery('f').
 					$this->getMayRead_forum_query(),
 				'',
 				'sorting ASC'
@@ -975,10 +975,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$catlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'uid, forum_name',
-			'tx_mmforum_forums',
+			'tx_mmforum_forums f',
 			'deleted = 0 AND hidden = 0 AND parentID = 0 ' .
 				 $this->getStoragePIDQuery().
-				 $this->getMayRead_forum_query().
+				 $this->getMayRead_forum_query('f').
 				 $this->getCategoryLimit_query(),
 			'',
 			'sorting ASC'
@@ -1005,10 +1005,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			$forumlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'*',
-				'tx_mmforum_forums',
+				'tx_mmforum_forums f',
 				'deleted = 0 AND hidden = 0 AND parentID = ' . $row['uid'] .
 					 $this->getStoragePIDQuery() .
-					 $this->getMayRead_forum_query(),
+					 $this->getMayRead_forum_query('f'),
 				'',
 				'sorting ASC'
 			);
@@ -1563,10 +1563,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Fill category/board select field in settings form
 		$cres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*',
-			'tx_mmforum_forums',
+			'tx_mmforum_forums f',
 			'deleted = 0 AND hidden = 0 ' .
 				$this->getStoragePIDQuery().
-				$this->getMayRead_forum_query().
+				$this->getMayRead_forum_query('f').
 				$this->getCategoryLimit_query(),
 			'',
 			'parentID ASC, sorting ASC'
@@ -5208,7 +5208,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			/* First search for query in cache. In case of a hit, just return
 			 * the result. */
-		$cacheRes = $this->cache->restore('getMayRead_forum_query_'.$userId);
+		$cacheRes = $this->cache->restore('getMayRead_forum_query_'.$userId.'_'.$prefix);
 		if($cacheRes !== null) return $cacheRes;
 
 			/* If the user is an administrator, just return a dummy query. */
@@ -5241,7 +5241,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$query = " AND (($query) OR ".$prefix."grouprights_read='') ";
 
 			/* Store query to cache and return. */
-		$this->cache->save('getMayRead_forum_query_'.$userId,$query);
+		$this->cache->save('getMayRead_forum_query_'.$userId.'_'.$prefix,$query);
 		return $query;
 	}
 
