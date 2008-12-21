@@ -1,3 +1,7 @@
+2008-12-21  Martin Helmich <m.helmich@mittwald.de>
+
+	* Fixed issue 2054
+	
 2008-12-21  Benjamin Mack  <benni@typo3.org>
 
 	* pi1: Cleaned up the performAttachmentUpload method
@@ -8,7 +12,7 @@
 
 	* Fixed issue 2299
 
-2008-12-08  Martin Helmich <m.helmich@mittwald.de
+2008-12-08  Martin Helmich <m.helmich@mittwald.de>
 
 	* Fixed postparsing mechanism
 	* Fixed issues 2275, 2258, 2253, 2135, 2132, 2097
@@ -30,7 +34,6 @@
 
     * Implemented some caching classes
     * Fixed issues 000458, 000454, 000437, 000450
-    
 
 2008-10-11  Benjamin Mack  <benni@typo3.org>
 

@@ -582,6 +582,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 	                    );
 	                    if($this->useRealUrl()) $linkParams[$this->prefixId]['folder'] = 'inbox';
 	                    $msgLink = $this->pi_getPageLink($this->conf['pm_pid'],'',$linkParams);
+						$msgLink = urlencode($msgLink);
 						$marker = array(
 							'###USERNAME###'		=> $row[tx_mmforum_pi1::getUserNameField()],
 	                        '###PMLINK###'          => tx_mmforum_pi1::getAbsUrl($msgLink),
