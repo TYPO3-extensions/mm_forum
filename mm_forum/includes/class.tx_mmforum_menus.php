@@ -50,6 +50,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 	 * @return  array           An array containing a set of HMENU items
 	 */
 	function catMenu($content, $conf) {
+		$this->init($conf);
 		$this->menuInit($conf);
 		$result = array();
 

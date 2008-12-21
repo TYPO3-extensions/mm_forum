@@ -1,3 +1,9 @@
+2008-12-21  Benjamin Mack  <benni@typo3.org>
+
+	* pi1: Cleaned up the performAttachmentUpload method
+	* pi1: Cleaned up the notification method
+	* pi1: Minor code cleanup and optimization
+
 2008-12-10  Martin Helmich <m.helmich@mittwald.de
 
 	* Fixed issue 2299

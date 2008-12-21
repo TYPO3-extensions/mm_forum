@@ -175,8 +175,8 @@ require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_rss.php')
  * @subpackage Forum
  */
 class tx_mmforum_pi1 extends tx_mmforum_base {
-    var $prefixId      = 'tx_mmforum_pi1';
-    var $scriptRelPath = 'pi1/class.tx_mmforum_pi1.php';
+	var $prefixId      = 'tx_mmforum_pi1';
+	var $scriptRelPath = 'pi1/class.tx_mmforum_pi1.php';
 
 	/**
 	 * General plugin methods
@@ -1448,11 +1448,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		);
 
 		$page = ($this->piVars['page'] ? $this->piVars['page'] : 1);
-		$pagecount = 15;
 
 		// Evaluate settings
-		$settings = ($this->piVars['list_prefix'] ? $this->piVars['list_prefix'] : array('order' => 'lastpost', 'show' => 'all'));
-
+		$settings = (is_array($this->piVars['list_prefix']) ? $this->piVars['list_prefix'] : array('order' => 'lastpost', 'show' => 'all'));
 		if (!isset($settings['order'])) {
 			$settings['order'] = 'lastpost';
 		}
@@ -1460,27 +1458,27 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$settings['show']  = 'all';
 		}
 		switch ($settings['order']) {
-			case 'lastpost':
+			case 'lastpost': 
 				$order = 'topic_last_post_id DESC';
-				$marker['###ORDER_LASTPOST###'] = 'selected="selected"';
 			break;
 			case 'category':
 				$order = 'c.sorting ASC, f.sorting ASC, topic_last_post_id DESC';
-				$marker['###ORDER_CATEGORY###'] = 'selected="selected"';
 			break;
 			case 'crdate':
 				$order = 'topic_time DESC';
-				$marker['###ORDER_CRDATE###'] = 'selected="selected"';
-			break;
+			break; 
 			case 'author':
 				$order = 'u.name ASC, topic_time DESC';
-				$marker['###ORDER_AUTHOR###'] = 'selected="selected"';
-			break;
+			break; 
 			default:
-				$order = 'topic_last_post_id DESC';
-				$marker['###ORDER_LASTPOST###'] = 'selected="selected"';
+				if ($settings['order']) {
+					$order = $GLOBALS['TYPO3_DB']->quoteStr($settings['order'], 'tx_mmforum_topics') . ' DESC';
+				} else {
+					$order = 'topic_last_post_id DESC';
+				}
 			break;
 		}
+		$marker['###ORDER_' . strtoupper($settings['order']) . '###'] = 'selected="selected"';
 
 		$addWhere = '';
 		if ($settings['show'] != 'all') {
@@ -1670,8 +1668,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$linkParams[$this->prefixId] = array(
 				'action'  => 'list_post',
 				'tid'     => $topicRow['uid'],
-				'prefix'  => $topicRow['topic_is'],
-				'howto'   => 1,
+				'prefix'  => $topicRow['topic_is']
 			);
 
 			$imgInfo = array(
@@ -1706,8 +1703,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 				$linkParams[$this->prefixId] = array(
 					'action'  => 'list_post',
-					'tid'     => $topicRow['uid'],
-					'howto'   => 1,
+					'tid'     => $topicRow['uid']
 				);
 
 				while ($topicPostsLeft >= 0) {
@@ -2635,81 +2631,92 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         return $content;
     }
 
-    /**
-     * Performs a file upload.
-     * This function handles the storing of file attachments into the
-     * database and the file system.
-     * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2007-05-21
-     * @return  mixed The attachment UID if the process was successfull, otherwise an
-     *                error message.
-     */
-    function performAttachmentUpload() {
-        $deny   = t3lib_div::trimExplode(',',$this->conf['attachments.']['deny']);
-        $allow  = t3lib_div::trimExplode(',',$this->conf['attachments.']['allow']);
+	/**
+	 * Performs a file upload.
+	 * This function handles the storing of file attachments into the
+	 * database and the file system.
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2007-05-21
+	 * @return  mixed The attachment UID(s) if the process was successfull, otherwise an
+	 *                error message.
+	 */
+	function performAttachmentUpload() {
+		$deny   = t3lib_div::trimExplode(',', $this->conf['attachments.']['deny']);
+		$allow  = t3lib_div::trimExplode(',', $this->conf['attachments.']['allow']);
+		$maxAttachments = intval($this->conf['attachments.']['maxCount'] ? $this->conf['attachments.']['maxCount'] : 1);
 
-        $fieldCount = $this->conf['attachments.']['maxCount']?$this->conf['attachments.']['maxCount']:1;
+		if (!$this->conf['attachments.']['enable']) {
+			return $this->errorMessage($this->conf, $this->pi_getLL('attachment.disabled'));
+		}
 
-        for($i=1; $i <= $fieldCount; $i ++) {
-	        $file = $_FILES['tx_mmforum_pi1_attachment_'.$i];
-	        if(!$file['size']) continue;
+		$attachments = array();
+		for ($i = 1; $i <= $maxAttachments; $i++) {
+			$file = $_FILES['tx_mmforum_pi1_attachment_' . $i];
+			if (!$file['size']) {
+				continue;
+			}
+			if ($file['size'] > $this->conf['attachments.']['maxFileSize']) {
+				$fileSize = t3lib_div::formatSize($file['size']) . 'B';
+				return $this->errorMessage($this->conf, sprintf($this->pi_getLL('attachment.toobig'), $fileSize));
+			}
+			if ($allow[0] == '*' || strlen($allow) == 0) {
+				if (count($deny) > 0) {
+					foreach ($deny as $denyItem) {
+						if (preg_match('/\.' . $denyItem . '$/i', $file['name'])) {
+							return $this->errorMessage($this->conf, $this->pi_getLL('attachment.denyed'));
+						}
+					}
+				}
+			} else {
+				$valid = false;
+				if (count($allow) > 0) {
+					foreach ($allow as $allowItem) {
+						if (preg_match('/\.' . $allowItem . '$/i', $file['name'])) {
+							$valid = true;
+						}
+					}
+					if (!$valid) {
+						return $this->errorMessage($this->conf, $this->pi_getLL('attachment.denyed'));
+					}
+				}
+			}
 
-	        if(!$this->conf['attachments.']['enable']) return $this->errorMessage($this->conf,$this->pi_getLL('attachment.disabled'));
-	        if($file['size'] > $this->conf['attachments.']['maxFileSize']) {
-	            $fileSize = $file['size'].' B';
-	            if($file['size'] >= 1024     ) $fileSize = round($file['size'] / 1024,2).' KB';
-	            if($file['size'] >= 1024*1024) $fileSize = round($file['size'] / (1024*1024),2).' MB';
-	            return $this->errorMessage($this->conf,sprintf($this->pi_getLL('attachment.toobig'),$fileSize));
-	        }
-	        if($allow[0] == '*' || (strlen($allow)==0)) {
-	            if(count($deny)>0) {
-	                foreach($deny as $denyItem)
-	                    if(preg_match('/\.'.$denyItem.'$/i',$file['name'])) return $this->errorMessage($this->conf,$this->pi_getLL('attachment.denyed'));
-	            }
-	        }
-	        else {
-	            $valid = false;
-	            if(count($allow)>0) {
-	                foreach($allow as $allowItem)
-	                    if(preg_match('/\.'.$allowItem.'$/i',$file['name'])) $valid = true;
-	                if(!$valid) return $this->errorMessage($this->conf,$this->pi_getLL('attachment.denyed'));
-	            }
-	        }
+			$newpath = $this->conf['attachments.']['attachmentDir'];
+			if (substr($newpath, -1, 1) != '/') {
+				$newpath .= '/';
+			}
+			$newpath .= 'attachment_' . md5_file($file['tmp_name']);
 
-	        $newpath = $this->conf['attachments.']['attachmentDir'];
-	        if(substr($newpath,-1,1)!='/') $newpath = $newpath.'/';
-	        $newpath .= 'attachment_'.md5_file($file['tmp_name']);
+			preg_match('/\.(.*?)$/', $file['name'], $ext);
+			$newpath .= '.' . $ext[1];
 
-	        preg_match('/\.(.*?)$/',$file['name'],$ext);
-	        $newpath .= '.'.$ext[1];
+			move_uploaded_file($file['tmp_name'], $newpath);
+			chmod($newpath, intval($GLOBALS['TYPO3_CONF_VARS']['BE']['fileCreateMask'], 8));
 
-	        move_uploaded_file($file['tmp_name'],$newpath);
-	        chmod($newpath,intval($GLOBALS['TYPO3_CONF_VARS']['BE']['fileCreateMask'],8));
+			$insertArray = array(
+				'pid'       => $this->getStoragePID(),
+				'tstamp'    => time(),
+				'crdate'    => time(),
+				'file_type' => $file['type'],
+				'file_name' => $file['name'],
+				'file_size' => $file['size'],
+				'file_path' => $newpath,
+			);
 
-	        $insertArray = array(
-	            'pid'           => $this->getStoragePID(),
-	            'tstamp'        => time(),
-	            'crdate'        => time(),
-	            'file_type'     => $file['type'],
-	            'file_name'     => $file['name'],
-	            'file_size'     => $file['size'],
-	            'file_path'     => $newpath,
-	        );
+			// Include hooks
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['attachment_dataRecord'])) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['attachment_dataRecord'] as $_classRef) {
+					$_procObj = &t3lib_div::getUserObj($_classRef);
+					$insertArray = $_procObj->attachment_dataRecord($insertArray, $this);
+				}
+			}
 
-	        // Include hooks
-	            if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['attachment_dataRecord'])) {
-	                foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['attachment_dataRecord'] as $_classRef) {
-	                    $_procObj = & t3lib_div::getUserObj($_classRef);
-	                    $insertArray = $_procObj->attachment_dataRecord($insertArray, $this);
-	                }
-	            }
+			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_attachments', $insertArray);
+			$attachments[] = $GLOBALS['TYPO3_DB']->sql_insert_id();
+		}
 
-	        $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_attachments',$insertArray);
-	        $attachment_ids[] = $GLOBALS['TYPO3_DB']->sql_insert_id();
-        }
-
-        return $attachment_ids;
-    }
+		return $attachments;
+	}
 
 
     /**
@@ -3088,15 +3095,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 
 		// Redirect back to previous page
-		$ref= t3lib_div::getIndpEnv('HTTP_REFERER');
-		if ($ref) {
-			$ref = $this->getAbsUrl($ref);
-			header('Location: ' . t3lib_div::locationHeaderUrl($ref));
-			exit();
-		}
-
-		$content = $this->pi_getLL('favorites.addSuccess') . '<br />' . $this->pi_getLL('redirect.error') . '<br />';
-		return $content;
+		$this->redirectToReferrer();
+		return $this->pi_getLL('favorites.addSuccess') . '<br />' . $this->pi_getLL('redirect.error') . '<br />';
 	}
 
 	/**
@@ -3113,15 +3113,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'user_id = ' . $userId . ' AND topic_id = ' . $topicId);
 
 		// Redirect back to previous page
-		$ref = t3lib_div::getIndpEnv('HTTP_REFERER');
-		if ($ref) {
-			$ref = $this->getAbsUrl($ref);
-			header('Location: ' . t3lib_div::locationHeaderUrl($ref));
-			exit();
-		}
-
-		$content = $this->pi_getLL('favorites.delSuccess') . '<br />' . $this->pi_getLL('redirect.error') . '<br />';
-		return $content;
+		$this->redirectToReferrer();
+		return $this->pi_getLL('favorites.delSuccess') . '<br />' . $this->pi_getLL('redirect.error') . '<br />';
 	}
 
 	/**
@@ -3561,62 +3554,72 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         }
     }
 
-    /**
-     * Sends an e-mail to users who have subscribed to certain forumcategory
-     * @param  string $content  The plugin content
-     * @param  array  $conf     The configuration vars
-     * @param  int    $topic_id The UID of the new topic that was created
-	 * @param  int    $forum_id The UID of the forum about which the users are
-     *                          to be alerted.
-     * @return void
+	/**
+	 * Sends an e-mail to users who have subscribed to certain forumcategory
+	 * @param  string $content The plugin content
+	 * @param  array  $conf    The configuration vars
+	 * @param  int    $topic_id   The UID of the new topic that was created
+	 * @param  int    $forum_id   The UID of the forum about which the users are
+	 *                        to be alerted.
+	 * @return void
 	 * @author Cyrill Helg
-     */
-    function send_newpost_mail_forum ($content,$conf,$topic_id,$forum_id)
-    {
-        list ($topic_name) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics',"uid='$topic_id'".$this->getStoragePIDQuery()));
+	 */
+	function send_newpost_mail_forum($content, $conf, $topicId, $forumId) {
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . intval($topicId) . $this->getStoragePIDQuery());
+		list($topicName) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-		list ($forum_name) =
-		$GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery(' forum_name','tx_mmforum_forums',"uid='$forum_id'".$this->getStoragePIDQuery()));
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('forum_name', 'tx_mmforum_forums', 'uid = ' . intval($forumId) . $this->getStoragePIDQuery());
+		list($forumName) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('user_id','tx_mmforum_forummail',"forum_id='$forum_id'".$this->getStoragePIDQuery());
-        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		$template = $this->pi_getLL('ntfMailForum.text');
+		$mailHeaders = array(
+			'From: ' . $this->conf['notifyingMail.']['sender'],
+			'X-Mailer: PHP/' . phpversion(),
+			'X-Sender-IP: ' . t3lib_div::getIndpEnv('REMOTE_ADDR'),
+			'Content-type: text/plain;charset=' . $GLOBALS['TSFE']->renderCharset,
+		);
 
-            list($to_username, $to_usermail) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField().',email','fe_users','uid="'.$row['user_id'].'"'));
+		// loop through each user who subscribed
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'user_id',
+			'tx_mmforum_forummail',
+			'forum_id = ' . intval($forumId) . ' AND user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $this->getStoragePIDQuery()
+		);
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			$userRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$this->getUserNameField() . ', email',
+				'fe_users',
+				'uid = ' . intval($row['user_id'])
+			);
+			list($toUsername, $toUsermail) = $GLOBALS['TYPO3_DB']->sql_fetch_row($userRes);
 
-            $header .= "From: ".$conf['notifyingMail.']['sender']."\n";
-            $header .= "X-Mailer: PHP/" . phpversion(). "\n";
-            $header .= "X-Sender-IP: ".getenv("REMOTE_ADDR")."\n";
-		    $header .= "Content-type: text/plain;charset=".$GLOBALS['TSFE']->renderCharset."\n";
+			$marker = array(
+				'###USERNAME###'  => $this->escape($toUsername),
+				'###FORUMNAME###' => $this->escape($forumName),
+			);
+			$linkParams[$this->prefixId] = array(
+				'action' => 'open_topic',
+				'id'     => $topicId
+			);
+			$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
+			if (strlen($this->conf['notifyingMail.']['topicLinkPrefix_override']) > 0) {
+				$link = $this->conf['notifyingMail.']['topicLinkPrefix_override'] . $link;
+			} else {
+				$link = $this->getAbsUrl($link);
+			}
+			$marker['###LINK###'] = $this->escapeURL($link);
+			$mailtext = $this->cObj->substituteMarkerArrayCached($template, $marker);
 
-
-            $template = $this->pi_getLL('ntfMailForum.text');
-            $marker['###USERNAME###']  = $this->escape($to_username);
-            $marker['###FORUMNAME###'] = $this->escape($forum_name);
-            $linkParams[$this->prefixId] = array(
-                'action' => 'open_topic',
-                'id'     => $topic_id
-            );
-            $link = $this->pi_getPageLink($GLOBALS['TSFE']->id,'',$linkParams);
-            if(strlen($conf['notifyingMail.']['topicLinkPrefix_override'])>0) {
-                $link = $conf['notifyingMail.']['topicLinkPrefix_override'].$link;
-            } else $link = $this->getAbsUrl($link);
-
-            $marker['###LINK###'] = $this->escapeURL($link);
-
-            $mailtext = $this->cObj->substituteMarkerArrayCached($template, $marker);
-
-            // Compose mail and send
-            if ($row['user_id'] <> $GLOBALS['TSFE']->fe_user->user['uid']) {
-                $llMarker = array(
-                    '###TOPICNAME###'        => $this->escape($topic_name),
-					'###FORUMNAME###'	     => $this->escape($forum_name),
-                    '###BOARDNAME###'        => $this->escape($conf['boardName'])
-                );
-                $subject = $this->cObj->substituteMarkerArray($this->pi_getLL('ntfMailForum.subject'),$llMarker);
-                mail($to_usermail,$subject,$mailtext, $header);
-            }
-        }
-    }
+			// Compose mail and send
+			$subjectMarker = array(
+				'###TOPICNAME###' => $this->escape($topicName),
+				'###FORUMNAME###' => $this->escape($forumName),
+				'###BOARDNAME###' => $this->escape($this->conf['boardName'])
+			);
+			$subject = $this->cObj->substituteMarkerArray($this->pi_getLL('ntfMailForum.subject'), $subjectMarker);
+			mail($toUsermail, $subject, $mailtext, implode("\n", $mailHeaders));
+		}
+	}
 
 	/**
 	 * Subordinary content functions
@@ -4907,15 +4910,15 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function errorMessage($conf, $message) {
 		$templateFile = $this->cObj->fileResource($conf['template.']['login_error']);
 		$template     = $this->cObj->getSubpart($templateFile, '###LOGINERROR###');
-		$content      = '';
+		$marker       = '';
 		if (is_array($message)) {
 			foreach ($message as $singleMessage) {
-				$content .= $this->cObj->stdWrap($singleMessage, $conf['errorMessage.']);
+				$marker .= $this->cObj->stdWrap($singleMessage, $conf['errorMessage.']);
 			}
 		} else {
-			$content = $this->cObj->stdWrap($message, $conf['errorMessage.']);
+			$marker = $this->cObj->stdWrap($message, $conf['errorMessage.']);
 		}
-		return $this->cObj->substituteMarker($template, '###LOGINERROR_MESSAGE###', $content);
+		return $this->cObj->substituteMarker($template, '###LOGINERROR_MESSAGE###', $marker);
 	}
 
 	/**
@@ -5018,7 +5021,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				'closed'        => $isClosed,
 				'unanswered'    => $isUnanw,
 				'solved'        => $isSolved,
-				'pinned'		=> $isPinned
+				'pinned'        => $isPinned
 			);
 			$oldData = $this->cObj->data;
 			$this->cObj->data = $dataArray;
