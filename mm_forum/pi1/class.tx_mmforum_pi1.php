@@ -3490,16 +3490,30 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      *                        to be alerted.
      * @return void
      */
-    function send_newpost_mail ($content,$conf,$topic_id)
-    {
-        $topic_id = intval($topic_id);
-        list ($topic_name) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics',"uid='$topic_id'".$this->getStoragePIDQuery()));
+    function send_newpost_mail ($content,$conf,$topic_id) {
+    	
+			/* Get topic data */
+        $topic_id	= intval($topic_id);
+		$res		= $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'topic_title',
+			'tx_mmforum_topics',
+			"uid='$topic_id'".$this->getStoragePIDQuery()
+		);
+        list($topic_name) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('user_id','tx_mmforum_topicmail',"topic_id='$topic_id'".$this->getStoragePIDQuery());
+			/* Get subscription data */
+        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'm.user_id,
+			 u.'.$this->getUserNameField().' as user_username,
+			 u.email AS user_email',
+			'tx_mmforum_topicmail m
+			 LEFT JOIN fe_users u ON u.uid=m.user_id',
+			"m.topic_id='$topic_id'".$this->getStoragePIDQuery('m')
+		);
+		
         while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 
-            list($to_username, $to_usermail) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField().',email','fe_users','uid="'.$row['user_id'].'"'));
-
+				/* Build mail header */
 			if(!preg_match('/<([^><@]*?)@([^><@]*?)>$/',$this->conf['notifyingMail.']['sender']))
 				$header .= "From: ".$this->conf['notifyingMail.']['sender']." <".$this->conf['notifyingMail.']['sender_address'].">\n";
 			else $header .= "From: ".$this->conf['notifyingMail.']['sender']."\n";
@@ -3507,9 +3521,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $header .= "X-Sender-IP: ".getenv("REMOTE_ADDR")."\n";
             $header .= "Content-type: text/plain;charset=".$GLOBALS['TSFE']->renderCharset."\n";
 
-
+				/* Build mail content */
             $template = $this->pi_getLL('ntfMail.text');
-            $marker['###USERNAME###'] = $this->escape($to_username);
 
             $linkParams[$this->prefixId] = array(
                 'action' => 'open_topic',
@@ -3520,36 +3533,37 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $link = $this->conf['notifyingMail.']['topicLinkPrefix_override'].$link;
             } else $link = $this->getAbsUrl($link);
 
-            $marker['###LINK###'] = $this->escapeURL($link);
+			$marker = array(				
+				'###USERNAME###'	=> $this->escape($row['user_username']),
+				'###LINK###'		=> $this->escapeURL($link)
+			);
 
             $mailtext = $this->cObj->substituteMarkerArrayCached($template, $marker);
 
-            // Compose mail and send
-            #if (!empty($to_usermail) && $row['user_id'] != $GLOBALS['TSFE']->fe_user->user['uid']) {
-			if (!empty($to_usermail)) {
+            	/* Compose mail and send */
+			if (!empty($row['user_email']) && $row['user_id'] != $GLOBALS['TSFE']->fe_user->user['uid']) {
                 $llMarker = array(
                     '###TOPICNAME###'        => $this->escape($topic_name),
-                    '###BOARDNAME###'        => $this->escape($conf['boardName'])
+                    '###BOARDNAME###'        => $this->escape($this->conf['boardName'])
                 );
-
                 $subject = $this->pi_getLL('ntfMail.subject');
 
-                // Include hooks
-                    if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_contentMarker'])) {
-                        foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_contentMarker'] as $_classRef) {
-                            $_procObj = & t3lib_div::getUserObj($_classRef);
-                            $llMarker = $_procObj->newPostMail_contentMarker($llMarker, $row, $this);
-                        }
+                	/* Include hooks */
+                if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_contentMarker'])) {
+                    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_contentMarker'] as $_classRef) {
+                        $_procObj = & t3lib_div::getUserObj($_classRef);
+                        $llMarker = $_procObj->newPostMail_contentMarker($llMarker, $row, $this);
                     }
-                    if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_subject'])) {
-                        foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_subject'] as $_classRef) {
-                            $_procObj = & t3lib_div::getUserObj($_classRef);
-                            $subject = $_procObj->newPostMail_subject($subject, $row, $this);
-                        }
+                }
+                if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_subject'])) {
+                    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_subject'] as $_classRef) {
+                        $_procObj = & t3lib_div::getUserObj($_classRef);
+                        $subject = $_procObj->newPostMail_subject($subject, $row, $this);
                     }
+                }
 
                 $subject = $this->cObj->substituteMarkerArray($subject,$llMarker);
-				mail($to_usermail,$subject,$mailtext, $header);
+				mail($row['user_email'],$subject,$mailtext, $header);
             }
         }
     }
