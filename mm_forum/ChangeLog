@@ -1,3 +1,10 @@
+2008-12-22  Benjamin Mack  <benni@typo3.org>
+
+	* ext_tables.sql: Updated fields for counting topics & posts to integer values instead of tinytext
+	  as this is the correct behaviour and allows correct sorting for statistics in the BE
+	* ext_tables.sql: Removed table definition tx_mmforum_topic_prefix as this one is referenced nowhere else
+	  in this extension
+
 2008-12-21  Martin Helmich <m.helmich@mittwald.de>
 
 	* Fixed issues 2054, 2049

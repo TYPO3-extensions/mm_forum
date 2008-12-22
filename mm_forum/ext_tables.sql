@@ -57,11 +57,11 @@ CREATE TABLE tx_mmforum_forums (
     hidden tinyint(4) unsigned default '0' NOT NULL,
     forum_name tinytext  NOT NULL,
     forum_desc tinytext NOT NULL,
-    forum_posts tinytext NOT NULL,
-    forum_last_post_id tinytext NOT NULL,
+    forum_posts int(11) default '0' NOT NULL,
+    forum_last_post_id int(11) default '0' NOT NULL,
     cat_id int(11) default '0' NOT NULL,
     forum_order int(11) default '0' NOT NULL,
-    forum_topics tinytext NOT NULL,
+    forum_topics int(11) default '0' NOT NULL,
     forum_internal tinyint(3) unsigned default '0' NOT NULL,
     sorting int(10) unsigned default '0' NOT NULL,
     grouprights_read blob NOT NULL,
@@ -222,22 +222,6 @@ CREATE TABLE tx_mmforum_smilies (
 
     PRIMARY KEY (uid),
     KEY parent (pid)
-);
-
-# 
-# Table structure for table 'tx_mmforum_topic_prefix'
-# 
-CREATE TABLE tx_mmforum_topic_prefix (
-    uid int(11) NOT NULL auto_increment,
-    pid int(11) default '0' NOT NULL,
-    tstsamp int(11) default '0' NOT NULL,
-    crdate int(11) default '0' NOT NULL,
-    deleted tinyint(4) default '0' NOT NULL,
-    hidden tinyint(4) default '0' NOT NULL,
-    prefix_name varchar(100) NOT NULL default '',
-
-    PRIMARY KEY (uid),
-    KEY pid (pid)
 );
 
 # 
@@ -601,7 +585,7 @@ CREATE TABLE tx_mmforum_postqueue (
   post_user int(10) unsigned NOT NULL default '0',
   post_time int(10) unsigned NOT NULL default '0',
   post_ip tinytext NOT NULL,
-  post_attachment varchar(128) NOT NULL default '',
+  post_attachment int(10) unsigned NOT NULL default '0',
   PRIMARY KEY (uid),
   KEY parent (pid)
 );
