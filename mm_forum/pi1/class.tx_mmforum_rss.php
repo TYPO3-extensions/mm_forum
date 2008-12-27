@@ -104,7 +104,7 @@ class tx_mmforum_rss {
      * be included.
      * 
      * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2008-07-17
+     * @version 2008-12-27
      * @param   string $mode  The RSS display mode. Can be 'all', 'topic' or 'forum'
      * @param   int    $param If $mode is 'topic' or 'forum', this parameter has
      *                        to contain the topic of forum UID.
@@ -113,7 +113,7 @@ class tx_mmforum_rss {
     function setHTMLHeadData($mode, $param=null) {
             // If method is called statically, instantiate class
         #if(!$this instanceof tx_mmforum_rss) {
-			// Workaround. "instance of does not work with old PHP versions.
+			// Workaround. "instanceof" does not work with old PHP versions.
         if(isset($this->extKey)) {
             $rssObj = t3lib_div::makeInstance('tx_mmforum_rss');
             $rssObj->initialize($this->conf, $this);
@@ -126,12 +126,15 @@ class tx_mmforum_rss {
                 case 'topic':   $linkParams[$this->pObj->prefixId] = array('tid' => $param); break;
             }
 
-                // Compose RSS URL
-            $rssLink = $this->pObj->pi_getPageLink($this->conf['rssPID'], null, $linkParams);
-            $rssLink = $this->pObj->getAbsURL($rssLink);
-
-                // Include RSS URL in HTML header data
-            $GLOBALS['TSFE']->additionalHeaderData['mm_forum_rss_'.$mode] = '<link rel="alternate" type="application/rss+xml" title="'.$this->getFeedTitle($mode, $param).'" href="'.$rssLink.'" />';
+				/* Set HTML head data only if a RSS page is specified */
+			if($this->conf['rssPID']) {
+	                // Compose RSS URL
+	            $rssLink = $this->pObj->pi_getPageLink($this->conf['rssPID'], null, $linkParams);
+	            $rssLink = $this->pObj->getAbsURL($rssLink);
+	
+	                // Include RSS URL in HTML header data
+	            $GLOBALS['TSFE']->additionalHeaderData['mm_forum_rss_'.$mode] = '<link rel="alternate" type="application/rss+xml" title="'.$this->getFeedTitle($mode, $param).'" href="'.$rssLink.'" />';
+			}
         }
     }
 
@@ -243,7 +246,7 @@ class tx_mmforum_rss {
      * @return  <type>       The parsed post text
      */
     function getPostTextComplete($text) {
-        return tx_mmforum_postparser::main($this,$this->conf,$text,'textparser');
+        return tx_mmforum_postparser::main($this->pObj,$this->conf,$text,'textparser');
     }
 
     /**
@@ -305,9 +308,24 @@ class tx_mmforum_rss {
      */
     function getFeedDescription() {
         if($this->piVars['tid']) {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics','uid='.intval($this->piVars['tid']));
+            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'topic_title',
+				'tx_mmforum_topics t
+				 LEFT JOIN tx_mmforum_forums f ON f.uid = t.forum_id
+				 LEFT JOIN tx_mmforum_forums c ON c.uid = f.parentID',
+				'uid='.intval($this->piVars['tid']).
+				 $this->pObj->getMayRead_forum_query('f').
+				 $this->pObj->getMayRead_forum_query('c')
+			);
         } elseif($this->piVars['fid']) {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('forum_name','tx_mmforum_forums','uid='.intval($this->piVars['fid']));
+            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'forum_name',
+				'tx_mmforum_forums f,
+				 LEFT JOIN tx_mmforum_forums c ON c.uid = f.parentID',
+				'uid='.intval($this->piVars['fid']).
+				$this->pObj->getMayRead_forum_query('f').
+				$this->pObj->getMayRead_forum_query('c')
+			);
         } else {
             return "";
         }
@@ -361,8 +379,17 @@ class tx_mmforum_rss {
     function getPosts_topic($topic_id) {
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             $this->selectFields,
-            'tx_mmforum_posts p LEFT JOIN tx_mmforum_posts_text x ON x.post_id = p.uid LEFT JOIN fe_users u ON u.uid = p.poster_id LEFT JOIN tx_mmforum_topics t ON t.uid = p.topic_id LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid',
-            'p.deleted=0 AND t.deleted=0 AND f.deleted=0 AND f.grouprights_read="" AND p.topic_id='.intval($topic_id),
+            'tx_mmforum_posts p
+			 LEFT JOIN tx_mmforum_posts_text x ON x.post_id = p.uid
+			 LEFT JOIN fe_users u ON u.uid = p.poster_id
+			 LEFT JOIN tx_mmforum_topics t ON t.uid = p.topic_id
+			 LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid',
+            'p.deleted=0 AND
+			 t.deleted=0 AND
+			 f.deleted=0 AND
+			 p.topic_id='.intval($topic_id).
+			 $this->pObj->getMayRead_forum_query('f').
+			 $this->pObj->getMayRead_forum_query('c'),
             'p.uid',
             'p.post_time DESC',
             $this->getPostNum()
@@ -385,8 +412,18 @@ class tx_mmforum_rss {
     function getPosts_forum($forum_id) {
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             $this->selectFields,
-            'tx_mmforum_posts p LEFT JOIN tx_mmforum_posts_text x ON x.post_id = p.uid LEFT JOIN fe_users u ON u.uid = p.poster_id LEFT JOIN tx_mmforum_topics t ON t.uid = p.topic_id LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid',
-            'p.deleted=0 AND t.deleted=0 AND f.deleted=0 AND f.grouprights_read="" AND f.uid='.intval($forum_id),
+            'tx_mmforum_posts p
+			 LEFT JOIN tx_mmforum_posts_text x ON x.post_id = p.uid
+			 LEFT JOIN fe_users u ON u.uid = p.poster_id
+			 LEFT JOIN tx_mmforum_topics t ON t.uid = p.topic_id
+			 LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid
+			 LEFT JOIN tx_mmforum_forums c ON f.parentID = c.uid',
+            'p.deleted=0 AND
+			 t.deleted=0 AND
+			 f.deleted=0 AND
+			 f.uid='.intval($forum_id).
+			 $this->pObj->getMayRead_forum_query('f').
+			 $this->pObj->getMayRead_forum_query('c'),
             'p.uid',
             'p.post_time DESC',
             $this->getPostNum()
@@ -408,8 +445,17 @@ class tx_mmforum_rss {
     function getPosts_all() {
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             $this->selectFields,
-            'tx_mmforum_posts p LEFT JOIN tx_mmforum_posts_text x ON x.post_id = p.uid LEFT JOIN fe_users u ON u.uid = p.poster_id LEFT JOIN tx_mmforum_topics t ON t.uid = p.topic_id LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid',
-            'p.deleted=0 AND t.deleted=0 AND f.deleted=0 AND f.grouprights_read=""',
+            'tx_mmforum_posts p
+			 LEFT JOIN tx_mmforum_posts_text x ON x.post_id = p.uid
+			 LEFT JOIN fe_users u ON u.uid = p.poster_id
+			 LEFT JOIN tx_mmforum_topics t ON t.uid = p.topic_id
+			 LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid
+			 LEFT JOIN tx_mmforum_forums c ON f.parentID = c.uid',
+            'p.deleted=0 AND
+			 t.deleted=0 AND
+			 f.deleted=0 '.
+			 $this->pObj->getMayRead_forum_query('f').
+			 $this->pObj->getMayRead_forum_query('c'),
             'p.uid',
             'p.post_time DESC',
             $this->getPostNum()

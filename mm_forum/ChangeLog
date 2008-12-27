@@ -1,3 +1,7 @@
+2008-12-27  Martin Helmich <m.helmich@mittwald.de>
+
+	* Fixed issue 2374
+
 2008-12-22  Benjamin Mack  <benni@typo3.org>
 
 	* ext_tables.sql: Updated fields for counting topics & posts to integer values instead of tinytext
