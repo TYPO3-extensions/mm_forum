@@ -1,5 +1,6 @@
 2009-01-02  Benjamin Mack  <benni@typo3.org>
 
+	* Code, naming and indention cleanup for postfactory class
 	* Changed line breaks to UNIX style
 
 2008-12-27  Martin Helmich <m.helmich@mittwald.de>

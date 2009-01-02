@@ -46,7 +46,7 @@ class tx_mmforum_postfactory {
 	 * @param   array $conf The configuration array of the calling object.
 	 * @return  void
 	 */
-	function init($conf,$parent = null) {
+	function init($conf, $parent = null) {
 		$this->conf = $conf;
 		$this->parent = $parent;
 	}
@@ -131,18 +131,18 @@ class tx_mmforum_postfactory {
 	 * @return  int/boolean         If topic creation was successfull, the topic's UID is returned,
 	 *                              otherwise FALSE.
 	 */
-	function create_topic($forum_uid, $author, $subject, $text, $date, $ip, $attachments = array(), $poll = 0, $subscribe = false, $noUpdate = false) {
+	function create_topic($forumId, $author, $subject, $text, $date, $ip, $attachments = array(), $poll = 0, $subscribe = false, $noUpdate = false) {
 
 		// Generate topic record
 		$insertArray = array(
-			'pid'				=> $this->getFirstPid(),
-			'tstamp'			=> time(),
-			'crdate'			=> time(),
-			'topic_title'		=> $subject,
-			'topic_poster'		=> $author,
-			'topic_time'		=> $date,
-			'forum_id'			=> $forum_uid,
-			'poll_id'			=> $poll
+			'pid'          => $this->getFirstPid(),
+			'tstamp'       => time(),
+			'crdate'       => time(),
+			'topic_title'  => $subject,
+			'topic_poster' => $author,
+			'topic_time'   => $date,
+			'forum_id'     => $forumId,
+			'poll_id'      => $poll
 		);
 
 		// Include hooks
@@ -159,37 +159,30 @@ class tx_mmforum_postfactory {
 		}
 
 		// Retrieve topic uid
-		$topic_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
+		$topicId = $GLOBALS['TYPO3_DB']->sql_insert_id();
 
 		// Generate post record
-		$post_uid = $this->create_post($topic_uid, $author, $text, $date, $ip, $attachments, $noUpdate);
-		if ($post_uid === false) {
-			$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_topics', 'uid=' . $topic_uid);
+		$postId = $this->create_post($topicId, $author, $text, $date, $ip, $attachments, $noUpdate);
+		if ($postId === false) {
+			$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_topics', 'uid = ' . $topicId);
 			return false;
 		}
 
 		// Update first post record
-		$updateArray = array(
-			'topic_first_post_id'	=> $post_uid
-		);
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid=' . $topic_uid, $updateArray);
+		$updateData = array('topic_first_post_id' => $postId);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, $updateData);
 
-		// Subscribe topic
+
+
+		// Subscribe the author to the topic
 		if ($subscribe) {
-			$insertArray = array(
-				'pid'      => $this->getFirstPid(),
-				'tstamp'   => time(),
-				'crdate'   => time(),
-				'user_id'  => $author,
-				'topic_id' => $topic_uid
-			);
-			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_topicmail', $insertArray);
+			tx_mmforum_havealook::addSubscription($this->parent, $topicId, $author);
 		}
 
 		//added by Cyrill Helg
 		// Send notification email to users who have subscribed the forum where this topic is created
-		@$this->parent->send_newpost_mail_forum ('', $this->conf, $topic_uid, $forum_uid);
-		return $topic_uid;
+		@$this->parent->send_newpost_mail_forum('', $this->conf, $topicId, $forumId);
+		return $postId;
 	}
 	
 	/**
@@ -214,38 +207,39 @@ class tx_mmforum_postfactory {
 	 * @return  int/boolean         If post creation was successfull, the post's UID is returned,
 	 *                              otherwise FALSE.
 	 */
-	function create_post_queue($topic_uid, $author, $text, $date, $ip, $attachments=array()) {
+	function create_post_queue($topicId, $author, $text, $date, $ip, $attachments = array()) {
 
 		// Retrieve forum uid
-			$forum_uid = $this->getForumUIDByTopic($topic_uid);
-			if($forum_uid === false) return false;
+		$forumId = $this->getForumUIDByTopic($topicId);
+		if ($forumId === false) {
+			return false;
+		}
 		
 		// Insert post into post queue
-			$insertArray = array(
-				'pid'				=> $this->getFirstPid(),
-				'tstamp'			=> time(),
-				'crdate'			=> time(),
-				'topic'				=> 0,
-				'topic_forum'		=> $forum_uid,
-				'post_parent'		=> $topic_uid,
-				'post_text'			=> $text,
-				'post_user'			=> $author,
-				'post_time'			=> $date,
-				'post_ip'			=> $ip,
-				'post_attachment'	=> is_array($attachments)?implode(',',$attachments):'',
-			);
+		$insertArray = array(
+			'pid'             => $this->getFirstPid(),
+			'tstamp'          => time(),
+			'crdate'          => time(),
+			'topic'           => 0,
+			'topic_forum'     => $forumId,
+			'post_parent'     => $topicId,
+			'post_text'       => $text,
+			'post_user'       => $author,
+			'post_time'       => $date,
+			'post_ip'         => $ip,
+			'post_attachment' => (is_array($attachments) ? implode(',', $attachments) : ''),
+		);
 
 		// Include hooks
-			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostqueue'])) {
-				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostqueue'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-					$insertArray = $_procObj->processPostqueueInsertArray($insertArray);
-				}
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostqueue'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostqueue'] as $_classRef) {
+				$_procObj    = &t3lib_div::getUserObj($_classRef);
+				$insertArray = $_procObj->processPostqueueInsertArray($insertArray);
 			}
-			
+		}
+
 		// Insert data
-			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_postqueue', $insertArray);
-			
+		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_postqueue', $insertArray);	
 	}
 	
 	/**
@@ -254,7 +248,7 @@ class tx_mmforum_postfactory {
 	 * 
 	 * @author  Martin Helmich
 	 * @version 2007-07-23
-	 * @param   int     $topic_uid  The UID of the topic the new post is to be created in
+	 * @param   int     $topicId    The UID of the topic the new post is to be created in
 	 * @param   int     $author     The UID of the fe_user creating this post
 	 * @param   string  $text       The post's text
 	 * @param   int     $date       The date of post creation as unix timestamp
@@ -269,94 +263,99 @@ class tx_mmforum_postfactory {
 	 * @return  int/boolean         If post creation was successfull, the post's UID is returned,
 	 *                              otherwise FALSE.
 	 */
-	function create_post($topic_uid, $author, $text, $date, $ip, $attachments=array(), $noUpdate=false) {
-		
+	function create_post($topicId, $author, $text, $date, $ip, $attachments = array(), $noUpdate = false) {
+		$author = intval($author);
+
 		// Retrieve forum uid
-			$forum_uid = $this->getForumUIDByTopic($topic_uid);
-			if($forum_uid === false) return false;
-			
+		$forumId = $this->getForumUIDByTopic($topicId);
+		if ($forumId === false) {
+			return false;
+		}
+
 		// Generate post record
-			$insertArray = array(
-				'pid'				=> $this->getFirstPid(),
-				'tstamp'			=> time(),
-				'crdate'			=> time(),
-				'topic_id'			=> $topic_uid,
-				'forum_id'			=> $forum_uid,
-				'poster_id'			=> $author,
-				'post_time'			=> $date,
-				'poster_ip'			=> $ip,
-				'attachment'		=> is_array($attachments)?implode(',',$attachments):'',
-			);
-			
+		$insertArray = array(
+			'pid'        => $this->getFirstPid(),
+			'tstamp'     => time(),
+			'crdate'     => time(),
+			'topic_id'   => $topicId,
+			'forum_id'   => $forumId,
+			'poster_id'  => $author,
+			'post_time'  => $date,
+			'poster_ip'  => $ip,
+			'attachment' => (is_array($attachments) ? implode(',', $attachments) : ''),
+		);
+	
 		// Include hooks
-			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPost'])) {
-				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPost'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-					$insertArray = $_procObj->processPostInsertArray($insertArray,$this);
-				}
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPost'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPost'] as $_classRef) {
+				$_procObj    = &t3lib_div::getUserObj($_classRef);
+				$insertArray = $_procObj->processPostInsertArray($insertArray, $this);
 			}
+		}
 			
 		// Insert post record
-			if(! $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_posts',$insertArray))
-				return false;
+		if (!$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_posts', $insertArray)) {
+			return false;
+		}
 			
 		// Retrieve post uid
-			$post_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
-			
+		$postId = $GLOBALS['TYPO3_DB']->sql_insert_id();
+
 		// Update attachment record
-			if($attachments)
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments','uid IN ('.implode(',',$attachments).')',array('post_id'=>$post_uid));
+		if (is_array($attachments) && count($attachments)) {
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid IN (' . implode(',', $attachments) . ')', array('post_id' => $postId));
+		}
 			
 		// Generate post text record
-			$insertArray = array(
-				'pid'				=> $this->getFirstPid(),
-				'tstamp'			=> time(),
-				'crdate'			=> time(),
-				'post_id'			=> $post_uid,
-				'post_text'			=> $text
-			);
-			
+		$insertArray = array(
+			'pid'       => $this->getFirstPid(),
+			'tstamp'    => time(),
+			'crdate'    => time(),
+			'post_id'   => $postId,
+			'post_text' => $text
+		);
+
 		// Include hooks
-			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostText'])) {
-				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostText'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-					$insertArray = $_procObj->processPostTextInsertArray($insertArray,$this);
-				}
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostText'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostText'] as $_classRef) {
+				$_procObj    = &t3lib_div::getUserObj($_classRef);
+				$insertArray = $_procObj->processPostTextInsertArray($insertArray, $this);
 			}
+		}
 			
 		// Insert post text record
-			if(!$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_posts_text',$insertArray)) {
-				$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_posts','uid=',$post_uid);
-				return false;
-			}
+		if (!$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_posts_text', $insertArray)) {
+			$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_posts', 'uid = ', $postId);
+			return false;
+		}
 			
 		// Clear topic for indexing
-			if(class_exists('tx_mmforum_indexing'))
-				tx_mmforum_indexing::delete_topic_ind_date($topic_uid);
-	
+		if (class_exists('tx_mmforum_indexing')) {
+			tx_mmforum_indexing::delete_topic_ind_date($topicId);
+		}
+
         // Send notification email to users who have subscribed this topic
-            if($this->parent != null)
-            	@$this->parent->send_newpost_mail ('',$this->conf,$topic_uid);
-	                    
+		if ($this->parent != null) {
+			// Subscribe to the topic
+			tx_mmforum_havealook::addSubscription($this->parent, $topicId, $author);
+			@$this->parent->send_newpost_mail('', $this->conf, $topicId);
+		}
+            
         // Set topic for all users to "not read"
-            $GLOBALS['TYPO3_DB']->exec_DELETEquery(
-                'tx_mmforum_postsread',
-                'topic_id='.$topic_uid
-            );
-			
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_postsread', 'topic_id = ' . $topicId);
+
 		// Update topic and forum post counters
-			if(!$noUpdate) {
-				$this->updateTopicPostCount($topic_uid);
-				$this->updateForumPostCount($forum_uid);
-				$this->updateUserPostCount($author);
-			} else {
-				$this->updateQueue_addTopic($topic_uid);
-				$this->updateQueue_addForum($forum_uid);
-				$this->updateQueue_addUser($author);
-			}
-			
-			return $post_uid;
-		
+		if (!$noUpdate) {
+			$this->updateTopicPostCount($topicId);
+			$this->updateForumPostCount($forumId);
+			$this->updateUserPostCount($author);
+		} else {
+			$this->updateQueue_addTopic($topicId);
+			$this->updateQueue_addForum($forumId);
+			$this->updateQueue_addUser($author);
+		}
+
+		return $postId;
 	}
 	
 	/**
@@ -406,16 +405,19 @@ class tx_mmforum_postfactory {
 	 * @return  void
 	 */
 	function updateQueue_process() {
-		$topic_queue		= is_array($this->updateQueue['topics'])?array_keys($this->updateQueue['topics']):array();
-		$forum_queue		= is_array($this->updateQueue['forums'])?array_keys($this->updateQueue['forums']):array();
-		$user_queue			= is_array($this->updateQueue['users'])?array_keys($this->updateQueue['users']):array();
+		$topicQueue = (is_array($this->updateQueue['topics']) ? array_keys($this->updateQueue['topics']) : array());
+		$forumQueue = (is_array($this->updateQueue['forums']) ? array_keys($this->updateQueue['forums']) : array());
+		$userQueue  = (is_array($this->updateQueue['users'])  ? array_keys($this->updateQueue['users'])  : array());
 		
-		foreach($topic_queue as $topic_uid)
-			$this->updateTopicPostCount($topic_uid);
-		foreach($forum_queue as $forum_uid)
-			$this->updateForumPostCount($forum_uid);
-		foreach($user_queue as $user_uid)
-			$this->updateUserPostCount($user_uid);
+		foreach ($topicQueue as $topicId) {
+			$this->updateTopicPostCount($topicId);
+		}
+		foreach ($forumQueue as $forumId) {
+			$this->updateForumPostCount($forumId);
+		}
+		foreach ($userQueue as $userId) {
+			$this->updateUserPostCount($userId);
+		}
 	}
 	
 	/**
