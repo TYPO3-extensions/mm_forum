@@ -76,7 +76,8 @@ class tx_mmforum_postfactory {
 	 * @return  int/boolean         If topic creation was successfull, the topic's UID is returned,
 	 *                              otherwise FALSE.
 	 */
-	function create_topic_queue($forum_uid, $author, $subject, $text, $date, $ip, $attachments = array(), $poll = 0, $subscribe = false, $noUpdate = false) {		$insertArray = array(
+	function create_topic_queue($forum_uid, $author, $subject, $text, $date, $ip, $attachments = array(), $poll = 0, $subscribe = false, $noUpdate = false) {
+		$insertArray = array(
 			'pid'				=> $this->getFirstPid(),
 			'tstamp'			=> time(),
 			'crdate'			=> time(),
