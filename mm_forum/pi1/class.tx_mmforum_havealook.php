@@ -1,9 +1,8 @@
 <?php
-
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007 Mittwald CM Service
+ *  (c) 2007-2008 Mittwald CM Service
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -27,10 +26,10 @@
  *
  *
  *
- *   59: class tx_mmforum_havealook extends tslib_pibase
- *   69:     function set_havealook ($content,$conf)
- *  104:     function del_havealook ($content,$conf)
- *  125:     function edit_havealook ($content,$conf)
+ *   59: class tx_mmforum_havealook
+ *   69:     function set($forumObj)
+ *  104:     function delete($forumObj)
+ *  125:     function edit($forumObj)
  *
  * TOTAL FUNCTIONS: 3
  * (This index is automatically created/updated by the extension "extdeveval")
@@ -38,10 +37,8 @@
  */
 
 /**
- * The class 'tx_mmforum_havealook' is a subclass for the 'Forum'
- * plugin (tx_mmforum_pi1) of the 'mm_forum' extension.
- * It handles subscriptions for email notifications on new posts
- * in certain topics.
+ * The class 'tx_mmforum_havealook'  handles subscriptions for email
+ * notifications on new posts in certain topics.
  * This class is not meant for instanciation, but only for static
  * function calls from the pi1 plugin, since it depends on the
  * LOCAL_LANG array of the main plugin.
@@ -57,34 +54,15 @@
 class tx_mmforum_havealook {
 
 	/**
-	 * Adds a topic to a user's list of email subscriptions.
-	 * @param  string $content The plugin content
-	 * @param  array  $conf    The configuration vars of the plugin
-	 * @return string          An error message in case the redirect attempt to
-	 *                         the previous page fails.
+	 * Adds a topic to a user's list of email subscriptions and then does a 
+	 * redirect to the previous page.
+	 * this function is called from teh 
+	 * @param  string $forumObj The plugin object
+	 * @return string           An error message in case the redirect attempt to
+	 *                          the previous page fails.
 	 */
 	function set($forumObj) {
-		$feUserId = intval($GLOBALS['TSFE']->fe_user->user['uid']);
-		$topicId  = intval($forumObj->piVars['tid']);
-		if ($feUserId && $topicId) {
-			// Executing database operations
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-				'uid',
-				'tx_mmforum_topicmail',
-				'user_id = ' . $feUserId . ' AND topic_id = ' . $topicId . $forumObj->getPidQuery()
-			);
-
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1) {
-				$insertArray = array(
-					'pid'		=> $forumObj->getStoragePID(),
-					'tstamp'    => time(),
-					'crdate'    => time(), 
-					'topic_id'  => $topicId,
-					'user_id'   => $feUserId
-				);
-				$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_topicmail', $insertArray);
-			}
-		 }
+		tx_mmforum_havealook::addSubscription($forumObj, $forumObj->piVars['tid'], $GLOBALS['TSFE']->fe_user->user['uid']);
 
 		// Redirecting visitor back to previous page
 		$forumObj->redirectToReferrer();
@@ -104,10 +82,10 @@ class tx_mmforum_havealook {
 		$topicId  = intval($forumObj->piVars['tid']);
 
 		if ($feUserId && $topicId) {
-			// Executing database operations
-			$res = $GLOBALS['TYPO3_DB']->exec_DELETEquery(
+			// Executing database operation
+			$GLOBALS['TYPO3_DB']->exec_DELETEquery(
 				'tx_mmforum_topicmail',
-				'user_id = ' . $feUserId . ' AND topic_id = ' . $topicId . $forumObj->getPidQuery()
+				'user_id = ' . $feUserId . ' AND topic_id = ' . $topicId . $forumObj->getStoragePIDQuery()
 			);
 		}
 
@@ -126,24 +104,51 @@ class tx_mmforum_havealook {
 	function edit($forumObj) {
 		$feUserId = intval($GLOBALS['TSFE']->fe_user->user['uid']);
 
+		// can be
+		//    "topic" - only topic subscriptions
+		//    "forum" - only forum subscriptions
+		//    "all"    - both of them (default)
+		$displayMode = 'all';
+		if ($forumObj->conf['havealook.']['displayOnlyTopics']) {
+			$displayMode = 'topic';
+		}
+		if (isset($forumObj->piVars['displayMode'])) {
+			$displayMode = $forumObj->piVars['displayMode'];
+		}
+
+
 		if ($feUserId) {
-			// Delete a subscription
+
+			// Delete a single subscription (through the link at every subscription)
 			if ($forumObj->piVars['deltid']) {
+				$deleleTopicId = intval($forumObj->piVars['deltid']);
 				if ($forumObj->piVars['delmode'] == 'topic') {
-					$res = $GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_topicmail', 'user_id = ' . $feUserId . ' AND topic_id = ' . intval($forumObj->piVars['deltid']));
+					$GLOBALS['TYPO3_DB']->exec_DELETEquery(
+						'tx_mmforum_topicmail',
+						'user_id = ' . $feUserId . ' AND topic_id = ' . $deleleTopicId . $forumObj->getStoragePIDQuery()
+					);
 				} else {
-					$res = $GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_forummail', 'user_id = ' . $feUserId . ' AND topic_id = ' . intval($forumObj->piVars['deltid']));
+					$GLOBALS['TYPO3_DB']->exec_DELETEquery(
+						'tx_mmforum_forummail',
+						'user_id = ' . $feUserId . ' AND forum_id = ' . $deleleTopicId . $forumObj->getStoragePIDQuery()
+					);
 				}
 				unset($forumObj->piVars['deltid']);
 			}
 
-			// Delete several subscriptions
+			// Delete several subscriptions (through the checkboxes)
 			if ($forumObj->piVars['havealook_action'] == 'delete') {
-				foreach ((array) $forumObj->piVars['fav_delete']['topic'] as $del_tid) {
-					$res = $GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_topicmail', 'user_id = ' . $feUserId . ' AND topic_id = ' . intval($del_tid));
+				foreach ((array) $forumObj->piVars['fav_delete']['topic'] as $deleleTopicId) {
+					$GLOBALS['TYPO3_DB']->exec_DELETEquery(
+						'tx_mmforum_topicmail',
+						'user_id = ' . $feUserId . ' AND topic_id = ' . intval($deleleTopicId) . $forumObj->getStoragePIDQuery()
+					);
 				}
-				foreach ((array) $forumObj->piVars['fav_delete']['forum'] as $del_tid) {
-					$res = $GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_forummail', 'user_id = ' . $feUserId . ' AND forum_id = ' . intval($del_tid));
+				foreach ((array) $forumObj->piVars['fav_delete']['forum'] as $deleleTopicId) {
+					$GLOBALS['TYPO3_DB']->exec_DELETEquery(
+						'tx_mmforum_forummail',
+						'user_id = ' . $feUserId . ' AND forum_id = ' . intval($deleleTopicId) . $forumObj->getStoragePIDQuery()
+					);
 				}
 				unset($forumObj->piVars['havealook_action']);
 			}
@@ -151,11 +156,12 @@ class tx_mmforum_havealook {
 			// Determination of sorting mode
 			$orderBy = ($forumObj->piVars['order'] ? $forumObj->piVars['order'] : 'added');
 
-			// Starting output
-			$templateFile = $forumObj->cObj->fileResource($forumObj->conf['template.']['favorites']);
-			$template     = $forumObj->cObj->getSubpart($templateFile, '###FAVORITES_SETTINGS###');
+
+			// rendering the settings
+			$templateFile = $forumObj->cObj->fileResource($forumObj->conf['template.']['havealook']);
+			$template     = $forumObj->cObj->getSubpart($templateFile, '###HAVEALOOK_SETTINGS###');
 			$marker = array(
-				'###ACTION###'             => $forumObj->shieldURL($forumObj->getAbsUrl($forumObj->pi_linkTP_keepPIvars_url())),
+				'###ACTION###'             => $forumObj->escapeURL($forumObj->getAbsUrl($forumObj->pi_linkTP_keepPIvars_url())),
 				'###ORDER_LPDATE###'       => ($orderBy == 'lpdate') ? 'selected="selected"' : '',
 				'###ORDER_CAT###'          => ($orderBy == 'cat'   ) ? 'selected="selected"' : '',
 				'###ORDER_ADDED###'        => ($orderBy == 'added' ) ? 'selected="selected"' : '',
@@ -167,19 +173,27 @@ class tx_mmforum_havealook {
 				'###LABEL_ORDER_ADDED###'  => $forumObj->pi_getLL('favorites.orderBy.added'),
 				'###LABEL_ORDER_ALPHAB###' => $forumObj->pi_getLL('favorites.orderBy.alphab')
 			);
+
+			// Include hook to modify the output of the settings
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['havealook']['listsettings'])) {
+				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['havealook']['listsettings'] as $_classRef) {
+					$_procObj = &t3lib_div::getUserObj($_classRef);
+					$marker   = $_procObj->havealook_listsettings($marker, $forumObj);
+				}
+			}
 			$content .= $forumObj->cObj->substituteMarkerArray($template, $marker);
 
 
-			$templateFile2 = $forumObj->cObj->fileResource($conf['template.']['havealook']);
-			$template      = $forumObj->cObj->getSubpart($templateFile2, '###HAVEALOOK_BEGIN###');
+			// rendering the head part
+			$template      = $forumObj->cObj->getSubpart($templateFile, '###HAVEALOOK_BEGIN###');
 			$marker = array(
-				'###ACTION###'					=> $forumObj->shieldURL($forumObj->getAbsUrl($forumObj->pi_linkTP_keepPIvars_url())),
-				'###LABEL_HAVEALOOK###'			=> $forumObj->pi_getLL('havealook.title'),
-				'###LABEL_OPTIONS###'			=> $forumObj->pi_getLL('favorites.options'),
-				'###LABEL_TOPICNAME###'			=> $forumObj->pi_getLL('topic.title'),
-				'###LABEL_CONFIRMMULTIPLE###'	=> $forumObj->pi_getLL('havealook.confirmMultiple')
+				'###ACTION###'                => $forumObj->escapeURL($forumObj->getAbsUrl($forumObj->pi_linkTP_keepPIvars_url())),
+				'###LABEL_HAVEALOOK###'       => $forumObj->pi_getLL('havealook.title'),
+				'###LABEL_OPTIONS###'         => $forumObj->pi_getLL('favorites.options'),
+				'###LABEL_TOPICNAME###'       => $forumObj->pi_getLL('topic.title'),
+				'###LABEL_CONFIRMMULTIPLE###' => $forumObj->pi_getLL('havealook.confirmMultiple')
 			); 
-			$content .= $forumObj->cObj->substituteMarkerArrayCached($template, $marker);
+			$content .= $forumObj->cObj->substituteMarkerArray($template, $marker);
 
 			switch($orderBy) {
 				case 'lpdate':
@@ -192,13 +206,12 @@ class tx_mmforum_havealook {
 					$order = 'mail_uid DESC';
 					break;
 				case 'alphab':
+				default:
 					$order = 'item_title ASC';
 					break;
-				default:
-					$order = '';
 			}
 
-			$sql = '(SELECT' .
+			$sqlTopic = 'SELECT' .
 					'	t.topic_title			AS item_title,' .
 					'	t.uid					AS item_uid,' .
 					'	t.topic_last_post_id	AS item_lastpost_uid,' .
@@ -212,7 +225,7 @@ class tx_mmforum_havealook {
 					'	c.forum_name			AS cat_title,' .
 					'	c.uid					AS cat_uid,' .
 					'	c.sorting 				AS cat_order,' .
-					'	\'topic\' 				AS notify_mode ' .
+					'	"topic" 				AS notify_mode ' .
 					'FROM' .
 					'	tx_mmforum_topicmail m' .
 					'	LEFT JOIN tx_mmforum_topics t ON m.topic_id = t.uid ' .
@@ -220,15 +233,14 @@ class tx_mmforum_havealook {
 					'	LEFT JOIN tx_mmforum_forums c ON f.parentID = c.uid ' .
 					'WHERE' .
 					'	m.user_id = ' . $feUserId . ' AND ' .
-					'	m.deleted = 0 AND ' .
+					'	m.deleted = 0 AND' .
 					'	t.deleted = 0 AND' .
 					'	f.deleted = 0 AND' .
 					'	c.deleted = 0 ' .
 						$forumObj->getMayRead_forum_query('f').
-						$forumObj->getMayRead_forum_query('c').
-					') ' .
-					'UNION ' .
-					'(SELECT' .
+						$forumObj->getMayRead_forum_query('c');
+					
+				$sqlForum = 'SELECT' .
 					'	f.forum_name			AS item_title,' .
 					'	f.uid					AS item_uid,' .
 					'	f.forum_last_post_id	AS item_lastpost_uid,' .
@@ -246,78 +258,144 @@ class tx_mmforum_havealook {
 					'FROM' .
 					'	tx_mmforum_forummail m' .
 					'	LEFT JOIN tx_mmforum_forums f ON m.forum_id = f.uid ' .
-					'	LEFT JOIN tx_mmforum_forums c ON f.parentID = c.uid ' .
+					'	LEFT JOIN tx_mmforum_forums c ON (f.parentID = c.uid OR (f.parentID = 0 AND f.uid = c.uid)) ' .
 					'WHERE' .
 					'	m.user_id = ' . $feUserId . ' AND ' .
 					'	m.deleted = 0 AND ' .
 					'	f.deleted = 0 AND ' .
 					'	c.deleted = 0 ' .
 						$forumObj->getMayRead_forum_query('f').
-						$forumObj->getMayRead_forum_query('c').
-					') ' .
-					'ORDER BY ' .
-						$order;
+						$forumObj->getMayRead_forum_query('c');
 
+			if ($displayMode == 'topic') {
+				$sql = $sqlTopic;
+			} else if ($displayMode == 'forum') {
+				$sql = $sqlForum;
+			} else {
+				$sql = '(' . $sqlTopic . ') UNION (' . $sqlForum . ')';
+			}
+
+
+			$sql .= 'ORDER BY ' . $order;
 			$res = $GLOBALS['TYPO3_DB']->sql_query($sql);
 
 			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
-				$template = $forumObj->cObj->getSubpart($templateFile2, '###LIST_HAVEALOOK_EMPTY###');
+				$template = $forumObj->cObj->getSubpart($templateFile, '###HAVEALOOK_LISTITEM_EMPTY###');
 				$content .= $forumObj->cObj->substituteMarker($template, '###LLL_HAVEALOOK_EMPTY###', $forumObj->pi_getLL('havealook.empty'));
 			} else {
-				$template = $forumObj->cObj->getSubpart($templateFile2, '###LIST_HAVEALOOK###');
+				$template = $forumObj->cObj->getSubpart($templateFile, '###HAVEALOOK_LISTITEM###');
+				
+				// go through every found subscription
 				while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+					if ($row['notify_mode'] == 'topic') {
+						$linkParams[$forumObj->prefixId] = array(
+							'action' => 'list_post',
+							'tid'    => $row['item_uid']
+						);
+						$marker['###TOPICICON###'] = $forumObj->getTopicIcon($row['item_uid']);
+					} else {
+						$linkParams[$forumObj->prefixId] = array(
+							'action' => 'list_prefix',
+							'fid'    => $row['item_uid']
+						);
+						$marker['###TOPICICON###'] = $forumObj->getForumIcon($row['item_uid']);
+					}
 
 					$imgInfo = array(
 						'src' => $forumObj->conf['path_img'] . $forumObj->conf['images.']['solved'],
 						'alt' => $forumObj->pi_getLL('topic.isSolved')
 					);
-
-					$solved = ($row['item_solved'] == 1 ? $forumObj->buildImageTag($imgInfo) : '');
-					$prefix = ($row['item_prefix'] ? $forumObj->cObj->wrap($row['item_prefix'], $forumObj->conf['list_topics.']['prefix_wrap']) : '');
-
-					$marker['###TOPIC_CHECKBOX###'] = '<input type="checkbox" name="tx_mmforum_pi1[fav_delete]['.$row['notify_mode'].'][]" value="'.$row['item_uid'].'" />';
-					if ($row['notify_mode'] == 'topic') {
-						$linkParams[$forumObj->prefixId] = array(
-							'action' => 'list_post',
-							'tid'    => $row['item_uid']
-						);                        
-						$marker['###TOPICICON###'] = $forumObj->getTopicIcon($row['item_uid']);
-					} else {
-						$linkParams[$forumObj->prefixId] = array(
-							'action' => 'list_topic',
-							'fid'    => $row['item_uid']
-						);
-						$marker['###TOPICICON###'] = $forumObj->getForumIcon($row['item_uid']);
-					}
-					$marker['###TOPICNAME###'] = $prefix . $forumObj->pi_linkToPage($forumObj->shield($row['item_title']), $forumObj->conf['pid_forum'],'',$linkParams) . $solved;
-					$marker['###TOPICSUB###'] = $forumObj->shield($row['cat_title']).' / '.$forumObj->shield($row['forum_title']) . ($row['notify_mode'] == 'topic' ? ' / ' . $forumObj->shield($row['item_title']) : '');
+					$marker['###SOLVED###']         = ($row['item_solved'] == 1 ? $forumObj->buildImageTag($imgInfo) : '');
+					$marker['###PREFIX###']         = ($row['item_prefix']      ? $forumObj->cObj->wrap($row['item_prefix'], $forumObj->conf['list_topics.']['prefix_wrap']) : '');
+					$marker['###NAME###']           = $forumObj->pi_linkToPage($forumObj->escape($row['item_title']), $forumObj->conf['pid_forum'], '', $linkParams);
+					$marker['###FORUMNAME###']      = $forumObj->escape($row['forum_title']);
+					$marker['###CATEGORY###']       = $forumObj->escape($row['cat_title']);
+					$marker['###TOPICNAME###']      = $marker['###PREFIX###'] . $marker['###NAME###'] . $marker['###SOLVED###'];
+					$marker['###TOPICSUB###']       = $marker['###CATEGORY###'] . ' / ' . $marker['###FORUMNAME###'] . ($row['notify_mode'] == 'topic' ? ' / ' . $forumObj->escape($row['item_title']) : '');
+					$marker['###TOPIC_CHECKBOX###'] = '<input type="checkbox" name="tx_mmforum_pi1[fav_delete]['.$row['notify_mode'].'][]" value="' . $row['item_uid'] . '" />';
 
 					$linkParams[$forumObj->prefixId] = array(
-						'action'  	=> 'havealook',
-						'deltid'  	=> $row['item_uid'],
-						'delmode'	=> $row['notify_mode']
+						'action'  => 'havealook',
+						'deltid'  => $row['item_uid'],
+						'delmode' => $row['notify_mode']
 					);
-					$marker['###TOPICDELLINK###'] = $forumObj->pi_linkTP($forumObj->pi_getLL('havealook.delete'), $linkParams);
+					$marker['###DELETELINK###'] = $marker['###TOPICDELLINK###'] = $forumObj->pi_linkTP($forumObj->pi_getLL('havealook.delete'), $linkParams);
 
+					// Include hook to modify the output of each item
+					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['havealook']['listitem'])) {
+						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['havealook']['listitem'] as $_classRef) {
+							$_procObj = &t3lib_div::getUserObj($_classRef);
+							$marker = $_procObj->havealook_listitem($marker, $row, $forumObj);
+						}
+					}
 					$content .= $forumObj->cObj->substituteMarkerArrayCached($template, $marker);
 				}
 			}
-			$template = $forumObj->cObj->getSubpart($templateFile2, '###HAVEALOOK_END###');
 
+			$template = $forumObj->cObj->getSubpart($templateFile, '###HAVEALOOK_END###');
 			$marker = array(
 				'###LABEL_MARKEDTOPICS###' => $forumObj->pi_getLL('havealook.markedTopics'),
 				'###LABEL_DELETE###'       => $forumObj->pi_getLL('havealook.delete'),
 				'###LABEL_GO###'           => $forumObj->pi_getLL('havealook.go')
 			);
-			$content .= $forumObj->cObj->substituteMarkerArray($template, $marker);
+
 		} else {
-			$templateFile = $forumObj->cObj->fileResource($conf['template.']['login_error']);
-			$template = $forumObj->cObj->getSubpart($templateFile, '###LOGINERROR###');
-			$content .= $forumObj->cObj->substituteMarker($template, '###LOGINERROR_MESSAGE###', $forumObj->pi_getLL('subscr.noLogin'));
+			$templateFile = $forumObj->cObj->fileResource($forumObj->conf['template.']['login_error']);
+			$template     = $forumObj->cObj->getSubpart($templateFile, '###LOGINERROR###');
+			$marker = array(
+				'###LOGINERROR_MESSAGE###' => $forumObj->pi_getLL('subscr.noLogin'),
+			);
 		}
 
+		// Include hook to modify the output of the whole thing
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['havealook']['edit'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['havealook']['edit'] as $_classRef) {
+				$_procObj = &t3lib_div::getUserObj($_classRef);
+				$marker   = $_procObj->havealook_edit($marker, $forumObj);
+			}
+		}
+
+		$content .= $forumObj->cObj->substituteMarkerArray($template, $marker);
 		return $content;
 	}
+
+
+	/**
+	 * Adds a topic to a (logged in) user's list of email subscriptions.
+	 * 
+	 * @param  string $forumObj The plugin object
+	 * @param  string $topicId  The topic identifier
+	 * @return bool             Whether it worked or not
+	 */
+	function addSubscription($forumObj, $topicId, $feUserId) {
+		$feUserId = intval($feUserId);
+		$topicId  = intval($topicId);
+		if ($feUserId && $topicId) {
+			// Executing database operations
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'uid',
+				'tx_mmforum_topicmail',
+				'user_id = ' . $feUserId . ' AND topic_id = ' . $topicId . $forumObj->getStoragePIDQuery()
+			);
+
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1) {
+				$insertData = array(
+					'pid'      => $forumObj->getStoragePID(),
+					'tstamp'   => time(),
+					'crdate'   => time(), 
+					'topic_id' => $topicId,
+					'user_id'  => $feUserId
+				);
+				return $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_topicmail', $insertData);
+			} else {
+				// it's already added, so "it worked"
+				return true;
+			}
+		 }
+		 // invalid parameters
+		 return false;
+	}
+
 }
 
 

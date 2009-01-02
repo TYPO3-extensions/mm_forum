@@ -43,3 +43,15 @@
 <input class="tx-mmforum-button" type="submit" value="###LABEL_GO###" />
 </form>
 <!-- ###HAVEALOOK_END### -->
+<!-- ###HAVEALOOK_SETTINGS### -->
+<form action="###ACTION###" method="post" name="havealook_settings">
+	###LABEL_ORDERBY###
+	<select class="tx-mmforum-select" name="tx_mmforum_pi1[order]" onchange="document.havealook_settings.submit();">
+		<option value="lpdate" ###ORDER_LPDATE###>###LABEL_ORDER_LPDATE###</option>
+		<option value="alphab" ###ORDER_ALPHAB###>###LABEL_ORDER_ALPHAB###</option>
+		<option value="cat"    ###ORDER_CAT###   >###LABEL_ORDER_CAT###</option>
+		<option value="added"  ###ORDER_ADDED### >###LABEL_ORDER_ADDED###</option>
+	</select>
+</form>
+<br />
+<!-- ###HAVEALOOK_SETTINGS### -->
