@@ -88,7 +88,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 			if($GLOBALS['TYPO3_DB']->sql_num_rows($pm_res) == 0) {
 				$this->debug('No new messages for user '.$user_arr['username'].'. Continue with next user.');
 				continue;
-			} else $this->debug($GLOBALS['TYPO3_DB']->sql_num_row($pm_res).' new messages for user '.$user_arr['username'].'. Creating email.');
+			} else $this->debug($GLOBALS['TYPO3_DB']->sql_num_rows($pm_res).' new messages for user '.$user_arr['username'].'. Creating email.');
 			
 			while($pm_arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($pm_res)) {
 				$link = sprintf($this->conf['cron_pm_readlink'],$pm_arr['uid']);

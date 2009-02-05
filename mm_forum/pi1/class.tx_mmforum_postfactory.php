@@ -112,7 +112,7 @@ class tx_mmforum_postfactory {
 	 * of this topic and updates all database counters.
 	 * 
 	 * @author  Martin Helmich
-	 * @version 2007-07-24
+	 * @version 2009-02-05
 	 * @param   int     $forum_uid  The UID of the forum the new topic is to be created in
 	 * @param   int     $author     The UID of the fe_user creating this topic
 	 * @param   string  $subject    The topic's subject
@@ -182,7 +182,7 @@ class tx_mmforum_postfactory {
 		//added by Cyrill Helg
 		// Send notification email to users who have subscribed the forum where this topic is created
 		@$this->parent->send_newpost_mail_forum('', $this->conf, $topicId, $forumId);
-		return $postId;
+		return $topicId;
 	}
 	
 	/**
