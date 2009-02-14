@@ -2775,6 +2775,18 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 );
                 $res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts_text', "post_id = '".intval($this->piVars['pid'])."'", $updateArray);
 
+				// check for attachments that should be deleted
+				if ($this->piVars['attachment_delete']) {
+					foreach ($this->piVars['attachment_delete'] as $uid => $delete) {
+						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid = ' . intval($uid), array('deleted' => 1, 'tstamp' => time()));
+						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid = ' . intval($uid), array('attachment' => 0,'tstamp' => time()));
+						$attachments = t3lib_div::intExplode(',', $row['attachment']);
+						unset($attachments[array_search($uid, $attachments)]);
+						$row['attachment'] = implode(',', $attachments);
+					}
+					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid = ' . $postId, array('attachment' => $row['attachment']));
+				}
+
 				// Check file upload
                     if($_FILES['tx_mmforum_pi1_attachment_1']['size']>0) {
                         $res = $this->performAttachmentUpload();
@@ -2799,23 +2811,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						}
                     } else $attachment_ids = null;
 
-                if($this->piVars['attachment_delete']) {
-                    foreach($this->piVars['attachment_delete'] as $uid=>$delete) {
-	                    $res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid='.intval($uid), array('deleted'=>1,'tstamp'=>time()));
-	                    $res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid='.intval($uid), array('attachment'=>0,'tstamp'=>time()));
-	                    $attachments = t3lib_div::intExplode(',',$row['attachment']);
-	                    unset($attachments[array_search($uid,$attachments)]);
-	                    $row['attachment'] = implode(',',$attachments);
-                    }
-                    $updateArray = array(
-                    	'attachment' => $row['attachment']
-                    );
-                    $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
-						'tx_mmforum_posts',
-						'uid='.$row['uid'],
-						$updateArray
-                    );
-                }
 
                 if($this->conf['polls.']['enable']) {
 	                if($this->piVars['enable_poll'] == '1' && $firstPost) {
