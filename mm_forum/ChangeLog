@@ -1,3 +1,7 @@
+2009-02-14  Benjamin Mack  <benni@typo3.org>
+
+	* pi1: First work on moving "notification" functions to the havealook class
+
 2009-02-05  Martin Helmich <m.helmich@mittwald.de>
 
 	* Fixed issues 2446 and 2583

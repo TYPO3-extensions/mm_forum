@@ -396,6 +396,167 @@ class tx_mmforum_havealook {
 		 return false;
 	}
 
+
+    /**
+     * Sends an e-mail to users who have subscribed a certain topic.
+     * 
+     * @param  int    $topicId   The UID of the topic about which the users are
+     *                        	to be alerted.
+     * @return void
+     */
+	function notifyTopicSubscribers($topicId, $forumObj) {
+		$topicId = intval($topicId);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . $topicId  . $forumObj->getStoragePIDQuery());
+		list($topicName) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+
+		$sender = $forumObj->conf['notifyingMail.']['sender'];
+		if (!preg_match('/<([^><@]*?)@([^><@]*?)>$/',$forumObj->conf['notifyingMail.']['sender'])) {
+			$sender = $forumObj->conf['notifyingMail.']['sender'] . ' <' . $forumObj->conf['notifyingMail.']['sender_address'] . '>';
+		}
+
+		$mailHeaders = array(
+			'From: ' . $sender,
+			'X-Mailer: PHP/' . phpversion(),
+			'X-Sender-IP: ' . t3lib_div::getIndpEnv('REMOTE_ADDR'),
+			'Content-type: text/plain;charset=' . $GLOBALS['TSFE']->renderCharset,
+		);
+
+		$template = $forumObj->pi_getLL('ntfMail.text');
+
+		$linkParams[$forumObj->prefixId] = array(
+			'action' => 'open_topic',
+			'id'     => $topicId
+		);
+
+		$link = $forumObj->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
+		if (strlen($forumObj->conf['notifyingMail.']['topicLinkPrefix_override']) > 0) {
+			$link = $forumObj->conf['notifyingMail.']['topicLinkPrefix_override'] . $link;
+		} else {
+			$link = $forumObj->getAbsUrl($link);
+		}
+
+		$marker = array(
+			'###LINK###'      => $this->escapeURL($link),
+			'###TOPICNAME###' => $forumObj->escape($topicName),
+			'###BOARDNAME###' => $forumObj->escape($forumObj->conf['boardName'])
+		);
+
+
+		// get all users on this topic
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'DISTINCT m.user_id, u.email, u.' . $forumObj->getUserNameField(),
+			'tx_mmforum_topicmail m, fe_users u',
+			'm.user_id = u.uid AND m.topic_id = ' . $topicId . 
+			' AND u.deleted = 0 AND u.disable = 0 AND m.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('m')
+		);
+
+		// loop through each user who subscribed
+		while (list($toUserId, $toEmail, $toUsername) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
+			$marker['###USERNAME###'] = $forumObj->escape($toUsername);
+			$mailtext = $forumObj->cObj->substituteMarkerArrayCached($template, $marker);
+
+			// Compose mail and send
+			if (!empty($toEmail)) {
+				$llMarker = array(
+					'###TOPICNAME###' => $forumObj->escape($topicName),
+					'###BOARDNAME###' => $forumObj->escape($forumObj->conf['boardName'])
+				);
+				$subject = $forumObj->pi_getLL('ntfMail.subject');
+
+				// Include hooks
+				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_contentMarker'])) {
+					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_contentMarker'] as $_classRef) {
+						$_procObj = &t3lib_div::getUserObj($_classRef);
+						$llMarker = $_procObj->newPostMail_contentMarker($llMarker, $row, $forumObj);
+					}
+				}
+				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_subject'])) {
+					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_subject'] as $_classRef) {
+						$_procObj = &t3lib_div::getUserObj($_classRef);
+						$subject = $_procObj->newPostMail_subject($subject, $row, $forumObj);
+					}
+				}
+				
+				$subject = $forumObj->cObj->substituteMarkerArray($subject, $llMarker);
+				mail($toEmail, $subject, $mailtext, implode("\n", $mailHeaders));
+			}
+		}
+	}
+
+
+	/**
+	 * Sends an e-mail to users who have subscribed to certain forumcategory
+	 * @param  string $content The plugin content
+	 * @param  array  $conf    The configuration vars
+	 * @param  int    $topic_id   The UID of the new topic that was created
+	 * @param  int    $forum_id   The UID of the forum about which the users are
+	 *                        to be alerted.
+	 * @return void
+	 * @author Cyrill Helg
+	 */
+	function notifyForumSubscribers($topicId, $forumId, $forumObj) {
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . intval($topicId) . $forumObj->getStoragePIDQuery());
+		list($topicName) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('forum_name, parentID', 'tx_mmforum_forums', 'uid = ' . intval($forumId) . $forumObj->getStoragePIDQuery());
+		list($forumName, $categoryId) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+
+		$sender = $forumObj->conf['notifyingMail.']['sender'];
+		if (!preg_match('/<([^><@]*?)@([^><@]*?)>$/',$forumObj->conf['notifyingMail.']['sender'])) {
+			$sender = $forumObj->conf['notifyingMail.']['sender'] . ' <' . $forumObj->conf['notifyingMail.']['sender_address'] . '>';
+		}
+
+		$mailHeaders = array(
+			'From: ' . $sender,
+			'X-Mailer: PHP/' . phpversion(),
+			'X-Sender-IP: ' . t3lib_div::getIndpEnv('REMOTE_ADDR'),
+			'Content-type: text/plain;charset=' . $GLOBALS['TSFE']->renderCharset,
+		);
+
+		// prepare the template (the variables that don't change all the time need only to be set once)
+		$linkParams[$forumObj->prefixId] = array(
+			'action' => 'open_topic',
+			'id'     => $topicId
+		);
+
+		$link = $forumObj->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
+		if (strlen($forumObj->conf['notifyingMail.']['topicLinkPrefix_override']) > 0) {
+			$link = $forumObj->conf['notifyingMail.']['topicLinkPrefix_override'] . $link;
+		} else {
+			$link = $forumObj->getAbsUrl($link);
+		}
+
+		$template = $forumObj->pi_getLL('ntfMailForum.text');
+
+		$marker = array(
+			'###LINK###'      => $forumObj->escapeURL($link),
+			'###USERNAME###'  => $forumObj->escape($toUsername),
+			'###FORUMNAME###' => $forumObj->escape($forumName),
+		);
+
+		$subjectMarker = array(
+			'###TOPICNAME###' => $forumObj->escape($topicName),
+			'###FORUMNAME###' => $forumObj->escape($forumName),
+			'###BOARDNAME###' => $forumObj->escape($forumObj->conf['boardName'])
+		);
+
+		// loop through each user who subscribed
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'DISTINCT m.user_id, u.email, u.' . $forumObj->getUserNameField(),
+			'tx_mmforum_forummail m, fe_users u',
+			'm.user_id = u.uid AND (m.forum_id = ' . intval($forumId) . ($categoryId > 0 ? ' OR m.forum_id = ' . $categoryId : '') . ') ' .
+			'AND u.deleted = 0 AND u.disable = 0 AND m.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('m')
+		);
+
+		while (list($toUserId, $toEmail, $toUsername) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
+			$marker['###USERNAME###'] = $forumObj->escape($toUsername);
+			$mailtext = $forumObj->cObj->substituteMarkerArrayCached($template, $marker);
+
+			// Compose mail and send
+			$subject = $forumObj->cObj->substituteMarkerArray($forumObj->pi_getLL('ntfMailForum.subject'), $subjectMarker);
+			mail($toEmail, $subject, $mailtext, implode("\n", $mailHeaders));
+		}
+	}
 }
 
 

@@ -181,7 +181,8 @@ class tx_mmforum_postfactory {
 
 		//added by Cyrill Helg
 		// Send notification email to users who have subscribed the forum where this topic is created
-		@$this->parent->send_newpost_mail_forum('', $this->conf, $topicId, $forumId);
+		tx_mmforum_havealook::notifyForumSubscribers($topicId, $forumId, $this->parent);
+
 		return $topicId;
 	}
 	
@@ -338,7 +339,7 @@ class tx_mmforum_postfactory {
 		if ($this->parent != null) {
 			// Subscribe to the topic
 			tx_mmforum_havealook::addSubscription($this->parent, $topicId, $author);
-			@$this->parent->send_newpost_mail('', $this->conf, $topicId);
+			tx_mmforum_havealook::notifyTopicSubscribers($topicId, $this->parent);
 		}
             
         // Set topic for all users to "not read"
