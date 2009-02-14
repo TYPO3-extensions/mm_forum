@@ -1,5 +1,6 @@
 2009-02-14  Benjamin Mack  <benni@typo3.org>
 
+	* pi1: Editing a post: Fixed bug that new attachments after editing weren't downloadable (the newly added attachments didn't have a postID)
 	* pi1: Editing post: Moved deleting an attachment before the uploading of a new attachment
 	* pi1: First work on moving "notification" functions to the havealook class
 

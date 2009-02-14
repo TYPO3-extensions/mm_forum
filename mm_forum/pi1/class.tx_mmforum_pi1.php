@@ -2787,30 +2787,31 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid = ' . $postId, array('attachment' => $row['attachment']));
 				}
 
-				// Check file upload
-                    if($_FILES['tx_mmforum_pi1_attachment_1']['size']>0) {
-                        $res = $this->performAttachmentUpload();
-                        if(!is_array($res)) {
-                            $content .= $res;
-                            unset($this->piVars['button']);
-                            return $this->new_post($content,$conf);
-                        }
-                        else {
-                        	$attachment_ids = $res;
-							$attachments = t3lib_div::intExplode(',',$row['attachment']);
-							$attachments = tx_mmforum_tools::processArray_numeric($attachments);
+				// Check for new file uploads / attachments
+				if ($_FILES['tx_mmforum_pi1_attachment_1']['size'] > 0) {
+					$res = $this->performAttachmentUpload();
+					if (!is_array($res)) {
+						$content .= $res;
+						unset($this->piVars['button']);
+						return $this->post_edit($content);
+					} else {
+						$attachmentIds = $res;
+						$attachments = t3lib_div::intExplode(',', $row['attachment']);
+						$attachments = tx_mmforum_tools::processArray_numeric($attachments);
 
-							$updateArray = array(
-								'attachment'	=> implode(',',array_merge($attachments,$attachment_ids))
-							);
-							$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
-								'tx_mmforum_posts',
-								'uid='.$row['uid'],
-								$updateArray
-		                    );
+						$updateData = array(
+							'attachment' => implode(',', array_merge($attachments, $attachmentIds))
+						);
+						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid = ' . $postId, $updateData);
+
+						// Update attachment records with the post ID (as this is not set within the performAttachmentUpload)
+						if (count($attachmentIds)) {
+							$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid IN (' . implode(',', $attachmentIds) . ')', array('post_id' => $postId));
 						}
-                    } else $attachment_ids = null;
-
+					}
+				} else {
+					$attachmentIds = null;
+				}
 
                 if($this->conf['polls.']['enable']) {
 	                if($this->piVars['enable_poll'] == '1' && $firstPost) {
