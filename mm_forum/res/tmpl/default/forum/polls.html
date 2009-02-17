@@ -104,10 +104,10 @@
         </td>
     </tr>
     <tr>
-        <td>###LABEL_EXPIRES###</td>
+        <td><label for="tx_mmforum_pi1-pollexpires">###LABEL_EXPIRES###</td>
         <td>
             <input type="hidden" name="tx_mmforum_pi1[poll][expires][act]" value="0" />
-            <input type="checkbox" name="tx_mmforum_pi1[poll][expires][act]" value="1" ###EXPIRES### onchange="changeExpField(this);" />
+            <input type="checkbox" name="tx_mmforum_pi1[poll][expires][act]" value="1" ###EXPIRES### onchange="changeExpField(this);" id="tx_mmforum_pi1-pollexpires" />
             
             <input id="expDay"    ###ENB_EXP### type="text" class="tx-mmforum-input" size="2" maxlength="2" name="tx_mmforum_pi1[poll][expires][day]" value="###DAY###" />.
             <input id="expMonth"  ###ENB_EXP### type="text" class="tx-mmforum-input" size="2" maxlength="2" name="tx_mmforum_pi1[poll][expires][month]" value="###MONTH###" />.
