@@ -436,7 +436,7 @@ class tx_mmforum_havealook {
 		}
 
 		$marker = array(
-			'###LINK###'      => $this->escapeURL($link),
+			'###LINK###'      => $forumObj->escapeURL($link),
 			'###TOPICNAME###' => $forumObj->escape($topicName),
 			'###BOARDNAME###' => $forumObj->escape($forumObj->conf['boardName'])
 		);

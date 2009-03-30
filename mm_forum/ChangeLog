@@ -3,6 +3,7 @@
     * All user profile fields are now controlled using dynamic userfields that
       are configured in the tx_mmforum_userfields table.
     * Redesign of backend module.
+    * Fixed issue #2715
 
 2009-02-16  Martin Helmich <m.helmich@mittwald.de>
 
