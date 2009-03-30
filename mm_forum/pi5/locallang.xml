@@ -24,15 +24,15 @@
             <label index="filename">File</label>
             <label index="name">Name</label>
             <label index="delete_avatar">Delete avatar</label>
-            <label index="errorValidEmail">Please insert a valid email address!</label>
-            <label index="errorEmailTwice">The inputted email address already exists</label>
+            <label index="errorValidEmail">Please insert a valid email address.</label>
+            <label index="errorEmailTwice">The specified email address already exists.</label>
             <label index="errorInsertOldPw">Please input your old password.&lt;br /&gt;</label>
             <label index="errorInsertNewPw">Please input a new password.&lt;br /&gt;</label>
-            <label index="errorInsertNewPw2">In order to beware of typing error repeat the new password.&lt;br /&gt;</label>
-            <label index="errorNewPwRepeat">The repetition of the password does not agree with the first input.&lt;br /&gt;</label>
+            <label index="errorInsertNewPw2">In order to prevent typing errors, please repeat the new password.&lt;br /&gt;</label>
+            <label index="errorNewPwRepeat">The repetition of the password does not match the first input. Please check if you have entered the password correctly. &lt;br /&gt;</label>
             <label index="errorOldPw">The old password is not correct.&lt;br /&gt;</label>
-            <label index="errorPwLength">The password entered by you must have at least %s indications.&lt;br /&gt;</label>
-            <label index="pwChanged">The password successfully changed</label>
+            <label index="errorPwLength">Please enter a password with a length of at least %s characters.&lt;br /&gt;</label>
+            <label index="pwChanged">The password has successfully been changed.</label>
             <label index="nologin">You have to be logged in in order to edit your user settings.</label>
             <label index="avatar-uploadAvatar">Upload avatar</label>
             <label index="avatar-avatar">Avatar</label>
@@ -55,6 +55,10 @@
             <label index="pmnotifymode-0">Send email as soon as PM was recieved</label>
             <label index="pmnotifymode-1">Send accumulated emails once a day</label>
             <label index="pmnotifymode-2">Do not notify about new PM at all</label>
+			
+			<!-- Added in 0.1.8 -->
+            <label index="errorWWWInvalid">Please insert a correct URL for your website.</label>
+			<label index="errorRequiredMissing">Please fill out the following fields: %s</label>
         </languageKey>
         <!-- GERMAN LANGUAGE DATA -->
         <languageKey index="de" type="array">
@@ -108,6 +112,12 @@
             <label index="pmnotifymode-0">E-Mail verschicken, sobald eine PN empfangen wurde</label>
             <label index="pmnotifymode-1">Einmal täglich eine Sammel-E-Mail verschicken</label>
             <label index="pmnotifymode-2">Gar nicht über neue PNs benachrichtigen</label>
+			
+			<!-- Added in 0.1.8 -->
+            <label index="errorWWWInvalid">Bitte geben Sie eine korrekte URL als Webseite an.</label>
+            <label index="errorWWWInvalid-inf">Bitte gib eine korrekte URL als Webseite an.</label>
+			<label index="errorRequiredMissing">Bitte füllen Sie die folgenden Felder aus: %s</label>
+			<label index="errorRequiredMissing-inf">Bitte fülle die folgenden Felder aus: %s</label>
         </languageKey>
         <!-- FINNISH LANGUAGE DATA -->
         <languageKey index="fi" type="array">

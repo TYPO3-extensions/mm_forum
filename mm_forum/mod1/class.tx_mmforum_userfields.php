@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007 Mittwald CM Service
+ *  (c) 2007-2009 Mittwald CM Service GmbH & Co. KG
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -41,6 +41,8 @@
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
+
+include_once '../includes/user/class.tx_mmforum_usermanagement.php';
  
 /**
  * This class handles the extension of the mm_forum user profile with
@@ -48,12 +50,12 @@
  * seperate database tables.
  * 
  * @author     Martin Helmich <m.helmich@mittwald.de>
- * @version    2007-05-16
- * @copyright  2007 Mittwald CM Service
+ * @version    2009-02-14
+ * @copyright  2007-2009 Martin Helmich, Mittwald CM Service GmbH & Co. KG
  * @package    mm_forum
  * @subpackage Backend
  */
-class tx_mmforum_userFields {
+class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 
     /**
      * The main function.
@@ -65,8 +67,8 @@ class tx_mmforum_userFields {
     function main($content) {
         $this->init();
         
-        if($this->ufVars['ext'])
-            $content .= $this->displayExtForm();
+        if($this->ufVars['edit'])
+            $content .= $this->displayExtForm($this->ufVars['edit']);
         else
             $content .= $this->displayFieldTable();
         
@@ -95,9 +97,13 @@ class tx_mmforum_userFields {
      * @param   string $param The link parameters
      * @return  string        The link
      */
-    function generateLink($param) {
+    function generateLink($param,$mode=0) {
         $set = $this->p->MOD_SETTINGS['function'];
-		return '<a href="index.php?SET[function]='.$set.$param.'">';
+		switch($mode) {
+			default:
+			case 0: return '<a href="index.php?SET[function]='.$set.$param.'">'; break;
+			case 1: return 'index.php?SET[function]='.$set.$param; break;
+		}
     }
     
     /**
@@ -175,44 +181,10 @@ class tx_mmforum_userFields {
             $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_userfields SET sorting='.$sorting_1.' WHERE uid='.$uid_2);
             $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_userfields SET sorting='.$sorting_2.' WHERE uid='.$uid_1);
         }
-        
-        if(!is_array($this->ufVars['field'])) return '';
-        
-        foreach($this->ufVars['field'] as $uid => $data) {
+        foreach((array)$this->ufVars['field'] as $uid => $data) {
             
-            if($uid == 'new' && strlen($data['save']) > 0) {
-                $data['label'] = trim($data['label']);
-                
-                if(strlen($data['label'])==0) {
-                    $content .= '<fieldset><legend>'.$this->getLL('error').'</legend>'.$this->getLL('error.noLabel').'</fieldset><br /><br />';
-                }
-                else {
-                    $insertArr = array(
-                        'pid'           => $this->p->config['plugin.']['tx_mmforum.']['storagePID'],
-                        'tstamp'        => time(),
-                        'crdate'        => time(),
-                        'cruser_id'     => $GLOBALS['BE_USER']->user['uid'],
-                        'sorting'       => $this->getMaxSorting(),
-                        'deleted'       => 0,
-                        'hidden'        => $data['hidden'],
-                        'label'         => $data['label'],
-                        'public'        => $data['public']
-                    );
-                    $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userfields',$insertArr);
-                    unset($this->ufVars['field']['new']);
-                }
-            }
-            elseif(intval($uid)>0) {
-                if(strlen($data['save']) > 0) {
-                    $updateArr = array(
-                        'tstamp'        => time(),
-                        'hidden'        => $data['hidden'],
-                        'label'         => $data['label'],
-                        'public'        => $data['public']
-                    );
-                    $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields','uid='.$uid,$updateArr);
-                }
-                elseif(strlen($data['delete']) > 0) {
+            if(intval($uid)>0) {
+            	if(strlen($data['delete']) > 0) {
                     $updateArr = array(
                         'tstamp'        => time(),
                         'deleted'       => 1
@@ -223,188 +195,442 @@ class tx_mmforum_userFields {
         }
         return $content;
     }
-    
-    /**
-     * Displays an extended user field editing form.
-     * 
-     * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2007-05-16
-     * @return  string The content
-     */
-    function displayExtForm() {
-        
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            '*',
-            'tx_mmforum_userfields',
-            'uid='.intval($this->ufVars['ext'])
-        );
-        $field = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        
-        $parser  = t3lib_div::makeInstance('t3lib_TSparser');
-        $parser->parse($field['config']);
-        $config = $parser->setup;
-        
-        if($this->ufVars['extfield']['save'] == $this->getLL('save')) {
-            if($this->ufVars['extfield']['label']=='1') {
-                $config['label'] = 'TEXT';
-                $config['label.']['value'] = $this->ufVars['extfield']['label_text'];
-                
-                $updateArr['config'] = $this->p->parseConf($config);
-            }
-            if($this->ufVars['extfield']['image']=='1') {
-                $config['label'] = 'IMAGE';
-                $config['label.'] = array(
-                    'file'      => $this->ufVars['extfield']['imagesrc']
-                );
-                
-                $updateArr['config'] = $this->p->parseConf($config);
-            }
-            if($this->ufVars['extfield']['useExisting']=='1') {
-            	$config['datasource'] = $this->ufVars['extfield']['useExisting_field'];
-                $updateArr['config'] = $this->p->parseConf($config);
-            }
-            if($this->ufVars['extfield']['config']) {
-                $updateArr['config'] = stripslashes($_POST['data']['tx_mmforum_userfields'][$field['uid']]['config']);
-                $parser->parse($updateArr['config']);
-                $config = $parser->setup;
-            }
-            $updateArr['tstamp'] = time();
-            $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields','uid='.$field['uid'],$updateArr);
-            
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                '*',
-                'tx_mmforum_userfields',
-                'uid='.intval($this->ufVars['ext'])
-            );
-            $field = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-            
-            $parser  = t3lib_div::makeInstance('t3lib_TSparser');
-            $parser->parse($field['config']);
-            $config = $parser->setup;
-        }
-        elseif($this->ufVars['back'] == $this->getLL('back')) {
-            return $this->displayFieldTable();
-        }
-        
-        $path = $this->p->config['plugin.']['tx_mmforum.']['path_img'];
-        if(substr($path,0,13)=='EXT:mm_forum/') $path = str_replace('EXT:mm_forum/',t3lib_extMgm::siteRelPath('mm_forum'),$path);
-        $imageoptions = $this->generateImageOptions('',$path);
-        
-        $content .= '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
-    <tr>
-        <td class="mm_forum-listrow_header" colspan="2">'.$this->getLL('ext.title').'</td>
-    </tr>
-    <tr class="mm_forum-listrow">
-        <td style="width:25%;">'.$this->getLL('ext.regLabel').'</td>
-        <td>
-            <input type="checkbox" name="tx_mmforum_userfields[extfield][label]" value="1" />
-            <input type="text" name="tx_mmforum_userfields[extfield][label_text]" />
-        </td>
-    </tr>
-    <tr>
-        <td style="width:25%;">'.$this->getLL('ext.image').'</td>
-        <td>
-            <input type="checkbox" name="tx_mmforum_userfields[extfield][image]" value="1" />
-            <img src="../../../../typo3/clear.gif" id="previewImage" />
-            <select name="tx_mmforum_userfields[extfield][imagesrc]" onchange="document.getElementById(\'previewImage\').src=\'../../../../\'+this[this.selectedIndex].value;">
-                '.$imageoptions.'
-            </select>
-        </td>
-    </tr>
-    <tr>
-        <td style="width:25%;">'.$this->getLL('ext.useExisting').'</td>
-        <td>
-            <input type="checkbox" name="tx_mmforum_userfields[extfield][useExisting]" value="1" />
-            <input type="text" name="tx_mmforum_userfields[extfield][useExisting_field]" />
-        </td>
-    </tr>
-    <tr>
-        <td>'.$this->getLL('ext.editConfig').'</td>
-        <td valign="top">
-            <br />
-            <div id="config_span"><input type="checkbox" name="tx_mmforum_userfields[extfield][config]" value="1" /> '.$this->p->tceforms->getSoloField('tx_mmforum_userfields',$field,'config').'</div>'.$this->getLL('config.help').'
-        </td>
-    </tr>
-</table>
-<input type="hidden" name="tx_mmforum_userfields[ext]" value="'.$field['uid'].'" />
-<input type="submit" name="tx_mmforum_userfields[extfield][save]" value="'.$this->getLL('save').'" />
-<input type="submit" name="tx_mmforum_userfields[back]" value="'.$this->getLL('back').'" onclick="location.href=\'index.php?SET[function]=6\';" />
-';
-
-        return $content;
-        
-    }
-    
-    /**
-     * Recursive function that generates an option menu of images files.
-     * 
-     * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2007-05-16
-     * @param   string $value    The default value
-     * @param   string $path     The file path
-     * @param   string $origPath The original file path. This parameter is needed
-     *                           due to the function's recursive character.
-     * @return  string           A list of <option>-objects.
-     */
-    function generateImageOptions($value,$path=false,$origPath='') {
-        $path = $path?$path:$this->p->config['plugin.']['tx_mmforum.']['path_img'];
-        if(substr($path,-1,1)=='/') $path = substr($path,0,strlen($path)-1);
-        $origPath = $origPath?$origPath:$path;
-        
-        $dirs = t3lib_div::get_dirs('../../../../'.$path);
-        if(count($dirs)>0) {
-            foreach($dirs as $dir) {
-                $options .= $this->generateImageOptions($value,$path.'/'.$dir,$origPath?$origPath:$path);
-            }
-        }
-        
-        $files=t3lib_div::getFilesInDir('../../../../'.$path,'gif,jpg,png');
-		if(count($files)>0) {
-			foreach($files as $k=>$f) {
-				$name = ($noDel === FALSE)?  str_replace('.'.$fileExt,'',$f): $f;
-                $dispPath = str_replace($origPath,'',$path);
-				$options .= '<option value="'.$path.'/'.$name.'"'.($value==$path.'/'.$name?'selected="selected"':'').' onchange="'.$onSelect.'">'.$dispPath.'/'.$name.'</option>'; 
-			}
+	
+	function generateTSConfig($meta) {
+		
+		$config = array();
+		
+		if($meta['link']) {
+			$config['datasource'] = $meta['link'];
 		}
-		return $options;
-    }
+		
+		if($meta['required']) {
+			$config['required'] = '1';
+		}
+		
+		$config['label'] = 'TEXT';
+		$config['label.'] = array(
+			'value'			=> $meta['label']['default']
+		);
+		
+		foreach($meta['label'] as $key => $content) {
+			if($key == 'default') continue;
+			$config['label.']['lang.'][$key] = $content;
+		}
+		
+		switch($meta['type']) {
+			case 'text':
+				switch($meta['text']['validate']) {
+					case 'num':		$config['validate'] = '/^[-+]?[0-9]*\.?[0-9]+$/'; break;
+					case 'alnum':	$config['validate'] = '/^\w*$/'; break;
+					case 'email':	$config['validate'] = "/^[a-z0-9!#\$%\*\/\?\|\^\{\}`~&'\+\-=_]([a-z0-9!#\$%\*\/\?\|\^\{\}`~&'\+\-=_\.]*?)[a-z0-9!#\$%\*\/\?\|\^\{\}`~&'\+\-=_]@([a-z0-9-\.]+?)[a-z0-9]\.([a-z\.])+$/i"; break;
+					case 'url':		$config['validate'] = '/^https?:\/\/([a-zA-Z0-9_\-]+:[^\s@:]+@)?((([a-zA-Z][a-zA-Z0-9\-]+\.)+[a-zA-Z\-]+)|((2(5[0-5]|[0-4][0-9])|[01][0-9]{2}|[0-9]{1,2})\.(2(5[0-5]|[0-4][0-9])|[01][0-9]{2}|[0-9]{1,2})\.(2(5[0-5]|[0-4][0-9])|[01][0-9]{2}|[0-9]{1,2})\.(2(5[0-5]|[0-4][0-9])|[01][0-9]{2}|[0-9]{1,2})))(:[0-9]{1,5})?(\/[!~*\'\(\)a-zA-Z0-9;\/\\\?:\@&=\+\$,%#\._-]*)*$/'; break;
+					case 'date':	$config['validate'] = '/^[0-9]{1,2}\. [0-9]{1,2}\. [0-9]{4}$/'; break;
+				}
+				
+				$length = ($meta['text']['length']>0) ? 'maxlength="'.$meta['text']['length'].'"' : '';
+				
+				$config['input'] = 'HTML';
+				$config['input.']['value'] = '<input type="text" name="###USERFIELD_NAME###" value="###USERFIELD_VALUE###" '.$length.' />';
+				break;
+			case 'radio':
+				$config['input'] = 'COA';
+				$i = 10;
+				foreach($meta['radio']['value'] as $key=>$value) {
+					$config['input.'][$i] = 'CASE';
+					$config['input.'][$i.'.'] = array(
+						'key.'					=> array(
+							'field'					=> 'fieldvalue'
+						),
+						"$key"					=> 'HTML',
+						"$key."					=> array(
+							'value'					=> '<div><input type="radio" name="###USERFIELD_NAME###" checked="checked" /> '.htmlspecialchars($value).'</div>',
+						),
+						"default"					=> 'HTML',
+						"default."					=> array(
+							'value'					=> '<div><input type="radio" name="###USERFIELD_NAME###" /> '.htmlspecialchars($value).'</div>',
+						)
+					);
+					$i += 10;
+				}
+				
+				$config['output'] = 'CASE';
+				$config['output.']['key.']['field'] = 'fieldvalue';
+				foreach($meta['radio']['value'] as $key=>$value) {
+					$config['output.'][$key] = 'TEXT';
+					$config['output.'][$key.'.']['value'] = htmlspecialchars($value); 
+				}
+			break;
+			case 'select':
+				$config['input'] = 'COA';
+				$i = 20;
+				
+				$config['input.']['10'] = 'HTML';
+				$config['input.']['10.']['value'] = '<select name="###USERFIELD_NAME###">';
+				
+				foreach($meta['select']['value'] as $key=>$value) {
+					$config['input.'][$i] = 'CASE';
+					$config['input.'][$i.'.'] = array(
+						'key.'					=> array(
+							'field'					=> 'fieldvalue'
+						),
+						"$key"					=> 'HTML',
+						"$key."					=> array(
+							'value'					=> '<option value="'.$key.'" selected="selected" /> '.htmlspecialchars($value).'</option>',
+						),
+						"default"					=> 'HTML',
+						"default."					=> array(
+							'value'					=> '<option value="'.$key.'" /> '.htmlspecialchars($value).'</option>',
+						)
+					);
+					$i += 10;
+				}
+				
+				$config['input.'][$i] = 'HTML';
+				$config['input.'][$i.'.']['value'] = '</select>';
+				
+				$config['output'] = 'CASE';
+				$config['output.']['key.']['field'] = 'fieldvalue';
+				foreach($meta['select']['values'] as $key=>$value) {
+					$config['output.'][$key] = 'TEXT';
+					$config['output.'][$key.'.']['value'] = htmlspecialchars($value); 
+				}
+			break;
+			case 'checkbox':
+				$config['input'] = 'HTML';
+				$config['input.']['value'] = '<input type="hidden" name="###USERFIELD_NAME###" value="0" /><input type="checkbox" name="###USERFIELD_NAME###" value="1" />';
+				
+				$config['output'] = 'CASE';
+				$config['output.'] = array(
+					'key.'				=> array('field' => 'fieldvalue'),
+					'0'					=> 'TEXT',
+					'0.'				=> array(
+						'value'				=> 'No',
+						'lang.'				=> array(
+							'de'				=> 'Nein'
+						),
+					),
+					'1'					=> 'TEXT',
+					'1.'				=> array(
+						'value'				=> 'Yes',
+						'lang.'				=> array(
+							'de'				=> 'Ja'
+						),
+					),
+				);
+			break;
+		}
+		
+		return $config;
+		
+	}
+	
+	function generateMetaArray($data) {
+		
+			/* Validate the link parameter. Check if the regarding
+			 * link field is defined in the TCA. If this is not the
+			 * case, replace this link with an empty value. */
+		if($data['link']) {
+			global $TCA;
+			t3lib_div::loadTCA('fe_users');
+		
+			$fields = array_keys($TCA['fe_users']['columns']);
+			$uf_link = in_array($data['link'],$fields) ? $data['link'] : null;
+		} else $uf_link = null;
+		
+			/* Validate the type parameter. If the parameter is NOT one
+			 * of the five allowed parameters, set parameter to 'custom'. */
+		$params = array('text','radio','checkbox','custom','select');
+		if(!in_array($data['type'],$params))
+			$uf_type = 'custom';
+		else $uf_type = $data['type'];
+		
+			/* Validate the text length parameter. If the parameter is no
+			 * valid positive integer (or -1 for unlimited length), the
+			 * parameter is set to -1. */
+		if(intval($data['text']['length'] != 0))
+			$uf_text_length = intval($data['text']['length']);
+		else $uf_text_length = -1;
+		
+			/* Validate the validation parameter. If the parameter is NOT one
+			 * of the six allowed parameters, set parameter to 'none'. */
+		$params = array('none','num','alnum','email','url','date');
+		if(!in_array($data['text']['validate'],$params))
+			$uf_text_validate = 'none';
+		else $uf_text_validate = $data['text']['validate'];
+		
+			/* Generate the label array. Kick out empty labels. */
+		$uf_labels = array();
+		foreach($data['label'] as $key => $label) {
+			$label['content'] = trim($label['content']);
+			$label['lang'] = trim($label['lang']);
+			
+			if(strlen($label['content']) * strlen($label['lang']) == 0) continue;
+			
+			$uf_labels[$label['lang']] = $label['content'];
+		}
+		
+			/* Generate the radio value array. Kick out empty values. */
+		$uf_radio_values = array();
+		foreach($data['radio']['value'] as $key => $label) {
+			$label['content'] = trim($label);
+			
+			if(strlen($label) == 0) continue;
+			
+			$uf_radio_values[] = $label;
+		}
+		
+			/* Generate the select value array. Kick out empty values. */
+		$uf_select_values = array();
+		foreach($data['select']['value'] as $key => $label) {
+			$label['content'] = trim($label);
+			
+			if(strlen($label) == 0) continue;
+			
+			$uf_select_values[] = $label;
+		}
+		
+		$meta = array(
+			'label'				=> $uf_labels,
+			'required'			=> $data['required'] ? true : false,
+			'private'			=> $data['private'] ? true : false,
+			'link'				=> $uf_link,
+			'type'				=> $uf_type,
+			'text'				=> array(
+				'length'			=> $uf_text_length,
+				'validate'			=> $uf_text_validate
+			),
+			'radio'				=> array(
+				'value'				=> $uf_radio_values,
+			),
+			'select'			=> array(
+				'value'				=> $uf_select_values,
+			)
+		);
+		
+		return $meta;
+		
+	}
+	
+	function editField($uid,$data) {
+		
+		$meta = $this->generateMetaArray($data);
+		
+		if($meta['type'] == 'custom') {
+			$config	= $data['custom']['config'];	
+		} else {
+			$confArr = $this->generateTSConfig($meta);
+			$config  = $this->p->parseConf($confArr);
+		}
+		
+		$updateArray = array(
+			'tstamp'			=> time(),
+			'public'			=> $meta['private']?'0':'1',
+			'label'				=> $meta['label']['default'],
+			'meta'				=> serialize($meta),
+			'config'			=> $config
+		);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.intval($uid), $updateArray);
+		
+	}
+	
+	function saveNewField($data) {
+		
+		$meta = $this->generateMetaArray($data);
+		
+		if($meta['type'] == 'custom') {
+			$config	= $data['custom']['config'];	
+		} else {
+			$confArr = $this->generateTSConfig($meta);
+			$config  = $this->p->parseConf($confArr);
+		}
+		
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('MAX(sorting)+1','tx_mmforum_userfields','1');
+		list($sorting) = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		
+		$insertArray = array(
+			'tstamp'			=> time(),
+			'crdate'			=> time(),
+			'cruser_id'			=> $GLOBALS['BE_USER']->user['uid'],
+			'sorting'			=> $sorting,
+			'public'			=> $meta['private']?'0':'1',
+			'label'				=> $meta['label']['default'],
+			'meta'				=> serialize($meta),
+			'config'			=> $config
+		);
+		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userfields', $insertArray);
+		return $GLOBALS['TYPO3_DB']->sql_insert_id();
+		
+	}
+	
+	function displayExtForm($uid=-1) {
+		
+		if($this->ufVars['action'] == 'save') {
+			if($uid == -1)
+				$uid = $this->saveNewField($this->ufVars);
+			else $this->editField($uid,$this->ufVars);
+		}
+		
+		if($uid != -1) $userfield = $this->getuserFieldData($uid);
+		
+		$template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/userfields.html'));
+		$template = t3lib_parsehtml::getSubpart($template, '###USERFIELD_FORM###');
+		
+		$llMarker		= array(
+			'###UF_IMG_LANG###'				=> '<img src="img/language.png" title="'.$this->getLL('form.language').'" />',
+			'###UF_IMG_RADIOVALUE###'		=> '<img src="img/list-add.png" />',
+			'###UF_IMG_DEL###'				=> 'img/edit-delete.png',
+			
+			'###UF_LLL_TITLE###'			=> $this->getLL( $uid == -1 ? 'new.title' : 'edit.title' ),
+			'###UF_LLL_LABEL###'			=> $this->getLL('field.name'),
+			'###UF_LLL_TYPE###'				=> $this->getLL('field.type'),
+			'###UF_LLL_REQUIRED###'			=> $this->getLL('field.required'),
+			'###UF_LLL_PRIVATE###'			=> $this->getLL('field.private'),
+			'###UF_LLL_TYPE_TEXT###'		=> $this->getLL('field.type.text'),
+			'###UF_LLL_TYPE_RADIO###'		=> $this->getLL('field.type.radio'),
+			'###UF_LLL_TYPE_CHECKBOX###'	=> $this->getLL('field.type.checkbox'),
+			'###UF_LLL_TYPE_SELECT###'		=> $this->getLL('field.type.select'),
+			'###UF_LLL_TYPE_CUSTOM###'		=> $this->getLL('field.type.custom'),
+			'###UF_LLL_LINKTOFEUSER###'		=> $this->getLL('field.link'),
+			'###UF_LLL_SAVE###'				=> $this->getLL('save'),
+			'###UF_LLL_BACK###'				=> $this->getLL('back'),
+			
+			'###UF_LLL_TEXT_TITLE###'		=> $this->getLL('field.type.text'),
+			'###UF_LLL_RADIO_TITLE###'		=> $this->getLL('field.type.radio'),
+			'###UF_LLL_CHECKBOX_TITLE###'	=> $this->getLL('field.type.checkbox'),
+			'###UF_LLL_SELECT_TITLE###'		=> $this->getLL('field.type.select'),
+			'###UF_LLL_CUSTOM_TITLE###'		=> $this->getLL('field.type.custom'),
+			
+			'###UF_LLL_TEXT_LENGTH###'			=> $this->getLL('field.text.length'),
+			'###UF_LLL_TEXT_LENGTH_UNLIMITED###'=> $this->getLL('field.text.length.unlim'),
+			'###UF_LLL_TEXT_VALIDATE###'		=> $this->getLL('field.text.validate'),
+			'###UF_LLL_TEXT_VALIDATE_NONE###'	=> $this->getLL('field.text.validate.none'),
+			'###UF_LLL_TEXT_VALIDATE_NUM###'	=> $this->getLL('field.text.validate.num'),
+			'###UF_LLL_TEXT_VALIDATE_ALNUM###'	=> $this->getLL('field.text.validate.alnum'),
+			'###UF_LLL_TEXT_VALIDATE_EMAIL###'	=> $this->getLL('field.text.validate.email'),
+			'###UF_LLL_TEXT_VALIDATE_URL###'	=> $this->getLL('field.text.validate.www'),
+			'###UF_LLL_TEXT_VALIDATE_DATE###'	=> $this->getLL('field.text.validate.date'),
+			
+			'###UF_LLL_RADIO_VALUES###'			=> $this->getLL('field.radio.values'),
+			'###UF_LLL_SELECT_VALUES###'		=> $this->getLL('field.select.values'),
+			
+			'###UF_BACKLINK###'					=> $this->generateLink('',1),
+		);
+		$template = t3lib_parsehtml::substituteMarkerArray($template, $llMarker);
+		
+		if($uid == -1) {
+			$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_FORM_LABEL###', '');
+			$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_FORM_RADIOVALUE###', '');
+			$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_FORM_SELECTVALUE###', '');
+			$marker = array(
+				'###UF_TYPE###'				=> 'text',
+				'###UF_REQUIRED###'			=> 'false',
+				'###UF_PRIVATE###'			=> 'false',
+				'###UF_LABEL###'			=> '',
+				'###UF_TEXT_LENGTH###'		=> -1,
+				'###UF_TEXT_VALIDATE###'	=> 'none',
+				'###UF_FEUSER_FIELDS###'	=> $this->getFeUserFields(),
+				'###UF_UID###'				=> -1,
+				'###UF_CONFIG###'			=> ''
+			);
+		} else {
+			$lTemplate	= t3lib_parsehtml::getSubpart($template, '###USERFIELD_FORM_LABEL###');
+			$rTemplate	= t3lib_parsehtml::getSubpart($template, '###USERFIELD_FORM_RADIOVALUE###');
+			$sTemplate	= t3lib_parsehtml::getSubpart($template, '###USERFIELD_FORM_SELECTVALUE###');
+			
+				/* Generate labels */
+			foreach((array)$userfield['meta']['label'] as $key=>$content) {
+				$lMarker = array(
+					'###UF_LANG_CONTENT###'			=> addslashes($content),
+					'###UF_LANG_LABEL###'			=> addslashes($key)
+				);
+				$lContent .= t3lib_parsehtml::substituteMarkerArray($lTemplate, $lMarker);
+			}
+			$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_FORM_LABEL###', $lContent);
+			
+				/* Generate radio values */
+			foreach((array)$userfield['meta']['radio']['value'] as $key=>$content) {
+				$rMarker = array(
+					'###UF_RADIO_VALUE###'			=> addslashes($content),
+				);
+				$rContent .= t3lib_parsehtml::substituteMarkerArray($rTemplate, $rMarker);
+			}
+			$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_FORM_RADIOVALUE###', $rContent);
+			
+				/* Generate select values */
+			foreach((array)$userfield['meta']['select']['value'] as $key=>$content) {
+				$sMarker = array(
+					'###UF_SELECT_VALUE###'			=> addslashes($content),
+				);
+				$sContent .= t3lib_parsehtml::substituteMarkerArray($sTemplate, $sMarker);
+			}
+			$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_FORM_SELECTVALUE###', $sContent);
+			
+			$marker = array(
+				'###UF_TYPE###'				=> $userfield['meta']['type'],
+				'###UF_REQUIRED###'			=> $userfield['meta']['required']?'true':false,
+				'###UF_PRIVATE###'			=> $userfield['meta']['private']?'true':false,
+				'###UF_LABEL###'			=> '',
+				'###UF_TEXT_LENGTH###'		=> $userfield['meta']['text']['length'],
+				'###UF_TEXT_VALIDATE###'	=> $userfield['meta']['text']['validate'],
+				'###UF_FEUSER_FIELDS###'	=> $this->getFeUserFields($userfield['meta']['link']),
+				'###UF_UID###'				=> $userfield['uid'],
+				'###UF_CONFIG###'			=> htmlspecialchars($userfield['config'])
+			);
+		}
+		
+		$template = t3lib_parsehtml::substituteMarkerArray($template, $marker);
+		
+		return $template;
+		
+	}
+	
+	function getFeUserFields($selected='') {
+
+			/* Get TCA of fe_user table */
+		global $TCA;
+		t3lib_div::loadTCA('fe_users');
+		
+		$content = '<option value=""></option>';
+		
+			/* Iterate through all fields and retrieve labels. */
+		foreach($TCA['fe_users']['columns'] as $field => $fConfig) {
+			$label = $GLOBALS['LANG']->sL($fConfig['label'],$fConfig['label']);
+			$label = preg_replace('/:$/','',$label);
+			$arr[] = array($label,$field);
+			
+			$content .= '<option value="'.htmlspecialchars($field).'" '.($selected==$field?'selected="selected"':'').'>'.htmlspecialchars($label).'</option>';
+		}
+		return $content;
+	}
     
-    /**
-     * Displays a list of all user defined fields.
-     * 
-     * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2007-05-15
-     * @return  string A list of all user defined fields.
-     */
+	    /**
+	     * Displays a list of all user defined fields.
+	     * 
+	     * @author  Martin Helmich <m.helmich@mittwald.de>
+	     * @version 2009-02-14
+	     * @return  string A list of all user defined fields.
+	     */
     function displayFieldTable() {
         
         $content .= $this->saveData();
-        
-        $arr = $this->ufVars['field']['new'];
-        if(strlen($arr['public'])==0) $arr['public'] = 1;
-        $content .= '<table cellpadding="2" cellspacing="0" class="mm_forum-list" width="100%">
-    <tr>
-        <td class="mm_forum-listrow_header">'.$this->getLL('field.enable').'</td>
-        <td class="mm_forum-listrow_header">'.$this->getLL('field.public').'</td>
-        <td class="mm_forum-listrow_header">'.$this->getLL('field.name').'</td>
-        <td class="mm_forum-listrow_header">'.$this->getLL('field.options').'</td>
-    </tr>
-    <tr class="mm_forum-listrow2">
-        <td style="width:1%">
-            <input type="hidden" name="tx_mmforum_userfields[field][new][hidden]" value="1" />
-            <input type="checkbox" name="tx_mmforum_userfields[field][new][hidden]" '.($arr['hidden']?'':'checked="checked"').' value="0" />
-        </td>
-        <td style="width:1%">
-            <input type="hidden" name="tx_mmforum_userfields[field][new][public]" value="0" />
-            <input type="checkbox" name="tx_mmforum_userfields[field][new][public]" '.($arr['public']?'checked="checked"':'').' value="1" />
-        </td>
-        <td>
-            <input type="text" style="width:100%;" name="tx_mmforum_userfields[field][new][label]" value="'.htmlentities($arr['label']).'" />
-        </td>
-        <td style="width:1%">
-            <input style="border:0px;" type="image" src="../../../../typo3/sysext/t3skin/icons/gfx/savedok.gif" name="tx_mmforum_userfields[field][new][save]" value="1" />&nbsp;<span style="color:red; font-weight:bold; vertical-align: top;">'.$this->getLL('new').'</span>
-        </td>
-    </tr>';
+		
+		$template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/userfields.html'));
+		$template = t3lib_parsehtml::getSubpart($template, '###USERFIELD_LIST###');
+		
+		$iTemplate = t3lib_parsehtml::getSubpart($template, '###USERFIELD_LIST_ITEM###');
+		
+		$marker = array(
+			'###UF_LLL_TITLE###'				=> $this->getLL('list.title'),
+			'###UF_LLL_HEAD_NAME###'			=> $this->getLL('field.name'),
+			'###UF_LLL_HEAD_EDIT###'			=> $this->getLL('field.options'),
+			'###UF_LLL_HEAD_TYPE###'			=> $this->getLL('field.type'),
+			'###UF_LLL_NEW###'					=> $this->getLL('list.new'),
+			'###UF_LLL_HELP###'					=> $this->getLL('list.help'),
+			
+			'###UF_LINK_NEW###'					=> $this->generateLink('&tx_mmforum_userfields[edit]=-1',1)
+		);
+		$template = t3lib_parsehtml::substituteMarkerArray($template, $marker);
         
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             '*',
@@ -416,36 +642,26 @@ class tx_mmforum_userFields {
         $i = 0;
         $max = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
         while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            $upButton   = ($i>0)?$this->generateLink('&tx_mmforum_userfields[moveUp]='.$arr['uid']).'<img src="../../../../typo3/sysext/t3skin/icons/gfx/button_up.gif" /></a>':'<img src="../../../../typo3/clear.gif" width="16" height="16" />';
-            $downButton = ($i<$max-1)?$this->generateLink('&tx_mmforum_userfields[moveDown]='.$arr['uid']).'<img src="../../../../typo3/sysext/t3skin/icons/gfx/button_down.gif" /></a>':'<img src="../../../../typo3/clear.gif" width="16" height="16" />';
             
-            $extButton  = $this->generateLink('&tx_mmforum_userfields[ext]='.$arr['uid']).'<img src="../../../../typo3/sysext/t3skin/icons/gfx/options.gif" /></a>';
+			$meta = unserialize($arr['meta']);
+			
+			$upButton   = ($i>0)?$this->generateLink('&tx_mmforum_userfields[moveUp]='.$arr['uid']).'<img src="img/move-up.png" /></a>':'<img src="../../../../typo3/clear.gif" width="24" height="24" />';
+            $downButton = ($i<$max-1)?$this->generateLink('&tx_mmforum_userfields[moveDown]='.$arr['uid']).'<img src="img/move-down.png" /></a>':'<img src="../../../../typo3/clear.gif" width="24" height="24" />';
+            $delButton	= $this->generateLink('&tx_mmforum_userfields[field]['.$arr['uid'].'][delete]=1').'<img src="img/edit-delete.png" /></a>';
+            $extButton  = $this->generateLink('&tx_mmforum_userfields[edit]='.$arr['uid']).'<img src="img/edit.png" /></a>';
             
-            if(strlen($arr['config'])>0) {
-                $input = '<em>'.htmlentities($arr['label']).' ['.$this->getLL('field.extended').']</em><input type="hidden" name="tx_mmforum_userfields[field]['.$arr['uid'].'][label]" value="'.$arr['label'].'" />';
-            } else $input = '<input type="text" style="width:100%;" name="tx_mmforum_userfields[field]['.$arr['uid'].'][label]" value="'.htmlentities($arr['label']).'" />';
-            
-            $content .= '<tr class="mm_forum-listrow'.($i++ % 2==0 ? '' : '2').'">
-    <td>
-        <input type="hidden" name="tx_mmforum_userfields[field]['.$arr['uid'].'][hidden]" value="1" />
-        <input type="checkbox" name="tx_mmforum_userfields[field]['.$arr['uid'].'][hidden]" '.($arr['hidden']?'':'checked="checked"').' value="0" />
-    </td>
-    <td style="width:1%">
-        <input type="hidden" name="tx_mmforum_userfields[field]['.$arr['uid'].'][public]" value="0" />
-        <input type="checkbox" name="tx_mmforum_userfields[field]['.$arr['uid'].'][public]" '.($arr['public']?'checked="checked"':'').' value="1" />
-    </td>
-    <td>
-        '.$input.'
-    </td>
-    <td style="white-space:nowrap;">
-        <input style="border:0px;" type="image" src="../../../../typo3/sysext/t3skin/icons/gfx/savedok.gif" name="tx_mmforum_userfields[field]['.$arr['uid'].'][save]" value="1" />'.
-        '<input style="border:0px;" type="image" src="../../../../typo3/sysext/t3skin/icons/gfx/garbage.gif" name="tx_mmforum_userfields[field]['.$arr['uid'].'][delete]" value="1" />'.
-        $upButton.$downButton.$extButton.'
-    </td>
-</tr>';
+			$iMarker	= array(
+				'###UF_NAME###'				=> htmlspecialchars($arr['label']),
+				'###UF_TYPE###'				=> $this->getLL('field.type.'.$meta['type']),
+				'###UF_EDIT###'				=> $extButton.$delButton.$upButton.$downButton
+			);
+			$iContent .= t3lib_parsehtml::substituteMarkerArray($iTemplate, $iMarker);
+			
+			$i ++;
         }
-        
-        $content .= '</table>';
+		
+		$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_LIST_ITEM###', $iContent);
+		$content .= $template;
         
         return $content;
     }

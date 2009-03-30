@@ -337,6 +337,46 @@ plugin.tx_mmforum_pi1 {
                     }
                 }
                 
+                userbuttons {
+                	10 = MMFORUM_BUTTON
+                	10 {
+                		label = www
+                		special = www
+                		link {
+                			field = www
+                			wrap = |
+                		}
+                	}
+                	20 = MMFORUM_BUTTON
+                	20 {
+                		label = icq
+                		link.field = tx_mmforum_icq
+                		link.wrap = http://www.icq.com/scripts/search.dll?to=|
+                		if.isTrue.field = tx_mmforum_icq
+                	}
+                	30 = MMFORUM_BUTTON
+                	30 {
+                		label = aim
+                		link.field = tx_mmforum_aim
+                		link.wrap = aim:goim?screenname=|&message=Hello+Are+you+there?
+                		if.isTrue.field = tx_mmforum_aim
+                	}
+                	40 = MMFORUM_BUTTON
+                	40 {
+                		label = yim
+                		link.field = tx_mmforum_yim
+                		link.wrap = http://edit.yahoo.com/config/send_webmesg?.target=|
+                		if.isTrue.field = tx_mmforum_yim
+                	}
+                	50 = MMFORUM_BUTTON
+                	50 {
+                		label = skype
+                		link.field = tx_mmforum_skype
+                		link.wrap = skype:|?call
+                		if.isTrue.field = tx_mmforum_skype
+                	}
+                }
+                
             # stdWrap for user signature
                 signature_stdWrap {
                     wrap = <br /><hr /><div class="tx-mmforum-signature"> | </div>

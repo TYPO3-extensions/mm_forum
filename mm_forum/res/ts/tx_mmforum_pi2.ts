@@ -41,4 +41,15 @@ plugin.tx_mmforum_pi2 {
 		
 	# Use captcha
 		useCaptcha				= {$plugin.tx_mmforum.useCaptcha}
+		
+	# Validation settings
+		validation {
+			www = /^(https?:\/\/)?([a-z0-9-]+\.)+([a-z0-9]+)(\/[!~*\'\(\)a-zA-Z0-9;\/\\\?:\@&=\+\$,%#\._-]*)*$/
+		}
+
+	# Settings for required fields
+		required {
+			fields = {$plugin.tx_mmforum.requiredFields}
+			fieldWrap = <strong>|</strong>
+		}
 }

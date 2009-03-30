@@ -1,3 +1,16 @@
+2009-03-30  Martin Helmich <m.helmich@mittwald.de>
+
+    * All user profile fields are now controlled using dynamic userfields that
+      are configured in the tx_mmforum_userfields table.
+    * Redesign of backend module.
+
+2009-02-16  Martin Helmich <m.helmich@mittwald.de>
+
+	* Fixed issues 2585, 2597
+	* Buttons below posts can now be configured using TypoScript
+	* Corrected grammar errors in user settings labels and made texts sound more polite
+	* Required fields can now be set up in the TS setup of the regarding plugin (pi2 and pi5)
+
 2009-02-14  Benjamin Mack  <benni@typo3.org>
 
 	* pi1: Editing a post: Fixed bug that new attachments after editing weren't downloadable (the newly added attachments didn't have a postID)

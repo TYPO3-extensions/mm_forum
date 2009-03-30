@@ -169,6 +169,8 @@ plugin.tx_mmforum {
     cron_index_count				= 10
     cron_verbose					= all
     
+    requiredFields					= name,email
+    
     style=default
     style_path=EXT:mm_forum/res/tmpl/default
 }

@@ -55,6 +55,12 @@
 			
 			<!-- Added in 0.1.7 -->
 			<label index="reg-title">Register</label>
+			
+			<!-- Added in 0.1.8 -->
+			<label index="error-required">Please fill out this field.</label>
+			<label index="error-emailEmpty">Please specify an email address.</label>
+			<label index="error-wwwInvalid">Please insert a correct URL for your website.</label>
+			<label index="error-userfieldEmpty">Please insert a correct value.</label>
         </languageKey>
 		<!-- GERMAN LANGUAGE DATA -->
         <languageKey index="de" type="array">
@@ -117,6 +123,16 @@
 			
 			<!-- Added in 0.1.7 -->
 			<label index="reg-title">Registrieren</label>
+			
+			<!-- Added in 0.1.8 -->
+			<label index="error-required">Bitte füllen Sie dieses Feld aus.</label>
+			<label index="error-required-inf">Bitte fülle dieses Feld aus.</label>
+			<label index="error-emailEmpty">Bitte geben Sie eine E-Mail-Adresse an.</label>
+			<label index="error-emailEmpty-inf">Bitte gib eine E-Mail-Adresse an.</label>
+            <label index="error-wwwInvalid">Bitte geben Sie eine korrekte URL als Webseite an.</label>
+            <label index="error-wwwInvalid-inf">Bitte gib eine korrekte URL als Webseite an.</label>
+			<label index="error-userfieldEmpty">Bitte geben Sie einen korrekten Wert an.</label>
+			<label index="error-userfieldEmpty-inf">Bitte gib einen korrekten Wert an.</label>
         </languageKey>
         <!-- FINNISH LANGUAGE DATA -->
         <languageKey index="fi" type="array">

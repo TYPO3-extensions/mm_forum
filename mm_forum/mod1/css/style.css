@@ -1,10 +1,11 @@
 body {
-    background:#fff !important;
+    /*background:#fff !important;*/
+	background: #f0f0f0;
     padding-left:12px;
 }
 
 a {
-  color:#be0027 !important
+  color:#1555a0 !important
 }
 
 a:hover {
@@ -13,10 +14,16 @@ a:hover {
 a.activ {font-weight:bold;}
 a img {border:none;}
 
-h1,h2,h3 {
-  padding:2px 0 2px 2px;
+h1,h2,h3,.mm_forum-buttons {
+  /*padding:2px 0 2px 2px;
   background:#ff8700 !important;
-  color:#fff !important;
+  color:#fff !important;*/
+ 
+	background-image: url('../bg.png');
+	background-position-y: bottom;
+	background-repeat: repeat-x;
+	color: #1555A0 !important;
+	border-bottom: 1px solid #1555a0;
 }
 
 form {width:733px !important}
@@ -32,8 +39,12 @@ label {
 }
 
 .mm_forum-list {
- 	border: 1px solid #ff8700;
- 	margin: 6px 2px;
+ 	border-bottom: 1px solid #1555a0;
+	border-top: 0px;
+	border-left: 0px;
+	border-right: 0px;
+ 	margin: 6px 0px;
+	background-color: #fff;
 }
 
 div.mm_forum-listrow {
@@ -54,7 +65,7 @@ div.mm_forum-listrow_active {
 }
 div.mm_forum-listrow_header {
  	height: 20px;
-	background-color: #ff8700;
+	background-color: #1555a0;
 	font-weight: bold;
 	clear: both;
 }
@@ -69,12 +80,12 @@ tr.mm_forum-listrow2 {
 tr.mm_forum-listrow_active {
 	background-color: #dedede;
 	font-weight: bold;
-    color:#ff8700;
+    color:#1555a0;
 	clear: both;
 }
 tr.mm_forum-listrow_active td {
 	font-weight: bold;
-    color:#ff8700;
+    color:#1555a0;
 	clear: both;
 }
 
@@ -82,9 +93,22 @@ tr.mm_forum-listrow_active td {
 
 td.mm_forum-listrow_header {
  	height: 20px;
-	background-color: #ff8700;
+	background-color: #fff;
+	background-image: url('../bg.png');
+	background-position-y: bottom;
+	background-repeat: repeat-x;
+	color: #1555A0 !important;
+	border-bottom: 1px solid #1555a0;
+	font-size: larger;
 	font-weight: bold;
-	color: #ffffff;
+}
+
+td.mm_forum-listrow_label {
+	color: #1555a0 !important;
+	border-bottom: 1px solid #1555a0;
+	background-color: #fff;
+	font-size: 8pt;
+	font-weight: bold;
 }
 
 .mm_forum-listrow-edit {
@@ -145,7 +169,7 @@ td.mm_forum-listrow_header {
 .mm_forum-listrow_active .mm_forum-listrow-age,
 .mm_forum-listrow_active .mm_forum-listrow-username,
 .mm_forum-listrow_active .mm_forum-listrow-groups {
-	color: #ff8700;
+	color: #1555a0;
 }
 
 tr.newdata {
@@ -157,7 +181,7 @@ tr.hidden {
 }
 
 fieldset {
-	border: 1px solid #ff8700;
+	border: 1px solid #1555a0;
 	background-color: #f8f9f9;
 	padding: 8px;
 	padding-top: 16px;
@@ -165,8 +189,8 @@ fieldset {
 
 legend {
  	background-color: #f1f2f2;
- 	border: 1px solid #ff8700;
- 	color: #ff8700;
+ 	border: 1px solid #1555a0;
+ 	color: #1555a0;
  	padding: 2px 4px;
  	font-weight: bold;
 }
@@ -201,6 +225,25 @@ option {
 }
 
 table.mm_forum-brtable, table.mm_forum-brtable tr, table.mm_forum-brtable td {
-    border: 1px solid #ff8700;
+    border: 1px solid #1555a0;
     border-collapse: collapse;
+}
+
+.mm_forum-button {
+	float:left;
+	padding-right: 8px;
+}
+
+.mm_forum-button-hover {
+	float:left;
+	background-color: #1555a0;
+	background-image: none;
+	color: #fff !important;
+	cursor: pointer;
+	padding-right: 8px;
+}
+
+.mm_forum-button img, .mm_forum-button-hover img {
+	vertical-align: middle;
+	margin-right: 8px;
 }

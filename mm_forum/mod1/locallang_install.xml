@@ -7,7 +7,7 @@
 	<data type="array">
         <!-- ENGLISH LANGUAGE DATA -->
 		<languageKey index="default" type="array">
-			<label index="install.cat.general">General settings</label>
+			<label index="install.cat.general">General</label>
 			<label index="install.cat.forum">Forum</label>
 			<label index="install.cat.pm">Private messaging</label>
 			<label index="install.cat.contact">Contact</label>
@@ -193,6 +193,14 @@
 			<label index="install.field.cron_verbose.options.quiet">Absolute silence</label>
             <label index="install.field.rssPID.title">RSS page</label>
             <label index="install.field.rssPID.desc">The page the mm_forum RSS plugin is placed on. Leave empty to disable RSS feeds.</label>
+			
+			<!-- ADDED IN 0.1.8 -->
+			<label index="install.cat.user">User</label>
+			<label index="install.title.user">User settings</label>
+            <label index="install.field.requiredFields.title">Required fields</label>
+            <label index="install.field.requiredFields.desc">The user fields that are required to be filled in during registration. The username and password are always required.</label>
+            <label index="install.field.emailConfirm.title">Confirm registration</label>
+            <label index="install.field.emailConfirm.desc">Defines whether registrations have to be confirmed by sending an activation link via email.</label>
 		</languageKey>
         <!-- GERMAN LANGUAGE DATA -->
 		<languageKey index="de" type="array">
@@ -383,7 +391,20 @@
 			<label index="install.field.cron_verbose.options.errors">Fehler und Warnungen</label>
 			<label index="install.field.cron_verbose.options.quiet">Völlige Stille</label>
             <label index="install.field.rssPID.title">RSS-Seite</label>
-            <label index="install.field.rssPID.desc">Die Seite, auf welcher das mm_forum-RSS-Plugin platziert ist. Lassen Sie dieses Feld leer, um die RSS-Funktion zu deaktivieren.</label>
+            <label index="install.field.rssPID.desc">
+            	Die Seite, auf welcher das mm_forum-RSS-Plugin platziert ist. Lassen Sie dieses Feld leer, um die RSS-Funktion zu deaktivieren.
+			</label>
+			
+			<!-- ADDED IN 0.1.8 -->
+			<label index="install.cat.user">Benutzereinstellungen</label>
+			<label index="install.title.user">Benutzereinstellungen</label>
+            <label index="install.field.requiredFields.title">Pflichtfelder</label>
+            <label index="install.field.requiredFields.desc">
+            	Die Felder, die bei der Registrierung zwingend ausgefüllt werden müssen.
+				Der Benutzername und das Passwort sind immer Pflichtfelder.
+			</label>
+            <label index="install.field.emailConfirm.title">Anmeldung bestätigen</label>
+            <label index="install.field.emailConfirm.desc">Gibt an, ob Anmeldungen über einen per E-Mail verschickten Aktivierungslink bestätigt werden müssen.</label>
 		</languageKey>
         <!-- FINNISH LANGUAGE DATA -->
         <languageKey index="fi" type="array">

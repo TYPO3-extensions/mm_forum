@@ -146,9 +146,14 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 		// Create marker array, field names are retrieved from TypoScript
 		$data = explode(',', $fields);
+		$required = t3lib_div::trimExplode(',',$this->conf['required.']['fields']);
+		
 		foreach ($data as $k=>$v) {
-			$marker['###'.strtoupper($v).'###'] = ($row[$v]);
+			$marker['###'.strtoupper($v).'###'] = isset($this->piVars[$v])?$this->piVars[$v]:$row[$v];
 			$marker['###DESCR_'.strtoupper($v).'###'] = $this->pi_getLL($v);
+			if(in_array($v, $required)) {
+				$marker['###DESCR_'.strtoupper($v).'###'] = $this->cObj->wrap($marker['###DESCR_'.strtoupper($v).'###'], $this->conf['required.']['fieldWrap']);
+			}
 		}
 
 		// Some special fields
@@ -197,13 +202,17 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
         );
         $parser  = t3lib_div::makeInstance('t3lib_TSparser');
         while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            $res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                'field_value',
-                'tx_mmforum_userfields_contents',
-                'field_id='.$arr['uid'].' AND user_id='.$row['uid']
-            );
-            if($GLOBALS['TYPO3_DB']->sql_num_rows($res2)>0) list($value) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res2);
-            else $value = '';
+            if(isset($this->piVars['userfield'][$arr['uid']])) {
+            	$value = $this->piVars['userfield'][$arr['uid']];
+            } else {
+				$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+	                'field_value',
+	                'tx_mmforum_userfields_contents',
+	                'field_id='.$arr['uid'].' AND user_id='.$row['uid']
+	            );
+	            if($GLOBALS['TYPO3_DB']->sql_num_rows($res2)>0) list($value) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res2);
+	            else $value = '';
+			}
             
             $parser->setup = array();
             if(strlen($arr['config'])>0) {
@@ -212,10 +221,12 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
             } else $config = array();
             
             if($config['label']) $label = $this->cObj->cObjGetSingle($config['label'],$config['label.']);
-            else $label = $arr['label'].':';
+            else $label = $arr['label'];
+			
+			if($config['required']) $label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
             
             if($config['datasource']) {
-            	$value = $row[$config['datasource']];
+            	$value = isset($this->piVars['userfield'][$arr['uid']])?$this->piVars['userfield'][$arr['uid']]:$row[$config['datasource']];
             	$label .= '<input type="hidden" name="tx_mmforum_pi5[userfield_exists]['.$arr['uid'].']" value="'.$config['datasource'].'" />';
             }
             
@@ -254,6 +265,31 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		return $content;
 	}
 	
+	function &getTSParser() {
+		if($this->parser) return $this->parser;
+		else {
+			$this->parser = t3lib_div::makeInstance('t3lib_TSparser');
+			return $this->parser;
+		}
+	}
+	
+	function getUserFieldIsRequired($uid) {
+		$uid = intval($uid);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'*',
+			'tx_mmforum_userfields',
+			'uid='.$uid.' AND deleted=0 AND hidden=0'
+		);
+		if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return false;
+		
+		$arr		= $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$parser		= $this->getTSParser();
+		$parser->parse($arr['config']);
+		$config		= $parser->setup;
+		
+		return $config['required']?true:false;
+	}
+	
 	function getUserfieldUsesExistingField($uid) {
 		$uid = intval($uid);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -264,7 +300,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return false;
 		
 		$arr		= $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-		$parser		= t3lib_div::makeInstance('t3lib_TSparser');
+		$parser		= $this->getTSParser();
 		$parser->parse($arr['config']);
 		$config		= $parser->setup;
 		
@@ -292,16 +328,16 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			$updateArr[$v] = $this->piVars[$v];
 		}
 
-		// Validate email address
+			/* Validate email address */
 		$error = 0;
 		$errormessage = '';
 		$email = $updateArr['email'];
-		if(!$this->validate_email($email)){
+		if($email && !$this->validate_email($email)){
 			$error = 1;
 			$marker['###ERROR_MSG###'] = $this->pi_getLL('errorValidEmail');
 		}
 
-		// Check if email address already exists
+			/* Check if email address already exists */
 		else {
 			$count = 0;
 			$where = 'deleted=0 AND email =\''.$GLOBALS['TYPO3_DB']->quoteStr($email,'fe_users').'\' AND uid <> '.$this->getUserID().' AND pid = '.$this->getUserProfilePid();
@@ -314,13 +350,64 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 				$marker['###ERROR_MSG###'] = $this->pi_getLL('errorEmailTwice');
 			}
 		}
+		
+			/* Validate homepage */
+		if($updateArr['www']) {
+			if(!preg_match($this->conf['validation.']['www'], $updateArr['www'], $matches)) {
+				$error = 1;
+				$marker['###ERROR_MSG###'] = $this->pi_getLL('errorWWWInvalid');
+			}
+		}
+		
+			/* Check required fields */
+		$required = t3lib_div::trimExplode(',',$this->conf['required.']['fields']);
+		foreach($required as $field) {
+			if(strlen(trim($updateArr[$field]))==0) {
+				$requiredMissing = true;
+				$missingFieldsLabels[] = $this->pi_getLL($field);
+			}
+		}
+		
+			/* Check required user fields */
+		$parser = $this->getTSParser();
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'*', 'tx_mmforum_userfields', 'deleted=0'
+		);
+		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+
+				/* Unset the configuration array, since the TS parser does not do this
+				 * automatically. Can cause very weird problems. */
+			unset($parser->setup);
+			
+				/* Parse the setup of the userfield. */
+			$parser->parse($arr['config']);
+			$config		= $parser->setup;
+			
+				/* This crazy statement checks (a) whether the userfield is required, and if this is the
+				 * case whether the user did enter something here and (b) whether a validation pattern has
+				 * been specified for this field, and if there is such a pattern, this is validated against
+				 * the user input. And all this in just one line. */
+			if(($config['required'] && !trim($this->piVars['userfield'][$arr['uid']])) || ($config['validate'] && !preg_match($config['validate'],$this->piVars['userfield'][$arr['uid']]))) {
+				$requiredMissing = true;
+				
+				if($config['label']) $label = $this->cObj->cObjGetSingle($config['label'],$config['label.']);
+	            else $label = $arr['label'];
+				
+				$missingFieldsLabels[] = $label;
+			}
+		}
+		
+		if($requiredMissing) {
+			$error = 1;
+			$marker['###ERROR_MSG###'] = sprintf($this->pi_getLL('errorRequiredMissing'),implode(', ',$missingFieldsLabels));
+		}
 
 		// If no error occurred...
 		if ($error == 0) {
 			$where = 'uid = '.$GLOBALS['TSFE']->fe_user->user['uid'];
             
             //if kb_md5fepw is installed, crypt password
-            #if(t3lib_extMgm::isLoaded('kb_md5fepw')) $updateArr['password']=md5($updateArr['password']);
+            if(t3lib_extMgm::isLoaded('kb_md5fepw')) $updateArr['password']=md5($updateArr['password']);
         
         	     // Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilUpdateArray'])) {

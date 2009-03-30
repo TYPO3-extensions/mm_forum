@@ -575,7 +575,6 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
         else $user = false;
 
         $menu = $profile = '';
-        #if($GLOBALS['TSFE']->fe_user->user['username']){
         if($this->getMayWrite_topic($this->piVars['tid'])) {
             if ((($read_flag == 0) AND ($closed_flag == 0)) OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
                 $quoteParams[$this->prefixId] = array(
@@ -592,23 +591,14 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
         }
 
         if($user && $user['deleted']=='0') {
-            $profile .= $this->createButton('profile','profileView:'.$user['uid'],0,true);
+            
+				/* Generate profile button */
+			$profile .= $this->createButton('profile','profileView:'.$user['uid'],0,true);
+		
+				/* Generate buttons */
+			$profile = tx_mmforum_postfunctions::getUserButtons($user);
         }
-        
-        if ($user['www']) {
-            $url = parse_url($user['www']);
-            IF (!$url['scheme']) $user['www'] = 'http://'.$user['www'];
-            $profile .= $this->createButton('www',false,false,true,$user['www']);
-        }
-        if ($user['tx_mmforum_icq'])
-            $profile .= $this->createButton('icq',false,false,true,'http://www.icq.com/scripts/search.dll?to='.htmlspecialchars($user['tx_mmforum_icq']));
-        if ($user['tx_mmforum_aim'])
-            $profile .= $this->createButton('aim',false,false,true,'aim:goim?screenname='.htmlspecialchars($user['tx_mmforum_aim']).'&message=Hello+Are+you+there?');
-        if ($user['tx_mmforum_yim'])
-            $profile .= $this->createButton('yim',false,false,true,'http://edit.yahoo.com/config/send_webmesg?.target='.htmlspecialchars($user['tx_mmforum_yim']).'&.src=pg');
-        if ($user['tx_mmforum_skype'])
-            $profile .= $this->createButton('skype',false,false,true,'skype:'.htmlspecialchars($user['tx_mmforum_skype']).'?call');
-        
+		
         if ($GLOBALS['TSFE']->fe_user->user['username'] && $user['uid']!=$GLOBALS['TSFE']->fe_user->user['uid']){
         	if(intval($this->conf['pm_id']) > 0 && $user && $user['deleted']=='0') {
                 $pmParams = array(
@@ -690,7 +680,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'*',
 				'tx_mmforum_attachments',
-				'uid IN ('.$row['attachment'].') AND deleted=0',
+				'post_id = '.$row['attachment'].' AND deleted=0',
 				'',
 				'uid ASC'
 			);
@@ -1176,6 +1166,66 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			exit();
 		}
 	 }
+	 
+	 	/**
+	 	 * Dynamically generates user buttons.
+	 	 * This function dynamically generates the set of buttons that is displayed
+	 	 * below each post. The buttons can be configured by TypoScript in
+	 	 * plugin.tx_mmforum_pi1.list_posts.userbuttons. See the existing configuration
+	 	 * for examples.
+	 	 * 
+	 	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 	 * @version 2009-02-10
+	 	 * @param   array  $user The user record
+	 	 * @return  string       HTML code of the generated buttons
+	 	 */
+	function getUserButtons($user) {
+	 	$oldData = $this->cObj->data;
+		$this->cObj->data = $user;
+		
+		$profile = '';
+		
+		foreach($this->conf['list_posts.']['userbuttons.'] as $key=>$obj) {
+			if($this->conf['list_posts.']['userbuttons.'][$key.'.'] && $obj=='MMFORUM_BUTTON') {
+				$buttonConf = $this->conf['list_posts.']['userbuttons.'][$key.'.'];
+				
+				if($buttonConf['if.'] && !$this->cObj->checkIf($buttonConf['if.'])) continue;
+				
+				if($buttonConf['label.']) {
+					$label = $this->cObj->cObjGetSingle('TEXT',$buttonConf['label.']);
+				}
+				
+				if($buttonConf['link.']) {
+					$link = $this->cObj->cObjGetSingle('TEXT',$buttonConf['link.']);
+				}
+				
+				if($buttonConf['special']) {
+					switch($buttonConf['special']) {
+						case 'www':
+							$res = @parse_url($link);
+							if(count($res)==0 || strlen(trim($link))==0) continue 2;
+						break;
+					}
+				}
+				
+				$profile .= $this->createButton(
+					$label ? $label : $buttonConf['label'],
+					$buttonConf['parameters'] ? $buttonConf['parameters'] : null,
+					$buttonConf['id'] ? $buttonConf['id'] : null,
+					$buttonConf['small'] ? true : false,
+					$link,
+					false,
+					$buttonConf['ATagParams']
+				);
+			} else {
+				$profile .= $this->cObj->cObjGetSingle($obj, $this->conf['list_posts.']['userbuttons.'][$key.'.']);
+			}
+		}
+		
+		$this->cObj->data = $oldData;
+		
+		return $profile;
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_postfunctions.php']) {

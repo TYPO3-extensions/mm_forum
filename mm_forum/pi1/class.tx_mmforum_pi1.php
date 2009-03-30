@@ -2249,6 +2249,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$marker['###POSTUSER###']    = $this->ident_user($GLOBALS['TSFE']->fe_user->user['uid'], $conf);
 					$marker['###POSTTEXT###']    = $posttext;
 					$marker['###ANKER###']       = '';
+					$marker['###POSTANCHOR###']	 = '';
 					$marker['###POSTDATE###']    = $this->pi_getLL('post.writtenOn') . ': ' . $this->formatDate(time());
 
 					$previewTemplate = $this->cObj->fileResource($conf['template.']['new_topic']);
@@ -2488,6 +2489,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     $marker['###POSTUSER###']   = $this->ident_user($GLOBALS['TSFE']->fe_user->user['uid'],$conf);
                     $marker['###POSTTEXT###']   = $posttext;
                     $marker['###ANKER###']      = '';
+					$marker['###POSTANCHOR###']	= '';
                     $marker['###POSTDATE###']   = $this->pi_getLL('post.writtenOn').': '.$this->formatDate(time());
 
                     $previewTemplate    = $this->cObj->fileResource($conf['template.']['new_post']);
@@ -5520,7 +5522,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
     	}
 
     	$data		= array(
-    		'button_label'		 => $this->pi_getLL('button.'.$label),
+    		'button_label'		 => $this->pi_getLL('button.'.$label,$label),
             'button_link'        => $nolink?'':($href?$href:$this->pi_getPageLink($id,'',$params)),
             'button_iconname'    => file_exists($this->conf['path_img'].'buttons/icons/'.$label.'.png')?$label.'.png':'',
             'button_atagparams'  => $atagparams

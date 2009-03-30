@@ -58,4 +58,15 @@ plugin.tx_mmforum_pi5 {
 				50.offset = 75-[50.w],3
 			}
 		}
+		
+	# Validation settings
+		validation {
+			www = /^(https?:\/\/)?([a-z0-9-]+\.)+([a-z0-9]+)(\/[!~*\'\(\)a-zA-Z0-9;\/\\\?:\@&=\+\$,%#\._-]*)*$/
+		}
+
+	# Settings for required fields
+		required {
+			fields = {$plugin.tx_mmforum.requiredFields}
+			fieldWrap = <strong>|</strong>
+		}
 }

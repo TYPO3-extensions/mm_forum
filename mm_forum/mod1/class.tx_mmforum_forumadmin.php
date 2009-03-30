@@ -90,6 +90,7 @@ class tx_mmforum_forumAdmin {
         $content = '<table width="100%" cellspacing="0" cellpadding="0">
     <tr>
         <td style="width:33%" valign="top">'.$this->display_tree().'</td>
+		<td style="width:8px;"><img src="'.$GLOBALS['BACK_PATH'].'/clear.gif" style="width:8px;" /></td>
         <td style="width:67%" valign="top">'.$rcontent.'</td>
 </table>';
         
@@ -128,9 +129,14 @@ class tx_mmforum_forumAdmin {
         $input_authWrite = $this->getUserGroupAccess_field('[forum][authWrite]',$this->param['forum']['authWrite']);
         $input_authMod = $this->getUserGroupAccess_field('[forum][authMod]',$this->param['forum']['authMod']);
         
-        $content = '<fieldset>
+        /*$content = '<fieldset>
     <legend>'.$this->getLL('forum.new').'</legend>
-    <table cellspacing="0" cellpadding="2" style="width:100%">
+    <table cellspacing="0" cellpadding="2" style="width:100%">*/
+	
+		$content = '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+	    <tr>
+	        <td class="mm_forum-listrow_header" colspan="2" valign="top"><img src="img/forum-edit.png" style="vertical-align: middle; margin-right:8px;" />'.$this->getLL('forum.new').'</td>
+	    </tr>
         <tr>
             <td>'.$this->getLL('forum.title').'</td>
             <td><input type="text" name="tx_mmforum_fadm[forum][title]" value="'.htmlspecialchars($this->param['forum']['title']).'" style="width:100%;" />'.$errors['title'].'</td>
@@ -213,9 +219,14 @@ class tx_mmforum_forumAdmin {
         $input_authWrite = $this->getUserGroupAccess_field('[ctg][authWrite]',$this->param['ctg']['authWrite']);
         $input_authMod = $this->getUserGroupAccess_field('[ctg][authMod]',$this->param['ctg']['authMod']);
         
-        $content = '<fieldset>
+    /*    $content = '<fieldset>
     <legend>'.$this->getLL('category.new').'</legend>
-    <table cellspacing="0" cellpadding="2" style="width:100%">
+    <table cellspacing="0" cellpadding="2" style="width:100%">*/
+	
+		$content = '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+	    <tr>
+	        <td class="mm_forum-listrow_header" colspan="2" valign="top"><img src="img/forum-edit.png" style="vertical-align: middle; margin-right:8px;" />'.$this->getLL('category.new').'</td>
+	    </tr>
         <tr>
             <td>'.$this->getLL('category.title').'</td>
             <td><input type="text" name="tx_mmforum_fadm[ctg][title]" value="'.htmlspecialchars($this->param['ctg']['title']).'" style="width:100%;" />'.$errors['title'].'</td>
@@ -301,9 +312,14 @@ class tx_mmforum_forumAdmin {
         $input_authWrite    = $this->getUserGroupAccess_field('[forum][authWrite]',$forum['grouprights_write']);
         $input_authMod      = $this->getUserGroupAccess_field('[forum][authMod]',$forum['grouprights_mod']);
         
-        $content = '<fieldset>
+        /*$content = '<fieldset>
     <legend>'.$this->getLL('forum.edit').'</legend>
-    <table cellspacing="0" cellpadding="2" style="width:100%">
+    <table cellspacing="0" cellpadding="2" style="width:100%">*/
+	
+		$content = '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+	    <tr>
+	        <td class="mm_forum-listrow_header" colspan="2" valign="top"><img src="img/forum-edit.png" style="vertical-align: middle; margin-right:8px;" />'.$this->getLL('forum.edit').'</td>
+	    </tr>
         <tr>
             <td>'.$this->getLL('forum.title').'</td>
             <td><input type="text" name="tx_mmforum_fadm[forum][title]" value="'.htmlspecialchars($forum['forum_name']).'" style="width:100%;" />'.$errors['title'].'</td>
@@ -397,9 +413,14 @@ class tx_mmforum_forumAdmin {
         $input_authWrite = $this->getUserGroupAccess_field('[ctg][authWrite]',$ctg['grouprights_write']);
         $input_authMod = $this->getUserGroupAccess_field('[ctg][authMod]',$ctg['grouprights_mod']);
         
-        $content = '<fieldset>
+        /*$content = '<fieldset>
     <legend>'.$this->getLL('category.edit').'</legend>
-    <table cellspacing="0" cellpadding="2" style="width:100%">
+    <table cellspacing="0" cellpadding="2" style="width:100%">*/
+	
+		$content = '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+	    <tr>
+	        <td class="mm_forum-listrow_header" colspan="2" valign="top"><img src="img/forum-edit.png" style="vertical-align: middle; margin-right:8px;" />'.$this->getLL('category.edit').'</td>
+	    </tr>
         <tr>
             <td>'.$this->getLL('category.title').'</td>
             <td><input type="text" name="tx_mmforum_fadm[ctg][title]" value="'.htmlspecialchars($ctg['forum_name']).'" style="width:100%;" />'.$errors['title'].'</td>
@@ -821,10 +842,15 @@ class tx_mmforum_forumAdmin {
      */
     function display_tree() {
         
-        $content = '<fieldset>
+        /*$content = '<fieldset>
     <legend>'.$this->getLL('tree').'</legend>
     <table width="100%" cellpadding="2" cellspacing="0">
-';
+';*/
+
+		$content = '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <td class="mm_forum-listrow_header" ><img src="img/forum.png" style="vertical-align: middle; margin-right:8px;" />'.$this->getLL('tree').'</td>
+    </tr>';
         
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             '*',
@@ -840,13 +866,16 @@ class tx_mmforum_forumAdmin {
             if($this->param['cid'] == $ctg['uid'] && !$this->param['fid']) $class_suffix = '_active';
                 
             $editOnClick = "location.href='index.php?SET[function]=".$this->func."&tx_mmforum_fadm[cid]=".$ctg['uid']."';";
-			$js = 'onmouseover="this.className=\'mm_forum-listrow_active\'; this.style.cursor=\'pointer\';" onmouseout="this.className=\'mm_forum-listrow'.$class_suffix.'\'" onclick="'.htmlspecialchars($editOnClick).'"';
+			$js = 'onmouseover="this.className=\'mm_forum-listrow_active\'; this.style.cursor=\'pointer\';" onmouseout="this.className=\'mm_forum-listrow\'" onclick="'.htmlspecialchars($editOnClick).'"';
             
             $icon = '<img src="../icon_tx_mmforum_forums.gif" style="vertical-align: middle;" />';
             
-            $content .= '<tr class="mm_forum-listrow'.$class_suffix.'" '.$js.'>
+            /*$content .= '<tr class="mm_forum-listrow'.$class_suffix.'" '.$js.'>
     <td>'.$icon.' '.htmlspecialchars($ctg['forum_name']).'</td>
-</tr>';
+</tr>';*/
+
+			$content .= '<tr class="mm_forum-listrow" '.$js.'><td><img src="img/category.png" style="vertical-align: middle; margin-right:8px;" />'.htmlspecialchars($ctg['forum_name']).'</td></tr>';
+
             $res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                 '*',
                 'tx_mmforum_forums',
@@ -860,12 +889,12 @@ class tx_mmforum_forumAdmin {
                 if($this->param['fid'] == $forum['uid']) $class_suffix = '_active';
                 
 			    $editOnClick = "location.href='index.php?SET[function]=".$this->func."&tx_mmforum_fadm[fid]=".$forum['uid']."';";
-			    $js = 'onmouseover="this.className=\'mm_forum-listrow_active\'; this.style.cursor=\'pointer\';" onmouseout="this.className=\'mm_forum-listrow'.$class_suffix.'\'" onclick="'.htmlspecialchars($editOnClick).'"';
+			    $js = 'onmouseover="this.className=\'mm_forum-listrow_active\'; this.style.cursor=\'pointer\';" onmouseout="this.className=\'mm_forum-listrow\'" onclick="'.htmlspecialchars($editOnClick).'"';
                 
-                $icon = '<img src="../icon_tx_mmforum_forums.gif" style="vertical-align: middle;" />';
+                $icon = '<img src="img/forum.png" style="vertical-align: middle; margin-right:8px;" />';
                 
-                $content .= '<tr class="mm_forum-listrow'.$class_suffix.'" '.$js.'>
-    <td style="padding-left:32px;">'.$icon.' '.htmlspecialchars($forum['forum_name']).'</td>
+                $content .= '<tr class="mm_forum-listrow" '.$js.'>
+    <td style="padding-left:32px;">'.$icon.htmlspecialchars($forum['forum_name']).'</td>
 </tr>';
             }
             $class_suffix = ($i++ % 2==0 ? '2' : '');
@@ -873,10 +902,10 @@ class tx_mmforum_forumAdmin {
             if($this->param['cid'] == $ctg['uid'] && $this->param['fid']=='new') $class_suffix = '_active';
             
             $editOnClick = "location.href='index.php?SET[function]=".$this->func."&tx_mmforum_fadm[fid]=new&tx_mmforum_fadm[cid]=".$ctg['uid']."';";
-			$js = 'onmouseover="this.className=\'mm_forum-listrow_active\'; this.style.cursor=\'pointer\';" onmouseout="this.className=\'mm_forum-listrow'.$class_suffix.'\'" onclick="'.htmlspecialchars($editOnClick).'"';
+			$js = 'onmouseover="this.className=\'mm_forum-listrow_active\'; this.style.cursor=\'pointer\';" onmouseout="this.className=\'mm_forum-listrow\'" onclick="'.htmlspecialchars($editOnClick).'"';
             
-            $content .= '<tr class="mm_forum-listrow'.$class_suffix.'" '.$js.'>
-    <td style="padding-left: 32px; font-style:italic;"><img src="forum_new.gif" style="vertical-align:middle;" /> ['.$this->getLL('forum.new').']</td>
+            $content .= '<tr class="mm_forum-listrow" '.$js.'>
+    <td style="padding-left: 32px; font-style:italic;"><img src="img/forum-new.png" style="vertical-align:middle; margin-right:8px;" />['.$this->getLL('forum.new').']</td>
 </tr>';
         }
         $class_suffix = ($i++ % 2==0 ? '2' : '');
@@ -886,8 +915,8 @@ class tx_mmforum_forumAdmin {
         $editOnClick = "location.href='index.php?SET[function]=".$this->func."&tx_mmforum_fadm[cid]=new';";
 		$js = 'onmouseover="this.className=\'mm_forum-listrow_active\'; this.style.cursor=\'pointer\';" onmouseout="this.className=\'mm_forum-listrow'.$class_suffix.'\'" onclick="'.htmlspecialchars($editOnClick).'"';
         
-        $content .= '<tr class="mm_forum-listrow'.$class_suffix.'" '.$js.'>
-        <td style="font-style:italic;"><img src="forum_new.gif" style="vertical-align:middle;" /> ['.$this->getLL('category.new').']</td>
+        $content .= '<tr class="mm_forum-listrow" '.$js.'>
+        <td style="font-style:italic;"><img src="img/category-new.png" style="vertical-align:middle;" /> ['.$this->getLL('category.new').']</td>
 </tr>';
         
         $content .= '</table></fieldset>';

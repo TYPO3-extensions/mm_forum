@@ -285,6 +285,9 @@
             
             <!-- ADDED IN 0.1.7 -->
             <label index="menu.updater">Updater</label>
+			
+			<!-- ADDED IN 0.1.8 -->
+			<label index="users.title">Users</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="title">mm_forum</label>

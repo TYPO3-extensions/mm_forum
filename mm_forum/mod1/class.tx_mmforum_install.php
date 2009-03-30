@@ -2,7 +2,7 @@
 /*
  *  Copyright notice
  *
- *  (c) 2007 Mittwald CM Service
+ *  (c) 2007-2009 Mittwald CM Service
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -73,37 +73,39 @@ require_once(PATH_t3lib.'class.t3lib_tcemain.php');
  * configuration vars in a very easy way.
  * 
  * @author     Martin Helmich
- * @version    2007-05-14
- * @copyright  2007 Mittwald CM Service
+ * @version    2009-02-12
+ * @copyright  2007-2009 Mittwald CM Service
  * @package    mm_forum
  * @subpackage Backend
  */
 class tx_mmforum_install {
 	
-    /**
-     * Required configuration variables
-     */
+	    /**
+	     * Required configuration variables
+	     */
 	var $required = array(
 		'storagePID', 'userPID', 'userGroup', 'adminGroup'
 	);
 	
-    /**
-     * An associative array storing all field data and data types.
-     * Configurations variables are organized in sets. 
-     */
+	    /**
+	     * An associative array storing all field data and data types.
+	     * Configurations variables are organized in sets. 
+	     */
 	var $fields = array(
 		'general'		=> array(
 			'storagePID'			=> 'group:pages',
 			'userPID'				=> 'group:pages',
 			'userGroup'				=> 'select:fe_groups:1',
-#			'moderatorGroup'		=> 'select:fe_groups:1',        // Deactivated due to introduction of forum-dependent moderators
 			'adminGroup'			=> 'select:fe_groups:1',
 			'informal'				=> 'checkbox',
 			'realUrl_specialLinks'	=> 'checkbox',
 			'disableRootline'		=> 'checkbox',
 			'dateFormat'			=> 'string',
-			'useCaptcha'			=> 'checkbox',
 			'userNameField'			=> 'string',
+		),
+		'user'			=> array(
+			'useCaptcha'			=> 'checkbox',
+			'requiredFields'		=> 'special:userRequired'
 		),
 		'forum'			=> array(
 			'boardPID'				=> 'group:pages',
@@ -111,7 +113,6 @@ class tx_mmforum_install {
 			'threadsPerPage'		=> 'int/unit{topics}',
 			'postsPerPage'			=> 'int/unit{posts}',
 			'displayRealName'		=> 'checkbox',
-#			'user_hotPosts'			=> 'int/unit{posts}',           // Deactivated due to introduction of user ranking system
 			'topic_hotPosts'		=> 'int/unit{posts}',
 			'spamblock_interval'	=> 'int/unit{seconds}',
 			'signatureLimit'		=> 'int/unit{lines}',
@@ -246,15 +247,16 @@ class tx_mmforum_install {
 	function display_categoryLinks() {
 		foreach($this->fields as $category => $data) {
 			$label = $this->getLL('cat.'.$category);
-			if($this->instVars['ctg'] == $category)
-				$items[] = '<strong>'.$label.'</strong>';
-			else {
+			if($this->instVars['ctg'] == $category) {
+				$set = $this->p->MOD_SETTINGS['function'];
+				$items[] = '<div class="mm_forum-button-hover"><img src="img/install-'.$category.'.png" />'.$label.'</div>';
+			} else {
                 $set = $this->p->MOD_SETTINGS['function'];
-				$items[] = '<a href="index.php?SET[function]='.$set.'&tx_mmforum_install[ctg]='.$category.'">'.$label.'</a>';
+				$items[] = '<div class="mm_forum-button" onmouseover="this.className=\'mm_forum-button-hover\';" onmouseout="this.className=\'mm_forum-button\';" onclick="document.location.href=\'index.php?SET[function]='.$set.'&tx_mmforum_install[ctg]='.$category.'\';"><img src="img/install-'.$category.'.png" />'.$label.'</div>';
             }
 		}
 		
-		return implode(' | ',$items).'<hr />';
+		return '<div class="mm_forum-buttons">'.implode('',$items).'<div style="clear:both;"></div></div>';
 	}
 
     /**
@@ -266,9 +268,15 @@ class tx_mmforum_install {
      * @return  string  The mm_forum help text
      */
     function display_helpForm() {
-        $content = '<strong>'.$this->getLL('help.title').'</strong><br /><br />'.$this->getLL('help.content');
+        $template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/install.html'));
+		$template = t3lib_parsehtml::getSubpart($template, '###INSTALL_HELP###');
+		
+		$marker = array(
+			'###INST_HELP_TITLE###'		=> $this->getLL('help.title'),
+			'###INST_HELP_TEXT###'		=> $this->getLL('help.content')
+		);
         
-        return $content;
+        return t3lib_parsehtml::substituteMarkerArray($template, $marker);
     }
     
     /**
@@ -293,25 +301,25 @@ class tx_mmforum_install {
 		
 		$fieldData = $this->fields[$this->instVars['ctg']];
 		if(count($fieldData)==0) return $content;
-		
-		$content .= '
-<fieldset>
-	<legend>'.$this->getLL('title.'.$this->instVars['ctg']).'</legend>
-	<table cellspacing="0" cellpadding="3" border="0">';
+	
+		$content .= '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <td class="mm_forum-listrow_header" valign="top" style="width:1px;"><img src="img/install-'.$this->instVars['ctg'].'.png" style="vertical-align: middle; margin-right:8px;" /></td>
+        <td class="mm_forum-listrow_header" colspan="2" valign="top">'.$this->getLL('title.'.$this->instVars['ctg']).'</td>
+    </tr>';
 
 		foreach($fieldData as $field => $config) {
 		
             $bigField = false;
             if($config == 'div') {
-                $content .= '</table>
-	<br />
-	<input type="hidden" name="tx_mmforum_install[ctg]" value="'.$this->instVars['ctg'].'" />
-	<input type="submit" value="'.$this->getLL('save').'" />
-</fieldset><br />
-<fieldset>
-    <legend>'.$this->getLL('field.'.$field.'.title').'</legend>
-    <table cellspacing="0" cellpadding="3" border="0">
-';
+
+				$content .= '</table>
+<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <td class="mm_forum-listrow_header" valign="top" style="width:1px;"><img src="img/install-'.$field.'.png" style="vertical-align: middle; margin-right:8px;" /></td>
+        <td class="mm_forum-listrow_header" colspan="2" valign="top">'.$this->getLL('field.'.$field.'.title').'</td>
+    </tr>';
+
                 continue;
             }
             
@@ -327,8 +335,7 @@ class tx_mmforum_install {
 			elseif(substr($config,0,6)=='group:') {
 				$data = explode(':',$config);
 				$input = $this->getGroupField($data[1],$this->conf[$field],$field);
-			}
-			elseif(substr($config,0,7)=='select:') {
+			} elseif(substr($config,0,7)=='select:') {
 				$data = explode(':',$config);
 					if($data[1] == 'fe_groups') $pid = $this->conf['userPID'];
 				elseif($data[1] == 'fe_users')  $pid = $this->conf['userPID'];
@@ -337,12 +344,17 @@ class tx_mmforum_install {
                 $limit = $data[2]?$data[2]:100;
                 $bigField = ($limit>1);
 				$input = $this->getSelectField($field,$this->conf[$field],$data[1],$pid,$limit);
-			}
-            elseif(preg_match('/^lselect:/',$config)) {
+			} elseif(substr($config,0,8)=='lselect:') {
                 $data = explode(':',$config);
                 $data = explode('|', $data[1]);
                 
                 $input = $this->getLSelectField($field,$this->conf[$field],$data);
+            } elseif(substr($config,0,8)=='special:') {
+                $data = explode(':',$config);
+				
+				switch($data[1]) {
+					case 'userRequired': $input = $this->getUserRequiredField($this->conf[$field],$field); $bigField=true; break;
+				}
             }
 			
 			$input .= $unit;
@@ -357,19 +369,19 @@ class tx_mmforum_install {
 			} else $default = '';
 			
             if(!$bigField)
-			    $content .= '<tr>
-	    <td valign="top"><span style="color: #ff8700;">&raquo;</span></td>
-	    <td valign="top">
+			    $content .= '<tr class="mm_forum-listrow">
+	    <td valign="top"><span style="color: #1555a0;">&#8718;</span></td>
+	    <td valign="top" style="width:50%;">
 		    <strong>'.$this->getLL('field.'.$field.'.title').'</strong><br />
 		    '.$this->getLL('field.'.$field.'.desc').'
 	    </td>
-	    <td valign="top">
+	    <td valign="top" style="width:50%;">
 		    '.$input.$default.'
 	    </td>
     </tr>';
             else
-                $content .= '<tr>
-        <td valign="top"><span style="color: #ff8700;">&raquo;</span></td>
+                $content .= '<tr class="mm_forum-listrow">
+        <td valign="top"><span style="color: #1555a0;">&#8718;</span></td>
         <td valign="top">
 		    <strong>'.$this->getLL('field.'.$field.'.title').'</strong><br />
 		    '.$this->getLL('field.'.$field.'.desc').'
@@ -384,10 +396,15 @@ class tx_mmforum_install {
 
 		$content .= '
 	</table>
-	<br />
-	<input type="hidden" name="tx_mmforum_install[ctg]" value="'.$this->instVars['ctg'].'" />
-	<input type="submit" value="'.$this->getLL('save').'" />
-</fieldset>
+
+<input type="hidden" name="tx_mmforum_install[ctg]" value="'.$this->instVars['ctg'].'" />
+<div class="mm_forum-buttons">
+	<div class="mm_forum-button" onmouseover="this.className=\'mm_forum-button-hover\';" onmouseout="this.className=\'mm_forum-button\';" onclick="document.forms[\'editform\'].submit();">
+		<img src="img/save.png">
+		'.$this->getLL('save').'
+	</div>
+	<div style="clear:both;"></div>
+</div>
 ';
 
 		return $content;
@@ -473,6 +490,69 @@ class tx_mmforum_install {
 				)
 			)
 		);
+		return $this->p->tceforms->getSingleField_typeSelect('','tx_mmforum_install[conf][0]['.$fieldname.']',array(),$conf);
+	}
+	
+		/**
+		 * Generates a dynamic selector field for required user fields.
+		 * This function generates a dynamic selector field for user fields
+		 * that are required to be filled in upon registration. The fields of
+		 * the fe_user table are loaded directly from the TCA.
+		 * 
+		 * @param  string $value     The value of this form element. This is
+		 *                           a commaseperated list of fe_user fields.
+		 * @param  string $fieldname The name of this form element.
+		 * @return string            The HTML code for this input field.
+		 * 
+		 * @author Martin Helmich <m.helmich@mittwald.de>
+		 */
+	function getUserRequiredField($value,$fieldname) {
+		
+			/* A list of fields that cannot be selected */
+		$excludeFields = array(
+			'username','password','lockToDomain','disable','starttime','endtime',
+			'felogin_redirectPid','usergroup','image','tx_mmforum_avatar',
+			'tx_mmforum_md5','tx_mmforum_reg_hash','tx_mmforum_pmnotifymode',
+			'lastlogin','TSconfig','lastlogin'
+		);
+		
+			/* Get TCA of fe_user table */
+		global $TCA;
+		t3lib_div::loadTCA('fe_users');
+		
+			/* Get list of selected fields */
+		$selFields = t3lib_div::trimExplode(',',$value);
+		$selFieldsLabels = array();
+		
+			/* Iterate through all fields and retrieve labels. */
+		foreach($TCA['fe_users']['columns'] as $field => $fConfig) {
+			if(in_array($field, $excludeFields)) continue;
+
+			$label = $GLOBALS['LANG']->sL($fConfig['label'],$fConfig['label']);
+			$label = preg_replace('/:$/','',$label);
+			$arr[] = array($label,$field);
+			
+			if(in_array($field, $selFields))
+				$selFieldsLabels[] = $field.'|'.$label;
+		}
+		
+			/* Compose select field's configuration array */
+		$conf = array(
+			'itemFormElName' => 'tx_mmforum_install[conf][0]['.$fieldname.']',
+			'itemFormElValue' => implode(',',$selFieldsLabels),
+			'fieldChangeFunc' => array(''),
+			'fieldConf' => array(
+				'config' => array(
+					'type' => 'select',
+					'items' => $arr,
+					'size' => 5,
+					'minitems' => 0,
+					'maxitems' => 99
+				)
+			)
+		);
+		
+			/* Create select field using the TCEForms class and return */
 		return $this->p->tceforms->getSingleField_typeSelect('','tx_mmforum_install[conf][0]['.$fieldname.']',array(),$conf);
 	}
     

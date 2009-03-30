@@ -118,7 +118,7 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 class  tx_mmforum_module1 extends t3lib_SCbase {
 	var $pageinfo;
     var $confArr;
-    var $display_mmLogo=FALSE;
+    var $display_mmLogo=false;
     
     var $tceforms;
     var $configFile;
@@ -161,7 +161,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
                  '7' => $LANG->getLL('menu.install'),
 				 '8' => $LANG->getLL('menu.statistics'),
 				 '9' => $LANG->getLL('menu.ranks'),
-				'10' => $LANG->getLL('menu.updater'),
+				#'10' => $LANG->getLL('menu.updater'),
                 #'7' => $LANG->getLL('menu.importexport'),
                 #'8' => $LANG->getLL('menu.documentation')
 			)
@@ -208,6 +208,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 						document.location = URL;
 					}
 				</script>
+				<script type="text/javascript" src="../res/scripts/prototype-1.6.0.3.js"></script>
 			';
 			$this->doc->postCode='
 				<script language="javascript" type="text/javascript">
@@ -275,12 +276,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		global $LANG;
         $content = $this->display_mmLogo?$this->logo:'';
         
-        #if(intval($this->confArr['userPID'])==0 || intval($this->confArr['forumPID'])==0 ||
-        #   intval($this->confArr['userGroup'])==0 || intval($this->confArr['modGroup'])==0 || intval($this->confArr['adminGroup'])==0 ) {
         if(!$this->getIsConfigured()) {
-            #$content .= $this->noSettingsError();
-			#$this->content.=$this->doc->section($LANG->getLL('error').':',$content,0,1);
-			
             $content .= $this->Install();
             $this->content .= $this->doc->section($LANG->getLL('menu.install').':',$content,0,1);
             
@@ -324,10 +320,10 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
                 $content .= $this->Ranks();
 				$this->content.=$this->doc->section($LANG->getLL('menu.ranks').':',$content,0,1);
             break;
-            case 10:
-            	$content .= $this->Updater();
-				$this->content.=$this->doc->section($LANG->getLL('menu.updater').':',$content,0,1);
-			break;
+            #case 10:
+            #	$content .= $this->Updater();
+			#	$this->content.=$this->doc->section($LANG->getLL('menu.updater').':',$content,0,1);
+			#break;
 		}
 	}
 	
@@ -351,6 +347,11 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 	 * @return string The HTML output.
 	 */
 	function userManagement() {
+		
+			/* Get template */
+        $template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/users.html'));
+		$template = t3lib_parsehtml::getSubpart($template, '###USERS_LIST###');
+		$uTemplate = t3lib_parsehtml::getSubpart($template, '###USERS_LIST_ITEM###');
 		
 		// Retrieve global variables
 			global $LANG;
@@ -412,18 +413,16 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		// Display userdata table
 			// Execute database query
 			$res=$GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users',"$filter and pid='".$this->confArr['userPID']."' and deleted=0 AND ".$userGroup_query,'',$order,($offset*$this->confArr['recordsPerPage']).",".$this->confArr['recordsPerPage']);
-			if($res)
-			{
-				$out .= '<div class="mm_forum-list" style="overflow:auto;">';
+			if($res) {
 				
-				$out .= '<div class="mm_forum-listrow_header" >
-						    <div class="mm_forum-listrow-edit"></div>
-						    <div class="mm_forum-listrowheader-username">'.$LANG->getLL('useradmin.username').'&nbsp;&nbsp;';
-                $out .= '<a href="index.php?mmforum_sort=username&mmforum_style=asc"><img src="css/arrow_down.gif" alt="asc" title="asc" /></a>&nbsp;&nbsp;&nbsp;<a href="index.php?mmforum_sort=username&mmforum_style=desc"><img src="css/arrow_up.gif" alt="desc" title="desc" /></a></div>
-						    <div class="mm_forum-listrowheader-age">'.$LANG->getLL('useradmin.age').'&nbsp;&nbsp;';
-                $out .= '<a href="index.php?mmforum_sort=age&mmforum_style=asc"><img src="css/arrow_down.gif" alt="asc" title="asc" /></a>&nbsp;&nbsp;&nbsp;<a href="index.php?mmforum_sort=age&mmforum_style=desc"><img src="css/arrow_up.gif" alt="desc" title="desc" /></a></div>
-						    <div class="mm_forum-listrowheader-groups">'.$LANG->getLL('useradmin.usergroup').'</div>
-						 </div>';
+				$marker = array(
+					'###USERS_LLL_TITLE###'				=> $LANG->getLL('users.title'),
+					'###USERS_LLL_USERNAME###'			=> $LANG->getLL('useradmin.username'),
+					'###USERS_LLL_REGISTERED###'		=> $LANG->getLL('useradmin.age'),
+					'###USERS_LLL_GROUPS###'			=> $LANG->getLL('useradmin.usergroup'),
+					'###USERS_LLL_OPTIONS###'			=> '&nbsp;'
+				);
+						
 				$i=0;                                   
 				while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 					// Display user groups
@@ -449,15 +448,20 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 						$icon = '<img src="../icon_tx_mmforum_forums.gif" />';
 						$hidden = ($row['hidden']==1?'<span style="color:blue;">['.$LANG->getLL('boardadmin.hidden').']</span> ':'');
 						
-						$out .= '<div '.$js.' class="mm_forum-listrow'.$class_suffix.'" style="overflow:visible;">';
-						$out .= '<div class="mm_forum-listrow-edit">'.$this->getItemFromRecord('fe_users',$row).'</div>';
-						$out .= '<div class="mm_forum-listrow-username">'.$row['username'].'</div>';
-						$out .= '<div class="mm_forum-listrow-age">'.t3lib_BEfunc::dateTimeAge($row['crdate'],1).'</div>';
-						$out .= '<div class="mm_forum-listrow-groups">'.(substr($outg,-2)==', '?substr($outg,0,strlen($outg)-2):$outg).'</div>';
-						$out .= '</div>';
+						$uMarker = array(
+							'###USER_USERNAME###'			=> htmlspecialchars($row['username']),
+							'###USER_REGISTERED###'			=> t3lib_BEfunc::dateTimeAge($row['crdate'],1),
+							'###USER_GROUPS###'				=> (substr($outg,-2)==', '?substr($outg,0,strlen($outg)-2):$outg),
+							'###USER_OPTIONS###'			=> '<img src="img/edit.png" onclick="'.htmlspecialchars($editOnClick).'" style="cursor:pointer;" />'
+						);
+						$uContent .= t3lib_parsehtml::substituteMarkerArray($uTemplate, $uMarker);
+						
 				}
 				
-				$out .= '</div>';
+				$template = t3lib_parsehtml::substituteSubpart($template, '###USERS_LIST_ITEM###', $uContent);
+				$template = t3lib_parsehtml::substituteMarkerArray($template, $marker);
+				
+				$out .= $template;
 			}
 			
 		return $out;
@@ -498,10 +502,27 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		$mmforum=t3lib_div::_GP('mmforum'); 
 		
 		// Output tools menu
-		$content .= '<div><a href="index.php?mmforum[tools]=1" '.($mmforum['tools']==1 ? 'class="activ"':'').'>'.$LANG->getLL('tools.bbcodes').'</a>&nbsp;|&nbsp;';
+		/*$content .= '<div><a href="index.php?mmforum[tools]=1" '.($mmforum['tools']==1 ? 'class="activ"':'').'>'.$LANG->getLL('tools.bbcodes').'</a>&nbsp;|&nbsp;';
 		$content .= '<a href="index.php?mmforum[tools]=2" '.($mmforum['tools']==2 ? 'class="activ"':'').'>'.$LANG->getLL('tools.smilies').'</a>&nbsp;|&nbsp;';
 		$content .= '<a href="index.php?mmforum[tools]=3" '.($mmforum['tools']==3 ? 'class="activ"':'').'>'.$LANG->getLL('tools.syntaxhighlighter').'</a>&nbsp;|&nbsp;';
-		$content .= '</div><hr>';
+		$content .= '</div><hr>';*/
+		
+		$content = '<div class="mm_forum-buttons">
+	<div class="mm_forum-button" onmouseover="this.className=\'mm_forum-button-hover\';" onmouseout="this.className=\'mm_forum-button\';" onclick="document.location.href=\'index.php?mmforum[tools]=1\';">
+		<img src="img/tools-bb.png">
+		'.$LANG->getLL('tools.bbcodes').'
+	</div>
+	<div class="mm_forum-button" onmouseover="this.className=\'mm_forum-button-hover\';" onmouseout="this.className=\'mm_forum-button\';" onclick="document.location.href=\'index.php?mmforum[tools]=2\';">
+		<img src="img/tools-smilies.png">
+		'.$LANG->getLL('tools.smilies').'
+	</div>
+	<div class="mm_forum-button" onmouseover="this.className=\'mm_forum-button-hover\';" onmouseout="this.className=\'mm_forum-button\';" onclick="document.location.href=\'index.php?mmforum[tools]=3\';">
+		<img src="img/tools-syntax.png">
+		'.$LANG->getLL('tools.syntaxhighlighter').'
+	</div>
+	<div style="clear:both;"></div>
+</div>';
+		
 		$content .= '<input type="hidden" name="mmforum[tools]" value="'.$mmforum['tools'].'" />';
 
 		switch ($mmforum['tools']) {
@@ -572,29 +593,32 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		$i=0;
 		$content .= '<table cellpadding="2" cellspacing="0" width="100%" class="mm_forum-list">';
 		$content .= '<tr>
-						<td class="mm_forum-listrow_header">'.$LANG->getLL('tools.bbcode').'</td>
-						<td class="mm_forum-listrow_header">'.$LANG->getLL('tools.pattern').'</td>
-						<td class="mm_forum-listrow_header">'.$LANG->getLL('tools.replacement').'</td>
-						<td class="mm_forum-listrow_header"></td>
+						<td class="mm_forum-listrow_header" colspan="4"><img src="img/tools-bb.png" style="vertical-align:middle; margin-right:8px;"> '.$LANG->getLL('tools.bbcodes').'</td>
 					</tr>';
 		$content .= '<tr>
-						<td class="mm_forum-listrow2"><input type="text" name="mmforum[bbcode][0]" value="'.$mmforum['bbcode'][0].'" size="24" /></td>
-						<td class="mm_forum-listrow2"><input type="text" name="mmforum[pattern][0]" value="'.$mmforum['pattern'][0].'" size="40" /></td>
-						<td class="mm_forum-listrow2"><input type="text" name="mmforum[replacement][0]" value="'.htmlspecialchars($mmforum['replacement'][0]).'" size="40" /></td>
-						<td class="mm_forum-listrow2" align="right"><input style="border:0px;" type="image" name="mmforum[save][0]" src="../../../../typo3/sysext/t3skin/icons/gfx/savedok.gif" /></td>
+						<td class="mm_forum-listrow_label">'.$LANG->getLL('tools.bbcode').'</td>
+						<td class="mm_forum-listrow_label">'.$LANG->getLL('tools.pattern').'</td>
+						<td class="mm_forum-listrow_label">'.$LANG->getLL('tools.replacement').'</td>
+						<td class="mm_forum-listrow_label">&nbsp;</td>
+					</tr>';
+		$content .= '<tr>
+						<td class="mm_forum-listrow"><input type="text" name="mmforum[bbcode][0]" value="'.$mmforum['bbcode'][0].'" style="width:100%;" /></td>
+						<td class="mm_forum-listrow"><input type="text" name="mmforum[pattern][0]" value="'.$mmforum['pattern'][0].'" style="width:100%;" /></td>
+						<td class="mm_forum-listrow"><input type="text" name="mmforum[replacement][0]" value="'.htmlspecialchars($mmforum['replacement'][0]).'" style="width:100%;" /></td>
+						<td class="mm_forum-listrow" align="right"><input style="border:0px;" type="image" name="mmforum[save][0]" src="img/save.png" /></td>
 					</tr>';
 		
 		$res=$GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_postparser','deleted=0','','bbcode asc');
 
 		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			$content .= (!$row['hidden']) ? '<tr class="mm_forum-listrow'.($i++ % 2==0 ? '' : '2').'">' : '<tr class="hidden">';
-			$content .= '	<td><input type="text" name="mmforum[bbcode]['.$row['uid'].']" value="'.htmlspecialchars($row['bbcode']).'" size="24" /></td>';
-			$content .= '	<td><input type="text" name="mmforum[pattern]['.$row['uid'].']" value="'.htmlspecialchars($row['pattern']).'" size="40" /></td>';
-			$content .= '	<td><input type="text" name="mmforum[replacement]['.$row['uid'].']" value="'.htmlspecialchars($row['replacement']).'" size="40" /></td>';       
+			$content .= (!$row['hidden']) ? '<tr class="mm_forum-listrow">' : '<tr class="mm_forum-listrow" style="background-color: #f0f0f0 !important;">';
+			$content .= '	<td><input type="text" name="mmforum[bbcode]['.$row['uid'].']" value="'.htmlspecialchars($row['bbcode']).'" style="width:100%;" /></td>';
+			$content .= '	<td><input type="text" name="mmforum[pattern]['.$row['uid'].']" value="'.htmlspecialchars($row['pattern']).'" style="width:100%;" /></td>';
+			$content .= '	<td><input type="text" name="mmforum[replacement]['.$row['uid'].']" value="'.htmlspecialchars($row['replacement']).'" style="width:100%;" /></td>';       
 			$content .= '	<td align="right">';
-			$content .= '		<a href="index.php?mmforum[tools]=1&mmforum[delete]['.$row['uid'].']=1"><img src="../../../../typo3/sysext/t3skin/icons/gfx/garbage.gif" /></a>&nbsp;&nbsp;';
-			$content .= 		$row['hidden']?'<a href="index.php?mmforum[tools]=1&mmforum[unhide]['.$row['uid'].']=1"><img src="../../../../typo3/sysext/t3skin/icons/gfx/button_unhide.gif" /></a>&nbsp;&nbsp;':'<a href="index.php?mmforum[tools]=1&mmforum[hide]['.$row['uid'].']=1"><img src="../../../../typo3/sysext/t3skin/icons/gfx/button_hide.gif" /></a>&nbsp;&nbsp;';
-			$content .= '		<input style="border:0px;" type="image" src="../../../../typo3/sysext/t3skin/icons/gfx/savedok.gif" name="mmforum[save]['.$row['uid'].']" />';
+			$content .= '		<a href="index.php?mmforum[tools]=1&mmforum[delete]['.$row['uid'].']=1"><img src="img/edit-delete.png" /></a>';
+			$content .= 		$row['hidden']?'<a href="index.php?mmforum[tools]=1&mmforum[unhide]['.$row['uid'].']=1"><img src="img/edit-hide.png" /></a>':'<a href="index.php?mmforum[tools]=1&mmforum[hide]['.$row['uid'].']=1"><img src="img/edit-hide.png" /></a>';
+			$content .= 		'<input style="border:0px;" type="image" src="img/save.png" name="mmforum[save]['.$row['uid'].']" />';
 			$content .= '	</td>';
 			$content .= '</tr>';
 		} 
@@ -661,35 +685,39 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 
 		$i=0;
 		if(!isset($mmforum['new']['smile_url']))  $mmforum['new']['smile_url']=$firstFile;
-		
-		$content .= '<table cellpadding="2" cellspacing="0" class="mm_forum-list" width="100%">';
+					
+		$content .= '<table cellpadding="2" cellspacing="0" width="100%" class="mm_forum-list">';
 		$content .= '<tr>
-						<td class="mm_forum-listrow_header">'.$LANG->getLL('tools.code').'</td>
-						<td class="mm_forum-listrow_header">'.$LANG->getLL('tools.smilie').'</td>
-						<td class="mm_forum-listrow_header">'.$LANG->getLL('tools.file').'</td>
-						<td class="mm_forum-listrow_header">'.$LANG->getLL('tools.editcode').'</td>
-						<td class="mm_forum-listrow_header">&nbsp;</td>
+						<td class="mm_forum-listrow_header" colspan="5"><img src="img/tools-smilies.png" style="vertical-align:middle; margin-right:8px;"> '.$LANG->getLL('tools.smilies').'</td>
 					</tr>';
+		$content .= '<tr>
+						<td class="mm_forum-listrow_label">'.$LANG->getLL('tools.code').'</td>
+						<td class="mm_forum-listrow_label">'.$LANG->getLL('tools.smilie').'</td>
+						<td class="mm_forum-listrow_label">'.$LANG->getLL('tools.file').'</td>
+						<td class="mm_forum-listrow_label">'.$LANG->getLL('tools.editcode').'</td>
+						<td class="mm_forum-listrow_label">&nbsp;</td>
+					</tr>';
+					
 		$content .= '<tr>
 						<td class="mm_forum-listrow"><b>['.$LANG->getLL('tools.new').']</b></td>
 						<td class="mm_forum-listrow"><img src="../res/smilies/'.htmlspecialchars($mmforum['new']['smile_url']).'" id="smilie_preview" /></td>
 						<td class="mm_forum-listrow"><select name="mmforum[new][smile_url]" onchange="document.getElementById(\'smilie_preview\').src=\'../res/smilies/\'+this[this.selectedIndex].value">'.$surlOptions.'</select></td>
 						<td class="mm_forum-listrow"><input type="text" name="mmforum[new][code]" value="'.htmlspecialchars($mmforum['new']['code']).'" /></td>
-						<td align="right" class="mm_forum-listrow"><input type="image" src="../../../../typo3/sysext/t3skin/icons/gfx/savedok.gif" name="mmforum[save][0]" /></td>
+						<td align="right" class="mm_forum-listrow"><input type="image" src="img/save.png" name="mmforum[save][0]" /></td>
 					</tr>';
 		
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_smilies','deleted=0','','smile_url asc');
 
 		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			$content .= (!$row['hidden']) ? '<tr class="mm_forum-listrow'.($i++ % 2==0 ? '' : '2').'">' : '<tr class="hidden">';
+			$content .= (!$row['hidden']) ? '<tr class="mm_forum-listrow">' : '<tr class="mm_forum-listrow" style="background-color: #f0f0f0;">';
 			$content .= '	<td>'.$row['code'].'</td>';
 			$content .= '	<td><img src="../res/smilies/'.$row['smile_url'].'" /></td>';
 			$content .= '	<td>'.$row['smile_url'].'</td>';
 			$content .= '	<td><input type="text" name="mmforum[code]['.$row['uid'].']" value="'.$row['code'].'" /></td>';       
 			$content .= '	<td align="right">';
-			$content .= '		<a href="index.php?mmforum[tools]=2&mmforum[delete]['.$row['uid'].']=1"><img src="../../../../typo3/sysext/t3skin/icons/gfx/garbage.gif" /></a>&nbsp;&nbsp;';
-			$content .= 		$row['hidden']?'<a href="index.php?mmforum[tools]=2&mmforum[unhide]['.$row['uid'].']=1"><img src="../../../../typo3/sysext/t3skin/icons/gfx/button_unhide.gif" /></a>&nbsp;&nbsp;':'<a href="index.php?mmforum[tools]=2&mmforum[hide]['.$row['uid'].']=1"><img src="../../../../typo3/sysext/t3skin/icons/gfx/button_hide.gif" /></a>&nbsp;&nbsp;';
-			$content .= '		<input style="border:0px;" type="image" src="../../../../typo3/sysext/t3skin/icons/gfx/savedok.gif" name="mmforum[save]['.$row['uid'].']" />';
+			$content .= '		<a href="index.php?mmforum[tools]=2&mmforum[delete]['.$row['uid'].']=1"><img src="img/edit-delete.png" /></a>';
+			$content .= 		$row['hidden']?'<a href="index.php?mmforum[tools]=2&mmforum[unhide]['.$row['uid'].']=1"><img src="img/edit-hide.png" /></a>':'<a href="index.php?mmforum[tools]=2&mmforum[hide]['.$row['uid'].']=1"><img src="img/edit-hide.png" /></a>';
+			$content .= 		'<input style="border:0px;" type="image" src="img/save.png" name="mmforum[save]['.$row['uid'].']" />';
 			$content .= '	</td>';
 			$content .= '</tr>';
 		}
@@ -762,7 +790,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		if(!isset($mmforum['new']['fe_inserticon']))  $mmforum['new']['fe_inserticon']=$firstFile;
 		
 		
-		$content .= '<table cellpadding="2" cellspacing="0" class="mm_forum-list" width="100%">';
+		/*$content .= '<table cellpadding="2" cellspacing="0" class="mm_forum-list" width="100%">';
 		$content .= '<tr>
 						<td class="mm_forum-listrow_header">&nbsp;</td>
 						<td class="mm_forum-listrow_header">'.$LANG->getLL('tools.fe_inserticon').'</td>
@@ -770,7 +798,22 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 						<td class="mm_forum-listrow_header">'.$LANG->getLL('tools.lang_title').'</td>
 						<td class="mm_forum-listrow_header">'.$LANG->getLL('tools.lang_pattern').'</td>
 						<td class="mm_forum-listrow_header">'.$LANG->getLL('tools.lang_code').'</td>
-						<td class="mm_forum-listrow_header">&nbsp;</td></tr>';
+						<td class="mm_forum-listrow_header">&nbsp;</td></tr>';*/
+						
+		$content .= '<table cellpadding="2" cellspacing="0" width="100%" class="mm_forum-list">';
+		$content .= '<tr>
+						<td class="mm_forum-listrow_header" colspan="7"><img src="img/tools-syntax.png" style="vertical-align:middle; margin-right:8px;"> '.$LANG->getLL('tools.syntaxhighlighter').'</td>
+					</tr>';
+		$content .= '<tr>
+						<td class="mm_forum-listrow_label">&nbsp;</td>
+						<td class="mm_forum-listrow_label">'.$LANG->getLL('tools.fe_inserticon').'</td>
+						<td class="mm_forum-listrow_label">&nbsp;</td>
+						<td class="mm_forum-listrow_label">'.$LANG->getLL('tools.lang_title').'</td>
+						<td class="mm_forum-listrow_label">'.$LANG->getLL('tools.lang_pattern').'</td>
+						<td class="mm_forum-listrow_label">'.$LANG->getLL('tools.lang_code').'</td>
+						<td class="mm_forum-listrow_label">&nbsp;</td>
+					</tr>';
+						
 		$content .= '<tr>
 						<td class="mm_forum-listrow"><b>['.$LANG->getLL('tools.new').']</b></td>
 						<td class="mm_forum-listrow"><img src="../res/img/default/editor_icons/'.htmlspecialchars($mmforum['new']['fe_inserticon']).'" id="fe_inserticon_preview" /></td>
@@ -778,13 +821,13 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 						<td class="mm_forum-listrow"><input type="text" name="mmforum[new][lang_title]" value="'.htmlspecialchars($mmforum['new']['lang_title']).'" /></td>
 						<td class="mm_forum-listrow"><input type="text" name="mmforum[new][lang_pattern]" value="'.htmlspecialchars($mmforum['new']['lang_pattern']).'" /></td>
 						<td class="mm_forum-listrow"><select name="mmforum[new][lang_code]">'.$this->getFileOptionFields('../includes/geshi/geshi/','php','',FALSE).'</select></td>
-						<td align="right" class="mm_forum-listrow"><input type="image" src="../../../../typo3/sysext/t3skin/icons/gfx/savedok.gif" name="mmforum[save][0]" /></td>
+						<td align="right" class="mm_forum-listrow"><input type="image" src="img/save.png" name="mmforum[save][0]" /></td>
 					</tr>';
 		
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_syntaxhl','deleted=0','','uid asc');
 
 		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			$content .= (!$row['hidden']) ? '<tr class="mm_forum-listrow'.($i++ % 2==0 ? '' : '2').'">' : '<tr class="hidden">';
+			$content .= (!$row['hidden']) ? '<tr class="mm_forum-listrow">' : '<tr class="mm_forum-listrow" style="background-color: #f0f0f0;">';
 			$content .= '	<td>&nbsp;</td>';
 			$content .= '	<td><img src="../res/img/default/editor_icons/'.$row['fe_inserticon'].'" /></td>';
 			$content .= '	<td><select name="mmforum[fe_inserticon]['.$row['uid'].']">'.$this->getFileOptionFields('../res/img/default/editor_icons/','',$row[fe_inserticon],TRUE).'</select></td>';
@@ -792,9 +835,9 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 			$content .= '	<td><input type="text" name="mmforum[lang_pattern]['.$row['uid'].']" value="'.$row['lang_pattern'].'" /></td>';
 			$content .= '	<td><select name="mmforum[lang_code]['.$row['uid'].']">'.$this->getFileOptionFields('../includes/geshi/geshi/','php',$row[lang_code],FALSE).'</select></td>';       
 			$content .= '	<td align="right">';
-			$content .= '		<a href="index.php?mmforum[tools]=3&mmforum[delete]['.$row['uid'].']=1"><img src="../../../../typo3/sysext/t3skin/icons/gfx/garbage.gif" /></a>&nbsp;&nbsp;';
-			$content .= 		$row['hidden']?'<a href="index.php?mmforum[tools]=3&mmforum[unhide]['.$row['uid'].']=1"><img src="../../../../typo3/sysext/t3skin/icons/gfx/button_unhide.gif" /></a>&nbsp;&nbsp;':'<a href="index.php?mmforum[tools]=3&mmforum[hide]['.$row['uid'].']=1"><img src="../../../../typo3/sysext/t3skin/icons/gfx/button_hide.gif" /></a>&nbsp;&nbsp;';
-			$content .= '		<input style="border:0px;" type="image" src="../../../../typo3/sysext/t3skin/icons/gfx/savedok.gif" name="mmforum[save]['.$row['uid'].']" />';
+			$content .= '		<a href="index.php?mmforum[tools]=3&mmforum[delete]['.$row['uid'].']=1"><img src="img/edit-delete.png" /></a>';
+			$content .= 		$row['hidden']?'<a href="index.php?mmforum[tools]=3&mmforum[unhide]['.$row['uid'].']=1"><img src="img/edit-hide.png" /></a>':'<a href="index.php?mmforum[tools]=3&mmforum[hide]['.$row['uid'].']=1"><img src="img/edit-hide.png" /></a>';
+			$content .= '<input style="border:0px;" type="image" src="img/save.png" name="mmforum[save]['.$row['uid'].']" />';
 			$content .= '	</td>';
 			$content .= '</tr>';
 		}

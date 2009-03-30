@@ -69,7 +69,7 @@ class tx_mmforum_ranksBE {
         $returnUrl  = t3lib_extMgm::extRelPath('mm_forum').'mod1/index.php';
         $returnUrl  = urlencode($returnUrl);
         $createlink = $GLOBALS['BACK_PATH'].'alt_doc.php?returnUrl='.$returnUrl.'&edit[tx_mmforum_ranks]['.$this->p->confArr['forumPID'].']=new';
-        $content .= '<table cellspacing="0" cellpadding="2" border="0" style="width:100%;" class="mm_forum-list">
+        /*$content .= '<table cellspacing="0" cellpadding="2" border="0" style="width:100%;" class="mm_forum-list">
     <tr>
         <td class="mm_forum-listrow_header">'.$this->getLL('title').'</td>
         <td class="mm_forum-listrow_header">'.$this->getLL('icon').'</td>
@@ -82,7 +82,25 @@ class tx_mmforum_ranksBE {
         <td></td>
         <td><a href="'.$createlink.'"><img src="'.$GLOBALS['BACK_PATH'].t3lib_extMgm::extRelPath('t3skin').'/icons/gfx/new_el.gif" alt="Create" /></a></td>
     </tr>
-    ';
+    ';*/
+	
+		$content .= '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <td class="mm_forum-listrow_header" colspan="4" valign="top"><img src="img/ranks.png" style="vertical-align: middle; margin-right:8px;" />'.$GLOBALS['LANG']->getLL('menu.ranks').'</td>
+    </tr>
+	<tr>
+		<td class="mm_forum-listrow_label">'.$this->getLL('title').'</td>
+		<td class="mm_forum-listrow_label">'.$this->getLL('icon').'</td>
+		<td class="mm_forum-listrow_label">'.$this->getLL('posts').'</td>
+		<td class="mm_forum-listrow_label" style="width:24px;">&nbsp;</td>
+	</tr>
+    <tr>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td><a href="'.$createlink.'"><img src="img/rank-new.png" alt="Create" /></a></td>
+    </tr>
+	';
         
         while($rank = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
             
@@ -101,11 +119,11 @@ class tx_mmforum_ranksBE {
             $editlink = $GLOBALS['BACK_PATH'].'alt_doc.php?returnUrl='.$returnUrl.'&edit[tx_mmforum_ranks]['.$rank['uid'].']=edit';
                
             $i = 0;
-            $content .= '<tr class="mm_forum-listrow'.($i++ % 2==1 ? '' : '2').'">
+            $content .= '<tr class="mm_forum-listrow">
                 <td>'.$title.'</td>
                 <td>'.$icon.'</td>
                 <td>'.$posts.'</td>
-                <td><a href="'.$editlink.'"><img src="'.$GLOBALS['BACK_PATH'].t3lib_extMgm::extRelPath('t3skin').'/icons/gfx/edit2.gif" alt="Edit" /></a></td>
+                <td><a href="'.$editlink.'"><img src="img/edit.png" alt="Edit" /></a></td>
             </tr>
             ';
             

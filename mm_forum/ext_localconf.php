@@ -23,7 +23,7 @@ t3lib_extMgm::addPItoST43($_EXTKEY,"pi6/class.tx_mmforum_pi6.php","_pi6","list_t
 	 * delete all cache files used for the mm_forum. This hook is
 	 * called after clearing the TYPO3 cache.
 	 */
-$TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] = 'typo3conf/ext/mm_forum/includes/cache/class.tx_mmforum_cache.php:tx_mmforum_cache->clearAllCaches';
+$TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] = 'EXT:mm_forum/includes/cache/class.tx_mmforum_cache.php:tx_mmforum_cache->clearAllCaches';
 
 	/**
 	 * This config variable adds the 'nav_hide' field to the fields
