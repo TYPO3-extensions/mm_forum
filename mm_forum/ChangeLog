@@ -4,6 +4,8 @@
       are configured in the tx_mmforum_userfields table.
     * Redesign of backend module.
     * Fixed issue #2715
+    * Implemented a cronjob for notifying moderators about reported topics (credits
+      go to Nathan Lenz)
 
 2009-02-16  Martin Helmich <m.helmich@mittwald.de>
 

@@ -40,6 +40,8 @@
  * publish   - Notifies moderators about posts that are waiting to be published. This
  *             only makes sense if the mm_forum is run in the moderated mode. This cron
  *             should be called at least once a day.
+ * reported  - Notifies moderators about posts that have been reported by forum users.
+ *             This should be called at least once per day.
  *             
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @copyright  2008 Martin Helmich, Mittwald CM Service
@@ -64,6 +66,7 @@ require(dirname(PATH_thisScript).'/'.$BACK_PATH.'init.php');
 require(dirname(PATH_thisScript).'/classes/class.tx_mmforum_cron_indexing.php');
 require(dirname(PATH_thisScript).'/classes/class.tx_mmforum_cron_messaging.php');
 require(dirname(PATH_thisScript).'/classes/class.tx_mmforum_cron_publish.php');
+require(dirname(PATH_thisScript).'/classes/class.tx_mmforum_cron_reported.php');
 
 	// Die with error if no parameter was submitted
 if($_SERVER['argc'] < 2) die("FATAL ERROR - No parameter submitted. Don't know what to do.\n");
@@ -76,6 +79,7 @@ switch($cronMode) {
 	case 'indexing':		$className = 'tx_mmforum_cron_indexing'; break;
 	case 'messaging':		$className = 'tx_mmforum_cron_messaging'; break;
 	case 'publish':			$className = 'tx_mmforum_cron_publish'; break;
+    case 'reported':		$className = 'tx_mmforum_cron_reported'; break;
 	default:				die("FATAL ERROR - Cronjob parameter $cronMode is not known.\n");
 }
 
