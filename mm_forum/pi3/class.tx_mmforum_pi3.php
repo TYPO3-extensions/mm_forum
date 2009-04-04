@@ -412,14 +412,18 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
             }
 			$marker['###DATE###']		= $this->formatDate($row['sendtime']);
 			$marker['###MESSAGE###']	= nl2br($this->shield($message_text));
-			
-			$linkParams = array();
-            $linkParams[$this->prefixId] = array(
-                'action' => 'message_write',
-                'messid' => $row['uid']
-            );
-            if($this->useRealUrl()) $linkParams[$this->prefixId]['folder'] = $this->piVars['folder']?$this->piVars['folder']:'inbox';
-            $marker['###REPLY###']		= tx_mmforum_pi1::createButton('pmreply',$linkParams);
+
+			if($userdata === FALSE || $userdata['deleted'] == 1) {
+				$linkParams = array();
+				$linkParams[$this->prefixId] = array(
+					'action' => 'message_write',
+					'messid' => $row['uid']
+				);
+				if($this->useRealUrl()) $linkParams[$this->prefixId]['folder'] = $this->piVars['folder']?$this->piVars['folder']:'inbox';
+				$marker['###REPLY###']		= tx_mmforum_pi1::createButton('pmreply',$linkParams);
+			} else {
+				$marker['###REPLY###'] = '';
+			}
             
 			$linkParams[$this->prefixId] = array(
                 'action'=>'message_del',

@@ -126,9 +126,9 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 			$subject		= sprintf($this->getLL('mailSubject'),$this->conf['cron_sitetitle'],$GLOBALS['TYPO3_DB']->sql_num_rows($pm_res));
 			$username		= $user_arr['name']?$user_arr['name']:$user_arr['username'];
 			$recipient		= '"'.$username.'" <'.$user_arr['email'].'>';
-			$contenttype	= $GLOBALS['config']['cron_htmlemail']?'text/html':'text/plain';
+			$contenttype	= $this->conf['cron_htmlemail']?'text/html':'text/plain';
 			$header			= "Content-Type: $contenttype; charset=utf-8\n";
-			$header		   .= "From: ".$GLOBALS['config']['cron_notifyPublishSender']."\n";
+			$header		   .= "From: ".$this->conf['cron_notifyPublishSender']."\n";
 			$header		   .= "X-Mailer: PHP/" . phpversion(). "\n";
 			$header		   .= "X-Sender-IP: ".getenv("REMOTE_ADDR")."\n";
 

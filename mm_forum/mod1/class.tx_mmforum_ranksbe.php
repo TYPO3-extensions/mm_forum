@@ -69,20 +69,6 @@ class tx_mmforum_ranksBE {
         $returnUrl  = t3lib_extMgm::extRelPath('mm_forum').'mod1/index.php';
         $returnUrl  = urlencode($returnUrl);
         $createlink = $GLOBALS['BACK_PATH'].'alt_doc.php?returnUrl='.$returnUrl.'&edit[tx_mmforum_ranks]['.$this->p->confArr['forumPID'].']=new';
-        /*$content .= '<table cellspacing="0" cellpadding="2" border="0" style="width:100%;" class="mm_forum-list">
-    <tr>
-        <td class="mm_forum-listrow_header">'.$this->getLL('title').'</td>
-        <td class="mm_forum-listrow_header">'.$this->getLL('icon').'</td>
-        <td class="mm_forum-listrow_header">'.$this->getLL('posts').'</td>
-        <td class="mm_forum-listrow_header"></td>
-    </tr>
-    <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td><a href="'.$createlink.'"><img src="'.$GLOBALS['BACK_PATH'].t3lib_extMgm::extRelPath('t3skin').'/icons/gfx/new_el.gif" alt="Create" /></a></td>
-    </tr>
-    ';*/
 	
 		$content .= '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
     <tr>

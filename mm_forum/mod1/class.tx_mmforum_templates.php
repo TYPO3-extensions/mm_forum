@@ -241,7 +241,7 @@ class tx_mmforum_templates {
         }
         else $templateOptions = '<option value="">'.$GLOBALS['LANG']->getLL('tmpl_selectThemeFirst').'</option>';
         
-        $newThemeLink = '<a href="index.php?SET[function]=3&tx_mmforum_template[newtheme]=1" title="'.$GLOBALS['LANG']->getLL('tmpl_createTheme').'"><img src="'.BACK_PATH.t3lib_extMgm::extRelPath('t3skin').'icons/gfx/new_el.gif" style="vertical-align:middle;" border="0" /></a>';
+        $newThemeLink = '<a href="index.php?SET[function]=3&tx_mmforum_template[newtheme]=1" title="'.$GLOBALS['LANG']->getLL('tmpl_createTheme').'"><img src="img/forum-new.png" style="vertical-align:middle;" border="0" /></a>';
         
         if($this->tmpVars['theme']) {
             if($this->p->config['plugin.']['tx_mmforum.']['style']==$this->tmpVars['theme'])

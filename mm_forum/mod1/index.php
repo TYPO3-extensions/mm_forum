@@ -2,7 +2,7 @@
 /***************************************************************
  *  Copyright notice
  *
- *  (c) 2007 Mittwald CM Service
+ *  (c) 2009 Mittwald CM Service GmbH & Co. KG
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -673,9 +673,11 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		}
 
 		// Display smilie editing form
-		$path=t3lib_extMgm::extPath('mm_forum').'/res/smilies/';
-		$files=t3lib_div::getFilesInDir($path,'gif');
+		
+		$path	= t3lib_div::getFileAbsFileName($this->config['plugin.']['tx_mmforum.']['path_smilie']);
+		$files	= t3lib_div::getFilesInDir($path,'gif');
 		$firstFile='';
+		
 		if(count($files)>0) {
 			foreach($files as $k=>$f) {
 				if($firstFile=='')$firstFile=$f; 

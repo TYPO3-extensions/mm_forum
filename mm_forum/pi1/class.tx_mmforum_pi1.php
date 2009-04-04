@@ -583,11 +583,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $content .= $this->cObj->substituteMarker($template, "###LABEL_NOTOPICS###", $this->pi_getLL('topic.noTopicsFound'));
 		}
 
-        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($topiclist))
-        {
-            #$row['topic_title'] = str_replace('<','&lt;',$row['topic_title']);
-            #$row['topic_title'] = str_replace('>','&gt;',$row['topic_title']);
-
+        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($topiclist)) {
             $forum = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                 'forum_name,parentID',
                 'tx_mmforum_forums',
@@ -605,6 +601,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             if($row['solved'] == 1) {
                 $imgInfo['src'] = $conf['path_img'].$conf['images.']['solved'];
                 $imgInfo['alt'] = $this->pi_getLL('topic.isSolved');
+                $imgInfo['title'] = $this->pi_getLL('topic.isSolved');
                 $solved         = $this->buildImageTag($imgInfo);
             } else {
                 $solved = '';
@@ -619,6 +616,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             }
             $imgInfo['src'] = $conf['path_img'].$conf['images.']['jump_to'];
             $imgInfo['alt'] = $this->pi_getLL('topic.gotoLastPost');
+            $imgInfo['title'] = $this->pi_getLL('topic.gotoLastPost');
             $last_post_link = $this->pi_linkToPage($this->buildImageTag($imgInfo), $GLOBALS['TSFE']->id,'',$linkparams);
 
             if($row['topic_is'])
@@ -635,7 +633,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $marker['###TOPICNAME###']  = $topic_is.$this->pi_linkTP($this->escape($row['topic_title']),$linkParams).$solved;
             $marker['###UNDERLINE###']  = $this->escape($rowc['cat_title']).' &raquo; '.$this->escape($rowf['forum_name']);
             $marker['###POSTS###']      = intval($row['topic_replies']).' ('.intval($row['topic_views']).')';
-            #$marker['###AUTHOR###']     = tx_mmforum_tools::link_profil($row['topic_poster']);
             $marker['###AUTHOR###']		= $this->linkToUserProfile($row['topic_poster']);
             $marker['###LAST###']       = $this->getlastpost($row['topic_last_post_id'],$conf).$last_post_link;
 
@@ -776,8 +773,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Check if solved flag is set
 			if ($row['solved'] == 1) {
 				$imgInfo = array(
-					'src' => $conf['path_img'] . $conf['images.']['solved'],
-					'alt' => $this->pi_getLL('topic.isSolved')
+					'src'	=> $conf['path_img'] . $conf['images.']['solved'],
+					'alt'	=> $this->pi_getLL('topic.isSolved'),
+					'title'	=> $this->pi_getLL('topic.isSolved')
 				);
 				$solved = $this->buildImageTag($imgInfo);
 			} else {
@@ -1107,7 +1105,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 
 
-		// === Checking the forum for read access ===
+		// Checking the forum for read access
 		if (!$this->getMayRead_forum($forumId)) {
 			$content .= $this->errorMessage($conf, $this->pi_getLL('board.noAccess'));
 			return $content;
@@ -1123,8 +1121,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$content .= $this->errorMessage($conf, $this->pi_getLL('board.noAccess'));
 			return $content;
 		}
-		// === end of forum access check ===
-
 
 		// load the forum details for the header
 		list($rowForum) = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
@@ -1222,16 +1218,18 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$solved = '';
 			$favorit = '';
 			if ($row['solved'] == 1 && $this->conf['topicIconMode'] == 'classic') {
-				$imgInfo['src'] = $conf['path_img'] . $conf['images.']['solved'];
-				$imgInfo['alt'] = $this->pi_getLL('topic.isSolved');
-				$solved         = $this->buildImageTag($imgInfo);
+				$imgInfo['src']		= $conf['path_img'] . $conf['images.']['solved'];
+				$imgInfo['alt']		= $this->pi_getLL('topic.isSolved');
+				$imgInfo['title']	= $this->pi_getLL('topic.isSolved');
+				$solved				= $this->buildImageTag($imgInfo);
 			}
 
 			// Check if the topic is favorite
 			if (is_array($userFav) && in_array ($row['uid'], $userFav)) {
-				$imgInfo['src'] = $conf['path_img'] . $conf['images.']['favorite'];
-				$imgInfo['alt'] = $this->pi_getLL('topic.isFavorite');
-				$favorit        = $this->buildImageTag($imgInfo);
+				$imgInfo['src']		= $conf['path_img'] . $conf['images.']['favorite'];
+				$imgInfo['alt']		= $this->pi_getLL('topic.isFavorite');
+				$imgInfo['title']	= $this->pi_getLL('topic.isFavorite');
+				$favorit			= $this->buildImageTag($imgInfo);
 			}
 
 			$row['topic_title'] = str_replace('<', '&lt;', $row['topic_title']);
@@ -1299,8 +1297,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			}
 
 			$linkParams[$this->prefixId]['pid'] = 'last';
-			$imgInfo['src'] = $conf['path_img'] . $conf['images.']['jump_to'];
-			$imgInfo['alt'] = $this->pi_getLL('topic.gotoLastPost');
+			$imgInfo['src']		= $conf['path_img'] . $conf['images.']['jump_to'];
+			$imgInfo['alt']		= $this->pi_getLL('topic.gotoLastPost');
+			$imgInfo['title']	= $this->pi_getLL('topic.gotoLastPost');
 			$last_post_link = $this->pi_linkToPage($this->buildImageTag($imgInfo), $GLOBALS['TSFE']->id, '', $linkParams);
 
 			$replies = intval($row['topic_replies']);
@@ -1356,8 +1355,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			);
 
 			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1) {
-				$imgInfo['alt'] = $this->pi_getLL('topic.emailSubscr.off');
-				$imgInfo['src'] = $conf['path_img'].$conf['images.']['info_mail_off'];
+				$imgInfo['alt']		= $this->pi_getLL('topic.emailSubscr.off');
+				$imgInfo['title']	= $this->pi_getLL('topic.emailSubscr.off');
+				$imgInfo['src']		= $conf['path_img'].$conf['images.']['info_mail_off'];
 				$linkParams[$this->prefixId] = array(
 					'action' => 'set_havealookforum',
 					'fid'    => $forumId
@@ -1366,8 +1366,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				//TODO: This does not work yet
 				$link = $this->pi_linkTP($this->pi_getLL('on'), $linkParams).' / <strong>' . $this->pi_getLL('off') . '</strong>';
 			} else {
-				$imgInfo['alt'] = $this->pi_getLL('topic.emailSubscr.on');
-				$imgInfo['src'] = $conf['path_img'].$conf['images.']['info_mail_on'];
+				$imgInfo['alt']		= $this->pi_getLL('topic.emailSubscr.on');
+				$imgInfo['title']	= $this->pi_getLL('topic.emailSubscr.on');
+				$imgInfo['src']		= $conf['path_img'].$conf['images.']['info_mail_on'];
 				$linkParams[$this->prefixId] = array(
 					'action' => 'del_havealookforum',
 					'fid'    => $forumId
@@ -1674,6 +1675,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$imgInfo = array(
 				'src' => $conf['path_img'] . $conf['images.']['jump_to'],
 				'alt' => $this->pi_getLL('topic.lastarticle'),
+				'title' => $this->pi_getLL('topic.lastarticle'),
 			);
 
 			$lastPostParams[$this->prefixId] = array(
@@ -3587,6 +3589,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $str = $this->cObj->substituteMarkerArray($this->pi_getLL('user.hot'),$llMarker);
                 $imgInfo['src']                     = $conf['path_img'].$conf['images.']['5kstar'];
                 $imgInfo['alt']                     = $str;
+                $imgInfo['title']                   = $str;
                 $marker['###TOTALPOSTS###']        .= $this->buildImageTag($imgInfo);
             }
 
@@ -3787,6 +3790,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $topic_is       = $row['topic_is']?"<span class=\"tx-mmforum-pi1-listtopic-prefix\">[{$row['topic_is']}]</span> ":'';
             $imgInfo['src'] = $this->conf['path_img'].$this->conf['images.']['solved'];
             $imgInfo['alt'] = $this->pi_getLL('topic.isSolved');
+            $imgInfo['title'] = $this->pi_getLL('topic.isSolved');
             $solved         = $row['solved'] ? $this->buildImageTag($imgInfo) : '';
 
             $linkParams[$this->prefixId] = array(
@@ -4024,7 +4028,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
         $linkParams = array();
 
-        IF($table == "tx_mmforum_topics") {
+        if($table == "tx_mmforum_topics") {
             if($column == 'topic_is') {
                 $linkParams[$this->prefixId]['action']='list_prefix';
                 if($this->piVars['list_prefix']) {
@@ -4033,12 +4037,15 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     $linkParams[$this->prefixId]['list_prefix']['order'] = $settings['order'];
                     $linkParams[$this->prefixId]['list_prefix']['prfx'] = $settings['prfx'];
                 }
-            }
-            elseif($column != 'topic_replies') {
+            } elseif($column != 'topic_replies') {
                 $linkParams[$this->prefixId]['action'] = 'list_topic';
                 $linkParams[$this->prefixId]['fid'] = $this->piVars['fid'];
-            }
-            else {
+
+				if($this->useRealUrl()) {
+					$linkParams[$this->prefixId]['tid'] = 'pages';
+					$linkParams[$this->prefixId]['pid'] = 'page';
+				}
+            } else {
                 $linkParams[$this->prefixId]['action'] = 'list_unans';
             }
         }
@@ -5011,12 +5018,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $this->cObj->data = $oldData;
 
             return $image;
-        } elseif($topicIconMode = 'classic') {
+        } elseif($topicIconMode == 'classic') {
             $filename = ($isClosed?'closed_':'').'forum'.($isNew?'_new':'');
 
             $imgInfo = array(
-                'src'       => $this->conf['path_img'].$this->conf['images.'][$filename],
-                'alt'       => $this->pi_getLL('board.'.$filename)
+                'src'		=> $this->conf['path_img'].$this->conf['images.'][$filename],
+                'alt'		=> $this->pi_getLL('board.'.$filename),
+                'title'		=> $this->pi_getLL('board.'.$filename)
             );
             return $this->buildImageTag($imgInfo);
         }
