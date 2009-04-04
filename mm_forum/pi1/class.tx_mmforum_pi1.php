@@ -2306,7 +2306,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					'###LABEL_POLL###'          => $this->pi_getLL('poll.postattach'),
 					'###POLL###'                => $pollObj->display_createForm($this->piVars['poll'] ? $this->piVars['poll'] : array(),$this),
 					'###POLLDIV_STYLE###'       => ($this->piVars['enable_poll'] ? '' : 'style="display:none;"'),
-					'###ENABLE_POLL###'         => ($this->piVars['enable_poll'] ? 'checked="checked' : '')
+					'###ENABLE_POLL###'         => ($this->piVars['enable_poll'] ? 'checked="checked"' : '')
 				);
 
 				// Remove file attachment section if file attachments are disabled
@@ -2731,6 +2731,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      */
     function post_edit($content, $conf)
     {
+            /* Get post UID */
+		$postId = intval($this->piVars['pid']);
+
         // Get topic UID
         $postlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             "*",
@@ -2806,7 +2809,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						);
 						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid = ' . $postId, $updateData);
 
-						// Update attachment records with the post ID (as this is not set within the performAttachmentUpload)
+                            // Update attachment records with the post ID (as this is not set within the performAttachmentUpload)
 						if (count($attachmentIds)) {
 							$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid IN (' . implode(',', $attachmentIds) . ')', array('post_id' => $postId));
 						}

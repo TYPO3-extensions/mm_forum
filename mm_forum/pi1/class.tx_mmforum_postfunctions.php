@@ -680,7 +680,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'*',
 				'tx_mmforum_attachments',
-				'post_id = '.$row['attachment'].' AND deleted=0',
+				'post_id = '.$row['uid'].' AND deleted=0',
 				'',
 				'uid ASC'
 			);
