@@ -447,7 +447,7 @@ class tx_mmforum_havealook {
 			'DISTINCT m.user_id, u.email, u.' . $forumObj->getUserNameField(),
 			'tx_mmforum_topicmail m, fe_users u',
 			'm.user_id = u.uid AND m.topic_id = ' . $topicId . 
-			' AND u.deleted = 0 AND u.disable = 0 AND m.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('m')
+			' AND u.deleted = 0 AND u.email != "" AND u.disable = 0 AND m.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('m')
 		);
 
 		// loop through each user who subscribed
@@ -544,8 +544,12 @@ class tx_mmforum_havealook {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'DISTINCT m.user_id, u.email, u.' . $forumObj->getUserNameField(),
 			'tx_mmforum_forummail m, fe_users u',
-			'm.user_id = u.uid AND (m.forum_id = ' . intval($forumId) . ($categoryId > 0 ? ' OR m.forum_id = ' . $categoryId : '') . ') ' .
-			'AND u.deleted = 0 AND u.disable = 0 AND m.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('m')
+			'm.user_id = u.uid AND
+			 (m.forum_id = ' . intval($forumId) . ($categoryId > 0 ? ' OR m.forum_id = ' . $categoryId : '') . ') AND
+			 u.deleted = 0 AND
+			 u.disable = 0 AND
+			 u.email != "" AND
+			 m.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('m')
 		);
 
 		while (list($toUserId, $toEmail, $toUsername) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
