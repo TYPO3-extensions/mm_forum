@@ -2695,7 +2695,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$newpath .= '.' . $ext[1];
 
 			move_uploaded_file($file['tmp_name'], $newpath);
-			chmod($newpath, intval($GLOBALS['TYPO3_CONF_VARS']['BE']['fileCreateMask'], 8));
+			t3lib_div::fixPermissions($newpath);
 
 			$insertArray = array(
 				'pid'       => $this->getStoragePID(),

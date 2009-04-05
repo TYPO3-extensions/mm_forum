@@ -530,8 +530,6 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		// Remove avatar. This does not remove the actual image file, but sets the
 		// avatar field in the user record to empty.
 		if (isset($this->piVars['del_avatar'])) {
-			#$updateArray['tx_mmforum_avatar'] = '';
-			#$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$userId,$updateArray);
 			$this->remove_avatar($userId);
 		}
 
@@ -551,6 +549,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			$uploadfile = $uploaddir.$userId.'_'.time().$mimes[$_FILES[$this->prefixId]['type']['file']];
             
 			if (move_uploaded_file($_FILES[$this->prefixId]['tmp_name']['file'], $uploadfile)) {
+				t3lib_div::fixPermissions($uploadfile);
 				$updateArray['tx_mmforum_avatar'] = $file;
 				$upload_ok = true;
 			} else {

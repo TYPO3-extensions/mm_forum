@@ -392,7 +392,12 @@ function catchTab(item,e){
         if(substr($srcdir,-1,1)=='/') $srcdir = substr($srcdir,0,strlen($srcdir)-1);
         
         $dirs = t3lib_div::get_dirs($srcdir);
-        if(!is_dir($dstdir)) mkdir($dstdir);
+		
+        if(!is_dir($dstdir)) {
+			mkdir($dstdir);
+			t3lib_div::fixPermissions($dstdir);
+		}
+
         if(count($dirs)>0) {
             foreach($dirs as $dir) {
                 if(!is_dir($dstdir.'/'.$dir)) mkdir($dstdir.'/'.$dir);
@@ -404,6 +409,7 @@ function catchTab(item,e){
         if(count($files)>0) {
             foreach($files as $file) {
                 copy($srcdir.'/'.$file,$dstdir.'/'.$file);
+				t3lib_div::fixPermissions($dstdir.'/'.$file);
             }
         }
     }
