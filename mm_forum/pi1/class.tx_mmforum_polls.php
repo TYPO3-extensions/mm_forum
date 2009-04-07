@@ -181,13 +181,15 @@ class tx_mmforum_polls {
      * selects an answer possibility in the post listing view and hits "Vote!").
      * The fact that this user voted on this poll is stored into the database.
      * 
-     * @version 2007-05-22
+     * @version 2008-04-07
      * @return  void
      */
     function objVote() {
         $answer_id = $this->piVars['poll']['answer'];
         $poll_id = $this->data['uid'];
         $user_id = $GLOBALS['TSFE']->fe_user->user['uid'];
+
+		if(!$this->getMayVote()) return;
         
         $answer_id  = intval($answer_id);
         $poll_id	= intval($poll_id);
