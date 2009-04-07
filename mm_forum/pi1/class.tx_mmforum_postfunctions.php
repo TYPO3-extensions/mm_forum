@@ -272,14 +272,17 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		$templateItem  = trim($this->cObj->getSubpart($templateFile, '###LIST_POSTS###'));
 		$templateFirst = trim($this->cObj->getSubpart($templateFile, '###LIST_POSTS_FIRST###'));
 
+		$i = 1;
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($postList)) {
-			$postMarker = tx_mmforum_postfunctions::getPostListMarkers($row, $topicData);
+
+			$postMarker = tx_mmforum_postfunctions::getPostListMarkers($row, $topicData, array('even' => ($i++%2)==0));
 			$postMarker['###ADMIN_PANEL###'] = $adminPanel;
 			if ($row['uid'] == $topicData['topic_first_post_id'] && $templateFirst) {
 				$content .= $this->cObj->substituteMarkerArrayCached($templateFirst, $postMarker);
 			} else {
 				$content .= $this->cObj->substituteMarkerArrayCached($templateItem, $postMarker);
 			}
+
 		}
 
 		// Output post listing END
@@ -471,20 +474,21 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 		$userSignature = tx_mmforum_postfunctions::marker_getUserSignature($userData);
 		$marker = array(
-			'###LABEL_AUTHOR###'  => $extra['###LABEL_AUTHOR###'],
-			'###LABEL_MESSAGE###' => $extra['###LABEL_MESSAGE###'],  
-			'###ATTACHMENTS###'   => tx_mmforum_postfunctions::marker_getAttachmentMarker($row,$topic),
-			'###POSTOPTIONS###'   => tx_mmforum_postfunctions::marker_getPostoptionsMarker($row,$topic),
+			'###LABEL_AUTHOR###'	=> $extra['###LABEL_AUTHOR###'],
+			'###LABEL_MESSAGE###'	=> $extra['###LABEL_MESSAGE###'],
+			'###ATTACHMENTS###'		=> tx_mmforum_postfunctions::marker_getAttachmentMarker($row,$topic),
+			'###POSTOPTIONS###'		=> tx_mmforum_postfunctions::marker_getPostoptionsMarker($row,$topic),
 
-			'###POSTMENU###'      => implode('', $mAp),
-			'###PROFILEMENU###'   => $mAp['profilebuttons'],
-			'###MESSAGEMENU###'   => $mAp['msgbuttons'], 
-			'###POSTUSER###'      => $this->ident_user($row['poster_id'], $this->conf, ($topic['topic_replies'] > 0 ? $topic['topic_poster'] : false)),
-			'###POSTTEXT###'      => tx_mmforum_postfunctions::marker_getPosttextMarker($row, $topic) . ($this->conf['list_posts.']['appendSignatureToPostText'] ? $userSignature : ''),
-			'###ANKER###'         => '<a name="pid' . $row['uid'] . '"></a>',	// deprecated, use "POSTANCHOR"
-			'###POSTANCHOR###'    => '<a name="pid' . $row['uid'] . '"></a>',
-			'###POSTDATE###'      => $this->pi_getLL('post.writtenOn').': '.$this->formatDate($row['post_time']),
-			'###USERSIGNATURE###' => $userSignature,
+			'###POSTMENU###'		=> implode('', $mAp),
+			'###PROFILEMENU###'		=> $mAp['profilebuttons'],
+			'###MESSAGEMENU###'		=> $mAp['msgbuttons'],
+			'###POSTUSER###'		=> $this->ident_user($row['poster_id'], $this->conf, ($topic['topic_replies'] > 0 ? $topic['topic_poster'] : false)),
+			'###POSTTEXT###'		=> tx_mmforum_postfunctions::marker_getPosttextMarker($row, $topic) . ($this->conf['list_posts.']['appendSignatureToPostText'] ? $userSignature : ''),
+			'###ANKER###'			=> '<a name="pid' . $row['uid'] . '"></a>',	// deprecated, use "POSTANCHOR"
+			'###POSTANCHOR###'		=> '<a name="pid' . $row['uid'] . '"></a>',
+			'###POSTDATE###'		=> $this->pi_getLL('post.writtenOn').': '.$this->formatDate($row['post_time']),
+			'###USERSIGNATURE###'	=> $userSignature,
+			'###EVEN_ODD###'		=> $extra['even'] ? 'even' : 'odd'
 		);
 
 		// Include hooks
@@ -596,7 +600,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			$profile .= $this->createButton('profile','profileView:'.$user['uid'],0,true);
 		
 				/* Generate buttons */
-			$profile = tx_mmforum_postfunctions::getUserButtons($user);
+			$profile .= tx_mmforum_postfunctions::getUserButtons($user);
         }
 		
         if ($GLOBALS['TSFE']->fe_user->user['username'] && $user['uid']!=$GLOBALS['TSFE']->fe_user->user['uid']){
@@ -630,7 +634,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
     function marker_getPostoptionsMarker($row,$topic) {
     	$lastpostdate = $topic['_v_last_post_date'];
     	
-    	IF ((($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid']) AND ($lastpostdate == $row['post_time'])) OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
+		IF ((($row['poster_id'] == $this->getUserID()) AND ($lastpostdate == $row['post_time']) AND $topic['closed_flag']!=1) OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
             
             $linkParams[$this->prefixId] = array(
                 'action'        => 'post_edit',
