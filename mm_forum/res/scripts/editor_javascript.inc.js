@@ -90,17 +90,38 @@ function checkForm() {
 }
 
 function emoticon(text) {
-	var post = document.getElementById('post');
-	var txtarea = post.message;
 	text = ' ' + text + ' ';
-	if (txtarea.createTextRange && txtarea.caretPos) {
-		var caretPos = txtarea.caretPos;
-		caretPos.text = caretPos.text.charAt(caretPos.text.length - 1) == ' ' ? caretPos.text + text + ' ' : caretPos.text + text;
-		txtarea.focus();
+	var post = document.getElementById('post');
+	var editor = post.message;
+
+		/* Internet Explorer */
+	if(typeof document.selection != 'undefined') {
+		if (document.post.message.createTextRange && document.post.message.caretPos) {
+			var caretPos = document.post.message.caretPos;
+			caretPos.text = caretPos.text.charAt(caretPos.text.length - 1) == ' ' ? text + ' ' : text;
+			document.post.message.focus();
+		} else {
+		document.post.message.value  += text;
+		document.post.message.focus();
+		}
+
+		/* Gecko */
+	} else if(typeof editor.selectionStart != 'undefined') {
+		start	= editor.selectionStart;
+		end		= editor.selectionEnd;
+
+		editor.value = editor.value.substr(0, start) + text + editor.value.substr(end);
+
+		editor.focus();
+		editor.selectionStart = end + text.length;
+		editor.selectionEnd = editor.selectionStart;
+
+		/* Other */
 	} else {
-		txtarea.value  += text;
-		txtarea.focus();
+		editor.value += text;
+		editor.focus();
 	}
+
 }
 
 function bbfontstyle(bbopen, bbclose) {
