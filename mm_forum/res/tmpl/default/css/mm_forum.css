@@ -350,7 +350,8 @@ div.tx-mmforum-pi1-codeboxnote {
  ***/
  
 td.tx-mmforum-pi1-newpost-left {
- border: 1px solid #dddddd;
+ border-top: 1px solid #dddddd;
+ border-bottom: 1px solid #dddddd;
  border-collapse: collapse;
  width: 150px;
  text-align: left;
@@ -360,7 +361,8 @@ td.tx-mmforum-pi1-newpost-left {
 }
  
 td.tx-mmforum-pi1-newpost-middle {
- border: 1px solid #dddddd;
+ border-top: 1px solid #dddddd;
+ border-bottom: 1px solid #dddddd;
  border-collapse: collapse;
  text-align: center;
  font-family: Tahoma;
