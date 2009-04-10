@@ -265,6 +265,16 @@ div.tx-mmforum-pi1-codeboxnote {
 	border-bottom: 1px solid #dddddd !important;
 	border-collapse: collapse;
 }
+
+.tx-mmforum-pi1-listtopic-rating {
+	width: 60px;
+	text-align: center !important;
+	font-size: 10px;
+	border-style: hidden !important;
+	border-top: 1px solid #dddddd !important;
+	border-bottom: 1px solid #dddddd !important;
+	border-collapse: collapse;
+}
  
 .tx-mmforum-pi1-listtopic-author {
 	width: 120px;
@@ -1064,4 +1074,8 @@ td.tx-mmforum-optth-disabled {
 	border-top: 1px solid #dddddd !important;
 	border-bottom: 1px solid #dddddd !important;
 	border-collapse: collapse;
+}
+
+.tx-mmforum-pi1-listpost-rating {
+	float: left;
 }

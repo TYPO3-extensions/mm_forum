@@ -351,4 +351,7 @@ plugin.tx_mmforum {
 			quoteClass			= tx-mmforum-pi1-pt-quote
 			codeClass			= tx-mmforum-pi1-pt-code
 		}
+
+	# Style path
+		stylePath				= {$plugin.tx_mmforum.style_path}
 }

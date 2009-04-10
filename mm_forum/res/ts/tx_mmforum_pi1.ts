@@ -524,7 +524,14 @@ plugin.tx_mmforum_pi1 {
             }
         }
             
-        # Topic icon mode
-            topicIconMode = {$plugin.tx_mmforum.topicIconMode}
+	# Topic icon mode
+		topicIconMode = {$plugin.tx_mmforum.topicIconMode}
+
+	# Ratings settings
+		enableRating {
+			topics			= 1
+			posts			= 0
+			users			= 0
+		}
             
 }

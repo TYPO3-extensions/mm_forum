@@ -154,6 +154,9 @@ require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_ranksfe.p
 require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_postqueue.php');
 require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_rss.php');
 
+if(t3lib_extMgm::isLoaded('ratings'))
+	require_once(t3lib_extMgm::extPath('ratings') . 'class.tx_ratings_api.php');
+
 /**
  * Plugin 'mm_forum' for the 'mm_forum' extension.
  * This is the main plugin of the 'mm_forum' extension. Offers functions
@@ -1155,12 +1158,17 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$marker['###NEWTOPICLINK###'] = '';
 		}
 
+		$isTopicRating = $this->isTopicRating();
+		if(!$isTopicRating) {
+			$template = $this->cObj->substituteSubpart($template, '###SUBP_RATING_LABEL###', '');
+		}
 
-		$marker['###LABEL_TOPIC###']         = $this->pi_getLL('board.topic');
-		$marker['###LABEL_REPLIES_HITS###']  = $this->pi_getLL('board.replies');
-		$marker['###LABEL_AUTHOR###']        = $this->pi_getLL('board.author');
-		$marker['###LABEL_LASTPOST###']      = $this->pi_getLL('board.lastPost');
-		$marker['###LABEL_HIDESOLVED###']    = $this->pi_getLL('board.hideSolved');
+		$marker['###LABEL_TOPIC###']		= $this->pi_getLL('board.topic');
+		$marker['###LABEL_REPLIES_HITS###']	= $this->pi_getLL('board.replies');
+		$marker['###LABEL_AUTHOR###']		= $this->pi_getLL('board.author');
+		$marker['###LABEL_LASTPOST###']		= $this->pi_getLL('board.lastPost');
+		$marker['###LABEL_HIDESOLVED###']	= $this->pi_getLL('board.hideSolved');
+		$marker['###LABEL_RATING###']		= $this->pi_getLL('board.rating');
 
 		$limitcount = $conf['topic_count'];
 
@@ -1212,6 +1220,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$template = $this->cObj->getSubpart($templateFile, '###LIST_NOTOPIC###');
 			$content .= $this->cObj->substituteMarker($template, '###LABEL_NOTOPICS###', $this->pi_getLL('topic.noTopicsFound'));
 		}
+
+		if(!$isTopicRating) $template = $this->cObj->substituteSubpart($template, '###SUBP_RATING###', '');
 
 		$j = 1;
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($topiclist)) {
@@ -1310,6 +1320,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$marker['###AUTHOR###']     		= $this->getauthor($row['topic_poster']);
 			$marker['###LAST###']               = $this->getlastpost($row['topic_last_post_id'], $conf) . ' ' . $last_post_link;
 			$marker['###LIST_TOPIC_EVENODD###']	= $this->conf['display.']['listItem.'][($j++ % 2 ? 'odd' : 'even') . 'Class'];
+			$marker['###RATING###']				= $isTopicRating ? $this->getRatingDisplay('tx_mmforum_topic', $row['uid']) : '';
 
 			// display last answer (and a no-replies message if there is only the initial thread post)
 			if ($replies > 0) {
@@ -4260,16 +4271,17 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$avatar = $this->getUserAvatar($userData);
 
 			$marker = array(
-				'###LLL_DELETED###'   => $this->pi_getLL('user-deleted'),
-				'###USERNAME###'      => $this->cObj->stdWrap($userData[$this->getUserNameField()], $this->conf['list_posts.']['userinfo.']['username_stdWrap.']),
-				'###USERREALNAME###'  => $this->cObj->stdWrap($userData['name'], $this->conf['list_posts.']['userinfo.']['realname_stdWrap.']),
-				'###USERRANKS###'     => $this->get_userranking($uid, $conf),
-				'###TOPICCREATOR###'  => ($uid == $threadauthor ? $this->cObj->stdWrap($this->pi_getLL('topic-topicauthor'),$this->conf['list_posts.']['userinfo.']['creator_stdWrap.']) : ''),
-				'###AVATAR###'        => $avatar,
-				'###LLL_REGSINCE###'  => $this->pi_getLL('user-regSince'),
-				'###LLL_POSTCOUNT###' => $this->pi_getLL('user-posts'),
-				'###REGSINCE###'      => $this->cObj->stdWrap($userData['crdate'], $this->conf['list_posts.']['userinfo.']['crdate_stdWrap.']),
-				'###POSTCOUNT###'     => intval($userData['tx_mmforum_posts'])
+				'###LLL_DELETED###'		=> $this->pi_getLL('user-deleted'),
+				'###USERNAME###'		=> $this->cObj->stdWrap($userData[$this->getUserNameField()], $this->conf['list_posts.']['userinfo.']['username_stdWrap.']),
+				'###USERREALNAME###'	=> $this->cObj->stdWrap($userData['name'], $this->conf['list_posts.']['userinfo.']['realname_stdWrap.']),
+				'###USERRANKS###'		=> $this->get_userranking($uid, $conf),
+				'###TOPICCREATOR###'	=> ($uid == $threadauthor ? $this->cObj->stdWrap($this->pi_getLL('topic-topicauthor'),$this->conf['list_posts.']['userinfo.']['creator_stdWrap.']) : ''),
+				'###AVATAR###'			=> $avatar,
+				'###LLL_REGSINCE###'	=> $this->pi_getLL('user-regSince'),
+				'###LLL_POSTCOUNT###'	=> $this->pi_getLL('user-posts'),
+				'###REGSINCE###'		=> $this->cObj->stdWrap($userData['crdate'], $this->conf['list_posts.']['userinfo.']['crdate_stdWrap.']),
+				'###POSTCOUNT###'		=> intval($userData['tx_mmforum_posts']),
+				'###USER_RATING###'		=> $this->isUserRating() ? $this->getRatingDisplay('fe_users', $userData['uid']) : ''
 			);
 			if ($userData === false) {
 				$template = $this->cObj->substituteSubpart($template, '###USERINFO_REGULAR###', '');
@@ -5721,6 +5733,53 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function getTopicIconMode() {
 		return ($this->conf['topicIconMode'] ? $this->conf['topicIconMode'] : 'modern');
 	}
+
+		/**
+		 * Determines if rating is enabled for a specific data type.
+		 * This can be configured using the plugin.tx_mmforum_pi1.enableRating
+		 * array. Furthermore, the 'ratings' extension is required to be installed.
+		 *
+		 * @author  Martin Helmich <m.helmich@mittwald.de>
+		 * @version 0.1.8-090410
+		 * @param   string $table The data type that is to be checked. At the moment,
+		 *                        this may either be 'topics', 'posts' or 'users'.
+		 * @return  boolean       TRUE, if rating is enabled, FALSE if rating disabled
+		 *                        or the 'ratings' extension is not installed.
+		 */
+	function isRating($table) {
+		if(!t3lib_extMgm::isLoaded('ratings')) return false;
+		return $this->conf['enableRating.'][$table] ? true : false;
+	}
+
+		/**
+		 * Determines if topic rating is enabled.
+		 *
+		 * @author  Martin Helmich <m.helmich@mittwald.de>
+		 * @version 0.1.8-090410
+		 * @return  boolean TRUE if topic rating is enabled, FALSE is topic rating
+		 *                  is disabled or the 'ratings' extension is not installed.
+		 */
+	function isTopicRating() { return $this->isRating('topics'); }
+
+		/**
+		 * Determines if post rating is enabled.
+		 *
+		 * @author  Martin Helmich <m.helmich@mittwald.de>
+		 * @version 0.1.8-090410
+		 * @return  boolean TRUE if post rating is enabled, FALSE is post rating
+		 *                  is disabled or the 'ratings' extension is not installed.
+		 */
+	function isPostRating() { return $this->isRating('posts'); }
+
+		/**
+		 * Determines if user rating is enabled.
+		 *
+		 * @author  Martin Helmich <m.helmich@mittwald.de>
+		 * @version 0.1.8-090410
+		 * @return  boolean TRUE if user rating is enabled, FALSE is user rating
+		 *                  is disabled or the 'ratings' extension is not installed.
+		 */
+	function isUserRating() { return $this->isRating('users'); }
 }
 
 

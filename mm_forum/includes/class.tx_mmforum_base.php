@@ -636,8 +636,56 @@ class tx_mmforum_base extends tslib_pibase {
 		}
 	}
 
+		/**
+		 * Gets the UID of the main mm_forum user group.
+		 *
+		 * @author  Martin Helmich <m.helmich@mittwald.de>
+		 * @version 0.1.8-090410
+		 * @return  int The UID of the main mm_forum user group.
+		 */
 	function getBaseUserGroup() {
 		return $this->conf['userGroup'];
+	}
+
+		/**
+		 * Gets an instance of the tx_ratings_api class.
+		 * This function returns an instance of the tx_ratings_api class. The
+		 * class is only instantiated once. If the 'ratings' extension is not
+		 * installed, this function returns NULL.
+		 *
+		 * @author  Martin Helmich <m.helmich@mittwald.de>
+		 * @version 0.1.8-090410
+		 * @return  tx_ratings_api An instance of the tx_ratings_api class or
+		 *                         NULL if the ratings extension is not installed.
+		 */
+	function getRatingInstance() {
+		if(!t3lib_extMgm::isLoaded('ratings')) return null;
+
+		if(isset($this->rating)) return $this->rating;
+		else {
+			$this->rating = t3lib_div::makeInstance('tx_ratings_api');
+			$this->ratingConf = $this->rating->getDefaultConfig();
+			$this->ratingConf['templateFile'] = $this->conf['stylePath'].'/rating/ratings.html';
+
+			return $this->rating;
+		}
+	}
+
+		/**
+		 * Displays a rating form using the API of the 'ratings' extension.
+		 * Rated records are identified by a combination of the table name and
+		 * the record's uid.
+		 *
+		 * @author  Martin Helmich <m.helmich@mittwald.de>
+		 * @version 0.1.8-090410
+		 * @param  string $table The table name of the rated record (e.g. fe_users
+		 *                       or tx_mmforum_topics)
+		 * @param  int    $uid   The uid of the rated record.
+		 * @return string        The HTML code of the ratings form
+		 */
+	function getRatingDisplay($table, $uid) {
+		$rating =& $this->getRatingInstance();
+		return $rating != null ? $this->getRatingInstance()->getRatingDisplay("{$table}_{$uid}", $this->ratingConf) : '';
 	}
 
 }

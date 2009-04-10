@@ -230,6 +230,13 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		$marker['###TOPICPREFIX###'] = strtolower($prefix);
 		$marker['###PREFIX###']      = $prefix;
 
+			/* Display the topic rating if the 'ratings' extension is installed
+			 * and topic rating is enabled. */
+		$isTopicRating = $this->isTopicRating();
+		if($isTopicRating)
+			$marker['###TOPIC_RATING###'] = $isTopicRating ? $this->getRatingDisplay('tx_mmforum_topic', $topicData['uid']) : '';
+		else $template = $this->cObj->substituteSubpart($template, '###SUBP_TOPIC_RATING###', '');
+
 		// Display poll
 		if ($topicData['poll_id'] > 0 && $pageNum == 1 && $this->conf['polls.']['enable']) {
 			$marker['###POLL###'] = tx_mmforum_polls::display($topicData['poll_id']);
@@ -488,7 +495,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			'###POSTANCHOR###'		=> '<a name="pid' . $row['uid'] . '"></a>',
 			'###POSTDATE###'		=> $this->pi_getLL('post.writtenOn').': '.$this->formatDate($row['post_time']),
 			'###USERSIGNATURE###'	=> $userSignature,
-			'###EVEN_ODD###'		=> $extra['even'] ? 'even' : 'odd'
+			'###EVEN_ODD###'		=> $extra['even'] ? 'even' : 'odd',
+			'###POSTRATING###'		=> $this->getRatingDisplay('tx_mmforum_posts', $row['uid'])
 		);
 
 		// Include hooks

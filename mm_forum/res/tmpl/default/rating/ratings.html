@@ -1,0 +1,67 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Ratings Template</title>
+<!-- ###HEADER_PARTS### -->
+<link rel="stylesheet" href="###SITE_REL_PATH###res/styles.css" />
+<script type="text/javascript" src="###SITE_REL_PATH###res/rating.js"></script>
+<script type="text/javascript" src="typo3/contrib/prototype/prototype.js"></script>
+<!-- ###ADDITIONAL_CSS### begin -->
+<link rel="stylesheet" href="###CSS_FILE###" />
+<!-- ###ADDITIONAL_CSS### end -->
+<!-- ###HEADER_PARTS### -->
+</head>
+
+<body>
+
+<h3>TEMPLATE RATING (WITH VOTING)</h3>
+<em>This is the template for rating display and update (using Prototype's Ajax)</em>
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi purus. Nullam id ipsum. Pellentesque iaculis lacus sed turpis. Vestibulum ut diam. Vivamus ut mauris. Integer non lacus ac mauris venenatis convallis. Vivamus feugiat, urna vitae adipiscing adipiscing, nulla est placerat mi, nec cursus lorem dui venenatis lacus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus viverra neque volutpat nisi. Quisque vehicula nulla condimentum dolor. Donec aliquam magna eu nunc.
+
+<!-- ###TEMPLATE_RATING### end -->
+<div id="tx-ratings-###REF###">
+	<div class="tx-ratings">
+		<div class="tx-rating-display-wrap" id="tx-ratings-wait-###REF###">
+			<img src="###SITE_REL_PATH###res/working.gif" width="16" height="16" alt="" />
+			###TEXT_SUBMITTING###
+		</div>
+		<div id="tx-ratings-display-###REF###">
+			<div class="tx-ratings-display">
+				<div class="tx-ratings-grey-bar"></div>
+				<div class="tx-ratings-gold-bar" style="width: ###BAR_WIDTH###px"></div>
+				<div class="tx-ratings-vote-bar">
+					<div>
+						###VOTE_LINKS###
+					</div>
+					<div class="tx-ratings-cleaner"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<!-- ###TEMPLATE_RATING### end -->
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi purus. Nullam id ipsum. Pellentesque iaculis lacus sed turpis. Vestibulum ut diam. Vivamus ut mauris. Integer non lacus ac mauris venenatis convallis. Vivamus feugiat, urna vitae adipiscing adipiscing, nulla est placerat mi, nec cursus lorem dui venenatis lacus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus viverra neque volutpat nisi. Quisque vehicula nulla condimentum dolor. Donec aliquam magna eu nunc.
+
+<!-- ###TEMPLATE_RATING_STATIC### end -->
+
+<div class="tx-ratings">
+	<div class="tx-ratings-display">
+		<div class="tx-ratings-grey-bar"></div>
+		<div class="tx-ratings-gold-bar" style="width: ###BAR_WIDTH###px"></div>
+	</div>
+</div>
+
+<!-- ###TEMPLATE_RATING_STATIC### end -->
+
+Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Morbi purus. Nullam id ipsum. Pellentesque iaculis lacus sed turpis. Vestibulum ut diam. Vivamus ut mauris. Integer non lacus ac mauris venenatis convallis. Vivamus feugiat, urna vitae adipiscing adipiscing, nulla est placerat mi, nec cursus lorem dui venenatis lacus. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vivamus viverra neque volutpat nisi. Quisque vehicula nulla condimentum dolor. Donec aliquam magna eu nunc.
+
+<!-- ###VOTE_LINK_SUB### begin -->
+<a href="javascript:void(0)" rel="nofollow" class="tx-ratings-star-###VALUE###" onclick="tx_ratings_submit('###REF###', ###VALUE###, '###AJAX_DATA###', '###CHECK###');return false"></a>
+<!-- ###VOTE_LINK_SUB### end -->
+
+</body>
+</html>

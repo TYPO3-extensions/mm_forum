@@ -370,12 +370,15 @@ To visit this new topic, follow the link below:
             <label index="topic-solvedshort-off">Open</label>
             <label index="options_mail_forum">Options</label>
 
-	    <!-- Added in 0.1.7 -->
-	    <label index="userlist-title">User list</label>
-	    <label index="user-profile">User profile</label>
-	    <label index="user-field">User field</label>
-	    <label index="user-username">User name</label>
-	    <label index="user-value">Value</label>
+			<!-- Added in 0.1.7 -->
+			<label index="userlist-title">User list</label>
+			<label index="user-profile">User profile</label>
+			<label index="user-field">User field</label>
+			<label index="user-username">User name</label>
+			<label index="user-value">Value</label>
+
+			<!-- Added in 0.1.8 -->
+			<label index="board-rating">Rating</label>
         </languageKey>
         <!-- GERMAN LANGUAGE DATA -->
         <languageKey index="de" type="array">
@@ -798,6 +801,9 @@ Hier der Link, mit dem Sie direkt in den Beitrag gelangen:
 			
 			<!-- Added in 0.1.7 -->
 			<label index="userlist-title">Benutzerliste</label>
+
+			<!-- Added in 0.1.8 -->
+			<label index="board-rating">Bewertung</label>
         </languageKey>
         <!-- FINNISH LANGUAGE DATA -->
         <languageKey index="fi" type="array">
