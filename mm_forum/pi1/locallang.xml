@@ -379,6 +379,7 @@ To visit this new topic, follow the link below:
 
 			<!-- Added in 0.1.8 -->
 			<label index="board-rating">Rating</label>
+			<label index="user-rating">Rating</label>
         </languageKey>
         <!-- GERMAN LANGUAGE DATA -->
         <languageKey index="de" type="array">
@@ -804,6 +805,7 @@ Hier der Link, mit dem Sie direkt in den Beitrag gelangen:
 
 			<!-- Added in 0.1.8 -->
 			<label index="board-rating">Bewertung</label>
+			<label index="user-rating">Bewertung</label>
         </languageKey>
         <!-- FINNISH LANGUAGE DATA -->
         <languageKey index="fi" type="array">

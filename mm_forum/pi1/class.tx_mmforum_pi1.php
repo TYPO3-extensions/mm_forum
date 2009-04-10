@@ -157,6 +157,8 @@ require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_rss.php')
 require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/user/class.tx_mmforum_usermanagement.php');
 require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/user/class.tx_mmforum_userfield.php');
 
+require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/model/class.tx_mmforum_user.php');
+
 if(t3lib_extMgm::isLoaded('ratings'))
 	require_once(t3lib_extMgm::extPath('ratings') . 'class.tx_ratings_api.php');
 
@@ -3577,21 +3579,24 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      */
     function view_profil ($content,$conf){
         $imgInfo = array('border' => $conf['img_border'], 'alt' => '', 'src' => '', 'style' => '');
-        $user_id = intval($this->piVars['user_id']);
 
-        if($this->useRealUrl() && $this->piVars['fid']) {
-            $user_id = tx_mmforum_tools::get_userid($this->piVars['fid']);
-        }
+		#$user_id = intval($this->piVars['user_id']);
+
+        if($this->useRealUrl() && $this->piVars['fid'])
+            #$user_id = tx_mmforum_tools::get_userid($this->piVars['fid']);
+			$user = tx_mmforum_FeUser::GetByUsername($this->piVars['fid']);
+        else $user = tx_mmforum_FeUser::GetByUID($this->piVars['user_id']);
 
         $template = $this->cObj->fileResource($conf['template.']['userdetail']);
         $template = $this->cObj->getSubpart($template, "###USERDETAIL###");
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users',"uid='$user_id'");
+        #$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users',"uid='$user_id'");
 
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0)
+        #if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0)
+		if($user === null)
             return $this->errorMessage($conf, $this->pi_getLL('user.error_notExist'));
 
-        $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        #$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
         $marker = array();
 
@@ -3612,36 +3617,29 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				'###LABEL_FIELD###'			=> $this->pi_getLL('user.field'),
 				'###LABEL_VALUE###'			=> $this->pi_getLL('user.value'),
 				'###LABEL_USERPROFILE###'	=> $this->pi_getLL('user.profile'),
+				'###LABEL_RATING###'		=> $this->pi_getLL('user.rating')
             );
 
         // Username
-            $marker['###USER###']                	= $this->escape($row[$this->getUserNameField()]);
+            $marker['###USER###']                	= $this->escape($user->gD($this->getUserNameField()));
         // Date of registration
-            $marker['###REGDATE###']				= $this->cObj->stdWrap($row['crdate'],$this->conf['user_profile.']['crdate_stdWrap.']);
+            $marker['###REGDATE###']				= $this->cObj->stdWrap($user->getCrdate(),$this->conf['user_profile.']['crdate_stdWrap.']);
         // Number of posts
-            $marker['###TOTALPOSTS###']             = intval($row['tx_mmforum_posts']);
-            if($row['tx_mmforum_posts'] >= $conf['user_hotposts']) {
+            $marker['###TOTALPOSTS###']             = $user->getPostCount();
+            if($user->getPostCount() >= $this->conf['user_hotposts']) {
                 // Special icon for users with more than a certain number posts defined in TypoScript
-                $llMarker = array('###HOTPOSTS###' => $conf['user_hotposts']);
+                $llMarker = array('###HOTPOSTS###' => $this->conf['user_hotposts']);
                 $str = $this->cObj->substituteMarkerArray($this->pi_getLL('user.hot'),$llMarker);
-                $imgInfo['src']                     = $conf['path_img'].$conf['images.']['5kstar'];
+                $imgInfo['src']                     = $this->conf['path_img'].$this->conf['images.']['5kstar'];
                 $imgInfo['alt']                     = $str;
                 $imgInfo['title']                   = $str;
                 $marker['###TOTALPOSTS###']        .= $this->buildImageTag($imgInfo);
             }
 
-        // Location
-            $marker['###LOCATION###']               = $this->escape($row['city']);
-
-        // Internet address
-                if(strlen($row['www']) == 0)                $marker['###WEBSITE###'] = "";
-            elseif(substr($row['www'],0,7) != "http://")    $marker['###WEBSITE###'] = '<a href="http://'.$row['www'].'">http://'.$row['www'].'</a>';
-            else                                            $marker['###WEBSITE###'] = '<a href="'.$row['www'].'">'.$row['www'].'</a>';
-
-        // Profession
-            $marker['###PROFESSION###']             = $this->escape($row['tx_mmforum_occ']);
-        // Interests
-            $marker['###INTERESTS###']              = $this->escape($row['tx_mmforum_interests']);
+		// Rating
+			if($this->isUserRating())
+				$marker['###RATING###']					= $this->getRatingDisplay('fe_users', $user->getUid());
+			else $template = $this->cObj->substituteSubpart($template, '###SUBP_RATING###', '');
 
         // Avatar
             if ($conf['path_avatar'] && $row['tx_mmforum_avatar'])  {
@@ -3658,52 +3656,32 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 'action'    => 'message_write',
                 'folder'    => 'inbox',
                 'messid'    => $this->pi_getLL('realurl.pmnew'),
-                'userid'    => $row['uid']
+                'userid'    => $user->getUID(),
             );
             $marker['###PM###']                     = $this->createButton('pm',$linkParams,$this->conf['pm_id'],true);
-
-        // YIM-Button
-            $marker['###LABEL_YIM###']              = $this->createButton('yim',array(),0,true,'',true);
-            $marker['###YIM###']                    = $this->escape($row['tx_mmforum_yim']);
-
-        // MSM-Button
-            $marker['###LABEL_MSN###']              = $this->createButton('msn',array(),0,true,'',true);
-            $marker['###MSN###']                    = $this->escape($row['tx_mmforum_msn']);
-
-        // AIM-Button
-            $marker['###LABEL_AIM###']              = $this->createButton('aim',array(),0,true,'',true);
-            $marker['###AIM###']                    = $this->escape($row['tx_mmforum_aim']);
-
-        // ICQ-Button
-            $marker['###LABEL_ICQ###']              = $this->createButton('icq',array(),0,true,'',true);
-            $marker['###ICQ###']                    = $this->escape($row['tx_mmforum_icq']);
-
-         // SKYPE-Button
-            $marker['###LABEL_SKYPE###']            = $this->createButton('skype',array(),0,true,'',true);
-            $marker['###SKYPE###']                  = $this->escape($row['tx_mmforum_skype']);
 
         // A link to a page presenting the last 10 posts by this user
             $linkparams = array();
             $linkparams[$this->prefixId] = array (
                 'action'    => 'post_history',
-                'user_id'   => $user_id
+                'user_id'   => $user->getUID()
             );
             if($this->useRealUrl()) {
                 unset($linkparams[$this->prefixId]['user_id']);
-                $linkparams[$this->prefixId]['fid'] = $row['username'];
+                $linkparams[$this->prefixId]['fid'] = $user->getUsername();
             }
             $marker['###10POSTS###']        = $this->pi_linkToPage($this->pi_getLL('user.lastPostsLink'),$GLOBALS['TSFE']->id,'',$linkparams).'<br />';
 
         // A list of the last 10 topic created by this user
-            $marker['###10TOPICS###']        = $this->view_last_10_topics($user_id);
+            $marker['###10TOPICS###']        = $this->view_last_10_topics($user->getUID());
 
         // The number of topics created by this user (currently not used?)
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('COUNT(uid)','tx_mmforum_topics',"topic_poster='$user_id'".$this->getStoragePIDQuery());
+            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('COUNT(uid)','tx_mmforum_topics',"topic_poster='{$user->getUID()}'".$this->getStoragePIDQuery());
             list($topic_num) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
             $marker['###THEMEN###']         = "<strong>".$topic_num."</strong>";
 
         // The last post made by this user (currently not used?)
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid,topic_id','tx_mmforum_posts',"deleted='0' AND hidden='0' AND poster_id='$user_id'".$this->getStoragePIDQuery(),'','crdate DESC','1');
+            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid,topic_id','tx_mmforum_posts',"deleted='0' AND hidden='0' AND poster_id='{$user->getUID()}'".$this->getStoragePIDQuery(),'','crdate DESC','1');
             list($lastpost_id,$lastpost_topic_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics',"uid='$lastpost_topic_id'".$this->getStoragePIDQuery());
@@ -3737,7 +3715,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $cRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                     'field_value',
                     'tx_mmforum_userfields_contents c',
-                    'c.deleted=0 AND c.field_id='.$arr['uid'].' AND c.user_id='.$user_id
+                    'c.deleted=0 AND c.field_id='.$arr['uid'].' AND c.user_id='.$user->getUid()
                 );
                 if($GLOBALS['TYPO3_DB']->sql_num_rows($cRes)) {
                     list($fieldContent) = $GLOBALS['TYPO3_DB']->sql_fetch_row($cRes);
