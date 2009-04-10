@@ -400,8 +400,9 @@ class tx_mmforum_havealook {
     /**
      * Sends an e-mail to users who have subscribed a certain topic.
      * 
-     * @param  int    $topicId   The UID of the topic about which the users are
-     *                        	to be alerted.
+     * @param  int            $topicId  The UID of the topic about which the users are
+     *                                  to be alerted.
+	 * @param  tx_mmforum_pi1 $forumObj An instance of the tx_mmforum_pi1 class.
      * @return void
      */
 	function notifyTopicSubscribers($topicId, $forumObj) {
@@ -429,6 +430,8 @@ class tx_mmforum_havealook {
 		);
 
 		$link = $forumObj->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
+		$link = $forumObj->tools->escapeBrackets($link);
+		
 		if (strlen($forumObj->conf['notifyingMail.']['topicLinkPrefix_override']) > 0) {
 			$link = $forumObj->conf['notifyingMail.']['topicLinkPrefix_override'] . $link;
 		} else {
@@ -520,6 +523,8 @@ class tx_mmforum_havealook {
 		);
 
 		$link = $forumObj->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
+		$link = $forumObj->tools->escapeBrackets($link);
+
 		if (strlen($forumObj->conf['notifyingMail.']['topicLinkPrefix_override']) > 0) {
 			$link = $forumObj->conf['notifyingMail.']['topicLinkPrefix_override'] . $link;
 		} else {

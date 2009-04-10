@@ -1,4 +1,7 @@
 <!-- ###NEWTOPIC### begin-->
+<!-- ###ROOTLINE_CONTAINER### begin -->
+<div class="tx-mmforum-rootline">###FORUMPATH###</div>
+<!-- ###ROOTLINE_CONTAINER### end -->
 <script type="text/javascript">
     function del() {
         document.getElementById('message').innerHTML = "";
@@ -10,13 +13,16 @@
 
     }
 
+	var editor = new tx_mmforum_Editor();
+
 </script>
-<form action="###ACTION###" method="post" id="post" enctype="multipart/form-data">
+<form action="###ACTION###" method="post" id="post" name="post" enctype="multipart/form-data">
 	<div style="width: 100%;">
 		<table class="tx-mmforum-table" width="100%">
 			<tr>
 				<th colspan="2" class="tx-mmforum-th">###LABEL_CREATETOPIC###</th>
 			</tr>
+			<!-- ###TITLE_SUBPART### begin -->
 			<tr>
 				<td class="tx-mmforum-pi1-newpost-left">
 					<label for="tx_mmforum_pi1-label">###LABEL_TITLE###</label>
@@ -25,22 +31,29 @@
 					<input type="text" name="tx_mmforum_pi1[topicname]" size="60" id="tx_mmforum_pi1-label" value="###TOPICNAME###" tabindex="1" />
 				</td>
 			</tr>
+			<!-- ###TITLE_SUBPART### end -->
 			<tr align="left" valign="top">
 				<td class="tx-mmforum-pi1-newpost-left">
 					###SMILIES###
 				</td>
 				<td class="tx-mmforum-pi1-newpost-middle">
-					<table width="100%" border="0" cellspacing="0" cellpadding="2">
+					<table width="10%" border="0" cellspacing="0" cellpadding="2">
 						<tr>
-                            <!-- ###BBCODEBUTTONS### -->
                             <td>
-                                <img src="###CODE_IMAGE###" alt="###CODE_LABEL###" title="###CODE_LABEL###" onmouseover="this.style.cursor='pointer';" onclick="bbstyle(###CODE_NUMBER###);" />
+								<table width="100%" border="0" cellspacing="0" cellpadding="2">
+						        <tr>
+						<!-- ###BBCODEBUTTONS### -->
+                                    <td>
+                                        <img src="###CODE_IMAGE###" alt="###CODE_LABEL###" title="###CODE_LABEL###" onmouseover="this.style.cursor='pointer';" onclick="editor.applyBBCode('###CODE_OPEN###', '###CODE_CLOSE###')" />
+                                    </td>
+                        <!-- ###BBCODEBUTTONS### -->
+                                </tr>
+                            </table>
                             </td>
-                            <!-- ###BBCODEBUTTONS### -->
 						</tr>
 						<tr>
-							<td colspan="11">
-								<textarea id="message" name="tx_mmforum_pi1[message]" rows="15" cols="35" style="width:100%" tabindex="2" class="tx-mmforum-post" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);">###POSTTEXT###</textarea>
+							<td>
+								<textarea name="tx_mmforum_pi1[message]" rows="15" cols="35" style="width:100%" tabindex="2" class="tx-mmforum-post" id="tx_mmforum_editor">###POSTTEXT###</textarea>
 							</td>
 						</tr>
 					</table>

@@ -191,7 +191,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function main($content, $conf) {
 
 			/* Include mm_forum javascript into page header */
-		$GLOBALS['TSFE']->additionalHeaderData['mm_forum'] = '<script type="text/javascript" src="' . t3lib_extMgm::siteRelPath('mm_forum') . 'mm_forum.js"></script>';
+		#$GLOBALS['TSFE']->additionalHeaderData['mm_forum'] = '<script type="text/javascript" src="' . t3lib_extMgm::siteRelPath('mm_forum') . 'mm_forum.js"></script>';
+		$GLOBALS['TSFE']->additionalHeaderData['mm_forum'] .= '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'res/scripts/prototype-1.6.0.3.js"></script>';
 
 			/* Initialize base object */
 		$this->init($conf);
@@ -2274,7 +2275,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 
 				// Include editor Javascript
-				$content .= $this->cObj->fileResource($conf['scripts.']['editor']);
+				//$content .= $this->cObj->fileResource($conf['scripts.']['editor']);
 
 				$template = $this->cObj->fileResource($conf['template.']['new_topic']);
 				$template = $this->cObj->getSubpart($template, '###NEWTOPIC###');
@@ -2339,6 +2340,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$marker['###MAXFILESIZE_TEXT###'] = sprintf($this->pi_getLL('newPost.maxFileSize'), $mFileSize);
 				$marker['###MAXFILESIZE_TEXT###'] = $this->cObj->stdWrap($marker['###MAXFILESIZE_TEXT###'], $this->conf['attachments.']['maxFileSize_stdWrap.']);
 				$marker['###MAXFILESIZE###'] = $this->conf['attachments.']['maxFileSize'];
+
+				if($this->conf['disableRootline'])
+					$template = $this->cObj->substituteSubpart($template, "###ROOTLINE_CONTAINER###", '');
+				else
+					$marker['###FORUMPATH###'] = $this->get_forum_path(intval($this->piVars['fid']),'');
 			}
 
 		} else {
@@ -2373,13 +2379,17 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         $gruppe         =   $GLOBALS['TSFE']->fe_user->user['usergroup'];
         $grouprights    =   explode(",",$GLOBALS['TSFE']->fe_user->user['usergroup']);
 
+		$topicId = intval($this->piVars['tid']);
+		$topicData = $this->getTopicData($topicId);
+
+		$forumId = $topicData['forum_id'];
+
         if (
-            ((!empty($benutzer)) AND ($this->get_topic_is($this->piVars['tid']) == 0))
-            OR ((!empty($benutzer)) AND (in_array($conf['grp_admin'],$grouprights)))
-            OR ((!empty($benutzer)) AND (in_array($conf['grp_mod'],$grouprights)))
-            )
+            (!empty($benutzer) && ($this->get_topic_is($topicId) == 0)) ||
+			(!empty($benutzer) && $this->getIsModOrAdmin($forumId))
+			)
         {
-            if(!$this->getMayWrite_topic($this->piVars['tid'])) {
+            if(!$this->getMayWrite_topic($topicId)) {
                 return $content.$this->errorMessage($conf, $this->pi_getLL('newTopic.noAccess'));
             }
 
@@ -2390,92 +2400,91 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     return $this->new_post($content, $conf);
                 }
 
-                // Checks if the current user has already written a post in a certain interval
-                // from now on. If so, the write attempt is blocked for security reasons.
-                    $interval = $conf['spamblock_interval'];
+					// Checks if the current user has already written a post in a certain interval
+					// from now on. If so, the write attempt is blocked for security reasons.
+				$interval = $conf['spamblock_interval'];
 
-                    $time   = time() - $interval;
-                    $res    = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                        "*",
-                        "tx_mmforum_posts",
-                        "poster_id='".$GLOBALS['TSFE']->fe_user->user['uid']."' AND post_time >= '".$time."'"
-                    );
+				$time   = time() - $interval;
+				$res    = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					"*",
+					"tx_mmforum_posts",
+					"poster_id='".$this->getUserID()."' AND post_time >= '".$time."'"
+				);
 
-                    $abort = ($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0)?TRUE:FALSE;
+				$abort = ($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0)?TRUE:FALSE;
 
-                    if($abort) {
-                        $template = $this->cObj->fileResource($conf['template.']['login_error']);
-                        $template = $this->cObj->getSubpart($template, "###LOGINERROR###");
-                        $marker = array();
-                        $llMarker = array('###SPAMBLOCK###' => $interval);
-                        $marker['###LOGINERROR_MESSAGE###'] = $this->cObj->substituteMarkerArray($this->pi_getLL('newPost.spamBlock'),$llMarker);
-                        $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
+				if($abort) {
+					$template = $this->cObj->fileResource($conf['template.']['login_error']);
+					$template = $this->cObj->getSubpart($template, "###LOGINERROR###");
+					$marker = array();
+					$llMarker = array('###SPAMBLOCK###' => $interval);
+					$marker['###LOGINERROR_MESSAGE###'] = $this->cObj->substituteMarkerArray($this->pi_getLL('newPost.spamBlock'),$llMarker);
+					$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 
-                        return $content;
-                    }
+					return $content;
+				}
 
-                $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                    "forum_id",
-                    "tx_mmforum_topics",
-                    "uid = '".intval($this->piVars['tid'])."'"
-                );
-                list($forum_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+					/* Create a topic subscription if the user checked the
+					   regarding checkbox. */
+				if($this->piVars['havealook']) {
+					tx_mmforum_havealook::addSubscription($this, $topicId, $this->getUserID());
+				}
 
-                // Check file upload
-                    if($_FILES['tx_mmforum_pi1_attachment_1']['size']>0) {
-                        $res = $this->performAttachmentUpload();
-                        if(!is_array($res)) {
-                            $content .= $res;
-                            unset($this->piVars['button']);
-                            return $this->new_post($content,$conf);
-                        }
-                        else $attachment_ids = $res;
-                    } else $attachment_ids = 0;
+					// Check file upload
+				if($_FILES['tx_mmforum_pi1_attachment_1']['size']>0) {
+					$res = $this->performAttachmentUpload();
+					if(!is_array($res)) {
+						$content .= $res;
+						unset($this->piVars['button']);
+						return $this->new_post($content,$conf);
+					}
+					else $attachment_ids = $res;
+				} else $attachment_ids = 0;
 
-                // Instantiate postfactory class
-                      $postfactory = t3lib_div::makeInstance('tx_mmforum_postfactory');
-                      $postfactory->init($this->conf,$this);
+					// Instantiate postfactory class
+				$postfactory = t3lib_div::makeInstance('tx_mmforum_postfactory');
+				$postfactory->init($this->conf,$this);
 
                 if($this->isModeratedForum() && !$this->getIsAdmin() && !$this->getIsMod($this->piVars['fid'])) {
 
-                    // Create post using postfactory
-                        $postfactory->create_post_queue(
-                            intval($this->piVars['tid']),
-                            $GLOBALS['TSFE']->fe_user->user['uid'],
-                            $this->piVars['message'],
-                            time(),
-                              $this->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
-                              $attachment_ids
-                        );
+						// Create post using postfactory
+					$postfactory->create_post_queue(
+						$topicId,
+						$this->getUserID(),
+						$this->piVars['message'],
+						time(),
+						  $this->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
+						  $attachment_ids
+					);
 
-                        return $this->successMessage($conf,$this->pi_getLL('postqueue-success'));
-                }
-                else {
+					return $this->successMessage($conf,$this->pi_getLL('postqueue-success'));
 
-                    // Create post using postfactory
-                          $post_uid = $postfactory->create_post(
-                              intval($this->piVars['tid']),
-                              $GLOBALS['TSFE']->fe_user->user['uid'],
-                              $this->piVars['message'],
-                              time(),
-                              $this->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
-                              $attachment_ids
-                          );
+                } else {
 
-                    // Redirect user to new post
-                        $linkParams = array(
-                            'tx_mmforum_pi1[action]'  => 'list_post',
-                            'tx_mmforum_pi1[tid]'     => intval($this->piVars['tid']),
-                            'tx_mmforum_pi1[pid]'     => $post_uid
-                        );
-                        $link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
-                        $link = $this->getAbsUrl($link);
-                        header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $post_uid));
-                        exit();
+						// Create post using postfactory
+					$post_uid = $postfactory->create_post(
+						$topicId,
+						$this->getUserID(),
+						$this->piVars['message'],
+						time(),
+						$this->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
+						$attachment_ids
+					);
+
+						// Redirect user to new post
+					$linkParams = array(
+						'tx_mmforum_pi1[action]'  => 'list_post',
+						'tx_mmforum_pi1[tid]'     => $topicId,
+						'tx_mmforum_pi1[pid]'     => $post_uid
+					);
+					$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
+					$link = $this->getAbsUrl($link);
+					header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $post_uid));
+					exit();
                 }
             }
             else {
-                // Show post preview
+					// Show post preview
                 if($this->piVars['button'] == $this->pi_getLL('newPost.preview')) {
                     $template = $this->cObj->fileResource($conf['template.']['list_post']);
                     $template = $this->cObj->getSubpart($template, "###LIST_POSTS###");
@@ -2488,7 +2497,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
                     $marker['###POSTOPTIONS###']= '';
                     $marker['###POSTMENU###']   = '';
-                    $marker['###POSTUSER###']   = $this->ident_user($GLOBALS['TSFE']->fe_user->user['uid'],$conf);
+					$marker['###POSTUSER###']   = $this->ident_user($this->getUserID(),$conf);
                     $marker['###POSTTEXT###']   = $posttext;
                     $marker['###ANKER###']      = '';
 					$marker['###POSTANCHOR###']	= '';
@@ -2516,15 +2525,18 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 // Include editor Javascript
                 $content   .=   $this->cObj->fileResource($conf['scripts.']['editor']);
 
-                $template = $this->cObj->fileResource($conf['template.']['new_post']);
+                $template = $this->cObj->fileResource($conf['template.']['new_topic']);
                 $template = $this->cObj->getSubpart($template, "###NEWTOPIC###");
+				$template = $this->cObj->substituteSubpart($template, '###TITLE_SUBPART###', '');
+
                 $marker = array(
                     '###LABEL_SEND###'              => $this->pi_getLL('newPost.save'),
                     '###LABEL_PREVIEW###'           => $this->pi_getLL('newPost.preview'),
                     '###LABEL_RESET###'             => $this->pi_getLL('newPost.reset'),
                     '###LABEL_ATTENTION###'         => $this->pi_getLL('newPost.attention'),
                     '###LABEL_NOTECODESAMPLES###'   => $this->pi_getLL('newPost.codeSamples'),
-                    '###LABEL_ATTACHMENT###'        => $this->pi_getLL('newPost.attachment')
+                    '###LABEL_ATTACHMENT###'        => $this->pi_getLL('newPost.attachment'),
+					'###LABEL_SETHAVEALOOK###'		=> $this->pi_getLL('newTopic.setHaveALook')
                 );
 
                 // Remove file attachment section if file attachments are disabled
@@ -2607,11 +2619,16 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $bbCodeButtons = $this->generateBBCodeButtons($bbCodeButtons_template);
                 $template = $this->cObj->substituteSubpart($template,'###BBCODEBUTTONS###',$bbCodeButtons);
 
-                $marker['###SMILIES###']        = $this->show_smilie_db($conf);
-                $marker['###ACTION###']         = htmlspecialchars($this->getAbsUrl($actionLink));
-                $marker['###POSTTITLE###']      = $this->pi_getLL('newPost.title');
+                $marker['###SMILIES###']			= $this->show_smilie_db($conf);
+                $marker['###ACTION###']				= htmlspecialchars($this->getAbsUrl($actionLink));
+                $marker['###LABEL_CREATETOPIC###']	= $this->pi_getLL('newPost.title');
 
                 $marker['###OLDPOSTTEXT###'] = '<hr />'.tx_mmforum_postfunctions::list_post('',$conf,'DESC');
+
+				if($this->conf['disableRootline'])
+					$template = $this->cObj->substituteSubpart($template, "###ROOTLINE_CONTAINER###", '');
+				else
+					$marker['###FORUMPATH###'] = $this->get_forum_path($forumId,'');
             }
 
         }
@@ -2772,7 +2789,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         );
         $topicData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
-        IF ((($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid']) AND ($lastpostdate == $row['post_time'])) OR $this->getIsAdmin() OR $this->getIsMod($row['forum_id'])) {
+        IF ((($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid']) AND ($lastpostdate == $row['post_time']) && $topicData['closed_flag'] != 1) OR $this->getIsAdmin() OR $this->getIsMod($row['forum_id'])) {
             if($this->piVars['button'] == $this->pi_getLL('newPost.save')) {
 
                 // Write changes to database
@@ -3318,7 +3335,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      * dynamically from database.
      * 
      * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2007-05-03
+     * @version 2009-04-09
      * @param   string $template The template that is to be used for the set of
      *                           BBCode buttons
      * @return  string           The BBCode buttons
@@ -3339,21 +3356,20 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $imgpath = $this->conf['postparser.']['buttonPath'].$arr['fe_inserticon'];
             $imgpath = str_replace('EXT:mm_forum/',t3lib_extMgm::siteRelPath('mm_forum'),$imgpath);
 
-            $marker = array(
-                '###CODE_IMAGE###'          => $imgpath,
-                '###CODE_LABEL###'          => $this->escape($title),
-                '###CODE_NUMBER###'         => $i,
-            );
-
-            $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
             preg_match('/\[(.*?)\]\|\[\/(.*?)\]/',$arr['bbcode'],$items);
 
             $items[1] = str_replace('|','',$items[1]);
             $items[2] = str_replace('|','',$items[2]);
 
-            $bbItems[$i] = '\'['.strtolower($items[1]).']\'';
-            $bbItems[$i+1] = '\'[/'.strtolower($items[2]).']\'';
-            $i += 2;
+            $marker = array(
+                '###CODE_IMAGE###'          => $imgpath,
+                '###CODE_LABEL###'          => $this->escape($title),
+                '###CODE_NUMBER###'         => $i,
+				'###CODE_OPEN###'			=> '['.strtolower($items[1]).']',
+				'###CODE_CLOSE###'			=> '[/'.strtolower($items[2]).']',
+            );
+
+            $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
         }
         // Load syntax highlighting data
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -3372,20 +3388,16 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $marker = array(
                     '###CODE_IMAGE###'          => $imgpath,
                     '###CODE_LABEL###'          => $this->escape($title),
-                    '###CODE_NUMBER###'         => $i
+                    '###CODE_NUMBER###'         => $i,
+					'###CODE_OPEN###'			=> '['.strtolower($arr['lang_code']).']',
+					'###CODE_CLOSE###'			=> '[/'.strtolower($arr['lang_code']).']',
                 );
 
                 $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
-
-                $bbItems[$i] = '\'['.strtolower($arr['lang_code']).']\'';
-                $bbItems[$i+1] = '\'[/'.strtolower($arr['lang_code']).']\'';
-                $i += 2;
             }
         }
 
-        $GLOBALS['TSFE']->additionalHeaderData['mm_forum'] .= '<script type="text/javascript">
-        var bbtags = new Array('.implode(',',(array)$bbItems).');
-        </script>';
+		$GLOBALS['TSFE']->additionalHeaderData['mm_forum'] .= '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'res/scripts/class.forum_editor.js"></script>';
 
         return $content;
 
@@ -3414,14 +3426,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $imgInfo['src'] = $conf['path_smilie'].$row['smile_url'];
             $imgInfo['alt'] = $row['emoticon'];
             if($this->conf['postForm.']['smiliesAsDiv']) {
-            	$content .= $this->cObj->wrap("<a href=\"javascript:emoticon('".$row['code']."')\">".$this->buildImageTag($imgInfo)."</a>",$this->conf['postForm.']['smiliesAsDiv.']['itemWrap']);
+            	$content .= $this->cObj->wrap("<a href=\"javascript:editor.insertSmilie('".$row['code']."')\">".$this->buildImageTag($imgInfo)."</a>",$this->conf['postForm.']['smiliesAsDiv.']['itemWrap']);
             } else {
 	            if($i >= 4){
 	                $content .= "\r\n</tr><tr>\r\n";
 	                $i = 0;
 	            }
 	            $i++;
-	            $content .="<td><a href=\"javascript:emoticon('".$row['code']."')\">".$this->buildImageTag($imgInfo)."</a></td>\n";
+	            $content .="<td><a href=\"javascript:editor.insertSmilie('".$row['code']."')\">".$this->buildImageTag($imgInfo)."</a></td>\n";
             }
         }
 
@@ -4903,7 +4915,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 
 		$isNew    = in_array($topic['uid'], $readarray);
-		$isHot    = ($topic['topic_replies'] >= $this->conf['hotposts']);
+		$isHot    = ($this->conf['hotposts'] > 0) ? ($topic['topic_replies'] >= $this->conf['hotposts']) : false;
 		$isClosed = ($topic['closed_flag'] == '1');
 		$isUnanw  = ($topic['topic_replies'] == 0);
 		$isPinned = ($topic['at_top_flag'] == '1');

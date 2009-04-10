@@ -10,6 +10,8 @@
     
     }
 
+	var editor = new tx_mmforum_Editor();
+
 </script>
 <form action="###ACTION###" method="post" id="post" enctype="multipart/form-data">
 	 <table class="tx-mmforum-table" width="100%">
@@ -30,7 +32,7 @@
 						        <tr>
 						<!-- ###BBCODEBUTTONS### -->
                                     <td>
-                                        <img src="###CODE_IMAGE###" alt="###CODE_LABEL###" title="###CODE_LABEL###" onmouseover="this.style.cursor='pointer';" onclick="bbstyle(###CODE_NUMBER###);" />
+                                        <img src="###CODE_IMAGE###" alt="###CODE_LABEL###" title="###CODE_LABEL###" onmouseover="this.style.cursor='pointer';" onclick="editor.applyBBCode('###CODE_OPEN###', '###CODE_CLOSE###')" />
                                     </td>
                         <!-- ###BBCODEBUTTONS### -->
                                 </tr>

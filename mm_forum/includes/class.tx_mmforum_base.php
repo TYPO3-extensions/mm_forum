@@ -580,8 +580,8 @@ class tx_mmforum_base extends tslib_pibase {
 		if($GLOBALS['TSFE']->fe_user->user['username']=="") return false;
 
 		$userId = $this->getUserID();
-		$cacheRes = $this->cache->restore("userIsMod_$user_$forum");
-		
+		$cacheRes = $this->cache->restore("userIsMod_{$userId}_{$forum}");
+
 		if($cacheRes !== null) return $cacheRes;
 
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -602,9 +602,8 @@ class tx_mmforum_base extends tslib_pibase {
         $intersect = array_intersect($GLOBALS['TSFE']->fe_user->groupData['uid'], $auth);
 
         $isMod = count($intersect) > 0;
-        //$GLOBALS['tx_mmforum_pi1']['userIsMod'][$forum] = $isMod;
 		
-		$this->cache->store("userIsMod_$user_$forum", $isMod);
+		$this->cache->store("userIsMod_{$userId}_{$forum}", $isMod);
 
         return $isMod;
 	}

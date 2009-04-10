@@ -76,7 +76,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 	*/
 	function main($content, $conf) {
         //add Javascript
-        $GLOBALS['TSFE']->additionalHeaderData['mm_forum'] = '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'mm_forum.js"></script>';
+        $GLOBALS['TSFE']->additionalHeaderData['mm_forum'] = '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'res/scripts/prototype-1.6.0.3.js"></script>';
 
 		$this->init($conf);
 		$this->pi_USER_INT_obj = 1;
@@ -585,8 +585,10 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 	                        'action' => 'message_read'
 	                    );
 	                    if($this->useRealUrl()) $linkParams[$this->prefixId]['folder'] = 'inbox';
+
 	                    $msgLink = $this->pi_getPageLink($this->conf['pm_pid'],'',$linkParams);
-						$msgLink = urlencode($msgLink);
+						$msgLink = $this->tools->escapeBrackets($msgLink);
+
 						$marker = array(
 							'###USERNAME###'		=> $row[tx_mmforum_pi1::getUserNameField()],
 	                        '###PMLINK###'          => tx_mmforum_pi1::getAbsUrl($msgLink),

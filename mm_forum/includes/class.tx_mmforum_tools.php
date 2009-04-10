@@ -628,6 +628,20 @@ class tx_mmforum_tools extends tslib_pibase {
 		return (substr($str, 0, 1) == '/' ? substr($str, 1) : $str);
 	}
 
+		/**
+		 * Escapes square brackets with hexadecimal notation.
+		 * This is necessary for links sent in notification emails, since Mozilla
+		 * Thunderbird crops links in mail bodys after the first closed square
+		 * bracket.
+		 *
+		 * @param  string $url The URL to be encoded
+		 * @return string      The encoded URL
+		 */
+	function escapeBrackets($url) {
+		$replace = array('[' => '%5b', ']' => '%5d');
+		return str_replace(array_keys($replace), array_values($replace), $url);
+	}
+
 
 }
 

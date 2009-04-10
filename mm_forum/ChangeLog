@@ -1,6 +1,15 @@
+2009-04-10  Martin Helmich <m.helmich@mittwald.de>
+
+	* Fixed a lot of different bugs
+	* Improved BBcode handling
+
+2009-04-07  Martin Helmich <m.helmich@mittwald.de>
+
+	* Fixed issue #3039, #3038
+
 2009-04-05  Martin Helmich <m.helmich@mittwald.de>
 
-    * Fixed issue #2707
+    * Fixed issues #2707, #2002, #2084, #2058
 
 2009-04-04  Martin Helmich <m.helmich@mittwald.de>
 
