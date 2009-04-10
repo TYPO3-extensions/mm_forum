@@ -280,13 +280,14 @@ class tx_mmforum_havealook {
 			$res = $GLOBALS['TYPO3_DB']->sql_query($sql);
 
 			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
-				$template = $forumObj->cObj->getSubpart($templateFile, '###HAVEALOOK_LISTITEM_EMPTY###');
+				$template = $forumObj->cObj->getSubpart($templateFile, '###LIST_HAVEALOOK_EMPTY###');
 				$content .= $forumObj->cObj->substituteMarker($template, '###LLL_HAVEALOOK_EMPTY###', $forumObj->pi_getLL('havealook.empty'));
 			} else {
-				$template = $forumObj->cObj->getSubpart($templateFile, '###HAVEALOOK_LISTITEM###');
+				$template = $forumObj->cObj->getSubpart($templateFile, '###LIST_HAVEALOOK###');
 				
 				// go through every found subscription
 				while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+
 					if ($row['notify_mode'] == 'topic') {
 						$linkParams[$forumObj->prefixId] = array(
 							'action' => 'list_post',

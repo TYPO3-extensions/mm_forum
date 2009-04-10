@@ -64,7 +64,7 @@ class tx_mmforum_userfield {
 		 * @version 2009-02-16
 		 */
 	function init(&$userLib, &$cObj=null) {
-		$this->userLib = $userLib;
+		$this->userLib =& $userLib;
 		
 		if($cObj === null)
 			$this->cObj = t3lib_div::makeInstance('tslib_cObj');
@@ -283,7 +283,7 @@ class tx_mmforum_userfield {
 		$arr['meta'] = unserialize($arr['meta']);
 		
 			/* Parse configuration TypoScript */
-        $parser = $this->userLib->getTSParser();
+        $parser =& $this->userLib->getTSParser();
 		$parser->setup = null;
         $parser->parse($arr['config']);
         $arr['config_parsed'] = $parser->setup;

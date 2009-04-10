@@ -154,6 +154,9 @@ require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_ranksfe.p
 require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_postqueue.php');
 require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_rss.php');
 
+require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/user/class.tx_mmforum_usermanagement.php');
+require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/user/class.tx_mmforum_userfield.php');
+
 if(t3lib_extMgm::isLoaded('ratings'))
 	require_once(t3lib_extMgm::extPath('ratings') . 'class.tx_ratings_api.php');
 
@@ -531,7 +534,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         $marker['###LABEL_REPLIES_HITS###'] = $this->pi_getLL('board.replies');
         $marker['###LABEL_AUTHOR###']       = $this->pi_getLL('board.author');
         $marker['###LABEL_LASTPOST###']     = $this->pi_getLL('board.lastPost');
+        $marker['###LABEL_RATING###']		= $this->pi_getLL('board.rating');
         $marker['###PAGES###']              = $this->pagecount2 ($lastlogin, $conf['topic_count']); // Anzeigen der Seiten, durch die man blÃ¯Â¿Â½ttern kann
+
+		if(!$this->isTopicRating()) {
+			$template = $this->cObj->substituteSubpart($template, '###SUBP_LABEL_RATING###', '');
+		}
 
 		// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnread_header'])) {
@@ -587,6 +595,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $content .= $this->cObj->substituteMarker($template, "###LABEL_NOTOPICS###", $this->pi_getLL('topic.noTopicsFound'));
 		}
 
+		if(!$this->isTopicRating()) {
+			$template = $this->cObj->substituteSubpart($template, '###SUBP_RATING###', '');
+		}
+
         while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($topiclist)) {
             $forum = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                 'forum_name,parentID',
@@ -639,8 +651,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $marker['###POSTS###']      = intval($row['topic_replies']).' ('.intval($row['topic_views']).')';
             $marker['###AUTHOR###']		= $this->linkToUserProfile($row['topic_poster']);
             $marker['###LAST###']       = $this->getlastpost($row['topic_last_post_id'],$conf).$last_post_link;
-
             $marker['###READIMAGE###'] = $this->getTopicIcon($row);
+			$marker['###RATING###']		= $this->getRatingDisplay('tx_mmforum_topic', $row['uid']);
 
             IF (($row['topic_replies'] + 1) > $conf['post_limit'])
             {
@@ -1879,7 +1891,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
         if(!in_array($sorting_mode,array('ASC','DESC'))) $sorting_mode = 'ASC';
 
-        $parser = t3lib_div::makeInstance('t3lib_TSparser');
+			/* Instantiate user management library */
+		$this->userLib = t3lib_div::makeInstance('tx_mmforum_usermanagement');
+
+		$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
+		$userField->init($this->userLib, $this->cObj);
 
         foreach($list_fields as $field) {
 
@@ -1887,11 +1903,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                     '*',
                     'tx_mmforum_userfields',
-                    'uid='.$field.' AND deleted=0 '.$this->getStoragePIDQuery()
+                    'uid='.$field.' AND deleted=0'
                 );
+				if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) continue;
+				
                 $arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+				$userField->get($arr);
 
-                if(strlen($arr['config'])>0) {
+                /*if(strlen($arr['config'])>0) {
                     $parser->parse($arr['config']);
                     $config = $parser->setup;
                 } else $config = array();
@@ -1901,9 +1920,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
                 if($config['output']) {
                     $userfields[$arr['uid']]    = $arr;
-                }
+                }*/
 
-				$userfields_config[$arr['uid']] = $config;
+				$label = $userField->getRenderedLabel();
+
+				$userfields_config[$arr['uid']] = $userField->conf;
             }
             else {
                 $label = $this->pi_getLL('userlist.fields.'.$field);
@@ -1999,13 +2020,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $users[] = $user;
             }
 
-	/**
-	 * [Describe function...]
-	 *
-	 * @param	[type]		$a: ...
-	 * @param	[type]		$b: ...
-	 * @return	[type]		...
-	 */
             function userdef_cmp($a,$b) {
                 return strcmp($a['__userdef'],$b['__userdef']);
             }
