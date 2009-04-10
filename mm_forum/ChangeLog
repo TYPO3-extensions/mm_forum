@@ -2,6 +2,7 @@
 
 	* Fixed a lot of different bugs
 	* Improved BBcode handling
+	* Fixed issue #3064
 
 2009-04-07  Martin Helmich <m.helmich@mittwald.de>
 

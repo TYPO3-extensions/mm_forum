@@ -636,6 +636,10 @@ class tx_mmforum_base extends tslib_pibase {
 		}
 	}
 
+	function getBaseUserGroup() {
+		return $this->conf['userGroup'];
+	}
+
 }
 
 // does not make sense to XCLASS here

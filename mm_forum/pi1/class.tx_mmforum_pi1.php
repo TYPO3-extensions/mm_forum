@@ -5254,6 +5254,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
 
+			/* Check if the user is in the base user group. If this is not the
+			 * case, the user is not allowed to write anywhere. */
+		if(!in_array($this->getBaseUserGroup(), $groups)) {
+			$query = " AND 1=0";
+			$this->cache->save('getMayWrite_forum_query_'.$userId, $query);
+			return $query;
+		}
+
 			/* Iterate through all the user's groups and compose an array
 			 * of SQL conditions. */
 		$queryParts = array();
@@ -5334,6 +5342,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			/* Load current user's groups */
 		$groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
+
+			/* Check if the user is in the base user group. If this is not the
+			 * case, the user is not allowed to write anywhere. */
+		if(!in_array($this->getBaseUserGroup(), $groups)) {
+			$this->cache->save("getMayWrite_forum_{$userId}_{$forum[uid]}", false);
+			return false;
+		}
 
 			/* Determine the intersection between the user's groups and the groups
 			 * with write access. If the intersect count is bigger than 0, this means
