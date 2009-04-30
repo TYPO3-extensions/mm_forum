@@ -1,3 +1,7 @@
+2009-04-30  Martin Helmich <m.helmich@mittwald.de>
+
+	* Adapted user settings plugin to new user field management.
+
 2009-04-10  Martin Helmich <m.helmich@mittwald.de>
 
 	* Fixed a lot of different bugs

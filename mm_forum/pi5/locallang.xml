@@ -59,6 +59,8 @@
 			<!-- Added in 0.1.8 -->
             <label index="errorWWWInvalid">Please insert a correct URL for your website.</label>
 			<label index="errorRequiredMissing">Please fill out the following fields: %s</label>
+			<label index="error-userfieldEmpty">Please enter a correct value</label>
+			<label index="username">Username</label>
         </languageKey>
         <!-- GERMAN LANGUAGE DATA -->
         <languageKey index="de" type="array">
@@ -118,6 +120,9 @@
             <label index="errorWWWInvalid-inf">Bitte gib eine korrekte URL als Webseite an.</label>
 			<label index="errorRequiredMissing">Bitte füllen Sie die folgenden Felder aus: %s</label>
 			<label index="errorRequiredMissing-inf">Bitte fülle die folgenden Felder aus: %s</label>
+			<label index="error-userfieldEmpty">Bitte geben Sie einen korrekten Wert an</label>
+			<label index="error-userfieldEmpty-inf">Bitte gib einen korrekten Wert an</label>
+			<label index="username">Benutzername</label>
         </languageKey>
         <!-- FINNISH LANGUAGE DATA -->
         <languageKey index="fi" type="array">

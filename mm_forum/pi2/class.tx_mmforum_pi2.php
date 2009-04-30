@@ -585,26 +585,6 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			}
 		}
 
-			/* If an email address was entered, validate it now. It is not checked
-			 * whether an email address is required, this is done later. */
-		if($email) {
-			if (!tx_mmforum_pi2::validate_email($this->data["email"])) {
-				$marker["###ERROR_email###"] = $this->pi_getLL('error.emailInvalid');
-				$marker["fehler"] = 1;
-				/* Check if email address already exists in database */
-			} else {
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-					'email',
-					'fe_users',
-					'email="'.$this->data['email'].'" AND deleted=0 AND pid='.$this->conf['userPID']
-				);
-				IF ($GLOBALS['TYPO3_DB']->sql_num_rows($res) >= 1) {
-					$marker["###ERROR_email###"] = $this->pi_getLL('error.emailExists');
-					$marker["fehler"] = 1;
-				}
-			}
-		}
-
 			/* Check password, first if the two entered password match, then for
 			 * length. */
 		if ($this->data["password"] != $this->data["password_again"]) {
@@ -615,30 +595,8 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			$marker["fehler"] = 1;
 		}
 		
-			/* Check required fields */
-		/*$requiredFields = t3lib_div::trimExplode(',',$this->conf['required.']['fields']);
-		foreach($requiredFields as $field) {
-			if(!trim($this->data[$field])) {
-				switch($field) {
-					case 'email':	$marker['###ERROR_'.$field.'###'] = $this->pi_getLL('error.emailEmpty'); break;
-					case 'name':	$marker['###ERROR_'.$field.'###'] = $this->pi_getLL('error.nameNone'); break;
-					default:		$marker['###ERROR_'.$field.'###'] = $this->pi_getLL('error.required'); break;
-				}
-				$marker['fehler'] = 1;
-			}
-		}*/
-		
-			/* Validate some optional fields */
-		/*if($this->data['www']) {
-			if(!preg_match($this->conf['validation.']['www'], $this->data['www'], $matches)) {
-				$marker['fehler'] = 1;
-				$marker['###ERROR_www###'] = $this->pi_getLL('error-wwwInvalid');
-			}
-		}*/
-		
 			/* Validate user defined fields */
 			/* Check required user fields */
-		//$parser = $this->userLib->getTSParser();
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*', 'tx_mmforum_userfields', 'deleted=0'
 		);
@@ -659,33 +617,6 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			}
 			
 		}
-
-/*		
-		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-
-				# Unset the configuration array, since the TS parser does not do this
-				# automatically. Can cause very weird problems.
-			unset($parser->setup);
-			
-				# Parse the setup of the userfield.
-			$parser->parse($arr['config']);
-			$config		= $parser->setup;
-			
-				# This crazy statement checks (a) whether the userfield is required, and if this is the
-				# case whether the user did enter something here and (b) whether a validation pattern has
-				# been specified for this field, and if there is such a pattern, this is validated against
-				# the user input. And all this in just one line.
-			if(($config['required'] && !trim($this->piVars['userfields'][$arr['uid']])) || ($config['validate'] && !preg_match($config['validate'],$this->piVars['userfields'][$arr['uid']]))) {
-				$marker['fehler'] = 1;
-				$marker['userfield_error'][$arr['uid']] = $this->pi_getLL('error-userfieldEmpty');
-				//$requiredMissing = true;
-				
-				//if($config['label']) $label = $this->cObj->cObjGetSingle($config['label'],$config['label.']);
-	            //else $label = $arr['label'];
-				
-				//$missingFieldsLabels[] = $label;
-			}
-		}*/
 		
 			/* Include hooks */
 	    if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['validateFormData'])) {
@@ -696,20 +627,6 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 	    }
 
 		return $marker;
-	}
-	
-	/**
-	 * Validates an email address.
-	 * @author Martin Helmich <m.helmich@mittwald.de>
-	 * @param  string $email The email address to be validated
-	 * @return bool          TRUE, if the email address is valid, otherwise FALSE
-	 */
-	function validate_email($email) {
-		if (preg_match('/\.\./', $email)) {
-			return false;
-		}
-		$pattern = "/^[a-z0-9!#\$%\*\/\?\|\^\{\}`~&'\+\-=_]([a-z0-9!#\$%\*\/\?\|\^\{\}`~&'\+\-=_\.]*?)[a-z0-9!#\$%\*\/\?\|\^\{\}`~&'\+\-=_]@([a-z0-9-\.]+?)[a-z0-9]\.([a-z\.])+$/i";
-		return preg_match($pattern, $email);
 	}
 
 	/**

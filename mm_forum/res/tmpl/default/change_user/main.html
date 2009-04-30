@@ -11,65 +11,18 @@
       <tr>
         <td rowspan="2" style="width:75px;" align="center">###SETTINGS_ICON###</td>
         <td class="tx-mmforum-td tx-mmforum-pi5-configleft" style="width:150px;">
+            ###DESCR_USERNAME###:
+        </td>
+        <td class="tx-mmforum-td">
+            ###USERNAME###
+        </td>
+      </tr>
+      <tr>
+         <td class="tx-mmforum-td tx-mmforum-pi5-configleft" style="width:150px;">
             ###DESCR_DATE###:
         </td>
         <td class="tx-mmforum-td">
             ###CRDATE###
-        </td>
-      </tr>
-      <tr>
-        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
-            ###DESCR_NAME###:
-        </td>
-        <td class="tx-mmforum-td">
-            <input type="text" name="tx_mmforum_pi5[name]" value="###NAME###" style="width: 98%;" />
-        </td>
-      </tr>
-      <tr>
-      	<td style="width:50px;"></td>
-        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
-            ###DESCR_ZIP### / ###DESCR_CITY###:
-        </td>
-        <td class="tx-mmforum-td">
-            <input type="text" name="tx_mmforum_pi5[zip]" value="###ZIP###" size="5" />
-            / 
-            <input type="text" name="tx_mmforum_pi5[city]" value="###CITY###" />
-        </td>
-      </tr>
-      <tr>
-      	<td style="width:50px;"></td>
-        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
-            ###DESCR_WWW###:
-        </td>
-        <td class="tx-mmforum-td">
-            <input type="text" name="tx_mmforum_pi5[www]" value="###WWW###" style="width: 98%;" />
-        </td>
-      </tr>
-      <tr>
-      	<td style="width:50px;"></td>
-        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
-            ###DESCR_EMAIL###:
-        </td>
-        <td class="tx-mmforum-td">
-            <input type="text"  name="tx_mmforum_pi5[email]" value="###EMAIL###" style="width: 98%;" />
-        </td>
-      </tr>
-      <tr>
-      	<td style="width:50px;"></td>
-        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
-            ###DESCR_TX_MMFORUM_OCC###:
-        </td>
-        <td class="tx-mmforum-td">
-            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_occ]" value="###TX_MMFORUM_OCC###" style="width: 98%;" />
-        </td>
-      </tr>
-      <tr>
-      	<td style="width:50px;"></td>
-        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
-            ###DESCR_TX_MMFORUM_INTERESTS###:
-        </td>
-        <td class="tx-mmforum-td">
-            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_interests]" value="###TX_MMFORUM_INTERESTS###" style="width: 98%;" />
         </td>
       </tr>
       <!-- ###USERFIELDS### begin -->
@@ -79,55 +32,10 @@
             ###USERFIELD_LABEL###:
         </td>
         <td class="tx-mmforum-td">
-            <!--###DEFUSERFIELD###--><input type="text"  name="tx_mmforum_pi5[userfield][###USERFIELD_UID###]" value="###USERFIELD_VALUE###" style="width: 98%;" /><!--###DEFUSERFIELD###-->
+            <!--###DEFUSERFIELD###--><input type="text"  name="tx_mmforum_pi5[userfield][###USERFIELD_UID###]" value="###USERFIELD_VALUE###" style="width: 98%;" /><!--###DEFUSERFIELD###--><div class="error">###USERFIELD_ERROR###</div>
         </td>
       </tr>
       <!-- ###USERFIELDS### end -->
-      <tr>
-      	<td style="width:50px;"></td>
-        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
-            ###IMG_MSN###
-        </td>
-        <td class="tx-mmforum-td">
-            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_msn]" value="###TX_MMFORUM_MSN###" style="width: 98%;" />
-        </td>
-      </tr>
-      <tr>
-      	<td style="width:50px;"></td>
-        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
-            ###IMG_YIM###
-        </td>
-        <td class="tx-mmforum-td">
-            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_yim]" value="###TX_MMFORUM_YIM###" style="width: 98%;" />
-        </td>
-      </tr>
-      <tr>
-      	<td style="width:50px;"></td>
-        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
-            ###IMG_AIM###
-        </td>
-        <td class="tx-mmforum-td">
-            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_aim]" value="###TX_MMFORUM_AIM###" style="width: 98%;" />
-        </td>
-      </tr>
-      <tr>
-      	<td style="width:50px;"></td>
-        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
-            ###IMG_ICQ###
-        </td>
-        <td class="tx-mmforum-td">
-            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_icq]" value="###TX_MMFORUM_ICQ###" maxlength="10" style="width: 98%;" />
-        </td>
-      </tr>
-      <tr>
-      	<td style="width:50px;"></td>
-        <td class="tx-mmforum-td tx-mmforum-pi5-configleft">
-            ###IMG_SKYPE###
-        </td>
-        <td class="tx-mmforum-td">
-            <input type="text"  name="tx_mmforum_pi5[tx_mmforum_skype]" value="###TX_MMFORUM_SKYPE###" maxlength="30" style="width: 98%;" />
-        </td>
-      </tr>
       <tr>
       	<td style="width:50px;"></td>
         <td valign="top" class="tx-mmforum-td tx-mmforum-pi5-configleft" >

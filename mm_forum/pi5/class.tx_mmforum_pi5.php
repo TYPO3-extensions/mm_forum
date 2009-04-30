@@ -62,7 +62,9 @@ require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_post
 class tx_mmforum_pi5 extends tx_mmforum_base {
 	var $prefixId      = 'tx_mmforum_pi5';					// Same as class name
 	var $scriptRelPath = 'pi5/class.tx_mmforum_pi5.php';	// Path to this script relative to the extension dir.
-	
+
+	var $userLib		= null;
+
 	/**
 	 * Main method. Calls the function list_userdata.
 	 * 
@@ -76,6 +78,9 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		$this->init($conf);
 		$this->pi_USER_INT_obj = 1;
         $conf = $this->conf;
+
+			/* Instantiate user management library */
+		$this->userLib = t3lib_div::makeInstance('tx_mmforum_usermanagement');
         
         if($GLOBALS['TSFE']->fe_user->user['uid'])
 		    $content = $this->list_userdata($content,$conf);
@@ -98,7 +103,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	 * @return  string          The content
 	 */
 	function list_userdata ($content,$conf) {
-		if (t3lib_div::GPvar("action") == "change_data")	$content = $this->write_userdata($content,$conf);
+		if (t3lib_div::GPvar("action") == "change_data")			   $this->write_userdata($content,$conf);
 		if (t3lib_div::GPvar("action") == "avatar_upload")	$content = $this->avatar_upload($content,$conf);
 		if (t3lib_div::GPvar("action") == "change_pass")	$content = $this->change_pass($content,$conf);
 			
@@ -200,6 +205,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
             '',
             'sorting DESC'
         );
+
         $parser  = t3lib_div::makeInstance('t3lib_TSparser');
         while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
             if(isset($this->piVars['userfield'][$arr['uid']])) {
@@ -247,7 +253,8 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
                 '###USERFIELD_LABEL###' => $label,
                 '###USERFIELD_VALUE###' => $value,
                 '###USERFIELD_UID###'   => $arr['uid'],
-                '###USERFIELD_NAME###'  => 'tx_mmforum_pi5[userfield]['.$arr['uid'].']'
+                '###USERFIELD_NAME###'  => 'tx_mmforum_pi5[userfield]['.$arr['uid'].']',
+				'###USERFIELD_ERROR###'	=> isset($this->userfield_error[$arr['uid']]) ? $this->userfield_error[$arr['uid']] : ''
             );
             $userField_content .= $this->cObj->substituteMarkerArrayCached($userField_thisTemplate, $userField_marker);
         }
@@ -328,82 +335,34 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			$updateArr[$v] = $this->piVars[$v];
 		}
 
-			/* Validate email address */
-		$error = 0;
-		$errormessage = '';
-		$email = $updateArr['email'];
-		if($email && !$this->validate_email($email)){
-			$error = 1;
-			$marker['###ERROR_MSG###'] = $this->pi_getLL('errorValidEmail');
-		}
-
-			/* Check if email address already exists */
-		else {
-			$count = 0;
-			$where = 'deleted=0 AND email =\''.$GLOBALS['TYPO3_DB']->quoteStr($email,'fe_users').'\' AND uid <> '.$this->getUserID().' AND pid = '.$this->getUserProfilePid();
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid, email','fe_users',$where);
-			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$count++;
-			}
-			if ($count>=1) {
-				$error = 1;
-				$marker['###ERROR_MSG###'] = $this->pi_getLL('errorEmailTwice');
-			}
-		}
-		
-			/* Validate homepage */
-		if($updateArr['www']) {
-			if(!preg_match($this->conf['validation.']['www'], $updateArr['www'], $matches)) {
-				$error = 1;
-				$marker['###ERROR_MSG###'] = $this->pi_getLL('errorWWWInvalid');
-			}
-		}
-		
-			/* Check required fields */
-		$required = t3lib_div::trimExplode(',',$this->conf['required.']['fields']);
-		foreach($required as $field) {
-			if(strlen(trim($updateArr[$field]))==0) {
-				$requiredMissing = true;
-				$missingFieldsLabels[] = $this->pi_getLL($field);
-			}
-		}
-		
 			/* Check required user fields */
-		$parser = $this->getTSParser();
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*', 'tx_mmforum_userfields', 'deleted=0'
 		);
+
+		$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
+		$userField->init($this->userLib, $this->cObj);
+
 		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 
-				/* Unset the configuration array, since the TS parser does not do this
-				 * automatically. Can cause very weird problems. */
-			unset($parser->setup);
-			
-				/* Parse the setup of the userfield. */
-			$parser->parse($arr['config']);
-			$config		= $parser->setup;
-			
-				/* This crazy statement checks (a) whether the userfield is required, and if this is the
-				 * case whether the user did enter something here and (b) whether a validation pattern has
-				 * been specified for this field, and if there is such a pattern, this is validated against
-				 * the user input. And all this in just one line. */
-			if(($config['required'] && !trim($this->piVars['userfield'][$arr['uid']])) || ($config['validate'] && !preg_match($config['validate'],$this->piVars['userfield'][$arr['uid']]))) {
+			$userField->get($arr);
+
+			$value		= $this->piVars['userfield'][$userField->getUID()];
+			$validate	= $userField->isValid($value);
+
+			if(!$validate) {
 				$requiredMissing = true;
-				
-				if($config['label']) $label = $this->cObj->cObjGetSingle($config['label'],$config['label.']);
-	            else $label = $arr['label'];
-				
-				$missingFieldsLabels[] = $label;
+				$this->userfield_error[$arr['uid']] = $this->pi_getLL('error-userfieldEmpty');
 			}
+
 		}
 		
-		if($requiredMissing) {
+		if($requiredMissing)
 			$error = 1;
-			$marker['###ERROR_MSG###'] = sprintf($this->pi_getLL('errorRequiredMissing'),implode(', ',$missingFieldsLabels));
-		}
 
 		// If no error occurred...
 		if ($error == 0) {
+
 			$where = 'uid = '.$GLOBALS['TSFE']->fe_user->user['uid'];
             
             //if kb_md5fepw is installed, crypt password
@@ -560,22 +519,6 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		}
 
 		return $content;
-	}
-
-	/**
-	 * Validates an email address
-	 * @author  Georg Ringer <typo3@ringerge.org>
-	 * @version 22.09.2006
-	 * @param   string  $email The email address to be validated
-	 * @return	boolean        TRUE, if the email address is valid, otherwise false.
-	 */
-	function validate_email($email){
-		if(eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", $email)) {
-			return true;
-		}
-		else {
-			return false;
-		}
 	}
 
 	/**
