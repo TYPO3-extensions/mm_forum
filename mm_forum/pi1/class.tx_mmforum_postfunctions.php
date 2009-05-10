@@ -141,7 +141,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			'###LABEL_MESSAGE###' => $this->pi_getLL('post.message'),
 			'###ADMIN_PANEL###'   => $adminPanel,
 		);
-		
+
 		// Log if topic has been read since last visit
 		if ($feUserId) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -244,6 +244,14 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			$marker['###POLL###'] = '';
 		}
 
+    // Include hooks
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['listPosts_topic'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['listPosts_topic'] as $_classRef) {
+				$_procObj = &t3lib_div::getUserObj($_classRef);
+				$marker   = $_procObj->listPosts_topic($marker, $topicData, $this);
+			}
+		}
+
 		$content .= $this->cObj->substituteMarkerArray($template, $marker);
 
 		// Determine last answering date to allow a user to edit his entry
@@ -275,7 +283,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			header('Location: ' . t3lib_div::locationHeaderUrl($link));
 			exit();
 		}
-		
+
 		$templateItem  = trim($this->cObj->getSubpart($templateFile, '###LIST_POSTS###'));
 		$templateFirst = trim($this->cObj->getSubpart($templateFile, '###LIST_POSTS_FIRST###'));
 
@@ -318,12 +326,12 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			$marker['###FAVORITELINK###'] = tx_mmforum_postfunctions::getFavoriteButton($topicId, $topicData);
 			$marker['###SOLVEDLINK###']   = tx_mmforum_postfunctions::getSolvedButton($topicId, $topicData);
 
-			if ($topicData['topic_poster'] == $feUserId || $this->getIsAdmin() || $this->getIsMod($topicData['forum_id'])) {				
+			if ($topicData['topic_poster'] == $feUserId || $this->getIsAdmin() || $this->getIsMod($topicData['forum_id'])) {
 				$linkParams[$this->prefixId] = array(
 					'action' => 'list_post',
 					'tid'    => $topicId
 				);
-				
+
 				$marker['###SOLVED_ACTION###']      = '';
 				$marker['###LABEL_THISTOPICIS###']	= $this->pi_getLL('topic.thisTopicIs');
 				$marker['###LABEL_NOTSOLVED###']	= $this->pi_getLL('topic.notSolved');
@@ -354,15 +362,15 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		return $content;
 	}
 
-    
+
     function getSolvedButton($topic_id,$topic_data) {
-    	
+
     	$imgInfo = array(
     		'src'		=> $topic_data['solved']?($this->conf['path_img'].$this->conf['images.']['solved_on']):($this->conf['path_img'].$this->conf['images.']['solved_off']),
     		'alt'		=> $topic_data['solved']?$this->pi_getLL('topic-solved-on'):$this->pi_getLL('topic-solved-off'),
     		'title'		=> $topic_data['solved']?$this->pi_getLL('topic-solved-on'):$this->pi_getLL('topic-solved-off'),
     	);
-    	
+
     	if($topic_data['topic_poster'] == $GLOBALS['TSFE']->fe_user->user['uid'] || $this->getIsModOrAdmin($topic_data['forum_id'])) {
     		if($topic_data['solved']) {
     			$linkParams[$this->prefixId] = array(
@@ -378,23 +386,23 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
     	} else {
     		$link = $topic_data['solved']?$this->pi_getLL('topic-solvedshort-on'):$this->pi_getLL('topic-solvedshort-off');
     	}
-        
+
         $image = $this->imgtag($imgInfo);
         $image = $this->cObj->stdWrap($image,$this->conf['list_posts.']['optImgWrap.']);
         $link  = $this->cObj->stdWrap($link,$this->conf['list_posts.']['optLinkWrap.']);
-        
+
         $result = $this->cObj->stdWrap($image.$link,$this->conf['list_posts.']['optItemWrap.']);
-        
+
         return $result;
     }
-    
+
     function getFavoriteButton($topic_id,$topic_data) {
     	$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             "uid",
             "tx_mmforum_favorites",
             "user_id = ".$GLOBALS['TSFE']->fe_user->user['uid']." AND topic_id = ".$this->piVars['tid'].$this->getPidQuery()
         );
-         
+
         if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1) {
             $imgInfo['alt'] = $this->pi_getLL('topic.favorite.off');
             $imgInfo['title'] = $this->pi_getLL('topic.favorite.off');
@@ -404,7 +412,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
             	'tid'			=> $this->piVars['tid']
             );
             if($this->getIsRealURL()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
-            
+
             $link = $this->pi_linkTP($this->pi_getLL('on'),$favlinkParams).' / <strong>'.$this->pi_getLL('off').'</strong>';
         } else {
             $imgInfo['alt'] = $this->pi_getLL('topic.favorite.on');
@@ -415,19 +423,19 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
             	'tid'			=> $this->piVars['tid']
             );
             if($this->getIsRealURL()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
-            
+
             $link = '<strong>'.$this->pi_getLL('on').'</strong> / '.$this->pi_linkTP($this->pi_getLL('off'),$favlinkParams);
         }
-        
+
         $image = $this->imgtag($imgInfo);
         $image = $this->cObj->stdWrap($image,$this->conf['list_posts.']['optImgWrap.']);
         $link  = $this->cObj->stdWrap($link,$this->conf['list_posts.']['optLinkWrap.']);
-        
+
         $result = $this->cObj->stdWrap($image.$link,$this->conf['list_posts.']['optItemWrap.']);
-        
+
         return $result;
     }
-        
+
     function getSubscriptionButton($topic_id,$topic_data) {
     	$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             "uid",
@@ -455,20 +463,20 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
             if($this->getIsRealURL()) $linkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
             $link = '<strong>'.$this->pi_getLL('on').'</strong> / '.$this->pi_linkTP($this->pi_getLL('off'),$linkParams);
         }
-        
+
         $image = $this->imgtag($imgInfo);
         $image = $this->cObj->stdWrap($image,$this->conf['list_posts.']['optImgWrap.']);
         $link  = $this->cObj->stdWrap($link,$this->conf['list_posts.']['optLinkWrap.']);
-        
+
         $result = $this->cObj->stdWrap($image.$link,$this->conf['list_posts.']['optItemWrap.']);
-        
+
         return $result;
     }
 
 	/**
 	 * Generates markers for a post.
 	 * This function generates markers for the post listing view.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-07-26
 	 * @param   string $row   The post record
@@ -511,7 +519,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 
 	/**
-	 * generates a string that displays the posttext of the 
+	 * generates a string that displays the posttext of the
 	 * @param	array	the user's data array
 	 * @return	string	the string ready to output (only if there is a signature of course)
 	 */
@@ -576,10 +584,10 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 
     function marker_getPostmenuMarker($row,$topic) {
-    	
+
         $read_flag          =  $topic['read_flag'];
         $closed_flag        =  $topic['closed_flag'];
-    	
+
     	$poster = $row['poster_id'];
         $user_res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users',"uid='$poster'");
         if($GLOBALS['TYPO3_DB']->sql_num_rows($user_res))
@@ -603,14 +611,14 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
         }
 
         if($user && $user['deleted']=='0') {
-            
+
 				/* Generate profile button */
 			$profile .= $this->createButton('profile','profileView:'.$user['uid'],0,true);
-		
+
 				/* Generate buttons */
 			$profile .= tx_mmforum_postfunctions::getUserButtons($user);
         }
-		
+
         if ($GLOBALS['TSFE']->fe_user->user['username'] && $user['uid']!=$GLOBALS['TSFE']->fe_user->user['uid']){
         	if(intval($this->conf['pm_id']) > 0 && $user && $user['deleted']=='0') {
                 $pmParams = array(
@@ -623,7 +631,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                 }
                 $profile .= $this->createButton( 'pm',$pmParams,$this->conf['pm_id'],true);
 			}
-            
+
             $alertParams[$this->prefixId] = array(
                 'action'        => 'post_alert',
                 'pid'     		=> $row['uid'],
@@ -641,9 +649,9 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
     function marker_getPostoptionsMarker($row,$topic) {
     	$lastpostdate = $topic['_v_last_post_date'];
-    	
+
 		IF ((($row['poster_id'] == $this->getUserID()) AND ($lastpostdate == $row['post_time']) AND $topic['closed_flag']!=1) OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
-            
+
             $linkParams[$this->prefixId] = array(
                 'action'        => 'post_edit',
                 'pid'           => $row['uid']
@@ -757,7 +765,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 	}
 
 	/**
-	 * Updates the number of Posts in a topic topics in the forum table 
+	 * Updates the number of Posts in a topic topics in the forum table
 	 *
 	 * @param	int		$forumId    ID of the forum to update
 	 * @return	void
@@ -871,7 +879,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                 $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts','uid = "'.intval($this->piVars['pid']).'"',$updArray);
                 $updArray = array("deleted"=>1);
                 $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts_text','post_id = "'.intval($this->piVars['pid']).'"',$updArray);
-                
+
             // Delete file attachment
                 if($row['attachment'] > 0)
                     $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments','post_id='.$row['uid'],$updArray);
@@ -913,7 +921,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                     // Delete poll
                     $pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
                     $pollObj->deletePoll(0,$topic_id);
-                    
+
                     // Determine last active post in board
                     $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_posts',"deleted = 0 AND hidden = 0 AND forum_id = '$forum_id'".$this->getPidQuery(),'','post_time DESC','1');
                     $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
@@ -921,7 +929,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
                     // Decrease board topic counter
                     $GLOBALS['TYPO3_DB']->sql_query("UPDATE tx_mmforum_forums SET forum_topics = forum_topics-1 WHERE uid = '".$forum_id."'");
-                    
+
                     // Remove shadow topics pointing to this topic
                     $updateArray = array(
                     	'tstamp'			=> time(),
@@ -943,7 +951,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
                     $this->update_lastpost_forum($forum_id);
                     $this->update_lastpost_topic($topic_id);
-                    
+
                     $linkParams[$this->prefixId] = array(
                         'action'    => 'list_post',
                         'tid'       => $topic_id,
@@ -967,7 +975,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 	/**
 	 * if an admin uses the "admin panel" options, this functions makes sure
 	 * that all the values are properly saved
-	 * 
+	 *
 	 * @param	array	$topicData	the data of the topic
 	 * @return	void
 	 */
@@ -1129,7 +1137,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 			foreach ($prefixes as $prefix) {
 				$selected = ($topicData['topic_is'] == $prefix ? ' selected="selected"' : '');
-				$marker['###PREFIXES###'] .= '<option value="' . $prefix . '"' . $selected . '>' . $prefix . '</option>'; 
+				$marker['###PREFIXES###'] .= '<option value="' . $prefix . '"' . $selected . '>' . $prefix . '</option>';
 			}
 			$marker['###TOPICPREFIX###'] = ($topicData['topic_is'] != 0 ? $topicData['topic_is'] : '');
 
@@ -1142,14 +1150,14 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 			// Generate "move topic" select box
 			$marker['###FORUM_BOX###'] = $this->get_forumbox($topicId);
-		
+
 			$marker['###OPTIONS###']  .= '<input type="hidden"  name="' . $this->prefixId . '[topic_id]" value="' . $topicId . '" />';
 			$content = $this->cObj->substituteMarkerArray($template, $marker);
 		}
 		return $content;
 	}
-	
-	
+
+
 	/**
 	 * redirects the page to a specific post
 	 *
@@ -1178,14 +1186,14 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			exit();
 		}
 	 }
-	 
+
 	 	/**
 	 	 * Dynamically generates user buttons.
 	 	 * This function dynamically generates the set of buttons that is displayed
 	 	 * below each post. The buttons can be configured by TypoScript in
 	 	 * plugin.tx_mmforum_pi1.list_posts.userbuttons. See the existing configuration
 	 	 * for examples.
-	 	 * 
+	 	 *
 	 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 	 * @version 2009-02-10
 	 	 * @param   array  $user The user record
@@ -1194,23 +1202,23 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 	function getUserButtons($user) {
 	 	$oldData = $this->cObj->data;
 		$this->cObj->data = $user;
-		
+
 		$profile = '';
-		
+
 		foreach($this->conf['list_posts.']['userbuttons.'] as $key=>$obj) {
 			if($this->conf['list_posts.']['userbuttons.'][$key.'.'] && $obj=='MMFORUM_BUTTON') {
 				$buttonConf = $this->conf['list_posts.']['userbuttons.'][$key.'.'];
-				
+
 				if($buttonConf['if.'] && !$this->cObj->checkIf($buttonConf['if.'])) continue;
-				
+
 				if($buttonConf['label.']) {
 					$label = $this->cObj->cObjGetSingle('TEXT',$buttonConf['label.']);
 				}
-				
+
 				if($buttonConf['link.']) {
 					$link = $this->cObj->cObjGetSingle('TEXT',$buttonConf['link.']);
 				}
-				
+
 				if($buttonConf['special']) {
 					switch($buttonConf['special']) {
 						case 'www':
@@ -1219,7 +1227,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 						break;
 					}
 				}
-				
+
 				$profile .= $this->createButton(
 					$label ? $label : $buttonConf['label'],
 					$buttonConf['parameters'] ? $buttonConf['parameters'] : null,
@@ -1233,9 +1241,9 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				$profile .= $this->cObj->cObjGetSingle($obj, $this->conf['list_posts.']['userbuttons.'][$key.'.']);
 			}
 		}
-		
+
 		$this->cObj->data = $oldData;
-		
+
 		return $profile;
 	}
 }
