@@ -802,6 +802,10 @@ Hier der Link, mit dem Sie direkt in den Beitrag gelangen:
 			
 			<!-- Added in 0.1.7 -->
 			<label index="userlist-title">Benutzerliste</label>
+			<label index="user-profile">Benutzerprofil</label>
+			<label index="user-field">Benutzerfeld</label>
+			<label index="user-username">Benutzername</label>
+			<label index="user-value">Wert</label>
 
 			<!-- Added in 0.1.8 -->
 			<label index="board-rating">Bewertung</label>
