@@ -2741,6 +2741,16 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			move_uploaded_file($file['tmp_name'], $newpath);
 			t3lib_div::fixPermissions($newpath);
 
+				/* Fix wrong mime-type for pdf when uploading through Firefox
+				 * Mime-type for PDF should be: 'application/pdf'
+				 * FF 3.0.9 Linux gives 'binary/octet-stream'
+				 * FF 3.0.9 Windows gives 'application/octet-stream'
+				 *
+				 * Credits go to Loek Hilgersom
+				 */
+			if(in_array($file['type'],array('binary/octet-stream','application/octet-stream','x-application/octet-stream')) && substr_compare($file['name'],'.pdf',-4,4,true)==0)
+				$file['type'] = 'application/pdf';
+
 			$insertArray = array(
 				'pid'       => $this->getStoragePID(),
 				'tstamp'    => time(),
