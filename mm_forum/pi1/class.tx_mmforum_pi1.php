@@ -2537,10 +2537,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     $marker['###MESSAGEMENU###']= '';
                     $marker['###PROFILEMENU###']= '';
                     $marker['###POSTMENU###']   = '';
-					          $marker['###POSTUSER###']   = $this->ident_user($this->getUserID(),$conf);
+					$marker['###POSTUSER###']   = $this->ident_user($this->getUserID(),$conf);
                     $marker['###POSTTEXT###']   = $posttext;
                     $marker['###ANKER###']      = '';
-					          $marker['###POSTANCHOR###']	= '';
+					$marker['###POSTANCHOR###']	= '';
                     $marker['###POSTDATE###']   = $this->pi_getLL('post.writtenOn').': '.$this->formatDate(time());
 
                     // Include hooks
@@ -3215,7 +3215,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			// Delete multiple favorites
 			if ($this->piVars['fav']['action'] == 'delete') {
-				foreach ($this->piVars['fav']['delete'] as $del_tid) {
+				foreach ((array)$this->piVars['fav']['delete'] as $del_tid) {
 					$del_tid = intval($del_tid);        // Parse to int for security reasons
 					$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_favorites', 'user_id = ' . $userId . ' AND topic_id = ' . $del_tid);
 				}
