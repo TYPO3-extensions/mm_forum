@@ -171,7 +171,7 @@ if(t3lib_extMgm::isLoaded('ratings'))
  * Furthermore, there are function for creating new posts and editing
  * existing ones and displaying user information and editing personal
  * preferences like listing and editing topics for email notification
- * or marking as favorite. 
+ * or marking as favorite.
  *
  * @author     Holger Trapp   <h.trapp@mittwald.de>
  * @author     Martin Helmich <m.helmich@mittwald.de>
@@ -378,7 +378,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 	/**
 	 * Evaluates configuration parameters submitted via FlexForms.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-04-27
 	 * @return void
@@ -1485,7 +1485,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$settings['show']  = 'all';
 		}
 		switch ($settings['order']) {
-			case 'lastpost': 
+			case 'lastpost':
 				$order = 'topic_last_post_id DESC';
 			break;
 			case 'category':
@@ -1493,10 +1493,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			break;
 			case 'crdate':
 				$order = 'topic_time DESC';
-			break; 
+			break;
 			case 'author':
 				$order = 'u.name ASC, topic_time DESC';
-			break; 
+			break;
 			default:
 				if ($settings['order']) {
 					$order = $GLOBALS['TYPO3_DB']->quoteStr($settings['order'], 'tx_mmforum_topics') . ' DESC';
@@ -1720,7 +1720,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				'###HITS###'        => intval($topicRow['topic_views']),
 				'###AUTHOR###'      => $this->getauthor($topicRow['topic_poster']),
 				'###DATE###'        => $this->formatDate($topicRow['topic_time']),
-				'###LAST###'		=> $this->getlastpost($topicRow['topic_last_post_id'], $conf).' '.$lastPostLink
+				'###LAST###'		=> $this->getlastpost($topicRow['topic_last_post_id'], $conf).' '.$lastPostLink,
+				'###POSTS_HITS###'  => intval($topicRow['topic_replies']) .' ('. intval($topicRow['topic_views']) . ')',
 			);
 			$location = $topicRow['cat_title'] . ' / ' . $topicRow['forum_name'];
 			$postLimit = intval($conf['post_limit']);
@@ -1780,7 +1781,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	/**
 	 * Displays a list containing a list of the latest posts, meaning the
 	 * topics that was last written in.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-05-23
 	 * @return  string	The latest topic list
@@ -1858,7 +1859,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
     /**
      * Displays a list of all users registered in the forum.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-09-29
      * @return  string The user list
@@ -1908,7 +1909,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     'uid='.$field.' AND deleted=0'
                 );
 				if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) continue;
-				
+
                 $arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 				$userField->get($arr);
 
@@ -2276,11 +2277,21 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 					$marker['###POSTOPTIONS###'] = '';
 					$marker['###POSTMENU###']    = '';
+					$marker['###MESSAGEMENU###']= '';
+					$marker['###PROFILEMENU###']= '';
 					$marker['###POSTUSER###']    = $this->ident_user($GLOBALS['TSFE']->fe_user->user['uid'], $conf);
 					$marker['###POSTTEXT###']    = $posttext;
 					$marker['###ANKER###']       = '';
 					$marker['###POSTANCHOR###']	 = '';
 					$marker['###POSTDATE###']    = $this->pi_getLL('post.writtenOn') . ': ' . $this->formatDate(time());
+
+					// Include hooks
+					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newTopic_INpreview'])) {
+						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newTopic_INpreview'] as $_classRef) {
+							$_procObj = & t3lib_div::getUserObj($_classRef);
+							$marker = $_procObj->newTopic_INpreview($marker, $this);
+						}
+					}
 
 					$previewTemplate = $this->cObj->fileResource($conf['template.']['new_topic']);
 					$previewTemplate = $this->cObj->getSubpart($previewTemplate, '###PREVIEW###');
@@ -2523,12 +2534,22 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     $posttext = $this->bb2text($posttext,$conf);
 
                     $marker['###POSTOPTIONS###']= '';
+                    $marker['###MESSAGEMENU###']= '';
+                    $marker['###PROFILEMENU###']= '';
                     $marker['###POSTMENU###']   = '';
-					$marker['###POSTUSER###']   = $this->ident_user($this->getUserID(),$conf);
+					          $marker['###POSTUSER###']   = $this->ident_user($this->getUserID(),$conf);
                     $marker['###POSTTEXT###']   = $posttext;
                     $marker['###ANKER###']      = '';
-					$marker['###POSTANCHOR###']	= '';
+					          $marker['###POSTANCHOR###']	= '';
                     $marker['###POSTDATE###']   = $this->pi_getLL('post.writtenOn').': '.$this->formatDate(time());
+
+                    // Include hooks
+                        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_INpreview'])) {
+                            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_INpreview'] as $_classRef) {
+                                $_procObj = & t3lib_div::getUserObj($_classRef);
+                                $marker = $_procObj->newPost_INpreview($marker, $this);
+                            }
+                        }
 
                     $previewTemplate    = $this->cObj->fileResource($conf['template.']['new_post']);
                     $previewTemplate    = $this->cObj->getSubpart($previewTemplate,"###PREVIEW###");
@@ -3370,7 +3391,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      * This function generates a set of BBCode buttons that insert new BBcodes
      * into a post text input field using javascript. The BBCodes are loaded
      * dynamically from database.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2009-04-09
      * @param   string $template The template that is to be used for the set of
@@ -3859,7 +3880,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      * @param  string $content The plugin content
      * @param  array  $conf    The plugin's configuration vars
      * @return string          The content
-     * 
+     *
      * @deprecated Currently not used
      */
     function send_mail($content, $conf) {
@@ -3959,7 +3980,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      * Generates a dynamic page navigator suitable for many applications.
      * This function can be used to generate a general page generator that can
      * be used nearly everywhere.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-06-05
      * @param   int    $maxPage        The maximum page number
@@ -3988,7 +4009,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $linkParams[$this->prefixId] = $def_linkParams;
             $linkParams[$this->prefixId][$linkVar_name] = $curPage - 1;
 
-            $content .= $this->pi_linkTP('&laquo; '.$this->pi_getLL('').'|',$linkParams);
+            $content .= $this->pi_linkTP(' &laquo; '.$this->pi_getLL('').'|',$linkParams);
         }
 
         for($i = $curPage-$maxOffset; $i <= $curPage+$maxOffset; $i ++) {
@@ -4085,7 +4106,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             // First page
                 if (($page - 1) >= 1)           $content .= $this->pi_linkTP(''.$this->pi_getLL('page.first').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>1))).'|';
             // Previous page
-                if (($page - 1) > 1)            $content .= $this->pi_linkTP('&laquo; '.$this->pi_getLL('').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';
+                if (($page - 1) > 1)            $content .= $this->pi_linkTP(' &laquo; '.$this->pi_getLL('page.previous').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';
             // List pages from 2 pages before current page to 2 pages after current page
                 if (($page - 2) >= 1)           $content .= '|'.$this->pi_linkTP(' '.($page-2).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-2))).'|';
                 if (($page - 1) >= 1)           $content .= '|'.$this->pi_linkTP(' '.($page-1).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';
@@ -4093,7 +4114,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 if (($page + 1) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.($page+1).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+1))).'|';
                 if (($page + 2) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.($page+2).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+2))).'|';
             // Next page
-                if (($page + 1) < $maxpage)     $content .= '|'.$this->pi_linkTP(' '.$this->pi_getLL('').' &raquo; ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+1)));
+                if (($page + 1) < $maxpage)     $content .= '|'.$this->pi_linkTP(' '.$this->pi_getLL('page.next').' &raquo; ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+1)));
             // Last page
                 if (($page + 1) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.$this->pi_getLL('page.last').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$maxpage)));
         }
@@ -4329,7 +4350,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 	/**
 	 * Returns the avatar of the user as a <img...> HTML tag
-	 * 
+	 *
 	 * @param  array	the user data array
 	 * @return string   the HTML tag
 	 */
@@ -4984,7 +5005,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
     /**
      * Generates a forum icon.
      * This function dynamically generates a forum icon.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2008-03-17
      * @param   boolean $isClosed Defines if the forum is not writeable
@@ -5081,7 +5102,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      * user that is currently logged in is allowed to open this attachment.
      * Only if this check is passed, the attachment file will be output
      * directly to the browser.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-21
      * @return  void
@@ -5493,7 +5514,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      * Retrieces a board records from database.
      * This function retrieves a board record from the tx_mmforum_forums table in
      * the database as an associative array.
-     * 
+     *
      * @param  int   $uid The board's uid
      * @return array      The board record as associative array
      */
@@ -5526,7 +5547,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * as special.userfunc in HMENUs in TypoScript in order to merge the mm_forum
 	 * internal rootline with a global page rootline. On the same time, the property
 	 * tx_mmforum_pi1.disableRootline should be set to 1.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-11-02
 	 * @param   string $content The content variable
@@ -5537,7 +5558,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 */
 	function createRootline($content, $conf) {
 		include_once(t3lib_extMgm::extPath('mm_forum') . '/includes/class.tx_mmforum_menus.php');
-		
+
 		$menuObj = t3lib_div::makeInstance('tx_mmforum_menus');
 		return $menuObj->createRootline($content,$conf);
 	}
@@ -5546,7 +5567,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      * Creates a button.
      * This function creates a button. The button can be configured using
      * TypoScript.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2008-02-11
      * @param   string  $label  The label. This will either be an image file name
@@ -5590,11 +5611,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 	/**
 	 * Sets the solved status of a topic.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-02-11
 	 * @param   int   $status Determines to which solved status the topic is to be set.
-	 *                        Set to '0' to "unsolve" the topic and to '1' to solve it. 
+	 *                        Set to '0' to "unsolve" the topic and to '1' to solve it.
 	 * @return  mixed         Returns either VOID on success or a content string in case
 	 *                        an error ocurred.
 	 */
@@ -5628,7 +5649,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 	/**
 	 * Solves a topic.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-02-11
 	 * @return  mixed Returns either VOID on success or a content string in case
@@ -5640,7 +5661,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 	/**
 	 * "Unsolves" a topic.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-02-11
 	 * @return  mixed Returns either VOID on success or a content string in case
@@ -5656,13 +5677,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * is used everywhere where a link to a user profile is needed. This means
 	 * that it suffices to hook into this function to modify the whole
 	 * profile linking mechanism of the mm_forum.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-02-11
 	 * @param   mixed  $userData Information on the user that is to be linked. This may
 	 *                           either be the user record as associative array or the user UID.
 	 * @return  string           The user link
-	 * 
+	 *
 	 */
 	function getUserProfileLink($userData) {
 		if (!is_array($userData)) {
@@ -5695,7 +5716,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * This function generates a text that is linked to a user profile.
 	 * The content of the link is typically the user name, but may be overwritten
 	 * by a parameter.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-02-11
 	 * @param   mixed  $userData Information on the user that is to be linked. This may
@@ -5716,7 +5737,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 	/**
 	 * Returns the database field name that is used for the username.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-03-16
 	 * @since   0.1.6
