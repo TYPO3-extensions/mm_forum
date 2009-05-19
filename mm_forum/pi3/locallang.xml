@@ -45,26 +45,26 @@
             <label index="imageArchivAlt">PM Archive</label>
             <label index="imageOutboxAlt">PM Outbox</label>
             <label index="imageNewPmAlt">Write new PM</label>
-            <label index="main.execute">Execute</label>
-            <label index="main.inbox">Incoming private messages</label>
-            <label index="main.outbox">Outgoing private messages</label>
-            <label index="main.archive">Message archive</label>
-            <label index="delete.confirm">Do you really want to delete this message</label>
-            <label index="read.readMessage">Read message</label>
-            <label index="write.writeMessage">Write message</label>
-            <label index="write.send">Send</label>
-            <label index="write.reset">Reset</label>
-            <label index="write.search">Search</label>
-            <label index="user.deleted">Deleted user</label>
-            <label index="ntfmail.content">Hello ###USERNAME###,
+            <label index="main-execute">Execute</label>
+            <label index="main-inbox">Incoming private messages</label>
+            <label index="main-outbox">Outgoing private messages</label>
+            <label index="main-archive">Message archive</label>
+            <label index="delete-confirm">Do you really want to delete this message</label>
+            <label index="read-readMessage">Read message</label>
+            <label index="write-writeMessage">Write message</label>
+            <label index="write-send">Send</label>
+            <label index="write-reset">Reset</label>
+            <label index="write-search">Search</label>
+            <label index="user-deleted">Deleted user</label>
+            <label index="ntfmail-content">Hello ###USERNAME###,
 You have recieved a new private message on ###SITENAME###.
 By clicking on the following link you come directly to the message:
 
 ###PMLINK###
 
  The forum team</label>
-            <label index="ntfmail.sender">###SITENAME### &lt;###EMAIL###&gt;</label>
-            <label index="ntfmail.subject">You have recieved a new message</label>
+            <label index="ntfmail-sender">###SITENAME### &lt;###EMAIL###&gt;</label>
+            <label index="ntfmail-subject">You have recieved a new message</label>
             
             <!-- Added in 0.1.5 -->
             <label index="button-inbox">Inbox</label>
@@ -120,33 +120,33 @@ By clicking on the following link you come directly to the message:
             <label index="imageArchivAlt">PM Archiv</label>
             <label index="imageOutboxAlt">PM Ausgang</label>
             <label index="imageNewPmAlt">Neue PM</label>
-            <label index="main.execute">Ausführen</label>
-            <label index="main.inbox">Eingegangene Private Nachrichten</label>
-            <label index="main.outbox">Versandte Private Nachrichten</label>
-            <label index="main.archive">Nachrichtenarchiv</label>
-            <label index="delete.confirm">Soll diese Nachricht wirklich gelöscht werden?</label>
-            <label index="read.readMessage">Nachricht lesen</label>
-            <label index="write.writeMessage">Nachricht schreiben</label>
-            <label index="write.send">Senden</label>
-            <label index="write.reset">Zurücksetzen</label>
-            <label index="write.search">Suchen</label>
-            <label index="user.deleted">Gelöschter Benutzer</label>
-            <label index="ntfmail.content">Hallo ###USERNAME###,
+            <label index="main-execute">Ausführen</label>
+            <label index="main-inbox">Eingegangene Private Nachrichten</label>
+            <label index="main-outbox">Versandte Private Nachrichten</label>
+            <label index="main-archive">Nachrichtenarchiv</label>
+            <label index="delete-confirm">Soll diese Nachricht wirklich gelöscht werden?</label>
+            <label index="read-readMessage">Nachricht lesen</label>
+            <label index="write-writeMessage">Nachricht schreiben</label>
+            <label index="write-send">Senden</label>
+            <label index="write-reset">Zurücksetzen</label>
+            <label index="write-search">Suchen</label>
+            <label index="user-deleted">Gelöschter Benutzer</label>
+            <label index="ntfmail-content">Hallo ###USERNAME###,
 Sie haben eine neue private Nachricht auf ###SITENAME### bekommen.
 Durch Klicken auf den folgenden Link kommen Sie direkt zur Nachricht:
 
 ###PMLINK###
 
 Das Forum-Team</label>
-            <label index="ntfmail.content-inf">Hallo ###USERNAME###,
+            <label index="ntfmail-content-inf">Hallo ###USERNAME###,
 du hast eine neue private Nachricht auf ###SITENAME### bekommen.
 Durch Klicken auf den folgenden Link kommst du direkt zur Nachricht:
 
 ###PMLINK###
 
 Das Forum-Team</label>
-            <label index="ntfmail.sender">###SITENAME### &lt;###EMAIL###&gt;</label>
-            <label index="ntfmail.subject">Eine neue private Nachricht ist eingetroffen</label>
+            <label index="ntfmail-sender">###SITENAME### &lt;###EMAIL###&gt;</label>
+            <label index="ntfmail-subject">Eine neue private Nachricht ist eingetroffen</label>
             
             <!-- Added in 0.1.5 -->
             <label index="button-inbox">Posteingang</label>
@@ -193,22 +193,22 @@ Das Forum-Team</label>
 			<label index="imageArchivAlt">Yksityisviestiarkisto</label>
 			<label index="imageOutboxAlt">Yksityisviesti lähtevät</label>
 			<label index="imageNewPmAlt">Kirjoita uusi yksityisviesti</label>
-			<label index="main.execute">Suorita</label>
-			<label index="main.inbox">Saapuvat yksityisviestit</label>
-			<label index="main.outbox">Lähtevät yksityisviestit</label>
-			<label index="main.archive">Viestiarkisto</label>
-			<label index="delete.confirm">Haluatko todella poistaa tämän viestin</label>
-			<label index="read.readMessage">Lue viesti</label>
-			<label index="write.writeMessage">Kirjoita viesti</label>
-			<label index="write.send">Lähetä</label>
-			<label index="write.reset">Tyhjennä</label>
-			<label index="write.search">Hae</label>
-			<label index="user.deleted">Poistettu käyttäjä</label>
-			<label index="ntfmail.content">Hei ###USERNAME###,
+			<label index="main-execute">Suorita</label>
+			<label index="main-inbox">Saapuvat yksityisviestit</label>
+			<label index="main-outbox">Lähtevät yksityisviestit</label>
+			<label index="main-archive">Viestiarkisto</label>
+			<label index="delete-confirm">Haluatko todella poistaa tämän viestin</label>
+			<label index="read-readMessage">Lue viesti</label>
+			<label index="write-writeMessage">Kirjoita viesti</label>
+			<label index="write-send">Lähetä</label>
+			<label index="write-reset">Tyhjennä</label>
+			<label index="write-search">Hae</label>
+			<label index="user-deleted">Poistettu käyttäjä</label>
+			<label index="ntfmail-content">Hei ###USERNAME###,
 Olet saanut yksityisviestin ###SITENAME###.
 Klikkaamalla seuraavaa linkkiä pääset suoraan viestiin:
 ###PMLINK###</label>
-			<label index="ntfmail.subject">Olet saanut uuden viestin</label>
+			<label index="ntfmail-subject">Olet saanut uuden viestin</label>
 			
 			<!-- Added in 0.1.5 -->
 			<label index="button-inbox">Saapuneet</label>
@@ -255,26 +255,26 @@ Klikkaamalla seuraavaa linkkiä pääset suoraan viestiin:
             <label index="imageArchivAlt">PB Archief</label>
             <label index="imageOutboxAlt">PB Postvak uit</label>
             <label index="imageNewPmAlt">Schrijf nieuw PB</label>
-            <label index="main.execute">Voer uit</label>
-            <label index="main.inbox">Ontvangen prive berichten</label>
-            <label index="main.outbox">Verzonden prive berichten</label>
-            <label index="main.archive">berichten archief</label>
-            <label index="delete.confirm">Weet u zeker dat u dit bericht wilt verwijderen?</label>
-            <label index="read.readMessage">Lees bericht</label>
-            <label index="write.writeMessage">Schijf bericht</label>
-            <label index="write.send">Stuur</label>
-            <label index="write.reset">Herstel</label>
-            <label index="write.search">Zoek</label>
-            <label index="user.deleted">Verwijderde gebruiker</label>
-            <label index="ntfmail.content">Beste ###USERNAME###,
+            <label index="main-execute">Voer uit</label>
+            <label index="main-inbox">Ontvangen prive berichten</label>
+            <label index="main-outbox">Verzonden prive berichten</label>
+            <label index="main-archive">berichten archief</label>
+            <label index="delete-confirm">Weet u zeker dat u dit bericht wilt verwijderen?</label>
+            <label index="read-readMessage">Lees bericht</label>
+            <label index="write-writeMessage">Schijf bericht</label>
+            <label index="write-send">Stuur</label>
+            <label index="write-reset">Herstel</label>
+            <label index="write-search">Zoek</label>
+            <label index="user-deleted">Verwijderde gebruiker</label>
+            <label index="ntfmail-content">Beste ###USERNAME###,
 U heeft een nieuw prive bericht ontvangen op ###SITENAME###.
 U gaat direct naar het bericht via de volgende link:
 
 ###PMLINK###
 
  De beheerders van het forum </label>
-            <label index="ntfmail.sender">###SITENAME### &lt;###EMAIL###&gt;</label>
-            <label index="ntfmail.subject">U heeft een nieuw bericht ontvangen</label>
+            <label index="ntfmail-sender">###SITENAME### &lt;###EMAIL###&gt;</label>
+            <label index="ntfmail-subject">U heeft een nieuw bericht ontvangen</label>
             
             <!-- Added in 0.1.5 -->
             <label index="button-inbox">Postvak In</label>
@@ -320,26 +320,26 @@ U gaat direct naar het bericht via de volgende link:
             <label index="imageArchivAlt">MP Archive</label>
             <label index="imageOutboxAlt">MP Sortant</label>
             <label index="imageNewPmAlt">Nouveau MP</label>
-            <label index="main.execute">Exécuter</label>
-            <label index="main.inbox">Messages privés reçus</label>
-            <label index="main.outbox">Messages privés expédiés</label>
-            <label index="main.archive">Messages archivés</label>
-            <label index="delete.confirm">Désirez-vous vraiment supprimer ce message ?</label>
-            <label index="read.readMessage">Lire le message</label>
-            <label index="write.writeMessage">Ecrire un message</label>
-            <label index="write.send">Envoyer</label>
-            <label index="write.reset">Vider le formulaire</label>
-            <label index="write.search">Rechercher</label>
-            <label index="user.deleted">intervenant supprimé</label>
-            <label index="ntfmail.content">Bonjour ###USERNAME###,
+            <label index="main-execute">Exécuter</label>
+            <label index="main-inbox">Messages privés reçus</label>
+            <label index="main-outbox">Messages privés expédiés</label>
+            <label index="main-archive">Messages archivés</label>
+            <label index="delete-confirm">Désirez-vous vraiment supprimer ce message ?</label>
+            <label index="read-readMessage">Lire le message</label>
+            <label index="write-writeMessage">Ecrire un message</label>
+            <label index="write-send">Envoyer</label>
+            <label index="write-reset">Vider le formulaire</label>
+            <label index="write-search">Rechercher</label>
+            <label index="user-deleted">intervenant supprimé</label>
+            <label index="ntfmail-content">Bonjour ###USERNAME###,
 Vous avez reçu un nouveau message sur le forum ###SITENAME###.
 Merci de suivre ce lien :
 
 ###PMLINK###
 
 			</label>
-            <label index="ntfmail.sender">###SITENAME### &lt;###EMAIL###&gt;</label>
-            <label index="ntfmail.subject">Vous avez reçu un nouveau message</label>
+            <label index="ntfmail-sender">###SITENAME### &lt;###EMAIL###&gt;</label>
+            <label index="ntfmail-subject">Vous avez reçu un nouveau message</label>
             
             <!-- Added in 0.1.5 -->
             <label index="button-inbox">MP reçus</label>
@@ -386,26 +386,26 @@ Merci de suivre ce lien :
 	    <label index="imageArchivAlt">Архив ЛС</label>
 	    <label index="imageOutboxAlt">Исходящие ЛС</label>
 	    <label index="imageNewPmAlt">Создать новое ЛС</label>
-	    <label index="main.execute">Выполнить</label>
-	    <label index="main.inbox">Входящие личные сообщения</label>
-	    <label index="main.outbox">Исходящие личные сообщения</label>
-	    <label index="main.archive">Архив сообщений</label>
-	    <label index="delete.confirm">Вы действительно хотите удалить это сообщение</label>
-	    <label index="read.readMessage">Просмотреть сообщение</label>
-	    <label index="write.writeMessage">Написать сообщение</label>
-	    <label index="write.send">Отправить</label>
-	    <label index="write.reset">Изменить</label>
-	    <label index="write.search">Искать</label>
-	    <label index="user.deleted">Удалить пользователя</label>
-	    <label index="ntfmail.content">Здравствуйте ###USERNAME###,
+	    <label index="main-execute">Выполнить</label>
+	    <label index="main-inbox">Входящие личные сообщения</label>
+	    <label index="main-outbox">Исходящие личные сообщения</label>
+	    <label index="main-archive">Архив сообщений</label>
+	    <label index="delete-confirm">Вы действительно хотите удалить это сообщение</label>
+	    <label index="read-readMessage">Просмотреть сообщение</label>
+	    <label index="write-writeMessage">Написать сообщение</label>
+	    <label index="write-send">Отправить</label>
+	    <label index="write-reset">Изменить</label>
+	    <label index="write-search">Искать</label>
+	    <label index="user-deleted">Удалить пользователя</label>
+	    <label index="ntfmail-content">Здравствуйте ###USERNAME###,
 		Вам отправлено новое личное сообщение на сайте ###SITENAME###.
 		Чтобы просмотреть сообщение, воспользуйтесь следующей ссылкой:
 
 		###PMLINK###
 
 		Администрация форума</label>
-	    <label index="ntfmail.sender">###SITENAME### &lt;###EMAIL###&gt;</label>
-	    <label index="ntfmail.subject">Для Вас получено новое сообщение</label>
+	    <label index="ntfmail-sender">###SITENAME### &lt;###EMAIL###&gt;</label>
+	    <label index="ntfmail-subject">Для Вас получено новое сообщение</label>
 
 	    <!-- Added in 0.1.5 -->
 	    <label index="button-inbox">Входящие</label>
@@ -452,26 +452,26 @@ Merci de suivre ce lien :
 	    <label index="imageArchivAlt">Архів ПС</label>
 	    <label index="imageOutboxAlt">Вихідні ПС</label>
 	    <label index="imageNewPmAlt">Створити нове ПС</label>
-	    <label index="main.execute">Виконати</label>
-	    <label index="main.inbox">Вхідні приватні сповіщення</label>
-	    <label index="main.outbox">Вихідні приватні сповіщення</label>
-	    <label index="main.archive">Архів сповіщень</label>
-	    <label index="delete.confirm">Ви дійсно бажаєте видалити це сповіщення</label>
-	    <label index="read.readMessage">Прглянути сповіщення</label>
-	    <label index="write.writeMessage">Написати сповіщення</label>
-	    <label index="write.send">Відправити</label>
-	    <label index="write.reset">Змінити</label>
-	    <label index="write.search">Шукати</label>
-	    <label index="user.deleted">Видалити користувача</label>
-	    <label index="ntfmail.content">Здраствуйте ###USERNAME###,
+	    <label index="main-execute">Виконати</label>
+	    <label index="main-inbox">Вхідні приватні сповіщення</label>
+	    <label index="main-outbox">Вихідні приватні сповіщення</label>
+	    <label index="main-archive">Архів сповіщень</label>
+	    <label index="delete-confirm">Ви дійсно бажаєте видалити це сповіщення</label>
+	    <label index="read-readMessage">Прглянути сповіщення</label>
+	    <label index="write-writeMessage">Написати сповіщення</label>
+	    <label index="write-send">Відправити</label>
+	    <label index="write-reset">Змінити</label>
+	    <label index="write-search">Шукати</label>
+	    <label index="user-deleted">Видалити користувача</label>
+	    <label index="ntfmail-content">Здраствуйте ###USERNAME###,
 		Вам надіслано нове приватне повідомлення на сайті ###SITENAME###.
 		Щоб переглянути повідомлення скористайтеся наступним посиланням:
 
 		###PMLINK###
 
 		Адміністрація форуму</label>
-	    <label index="ntfmail.sender">###SITENAME### &lt;###EMAIL###&gt;</label>
-	    <label index="ntfmail.subject">Для Вас отримано нове сповіщення</label>
+	    <label index="ntfmail-sender">###SITENAME### &lt;###EMAIL###&gt;</label>
+	    <label index="ntfmail-subject">Для Вас отримано нове сповіщення</label>
 
 	    <!-- Added in 0.1.5 -->
 	    <label index="button-inbox">Вхідні</label>
