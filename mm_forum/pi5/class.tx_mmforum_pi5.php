@@ -42,6 +42,7 @@
 
 require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_base.php');
 require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_postparser.php');
+require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/user/class.tx_mmforum_usermanagement.php');
 
 /** 
  * The plugin 'Change Userdetails' for the 'mm_forum' extension

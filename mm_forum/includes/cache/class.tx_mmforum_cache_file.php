@@ -128,9 +128,17 @@ class tx_mmforum_cache_file {
 		 * @return  void
 		 */
 	function deleteAll() {
-		$fullPath = $GLOBALS['BACK_PATH'].'../'.$this->path;
-		$cmd = 'cd '.$fullPath.' && rm -f *.mmforum_cache';
-		system($cmd);
+		$fullPath = dirname(PATH_thisScript).$GLOBALS['BACK_PATH'].'/../'.$this->path;
+
+			/* NOTE: The following condition is NOT a mistake, but is actually indented
+			 * not to match BOTH false (for "string not found") AND 0 (for "string found
+			 * at index 0"). Btw, type safety is greatly overrated... ;) */
+		while(strpos($fullPath,'../'))
+			$fullPath = preg_replace('/\/([^\/]*?)\/\.\.\//','/',$fullPath);
+
+		$files = glob($fullPath.'/*.mmforum_cache');
+
+		foreach($files as $file) unlink($file);
 	}
 	
 }
