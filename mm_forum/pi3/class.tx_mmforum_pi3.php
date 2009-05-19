@@ -517,7 +517,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			else
 			{
 				// Retrieve userId from username
-				$where = "deleted = 0 AND disable = 0 AND username=".$GLOBALS['TYPO3_DB']->fullQuoteStr($to_username,'fe_users');
+				$where = "deleted = 0 AND disable = 0 AND username=".$GLOBALS['TYPO3_DB']->fullQuoteStr($to_username,'fe_users')." AND pid=".$this->conf['userPID'];
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','fe_users',$where);
 				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
