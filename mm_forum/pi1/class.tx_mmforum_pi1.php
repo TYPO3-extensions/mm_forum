@@ -399,7 +399,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		switch ($code) {
 			case 'LATEST':
-				$limitCat = trim($this->pi_getFFvalue($ff, 'exclCategories_latest', 'general'));
+				$exclCategories_latest = trim($this->pi_getFFvalue($ff, 'exclCategories_latest', 'general'));
+				$limitCat = $exclCategories_latest ? $exclCategories_latest : $this->cObj->stdWrap($this->conf['exclCategories_latest'],$this->conf['exclCategories_latest.']);
+
 				$this->limitCat = ((strlen($limitCat) > 0)  ? $limitCat : false);
 
 				$limitTopic = trim($this->pi_getFFvalue($ff, 'latest_limit', 'general'));
@@ -420,7 +422,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			case 'BOARD':
 			case '':
-				$limitCat = trim($this->pi_getFFvalue($ff, 'exclCategories', 'general'));
+				$exclCategories = trim($this->pi_getFFvalue($ff, 'exclCategories', 'general'));
+				$limitCat = $exclCategories ? $exclCategories : $this->cObj->stdWrap($this->conf['exclCategories'],$this->conf['exclCategories.']);
 				$this->limitCat = ((strlen($limitCat) > 0) ? $limitCat : false);
 
 				$redirect = $this->pi_getFFvalue($ff, 'redirectSpecial', 'general');
