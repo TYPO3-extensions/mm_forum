@@ -5806,6 +5806,34 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		 *                  is disabled or the 'ratings' extension is not installed.
 		 */
 	function isUserRating() { return $this->isRating('users'); }
+
+
+
+		/**
+		 * Formats a timestamp in human readable form. If the timestamp is from the
+		 * current day or the day before, there is no date displayed, but rather a string
+		 * saying "today" or "yesterday".
+		 *
+		 * @param  string $content The timestamp that is to be formatted
+		 * @param  array  $conf    Configuration options
+		 * @return string          The formatted timestamp
+		 */
+
+	function formatLastPostDate($content, $conf) {
+		
+		$this->pi_loadLL();
+
+		$todayStart = mktime(0, 0, 0, date("m"), date('d'), date('Y'));
+		$yesterdayStart = mktime(0, 0, 0, date("m"), date('d')-1, date('Y'));
+
+		$content	= intval($content);
+
+		    if($content >= $todayStart)		$dateFormat = $this->pi_getLL('date-today').'&nbsp;[%H:%M]';
+		elseif($content >= $yesterdayStart)	$dateFormat = $this->pi_getLL('date-yesterday').'&nbsp;[%H:%M]';
+		else								$dateFormat = $conf['defaultDateFormat'];
+
+		return strftime($dateFormat, $content);
+	}
 }
 
 

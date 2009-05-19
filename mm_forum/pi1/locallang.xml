@@ -380,6 +380,8 @@ To visit this new topic, follow the link below:
 			<!-- Added in 0.1.8 -->
 			<label index="board-rating">Rating</label>
 			<label index="user-rating">Rating</label>
+			<label index="date-today">Today</label>
+			<label index="date-yesterday">Yesterday</label>
         </languageKey>
         <!-- GERMAN LANGUAGE DATA -->
         <languageKey index="de" type="array">
@@ -810,6 +812,8 @@ Hier der Link, mit dem Sie direkt in den Beitrag gelangen:
 			<!-- Added in 0.1.8 -->
 			<label index="board-rating">Bewertung</label>
 			<label index="user-rating">Bewertung</label>
+			<label index="date-today">Heute</label>
+			<label index="date-yesterday">Gestern</label>
         </languageKey>
         <!-- FINNISH LANGUAGE DATA -->
         <languageKey index="fi" type="array">

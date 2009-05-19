@@ -292,9 +292,8 @@ plugin.tx_mmforum_pi1 {
 		 	
 		 	# stdWrap for last post date info
 		 		lastPostDate_stdWrap {
-		 			#date = D d.m.Y [H:i]
-		 			strftime = %a&nbsp;%e.%m.%Y&nbsp;[%H:%M]
-		 			#strftime = %c
+					postUserFunc = tx_mmforum_pi1->formatLastPostDate
+					postUserFunc.defaultDateFormat = {$plugin.tx_mmforum.dateFormat}
 		 			wrap = |<br />
 		 		}
                 
