@@ -410,14 +410,14 @@ class tx_mmforum_postparser {
 	 * @return  string         The parsed string
 	 */
 	function zitat($text,$parent, $conf){
-		preg_match_all('/\[quote:[a-zA-Z0-9]{10}="[^\"]{1,30}"]/isS',$text,$quote_data);
+		preg_match_all('/\[quote:[a-zA-Z0-9]{10}=&quot;[^\"]{1,30}&quot;]/isS',$text,$quote_data);
 		while(list ($k,$v) = each ($quote_data)){
-			$pattern = '/"[^\"]{1,30}"/';
+			$pattern = '/&quot;[^\"]{1,30}&quot;/';
 			while(list ($k1,$v1) = each ($v)){
 				preg_match($pattern,$v1,$arr_with_names);
 				while(list ($k2,$v2) = each ($arr_with_names)){
-					$text = preg_replace('/\[quote:[a-zA-Z0-9]{10}="[^\"]{1,30}"]/isS', 
-					'<div class="'.$conf['postparser.']['quoteClass'].'">'.str_replace("\"","",$v2).' '.$parent->pi_getLL('quote_prefix').'<br />', $text,1);
+					$text = preg_replace('/\[quote:[a-zA-Z0-9]{10}=&quot;[^\"]{1,30}&quot;]/isS', 
+					'<div class="'.$conf['postparser.']['quoteClass'].'">'.str_replace("&quot;","",$v2).' '.$parent->pi_getLL('quote_prefix').'<br />', $text,1);
 				}
 			}
 		}
@@ -426,13 +426,13 @@ class tx_mmforum_postparser {
 		$text = preg_replace("/\[quote\](.*?)\[\/quote\]/isS","<div class=\"".$conf['postparser.']['quoteClass']."\">\\1</div>",$text);
 		$text = preg_replace('/\[\/quote]/isS', '</div>', $text);
 		
-		preg_match_all('/\[quote="[^\"]{1,30}"]/isS',$text,$quote_data);
+		preg_match_all('/\[quote=&quot;[^\"]{1,30}&quot;]/isS',$text,$quote_data);
 		while(list ($k,$v) = each ($quote_data)){
-			$pattern = '/"[^\"]{1,30}"/';
+			$pattern = '/&quot;[^\"]{1,30}&quot;/';
 			while(list ($k1,$v1) = each ($v)){
 				preg_match($pattern,$v1,$arr_with_names);
 				while(list ($k2,$v2) = each ($arr_with_names)){
-					$text = preg_replace('/\[quote="[^\"]{1,30}"]/isS', '<div class="'.$conf['postparser.']['quoteClass'].'">'.str_replace("\"","",$v2).' '.$parent->pi_getLL('quote_prefix').'<br />', $text,1);
+					$text = preg_replace('/\[quote=&quot;[^\"]{1,30}&quot;]/isS', '<div class="'.$conf['postparser.']['quoteClass'].'">'.str_replace("&quot;","",$v2).' '.$parent->pi_getLL('quote_prefix').'<br />', $text,1);
 				}
 			}
 		}
