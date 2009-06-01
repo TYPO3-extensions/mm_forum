@@ -434,6 +434,10 @@ plugin.tx_mmforum_pi1 {
 				itemWrap = <div class="tx-mmforum-pi1-smilie"> | </div>
 			}
 		}
+
+		listLatest {
+			limit = 10
+		}
 		
 	# User profile
 		user_profile {

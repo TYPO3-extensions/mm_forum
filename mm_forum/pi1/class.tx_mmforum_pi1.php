@@ -405,7 +405,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$this->limitCat = ((strlen($limitCat) > 0)  ? $limitCat : false);
 
 				$limitTopic = trim($this->pi_getFFvalue($ff, 'latest_limit', 'general'));
-				$this->conf['listLatest.']['limit'] = ((intval($limitTopic) > 0) ? intval($limitTopic) : 10);
+				$this->conf['listLatest.']['limit'] = (intval($limitTopic) > 0) ? intval($limitTopic) : $this->conf['listLatest.']['limit'];
 				break;
 
 			case 'USERLIST':
@@ -1794,7 +1794,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$template     = $this->cObj->getSubpart($templateFile, '###LATEST###');
 		$templateRow  = $this->cObj->getSubpart($template, '###LATEST_POST###');
 
-		$limit = $this->latest_limitTopic;
+		$limit = $this->conf['listLatest.']['limit'];
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			't.topic_last_post_id as post_id, t.uid as topic_id, t.*,
@@ -5167,8 +5167,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			/* If no user is logged in, select only boards where no read
 			 * access is specified. */
-		if(strlen($prefix)>0) $prefix = "$prefix.";
-		if(!$GLOBALS['TSFE']->fe_user->user) return " AND (".$prefix."grouprights_read='')";
+		$dprefix = (strlen($prefix)>0) ? "$prefix." : "";
+		if(!$GLOBALS['TSFE']->fe_user->user) {
+			$this->cache->save('getMayRead_forum_query_'.$userId.'_'.$prefix,$query=" AND (".$dprefix."grouprights_read='')");
+			return $query;
+		}
 
 			/* Get all groups the current user is a member of. */
 		$groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
@@ -5183,13 +5186,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			 * and the groups with read access. */
 		else {
 			foreach($groups as $group) {
-				$queryParts[] = "FIND_IN_SET($group,".$prefix."grouprights_read)";
+				$queryParts[] = "FIND_IN_SET($group,".$dprefix."grouprights_read)";
 			}
 		}
 
 			/* Compose query */
 		$query = is_array($queryParts)?implode(' OR ',$queryParts):$queryParts;
-		$query = " AND (($query) OR ".$prefix."grouprights_read='') ";
+		$query = " AND (($query) OR ".$dprefix."grouprights_read='') ";
 
 			/* Store query to cache and return. */
 		$this->cache->save('getMayRead_forum_query_'.$userId.'_'.$prefix,$query);
@@ -5216,19 +5219,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				/* Parse to integer */
 			$forum = intval($forum);
 
-				/* Try to load read access from cache */
+				/* Try to load read access from cache. If the regarding property is
+				 * stored in the cache, return the result now, otherwise load the board
+				 * record from the database. */
 			$cacheRes = $this->cache->restore('getMayRead_forum_'.$userId.'_'.$forum);
-
-				/* If cache hit, return result */
 			if($cacheRes !== null) return $cacheRes;
-
-				/* Otherwise load board data */
 			else $forum = $this->getBoardData($forum);
 
-		}
-
-			/* If the cache was not checked before, do so now. */
-		if(!isset($cacheRes)) {
+		} else {
 			$cacheRes = $this->cache->restore('getMayRead_forum_'.$userId.'_'.$forum['uid']);
 			if($cacheRes !== null) return $cacheRes;
 		}
@@ -5236,7 +5234,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			/* If this forum has a parent category, check the access rights
 			 * for this parent category, too. */
         if($forum['parentID']) {
-            if(!$this->getMayRead_forum($forum['parentID'])) {
+            if(!$this->getMayRead_forum(intval($forum['parentID']))) {
 				$this->cache->save('getMayRead_forum_'.$userId.'_'.$forum['uid'], false);
             	return false;
 			}
