@@ -143,26 +143,20 @@ class tx_mmforum_cache {
 		
 			/* Compose class name and instantiate */
 		if(isset($GLOBALS['typo3CacheManager'])) {
-			Console::log("Using TYPO3 Cache manager");
-
 			$this->useTYPO3Cache = TRUE;
 			
-			if($useMode == 'database') {
-				Console::log("Using cache_hash Database cache");
+			if($useMode == 'database') 
 				$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('cache_hash');
-			} else {
-				if($GLOBALS['typo3CacheManager']->hasCache('mm_forum')) {
-					Console::log("Revive mm_forum cache");
+			else {
+				if($GLOBALS['typo3CacheManager']->hasCache('mm_forum'))
 					$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('mm_forum');
-				} else {
+				else {
 					switch($useMode) {
 						case 'apc':		$className = 't3lib_cache_backend_ApcBackend'; break;
 						case 'file':	$className = 't3lib_cache_backend_FileBackend'; break;
 						case 'none':	$className = 't3lib_cache_backend_NullBackend'; break;
 						default:		$className = 't3lib_cache_backend_GlobalsBackend'; break;
 					}
-
-					Console::log("Create cache instance of $className");
 
 					if(!class_exists($className) && file_exists(PATH_t3lib.'cache/backend/class.'.strtolower($className).'.php'))
 						include_once PATH_t3lib.'cache/backend/class.'.strtolower($className).'.php';
@@ -179,8 +173,6 @@ class tx_mmforum_cache {
 				}
 			}
 		} else {
-			Console::log("Using mm_forum Cache manager");
-
 			$className = 'tx_mmforum_cache_'.$useMode;
 			$this->cacheObj =& t3lib_div::makeInstance($className);
 		}
@@ -221,8 +213,6 @@ class tx_mmforum_cache {
 		 */
 	function save($key, $object, $override=false) {
 
-		Console::Log("Store to cache: $key : ".var_export($object, true));
-
 			/* Insert object into direct cache */
 		if(!$this->directCache[$key] || $override)
 			$this->directCache[$key] = $object;
@@ -258,18 +248,13 @@ class tx_mmforum_cache {
 			/* If key is found in direct cache, return object from
 			 * direct cache, otherwise load from real cache. */
 		if($this->useTYPO3Cache) {
-			if(!$this->cacheObj->has($key)) {
-				Console::LogError(new Exception(),"Load from cache: $key : NULL");
-				return null;
-			}
+			if(!$this->cacheObj->has($key)) return null;
 			$restore = $this->directCache[$key] ? $this->directCache[$key] : $this->cacheObj->get($key);
 		}
 		else $restore = $this->directCache[$key] ? $this->directCache[$key] : $this->cacheObj->restore($key);
 		
 			/* If key is not in direct cache, store it there now. */
 		if(!$this->directCache[$key]) $this->directCache[$key] = $restore;
-
-		Console::Log("Loaded from cache: $key ".var_export($restore, true));
 		
 			/* Return. */
 		return $restore === 'boolean:false' ? false : $restore;
