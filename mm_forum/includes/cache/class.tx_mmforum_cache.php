@@ -22,6 +22,8 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+
+
 	/** Include database based cache. */
 include_once t3lib_extMgm::extPath('mm_forum').'includes/cache/class.tx_mmforum_cache_database.php';
 
@@ -33,6 +35,8 @@ include_once t3lib_extMgm::extPath('mm_forum').'includes/cache/class.tx_mmforum_
 
 	/** Include dummy cache. */
 include_once t3lib_extMgm::extPath('mm_forum').'includes/cache/class.tx_mmforum_cache_none.php';
+
+
 
 	/**
 	 * This class handles data caching for the mm_forum extension.
@@ -60,22 +64,53 @@ include_once t3lib_extMgm::extPath('mm_forum').'includes/cache/class.tx_mmforum_
 	 * @package    mm_forum
 	 * @subpackage Cache
 	 */
+
 class tx_mmforum_cache {
-	
+
+
+
+
+
+		/*
+		 * ATTRIBUTES
+		 */
+
+
+
+
+
 		/**
 		 * The caching object.
 		 * This is an instance of one of the tx_mmforum_cache_* classes.
+		 *
+		 * @var tx_mmforum_cache_* OR t3lib_cache_frontend_VariableFrontend
 		 */
+
 	var $cacheObj;
-	
+
+
+
 		/**
 		 * The "direct cache" object.
 		 * Data stored in the cache will be stored in this array also, allowing
 		 * very quick access to this value in case it is requested several times
 		 * during the same request.
 		 * Note that the "direct cache" is not persistent.
+		 *
+		 * @var array
 		 */
+
 	var $directCache;
+
+
+
+		/**
+		 * Defines whether the TYPO3 internal cache is used. This flag will be set for
+		 * TYPO3 versions from 4.3 upwards.
+		 * @var boolean
+		 */
+
+	var $useTYPO3Cache = false;
 	
 		/**
 		 * Initializes the cache and determines caching method.
@@ -87,7 +122,7 @@ class tx_mmforum_cache {
 		 * @return  void
 		 */
 	function init($mode = 'auto') {
-		
+
 			/* If mode is set to 'auto' or 'apc', first try to set mode
 			 * to APC (if enabled) or otherwise to database. */
 		if($mode == 'auto' || $mode == 'apc') {
@@ -107,8 +142,48 @@ class tx_mmforum_cache {
 		else $useMode = 'database';
 		
 			/* Compose class name and instantiate */
-		$className = 'tx_mmforum_cache_'.$useMode;
-		$this->cacheObj =& t3lib_div::makeInstance($className);
+		if(isset($GLOBALS['typo3CacheManager'])) {
+			Console::log("Using TYPO3 Cache manager");
+
+			$this->useTYPO3Cache = TRUE;
+			
+			if($useMode == 'database') {
+				Console::log("Using cache_hash Database cache");
+				$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('cache_hash');
+			} else {
+				if($GLOBALS['typo3CacheManager']->hasCache('mm_forum')) {
+					Console::log("Revive mm_forum cache");
+					$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('mm_forum');
+				} else {
+					switch($useMode) {
+						case 'apc':		$className = 't3lib_cache_backend_ApcBackend'; break;
+						case 'file':	$className = 't3lib_cache_backend_FileBackend'; break;
+						case 'none':	$className = 't3lib_cache_backend_NullBackend'; break;
+						default:		$className = 't3lib_cache_backend_GlobalsBackend'; break;
+					}
+
+					Console::log("Create cache instance of $className");
+
+					if(!class_exists($className) && file_exists(PATH_t3lib.'cache/backend/class.'.strtolower($className).'.php'))
+						include_once PATH_t3lib.'cache/backend/class.'.strtolower($className).'.php';
+					elseif(!class_exists($className))
+						$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('cache_hash');
+
+					if(class_exists($className)) {
+						$cacheBackend		= new $className;
+						$cacheObject		= new t3lib_cache_frontend_VariableFrontend('mm_forum', $cacheBackend);
+
+						$GLOBALS['typo3CacheManager']->registerCache( $cacheObject );
+						$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('mm_forum');
+					}
+				}
+			}
+		} else {
+			Console::log("Using mm_forum Cache manager");
+
+			$className = 'tx_mmforum_cache_'.$useMode;
+			$this->cacheObj =& t3lib_div::makeInstance($className);
+		}
 		
 	}
 	
@@ -134,25 +209,32 @@ class tx_mmforum_cache {
 		 * 
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2008-10-11
-		 * @param   string $key      The key of the object. This key will be
-		 *                           used to retrieve the object from the cache.
-		 * @param   mixed  $object   The object that is to be stored in the
-		 *                           cache. Depending on the cacheing method, this
-		 *                           object should be serializable.
-		 * @param   bool   $override Determines whether to override the variable
-		 *                           in case it is already stored in cache.
-		 * @return  bool             TRUE on success, otherwise FALSE.
+		 * @param   string $key      The key of the object. This key will be used to
+		 *                           retrieve the object from the cache.
+		 * @param   mixed  $object   The object that is to be stored in the cache.
+		 *                           Depending on the cacheing method, this object should
+		 *                           be serializable.
+		 * @param   bool   $override Determines whether to override the variable in case
+		 *	                         it is already stored in cache.
+		 * @return  bool             TRUE on success, otherwise FALSE. VOID, if the TYPO3
+		 *                           internal cache is used.
 		 */
 	function save($key, $object, $override=false) {
-		
+
+		Console::Log("Store to cache: $key : ".var_export($object, true));
+
 			/* Insert object into direct cache */
 		if(!$this->directCache[$key] || $override)
 			$this->directCache[$key] = $object;
-			
-		if($object === false) $object = 'boolean:false';
-			
-			/* Insert object into real cache and return result */
-		return $this->cacheObj->save($key, $object, $override);
+
+		if($this->useTYPO3Cache) {
+			return $this->cacheObj->set($key, $object);
+		} else {
+			if($object === false) $object = 'boolean:false';
+
+				/* Insert object into real cache and return result */
+			return $this->cacheObj->save($key, $object, $override);
+		}
 		
 	}
 	
@@ -172,13 +254,22 @@ class tx_mmforum_cache {
 		 * @return  mixed       The object
 		 */
 	function restore($key) {
-		
+
 			/* If key is found in direct cache, return object from
 			 * direct cache, otherwise load from real cache. */
-		$restore = $this->directCache[$key] ? $this->directCache[$key] : $this->cacheObj->restore($key);
+		if($this->useTYPO3Cache) {
+			if(!$this->cacheObj->has($key)) {
+				Console::LogError(new Exception(),"Load from cache: $key : NULL");
+				return null;
+			}
+			$restore = $this->directCache[$key] ? $this->directCache[$key] : $this->cacheObj->get($key);
+		}
+		else $restore = $this->directCache[$key] ? $this->directCache[$key] : $this->cacheObj->restore($key);
 		
 			/* If key is not in direct cache, store it there now. */
 		if(!$this->directCache[$key]) $this->directCache[$key] = $restore;
+
+		Console::Log("Loaded from cache: $key ".var_export($restore, true));
 		
 			/* Return. */
 		return $restore === 'boolean:false' ? false : $restore;
@@ -199,7 +290,9 @@ class tx_mmforum_cache {
 		unset($this->directCache[$key]);
 		
 			/* Delete from real cache and return result */
-		return $this->cacheObj->delete($key);
+		if($this->useTYPO3Cache)
+			return $this->cacheObj->remove($key);
+		else return $this->cacheObj->delete($key);
 		
 	}
 	
@@ -239,7 +332,7 @@ class tx_mmforum_cache {
 		 * @return  tx_mmforum_cache An tx_mmforum_cache object.
 		 */
 	function getGlobalCacheObject() {
-		
+
 			/* Check if object already exists and if so, just return this
 			 * object. */
 		if(isset($GLOBALS['mm_forum']['cacheObj']))
