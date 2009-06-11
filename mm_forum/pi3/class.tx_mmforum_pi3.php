@@ -44,6 +44,7 @@
  */
 
 require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_base.php');
+require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_pi1.php');
 
 /**
  * Plugin 'Private Messaging' for the 'mm_forum' extension.
@@ -413,7 +414,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			$marker['###DATE###']		= $this->formatDate($row['sendtime']);
 			$marker['###MESSAGE###']	= nl2br($this->shield($message_text));
 
-			if($userdata === FALSE || $userdata['deleted'] == 1) {
+			if(!($userdata === FALSE || $userdata['deleted'] == 1)) {
 				$linkParams = array();
 				$linkParams[$this->prefixId] = array(
 					'action' => 'message_write',
@@ -597,7 +598,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						$mailtext = $this->cObj->substituteMarkerArrayCached($template, $marker);
 	
 						// Compose mail and send
-						mail($to,$this->pi_getLL('ntfmail.subject'),$mailtext, $header) or die('Fehler beim Mailversand.');
+						mail($to,$this->pi_getLL('ntfmail.subject'),$mailtext, $header);
 						
 						$updateArray = array(
 							'notified'				=> 1,
