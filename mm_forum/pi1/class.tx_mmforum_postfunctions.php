@@ -178,7 +178,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		if ($this->conf['disableRootline']) {
 			$template = $this->cObj->substituteSubpart($template, '###ROOTLINE_CONTAINER###', '');
 		} else {
-			$marker['###FORUMPATH###'] = $this->get_forum_path($topicData['foeum_id'], $topicId);
+			$marker['###FORUMPATH###'] = $this->get_forum_path($topicData['forum_id'], $topicId);
 		}
 
 		$marker['###PAGETITLE###'] = $this->cObj->data['header'];
