@@ -32,7 +32,7 @@
  * class.
  * 
  * @author     Martin Helmich <m.helmich@mittwald.de>
- * @version    2007-07-24
+ * @version    $Id$
  * @package    mm_forum
  * @subpackage Forum
  */
@@ -446,21 +446,28 @@ class tx_mmforum_postfactory {
 	}
 	
 	/**
+	 *
 	 * Updates a forum's post and topic count.
 	 * 
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
-	 * @version 2007-07-21
-	 * @param   int  $forum_uid The UID of the forum whose post and topic count is to be updated
+	 * @version 2009-06-12
+	 * @param   int    $forum_uid The UID of the forum whose post and topic
+	 *                            count is to be updated
+	 * @param   string $orderBy   The column name of the tx_mmforum_posts table
+	 *                            used for ordering posts (see
+	 *                            http://forge.typo3.org/issues/show/3520 for
+	 *                            for more information).
 	 * @return  void
+	 *
 	 */
-	function updateForumPostCount($forum_uid) {
+	function updateForumPostCount($forum_uid, $orderBy='post_time') {
 		$forum_uid = intval($forum_uid);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'uid',
 			'tx_mmforum_posts',
 			'forum_id='.$forum_uid.' AND deleted=0'.$this->getPidQuery(),
 			'',
-			'post_time DESC'
+			$orderBy.' DESC'
 		);
 		list($last_post_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 		$postcount = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
@@ -480,23 +487,32 @@ class tx_mmforum_postfactory {
 		);
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums','uid='.$forum_uid,$updateArray);
 	}
-	
+
+
+
 	/**
+	 *
 	 * Updates a topics's post count.
 	 * 
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-07-21
-	 * @param   int  $topic_uid The UID of the topic whose post count is to be updated
+	 * @param   int   $topic_uid  The UID of the topic whose post count is to be
+	 *                            updated
+	 * @param   string $orderBy   The column name of the tx_mmforum_posts table
+	 *                            used for ordering posts (see
+	 *                            http://forge.typo3.org/issues/show/3520 for
+	 *                            for more information).
 	 * @return  void
+	 *
 	 */
-	function updateTopicPostCount($topic_uid) {
+	function updateTopicPostCount($topic_uid, $orderBy='post_time') {
 		$topic_uid = intval($topic_uid);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'uid',
 			'tx_mmforum_posts',
 			'topic_id='.$topic_uid.' AND deleted=0'.$this->getPidQuery(),
 			'',
-			'post_time DESC'
+			$orderBy.' DESC'
 		);
 		list($last_post_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 		$postcount = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
