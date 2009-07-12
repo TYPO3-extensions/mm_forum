@@ -2664,6 +2664,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     'action'            => 'new_post',
                     'tid'                => $this->piVars['tid']
                 );
+				if($this->getIsRealURL()) $actionParams[$this->prefixId]['fid'] = $forumId;
                 $actionLink = $this->pi_getPageLink($GLOBALS['TSFE']->id,'',$actionParams);
 
                 $bbCodeButtons_template = $this->cObj->getSubpart($template, '###BBCODEBUTTONS###');
