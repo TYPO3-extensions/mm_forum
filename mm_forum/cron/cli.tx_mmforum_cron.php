@@ -1,4 +1,4 @@
-#!/usr/bin/php
+#!/usr/bin/php -q
 <?php
 /*
  *  Copyright notice
@@ -23,8 +23,13 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
+
+
+
+
 /**
- * This script handles the mm_forum cronjob handling. It is NOT intented to
+ *
+ *  This script handles the mm_forum cronjob handling. It is NOT intented to
  * be called from browser, but rather used on command line level. This script
  * has to be called with its absolute path (meaning
  * /srv/www/typo3conf/ext/mm_forum/cron/cli.tx_mmforum_cron.php instead of just
@@ -42,13 +47,19 @@
  *             should be called at least once a day.
  * reported  - Notifies moderators about posts that have been reported by forum users.
  *             This should be called at least once per day.
- *             
+ *
+ *
  * @author     Martin Helmich <m.helmich@mittwald.de>
- * @copyright  2008 Martin Helmich, Mittwald CM Service
- * @version    2008-06-22
+ * @copyright  2009 Martin Helmich, Mittwald CM Service
+ * @version    $Id$
  * @package    mm_forum
  * @subpackage Cronjobs
+ *
  */
+
+
+
+
 
 	// Set content type to plain text and disable HTML errors
 header('Content-Type: text/plain');
@@ -57,16 +68,13 @@ ini_set('html_errors','0');
 	// Define path constants
 define('TYPO3_cliMode', true);
 define('PATH_thisScript', $_SERVER['SCRIPT_FILENAME']);
+if(!defined("STDERR")) define("STDERR", fopen("php://stderr","w"));
 
 	// Load configuration file
 require(dirname(PATH_thisScript).'/conf.php');
 
 	// Load includes
 require(dirname(PATH_thisScript).'/'.$BACK_PATH.'init.php');
-require(dirname(PATH_thisScript).'/classes/class.tx_mmforum_cron_indexing.php');
-require(dirname(PATH_thisScript).'/classes/class.tx_mmforum_cron_messaging.php');
-require(dirname(PATH_thisScript).'/classes/class.tx_mmforum_cron_publish.php');
-require(dirname(PATH_thisScript).'/classes/class.tx_mmforum_cron_reported.php');
 
 	// Die with error if no parameter was submitted
 if($_SERVER['argc'] < 2) die("FATAL ERROR - No parameter submitted. Don't know what to do.\n");
@@ -75,16 +83,14 @@ if($_SERVER['argc'] < 2) die("FATAL ERROR - No parameter submitted. Don't know w
 $cronMode	= $_SERVER['argv'][1];
 
 	// Determine which cronjob to execute
-switch($cronMode) {
-	case 'indexing':		$className = 'tx_mmforum_cron_indexing'; break;
-	case 'messaging':		$className = 'tx_mmforum_cron_messaging'; break;
-	case 'publish':			$className = 'tx_mmforum_cron_publish'; break;
-    case 'reported':		$className = 'tx_mmforum_cron_reported'; break;
-	default:				die("FATAL ERROR - Cronjob parameter $cronMode is not known.\n");
-}
+$cronClassName		= 'tx_mmforum_cron_'.$cronMode;
+$cronFileName		= dirname(PATH_thisScript).'/classes/class.'.$cronClassName.'.php';
+
+if(!file_exists($cronFileName)) die("FATAL ERROR - Cronjob mode $cronMode is not known.\n");
+else require_once($cronFileName);
 
 	// Instantiate cronjob object and execute
-$cronObj = t3lib_div::makeInstance($className);
+$cronObj = t3lib_div::makeInstance($cronClassName);
 $cronObj->initialize();
 $cronObj->main();
 ?>
