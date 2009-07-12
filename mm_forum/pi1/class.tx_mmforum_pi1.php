@@ -199,8 +199,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function main($content, $conf) {
 
 			/* Include mm_forum javascript into page header */
-		#$GLOBALS['TSFE']->additionalHeaderData['mm_forum'] = '<script type="text/javascript" src="' . t3lib_extMgm::siteRelPath('mm_forum') . 'mm_forum.js"></script>';
-		$GLOBALS['TSFE']->additionalHeaderData['mm_forum'] .= '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'res/scripts/prototype-1.6.0.3.js"></script>';
+
+		# Moved to TypoScript!
+		#$GLOBALS['TSFE']->additionalHeaderData['mm_forum'] .= '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'res/scripts/prototype-1.6.0.3.js"></script>';
 
 			/* Initialize base object */
 		$this->init($conf);

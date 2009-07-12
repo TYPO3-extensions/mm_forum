@@ -2,6 +2,10 @@ page.includeCSS {
 	mm_forum = {$plugin.tx_mmforum.style_path}/css/mm_forum.css
 }
 
+page.includeJS {
+	mm_forum_prototype = EXT:mm_forum/res/scripts/prototype-1.6.0.3.js
+}
+
 <INCLUDE_TYPOSCRIPT: source="FILE: EXT:mm_forum/res/ts/tx_mmforum_base.ts">
 <INCLUDE_TYPOSCRIPT: source="FILE: EXT:mm_forum/res/ts/tx_mmforum_pi1.ts">
 <INCLUDE_TYPOSCRIPT: source="FILE: EXT:mm_forum/res/ts/tx_mmforum_pi2.ts">
