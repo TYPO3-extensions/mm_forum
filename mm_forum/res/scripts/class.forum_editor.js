@@ -69,6 +69,7 @@ tx_mmforum_Editor.prototype = {
 	applyBBCode: function(open, close) {
 		var editor = this.getEditorElement();
 
+			/* Internet Explorer */
 		if(typeof document.selection != 'undefined') {
 
 			var range = document.selection.createRange();
@@ -93,6 +94,11 @@ tx_mmforum_Editor.prototype = {
 			editor.focus();
 			editor.selectionStart = end + open.length;
 			editor.selectionEnd = editor.selectionStart;
+
+			/* Other */
+		} else {
+			editor.value += smilie;
+			editor.focus();
 		}
 
 	},

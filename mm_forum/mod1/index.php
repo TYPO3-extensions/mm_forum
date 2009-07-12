@@ -1125,7 +1125,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
      * @return  boolean TRUE, if the extension is properly configured, otherwise FALSE.
      */
     function getIsConfigured() {
-        if(intval($this->confArr['userPID'])==0 || intval($this->confArr['forumPID'])==0 ||
+		if(intval($this->confArr['userPID'])==0 || intval($this->confArr['forumPID'])==0 ||
            intval($this->confArr['userGroup'])==0 || intval($this->confArr['adminGroup'])==0 )
            return false;
         return true;

@@ -645,23 +645,38 @@ class tx_mmforum_install {
 	function display_install_userGroups() {
 		$input_userGroup = $this->getGroupField('fe_groups',$this->conf['userGroup'],'userGroup',true,$this->conf['userPID']);
 		$input_adminGroup = $this->getGroupField('fe_groups',$this->conf['adminGroup'],'adminGroup',true,$this->conf['userPID']);
-		
-		$content .= '
-<fieldset>
-	<legend>'.$this->getLL('usergroups').'</legend>
-    '.$this->getLL('start').'<br /><br />
-	<table cellspacing="0" cellpadding="3" border="0">
-		<tr>
-			<td><strong>'.$this->getLL('field.userGroup.title').':</strong><br />'.$this->getLL('field.userGroup.desc').'<br /><br /></td>
-			<td>'.$input_userGroup.'</td>
-		</tr>
-		<tr>
-			<td><strong>'.$this->getLL('field.adminGroup.title').':</strong><br />'.$this->getLL('field.adminGroup.desc').'<br /><br /></td>
-			<td>'.$input_adminGroup.'</td>
-		</tr>
-	</table>
-	<br /><br /><input type="submit" value="'.$this->getLL('save').'" />
-</fieldset>
+
+		$content .= '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <td colspan="3" class="mm_forum-listrow_header" valign="top"><img src="img/install-general.png" style="vertical-align: middle; margin-right:8px;" />'.$this->getLL('start.title').'</td>
+    </tr>
+	<tr class="mm_forum-listrow">
+		<td colspan="3" style="padding-top: 16px; padding-bottom:16px;">'.$this->getLL('start').'</td>
+	</tr>
+	<tr>
+		<td valign="top"><span style="color: #1555a0;">&#8718;</span></td>
+		<td valign="top">
+			<div style="font-weight:bold;">'.$this->getLL('field.userGroup.title').'</div>
+			<div>'.$this->getLL('field.userGroup.desc').'</div>
+		</td>
+		<td valign="top">'.$input_userGroup.'</td>
+	</tr>
+	<tr>
+		<td valign="top"><span style="color: #1555a0;">&#8718;</span></td>
+		<td valign="top">
+			<div style="font-weight:bold;">'.$this->getLL('field.adminGroup.title').'</div>
+			<div>'.$this->getLL('field.adminGroup.desc').'</div>
+		</td>
+		<td valign="top">'.$input_adminGroup.'</td>
+	</tr>
+</table>
+<div class="mm_forum-buttons">
+	<div class="mm_forum-button" onmouseover="this.className=\'mm_forum-button-hover\';" onmouseout="this.className=\'mm_forum-button\';" onclick="document.forms[\'editform\'].submit();">
+		<img src="img/save.png">
+		'.$this->getLL('save').'
+	</div>
+	<div style="clear:both;"></div>
+</div>
 ';
 		return $content;
 	}
@@ -688,13 +703,29 @@ class tx_mmforum_install {
 			)
 		);
 		$input = $this->p->tceforms->getSingleField_typeGroup('pages','tx_mmforum_install[conf][0][storagePID]',array(),$conf);
-		$content .= '
-<fieldset>
-	<legend>'.$this->getLL('field.storagePID.title').'</legend>
-    '.$this->getLL('start').'<br /><br />'.$this->getLL('field.storagePID.desc').'<br /><br />
-	'.$input.'
-	<br /><br /><input type="submit" value="'.$this->getLL('save').'" />
-</fieldset>
+		$content .= '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <td colspan="3" class="mm_forum-listrow_header" valign="top"><img src="img/install-general.png" style="vertical-align: middle; margin-right:8px;" />'.$this->getLL('start.title').'</td>
+    </tr>
+	<tr class="mm_forum-listrow">
+		<td colspan="3" style="padding-top: 16px; padding-bottom:16px;">'.$this->getLL('start').'</td>
+	</tr>
+	<tr>
+		<td valign="top"><span style="color: #1555a0;">&#8718;</span></td>
+		<td>
+			<div style="font-weight:bold;">'.$this->getLL('field.storagePID.title').'</div>
+			<div>'.$this->getLL('field.storagePID.desc').'</div>
+		</td>
+		<td>'.$input.'</td>
+	</tr>
+</table>
+<div class="mm_forum-buttons">
+	<div class="mm_forum-button" onmouseover="this.className=\'mm_forum-button-hover\';" onmouseout="this.className=\'mm_forum-button\';" onclick="document.forms[\'editform\'].submit();">
+		<img src="img/save.png">
+		'.$this->getLL('save').'
+	</div>
+	<div style="clear:both;"></div>
+</div>
 ';
 		return $content;
 	}
@@ -721,13 +752,29 @@ class tx_mmforum_install {
 			)
 		);
 		$input = $this->p->tceforms->getSingleField_typeGroup('pages','tx_mmforum_install[conf][0][userPID]',array(),$conf);
-		$content .= '
-<fieldset>
-	<legend>'.$this->getLL('field.userPID.title').'</legend>
-    '.$this->getLL('start').'<br /><br />'.$this->getLL('field.userPID.desc').'<br /><br />
-	'.$input.'
-	<br /><br /><input type="submit" value="'.$this->getLL('save').'" />
-</fieldset>
+		$content .= '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <td colspan="3" class="mm_forum-listrow_header" valign="top"><img src="img/install-general.png" style="vertical-align: middle; margin-right:8px;" />'.$this->getLL('start.title').'</td>
+    </tr>
+	<tr class="mm_forum-listrow">
+		<td colspan="3" style="padding-top: 16px; padding-bottom:16px;">'.$this->getLL('start').'</td>
+	</tr>
+	<tr>
+		<td valign="top"><span style="color: #1555a0;">&#8718;</span></td>
+		<td>
+			<div style="font-weight:bold;">'.$this->getLL('field.userPID.title').'</div>
+			<div>'.$this->getLL('field.userPID.desc').'</div>
+		</td>
+		<td>'.$input.'</td>
+	</tr>
+</table>
+<div class="mm_forum-buttons">
+	<div class="mm_forum-button" onmouseover="this.className=\'mm_forum-button-hover\';" onmouseout="this.className=\'mm_forum-button\';" onclick="document.forms[\'editform\'].submit();">
+		<img src="img/save.png">
+		'.$this->getLL('save').'
+	</div>
+	<div style="clear:both;"></div>
+</div>
 ';
 		return $content;
 	}

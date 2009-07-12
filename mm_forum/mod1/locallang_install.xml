@@ -201,6 +201,11 @@
             <label index="install.field.requiredFields.desc">The user fields that are required to be filled in during registration. The username and password are always required.</label>
             <label index="install.field.emailConfirm.title">Confirm registration</label>
             <label index="install.field.emailConfirm.desc">Defines whether registrations have to be confirmed by sending an activation link via email.</label>
+			<label index="install.start.title">mm_forum Installation</label>
+			<label index="install.sampleData.title">Insert sample Data</label>
+			<label index="install.sampleData.desc">Check this input field if you want some sample data to be inserted into your new forum.</label>
+			<label index="install.firstAdmin.title">First admin user</label>
+			<label index="install.firstAdmin.desc">Here, you can select a user that will automatically be made an administrator user for the forum. Can be left empty.</label>
 		</languageKey>
         <!-- GERMAN LANGUAGE DATA -->
 		<languageKey index="de" type="array">

@@ -57,7 +57,13 @@
  * @subpackage Backend
  */
 class tx_mmforum_templates {
-    
+
+		/**
+		 * Theme names that cannot be selected using the theme selector.
+		 * @var array
+		 */
+	var $metaThemes = array('mod1','cron','.svn');
+
     /**
      * The main function.
      * @param  string $content The content
@@ -122,6 +128,7 @@ class tx_mmforum_templates {
         
         if(count($dirs)>0) {
             foreach($dirs as $dir) {
+				if(in_array($dir,$this->metaThemes)) continue;
                 $result[$dir] = $this->getTemplates($path.'/'.$dir);
             }
         }
@@ -130,6 +137,7 @@ class tx_mmforum_templates {
         
         if(count($files)==0) return $result;
         foreach($files as $file) {
+			if($file{0}==='.') continue; # Don't display hidden files
             $result[$file] = $file; 
         }
         

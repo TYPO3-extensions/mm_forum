@@ -67,10 +67,8 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
     function main($content) {
         $this->init();
         
-        if($this->ufVars['edit'])
-            $content .= $this->displayExtForm($this->ufVars['edit']);
-        else
-            $content .= $this->displayFieldTable();
+        if($this->ufVars['edit']) $content .= $this->displayExtForm($this->ufVars['edit']);
+        else                      $content .= $this->displayFieldTable();
         
         return $content;
     }
@@ -85,9 +83,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
      * @param   string $key The language string key
      * @return  string      The language string
      */
-    function getLL($key) {
-        return $GLOBALS['LANG']->getLL('userFields.'.$key);
-    }
+    function getLL($key) { return $GLOBALS['LANG']->getLL('userFields.'.$key); }
     
     /**
      * Generates a link. Function was written to simplify link generation.
