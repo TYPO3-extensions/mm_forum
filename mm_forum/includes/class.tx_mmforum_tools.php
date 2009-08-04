@@ -268,7 +268,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	function getParentUserGroups($group) {
 
 			/* Parse to int for security reasons */
-		$group = intval($group);
+		$group = implode(',',array_filter(t3lib_div::intExplode(',',$group)));
 
 			/* Try to load result from cache */
 		$cache =& tx_mmforum_cache::getGlobalCacheObject();
