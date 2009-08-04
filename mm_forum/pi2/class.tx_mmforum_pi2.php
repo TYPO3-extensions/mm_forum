@@ -181,25 +181,29 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		return $this->cObj->substituteMarkerArray($template, $marker);
 	}
 
-	/**
-	 * Activates a user.
-	 * On registration, a so called regHash is generated, which is individual for
-	 * each user, since it is the MD5-Hash of the date of registration and the username.
-	 * This method removes the disabled flag from the user record, allowing him to
-	 * log in on the page.
-	 * @param  string $hash The regHash to be checked
-	 * @return string       A message indicating the success of the activation
-	 */
-	function check_hash($hash)
-	{
+
+
+		/**
+		 * Activates a user.
+		 * On registration, a so called regHash is generated, which is individual for
+		 * each user, since it is the MD5-Hash of the date of registration and the username.
+		 * This method removes the disabled flag from the user record, allowing him to
+		 * log in on the page.
+		 *
+		 * @param  string $hash The regHash to be checked
+		 * @return string       A message indicating the success of the activation
+		 */
+
+	function check_hash($hash) {
+
 			/* Check hash on validity */
-		$hash = mysql_escape_string($hash);
-		if(!preg_match('/^[a-f0-9]{15}$/')) {
+		if(!preg_match('/^[a-f0-9]{15}$/', $hash)) {
 			$template = $this->cObj->getSubpart($this->tmpl, "###FEHLER###");
 			return $template;
 		}
 
 			/* Load user record from database */
+		$hash = mysql_escape_string($hash);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users','tx_mmforum_reg_hash="'.$hash.'"');
 
 			/* If user records exists exactly once, continue... */
@@ -208,8 +212,8 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 				/* Activate user */
 			$updateArray = array(
-				'disable'					=> 0,
-				'tx_mmforum_reg_hash'	=> ''
+				'disable'               => 0,
+				'tx_mmforum_reg_hash'   => ''
 			);
 
 			$res2 = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users',"tx_mmforum_reg_hash='$hash'",$updateArray);
