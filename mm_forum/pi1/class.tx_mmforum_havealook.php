@@ -482,7 +482,15 @@ class tx_mmforum_havealook {
 				}
 				
 				$subject = $forumObj->cObj->substituteMarkerArray($subject, $llMarker);
-				mail($toEmail, $subject, $mailtext, implode("\n", $mailHeaders));
+
+				t3lib_div::plainMailEncoded (
+					$toEmail,
+					$subject,
+					$mailtext,
+					implode("\n", $mailHeaders),
+					'base64',
+					$GLOBALS['TSFE']->renderCharset
+				);
 			}
 		}
 	}

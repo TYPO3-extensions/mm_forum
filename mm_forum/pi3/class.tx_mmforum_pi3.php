@@ -1,4 +1,7 @@
 <?php
+
+
+
 /***************************************************************
  *  Copyright notice
  *  
@@ -43,38 +46,49 @@
  *
  */
 
+
 require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_base.php');
 require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_pi1.php');
 
-/**
- * Plugin 'Private Messaging' for the 'mm_forum' extension.
- * The 'private messaging' plugin for the extension 'mm_forum' displays
- * the personal in- and outbox for each user's private messages and
- * allows writing new private messages and replying to read messages.
- *
- * @author     Holger Trapp <h.trapp@mittwaldmedien.de>
- * @author     Georg Ringer <typo3@ringerge.org>
- * @author     Martin Helmich <m.helmich@mittwald.de>
- * @author     Björn Detert <b.detert@mittwald.de>
- * @copyright  2008 Mittwald CM Service
- * @version    2008-01-11
- * @package    mm_forum
- * @subpackage Messaging
- */
+
+
+
+
+	/**
+	 * Plugin 'Private Messaging' for the 'mm_forum' extension.
+	 * The 'private messaging' plugin for the extension 'mm_forum' displays
+	 * the personal in- and outbox for each user's private messages and
+	 * allows writing new private messages and replying to read messages.
+	 *
+	 * @author     Holger Trapp <h.trapp@mittwaldmedien.de>
+	 * @author     Georg Ringer <typo3@ringerge.org>
+	 * @author     Martin Helmich <m.helmich@mittwald.de>
+	 * @author     Björn Detert <b.detert@mittwald.de>
+	 * @copyright  2008 Mittwald CM Service
+	 * @version    2008-01-11
+	 * @package    mm_forum
+	 * @subpackage Messaging
+	 */
+
 class tx_mmforum_pi3 extends tx_mmforum_base {
+
 	var $prefixId		= 'tx_mmforum_pi3';					// Same as class name
 	var $prefixId_pi1	= 'tx_mmforum_pi1';					// Main plugin class name
 	var $scriptRelPath	= 'pi3/class.tx_mmforum_pi3.php';	// Path to this script relative to the extension dir.
     var $mm1;
-    
-	/**
-	* Main function. Delegates tasks to other functions
-	* @author  Holger Trapp <h.trapp@mittwaldmedien.de>
-	* @version 20.09.2006
-	* @param   string $content The content
-	* @param   array  $conf    The plugin's configuration vars
-	* @return  string          The plugin content
-	*/
+
+
+
+		/**
+		 * Main function. Delegates tasks to other functions.
+		 *
+		 * @author  Holger Trapp <h.trapp@mittwaldmedien.de>
+		 * @version 20.09.2006
+		 * @param   string $content The content
+		 * @param   array  $conf    The plugin's configuration vars
+		 * @return  string          The plugin content
+		 */
+
 	function main($content, $conf) {
         //add Javascript
         $GLOBALS['TSFE']->additionalHeaderData['mm_forum'] = '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'res/scripts/prototype-1.6.0.3.js"></script>';
@@ -136,14 +150,18 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		return $this->pi_wrapInBaseClass($content);
 	}
 
-	/**
-	 * Lists the private messages of the current user.
-	 * @author  Georg Ringer <typo3@ringerge.org>
-	 * @version 20.09.2006
-	 * @param   string $content The content
-	 * @param   array  $conf    The plugin's configuration vars
-	 * @return  string          The plugin content
-	 */
+
+
+		/**
+		 * Lists the private messages of the current user.
+		 *
+		 * @author  Georg Ringer <typo3@ringerge.org>
+		 * @version 20.09.2006
+		 * @param   string $content The content
+		 * @param   array  $conf    The plugin's configuration vars
+		 * @return  string          The plugin content
+		 */
+
 	function list_inbox ($content,$conf) {
 
 		$content = $this->top_navi($content, $conf);
@@ -333,14 +351,18 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		return $content;
 	}
 
-	/**
-	 * Deletes a private message.
-	 * @author  Georg Ringer <typo3@ringerge.org>
-	 * @version 20.09.2006
-	 * @param   string $content The content
-	 * @param   array  $conf    The plugin's configuration vars
-	 * @return  string          The plugin content
-	 */
+
+
+		/**
+		 * Deletes a private message.
+		 *
+		 * @author  Georg Ringer <typo3@ringerge.org>
+		 * @version 20.09.2006
+		 * @param   string $content The content
+		 * @param   array  $conf    The plugin's configuration vars
+		 * @return  string          The plugin content
+		 */
+
 	function message_del ($content,$conf) {
 		$where = 'hidden = 0 AND DELETED = 0 AND uid = \''.intval($this->piVars["messid"]).'\' AND to_uid = '.$GLOBALS['TSFE']->fe_user->user['uid'].$this->getStoragePIDQuery();
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_pminbox',$where,'','',$limit=1);
@@ -362,14 +384,18 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		return $content;
 	}
 
-	/**
-	* Displays a single private message.
-	* @author  Georg Ringer <typo3@ringerge.org>
-	* @version 2007-05-02
-	* @param   string $content The content
-	* @param   array  $conf    The plugin's configuration vars
-	* @return  string          The plugin content
-	*/
+
+
+		/**
+		 * Displays a single private message.
+		 *
+		 * @author  Georg Ringer <typo3@ringerge.org>
+		 * @version 2007-05-02
+		 * @param   string $content The content
+		 * @param   array  $conf    The plugin's configuration vars
+		 * @return  string          The plugin content
+		 */
+
 	function message_read ($content,$conf) {
 		
 		// Load message from database
@@ -444,16 +470,19 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 	}
 
 
+
 	/**
-	* Displays the form for writing a new private message or replying to an
-	* existing one. Also saves the new private message to database.
-	* @author  Georg Ringer <typo3@ringerge.org>
-	* @author  Martin Helmich <m.helmich@mittwald.de>
-	* @version 2008-01-11
-	* @param   string $content The content
-	* @param   array  $conf    The plugin's configuration vars
-	* @return  string          The plugin content
-	*/
+	 * Displays the form for writing a new private message or replying to an
+	 * existing one. Also saves the new private message to database.
+	 *
+	 * @author  Georg Ringer <typo3@ringerge.org>
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2008-01-11
+	 * @param   string $content The content
+	 * @param   array  $conf    The plugin's configuration vars
+	 * @return  string          The plugin content
+	 */
+
 	function message_write ($content,$conf) {
 		
 		// Load message to reply to from database
@@ -598,7 +627,14 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						$mailtext = $this->cObj->substituteMarkerArrayCached($template, $marker);
 	
 						// Compose mail and send
-						mail($to,$this->pi_getLL('ntfmail.subject'),$mailtext, $header);
+						t3lib_div::plainMailEncoded (
+							$to,
+							$this->pi_getLL('ntfmail.subject'),
+							$mailtext,
+							$header,
+							'base64',
+							$GLOBALS['TSFE']->renderCharset
+						);
 						
 						$updateArray = array(
 							'notified'				=> 1,

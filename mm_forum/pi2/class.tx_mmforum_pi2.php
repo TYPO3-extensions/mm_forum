@@ -162,14 +162,30 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 		$subject = $this->cObj->substituteMarker($this->pi_getLL('msg.subject'), '###SITENAME###', $this->conf['siteName']);
 
-		t3lib_div::plainMailEncoded($this->data['email'], $subject, $template, implode("\n", $header));
+		t3lib_div::plainMailEncoded (
+
+			$this->data['email'],               /* Address                                  */
+			$subject,                           /* Subject                                  */
+			$template,                          /* Mail body                                */
+			implode("\n", $header),             /* Headers, seperated by \n                 */
+			'base64',                           /* Encoding that is to be used for headers. *
+			                                     * Allowed is "Quoted-printable" and        *
+			                                     * "base64"                                 */
+
+			$GLOBALS['TSFE']->renderCharset     /* The charset the headers are to be        *
+			                                     * encoded in.                              */
+
+		);
 	}
 
-	/**
-	 * Shows a message indicationg the registration was successful and that a
-	 * mail requesting an activation has been sent.
-	 * @return string The message
-	 */
+
+
+		/**
+		 * Shows a message indicationg the registration was successful and that a
+		 * mail requesting an activation has been sent.
+		 * @return string The message
+		 */
+
 	function showEmailSent() {
 		$marker = $this->makeMarker();
 		$template = $this->cObj->getSubpart($this->tmpl, '###TEMPLATE_CREATE_LOGIN_OK###');
