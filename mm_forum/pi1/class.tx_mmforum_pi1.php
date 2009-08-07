@@ -3598,12 +3598,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return string          The content
 	 */
 	function post_history($conf) {
-		if ($this->useRealUrl() && $this->piVars['fid']) {
+		if ($this->useRealUrl() && $this->piVars['fid'])
 			$this->piVars['user_id'] = tx_mmforum_tools::get_userid($this->piVars['fid']);
-		}
-		if (!is_numeric($this->piVars['user_id'])) {
-			$this->piVars['user_id'] = $this->get_userid($this->piVars['user_id']);
-		}
+		elseif (isset($this->piVars['user_id']) && !is_numeric($this->piVars['user_id']))
+			$this->piVars['user_id'] = tx_mmforum_tools::get_userid($this->piVars['user_id']);
+		elseif ( !isset($this->piVars['user_id']) )
+			$this->piVars['user_id'] = $GLOBALS['TSFE']->fe_user->user['uid'];
+
 		return tx_mmforum_user::list_user_post($conf, $this->piVars['user_id'], $this->piVars['page']);
 	}
 
@@ -4839,15 +4840,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	}
 
 	/**
-	* Returns the user UID of a specific username.
-	* @param  string $username The username, whose user UID is to be determined.
-	* @return int              The user UID of $username.
-	*/
-	function get_userid($username) {
-		$username = $GLOBALS['TYPO3_DB']->fullQuoteStr($username, 'fe_users');
-		list($userId) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery('uid', 'fe_users', 'username = ' . $username));
-		return $userId;
-	}
+	 * Returns the user UID of a specific username.
+	 *
+	 * @deprecated Use tx_mmforum_tools::get_userid instead
+	 * @param  string $username The username, whose user UID is to be determined.
+	 * @return int              The user UID of $username.
+	 */
+	function get_userid($username) { return tx_mmforum_tools::get_userid($username); }
 
 	/**
 	 * Generates an error message.
