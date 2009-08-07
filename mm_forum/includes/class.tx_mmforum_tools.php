@@ -136,14 +136,12 @@ class tx_mmforum_tools extends tslib_pibase {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'uid',
 			'fe_users',
-			'username = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($username, 'fe_users')
+			'username = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($username, 'fe_users').' AND deleted=0'
 		);
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 			list($userId) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 			return $userId;
-		} else {
-			return 0;
-		}
+		} else return 0;
 	}
 
 	/**
