@@ -240,11 +240,11 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 						),
 						"$key"					=> 'HTML',
 						"$key."					=> array(
-							'value'					=> '<div><input type="radio" name="###USERFIELD_NAME###" checked="checked" /> '.htmlspecialchars($value).'</div>',
+							'value'					=> '<div><input type="radio" name="###USERFIELD_NAME###" checked="checked" value="'.$key.'" /> '.htmlspecialchars($value).'</div>',
 						),
 						"default"					=> 'HTML',
 						"default."					=> array(
-							'value'					=> '<div><input type="radio" name="###USERFIELD_NAME###" /> '.htmlspecialchars($value).'</div>',
+							'value'					=> '<div><input type="radio" name="###USERFIELD_NAME###" value="'.$key.'" /> '.htmlspecialchars($value).'</div>',
 						)
 					);
 					$i += 10;
