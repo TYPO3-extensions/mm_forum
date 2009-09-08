@@ -14,7 +14,7 @@ Userfields_TypeSelect.prototype = {
 	},
 	
 	addValue: function(text) {
-		if(this.valueId == 0 && this.getValue(0)=='' && !isNaN(text))
+		if(this.valueId == 0 && this.getValue(0)=='' && text != null)
 			this.setValue(0,text);
 		else {
 			
@@ -31,6 +31,9 @@ Userfields_TypeSelect.prototype = {
 				newInput.setAttribute('onchange','this.style.border=\'\';');
 				newInput.id = 'uf-select-value-' + this.valueId;
 				newInput.name = 'tx_mmforum_userfields[select][value]['+this.valueId+']';
+
+				if(text != null)
+					newInput.value = text;
 				
 					/* Create delete button */
 				var newInput_delete = document.createElement('img');

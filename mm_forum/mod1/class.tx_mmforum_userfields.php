@@ -260,6 +260,8 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			case 'select':
 				$config['input'] = 'COA';
 				$i = 20;
+
+				t3lib_div::debug($meta); 
 				
 				$config['input.']['10'] = 'HTML';
 				$config['input.']['10.']['value'] = '<select name="###USERFIELD_NAME###">';
@@ -287,7 +289,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 				
 				$config['output'] = 'CASE';
 				$config['output.']['key.']['field'] = 'fieldvalue';
-				foreach($meta['select']['values'] as $key=>$value) {
+				foreach($meta['select']['value'] as $key=>$value) {
 					$config['output.'][$key] = 'TEXT';
 					$config['output.'][$key.'.']['value'] = htmlspecialchars($value); 
 				}
