@@ -153,7 +153,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 		$marker = $this->makeMarker();
 		$marker['###EMAIL_URL###']            = $link;
-		$marker['###LABEL_HELLO###']          = $this->cObj->substituteMarker($this->pi_getLL('msg.hello'), '###USERNAME###', $marker['###VALUE_username###']);
+		$marker['###LABEL_HELLO###']          = $this->cObj->substituteMarker($this->pi_getLL('msg.hello'), '###USERNAME###', $this->data[$this->conf['userNameField']]);
 		$marker['###LABEL_PLEASEACTIVATE###'] = $this->cObj->substituteMarker($this->pi_getLL('msg.pleaseActivate'), '###SITENAME###', $this->conf['siteName']);
 		$marker['###LABEL_YOURS###']          = $this->cObj->substituteMarker($this->pi_getLL('msg.yoursPlaintext'), '###TEAM###', $this->conf['teamName']);
 
@@ -324,7 +324,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 				$value = trim($this->piVars['userfields'][$userField->getUID()]);
 				$userField->setForUser($user_id, $value, $this->getStoragePID());
 
-				if($userField->getLinkedUserField() == 'email') $this->validationEmailReceipient = $value;
+				if($userField->isUsingExistingField()) $this->data[$userField->getLinkedUserField()] = $value;
 			}
 		}
 		
