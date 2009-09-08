@@ -61,17 +61,15 @@ class tx_mmforum_user extends tx_mmforum_base {
 	 */
 	function list_user_post($conf, $userId = 0, $page = 0) {
 		$this->conf = $conf;
-		$page = intval($page);
 		$userId = intval($userId ? $userId : $GLOBALS['TSFE']->fe_user->user['uid']);
+
 		if (!$userId) {
 			return $this->errorMessage($conf, $this->pi_getLL('user.noLogin'));
 		}
-		if ($this->getIsRealURL()) {
-			$page = str_replace($this->pi_getLL('realurl.page') . '_', '', $page);
-		}
+		$page = intval($this->getIsRealURL() ? str_replace($this->pi_getLL('realurl.page') . '_', '', $page) : $page);
 
 
-		$itemsPerPage = 25;
+		$itemsPerPage = 10;
 		$templateFile = $this->cObj->fileResource($conf['template.']['userdetail']);
 		$template     = $this->cObj->getSubpart($templateFile, '###USERPOSTS###');
 		$template_sub = $this->cObj->getSubpart($template, '###LIST###');

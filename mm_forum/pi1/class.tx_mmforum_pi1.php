@@ -3605,7 +3605,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		elseif ( !isset($this->piVars['user_id']) )
 			$this->piVars['user_id'] = $GLOBALS['TSFE']->fe_user->user['uid'];
 
-		return tx_mmforum_user::list_user_post($conf, $this->piVars['user_id'], $this->piVars['page']);
+		return tx_mmforum_user::list_user_post($conf, $this->piVars['user_id'], $this->useRealUrl() ? $this->piVars['tid'] : $this->piVars['page']);
 	}
 
     /**
