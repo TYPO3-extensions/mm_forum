@@ -2976,6 +2976,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     $marker['###ANKER###']          = '';
                     $marker['###POSTDATE###']       = $this->pi_getLL('post.writtenOn').': '.$this->formatDate(time());
 
+                    // Include hooks
+                        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_INpreviewMarker'])) {
+                            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_INpreviewMarker'] as $_classRef) {
+                                $_procObj = & t3lib_div::getUserObj($_classRef);
+                                $marker = $_procObj->editPost_INpreviewMarker($marker, $this);
+                            }
+                        }
+
                     $previewTemplate    = $this->cObj->fileResource($conf['template.']['new_post']);
                     $previewTemplate    = $this->cObj->getSubpart($previewTemplate,"###PREVIEW###");
                     $previewMarker = array(
@@ -5600,8 +5608,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
     		'button_label'		 => $this->pi_getLL('button.'.$label,$label),
             'button_link'        => $nolink?'':($href?$href:$this->pi_getPageLink($id,'',$params)),
             'button_iconname'    => file_exists($this->conf['path_img'].'buttons/icons/'.$label.'.png')?$label.'.png':'',
-            'button_atagparams'  => $atagparams,
-			'button_unique_name' => $label
+            'button_atagparams'  => $atagparams
         );
         $oldData    = $this->cObj->data;
         $this->cObj->data = $data;
