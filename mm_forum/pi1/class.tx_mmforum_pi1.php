@@ -2755,17 +2755,25 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 			}
 
-			$newpath = $this->conf['attachments.']['attachmentDir'];
-			if (substr($newpath, -1, 1) != '/') {
-				$newpath .= '/';
-			}
-			$newpath .= 'attachment_' . md5_file($file['tmp_name']);
+			if(!file_exists($this->conf['path_avatar'].'.htaccess'))
+				file_put_contents($this->conf['path_avatar'].'.htaccess', "deny from all");
 
-			preg_match('/\.(.*?)$/', $file['name'], $ext);
-			$newpath .= '.' . $ext[1];
+			$dirname = $this->conf['attachments.']['attachmentDir'];
+			if (substr($newpath, -1, 1) != '/') {
+				$dirname .= '/';
+			}
+
+			$htaccessPath = $dirname.'.htaccess';
+			if(!file_exists($htaccessPath))
+				file_put_contents($htaccessPath, "deny from all");
+
+			$newpath = $dirname.'attachment_' . md5_file($file['tmp_name']);
+
+			$ext = array_pop(explode('.', $file['name']));
+			$newpath .= '.' . $ext;
 
 			move_uploaded_file($file['tmp_name'], $newpath);
-			t3lib_div::fixPermissions($newpath);
+			chmod($newpath, 0444);
 
 				/* Fix wrong mime-type for pdf when uploading through Firefox
 				 * Mime-type for PDF should be: 'application/pdf'
