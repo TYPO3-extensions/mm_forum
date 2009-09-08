@@ -3636,20 +3636,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		#$user_id = intval($this->piVars['user_id']);
 
         if($this->useRealUrl() && $this->piVars['fid'])
-            #$user_id = tx_mmforum_tools::get_userid($this->piVars['fid']);
 			$user = tx_mmforum_FeUser::GetByUsername($this->piVars['fid']);
         else $user = tx_mmforum_FeUser::GetByUID($this->piVars['user_id']);
 
         $template = $this->cObj->fileResource($conf['template.']['userdetail']);
         $template = $this->cObj->getSubpart($template, "###USERDETAIL###");
 
-        #$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users',"uid='$user_id'");
-
-        #if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0)
 		if($user === null)
             return $this->errorMessage($conf, $this->pi_getLL('user.error_notExist'));
-
-        #$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
         $marker = array();
 
@@ -3695,9 +3689,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			else $template = $this->cObj->substituteSubpart($template, '###SUBP_RATING###', '');
 
         // Avatar
-            if ($conf['path_avatar'] && $row['tx_mmforum_avatar'])  {
-
-                $marker['###AVATAR###']             = tx_mmforum_tools::res_img($conf['path_avatar'].$row['tx_mmforum_avatar'],$conf['avatar_width'],$conf['avatar_height']);
+            if ($conf['path_avatar'] && $user->hasAvatar())  {
+                $marker['###AVATAR###']             = tx_mmforum_tools::res_img($conf['path_avatar'].$user->getAvatarFilename(),$conf['avatar_width'],$conf['avatar_height']);
             } else {
                 $marker['###AVATAR###']             = "";
             }
@@ -3786,7 +3779,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
                 if($config['datasource']) {
                     if($config['datasource'] != 'password')
-                        $fieldContent = $row[$config['datasource']];
+                        $fieldContent = $user->gD($config['datasource']);
                     else $fieldContent = $arr['field_value'];
                 }
                 else $fieldContent = $arr['field_value'];

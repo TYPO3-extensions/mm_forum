@@ -39,6 +39,8 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 	function getPostCount() { return intval($this->gD('tx_mmforum_posts')); }
 	function getCity() { return $this->gD('city'); }
 	function getUsername() { return $this->gD('username'); }
+	function getAvatarFilename() { return $this->gD('tx_mmforum_avatar'); }
+	function hasAvatar() { return strlen($this->getAvatarFilename()) > 0; }
 
 }
 
