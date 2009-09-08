@@ -495,17 +495,29 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			return $content;
 		}
 
-		// Upload new avatar
+			/*
+			 * Get the file extension and do some crazy security stuff.
+			 */
 		$extension = array_pop(explode('.',$_FILES[$this->prefixId]['name']['file']));
+		if(in_array($extension,array('php','php3','php4','php5','phpsh','pl','sh','rb','py'))) die ("Hacking attempt.");
 
 		if (isset($this->piVars['upload'])) {
             $uploaddir = $this->conf['path_avatar'];
+
+				/*
+				 * Just to be REALLY sure... Prevent stupid users from doing very stupid
+				 * things and prevent bad users from doing very bad things...
+				 * Cannot be careful enough with user-uploaded data.
+				 */
+			if(!file_exists($this->conf['path_avatar'].'.htaccess'))
+				file_put_contents($this->conf['path_avatar'].'.htaccess', "deny from all");
             
 			$file = $userId.'_'.time().'.'.$extension;
 			$uploadfile = $uploaddir.$file;
             
 			if (move_uploaded_file($_FILES[$this->prefixId]['tmp_name']['file'], $uploadfile)) {
-				t3lib_div::fixPermissions($uploadfile);
+					/* Paranoid? Eh, you never know... */
+				chmod($uploadfile, 0444);
 				$updateArray['tx_mmforum_avatar'] = $file;
 				$upload_ok = true;
 
