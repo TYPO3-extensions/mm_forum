@@ -164,7 +164,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 		t3lib_div::plainMailEncoded (
 
-			$this->validationEmailReceipient,   /* Address                                  */
+			$this->data['email'],               /* Address                                  */
 			$subject,                           /* Subject                                  */
 			$template,                          /* Mail body                                */
 			implode("\n", $header),             /* Headers, seperated by \n                 */
@@ -455,6 +455,9 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
                     '###USERFIELD_VALUE###'     => $this->piVars['userfields'][$userField->getUID()]?$this->piVars['userfields'][$arr['uid']]:'',
 					'###USERFIELD_ERROR###'		=> $marker['userfield_error'][$userField->getUID()]
                 );
+                if ($userFields_marker['###USERFIELD_ERROR###']) {
+                    $userFields_marker['###USERFIELD_ERROR###'] = $this->cObj->wrap($userFields_marker['###USERFIELD_ERROR###'], $this->conf['errorwrap']);
+                }
                 $userFields_content .= $this->cObj->substituteMarkerArrayCached($userField_thisTemplate, $userFields_marker);
 				
 			}
@@ -563,7 +566,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		if(t3lib_extMgm::isLoaded('captcha') && $this->conf['useCaptcha']) {
 			session_start();
 			if($this->data['captcha'] != $_SESSION['tx_captcha_string']) {
-				$marker['###ERROR_captcha###'] = $this->pi_getLL('error.captcha');
+				$marker['###ERROR_captcha###'] = $this->cObj->wrap($this->pi_getLL('error.captcha'), $this->conf['errorwrap']);
 				$marker['fehler'] = 1;
 			}
 			$_SESSION['tx_captcha_string'] = '';
@@ -575,7 +578,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			 * There must be no invalid chars.
 			 */
 		if ((strlen($this->data['username']) < $this->conf['username_minLength']) || (strlen($this->data['username']) > $this->conf['username_maxLength'])) {
-			$marker["###ERROR_username###"] = $this->pi_getLL('error.usernameLength');
+			$marker["###ERROR_username###"] = $this->cObj->wrap($this->pi_getLL('error.usernameLength'), $this->conf['errorwrap']);
 			$marker["fehler"] = 1;
 		}
 		
@@ -590,7 +593,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
         if ((preg_match_all($username_pattern,$this->data['username'],$matches) && !$username_useMatchPattern) ||
 		    (!preg_match_all($username_pattern,$this->data['username'],$matches) && $username_useMatchPattern)) {
 			$matches[0] = array_unique($matches[0]);
-            $marker["###ERROR_username###"] = $this->pi_getLL('error.usernameChars').($username_useMatchPattern?'':' ('.implode(', ',$matches[0]).')');
+            $marker["###ERROR_username###"] = $this->cObj->wrap($this->pi_getLL('error.usernameChars').($username_useMatchPattern?'':' ('.implode(', ',$matches[0]).')'), $this->conf['errorwrap']);
 			$marker["fehler"] = 1;
 			$marker["###VALUE_username###"] = str_replace('"','&quot;',$marker['###VALUE_username###']);
 		}
@@ -603,7 +606,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 				'username LIKE "'.$this->data['username'].'" AND deleted=0 AND pid='.$this->conf['userPID']
 			);
 			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
-				$marker["###ERROR_username###"] = $this->pi_getLL('error.usernameExists');
+				$marker["###ERROR_username###"] = $this->cObj->wrap($this->pi_getLL('error.usernameExists'), $this->conf['errorwrap']);
 				$marker["fehler"] = 1;
 			}
 		}
@@ -611,10 +614,10 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			/* Check password, first if the two entered password match, then for
 			 * length. */
 		if ($this->data["password"] != $this->data["password_again"]) {
-			$marker["###ERROR_password###"] = $this->pi_getLL('error.passwordMismatch');
+			$marker["###ERROR_password###"] = $this->cObj->wrap($this->pi_getLL('error.passwordMismatch'), $this->conf['errorwrap']);
 			$marker["fehler"] = 1;
 		} if (strlen($this->data['password'])<6) {
-			$marker["###ERROR_password###"] = $this->pi_getLL('error.passwordLength');
+			$marker["###ERROR_password###"] = $this->cObj->wrap($this->pi_getLL('error.passwordLength'), $this->conf['errorwrap']);
 			$marker["fehler"] = 1;
 		}
 		

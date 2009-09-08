@@ -47,6 +47,9 @@ plugin.tx_mmforum_pi2 {
 			www = /^(https?:\/\/)?([a-z0-9-]+\.)+([a-z0-9]+)(\/[!~*\'\(\)a-zA-Z0-9;\/\\\?:\@&=\+\$,%#\._-]*)*$/
 		}
 
+	# Wrap for fields with invalid input
+		errorwrap = <div class="error"> | </div>
+
 	# Settings for required fields
 		required {
 			fields = {$plugin.tx_mmforum.requiredFields}
