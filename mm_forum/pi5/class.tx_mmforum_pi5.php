@@ -492,32 +492,27 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		// avatar field in the user record to empty.
 		if (isset($this->piVars['del_avatar'])) {
 			$this->remove_avatar($userId);
+			return $content;
 		}
 
 		// Upload new avatar
-		$mimes = array();
-		$mimes['image/pjpeg'] = ".jpg";
-		$mimes['image/jpeg'] = ".jpg";
-		$mimes['image/gif'] = ".gif"; 
-		$mimes['image/bmp'] = ".bmp"; 
-		$mimes['image/tiff'] = ".tif"; 
-		$mimes['image/png'] = ".png";
+		$extension = array_pop(explode('.',$_FILES[$this->prefixId]['name']['file']));
 
 		if (isset($this->piVars['upload'])) {
             $uploaddir = $this->conf['path_avatar'];
             
-			$file = $userId.'_'.time().$mimes[$_FILES[$this->prefixId]['type']['file']];
-			$uploadfile = $uploaddir.$userId.'_'.time().$mimes[$_FILES[$this->prefixId]['type']['file']];
+			$file = $userId.'_'.time().'.'.$extension;
+			$uploadfile = $uploaddir.$file;
             
 			if (move_uploaded_file($_FILES[$this->prefixId]['tmp_name']['file'], $uploadfile)) {
 				t3lib_div::fixPermissions($uploadfile);
 				$updateArray['tx_mmforum_avatar'] = $file;
 				$upload_ok = true;
+
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$userId,$updateArray);
 			} else {
 				$upload_ok = false;
 			}
-
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$userId,$updateArray);
 		}
 
 		return $content;
