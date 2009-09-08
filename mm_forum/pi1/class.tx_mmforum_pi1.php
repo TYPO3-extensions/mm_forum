@@ -5600,7 +5600,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
     		'button_label'		 => $this->pi_getLL('button.'.$label,$label),
             'button_link'        => $nolink?'':($href?$href:$this->pi_getPageLink($id,'',$params)),
             'button_iconname'    => file_exists($this->conf['path_img'].'buttons/icons/'.$label.'.png')?$label.'.png':'',
-            'button_atagparams'  => $atagparams
+            'button_atagparams'  => $atagparams,
+			'button_unique_name' => $label
         );
         $oldData    = $this->cObj->data;
         $this->cObj->data = $data;
