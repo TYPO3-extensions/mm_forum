@@ -164,7 +164,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 		t3lib_div::plainMailEncoded (
 
-			$this->data['email'],               /* Address                                  */
+			$this->validationEmailReceipient,   /* Address                                  */
 			$subject,                           /* Subject                                  */
 			$template,                          /* Mail body                                */
 			implode("\n", $header),             /* Headers, seperated by \n                 */
@@ -321,8 +321,10 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$userField->get($arr);
 				
-				$value = $this->piVars['userfields'][$userField->getUID()];
+				$value = trim($this->piVars['userfields'][$userField->getUID()]);
 				$userField->setForUser($user_id, $value, $this->getStoragePID());
+
+				if($userField->getLinkedUserField() == 'email') $this->validationEmailReceipient = $value;
 			}
 		}
 		

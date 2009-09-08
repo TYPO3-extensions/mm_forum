@@ -685,7 +685,7 @@ class tx_mmforum_base extends tslib_pibase {
 		 */
 	function getRatingDisplay($table, $uid) {
 		$rating =& $this->getRatingInstance();
-		return $rating != null ? $this->getRatingInstance()->getRatingDisplay("{$table}_{$uid}", $this->ratingConf) : '';
+		return $rating != null ? $rating->getRatingDisplay("{$table}_{$uid}", $this->ratingConf) : '';
 	}
 
 }
