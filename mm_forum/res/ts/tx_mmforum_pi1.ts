@@ -412,6 +412,12 @@ plugin.tx_mmforum_pi1 {
                 userinfo_realName_wrap = <span style="font-size:10px;"> | </span><br />
 			# Wrap for highlighted search words
 				highlight_wrap = <span class="tx-mmforum-pi1-highlight"> | </span>
+
+			# stdWrap for text "Edited x times. Last on xxxx.xx.xx"
+				postEdited_stdWrap {
+					#you can use fields ###COUNT###, ###DATE### and ###TIME### fe. dataWrap = count: {field:###COUNT###}
+					wrap = <br /><br />|
+				}
 		}
 		
 	# General display options
@@ -536,5 +542,6 @@ plugin.tx_mmforum_pi1 {
 			posts			= 0
 			users			= 0
 		}
+
             
 }

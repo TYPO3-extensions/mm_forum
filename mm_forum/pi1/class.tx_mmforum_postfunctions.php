@@ -549,7 +549,12 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				'###DATE###'  => date(' d.m.Y ', $row['edit_time']),
 				'###TIME###'  => date('H:i', $row['edit_time'])
 			);
-			$posttext .= '<br /><br />' . $this->cObj->substituteMarkerArray($this->pi_getLL('post.edited'), $editMarker);
+			
+			$oldData = $this->cObj->data;
+			$this->cObj->data = $editMarker;
+			$posttext .= $this->cObj->stdWrap($this->cObj->substituteMarkerArray($this->pi_getLL('post.edited'), $editMarker), $this->conf['list_posts.']['postEdited_stdWrap.']);
+			$this->cObj->data = $oldData;
+
 		}
 		return $posttext;
 	}
