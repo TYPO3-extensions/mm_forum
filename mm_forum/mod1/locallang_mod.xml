@@ -10,6 +10,11 @@
 			<label index="mlang_labels_tabdescr">Administration environment for the mm_forum extension. Offers functions for user administration, board and category management, in-browser template file editing and various other features.</label>
 			<label index="mlang_labels_tablabel">mm_forum administration</label>
 		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="mlang_tabs_tab">mm_forum</label>
+			<label index="mlang_labels_tabdescr">Administationsumgebung der mm_forum Extension. Bietet Funktionen zur Benutzeradministration, zum Board- und Kategoriemanagement, in-Browser Template editieren sowie verschiedene andere Features.</label>
+			<label index="mlang_labels_tablabel">mm_forum Administration</label>
+		</languageKey>
 		<languageKey index="fr" type="array">
 			<label index="mlang_tabs_tab">mm_forum</label>
 			<label index="mlang_labels_tabdescr">Environnement d'administration de mm_forum. Offre les fonctions d'administration de forums, de thèmes, d'utilisateurs, etc.</label>

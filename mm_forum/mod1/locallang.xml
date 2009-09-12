@@ -17,12 +17,12 @@
 			<label index="menu.mailing">Mailing</label>
 			<label index="menu.importexport">Data Import/Export</label>
 			<label index="menu.phpbbimport">phpBB Data import</label>
-            <label index="menu.import">Data import</label>
-            <label index="menu.install">Install</label>
-            <label index="menu.userFields">Extend user profile</label>
+			<label index="menu.import">Data import</label>
+			<label index="menu.install">Install</label>
+			<label index="menu.userFields">Extend user profile</label>
 			
 			<label index="error">Error</label>
-			<label index="error.noSettings">The backend module was not properly configured in the extension manager. Please fill out the missing fields in the configuration form in the extension manager. You will have to enter the UIDs of the regular user group, the moderator user group and the administrator group. Furthermore, you will have to specify the UID of the page where all mm_forum data is stored on. See the documentation for a more detailed description on how to do this.</label>
+			<label index="error.noSettings">The backend module was not properly configured in the extension manager. Please fill out the missing fields in the configuration form of the extension manager. You will have to enter the UIDs of the regular user group and the moderator user group. Furthermore, you will have to specify the UID of the page on which all mm_forum data are stored. See the documentation for a more detailed description on how to do this.</label>
 
 			<label index="page.page">Page</label>
 			<label index="page.first">First</label>
@@ -77,26 +77,26 @@
 			<label index="tmpl.edit">Edit "%s"</label>
 			<label index="tmpl.reset">Reset template</label>
 			<label index="tmpl.save">Save template</label>
-            <label index="tmpl.noTemplate">No template found</label>
-            
-            <label index="tmpl_select_title">Select template</label>
-            <label index="tmpl_selectTheme">Select design set</label>
-            <label index="tmpl_selectTemplate">Select template</label>
-            <label index="tmpl_selectThemeFirst">Please select a design set first</label>
-            <label index="tmpl_createTheme">Create a new design set</label>
-            <label index="tmpl_createTheme_desc">This creates a new design set by copying the default design set into a new directory.</label>
-            <label index="tmpl_createTheme_name">Design set name</label>
-            <label index="tmpl_createTheme_submit">Create</label>
-            <label index="tmpl_createTheme_error">A design set with this name does already exist.</label>
-            <label index="tmpl_createTheme_error">The design set was successfully created.</label>
-            <label index="tmpl_editTemplate_title">Edit template "%s"</label>
-            <label index="tmpl_editTemplate_submit">Save</label>
-            <label index="tmpl_editTemplate_reset">Undo changes</label>
-            <label index="tmpl_editTemplate_toDefault">Reset to default</label>
-            <label index="tmpl_editTemplate_noedit">Templates in the default design set cannot be edited. Please create a new design set.</label>
-            <label index="tmpl_themeActive">This design set is active.</label>
-            <label index="tmpl_themeInactive">This design set is not active.</label>
-            <label index="tmpl_themeActivate">Activate</label>
+			<label index="tmpl.noTemplate">No template found</label>
+			
+			<label index="tmpl_select_title">Select template</label>
+			<label index="tmpl_selectTheme">Select design set</label>
+			<label index="tmpl_selectTemplate">Select template</label>
+			<label index="tmpl_selectThemeFirst">Please select a design set first</label>
+			<label index="tmpl_createTheme">Create a new design set</label>
+			<label index="tmpl_createTheme_desc">This creates a new design set by copying the default design set into a new directory.</label>
+			<label index="tmpl_createTheme_name">Design set name</label>
+			<label index="tmpl_createTheme_submit">Create</label>
+			<label index="tmpl_createTheme_error">A design set with this name does already exist.</label>
+			<label index="tmpl_createTheme_error">The design set was successfully created.</label>
+			<label index="tmpl_editTemplate_title">Edit template "%s"</label>
+			<label index="tmpl_editTemplate_submit">Save</label>
+			<label index="tmpl_editTemplate_reset">Undo changes</label>
+			<label index="tmpl_editTemplate_toDefault">Reset to default</label>
+			<label index="tmpl_editTemplate_noedit">Templates in the default design set cannot be edited. Please create a new design set.</label>
+			<label index="tmpl_themeActive">This design set is active.</label>
+			<label index="tmpl_themeInactive">This design set is not active.</label>
+			<label index="tmpl_themeActivate">Activate</label>
 			
 			<label index="tools.bbcodes">BB Codes</label>
 			<label index="tools.smilies">Smilies</label>
@@ -124,43 +124,43 @@
 			<label index="tools.new">New</label>
 			<label index="tools.create">Create</label>
 			
-            <label index="import.stepX">Step %s</label>
-            <label index="import.stepXofY">Step %s of %s</label>
-            <label index="import.step0">Select import procedure</label>
-            <label index="import.step0.phpBB">phpBB</label>
-            <label index="import.step0.phpBB.desc">Import data from an existing phpBB message board.</label>
-            <label index="import.step0.CHC">CHC Forum</label>
-            <label index="import.step0.CHC.desc">Import data from an existing instance of the CHC Forum TYPO3 extension.</label>
-            <label index="import.step0.continue">Continue</label>
-            <label index="import.step0.error">You must select an import procedure before continuing.</label>
-            <label index="import.step1">Select database connection</label>
-            <label index="import.step1.localDB">Use local TYPO3 database</label>
-            <label index="import.step1.extDB">Use external database</label>
-            <label index="import.step1.ext.server">Server</label>
-            <label index="import.step1.ext.user">User name</label>
-            <label index="import.step1.ext.password">Password</label>
-            <label index="import.step1.ext.dbname">Database name</label>
-            <label index="import.step1.continue">Continue</label>
-            <label index="import.step1.error_server">No server specified</label>
-            <label index="import.step1.error_user">No user name specified</label>
-            <label index="import.step1.error_dbname">No database name specified</label>
-            <label index="import.step1.error_connect">Could not connect to the specified server.</label>
-            <label index="import.step1.error_selectdb">Could not select the specified database.</label>
-            
-            <label index="chc.success">Import of CHC Forum data was successful.</label>
-            <label index="chc.categories">Categories</label>
-            <label index="chc.boards">Message boards</label>
-            <label index="chc.topics">Topics</label>
-            <label index="chc.step3">Step 3 of 4: Select import data</label>
-            <label index="chc.import.chc">CHC Forum</label>
-            <label index="chc.import.chc.desc">Import categories and boards from the CHC Forum extension.</label>
-            <label index="chc.import.cwt">CWT Community</label>
-            <label index="chc.import.cwt.desc">Import private messages from the CWT Community extension.</label>
-            <label index="chc.import.continue">Continue</label>
-            <label index="chc.step4">Step 4 of 4: Conduct import</label>
-            <label index="chc.posts">Posts</label>
-            <label index="cwt.success">Import of CWT Community data was successful.</label>
-            <label index="cwt.pms">Private messages</label>
+			<label index="import.stepX">Step %s</label>
+			<label index="import.stepXofY">Step %s of %s</label>
+			<label index="import.step0">Select import procedure</label>
+			<label index="import.step0.phpBB">phpBB</label>
+			<label index="import.step0.phpBB.desc">Import data from an existing phpBB message board.</label>
+			<label index="import.step0.CHC">CHC Forum</label>
+			<label index="import.step0.CHC.desc">Import data from an existing instance of the CHC Forum TYPO3 extension.</label>
+			<label index="import.step0.continue">Continue</label>
+			<label index="import.step0.error">You must select an import procedure before continuing.</label>
+			<label index="import.step1">Select database connection</label>
+			<label index="import.step1.localDB">Use local TYPO3 database</label>
+			<label index="import.step1.extDB">Use external database</label>
+			<label index="import.step1.ext.server">Server</label>
+			<label index="import.step1.ext.user">User name</label>
+			<label index="import.step1.ext.password">Password</label>
+			<label index="import.step1.ext.dbname">Database name</label>
+			<label index="import.step1.continue">Continue</label>
+			<label index="import.step1.error_server">No server specified</label>
+			<label index="import.step1.error_user">No user name specified</label>
+			<label index="import.step1.error_dbname">No database name specified</label>
+			<label index="import.step1.error_connect">Could not connect to the specified server.</label>
+			<label index="import.step1.error_selectdb">Could not select the specified database.</label>
+
+			<label index="chc.success">Import of CHC Forum data was successful.</label>
+			<label index="chc.categories">Categories</label>
+			<label index="chc.boards">Message boards</label>
+			<label index="chc.topics">Topics</label>
+			<label index="chc.step3">Step 3 of 4: Select import data</label>
+			<label index="chc.import.chc">CHC Forum</label>
+			<label index="chc.import.chc.desc">Import categories and boards from the CHC Forum extension.</label>
+			<label index="chc.import.cwt">CWT Community</label>
+			<label index="chc.import.cwt.desc">Import private messages from the CWT Community extension.</label>
+			<label index="chc.import.continue">Continue</label>
+			<label index="chc.step4">Step 4 of 4: Conduct import</label>
+			<label index="chc.posts">Posts</label>
+			<label index="cwt.success">Import of CWT Community data was successful.</label>
+			<label index="cwt.pms">Private messages</label>
             
 			<label index="phpbb.general.prefix">MySQL Table prefix</label>
 			<label index="phpbb.general.update">Update</label>
@@ -175,7 +175,7 @@
 			<label index="phpbb.step1.fatalError">None of the tables required for data import were not found. Please check, if the table prefix you specified is correct.</label>
 			<label index="phpbb.step1.error">Some of the tables possibly required for data import were not found (see above).</label>
 			<label index="phpbb.step1.ok">All tables required for data import were found. Proceed with next step.</label>
-			<label index="phpbb.step1.warning">WARNING: Some tables used in the phpBB board were not found in your database. Since not all phpBB tables are used during data import, so this fact is not necessarily of importance. Do you want to continue anyway?</label>
+			<label index="phpbb.step1.warning">WARNING: Some tables used in the phpBB board were not found in your database. Since not all phpBB tables are used during data import, this fact is not necessarily of importance. Do you want to continue anyway?</label>
 			
 			<label index="phpbb.step2">Select import data</label>
 			<label index="phpbb.step2.instruction">Select which data you want to import from your phpBB board. Note that there are some data fields that depend on other data to be also imported.</label>
@@ -190,7 +190,7 @@
 			<label index="phpbb.step2.smilies">Smilies</label>
 			<label index="phpbb.step2.subscr">Email subscriptions</label>
 			<label index="phpbb.step2.tablesrequired">Required tables</label>
-			<label index="phpbb.step2.note">&lt;i&gt;Note:&lt;/i&gt; Table names marked read mean that this table does not exist. Trying to import these data fields will lead to an error.</label>
+			<label index="phpbb.step2.note">&lt;i&gt;Note:&lt;/i&gt; Table names marked red mean that this table does not exist. Trying to import these data fields will lead to an error.</label>
 			<label index="phpbb.step2.noSelectNote">You have to select at least one data field before proceeding.</label>
 			
 			<label index="phpbb.step3">Specify import options</label>
@@ -258,7 +258,7 @@
 			<label index="phpbb.step3.errors">%s errors occurred while processing your data. Please correct these errors before proceeding with the next step.</label>
 			<label index="phpbb.step3.warning">One or more problems occurred while processing your data. These will not cause any errors in the next step, but might lead to unwanted results. Please check your inputs before processing with the next step.</label>
 
-			<label index="phpbb.step4.startNote">The phpBB data are ready to be imported. Press the start button to begin the import process. Please notice that the import procedure may take some time, dependent of the amount of data and your import settings.</label>
+			<label index="phpbb.step4.startNote">The phpBB data are ready to be imported. Press the start button to begin the import process. Please notice that the import procedure may take some time, depending on the amount of data and your import settings.</label>
 			<label index="phpbb.step4.startButton">Start import</label>
 			
 			<label index="phpbb.step3.clearAll">Clear all regarding mm_forum tables before importing</label>
@@ -272,19 +272,19 @@
 			<label index="phpbb.step4.clear.whereEx">Example: WHERE uid NOT IN (1,2,3)</label>
             
 			<label index="phpbb.step2.polls">Polls</label>
-            <label index="phpbb.step3.polls.pid">Storage page UID</label>
-            <label index="phpbb.step4.pollimport_report">Imported %s polls.</label>
-            
-            <!-- ADDED IN 0.1.2 -->
-            <label index="menu.ranks">User ranks</label>
-            <label index="ranks.title">Title</label>
-            <label index="ranks.icon">Icon</label>
-            <label index="ranks.posts">Posts</label>
-            <label index="ranks.noicon">No icon</label>
-            <label index="ranks.special">Special rank</label>
-            
-            <!-- ADDED IN 0.1.7 -->
-            <label index="menu.updater">Updater</label>
+			<label index="phpbb.step3.polls.pid">Storage page UID</label>
+			<label index="phpbb.step4.pollimport_report">Imported %s polls.</label>
+
+			<!-- ADDED IN 0.1.2 -->
+			<label index="menu.ranks">User ranks</label>
+			<label index="ranks.title">Title</label>
+			<label index="ranks.icon">Icon</label>
+			<label index="ranks.posts">Posts</label>
+			<label index="ranks.noicon">No icon</label>
+			<label index="ranks.special">Special rank</label>
+
+			<!-- ADDED IN 0.1.7 -->
+			<label index="menu.updater">Updater</label>
 			
 			<!-- ADDED IN 0.1.8 -->
 			<label index="users.title">Users</label>
@@ -301,9 +301,9 @@
 			<label index="menu.mailing">Mailing</label>
 			<label index="menu.importexport">Datenimport/-export</label>
 			<label index="menu.phpbbimport">phpBB-Datenimport</label>
-            <label index="menu.import">Datenimport</label>
-            <label index="menu.install">Installation</label>
-            <label index="menu.userFields">Benutzerprofil erweitern</label>
+			<label index="menu.import">Datenimport</label>
+			<label index="menu.install">Installation</label>
+			<label index="menu.userFields">Benutzerprofil erweitern</label>
 
 			<label index="error">Fehler</label>
 			<label index="error.noSettings">Das Backend-Modul wurde nicht ordnungsgemäß im Erweiterungsmanager konfiguriert. Bitte füllen Sie die noch fehlenden Felder im Konfigurationsformular im Erweiterungsmanager aus. Sie müssen die UIDs der Benutzergruppe für reguläre Benutzer sowie der Moderatoren- und Administratorengruppen angeben. Des weiteren müssen Sie die UID der Seite, auf der die Daten des mm_forum gespeichert werden, angeben. Eine detailliertere Beschreibung hierzu finden Sie in der Dokumentation.</label>
@@ -361,26 +361,26 @@
 			<label index="tmpl.edit">"%s" bearbeiten</label>
 			<label index="tmpl.reset">Vorlage zurücksetzen</label>
 			<label index="tmpl.save">Vorlage speichern</label>
-            <label index="tmpl.noTemplate">Keine Designvorlage gefunden</label>
-            
-            <label index="tmpl_select_title">Designvorlage auswählen</label>
-            <label index="tmpl_selectTheme">Designset auswählen</label>
-            <label index="tmpl_selectTemplate">Designvorlage auswählen</label>
-            <label index="tmpl_selectThemeFirst">Bitte wählen Sie zunächst ein Designset aus.</label>
-            <label index="tmpl_createTheme">Neues Designset anlegen</label>
-            <label index="tmpl_createTheme_desc">Dieser Vorgang legt ein neues Designset angelegt, indem das Standarddesignset in ein neues Verzeichnis kopiert wird.</label>
-            <label index="tmpl_createTheme_name">Designset-name</label>
-            <label index="tmpl_createTheme_submit">Anlegen</label>
-            <label index="tmpl_createTheme_error">Ein Designset mit diesem Namen existiert bereits.</label>
-            <label index="tmpl_createTheme_error">Das Designset wurde erfolgreich angelegt.</label>
-            <label index="tmpl_editTemplate_title">Designvorlage "%s" bearbeiten</label>
-            <label index="tmpl_editTemplate_submit">Speichern</label>
-            <label index="tmpl_editTemplate_reset">Änderungen rückgängig</label>
-            <label index="tmpl_editTemplate_toDefault">Auf Standard zurücksetzen</label>
-            <label index="tmpl_editTemplate_noedit">Designvorlagen aus dem Standarddesignset können nicht bearbeitet werden. Bitte legen Sie ein neues Designset an.</label>
-            <label index="tmpl_themeActive">Dieses Designset ist aktiv.</label>
-            <label index="tmpl_themeInactive">Dieses Designset ist nicht aktiv.</label>
-            <label index="tmpl_themeActivate">Aktivieren</label>
+			<label index="tmpl.noTemplate">Keine Designvorlage gefunden</label>
+
+			<label index="tmpl_select_title">Designvorlage auswählen</label>
+			<label index="tmpl_selectTheme">Designset auswählen</label>
+			<label index="tmpl_selectTemplate">Designvorlage auswählen</label>
+			<label index="tmpl_selectThemeFirst">Bitte wählen Sie zunächst ein Designset aus.</label>
+			<label index="tmpl_createTheme">Neues Designset anlegen</label>
+			<label index="tmpl_createTheme_desc">Dieser Vorgang legt ein neues Designset angelegt, indem das Standarddesignset in ein neues Verzeichnis kopiert wird.</label>
+			<label index="tmpl_createTheme_name">Designset-name</label>
+			<label index="tmpl_createTheme_submit">Anlegen</label>
+			<label index="tmpl_createTheme_error">Ein Designset mit diesem Namen existiert bereits.</label>
+			<label index="tmpl_createTheme_error">Das Designset wurde erfolgreich angelegt.</label>
+			<label index="tmpl_editTemplate_title">Designvorlage "%s" bearbeiten</label>
+			<label index="tmpl_editTemplate_submit">Speichern</label>
+			<label index="tmpl_editTemplate_reset">Änderungen rückgängig</label>
+			<label index="tmpl_editTemplate_toDefault">Auf Standard zurücksetzen</label>
+			<label index="tmpl_editTemplate_noedit">Designvorlagen aus dem Standarddesignset können nicht bearbeitet werden. Bitte legen Sie ein neues Designset an.</label>
+			<label index="tmpl_themeActive">Dieses Designset ist aktiv.</label>
+			<label index="tmpl_themeInactive">Dieses Designset ist nicht aktiv.</label>
+			<label index="tmpl_themeActivate">Aktivieren</label>
             
 			<label index="tools.bbcodes">BB-Codes</label>
 			<label index="tools.smilies">Smilies</label>
@@ -407,43 +407,43 @@
 			<label index="tools.editcode">Code bearbeiten</label>
 			<label index="tools.new">Neu</label>
 
-            <label index="import.stepX">Schritt %s</label>
-            <label index="import.stepXofY">Schritt %s von %s</label>
-            <label index="import.step0">Importmethode auswählen</label>
-            <label index="import.step0.phpBB">phpBB</label>
-            <label index="import.step0.phpBB.desc">Importiert Daten aus einem bestehenden phpBB-Forum.</label>
-            <label index="import.step0.CHC">CHC Forum</label>
-            <label index="import.step0.CHC.desc">Importiert Daten aus einer bestehenden Instanz der TYPO3-Erweiterung CHC-Forum.</label>
-            <label index="import.step0.continue">Weiter</label>
-            <label index="import.step0.error">Sie müssen eine Importmethode auswählen, bevor Sie fortfahren.</label>
-            <label index="import.step1">Datenbankverbindung auswählen</label>
-            <label index="import.step1.localDB">Lokale TYPO3-Datenbank verwenden</label>
-            <label index="import.step1.extDB">Externe Datenbank verwenden</label>
-            <label index="import.step1.ext.server">Server</label>
-            <label index="import.step1.ext.user">Benutzername</label>
-            <label index="import.step1.ext.password">Passwort</label>
-            <label index="import.step1.ext.dbname">Datenbankname</label>
-            <label index="import.step1.continue">Weiter</label>
-            <label index="import.step1.error_server">Kein Server angegeben</label>
-            <label index="import.step1.error_user">Kein Benutzername angegeben</label>
-            <label index="import.step1.error_dbname">Kein Datenbankname angegeben</label>
-            <label index="import.step1.error_connect">Konnte keine Verbindung zu dem angegebenen Server herstellen.</label>
-            <label index="import.step1.error_selectdb">Konnte nicht auf die angegebene Datenbank zugreifen.</label>
-            
-            <label index="chc.success">Der Datenimport der CHC Forum-Daten war erfolgreich.</label>
-            <label index="chc.categories">Kategorien</label>
-            <label index="chc.boards">Foren</label>
-            <label index="chc.topics">Themen</label>
-            <label index="chc.step3">Schritt 3 von 4: Importdaten auswählen</label>
-            <label index="chc.import.chc">CHC Forum</label>
-            <label index="chc.import.chc.desc">Importiert Kategorien und Foren der CHC Forum-Erweiterung.</label>
-            <label index="chc.import.cwt">CWT Community</label>
-            <label index="chc.import.cwt.desc">Importiert private Nachrichten aus der CWT Community-Erweiterung.</label>
-            <label index="chc.import.continue">Weiter</label>
-            <label index="chc.step4">Schritt 4 von 4: Import durchführen</label>
-            <label index="chc.posts">Beiträge</label>
-            <label index="cwt.success">Der Datenimport der CWT Community-Daten war erfolgreich.</label>
-            <label index="cwt.pms">Private Nachrichten</label>
+			<label index="import.stepX">Schritt %s</label>
+			<label index="import.stepXofY">Schritt %s von %s</label>
+			<label index="import.step0">Importmethode auswählen</label>
+			<label index="import.step0.phpBB">phpBB</label>
+			<label index="import.step0.phpBB.desc">Importiert Daten aus einem bestehenden phpBB-Forum.</label>
+			<label index="import.step0.CHC">CHC Forum</label>
+			<label index="import.step0.CHC.desc">Importiert Daten aus einer bestehenden Instanz der TYPO3-Erweiterung CHC-Forum.</label>
+			<label index="import.step0.continue">Weiter</label>
+			<label index="import.step0.error">Sie müssen eine Importmethode auswählen, bevor Sie fortfahren.</label>
+			<label index="import.step1">Datenbankverbindung auswählen</label>
+			<label index="import.step1.localDB">Lokale TYPO3-Datenbank verwenden</label>
+			<label index="import.step1.extDB">Externe Datenbank verwenden</label>
+			<label index="import.step1.ext.server">Server</label>
+			<label index="import.step1.ext.user">Benutzername</label>
+			<label index="import.step1.ext.password">Passwort</label>
+			<label index="import.step1.ext.dbname">Datenbankname</label>
+			<label index="import.step1.continue">Weiter</label>
+			<label index="import.step1.error_server">Kein Server angegeben</label>
+			<label index="import.step1.error_user">Kein Benutzername angegeben</label>
+			<label index="import.step1.error_dbname">Kein Datenbankname angegeben</label>
+			<label index="import.step1.error_connect">Konnte keine Verbindung zu dem angegebenen Server herstellen.</label>
+			<label index="import.step1.error_selectdb">Konnte nicht auf die angegebene Datenbank zugreifen.</label>
+
+			<label index="chc.success">Der Datenimport der CHC Forum-Daten war erfolgreich.</label>
+			<label index="chc.categories">Kategorien</label>
+			<label index="chc.boards">Foren</label>
+			<label index="chc.topics">Themen</label>
+			<label index="chc.step3">Schritt 3 von 4: Importdaten auswählen</label>
+			<label index="chc.import.chc">CHC Forum</label>
+			<label index="chc.import.chc.desc">Importiert Kategorien und Foren der CHC Forum-Erweiterung.</label>
+			<label index="chc.import.cwt">CWT Community</label>
+			<label index="chc.import.cwt.desc">Importiert private Nachrichten aus der CWT Community-Erweiterung.</label>
+			<label index="chc.import.continue">Weiter</label>
+			<label index="chc.step4">Schritt 4 von 4: Import durchführen</label>
+			<label index="chc.posts">Beiträge</label>
+			<label index="cwt.success">Der Datenimport der CWT Community-Daten war erfolgreich.</label>
+			<label index="cwt.pms">Private Nachrichten</label>
 			
 			<label index="phpbb.general.prefix">MySQL Tabellenpräfix</label>
 			<label index="phpbb.general.update">Aktualisieren</label>
@@ -553,11 +553,10 @@
 			<label index="phpbb.step4.clear.whereEx">Beispiel: WHERE uid NOT IN (1,2,3)</label>
             
 			<label index="phpbb.step2.polls">Umfragen</label>
-            <label index="phpbb.step3.polls.pid">Seiten-ID</label>
-            <label index="phpbb.step4.pollimport_report">Es wurden %s Umfragen importiert.</label>
+			<label index="phpbb.step3.polls.pid">Seiten-ID</label>
+			<label index="phpbb.step4.pollimport_report">Es wurden %s Umfragen importiert.</label>
 		</languageKey>
-        
-        <languageKey index="fi" type="array">
+		<languageKey index="fi" type="array">
 			<label index="indev">Kehitteillä</label>
 			<label index="menu.useradmin">Käyttäjähallinta</label>
 			<label index="menu.boardadmin">Keskusteluhallinta</label>
@@ -696,7 +695,7 @@
 			<label index="phpbb.general.no">Ei</label>
 		</languageKey>
         <!-- FRENCH LANGUAGE DATA -->
-        <languageKey index="fr" type="array">
+		<languageKey index="fr" type="array">
 			<label index="title">mm_forum</label>
 			<label index="indev">Au travail...</label>
 			
@@ -708,9 +707,9 @@
 			<label index="menu.mailing">Mailing</label>
 			<label index="menu.importexport">Import/-export de données</label>
 			<label index="menu.phpbbimport">phpBB-Importation de données</label>
-            <label index="menu.import">Importation de données</label>
-            <label index="menu.install">Installation</label>
-            <label index="menu.userFields">Etendre le profil d'intervenants</label>
+			<label index="menu.import">Importation de données</label>
+			<label index="menu.install">Installation</label>
+			<label index="menu.userFields">Etendre le profil d'intervenants</label>
 
 			<label index="error">Erreur</label>
 			<label index="error.noSettings">Le module backend n'est pas configuré correctement dans le manager d'extensions. Merci de remplir les champs manquants dans le formulaire de configuration. Les UIDs des groupes d'intervenants, des animateurs et des administrateurs doivent etre indiquées. Les UID des pages qui contiennent les données de mm_forum doivent etre indiquées. Merci de consulter la documentation.</label>
@@ -768,26 +767,26 @@
 			<label index="tmpl.edit">Editer "%s"</label>
 			<label index="tmpl.reset">Valeurs par défaut</label>
 			<label index="tmpl.save">Enregistrer le gabarit</label>
-            <label index="tmpl.noTemplate">Aucun gabarit trouvé</label>
-            
-            <label index="tmpl_select_title">Choisir un gabarit de design</label>
-            <label index="tmpl_selectTheme">choisir des parametres de design</label>
-            <label index="tmpl_selectTemplate">Choisir un gabarit de design</label>
-            <label index="tmpl_selectThemeFirst">Merci de d'abord choisir un paramétrage de gabarit.</label>
-            <label index="tmpl_createTheme">Créer un nouveau paramétrage de gabarit</label>
-            <label index="tmpl_createTheme_desc">cette action va créer un nouveau paramétrage de gabarit en copiant le paramétrage de gabarit par défaut dans un nouveau répertoire.</label>
-            <label index="tmpl_createTheme_name">Nom du paramétrage de gabarit</label>
-            <label index="tmpl_createTheme_submit">Créer</label>
-            <label index="tmpl_createTheme_error">Ce nom existe déjà.</label>
-            <label index="tmpl_createTheme_error">Création du paramétrage de gabarit terminée.</label>
-            <label index="tmpl_editTemplate_title">Designvorlage "%s" bearbeiten</label>
-            <label index="tmpl_editTemplate_submit">Speichern</label>
-            <label index="tmpl_editTemplate_reset">Änderungen rückgängig</label>
-            <label index="tmpl_editTemplate_toDefault">Auf Standard zurücksetzen</label>
-            <label index="tmpl_editTemplate_noedit">Designvorlagen aus dem Standarddesignset können nicht bearbeitet werden. Bitte legen Sie ein neues Designset an.</label>
-            <label index="tmpl_themeActive">Ce gabarit de design est actif.</label>
-            <label index="tmpl_themeInactive">Ce gabarit de design n'est pas actif.</label>
-            <label index="tmpl_themeActivate">Activer</label>
+			<label index="tmpl.noTemplate">Aucun gabarit trouvé</label>
+
+			<label index="tmpl_select_title">Choisir un gabarit de design</label>
+			<label index="tmpl_selectTheme">choisir des parametres de design</label>
+			<label index="tmpl_selectTemplate">Choisir un gabarit de design</label>
+			<label index="tmpl_selectThemeFirst">Merci de d'abord choisir un paramétrage de gabarit.</label>
+			<label index="tmpl_createTheme">Créer un nouveau paramétrage de gabarit</label>
+			<label index="tmpl_createTheme_desc">cette action va créer un nouveau paramétrage de gabarit en copiant le paramétrage de gabarit par défaut dans un nouveau répertoire.</label>
+			<label index="tmpl_createTheme_name">Nom du paramétrage de gabarit</label>
+			<label index="tmpl_createTheme_submit">Créer</label>
+			<label index="tmpl_createTheme_error">Ce nom existe déjà.</label>
+			<label index="tmpl_createTheme_error">Création du paramétrage de gabarit terminée.</label>
+			<label index="tmpl_editTemplate_title">Designvorlage "%s" bearbeiten</label>
+			<label index="tmpl_editTemplate_submit">Speichern</label>
+			<label index="tmpl_editTemplate_reset">Änderungen rückgängig</label>
+			<label index="tmpl_editTemplate_toDefault">Auf Standard zurücksetzen</label>
+			<label index="tmpl_editTemplate_noedit">Designvorlagen aus dem Standarddesignset können nicht bearbeitet werden. Bitte legen Sie ein neues Designset an.</label>
+			<label index="tmpl_themeActive">Ce gabarit de design est actif.</label>
+			<label index="tmpl_themeInactive">Ce gabarit de design n'est pas actif.</label>
+			<label index="tmpl_themeActivate">Activer</label>
             
 			<label index="tools.bbcodes">BB-Codes</label>
 			<label index="tools.smilies">Emoticons</label>
@@ -814,43 +813,43 @@
 			<label index="tools.editcode">Intervenir dans le code</label>
 			<label index="tools.new">Nouveau</label>
 
-            <label index="import.stepX">Etape %s</label>
-            <label index="import.stepXofY">Etape %s de %s</label>
-            <label index="import.step0">Choix de la méthode d'importation</label>
-            <label index="import.step0.phpBB">phpBB</label>
-            <label index="import.step0.phpBB.desc">Importe des données d'un forum phpBB existant.</label>
-            <label index="import.step0.CHC">CHC Forum</label>
-            <label index="import.step0.CHC.desc">Importe des données d'une instance existante de l'extension TYPO3 CHC-Forum.</label>
-            <label index="import.step0.continue">Continuer</label>
-            <label index="import.step0.error">Vous devez choisir une méthode d'importation avant de poursuivre.</label>
-            <label index="import.step1">Choix de la liaison vers la banque de données</label>
-            <label index="import.step1.localDB">Utiliser la banque de données locale de TYPO3</label>
-            <label index="import.step1.extDB">Utiliser une banque de données externe</label>
-            <label index="import.step1.ext.server">Serveur</label>
-            <label index="import.step1.ext.user">Identifiant</label>
-            <label index="import.step1.ext.password">Mot de passe</label>
-            <label index="import.step1.ext.dbname">Nom de la banque de données </label>
-            <label index="import.step1.continue">continuer</label>
-            <label index="import.step1.error_server">Indiquez un serveur !</label>
-            <label index="import.step1.error_user">indiquez un identifiant !</label>
-            <label index="import.step1.error_dbname">Indiquer le nom de la banque de données !</label>
-            <label index="import.step1.error_connect">Liaison vers le serveur indiqué impossible !</label>
-            <label index="import.step1.error_selectdb">Ouverture de la banque de données indiquée impossible !</label>
-            
-            <label index="chc.success">L'importation des données de CHC Forum est terminée.</label>
-            <label index="chc.categories">Forums</label>
-            <label index="chc.boards">Thèmes</label>
-            <label index="chc.topics">Fils</label>
-            <label index="chc.step3">Etape 3 de 4 : Choisir les données à importer</label>
-            <label index="chc.import.chc">CHC Forum</label>
-            <label index="chc.import.chc.desc">Importe les forums et thèmes de l'extension CHC Forum.</label>
-            <label index="chc.import.cwt">CWT Community</label>
-            <label index="chc.import.cwt.desc">Importe les messages privés de l'extension CWT Community.</label>
-            <label index="chc.import.continue">Continuer</label>
-            <label index="chc.step4">Etape 4 de 4 : Lancer l'importation</label>
-            <label index="chc.posts">Interventions</label>
-            <label index="cwt.success">L'importation de CWT Community est terminée.</label>
-            <label index="cwt.pms">Messages privés</label>
+			<label index="import.stepX">Etape %s</label>
+			<label index="import.stepXofY">Etape %s de %s</label>
+			<label index="import.step0">Choix de la méthode d'importation</label>
+			<label index="import.step0.phpBB">phpBB</label>
+			<label index="import.step0.phpBB.desc">Importe des données d'un forum phpBB existant.</label>
+			<label index="import.step0.CHC">CHC Forum</label>
+			<label index="import.step0.CHC.desc">Importe des données d'une instance existante de l'extension TYPO3 CHC-Forum.</label>
+			<label index="import.step0.continue">Continuer</label>
+			<label index="import.step0.error">Vous devez choisir une méthode d'importation avant de poursuivre.</label>
+			<label index="import.step1">Choix de la liaison vers la banque de données</label>
+			<label index="import.step1.localDB">Utiliser la banque de données locale de TYPO3</label>
+			<label index="import.step1.extDB">Utiliser une banque de données externe</label>
+			<label index="import.step1.ext.server">Serveur</label>
+			<label index="import.step1.ext.user">Identifiant</label>
+			<label index="import.step1.ext.password">Mot de passe</label>
+			<label index="import.step1.ext.dbname">Nom de la banque de données </label>
+			<label index="import.step1.continue">continuer</label>
+			<label index="import.step1.error_server">Indiquez un serveur !</label>
+			<label index="import.step1.error_user">indiquez un identifiant !</label>
+			<label index="import.step1.error_dbname">Indiquer le nom de la banque de données !</label>
+			<label index="import.step1.error_connect">Liaison vers le serveur indiqué impossible !</label>
+			<label index="import.step1.error_selectdb">Ouverture de la banque de données indiquée impossible !</label>
+
+			<label index="chc.success">L'importation des données de CHC Forum est terminée.</label>
+			<label index="chc.categories">Forums</label>
+			<label index="chc.boards">Thèmes</label>
+			<label index="chc.topics">Fils</label>
+			<label index="chc.step3">Etape 3 de 4 : Choisir les données à importer</label>
+			<label index="chc.import.chc">CHC Forum</label>
+			<label index="chc.import.chc.desc">Importe les forums et thèmes de l'extension CHC Forum.</label>
+			<label index="chc.import.cwt">CWT Community</label>
+			<label index="chc.import.cwt.desc">Importe les messages privés de l'extension CWT Community.</label>
+			<label index="chc.import.continue">Continuer</label>
+			<label index="chc.step4">Etape 4 de 4 : Lancer l'importation</label>
+			<label index="chc.posts">Interventions</label>
+			<label index="cwt.success">L'importation de CWT Community est terminée.</label>
+			<label index="cwt.pms">Messages privés</label>
 			
 			<label index="phpbb.general.prefix">Préfixe de tableau MySQL</label>
 			<label index="phpbb.general.update">Actualiser</label>
@@ -960,16 +959,16 @@
 			<label index="phpbb.step4.clear.whereEx">Exemple : WHERE uid NOT IN (1,2,3)</label>
             
 			<label index="phpbb.step2.polls">Votes</label>
-            <label index="phpbb.step3.polls.pid">ID de la page</label>
-            <label index="phpbb.step4.pollimport_report">%s Votes importés.</label>
-			            
-            <!-- ADDED IN 0.1.2 -->
-            <label index="menu.ranks">Classement des utilisateurs</label>
-            <label index="ranks.title">Titre</label>
-            <label index="ranks.icon">Icône</label>
-            <label index="ranks.posts">Interventions</label>
-            <label index="ranks.noicon">Pas d'icône</label>
-            <label index="ranks.special">Rang spécial</label>
+			<label index="phpbb.step3.polls.pid">ID de la page</label>
+			<label index="phpbb.step4.pollimport_report">%s Votes importés.</label>
+
+			<!-- ADDED IN 0.1.2 -->
+			<label index="menu.ranks">Classement des utilisateurs</label>
+			<label index="ranks.title">Titre</label>
+			<label index="ranks.icon">Icône</label>
+			<label index="ranks.posts">Interventions</label>
+			<label index="ranks.noicon">Pas d'icône</label>
+			<label index="ranks.special">Rang spécial</label>
 		</languageKey>
         <!-- RUSSIAN LANGUAGE DATA -->
 		<languageKey index="ru" type="array">

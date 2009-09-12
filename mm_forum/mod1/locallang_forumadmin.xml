@@ -6,88 +6,88 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-            <label index="forumAdmin.tree">Forum tree</label>
-            <label index="forumAdmin.save">Save</label>
-            <label index="forumAdmin.saveAndReturn">Save and return here</label>
-            <label index="forumAdmin.back">Go back</label>
-            <label index="forumAdmin.delete">Delete</label>
-            
-            <label index="forumAdmin.error.noTitle">You must specify a title.</label>
-            
-            <label index="forumAdmin.category.new">New category</label>
-            <label index="forumAdmin.category.edit">Edit category</label>
-            <label index="forumAdmin.category.hidden">Hidden</label>
-            <label index="forumAdmin.category.title">Title</label>
-            <label index="forumAdmin.category.order">Order</label>
-            <label index="forumAdmin.category.authRead">Read access</label>
-            <label index="forumAdmin.category.authWrite">Write access</label>
-            <label index="forumAdmin.category.confirmDelete">Do you really want to delete this category?</label>
-            <label index="forumAdmin.category.readAuth_note">Leave empty to allow all users to read (including guests).</label>
-            <label index="forumAdmin.category.writeAuth_note">Leave empty to allow all users to write (only logged-in users).</label>
-            
-            <label index="forumAdmin.forum.new">New forum</label>
-            <label index="forumAdmin.forum.edit">Edit forum</label>
-            <label index="forumAdmin.forum.hidden">Hidden</label>
-            <label index="forumAdmin.forum.title">Title</label>
-            <label index="forumAdmin.forum.desc">Description</label>
-            <label index="forumAdmin.forum.order">Order</label>
-            <label index="forumAdmin.forum.authRead">Read access</label>
-            <label index="forumAdmin.forum.authWrite">Write access</label>
-            <label index="forumAdmin.forum.confirmDelete">Do you really want to delete this forum?</label>
-            
-            <label index="forumAdmin.order.beginning">As first</label>
-            <label index="forumAdmin.order.ending">As last</label>
-            <label index="forumAdmin.order.after">After</label>
-            
-            <label index="forumAdmin.forum.updateIndex">NOTE: After changing read access to this forum, the search index needs to be updated.</label>
-            <label index="forumAdmin.category.updateIndex">NOTE: After changing read access to this category, the search index needs to be updated.</label>
-            
-            <!-- ADDED IN 0.1.7 -->
-            <label index="forumAdmin.category.authMod">Moderation access</label>
-            <label index="forumAdmin.category.modAuth_note">Leave empty will result in no moderating users.</label>
-            <label index="forumAdmin.forum.authMod">Moderation access</label>
+			<label index="forumAdmin.tree">Forum tree</label>
+			<label index="forumAdmin.save">Save</label>
+			<label index="forumAdmin.saveAndReturn">Save and return here</label>
+			<label index="forumAdmin.back">Go back</label>
+			<label index="forumAdmin.delete">Delete</label>
+
+			<label index="forumAdmin.error.noTitle">You must specify a title.</label>
+
+			<label index="forumAdmin.category.new">New category</label>
+			<label index="forumAdmin.category.edit">Edit category</label>
+			<label index="forumAdmin.category.hidden">Hidden</label>
+			<label index="forumAdmin.category.title">Title</label>
+			<label index="forumAdmin.category.order">Order</label>
+			<label index="forumAdmin.category.authRead">Read access</label>
+			<label index="forumAdmin.category.authWrite">Write access</label>
+			<label index="forumAdmin.category.confirmDelete">Do you really want to delete this category?</label>
+			<label index="forumAdmin.category.readAuth_note">Leave empty to allow all users to read (including guests).</label>
+			<label index="forumAdmin.category.writeAuth_note">Leave empty to allow all users to write (only logged-in users).</label>
+
+			<label index="forumAdmin.forum.new">New forum</label>
+			<label index="forumAdmin.forum.edit">Edit forum</label>
+			<label index="forumAdmin.forum.hidden">Hidden</label>
+			<label index="forumAdmin.forum.title">Title</label>
+			<label index="forumAdmin.forum.desc">Description</label>
+			<label index="forumAdmin.forum.order">Order</label>
+			<label index="forumAdmin.forum.authRead">Read access</label>
+			<label index="forumAdmin.forum.authWrite">Write access</label>
+			<label index="forumAdmin.forum.confirmDelete">Do you really want to delete this forum?</label>
+
+			<label index="forumAdmin.order.beginning">As first</label>
+			<label index="forumAdmin.order.ending">As last</label>
+			<label index="forumAdmin.order.after">After</label>
+
+			<label index="forumAdmin.forum.updateIndex">NOTE: After changing read access to this forum, the search index needs to be updated.</label>
+			<label index="forumAdmin.category.updateIndex">NOTE: After changing read access to this category, the search index needs to be updated.</label>
+
+			<!-- ADDED IN 0.1.7 -->
+			<label index="forumAdmin.category.authMod">Moderation access</label>
+			<label index="forumAdmin.category.modAuth_note">Leave empty will result in no moderating users.</label>
+			<label index="forumAdmin.forum.authMod">Moderation access</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-		    <label index="forumAdmin.tree">Forumbaum</label>
-            <label index="forumAdmin.save">Speichern</label>
-            <label index="forumAdmin.saveAndReturn">Speichern und hierhin zurück</label>
-            <label index="forumAdmin.back">Zurück</label>
-            <label index="forumAdmin.delete">Löschen</label>
-            
-            <label index="forumAdmin.error.noTitle">Sie müssen einen Titel angeben.</label>
-            
-            <label index="forumAdmin.category.new">Neue Kategorie</label>
-            <label index="forumAdmin.category.edit">Kategorie bearbeiten</label>
-            <label index="forumAdmin.category.hidden">Versteckt</label>
-            <label index="forumAdmin.category.title">Titel</label>
-            <label index="forumAdmin.category.order">Reihenfolge</label>
-            <label index="forumAdmin.category.authRead">Lesezugriff</label>
-            <label index="forumAdmin.category.authWrite">Schreibzugriff</label>
-            <label index="forumAdmin.category.confirmDelete">Möchten Sie diese Kategorie wirklich löschen?</label>
-            <label index="forumAdmin.category.readAuth_note">Leer lassen, damit alle Benutzer lesen können (einschl. Gäste).</label>
-            <label index="forumAdmin.category.writeAuth_note">Leer lassen, damit alle Benutzer schreiben können (nur eingeloggte Benutzer).</label>
-            
-            <label index="forumAdmin.forum.new">Neues Forum</label>
-            <label index="forumAdmin.forum.edit">Forum bearbeiten</label>
-            <label index="forumAdmin.forum.hidden">Versteckt</label>
-            <label index="forumAdmin.forum.title">Titel</label>
-            <label index="forumAdmin.forum.desc">Beschreibung</label>
-            <label index="forumAdmin.forum.order">Reihenfolge</label>
-            <label index="forumAdmin.forum.authRead">Lesezugriff</label>
-            <label index="forumAdmin.forum.authWrite">Schreibzugriff</label>
-            <label index="forumAdmin.forum.confirmDelete">Möchten Sie dieses Forum wirklich löschen?</label>
-            
-            <label index="forumAdmin.order.beginning">Als Erstes</label>
-            <label index="forumAdmin.order.ending">Als Letztes</label>
-            <label index="forumAdmin.order.after">Nach</label>
-            
-            <label index="forumAdmin.forum.updateIndex">HINWEIS: Nach dem Ändern der Leseberechtigungen muss der Suchindex aktualisiert werden.</label>
-            <label index="forumAdmin.category.updateIndex">HINWEIS: Nach dem Ändern der Leseberechtigungen muss der Suchindex aktualisiert werden.</label>
-            
-            <!-- ADDED IN 0.1.7 -->
-            <label index="forumAdmin.category.authMod">Moderationszugriff</label>
-            <label index="forumAdmin.category.modAuth_note">Leer lassen, damit keine Moderatoren existieren.</label>
-            <label index="forumAdmin.forum.authMod">Moderationszugriff</label>
+			<label index="forumAdmin.tree">Forumbaum</label>
+			<label index="forumAdmin.save">Speichern</label>
+			<label index="forumAdmin.saveAndReturn">Speichern und hierhin zurück</label>
+			<label index="forumAdmin.back">Zurück</label>
+			<label index="forumAdmin.delete">Löschen</label>
+
+			<label index="forumAdmin.error.noTitle">Sie müssen einen Titel angeben.</label>
+
+			<label index="forumAdmin.category.new">Neue Kategorie</label>
+			<label index="forumAdmin.category.edit">Kategorie bearbeiten</label>
+			<label index="forumAdmin.category.hidden">Versteckt</label>
+			<label index="forumAdmin.category.title">Titel</label>
+			<label index="forumAdmin.category.order">Reihenfolge</label>
+			<label index="forumAdmin.category.authRead">Lesezugriff</label>
+			<label index="forumAdmin.category.authWrite">Schreibzugriff</label>
+			<label index="forumAdmin.category.confirmDelete">Möchten Sie diese Kategorie wirklich löschen?</label>
+			<label index="forumAdmin.category.readAuth_note">Leer lassen, damit alle Benutzer lesen können (einschl. Gäste).</label>
+			<label index="forumAdmin.category.writeAuth_note">Leer lassen, damit alle Benutzer schreiben können (nur eingeloggte Benutzer).</label>
+
+			<label index="forumAdmin.forum.new">Neues Forum</label>
+			<label index="forumAdmin.forum.edit">Forum bearbeiten</label>
+			<label index="forumAdmin.forum.hidden">Versteckt</label>
+			<label index="forumAdmin.forum.title">Titel</label>
+			<label index="forumAdmin.forum.desc">Beschreibung</label>
+			<label index="forumAdmin.forum.order">Reihenfolge</label>
+			<label index="forumAdmin.forum.authRead">Lesezugriff</label>
+			<label index="forumAdmin.forum.authWrite">Schreibzugriff</label>
+			<label index="forumAdmin.forum.confirmDelete">Möchten Sie dieses Forum wirklich löschen?</label>
+
+			<label index="forumAdmin.order.beginning">Als Erstes</label>
+			<label index="forumAdmin.order.ending">Als Letztes</label>
+			<label index="forumAdmin.order.after">Nach</label>
+
+			<label index="forumAdmin.forum.updateIndex">HINWEIS: Nach dem Ändern der Leseberechtigungen muss der Suchindex aktualisiert werden.</label>
+			<label index="forumAdmin.category.updateIndex">HINWEIS: Nach dem Ändern der Leseberechtigungen muss der Suchindex aktualisiert werden.</label>
+
+			<!-- ADDED IN 0.1.7 -->
+			<label index="forumAdmin.category.authMod">Moderationszugriff</label>
+			<label index="forumAdmin.category.modAuth_note">Leer lassen, damit keine Moderatoren existieren.</label>
+			<label index="forumAdmin.forum.authMod">Moderationszugriff</label>
 		</languageKey>
         
         <languageKey index="fi" type="array">
@@ -122,37 +122,37 @@
 			<label index="forumAdmin.forum.updateIndex">HUOMAUTUS: Tämän forumin lukuoikeuksien muuttamisen jälkeen hakuindeksointi on päivitettävä.</label>
 			<label index="forumAdmin.category.updateIndex">HUOMAUTUS: Tämän kategorian lukuoikeuksien muuttamisen jälkeen hakuindeksointi on päivitettävä.</label>
 		</languageKey>
-        <languageKey index="fr" type="array">
-		    <label index="forumAdmin.tree">Arborescence</label>
-            <label index="forumAdmin.save">Sauvegarder</label>
-            <label index="forumAdmin.saveAndReturn">Sauvegarder et revenir dans ce dialoge</label>
-            <label index="forumAdmin.back">Précédent</label>
-            <label index="forumAdmin.delete">Supprimer</label>
-            <label index="forumAdmin.error.noTitle">Merci d'indiquer un titre.</label>
-            <label index="forumAdmin.category.new">Créer un forum</label>
-            <label index="forumAdmin.category.edit">Modifier un forum</label>
-            <label index="forumAdmin.category.hidden">Caché</label>
-            <label index="forumAdmin.category.title">Titre</label>
-            <label index="forumAdmin.category.order">Classement</label>
-            <label index="forumAdmin.category.authRead">Lecture</label>
-            <label index="forumAdmin.category.authWrite">Ecriture</label>
-            <label index="forumAdmin.category.confirmDelete">Désirez-vous vraiment supprimer ce forum ?</label>
-            <label index="forumAdmin.category.readAuth_note">Laisser vide = tous les utilisateurs peuvent lire.</label>
-            <label index="forumAdmin.category.writeAuth_note">Laisser vide = tous les utilisateurs identifiés peuvent écrire.</label>            
-            <label index="forumAdmin.forum.new">Créer un thème</label>
-            <label index="forumAdmin.forum.edit">Modifier un thème</label>
-            <label index="forumAdmin.forum.hidden">Caché</label>
-            <label index="forumAdmin.forum.title">Titre</label>
-            <label index="forumAdmin.forum.desc">Description</label>
-            <label index="forumAdmin.forum.order">Classement</label>
-            <label index="forumAdmin.forum.authRead">Lecture</label>
-            <label index="forumAdmin.forum.authWrite">Ecriture</label>
-            <label index="forumAdmin.forum.confirmDelete">Désirez-vous vraiment supprimer ce thème ?</label>            
-            <label index="forumAdmin.order.beginning">En premier</label>
-            <label index="forumAdmin.order.ending">En dernier</label>
-            <label index="forumAdmin.order.after">Après</label>
-            <label index="forumAdmin.forum.updateIndex">AVERTISSEMENT : Apres modification des droits de lecture, il faut actualiser l'index de recherche.</label>
-            <label index="forumAdmin.category.updateIndex">AVERTISSEMENT : Apres modification des droits d'écriture, il faut actualiser l'index de recherche.</label>
+		<languageKey index="fr" type="array">
+			<label index="forumAdmin.tree">Arborescence</label>
+			<label index="forumAdmin.save">Sauvegarder</label>
+			<label index="forumAdmin.saveAndReturn">Sauvegarder et revenir dans ce dialoge</label>
+			<label index="forumAdmin.back">Précédent</label>
+			<label index="forumAdmin.delete">Supprimer</label>
+			<label index="forumAdmin.error.noTitle">Merci d'indiquer un titre.</label>
+			<label index="forumAdmin.category.new">Créer un forum</label>
+			<label index="forumAdmin.category.edit">Modifier un forum</label>
+			<label index="forumAdmin.category.hidden">Caché</label>
+			<label index="forumAdmin.category.title">Titre</label>
+			<label index="forumAdmin.category.order">Classement</label>
+			<label index="forumAdmin.category.authRead">Lecture</label>
+			<label index="forumAdmin.category.authWrite">Ecriture</label>
+			<label index="forumAdmin.category.confirmDelete">Désirez-vous vraiment supprimer ce forum ?</label>
+			<label index="forumAdmin.category.readAuth_note">Laisser vide = tous les utilisateurs peuvent lire.</label>
+			<label index="forumAdmin.category.writeAuth_note">Laisser vide = tous les utilisateurs identifiés peuvent écrire.</label>
+			<label index="forumAdmin.forum.new">Créer un thème</label>
+			<label index="forumAdmin.forum.edit">Modifier un thème</label>
+			<label index="forumAdmin.forum.hidden">Caché</label>
+			<label index="forumAdmin.forum.title">Titre</label>
+			<label index="forumAdmin.forum.desc">Description</label>
+			<label index="forumAdmin.forum.order">Classement</label>
+			<label index="forumAdmin.forum.authRead">Lecture</label>
+			<label index="forumAdmin.forum.authWrite">Ecriture</label>
+			<label index="forumAdmin.forum.confirmDelete">Désirez-vous vraiment supprimer ce thème ?</label>
+			<label index="forumAdmin.order.beginning">En premier</label>
+			<label index="forumAdmin.order.ending">En dernier</label>
+			<label index="forumAdmin.order.after">Après</label>
+			<label index="forumAdmin.forum.updateIndex">AVERTISSEMENT : Apres modification des droits de lecture, il faut actualiser l'index de recherche.</label>
+			<label index="forumAdmin.category.updateIndex">AVERTISSEMENT : Apres modification des droits d'écriture, il faut actualiser l'index de recherche.</label>
 		</languageKey>
         <!-- RUSSIAN LANGUAGE DATA -->
 		<languageKey index="ru" type="array">

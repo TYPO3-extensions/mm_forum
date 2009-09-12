@@ -6,28 +6,28 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-            <label index="userFields.new">NEW</label>
-            <label index="userFields.save">Save</label>
-            <label index="userFields.back">Back</label>
+			<label index="userFields.new">NEW</label>
+			<label index="userFields.save">Save</label>
+			<label index="userFields.back">Back</label>
             
 			<label index="userFields.error">Error</label>
-            <label index="userFields.error.noLabel">No label was specified.</label>
-            
-            <label index="userFields.field.enable">Enable</label>
-            <label index="userFields.field.public">Public</label>
+			<label index="userFields.error.noLabel">No label was specified.</label>
+
+			<label index="userFields.field.enable">Enable</label>
+			<label index="userFields.field.public">Public</label>
 			<label index="userFields.field.name">Field name</label>
 			<label index="userFields.field.options">Options</label>
-            <label index="userFields.field.extended">Extended</label>
-            
-            <label index="userFields.ext.title">Extended editing mode</label>
-            <label index="userFields.ext.image">Use image as label</label>
-            <label index="userFields.ext.editConfig">Edit field configuration directly</label>
-            <label index="userFields.ext.regLabel">Use regular label</label>
-            
-            <label index="userFields.config.help">Use this field to edit the user field label, input field and output method directly. The label is described by the "label" cObj, the input field is described by the "input" cObj and the output is described by the "output" cObj. An array containing the field value is loaded into the cObj data array ("fieldvalue" => value). You may use the markers ###USERFIELD_LABEL###, ###USERFIELD_VALUE###, ###USERFIELD_NAME### and ###USERFIELD_UID###. These will be replaced with the regarding contents afterwards. Using the "datasource" attribute you can specify an existing field of the fe_users table that should be used for this field.</label>
-            
-            <!-- ADDED IN 0.1.4 -->
-            <label index="userFields.ext.useExisting">Use existing fe_user field</label>
+			<label index="userFields.field.extended">Extended</label>
+
+			<label index="userFields.ext.title">Extended editing mode</label>
+			<label index="userFields.ext.image">Use image as label</label>
+			<label index="userFields.ext.editConfig">Edit field configuration directly</label>
+			<label index="userFields.ext.regLabel">Use regular label</label>
+
+			<label index="userFields.config.help">Use this field to edit the user field label, input field and output method directly. The label is described by the "label" cObj, the input field is described by the "input" cObj and the output is described by the "output" cObj. An array containing the field value is loaded into the cObj data array ("fieldvalue" => value). You may use the markers ###USERFIELD_LABEL###, ###USERFIELD_VALUE###, ###USERFIELD_NAME### and ###USERFIELD_UID###. These will be replaced with the regarding contents afterwards. Using the "datasource" attribute you can specify an existing field of the fe_users table that should be used for this field.</label>
+
+			<!-- ADDED IN 0.1.4 -->
+			<label index="userFields.ext.useExisting">Use existing fe_user field</label>
 			
 			<!-- ADDED IN 0.1.8 -->
 			<label index="userFields.form.language">Add labels in another language</label>
@@ -59,30 +59,30 @@
 			<label index="userFields.list.help">Help</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-            <label index="userFields.new">NEU</label>
-            <label index="userFields.save">Speichern</label>
-            <label index="userFields.back">Zurück</label>
+			<label index="userFields.new">NEU</label>
+			<label index="userFields.save">Speichern</label>
+			<label index="userFields.back">Zurück</label>
             
 			<label index="userFields.error">Fehler</label>
-            <label index="userFields.error.noLabel">Es wurde keine Beschriftung angegeben.</label>
-            
-            <label index="userFields.field.enable">Aktiv</label>
-            <label index="userFields.field.public">Öffentl.</label>
+			<label index="userFields.error.noLabel">Es wurde keine Beschriftung angegeben.</label>
+
+			<label index="userFields.field.enable">Aktiv</label>
+			<label index="userFields.field.public">Öffentl.</label>
 			<label index="userFields.field.name">Feldname</label>
 			<label index="userFields.field.options">Optionen</label>
-            <label index="userFields.field.extended">Erweitert</label>
-            
-            <label index="userFields.ext.title">Erweiterter Bearbeitungsmodus</label>
-            <label index="userFields.ext.image">Bild als Beschriftung verwenden</label>
-            <label index="userFields.ext.editConfig">Feldkonfiguration direkt bearbeiten</label>
-            <label index="userFields.ext.regLabel">Gewöhnliche Beschriftung verwenden</label>
-            
-            <label index="userFields.config.help">Benutzen Sie dieses Feld, um die Beschriftung, das Eingabefeld und die Ausgabe des Feldes direkt zu bearbeiten. Die Beschriftung wird vom "label"-cObj beschrieben, das Eingabefeld vom "input"-cObj und die Ausgabe vom "output"-cObj. Ein Array, der den Feldwert beinhaltet wird in den Datenarray des cObjects geladen ("fieldvalue" => Wert). Sie können die Marker ###USERFIELD_LABEL###, ###USERFIELD_VALUE###, ###USERFIELD_NAME### und ###USERFIELD_UID### benutzen. Diese werden hinterher mit den entsprechenden Inhalten ersetzt. Mithilfe des "datasource"-Attributes können Sie ein existierendes Feld der fe_user-Tabelle angeben, welches für dieses Feld benutzt werden soll.</label>
-            
-            <!-- ADDED IN 0.1.4 -->
-            <label index="userFields.ext.useExisting">Existierendes fe_user-Feld benutzen</label>
+			<label index="userFields.field.extended">Erweitert</label>
+
+			<label index="userFields.ext.title">Erweiterter Bearbeitungsmodus</label>
+			<label index="userFields.ext.image">Bild als Beschriftung verwenden</label>
+			<label index="userFields.ext.editConfig">Feldkonfiguration direkt bearbeiten</label>
+			<label index="userFields.ext.regLabel">Gewöhnliche Beschriftung verwenden</label>
+
+			<label index="userFields.config.help">Benutzen Sie dieses Feld, um die Beschriftung, das Eingabefeld und die Ausgabe des Feldes direkt zu bearbeiten. Die Beschriftung wird vom "label"-cObj beschrieben, das Eingabefeld vom "input"-cObj und die Ausgabe vom "output"-cObj. Ein Array, der den Feldwert beinhaltet wird in den Datenarray des cObjects geladen ("fieldvalue" => Wert). Sie können die Marker ###USERFIELD_LABEL###, ###USERFIELD_VALUE###, ###USERFIELD_NAME### und ###USERFIELD_UID### benutzen. Diese werden hinterher mit den entsprechenden Inhalten ersetzt. Mithilfe des "datasource"-Attributes können Sie ein existierendes Feld der fe_user-Tabelle angeben, welches für dieses Feld benutzt werden soll.</label>
+
+			<!-- ADDED IN 0.1.4 -->
+			<label index="userFields.ext.useExisting">Existierendes fe_user-Feld benutzen</label>
 		</languageKey>
-        <languageKey index="fi" type="array">
+			<languageKey index="fi" type="array">
 			<label index="userFields.new">UUSI</label>
 			<label index="userFields.save">Tallenna</label>
 			<label index="userFields.back">Takaisin</label>
@@ -97,25 +97,25 @@
 			<label index="userFields.ext.image">Käytä kuvaa nimenä</label>
 		</languageKey>
 		<languageKey index="fr" type="array">
-            <label index="userFields.new">NOUVEAU</label>
-            <label index="userFields.save">Enregistrer</label>
-            <label index="userFields.back">Retour en arrière</label>
+			<label index="userFields.new">NOUVEAU</label>
+			<label index="userFields.save">Enregistrer</label>
+			<label index="userFields.back">Retour en arrière</label>
             
 			<label index="userFields.error">Erreur</label>
-            <label index="userFields.error.noLabel">Merci d'indiquer une description.</label>
-            
-            <label index="userFields.field.enable">Actif</label>
-            <label index="userFields.field.public">Publié</label>
+			<label index="userFields.error.noLabel">Merci d'indiquer une description.</label>
+			
+			<label index="userFields.field.enable">Actif</label>
+			<label index="userFields.field.public">Publié</label>
 			<label index="userFields.field.name">Champs</label>
 			<label index="userFields.field.options">Options</label>
-            <label index="userFields.field.extended">Etendu</label>
-            
-            <label index="userFields.ext.title">Mode étendu</label>
-            <label index="userFields.ext.image">Utiliser une image comme description</label>
-            <label index="userFields.ext.editConfig">Intervenir directement dans la configuration du champ</label>
-            <label index="userFields.ext.regLabel">Utiliser une description standard</label>
-            
-            <label index="userFields.config.help">Utiliser ce champ pour intervenir sur la description, le champ de saisie et le champ de résultat. La description est spécifiée par le "label"-cObj, le champ de saisie par le "input"-cObj et le champ de résultat par "output"-cObj. Un array, qui contient la valeur du champ sera chargée dans l'array des données du cObject ("fieldvalue" => Valeur). Vous pouvez utiliser les markers ###USERFIELD_LABEL###, ###USERFIELD_VALUE###, ###USERFIELD_NAME### et ###USERFIELD_UID###. Ceux-ci seront remplacés par leur contenus respectifs.</label>
+			<label index="userFields.field.extended">Etendu</label>
+			
+			<label index="userFields.ext.title">Mode étendu</label>
+			<label index="userFields.ext.image">Utiliser une image comme description</label>
+			<label index="userFields.ext.editConfig">Intervenir directement dans la configuration du champ</label>
+			<label index="userFields.ext.regLabel">Utiliser une description standard</label>
+			
+			<label index="userFields.config.help">Utiliser ce champ pour intervenir sur la description, le champ de saisie et le champ de résultat. La description est spécifiée par le "label"-cObj, le champ de saisie par le "input"-cObj et le champ de résultat par "output"-cObj. Un array, qui contient la valeur du champ sera chargée dans l'array des données du cObject ("fieldvalue" => Valeur). Vous pouvez utiliser les markers ###USERFIELD_LABEL###, ###USERFIELD_VALUE###, ###USERFIELD_NAME### et ###USERFIELD_UID###. Ceux-ci seront remplacés par leur contenus respectifs.</label>
 		</languageKey>
         <!-- RUSSIAN LANGUAGE DATA -->
 		<languageKey index="ru" type="array">
