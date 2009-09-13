@@ -1,57 +1,57 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
-    <meta type="array">
-        <description>userregistration</description>
-        <type>module</type>
-        <csh_table></csh_table>
-        <labelContext type="array">
-        </labelContext>
-    </meta>
-    <data type="array">
-        <!-- ENGLISH LANGUAGE DATA -->
-        <languageKey index="default" type="array">
-            <label index="error-alreadyLoggedIn">You are already logged in</label>
-            <label index="error-usernameLength">The user name must consist at least three characters and may not exceed 30 characters.</label>
-            <label index="error-usernameChars">Invalid character in the user name</label>
-            <label index="error-usernameExists">User name already assigned</label>
-            <label index="error-emailInvalid">Invalid email address</label>
-            <label index="error-emailExists">This email address already exists. Perhaps you are already registrated.</label>
-            <label index="error-nameNone">Please input a name.</label>
-            <label index="error-passwordMismatch">Passwords do not agree</label>
-            <label index="error-passwordLength">The password must consist of at least six characters!</label>
-            <label index="error-passwordNone">Please input a password!</label>
-            <label index="error-generalError">Unfortunately there was an error.</label>
-            <label index="error-support">Please send an information email to this address: ###SUPPORTMAIL###. Thanks a lot.</label>
-            <label index="reg-requiredNote">Please fill in all fields marked with an asterisk (*).</label>
-            <label index="reg-username">User name</label>
-            <label index="reg-password">Password</label>
-            <label index="reg-passwordRepeat">Repeat password</label>
-            <label index="reg-name">Name</label>
-            <label index="reg-profession">Profession</label>
-            <label index="reg-location">Place</label>
-            <label index="reg-interests">Interests</label>
-            <label index="reg-website">Website</label>
-            <label index="reg-create">Create user</label>
-            <label index="reg-email">Email address</label>
-            <label index="msg-thankYou">Thank you for your registration!</label>
-            <label index="msg-emailIsSent">You will recieve an email to the address ###EMAIL### immediately. Please follow the link that is specified in this email to finalize your registration.</label>
-            <label index="msg-yours">Your team of&lt;br /&gt;###TEAM###</label>
-            <label index="msg-yoursPlaintext">Your team of 
+	<meta type="array">
+		<description>userregistration</description>
+		<type>module</type>
+		<csh_table></csh_table>
+		<labelContext type="array">
+		</labelContext>
+	</meta>
+	<data type="array">
+		<!-- ENGLISH LANGUAGE DATA -->
+		<languageKey index="default" type="array">
+			<label index="error-alreadyLoggedIn">You are already logged in</label>
+			<label index="error-usernameLength">The user name must consist of at least three characters and may not exceed 30 characters.</label>
+			<label index="error-usernameChars">Invalid character in the user name</label>
+			<label index="error-usernameExists">User name already assigned</label>
+			<label index="error-emailInvalid">Invalid email address</label>
+			<label index="error-emailExists">This email address already exists. Perhaps you are already registered.</label>
+			<label index="error-nameNone">Please input a name.</label>
+			<label index="error-passwordMismatch">Passwords do not match</label>
+			<label index="error-passwordLength">The password must consist of at least six characters!</label>
+			<label index="error-passwordNone">Please input a password!</label>
+			<label index="error-generalError">Unfortunately there was an error.</label>
+			<label index="error-support">Please send an information email to this address: ###SUPPORTMAIL###. Thanks a lot.</label>
+			<label index="reg-requiredNote">Please fill in all fields marked with an asterisk (*).</label>
+			<label index="reg-username">User name</label>
+			<label index="reg-password">Password</label>
+			<label index="reg-passwordRepeat">Repeat password</label>
+			<label index="reg-name">Name</label>
+			<label index="reg-profession">Profession</label>
+			<label index="reg-location">Place</label>
+			<label index="reg-interests">Interests</label>
+			<label index="reg-website">Website</label>
+			<label index="reg-create">Create user</label>
+			<label index="reg-email">Email address</label>
+			<label index="msg-thankYou">Thank you for your registration!</label>
+			<label index="msg-emailIsSent">You will recieve an email to the address ###EMAIL### immediately. Please follow the link that is specified in this email to finalize your registration.</label>
+			<label index="msg-yours">Your team of&lt;br /&gt;###TEAM###</label>
+			<label index="msg-yoursPlaintext">Your team of 
 ###TEAM###</label>
-            <label index="msg-hello">Hello ###USERNAME###</label>
-            <label index="msg-pleaseActivate">thank you for your registration on ###SITENAME###. So that your account can be activated, we ask you to follow the following link.</label>
-            <label index="msg-activated">Your registration is now finished. You can sign in directly and use the extended functions of ###SITENAME### .</label>
-            <label index="msg-subject">Your registration on ###SITENAME###</label>
-            
-            <!-- Added in 0.1.5 -->
-            <label index="button-email">Email</label>
-            <label index="button-icq">ICQ</label>
-            <label index="button-aim">AIM</label>
-            <label index="button-yim">YIM</label>
-            <label index="button-msn">MSN</label>
-            <label index="button-skype">Skype</label>
-            <label index="error-captcha">Invalid validation code. Please try again.</label>
-            <label index="reg-captcha">Validation</label>
+			<label index="msg-hello">Hello ###USERNAME###</label>
+			<label index="msg-pleaseActivate">thank you for your registration on ###SITENAME###. To activate your account please follow the following link.</label>
+			<label index="msg-activated">Your registration is now finished. You can sign in directly and use the extended functions of ###SITENAME### .</label>
+			<label index="msg-subject">Your registration on ###SITENAME###</label>
+
+			<!-- Added in 0.1.5 -->
+			<label index="button-email">Email</label>
+			<label index="button-icq">ICQ</label>
+			<label index="button-aim">AIM</label>
+			<label index="button-yim">YIM</label>
+			<label index="button-msn">MSN</label>
+			<label index="button-skype">Skype</label>
+			<label index="error-captcha">Invalid validation code. Please try again.</label>
+			<label index="reg-captcha">Validation</label>
 			
 			<!-- Added in 0.1.7 -->
 			<label index="reg-title">Register</label>
@@ -61,66 +61,66 @@
 			<label index="error-emailEmpty">Please specify an email address.</label>
 			<label index="error-wwwInvalid">Please insert a correct URL for your website.</label>
 			<label index="error-userfieldEmpty">Please insert a correct value.</label>
-        </languageKey>
+		</languageKey>
 		<!-- GERMAN LANGUAGE DATA -->
-        <languageKey index="de" type="array">
-            <label index="error-alreadyLoggedIn">Sie sind bereits eingeloggt.</label>
-            <label index="error-alreadyLoggedIn-inf">Du bist bereits eingeloggt.</label>
-            <label index="error-usernameLength">Der Benutzername muss mindestens aus 3 Zeichen bestehen und darf 30 Zeichen nicht überschreiten</label>
-            <label index="error-usernameChars">Ungültiges Zeichen im Benutzernamen</label>
-            <label index="error-usernameExists">Benutzername ist schon vergeben!</label>
-            <label index="error-emailInvalid">Ungültige E-Mail-Adresse</label>
-            <label index="error-emailExists">Diese E-Mailadresse ist schon vergeben. Eventuell haben Sie sich schon angemeldet.</label>
-            <label index="error-emailExists-inf">Diese E-Mailadresse ist schon vergeben. Eventuell hast du dich schon angemeldet.</label>
-            <label index="error-nameNone">Bitte geben Sie einen Namen ein.</label>
-            <label index="error-nameNone-inf">Bitte gib einen Namen ein.</label>
-            <label index="error-passwordMismatch">Passwörter stimmen nicht überein</label>
-            <label index="error-passwordLength">Das Passwort muss aus mindestens 6 Zeichen bestehen!</label>
-            <label index="error-passwordNone">Bitte geben Sie ein Passwort ein!</label>
-            <label index="error-passwordNone-inf">Bitte gib ein Passwort ein!</label>
-            <label index="error-generalError">Leider ist ein Fehler aufgetreten.</label>
-            <label index="error-support">Bitte informieren Sie uns per E-Mail an die Adresse ###SUPPORTMAIL###. Vielen Dank.</label>
-            <label index="error-support-inf">Bitte informiere uns per E-Mail an die Adresse ###SUPPORTMAIL###. Vielen Dank.</label>
-            <label index="reg-requiredNote">Felder, die mit (*) gekennzeichnet sind, müssen ausgefüllt werden.</label>
-            <label index="reg-username">Benutzername</label>
-            <label index="reg-password">Passwort</label>
-            <label index="reg-passwordRepeat">Passwort wiederholen</label>
-            <label index="reg-name">Name</label>
-            <label index="reg-profession">Beruf</label>
-            <label index="reg-location">Wohnort</label>
-            <label index="reg-interests">Interessen</label>
-            <label index="reg-website">Website</label>
-            <label index="reg-create">Benutzer anlegen</label>
-            <label index="reg-email">E-Mail-Adresse</label>
-            <label index="msg-thankYou">Vielen Dank für Ihre Anmeldung!</label>
-            <label index="msg-thankYou-inf">Vielen Dank für deine Anmeldung!</label>
-            <label index="msg-emailIsSent">Sie erhalten umgehend an die von Ihnen angegebene Adresse ###EMAIL### eine E-Mail. Bitte folgen Sie dem in dieser E-Mail angegeben Link und schließen Sie so Ihre Anmeldung ab.</label>
-            <label index="msg-emailIsSent-inf">Du erhälst umgehend an die von dir angegebene Adresse ###EMAIL### eine E-Mail. Bitte folge dem in dieser E-Mail angegeben Link und schließe so deine Anmeldung ab.</label>
-            <label index="msg-yours">Ihr Team von&lt;br /&gt;###TEAM###</label>
-            <label index="msg-yours-inf">Dein Team von&lt;br /&gt;###TEAM###</label>
-            <label index="msg-yoursPlaintext">Ihr Team von
+		<languageKey index="de" type="array">
+			<label index="error-alreadyLoggedIn">Sie sind bereits eingeloggt.</label>
+			<label index="error-alreadyLoggedIn-inf">Du bist bereits eingeloggt.</label>
+			<label index="error-usernameLength">Der Benutzername muss mindestens aus 3 Zeichen bestehen und darf 30 Zeichen nicht überschreiten</label>
+			<label index="error-usernameChars">Ungültiges Zeichen im Benutzernamen</label>
+			<label index="error-usernameExists">Benutzername ist schon vergeben!</label>
+			<label index="error-emailInvalid">Ungültige E-Mail-Adresse</label>
+			<label index="error-emailExists">Diese E-Mailadresse ist schon vergeben. Eventuell haben Sie sich schon angemeldet.</label>
+			<label index="error-emailExists-inf">Diese E-Mailadresse ist schon vergeben. Eventuell hast du dich schon angemeldet.</label>
+			<label index="error-nameNone">Bitte geben Sie einen Namen ein.</label>
+			<label index="error-nameNone-inf">Bitte gib einen Namen ein.</label>
+			<label index="error-passwordMismatch">Passwörter stimmen nicht überein</label>
+			<label index="error-passwordLength">Das Passwort muss aus mindestens 6 Zeichen bestehen!</label>
+			<label index="error-passwordNone">Bitte geben Sie ein Passwort ein!</label>
+			<label index="error-passwordNone-inf">Bitte gib ein Passwort ein!</label>
+      <label index="error-generalError">Leider ist ein Fehler aufgetreten.</label>
+			<label index="error-support">Bitte informieren Sie uns per E-Mail an die Adresse ###SUPPORTMAIL###. Vielen Dank.</label>
+			<label index="error-support-inf">Bitte informiere uns per E-Mail an die Adresse ###SUPPORTMAIL###. Vielen Dank.</label>
+			<label index="reg-requiredNote">Felder, die mit (*) gekennzeichnet sind, müssen ausgefüllt werden.</label>
+			<label index="reg-username">Benutzername</label>
+			<label index="reg-password">Passwort</label>
+			<label index="reg-passwordRepeat">Passwort wiederholen</label>
+			<label index="reg-name">Name</label>
+			<label index="reg-profession">Beruf</label>
+			<label index="reg-location">Wohnort</label>
+			<label index="reg-interests">Interessen</label>
+			<label index="reg-website">Website</label>
+			<label index="reg-create">Benutzer anlegen</label>
+			<label index="reg-email">E-Mail-Adresse</label>
+			<label index="msg-thankYou">Vielen Dank für Ihre Anmeldung!</label>
+			<label index="msg-thankYou-inf">Vielen Dank für deine Anmeldung!</label>
+			<label index="msg-emailIsSent">Sie erhalten umgehend an die von Ihnen angegebene Adresse ###EMAIL### eine E-Mail. Bitte folgen Sie dem in dieser E-Mail angegeben Link und schließen Sie so Ihre Anmeldung ab.</label>
+			<label index="msg-emailIsSent-inf">Du erhälst umgehend an die von dir angegebene Adresse ###EMAIL### eine E-Mail. Bitte folge dem in dieser E-Mail angegeben Link und schließe so deine Anmeldung ab.</label>
+			<label index="msg-yours">Ihr Team von&lt;br /&gt;###TEAM###</label>
+			<label index="msg-yours-inf">Dein Team von&lt;br /&gt;###TEAM###</label>
+			<label index="msg-yoursPlaintext">Ihr Team von
 ###TEAM###</label>
-            <label index="msg-yoursPlaintext-inf">Dein Team von
+			<label index="msg-yoursPlaintext-inf">Dein Team von
 ###TEAM###</label>
-            <label index="msg-hello">Hallo ###USERNAME###</label>
-            <label index="msg-pleaseActivate">vielen Dank für Ihre Anmeldung auf ###SITENAME###. Damit Ihr Account freigeschaltet werden kann, bitten wir Sie darum, den folgenden Link zu folgen.</label>
-            <label index="msg-pleaseActivate-inf">vielen Dank für deine Anmeldung auf ###SITENAME###. Damit dein Account freigeschaltet werden kann, bitten wir dich darum, den folgenden Link zu folgen.</label>
-            <label index="msg-activated">Ihre Anmeldung ist jetzt abgeschlossen. Sie können sich jetzt direkt anmelden und die erweiterten Funktionen von ###SITENAME### nutzen.</label>
-            <label index="msg-activated-inf">Deine Anmeldung ist jetzt abgeschlossen. Du kannst sich jetzt direkt anmelden und die erweiterten Funktionen von ###SITENAME### nutzen.</label>
-            <label index="msg-subject">Ihre Anmeldung auf ###SITENAME###</label>
-            <label index="msg-subject-inf">Deine Anmeldung auf ###SITENAME###</label>
-            
-            <!-- Added in 0.1.5 -->
-            <label index="button-email">E-Mail</label>
-            <label index="button-icq">ICQ</label>
-            <label index="button-aim">AIM</label>
-            <label index="button-yim">YIM</label>
-            <label index="button-msn">MSN</label>
-            <label index="button-skype">Skype</label>
-            <label index="error-captcha">Bitte kopieren Sie den nebenstehenden Code korrekt.</label>
-            <label index="error-captcha-inf">Bitte kopiere den nebenstehenden Code korrekt.</label>
-            <label index="reg-captcha">Validierung</label>
-			
+			<label index="msg-hello">Hallo ###USERNAME###</label>
+			<label index="msg-pleaseActivate">vielen Dank für Ihre Anmeldung auf ###SITENAME###. Damit Ihr Account freigeschaltet werden kann, bitten wir Sie darum, den folgenden Link zu folgen.</label>
+			<label index="msg-pleaseActivate-inf">vielen Dank für deine Anmeldung auf ###SITENAME###. Damit dein Account freigeschaltet werden kann, bitten wir dich darum, den folgenden Link zu folgen.</label>
+			<label index="msg-activated">Ihre Anmeldung ist jetzt abgeschlossen. Sie können sich jetzt direkt anmelden und die erweiterten Funktionen von ###SITENAME### nutzen.</label>
+			<label index="msg-activated-inf">Deine Anmeldung ist jetzt abgeschlossen. Du kannst sich jetzt direkt anmelden und die erweiterten Funktionen von ###SITENAME### nutzen.</label>
+			<label index="msg-subject">Ihre Anmeldung auf ###SITENAME###</label>
+			<label index="msg-subject-inf">Deine Anmeldung auf ###SITENAME###</label>
+
+			<!-- Added in 0.1.5 -->
+			<label index="button-email">E-Mail</label>
+			<label index="button-icq">ICQ</label>
+			<label index="button-aim">AIM</label>
+			<label index="button-yim">YIM</label>
+			<label index="button-msn">MSN</label>
+			<label index="button-skype">Skype</label>
+			<label index="error-captcha">Bitte kopieren Sie den nebenstehenden Code korrekt.</label>
+			<label index="error-captcha-inf">Bitte kopiere den nebenstehenden Code korrekt.</label>
+			<label index="reg-captcha">Validierung</label>
+
 			<!-- Added in 0.1.7 -->
 			<label index="reg-title">Registrieren</label>
 			
@@ -129,13 +129,13 @@
 			<label index="error-required-inf">Bitte fülle dieses Feld aus.</label>
 			<label index="error-emailEmpty">Bitte geben Sie eine E-Mail-Adresse an.</label>
 			<label index="error-emailEmpty-inf">Bitte gib eine E-Mail-Adresse an.</label>
-            <label index="error-wwwInvalid">Bitte geben Sie eine korrekte URL als Webseite an.</label>
-            <label index="error-wwwInvalid-inf">Bitte gib eine korrekte URL als Webseite an.</label>
+			<label index="error-wwwInvalid">Bitte geben Sie eine korrekte URL als Webseite an.</label>
+			<label index="error-wwwInvalid-inf">Bitte gib eine korrekte URL als Webseite an.</label>
 			<label index="error-userfieldEmpty">Bitte geben Sie einen korrekten Wert an.</label>
 			<label index="error-userfieldEmpty-inf">Bitte gib einen korrekten Wert an.</label>
-        </languageKey>
-        <!-- FINNISH LANGUAGE DATA -->
-        <languageKey index="fi" type="array">
+		</languageKey>
+		<!-- FINNISH LANGUAGE DATA -->
+		<languageKey index="fi" type="array">
 			<label index="error-alreadyLoggedIn">Olet kirjautunut sisään</label>
 			<label index="error-usernameLength">Käyttäjänimen tulee sisältää 3-30 kirjainta.</label>
 			<label index="error-usernameChars">Epäkelpo kirjain käyttäjänimessä</label>
@@ -168,193 +168,192 @@
 			<label index="msg-pleaseActivate">Kiitos rekisteröitymisestä ###SITENAME###. Aktivoi tilisi klikkaamalla oheista linkkiä.</label>
 			<label index="msg-activated">Rekisteröitymisesi on nyt viimeistelty. Voit kirjautua sisään ja keskustella foorumissamme.</label>
 			<label index="msg-subject">Rekisteröitymisesi ###SITENAME###</label>
-            
-            <!-- Added in 0.1.5 -->
-            <label index="button-email">Sähköposti</label>
-            <label index="button-icq">ICQ</label>
-            <label index="button-aim">AIM</label>
-            <label index="button-yim">YIM</label>
-            <label index="button-msn">MSN</label>
-            <label index="button-skype">Skype</label>
+
+			<!-- Added in 0.1.5 -->
+			<label index="button-email">Sähköposti</label>
+			<label index="button-icq">ICQ</label>
+			<label index="button-aim">AIM</label>
+			<label index="button-yim">YIM</label>
+			<label index="button-msn">MSN</label>
+			<label index="button-skype">Skype</label>
 		</languageKey>
 		<!-- DUTCH LANGUAGE DATA -->
 		<languageKey index="nl" type="array">
-            <label index="error-alreadyLoggedIn">U bent al ingelogd</label>
-            <label index="error-usernameLength">De gebruikersnaam moet op z'n minst drie tekens lang zijn en mag niet langer dan 30 tekens zijn.</label>
-            <label index="error-usernameChars">Fout karakter in de gebruikersnaam</label>
-            <label index="error-usernameExists">Gebruikersnaam is al in gebruik</label>
-            <label index="error-emailInvalid">Foutief email adres</label>
-            <label index="error-emailExists">Dit emailadres wordt al gebruikt.</label>
-            <label index="error-nameNone">Voer een naam in.</label>
-            <label index="error-passwordMismatch">De twee ingevoerde wachtwoorden zijn niet hetzelfde</label>
-            <label index="error-passwordLength">Het wachtwoord moet minimaal zes karakters bevatten!</label>
-            <label index="error-passwordNone">Voer een wachtwoord in!</label>
-            <label index="error-generalError">Er is een fout opgetreden.</label>
-            <label index="error-support">Please send an information email to this address ###SUPPORTMAIL###. Thanks a lot.</label>
-            <label index="reg-requiredNote">Velden met een sterretje (*), zijn verplicht.</label>
-            <label index="reg-username">Gebruikersnaam</label>
-            <label index="reg-password">Wachtwoord</label>
-            <label index="reg-passwordRepeat">Herhaal wachtwoord</label>
-            <label index="reg-name">Naam</label>
-            <label index="reg-profession">Beroep</label>
-            <label index="reg-location">Plaats</label>
-            <label index="reg-interests">Interesses</label>
-            <label index="reg-website">Website</label>
-            <label index="reg-create">Meld aan</label>
-            <label index="reg-email">Email adres</label>
-            <label index="msg-thankYou">Bedankt voor uw registratie!</label>
-            <label index="msg-emailIsSent">U krijgt een email op het emailadres ###EMAIL###. Volg de link in de email om de registratie te voltooien.</label>
-            <label index="msg-yours">Het beheerteam van &lt;br /&gt;###TEAM###</label>
-            <label index="msg-yoursPlaintext">Het beheerteam van  
+			<label index="error-alreadyLoggedIn">U bent al ingelogd</label>
+			<label index="error-usernameLength">De gebruikersnaam moet op z'n minst drie tekens lang zijn en mag niet langer dan 30 tekens zijn.</label>
+			<label index="error-usernameChars">Fout karakter in de gebruikersnaam</label>
+			<label index="error-usernameExists">Gebruikersnaam is al in gebruik</label>
+			<label index="error-emailInvalid">Foutief email adres</label>
+			<label index="error-emailExists">Dit emailadres wordt al gebruikt.</label>
+			<label index="error-nameNone">Voer een naam in.</label>
+			<label index="error-passwordMismatch">De twee ingevoerde wachtwoorden zijn niet hetzelfde</label>
+			<label index="error-passwordLength">Het wachtwoord moet minimaal zes karakters bevatten!</label>
+			<label index="error-passwordNone">Voer een wachtwoord in!</label>
+			<label index="error-generalError">Er is een fout opgetreden.</label>
+			<label index="error-support">Please send an information email to this address ###SUPPORTMAIL###. Thanks a lot.</label>
+			<label index="reg-requiredNote">Velden met een sterretje (*), zijn verplicht.</label>
+			<label index="reg-username">Gebruikersnaam</label>
+			<label index="reg-password">Wachtwoord</label>
+			<label index="reg-passwordRepeat">Herhaal wachtwoord</label>
+			<label index="reg-name">Naam</label>
+			<label index="reg-profession">Beroep</label>
+			<label index="reg-location">Plaats</label>
+			<label index="reg-interests">Interesses</label>
+			<label index="reg-website">Website</label>
+			<label index="reg-create">Meld aan</label>
+			<label index="reg-email">Email adres</label>
+			<label index="msg-thankYou">Bedankt voor uw registratie!</label>
+			<label index="msg-emailIsSent">U krijgt een email op het emailadres ###EMAIL###. Volg de link in de email om de registratie te voltooien.</label>
+			<label index="msg-yours">Het beheerteam van &lt;br /&gt;###TEAM###</label>
+			<label index="msg-yoursPlaintext">Het beheerteam van
 ###TEAM###</label>
-            <label index="msg-hello">Beste ###USERNAME###</label>
-            <label index="msg-pleaseActivate">Bedankt voor uw registratie op ###SITENAME###. Om uw account te activeren moet u de volgende link gebruiken.</label>
-            <label index="msg-activated">Uw registratie is voltooid. U kunt nu inloggen en gebruik maken van de uitgebreide functies van ###SITENAME### .</label>
-            <label index="msg-subject">Uw registratie op ###SITENAME###</label>
-            
-            <!-- Added in 0.1.5 -->
-            <label index="button-email">Email</label>
-            <label index="button-icq">ICQ</label>
-            <label index="button-aim">AIM</label>
-            <label index="button-yim">YIM</label>
-            <label index="button-msn">MSN</label>
-            <label index="button-skype">Skype</label>
-        </languageKey>
-        
-        <!-- FRENCH LANGUAGE DATA -->
-        <languageKey index="fr" type="array">
-            <label index="error-alreadyLoggedIn">Vous êtes déjà identifié</label>
-            <label index="error-usernameLength">Votre pseudo doit avoir une longueur de minimum 3 charactères (et au maximum: 30)</label>
-            <label index="error-usernameChars">Le Pseudo comporte un charactère invalide</label>
-            <label index="error-usernameExists">ce pseudo est déjà utilisé</label>
-            <label index="error-emailInvalid">Cette adresse mail est invalide</label>
-            <label index="error-emailExists">Cette adresse mail est déjà utilisée. Seriez-vous déjà inscrit ?</label>
-            <label index="error-nameNone">Merci d'indiquer un nouveau nom</label>
-            <label index="error-passwordMismatch">Les mots de passe ne concordent pas</label>
-            <label index="error-passwordLength">Le mot de passe doit avoi au minimum 6 charactères</label>
-            <label index="error-passwordNone">Merci de spécifier un mot de passe</label>
-            <label index="error-generalError">Une erreur s'est produite.</label>
-            <label index="error-support">Merci de nous informer en écrivant à l'adresse suivante : ###SUPPORTMAIL###. Merci beaucoup.</label>
-            <label index="reg-requiredNote">Les champs marqués de (*) doivent être renseignés.</label>
-            <label index="reg-username">Pseudo</label>
-            <label index="reg-password">Mot de passe</label>
-            <label index="reg-passwordRepeat">Répétez le mot de passe</label>
-            <label index="reg-name">Nom</label>
-            <label index="reg-profession">Métier</label>
-            <label index="reg-location">Ville</label>
-            <label index="reg-interests">Intêrêts</label>
-            <label index="reg-website">Site internet</label>
-            <label index="reg-create">Créer le compte</label>
-            <label index="reg-email">Adresse mail</label>
-            <label index="msg-thankYou">Nous vous remercions pour votre inscription !</label>
-            <label index="msg-emailIsSent">Vous alez recevoir un mail à l'adresse indiquée (###EMAIL###). Merci de valider votre inscription en cliquant sur le lien compris dans l'e-mail.</label>
-            <label index="msg-yours">Les administrateurs de ###TEAM###</label>
-            <label index="msg-yoursPlaintext">Les administrateurs de 
+		<label index="msg-hello">Beste ###USERNAME###</label>
+		<label index="msg-pleaseActivate">Bedankt voor uw registratie op ###SITENAME###. Om uw account te activeren moet u de volgende link gebruiken.</label>
+		<label index="msg-activated">Uw registratie is voltooid. U kunt nu inloggen en gebruik maken van de uitgebreide functies van ###SITENAME### .</label>
+		<label index="msg-subject">Uw registratie op ###SITENAME###</label>
+
+			<!-- Added in 0.1.5 -->
+			<label index="button-email">Email</label>
+			<label index="button-icq">ICQ</label>
+			<label index="button-aim">AIM</label>
+			<label index="button-yim">YIM</label>
+			<label index="button-msn">MSN</label>
+			<label index="button-skype">Skype</label>
+		</languageKey>
+		<!-- FRENCH LANGUAGE DATA -->
+		<languageKey index="fr" type="array">
+			<label index="error-alreadyLoggedIn">Vous êtes déjà identifié</label>
+			<label index="error-usernameLength">Votre pseudo doit avoir une longueur de minimum 3 charactères (et au maximum: 30)</label>
+			<label index="error-usernameChars">Le Pseudo comporte un charactère invalide</label>
+			<label index="error-usernameExists">ce pseudo est déjà utilisé</label>
+			<label index="error-emailInvalid">Cette adresse mail est invalide</label>
+			<label index="error-emailExists">Cette adresse mail est déjà utilisée. Seriez-vous déjà inscrit ?</label>
+			<label index="error-nameNone">Merci d'indiquer un nouveau nom</label>
+			<label index="error-passwordMismatch">Les mots de passe ne concordent pas</label>
+			<label index="error-passwordLength">Le mot de passe doit avoi au minimum 6 charactères</label>
+			<label index="error-passwordNone">Merci de spécifier un mot de passe</label>
+			<label index="error-generalError">Une erreur s'est produite.</label>
+			<label index="error-support">Merci de nous informer en écrivant à l'adresse suivante : ###SUPPORTMAIL###. Merci beaucoup.</label>
+			<label index="reg-requiredNote">Les champs marqués de (*) doivent être renseignés.</label>
+			<label index="reg-username">Pseudo</label>
+			<label index="reg-password">Mot de passe</label>
+			<label index="reg-passwordRepeat">Répétez le mot de passe</label>
+			<label index="reg-name">Nom</label>
+			<label index="reg-profession">Métier</label>
+			<label index="reg-location">Ville</label>
+			<label index="reg-interests">Intêrêts</label>
+			<label index="reg-website">Site internet</label>
+			<label index="reg-create">Créer le compte</label>
+			<label index="reg-email">Adresse mail</label>
+			<label index="msg-thankYou">Nous vous remercions pour votre inscription !</label>
+			<label index="msg-emailIsSent">Vous alez recevoir un mail à l'adresse indiquée (###EMAIL###). Merci de valider votre inscription en cliquant sur le lien compris dans l'e-mail.</label>
+			<label index="msg-yours">Les administrateurs de ###TEAM###</label>
+			<label index="msg-yoursPlaintext">Les administrateurs de
 ###TEAM###</label>
-            <label index="msg-hello">Bonjour ###USERNAME###</label>
-            <label index="msg-pleaseActivate">Merci pour votre inscription sur ###SITENAME###. Afin de valider votre inscription, cliquez sur le lien suivant :</label>
-            <label index="msg-activated">Votre inscription est maintenant effective. Vous pouvez dès à présent vous identifier au site ###SITENAME###.</label>
-            <label index="msg-subject">Votre inscription sur le site ###SITENAME###</label>
-            
-            <!-- Added in 0.1.5 -->
-            <label index="button-email">Email</label>
-            <label index="button-icq">ICQ</label>
-            <label index="button-aim">AIM</label>
-            <label index="button-yim">YIM</label>
-            <label index="button-msn">MSN</label>
-            <label index="button-skype">Skype</label>
-        </languageKey>
-	<!-- RUSSIAN LANGUAGE DATA -->
-	<languageKey index="ru" type="array">
-	    <label index="error-alreadyLoggedIn">Вы уже авторизированы</label>
-	    <label index="error-usernameLength">Имя пользователя должно быть не короче 3 символов и не превышать 30.</label>
-	    <label index="error-usernameChars">Недопустимые символы в имени пользователя</label>
-	    <label index="error-usernameExists">Такое имя пользователя уже существует</label>
-	    <label index="error-emailInvalid">Недопустимый email</label>
-	    <label index="error-emailExists">Такой email адрес уже существует. Возможно Вы уже проходили регистрацию.</label>
-	    <label index="error-nameNone">Пожалуйста, укажите имя.</label>
-	    <label index="error-passwordMismatch">Пароль не совпадает</label>
-	    <label index="error-passwordLength">Пароль должен быть не менее 6 символов!</label>
-	    <label index="error-passwordNone">Пожалуйста, введите пароль!</label>
-	    <label index="error-generalError">Непредвиденная ошибка.</label>
-	    <label index="error-support">Пожалуйста, отправьте информацию по этому адресу ###SUPPORTMAIL###. Спасибо.</label>
-	    <label index="reg-requiredNote">Поля, возле которых стоит знак (*) являются обязательными.</label>
-	    <label index="reg-username">Имя пользователя</label>
-	    <label index="reg-password">Пароль</label>
-	    <label index="reg-passwordRepeat">Повторите пароль</label>
-	    <label index="reg-name">Имя</label>
-	    <label index="reg-profession">Род деятельности</label>
-	    <label index="reg-location">Город</label>
-	    <label index="reg-interests">Интересы</label>
-	    <label index="reg-website">Website</label>
-	    <label index="reg-create">Создать пользователя</label>
-	    <label index="reg-email">Email</label>
-	    <label index="msg-thankYou">Спасибо за регистрацию!</label>
-	    <label index="msg-emailIsSent">В ближайшее время Вы получите сообщени на email ###EMAIL###. Пожалуйста, откройте указаную в этом сообщении ссылку, чтобы завершить регистрацию.</label>
-	    <label index="msg-yours">Администрация &lt;br /&gt;###TEAM###</label>
-	    <label index="msg-yoursPlaintext">Администрация 
+			<label index="msg-hello">Bonjour ###USERNAME###</label>
+			<label index="msg-pleaseActivate">Merci pour votre inscription sur ###SITENAME###. Afin de valider votre inscription, cliquez sur le lien suivant :</label>
+			<label index="msg-activated">Votre inscription est maintenant effective. Vous pouvez dès à présent vous identifier au site ###SITENAME###.</label>
+			<label index="msg-subject">Votre inscription sur le site ###SITENAME###</label>
+
+			<!-- Added in 0.1.5 -->
+			<label index="button-email">Email</label>
+			<label index="button-icq">ICQ</label>
+			<label index="button-aim">AIM</label>
+			<label index="button-yim">YIM</label>
+			<label index="button-msn">MSN</label>
+			<label index="button-skype">Skype</label>
+		</languageKey>
+		<!-- RUSSIAN LANGUAGE DATA -->
+		<languageKey index="ru" type="array">
+			<label index="error-alreadyLoggedIn">Вы уже авторизированы</label>
+			<label index="error-usernameLength">Имя пользователя должно быть не короче 3 символов и не превышать 30.</label>
+			<label index="error-usernameChars">Недопустимые символы в имени пользователя</label>
+			<label index="error-usernameExists">Такое имя пользователя уже существует</label>
+			<label index="error-emailInvalid">Недопустимый email</label>
+			<label index="error-emailExists">Такой email адрес уже существует. Возможно Вы уже проходили регистрацию.</label>
+			<label index="error-nameNone">Пожалуйста, укажите имя.</label>
+			<label index="error-passwordMismatch">Пароль не совпадает</label>
+			<label index="error-passwordLength">Пароль должен быть не менее 6 символов!</label>
+			<label index="error-passwordNone">Пожалуйста, введите пароль!</label>
+			<label index="error-generalError">Непредвиденная ошибка.</label>
+			<label index="error-support">Пожалуйста, отправьте информацию по этому адресу ###SUPPORTMAIL###. Спасибо.</label>
+			<label index="reg-requiredNote">Поля, возле которых стоит знак (*) являются обязательными.</label>
+			<label index="reg-username">Имя пользователя</label>
+			<label index="reg-password">Пароль</label>
+			<label index="reg-passwordRepeat">Повторите пароль</label>
+			<label index="reg-name">Имя</label>
+			<label index="reg-profession">Род деятельности</label>
+			<label index="reg-location">Город</label>
+			<label index="reg-interests">Интересы</label>
+			<label index="reg-website">Website</label>
+			<label index="reg-create">Создать пользователя</label>
+			<label index="reg-email">Email</label>
+			<label index="msg-thankYou">Спасибо за регистрацию!</label>
+			<label index="msg-emailIsSent">В ближайшее время Вы получите сообщени на email ###EMAIL###. Пожалуйста, откройте указаную в этом сообщении ссылку, чтобы завершить регистрацию.</label>
+			<label index="msg-yours">Администрация &lt;br /&gt;###TEAM###</label>
+			<label index="msg-yoursPlaintext">Администрация
 		###TEAM###</label>
-	    <label index="msg-hello">Здравствуйте ###USERNAME###</label>
-	    <label index="msg-pleaseActivate">Благодарим Вас за регистрацию на ###SITENAME###. Для того, чтобы активировать Вашу учетную запись, просим перейти по следующей ссылке.</label>
-	    <label index="msg-activated">Вы зарегистрированы на сайте. Вы можете сейчас же авторизироваться на сайте ###SITENAME### воспользовавшись указанными Вами при регистрации именем и паролем.</label>
-	    <label index="msg-subject">Регистрация на ###SITENAME###</label>
+			<label index="msg-hello">Здравствуйте ###USERNAME###</label>
+			<label index="msg-pleaseActivate">Благодарим Вас за регистрацию на ###SITENAME###. Для того, чтобы активировать Вашу учетную запись, просим перейти по следующей ссылке.</label>
+			<label index="msg-activated">Вы зарегистрированы на сайте. Вы можете сейчас же авторизироваться на сайте ###SITENAME### воспользовавшись указанными Вами при регистрации именем и паролем.</label>
+			<label index="msg-subject">Регистрация на ###SITENAME###</label>
 
-	    <!-- Added in 0.1.5 -->
-	    <label index="button-email">Email</label>
-	    <label index="button-icq">ICQ</label>
-	    <label index="button-aim">AIM</label>
-	    <label index="button-yim">YIM</label>
-	    <label index="button-msn">MSN</label>
-	    <label index="button-skype">Skype</label>
+			<!-- Added in 0.1.5 -->
+			<label index="button-email">Email</label>
+			<label index="button-icq">ICQ</label>
+			<label index="button-aim">AIM</label>
+			<label index="button-yim">YIM</label>
+			<label index="button-msn">MSN</label>
+			<label index="button-skype">Skype</label>
 
-	    <!-- Added in 0.1.7 -->
-	    <label index="reg-title">Регистрация</label>
-	</languageKey>
-	<!-- UKRAINIAN LANGUAGE DATA -->
-	<languageKey index="ua" type="array">
-	    <label index="error-alreadyLoggedIn">Ви вже авторизовані</label>
-	    <label index="error-usernameLength">Ім'я користувача має бути не коротше ніж 3 символи та не більш 30.</label>
-	    <label index="error-usernameChars">Недозволені символи у імені користувача</label>
-	    <label index="error-usernameExists">Таке ім'я користувача вже існує</label>
-	    <label index="error-emailInvalid">Недозволений email</label>
-	    <label index="error-emailExists">Така email адреса вже існує. Можливо Ви проходили реєстрацію.</label>
-	    <label index="error-nameNone">Будь ласка, вкажіть ім'я.</label>
-	    <label index="error-passwordMismatch">Пароль не співпадає</label>
-	    <label index="error-passwordLength">Пароль має бути не менш 6 символів!</label>
-	    <label index="error-passwordNone">Будь ласка, введіть пароль!</label>
-	    <label index="error-generalError">Непередбачена помилка.</label>
-	    <label index="error-support">Будь ласка, відправте інформацію за цією адресою ###SUPPORTMAIL###. Дякуємо.</label>
-	    <label index="reg-requiredNote">Поля, біля яких встановлено позначку (*) є обов'язковими.</label>
-	    <label index="reg-username">Ім'я користувача</label>
-	    <label index="reg-password">Пароль</label>
-	    <label index="reg-passwordRepeat">Повторити пароль</label>
-	    <label index="reg-name">Ім'я</label>
-	    <label index="reg-profession">Рід діяльності</label>
-	    <label index="reg-location">Місто</label>
-	    <label index="reg-interests">Інтереси</label>
-	    <label index="reg-website">Website</label>
-	    <label index="reg-create">Створити користувача</label>
-	    <label index="reg-email">Email</label>
-	    <label index="msg-thankYou">Дякуємо за реєстрацію!</label>
-	    <label index="msg-emailIsSent">Найближчим часом Ви отримаєте сповіщення на email ###EMAIL###. Будь ласка, відкрийте вказане у цьому сповіщенні посилання, щоб завершити реєстрацію.</label>
-	    <label index="msg-yours">Адміністрація &lt;br /&gt;###TEAM###</label>
-	    <label index="msg-yoursPlaintext">Адміністрація 
+			<!-- Added in 0.1.7 -->
+			<label index="reg-title">Регистрация</label>
+		</languageKey>
+		<!-- UKRAINIAN LANGUAGE DATA -->
+		<languageKey index="ua" type="array">
+			<label index="error-alreadyLoggedIn">Ви вже авторизовані</label>
+			<label index="error-usernameLength">Ім'я користувача має бути не коротше ніж 3 символи та не більш 30.</label>
+			<label index="error-usernameChars">Недозволені символи у імені користувача</label>
+			<label index="error-usernameExists">Таке ім'я користувача вже існує</label>
+			<label index="error-emailInvalid">Недозволений email</label>
+			<label index="error-emailExists">Така email адреса вже існує. Можливо Ви проходили реєстрацію.</label>
+			<label index="error-nameNone">Будь ласка, вкажіть ім'я.</label>
+			<label index="error-passwordMismatch">Пароль не співпадає</label>
+			<label index="error-passwordLength">Пароль має бути не менш 6 символів!</label>
+			<label index="error-passwordNone">Будь ласка, введіть пароль!</label>
+			<label index="error-generalError">Непередбачена помилка.</label>
+			<label index="error-support">Будь ласка, відправте інформацію за цією адресою ###SUPPORTMAIL###. Дякуємо.</label>
+			<label index="reg-requiredNote">Поля, біля яких встановлено позначку (*) є обов'язковими.</label>
+			<label index="reg-username">Ім'я користувача</label>
+			<label index="reg-password">Пароль</label>
+			<label index="reg-passwordRepeat">Повторити пароль</label>
+			<label index="reg-name">Ім'я</label>
+			<label index="reg-profession">Рід діяльності</label>
+			<label index="reg-location">Місто</label>
+			<label index="reg-interests">Інтереси</label>
+			<label index="reg-website">Website</label>
+			<label index="reg-create">Створити користувача</label>
+			<label index="reg-email">Email</label>
+			<label index="msg-thankYou">Дякуємо за реєстрацію!</label>
+			<label index="msg-emailIsSent">Найближчим часом Ви отримаєте сповіщення на email ###EMAIL###. Будь ласка, відкрийте вказане у цьому сповіщенні посилання, щоб завершити реєстрацію.</label>
+			<label index="msg-yours">Адміністрація &lt;br /&gt;###TEAM###</label>
+			<label index="msg-yoursPlaintext">Адміністрація
 		###TEAM###</label>
-	    <label index="msg-hello">Вітаю ###USERNAME###</label>
-	    <label index="msg-pleaseActivate">Дякуємо Вам за реєстрацію на ###SITENAME###. Для того, щоб активувати Ваш обліковий запис, просимо перейти за наступним посиланням.</label>
-	    <label index="msg-activated">Вас зареєстровано на сайті. Ви можете зараз же авторизуватися на сайті ###SITENAME### скориставшися вказаними Вами під час реєстрації ім'ям та паролем.</label>
-	    <label index="msg-subject">Реєстрація на ###SITENAME###</label>
+			<label index="msg-hello">Вітаю ###USERNAME###</label>
+			<label index="msg-pleaseActivate">Дякуємо Вам за реєстрацію на ###SITENAME###. Для того, щоб активувати Ваш обліковий запис, просимо перейти за наступним посиланням.</label>
+			<label index="msg-activated">Вас зареєстровано на сайті. Ви можете зараз же авторизуватися на сайті ###SITENAME### скориставшися вказаними Вами під час реєстрації ім'ям та паролем.</label>
+			<label index="msg-subject">Реєстрація на ###SITENAME###</label>
 
-	    <!-- Added in 0.1.5 -->
-	    <label index="button-email">Email</label>
-	    <label index="button-icq">ICQ</label>
-	    <label index="button-aim">AIM</label>
-	    <label index="button-yim">YIM</label>
-	    <label index="button-msn">MSN</label>
-	    <label index="button-skype">Skype</label>
+			<!-- Added in 0.1.5 -->
+			<label index="button-email">Email</label>
+			<label index="button-icq">ICQ</label>
+			<label index="button-aim">AIM</label>
+			<label index="button-yim">YIM</label>
+			<label index="button-msn">MSN</label>
+			<label index="button-skype">Skype</label>
 
-	    <!-- Added in 0.1.7 -->
-	    <label index="reg-title">Реєстрація</label>
-	</languageKey>
-    </data>
+			<!-- Added in 0.1.7 -->
+			<label index="reg-title">Реєстрація</label>
+		</languageKey>
+	</data>
 </T3locallang>
