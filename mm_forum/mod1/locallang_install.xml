@@ -327,7 +327,7 @@
 			<!-- HELP -->
 			<label index="install.help.title">mm_forum-Konfigurationsmodul</label>
 			<label index="install.help.content">Dies ist das mm_forum-Konfigurationsmodul. Hier können Sie alle notwendigen Einstellungen treffen, die für den Betrieb der mm_forum-Erweiterung notwendig sind.&lt;br /&gt;&lt;br /&gt;Beachten Sie, dass Sie, wenn Sie diese Werte setzen, global geltende Standardwerte für die betreffenden Eigenschaften definieren. Sie können diese Einstellungen in einem Template überschreiben, indem Sie die entsprechenden Variablen in den TypoScript-Konstanten oder im TypoScript-Setup angeben.</label>
-			<label index="install.start">Das mm_forum-Installationstool hat ermittelt, dass die mm_forum-Erweiterung nicht ordnungsgem&auml;&szlig; konfiguriert wurde. In den folgenden Konfigurationsschritten werden Sie gebeten, einige ben&ouml;tigte Felder auszuf&uuml;llen, damit die mm_forum-Erweiterung in Betrieb genommen werden kann.</label>
+			<label index="install.start">Das mm_forum-Installationstool hat ermittelt, dass die mm_forum-Erweiterung nicht ordnungsgemäß konfiguriert wurde. In den folgenden Konfigurationsschritten werden Sie gebeten, einige benötigte Felder auszufüllen, damit die mm_forum-Erweiterung in Betrieb genommen werden kann.</label>
             
 			<!-- ATTACHMENTS -->
 			<label index="install.field.attachments.title">Dateianhänge</label>
@@ -336,7 +336,7 @@
 			<label index="install.field.attachment_allow.title">Zugelassene Dateiendungen</label>
 			<label index="install.field.attachment_allow.desc">Dies ist eine kommaseparierte Liste von Dateiendungen, die für den Upload zugelassen sind. Sie können das *-Zeichen verwenden, um alle Endungen zuzulassen.</label>
 			<label index="install.field.attachment_deny.title">Nicht zugelassene Dateiendungen</label>
-			<label index="install.field.attachment_deny.desc">Dies ist eine kommaseparierte Liste von Dateiendungen, die nicht für den Upload zugelassen sind. Diese Eistellung überstimmt die Einstellung über zugelassene Dateiendungen. Wenn Sie also alle Dateiendungen zulassen (*) und lediglich z.B. &qout;php&qout; als Endung ablehnen, werden alle Dateien bis auf die mit der Endung &qout;php&qout; zugelassen.</label>
+			<label index="install.field.attachment_deny.desc">Dies ist eine kommaseparierte Liste von Dateiendungen, die nicht für den Upload zugelassen sind. Diese Eistellung überstimmt die Einstellung über zugelassene Dateiendungen. Wenn Sie also alle Dateiendungen zulassen (*) und lediglich z.B. "php" als Endung ablehnen, werden alle Dateien bis auf die mit der Endung "php" zugelassen.</label>
 			<label index="install.field.attachment_filesize.title">Maximale Dateigröße</label>
 			<label index="install.field.attachment_filesize.desc">Diese Eigenschaft beschreibt die maximale Dateigröße für hochgeladene Dateien. Größere Dateien werden nicht zugelassen.</label>
 			<label index="install.field.attachment_preview.title">Vorschaubilder</label>
@@ -447,7 +447,7 @@
 			<label index="install.field.user_hotPosts.title">Viestittäjä -merkinnän raja</label>
 			<label index="install.field.user_hotPosts.desc">Tällä määritellään kuinka monta viestiä käyttäjän pitää lähettää saadakseen tietyn kuvakemerkinnän käyttäjänimensä yhteyteen.</label>
 			<label index="install.field.topic_hotPosts.title">Kuuma aihe -merkinnän raja</label>
-			<label index="install.field.topic_hotPosts.desc">Tällä määritellään kuinka monta viestiä tietyn aiheen pitää sisältää saadaksen &quot;kuuma aihe&quot; -merkinnän.</label>
+			<label index="install.field.topic_hotPosts.desc">Tällä määritellään kuinka monta viestiä tietyn aiheen pitää sisältää saadaksen "kuuma aihe"-merkinnän.</label>
 			<label index="install.field.signatureLimit.title">Allekirjoituksen maksimipituus riveissä</label>
 			<label index="install.field.prefixes.title">Etuliitteet</label>
 			<label index="install.field.prefixes.desc">Pilkulla eroteltu lista oletusetuliitteistä, joita moderaattorit voivat lisätä keskustelunaiheisiin.</label>
