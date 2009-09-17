@@ -1,106 +1,106 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
-	<meta type="array">
-		<description>Language labels for plugin &quot;tx_mmforum_pi4&quot;</description>
-		<type></type>
-		<csh_table></csh_table>
-		<labelContext type="array">
-		</labelContext>
-	</meta>
-	<data type="array">
-		<languageKey index="default" type="array">
-			<label index="indexing-running">Indexing is already running.</label>
-			<label index="indexing-topicIndexed">Topic ###TOPIC### was indexed.</label>
+    <meta type="array">
+        <description>Language labels for plugin &quot;tx_mmforum_pi4&quot;</description>
+        <type></type>
+        <csh_table></csh_table>
+        <labelContext type="array">
+        </labelContext>
+    </meta>
+    <data type="array">
+        <languageKey index="default" type="array">
+            <label index="indexing-running">Indexing is already running.</label>
+            <label index="indexing-topicIndexed">Topic ###TOPIC### was indexed.</label>
 			<label index="searchform-searchAllBoards">Search in all boards</label>
-			<label index="searchform-sorting-none">No sorting</label>
-			<label index="searchform-sorting-dateAsc">Date ascending</label>
-			<label index="searchform-sorting-dateDesc">Date descending</label>
-			<label index="searchform-sorting-repliesMost">Most answers</label>
-			<label index="searchform-sorting-repliesLeast">Fewest answers</label>
-			<label index="searchform-sorting-readMost">Most frequently read</label>
-			<label index="searchform-sorting-readLeast">Most rarely read</label>
-			<label index="searchform-quickGuide">Quick guide for the search</label>
-			<label index="searchform-quickGuideIndex">Quick guide for Indexing</label>
-			<label index="searchform-quickGuideExpand">Quick guide</label>
-			<label index="searchform-wildcard-header">Wildcard-Search</label>
+            <label index="searchform-sorting-none">No sorting</label>
+            <label index="searchform-sorting-dateAsc">Date ascending</label>
+            <label index="searchform-sorting-dateDesc">Date descending</label>
+            <label index="searchform-sorting-repliesMost">Most answers</label>
+            <label index="searchform-sorting-repliesLeast">Fewest answers</label>
+            <label index="searchform-sorting-readMost">Most frequently read</label>
+            <label index="searchform-sorting-readLeast">Most rarely read</label>
+            <label index="searchform-quickGuide">Quick guide for the search</label>
+            <label index="searchform-quickGuideIndex">Quick guide for Indexing</label>
+            <label index="searchform-quickGuideExpand">Quick guide</label>
+            <label index="searchform-wildcard-header">Wildcard-Search</label>
 			<label index="searchform-wildcard-content">With the help of a so-called wildcard you can look for several search words, which have the same word beginning. If you search e.g. for &quot;Typo*&quot;, the search will find everything that begins with &quot;Typo&quot; : Typo3, Typoscript, Typocode, Typo3user... etc.</label>
-			<label index="searchform-negative-header">Negative search</label>
+            <label index="searchform-negative-header">Negative search</label>
 			<label index="searchform-negative-content">If you do not want to find certain expressions in your search result, you can cause this with placing a hyphen in front. Terms containing this phrase are excluded from the search result.</label>
-			<label index="searchform-usersearch-header">Search for user</label>
+            <label index="searchform-usersearch-header">Search for user</label>
 			<label index="searchform-usersearch-content">It is possible to limit the search result on answers of certain users. In addition to the retrieval query attach still another &quot;user:username&quot; and find the results, which were written by this certain user. If the username could not be found this will be ignored.</label>
-			<label index="searchform-Index-header">Indexing</label>
-			<label index="searchform-Index-content">This function updates the search index. Please note that only posts that have been indexed will be found by the search function, so it is necessary to conduct an indexing process in regular intervals.</label>
-			<label index="searchform-orderBy">Sort by</label>
-			<label index="searchform-onlySolved">Show only solved topics</label>
-			<label index="searchform-onePost">Only show one post per topic</label>
-			<label index="searchform-submit">Search</label>
-			<label index="searchform-startIndex">Start indexing</label>
-			<label index="searchform-title">Search</label>
-			<label index="searchform-searchstring">Search string</label>
-			<label index="searchform-advanced">Advanced</label>
-			<label index="searchform-searchplace">Search place</label>
-			<label index="searchform-indexing">Indexing</label>
-			<label index="search-noResults">No results found</label>
-			<label index="search-results">Results</label>
-			<label index="search-topicinfo">Topic information</label>
-			<label index="search-replies">Answers</label>
-			<label index="search-solved">Solved</label>
-			<label index="search-cruser">Created by</label>
-			<label index="search-crdate">Creation date</label>
-			<label index="search-yes">Yes</label>
-			<label index="search-no">No</label>
-			<label index="search-topicSolved">This topic was solved</label>
-			<label index="search-searchresults">Search results</label>
-			<label index="stats">Statistic: ###WORDS### words with ###MATCHES### results in ###TOPICS### topics</label>
-			<label index="debug-duration">Duration</label>
-		</languageKey>
-		<languageKey index="de" type="array">
-			<label index="indexing-running">Indizierung läuft bereits.</label>
-			<label index="indexing-topicIndexed">Thema ###TOPIC### wurde indiziert.</label>
-			<label index="searchform-searchAllBoards">Alle Foren durchsuchen</label>
-			<label index="searchform-sorting-none">keine Sortierung</label>
-			<label index="searchform-sorting-dateAsc">Datum absteigend</label>
-			<label index="searchform-sorting-dateDesc">Datum aufsteigend</label>
-			<label index="searchform-sorting-repliesMost">den meisten Antworten</label>
-			<label index="searchform-sorting-repliesLeast">den wenigsten Antworten</label>
-			<label index="searchform-sorting-readMost">am häufigsten gelesenen</label>
-			<label index="searchform-sorting-readLeast">am wenigsten gelesen</label>
-			<label index="searchform-quickGuide">Kurzanleitung zur Suche</label>
-			<label index="searchform-quickGuideIndex">Kurzanleitung zur Indizierung</label>
-			<label index="searchform-quickGuideExpand">Kurzanleitung</label>
-			<label index="searchform-wildcard-header">Wildcard Suche</label>
-			<label index="searchform-wildcard-content">Mit Hilfe eines sogenannten Wildcard [in diesem Fall ein &quot;*&quot;] kann man nach mehreren Suchbegriffen suchen, die den gleichen Wortanfang haben. Zum Beispiel wird gesucht nach &quot;Typo*&quot; dann findet die Suche alles was mit Typo anfängt: Typo3, Typoscript, Typocode, Typo3user ... usw..</label>
-			<label index="searchform-negative-header">Negativ Suche</label>
-			<label index="searchform-negative-content">Wenn man gewisse Ausdrücke in seinem Suchergebnis nicht finden möchte, kann man dieses mit einem Voranstellen eines &quot;-&quot; bewirken. Beiträge, die diesen Begriff enthalten, werden aus dem Suchergebnis ausgeschlossen.</label>
-			<label index="searchform-usersearch-header">Suchen nach Usern</label>
-			<label index="searchform-usersearch-content">Mit der neuen Suche ist es auch nun möglich die Suchergebnisse auf Antworten von bestimmten Usern einzugrenzen. Dazu hängt man an die Suchanfrage noch ein &quot;user:username&quot; an und findet die Ergebnisse, die von diesem bestimmten User geschrieben wurden. Sollte es den Usernamen nicht geben, wird dieser Anhang nicht weiter beachtet.</label>
-			<label index="searchform-Index-header">Indizierung</label>
-			<label index="searchform-Index-content">Diese Funktion aktualisiert den Suchindex. Beachten Sie, dass nur indizierte Beiträge von der Suche gefunden werden, daher ist es notwendig, dass die Indizierung in regemäßigen Abständen durchgeführt wird.</label>
-			<label index="searchform-orderBy">Sortieren nach</label>
-			<label index="searchform-onlySolved">nur gelöste Themen</label>
-			<label index="searchform-onePost">Nur ein Post pro Thema anzeigen</label>
-			<label index="searchform-submit">Suche</label>
-			<label index="searchform-startIndex">Indizierung starten</label>
-			<label index="searchform-title">Suche</label>
-			<label index="searchform-searchstring">Suchbegriffe</label>
-			<label index="searchform-advanced">Erweitert</label>
-			<label index="searchform-searchplace">Suchort</label>
-			<label index="searchform-indexing">Indizierung</label>
-			<label index="search-noResults">Keine Einträge gefunden</label>
-			<label index="search-results">Treffer</label>
-			<label index="search-topicinfo">Themeninformationen</label>
-			<label index="search-replies">Antworten</label>
-			<label index="search-solved">Gelöst</label>
-			<label index="search-cruser">Erstellt von</label>
-			<label index="search-crdate">Erstellt am</label>
-			<label index="search-yes">Ja</label>
-			<label index="search-no">Nein</label>
-			<label index="search-topicSolved">Dieses Thema wurde gelöst</label>
-			<label index="search-searchresults">Suchergebnisse</label>
-			<label index="stats">Statistik: ###WORDS### Wörter mit ###MATCHES### Wortverknüpfungen in ###TOPICS### Themen</label>
-			<label index="debug-duration">Dauer</label>
-		</languageKey>
-		<languageKey index="fi" type="array">
+            <label index="searchform-Index-header">Indexing</label>
+            <label index="searchform-Index-content">This function updates the search index. Please note that only posts that have been indexed will be found by the search function, so it is necessary to conduct an indexing process in regular intervals.</label>
+            <label index="searchform-orderBy">Sort by</label>
+            <label index="searchform-onlySolved">Show only solved topics</label>
+            <label index="searchform-onePost">Only show one post per topic</label>
+            <label index="searchform-submit">Search</label>
+            <label index="searchform-startIndex">Start indexing</label>
+            <label index="searchform-title">Search</label>
+            <label index="searchform-searchstring">Search string</label>
+            <label index="searchform-advanced">Advanced</label>
+            <label index="searchform-searchplace">Search place</label>
+            <label index="searchform-indexing">Indexing</label>
+            <label index="search-noResults">No results found</label>
+            <label index="search-results">Results</label>
+            <label index="search-topicinfo">Topic information</label>
+            <label index="search-replies">Answers</label>
+            <label index="search-solved">Solved</label>
+            <label index="search-cruser">Created by</label>
+            <label index="search-crdate">Creation date</label>
+            <label index="search-yes">Yes</label>
+            <label index="search-no">No</label>
+            <label index="search-topicSolved">This topic was solved</label>
+            <label index="search-searchresults">Search results</label>
+            <label index="stats">Statistic: ###WORDS### words with ###MATCHES### results in ###TOPICS### topics</label>
+            <label index="debug-duration">Duration</label>
+        </languageKey>
+        <languageKey index="de" type="array">
+            <label index="indexing-running">Indizierung läuft bereits.</label>
+            <label index="indexing-topicIndexed">Thema ###TOPIC### wurde indiziert.</label>
+            <label index="searchform-searchAllBoards">Alle Foren durchsuchen</label>
+            <label index="searchform-sorting-none">keine Sortierung</label>
+            <label index="searchform-sorting-dateAsc">Datum absteigend</label>
+            <label index="searchform-sorting-dateDesc">Datum aufsteigend</label>
+            <label index="searchform-sorting-repliesMost">den meisten Antworten</label>
+            <label index="searchform-sorting-repliesLeast">den wenigsten Antworten</label>
+            <label index="searchform-sorting-readMost">am häufigsten gelesenen</label>
+            <label index="searchform-sorting-readLeast">am wenigsten gelesen</label>
+            <label index="searchform-quickGuide">Kurzanleitung zur Suche</label>
+            <label index="searchform-quickGuideIndex">Kurzanleitung zur Indizierung</label>
+            <label index="searchform-quickGuideExpand">Kurzanleitung</label>
+            <label index="searchform-wildcard-header">Wildcard Suche</label>
+            <label index="searchform-wildcard-content">Mit Hilfe eines sogenannten Wildcard [in diesem Fall ein &quot;*&quot;] kann man nach mehreren Suchbegriffen suchen, die den gleichen Wortanfang haben. Zum Beispiel wird gesucht nach &quot;Typo*&quot; dann findet die Suche alles was mit Typo anfängt: Typo3, Typoscript, Typocode, Typo3user ... usw..</label>
+            <label index="searchform-negative-header">Negativ Suche</label>
+            <label index="searchform-negative-content">Wenn man gewisse Ausdrücke in seinem Suchergebnis nicht finden möchte, kann man dieses mit einem Voranstellen eines &quot;-&quot; bewirken. Beiträge, die diesen Begriff enthalten, werden aus dem Suchergebnis ausgeschlossen.</label>
+            <label index="searchform-usersearch-header">Suchen nach Usern</label>
+            <label index="searchform-usersearch-content">Mit der neuen Suche ist es auch nun möglich die Suchergebnisse auf Antworten von bestimmten Usern einzugrenzen. Dazu hängt man an die Suchanfrage noch ein &quot;user:username&quot; an und findet die Ergebnisse, die von diesem bestimmten User geschrieben wurden. Sollte es den Usernamen nicht geben, wird dieser Anhang nicht weiter beachtet.</label>
+            <label index="searchform-Index-header">Indizierung</label>
+            <label index="searchform-Index-content">Diese Funktion aktualisiert den Suchindex. Beachten Sie, dass nur indizierte Beiträge von der Suche gefunden werden, daher ist es notwendig, dass die Indizierung in regemäßigen Abständen durchgeführt wird.</label>
+            <label index="searchform-orderBy">Sortieren nach</label>
+            <label index="searchform-onlySolved">nur gelöste Themen</label>
+            <label index="searchform-onePost">Nur ein Post pro Thema anzeigen</label>
+            <label index="searchform-submit">Suche</label>
+            <label index="searchform-startIndex">Indizierung starten</label>
+            <label index="searchform-title">Suche</label>
+            <label index="searchform-searchstring">Suchbegriffe</label>
+            <label index="searchform-advanced">Erweitert</label>
+            <label index="searchform-searchplace">Suchort</label>
+            <label index="searchform-indexing">Indizierung</label>
+            <label index="search-noResults">Keine Einträge gefunden</label>
+            <label index="search-results">Treffer</label>
+            <label index="search-topicinfo">Themeninformationen</label>
+            <label index="search-replies">Antworten</label>
+            <label index="search-solved">Gelöst</label>
+            <label index="search-cruser">Erstellt von</label>
+            <label index="search-crdate">Erstellt am</label>
+            <label index="search-yes">Ja</label>
+            <label index="search-no">Nein</label>
+            <label index="search-topicSolved">Dieses Thema wurde gelöst</label>
+            <label index="search-searchresults">Suchergebnisse</label>
+            <label index="stats">Statistik: ###WORDS### Wörter mit ###MATCHES### Wortverknüpfungen in ###TOPICS### Themen</label>
+            <label index="debug-duration">Dauer</label>
+        </languageKey>
+        <languageKey index="fi" type="array">
 			<label index="indexing-running">Indeksointi käynnissä.</label>
 			<label index="indexing-topicIndexed">Aihe ###TOPIC### indeksoitiin.</label>
 			<label index="searchform-searchAllBoards">Hae kaikista forumeista</label>
@@ -146,54 +146,54 @@
 			<label index="stats">Tilastotieto: ###WORDS### sanaa ja ###MATCHES### osumaa ###TOPICS### aiheessa</label>
 			<label index="debug-duration">Kesto</label>
 		</languageKey>
-		<languageKey index="fr" type="array">
-			<label index="indexing-running">L'indexation est déjà en cour d'exécution.</label>
-			<label index="indexing-topicIndexed">Le fil ###TOPIC### a été indexé.</label>
-			<label index="searchform-searchAllBoards">rechercher dans toutes les catégories</label>
-			<label index="searchform-sorting-none">sans classement</label>
-			<label index="searchform-sorting-dateAsc">Par date descendante</label>
-			<label index="searchform-sorting-dateDesc">Par date ascendante</label>
-			<label index="searchform-sorting-repliesMost">Avec le plus d'interventions</label>
-			<label index="searchform-sorting-repliesLeast">Avec le moins d'interventions</label>
-			<label index="searchform-sorting-readMost">Le plus lues</label>
-			<label index="searchform-sorting-readLeast">Le moins lues</label>
-			<label index="searchform-quickGuide">Mode d'emploi pour la recherche</label>
-			<label index="searchform-quickGuideIndex">Mode d'emploi pour l'indexation</label>
-			<label index="searchform-quickGuideExpand">Mode d'emploi</label>
-			<label index="searchform-wildcard-header">Recherche avec joker</label>
-			<label index="searchform-wildcard-content">A l'aide d'un joker [dans ce cas : &quot;*&quot;]. On peut rechercher plusieurs mots qui débutent avec les memes mettres. Exemple : le critere de recherche &quot;Typo*&quot; trouvera tous les mots qui commencent pas typo3 : Typo3, Typoscript, Typocode, Typo3user ... etc..</label>
-			<label index="searchform-negative-header">Recherche par la négative</label>
-			<label index="searchform-negative-content">Afin de trouver des interventions qui ne contiennent PAS le terme recherché, il suffit de faire précéder le terme par un &quot;-&quot;. Toutes les interventions contenant le terme recherché aini seron exclus de la liste des résultats.</label>
-			<label index="searchform-usersearch-header">Recherche par auteur</label>
-			<label index="searchform-usersearch-content">Avec cette option pour pouvez limiter les résultats à un seul auteur, en ajoutant au terme recherché : un &quot;user:username&quot;. Si l'auteur indiqué n'existe pas, toutes les interventions contenant le terme recherché seront listées.</label>
-			<label index="searchform-Index-header">Indexation</label>
-			<label index="searchform-Index-content">Cette fonction actualise l'index de recherche. Seules des interventions qui ont été indexées peuvent etre trouvées. Il est donc nécessaire d'actualiser l'index de recherche régulièrement.</label>
-			<label index="searchform-orderBy">Classement</label>
-			<label index="searchform-onlySolved">Uniquement les fils clos</label>
-			<label index="searchform-onePost">Ne lister qu'un fil par thème</label>
-			<label index="searchform-submit">Lancer la recherche</label>
-			<label index="searchform-startIndex">Cliquez sur ce lien pour actualiser l'index de recherche</label>
-			<label index="searchform-title">Moteur de recherche</label>
-			<label index="searchform-searchstring">Terme(s) recherché</label>
-			<label index="searchform-advanced">Options</label>
-			<label index="searchform-searchplace">Lieu de la recherche</label>
-			<label index="searchform-indexing">Indexation</label>
-			<label index="search-noResults">Aucun résultat</label>
-			<label index="search-results">Résultats</label>
-			<label index="search-topicinfo">Information a propos du thème</label>
-			<label index="search-replies">Réponses</label>
-			<label index="search-solved">Clôturé</label>
-			<label index="search-cruser">Crée par</label>
-			<label index="search-crdate">Le</label>
-			<label index="search-yes">Oui</label>
-			<label index="search-no">Non</label>
-			<label index="search-topicSolved">Ce fil a été clôturé</label>
-			<label index="search-searchresults">Résultats de la recherche</label>
-			<label index="stats">Statistique : ###WORDS### mots mit ###MATCHES### liens dans ###TOPICS### thèmes</label>
-			<label index="debug-duration">Durée </label>
-		</languageKey>
-		<!-- RUSSIAN LANGUAGE DATA -->
-		<languageKey index="ru" type="array">
+        <languageKey index="fr" type="array">
+            <label index="indexing-running">L'indexation est déjà en cour d'exécution.</label>
+            <label index="indexing-topicIndexed">Le fil ###TOPIC### a été indexé.</label>
+            <label index="searchform-searchAllBoards">rechercher dans toutes les catégories</label>
+            <label index="searchform-sorting-none">sans classement</label>
+            <label index="searchform-sorting-dateAsc">Par date descendante</label>
+            <label index="searchform-sorting-dateDesc">Par date ascendante</label>
+            <label index="searchform-sorting-repliesMost">Avec le plus d'interventions</label>
+            <label index="searchform-sorting-repliesLeast">Avec le moins d'interventions</label>
+            <label index="searchform-sorting-readMost">Le plus lues</label>
+            <label index="searchform-sorting-readLeast">Le moins lues</label>
+            <label index="searchform-quickGuide">Mode d'emploi pour la recherche</label>
+            <label index="searchform-quickGuideIndex">Mode d'emploi pour l'indexation</label>
+            <label index="searchform-quickGuideExpand">Mode d'emploi</label>
+            <label index="searchform-wildcard-header">Recherche avec joker</label>
+            <label index="searchform-wildcard-content">A l'aide d'un joker [dans ce cas : &quot;*&quot;]. On peut rechercher plusieurs mots qui débutent avec les memes mettres. Exemple : le critere de recherche &quot;Typo*&quot; trouvera tous les mots qui commencent pas typo3 : Typo3, Typoscript, Typocode, Typo3user ... etc..</label>
+            <label index="searchform-negative-header">Recherche par la négative</label>
+            <label index="searchform-negative-content">Afin de trouver des interventions qui ne contiennent PAS le terme recherché, il suffit de faire précéder le terme par un &quot;-&quot;. Toutes les interventions contenant le terme recherché aini seron exclus de la liste des résultats.</label>
+            <label index="searchform-usersearch-header">Recherche par auteur</label>
+            <label index="searchform-usersearch-content">Avec cette option pour pouvez limiter les résultats à un seul auteur, en ajoutant au terme recherché : un &quot;user:username&quot;. Si l'auteur indiqué n'existe pas, toutes les interventions contenant le terme recherché seront listées.</label>
+            <label index="searchform-Index-header">Indexation</label>
+            <label index="searchform-Index-content">Cette fonction actualise l'index de recherche. Seules des interventions qui ont été indexées peuvent etre trouvées. Il est donc nécessaire d'actualiser l'index de recherche régulièrement.</label>
+            <label index="searchform-orderBy">Classement</label>
+            <label index="searchform-onlySolved">Uniquement les fils clos</label>
+            <label index="searchform-onePost">Ne lister qu'un fil par thème</label>
+            <label index="searchform-submit">Lancer la recherche</label>
+            <label index="searchform-startIndex">Cliquez sur ce lien pour actualiser l'index de recherche</label>
+            <label index="searchform-title">Moteur de recherche</label>
+            <label index="searchform-searchstring">Terme(s) recherché</label>
+            <label index="searchform-advanced">Options</label>
+            <label index="searchform-searchplace">Lieu de la recherche</label>
+            <label index="searchform-indexing">Indexation</label>
+            <label index="search-noResults">Aucun résultat</label>
+            <label index="search-results">Résultats</label>
+            <label index="search-topicinfo">Information a propos du thème</label>
+            <label index="search-replies">Réponses</label>
+            <label index="search-solved">Clôturé</label>
+            <label index="search-cruser">Crée par</label>
+            <label index="search-crdate">Le</label>
+            <label index="search-yes">Oui</label>
+            <label index="search-no">Non</label>
+            <label index="search-topicSolved">Ce fil a été clôturé</label>
+            <label index="search-searchresults">Résultats de la recherche</label>
+            <label index="stats">Statistique : ###WORDS### mots et ###MATCHES### liens dans ###TOPICS### thèmes</label>
+            <label index="debug-duration">Durée </label>
+        </languageKey>
+        <!-- RUSSIAN LANGUAGE DATA -->
+        <languageKey index="ru" type="array">
 			<label index="indexing-running">Индексация запущена.</label>
 			<label index="indexing-topicIndexed">Тема ###TOPIC### проиндексированна.</label>
 			<label index="searchform-searchAllBoards">Искать во всех форумах</label>
@@ -238,7 +238,7 @@
 			<label index="search-searchresults">Результаты поиска</label>
 			<label index="stats">Статистика: ###WORDS### слова с ###MATCHES### найдены в ###TOPICS### темах</label>
 			<label index="debug-duration">Время поиска</label>
-		</languageKey>
+        </languageKey>
 		<!-- UKRAINIAN LANGUAGE DATA -->
 		<languageKey index="ua" type="array">
 			<label index="indexing-running">Індексування запущено.</label>
@@ -286,5 +286,5 @@
 			<label index="stats">Статистика: ###WORDS### слів з ###MATCHES### знайдено у ###TOPICS### темах</label>
 			<label index="debug-duration">Час пошуку</label>
 		</languageKey>
-	</data>
+    </data>
 </T3locallang>

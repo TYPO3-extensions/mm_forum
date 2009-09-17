@@ -6,36 +6,55 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
-			<label index="updater.currentRevision">Current Revision: %s</label>
-			<label index="updater.newestRevision">Newest Revision: %s</label>
-			<label index="updater.noUpdate">No update required.</label>
-			<label index="updater.updatePossible">A new version is available. Click the button below to update.</label>
-			<label index="updater.updateNow">Update!</label>
+            <label index="updater.currentRevision">Current Revision: %s</label>
+            <label index="updater.newestRevision">Newest Revision: %s</label>
+            <label index="updater.noUpdate">No update required.</label>
+            <label index="updater.updatePossible">A new version is available. Click the button below to update.</label>
+            <label index="updater.updateNow">Update!</label>
 			<label index="updater.intro">This is the mm_forum updater. You can use it to update your version of the mm_forum extension to the newest available version from the official mm_forum SVN repository (svn.typo3.net). You should however consider that the versions available in the SVN repository are development versions that are not necessarily stable.</label>
-			<label index="updater.title">Update</label>
-			<label index="updater.progress.success">Success</label>
-			<label index="updater.progress.failure">Failure</label>
-			<label index="updater.progress.loadTarball">Loading Tarball from SVN repository... </label>
-			<label index="updater.progress.storeToHD">Store Tarball into filesystem... </label>
-			<label index="updater.progress.moveInstaller">Move update installer into ext/ directory... </label>
-			<label index="updater.progress.performInstallation">Perform installation... </label>
-			<label index="updater.noURLfopen">The SVN repository could not be contacted. Please make sure that allow_url_fopen is enabled.</label>
+            <label index="updater.title">Update</label>
+            <label index="updater.progress.success">Success</label>
+            <label index="updater.progress.failure">Failure</label>
+            <label index="updater.progress.loadTarball">Loading Tarball from SVN repository... </label>
+            <label index="updater.progress.storeToHD">Store Tarball into filesystem... </label>
+            <label index="updater.progress.moveInstaller">Move update installer into ext/ directory... </label>
+            <label index="updater.progress.performInstallation">Perform installation... </label>
+            <label index="updater.noURLfopen">The SVN repository could not be contacted. Please make sure that allow_url_fopen is enabled.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
-			<label index="updater.currentRevision">Aktuelle Revision: %s</label>
-			<label index="updater.newestRevision">Neueste Revision: %s</label>
-			<label index="updater.noUpdate">Keine Aktualisierung erforderlich.</label>
+            <label index="updater.currentRevision">Aktuelle Revision: %s</label>
+            <label index="updater.newestRevision">Neueste Revision: %s</label>
+            <label index="updater.noUpdate">Keine Aktualisierung erforderlich.</label>
 			<label index="updater.updatePossible">Es steht eine neue Version zur Verfügung. Klicken Sie auf untenstehenden Button, um ein Update durchzuführen.</label>
-			<label index="updater.updateNow">Aktualisieren!</label>
+            <label index="updater.updateNow">Aktualisieren!</label>
 			<label index="updater.intro">Dies ist der mm_forum-Updater. Sie können ihn benutzen, um Ihre mm_forum-Version auf die neuste Version, die im offiziellen mm_forum-SVN-Repository (svn.typo3.net) zur Verfügung steht, zu aktualisieren. Sie sollten jedoch bedenken, dass die im SVN-Repository zur Verfügung gestellten Versionen Entwicklungsversionen sind, die nicht unbedingt stabil laufen müssen.</label>
-			<label index="updater.title">Aktualisieren</label>
-			<label index="updater.progress.success">Erfolg</label>
-			<label index="updater.progress.failure">Fehler</label>
-			<label index="updater.progress.loadTarball">Lade Tarball aus SVN-Repository... </label>
-			<label index="updater.progress.storeToHD">Speichere Tarball im Dateisystem... </label>
-			<label index="updater.progress.moveInstaller">Verschiebe Installer ins ext/-Verzeichnis... </label>
-			<label index="updater.progress.performInstallation">Führe Installation durch... </label>
-			<label index="updater.noURLfopen">Das SVN-Repository konnte nicht erreicht werden. Bitte stellen Sie sicher, dass allow_url_fopen aktiviert ist.</label>
+            <label index="updater.title">Aktualisieren</label>
+            <label index="updater.progress.success">Erfolg</label>
+            <label index="updater.progress.failure">Fehler</label>
+            <label index="updater.progress.loadTarball">Lade Tarball aus SVN-Repository... </label>
+            <label index="updater.progress.storeToHD">Speichere Tarball im Dateisystem... </label>
+            <label index="updater.progress.moveInstaller">Verschiebe Installer ins ext/-Verzeichnis... </label>
+            <label index="updater.progress.performInstallation">Führe Installation durch... </label>
+            <label index="updater.noURLfopen">Das SVN-Repository konnte nicht erreicht werden. Bitte stellen Sie sicher, dass allow_url_fopen aktiviert ist.</label>
+		</languageKey>
+				<languageKey index="fr" type="array">
+            <label index="updater.currentRevision">Version installée : %s</label>
+            <label index="updater.newestRevision">Nouvelle version : %s</label>
+            <label index="updater.noUpdate">Actualisation inutile.</label>
+            <label index="updater.updatePossible">Il y a une nouvelle version disponible.
+            	Utiliser la commande ci-dessous pour effectuer une mise à jour.</label>
+            <label index="updater.updateNow">Actualiser !</label>
+            <label index="updater.intro">Ceci est le programme de mise à jour de mm_forum.
+				Vous pouvez l'utiliser pour actualiser votre version par celle qui est disponible sur (svn.typo3.net).
+            	Par contre, sachez que ces versions sont des versions intermédiaires qui peuvent comporter des bugs.</label>
+            <label index="updater.title">Actualiser</label>
+            <label index="updater.progress.success">Succès</label>
+            <label index="updater.progress.failure">Erreur</label>
+            <label index="updater.progress.loadTarball">Chargement de Tarball de la SVN-Repository... </label>
+            <label index="updater.progress.storeToHD">Enregistrement du Tarball dans vos répertoires... </label>
+            <label index="updater.progress.moveInstaller">Déplacement du Installer dans le dossier ext/ ... </label>
+            <label index="updater.progress.performInstallation">L'installation est en cours... </label>
+            <label index="updater.noURLfopen">Le SVN-Repository n'est pas accessible. Assurez-vous que la fonction allow_url_fopen est activée sur votre serveur</label>
 		</languageKey>
 	</data>
 </T3locallang>

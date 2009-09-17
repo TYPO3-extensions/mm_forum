@@ -25,9 +25,9 @@
 			<label index="install.yes">Yes</label>
 			<label index="install.no">No</label>
 			<label index="install.save">Save settings</label>
-			<label index="install.currentValue">Current value</label>
-			<label index="install.usergroups">User groups</label>
-			<label index="install.clearCacheReminder">Remember to clear the cache after saving.</label>
+            <label index="install.currentValue">Current value</label>
+            <label index="install.usergroups">User groups</label>
+            <label index="install.clearCacheReminder">Remember to clear the cache after saving.</label>
 			
 			<label index="install.unit.topics">topics</label>
 			<label index="install.unit.posts">posts</label>
@@ -35,7 +35,7 @@
 			<label index="install.unit.lines">lines</label>
 			<label index="install.unit.chars">characters</label>
 			<label index="install.unit.results">search results</label>
-			<label index="install.unit.bytes">bytes</label>
+            <label index="install.unit.bytes">bytes</label>
 			
 			<!-- GENERAL OPTIONS -->
 			<label index="install.field.storagePID.title">Data storage page</label>
@@ -79,8 +79,8 @@
 			<label index="install.field.polls_enable.desc">This setting enables polls in your mm_forum.</label>
 			<label index="install.field.polls_restrict.title">Restrict poll creation</label>
 			<label index="install.field.polls_restrict.desc">This setting restricts the creation of polls to certain user groups. Leave this field empty to allow all users to create polls.</label>
-			<label index="install.field.enableShadows.title">Enable shadow topics</label>
-			<label index="install.field.enableShadows.desc">This property enables the display of shadow topics. If you move a topic to another forum, a "shadow" remains in the old forum pointing to the new location.</label>
+            <label index="install.field.enableShadows.title">Enable shadow topics</label>
+            <label index="install.field.enableShadows.desc">This property enables the display of shadow topics. If you move a topic to another forum, a "shadow" remains in the old forum pointing to the new location.</label>
 			
 			<!-- PM OPTIONS -->
 			<label index="install.field.pmPID.title">Private messaging page</label>
@@ -101,7 +101,7 @@
 			<!-- CONTACT OPTIONS -->
 			<label index="install.field.boardName.title">Board name</label>
 			<label index="install.field.boardName.desc">This parameter describes this board's name. This value is used in automatically generated messages.</label>
-			<label index="install.field.site_name.title">Site name</label>
+            <label index="install.field.site_name.title">Site name</label>
 			<label index="install.field.site_name.desc">This parameter descritbes this site's name. It is used in automatically generated messages.</label>
 			<label index="install.field.support_mail.title">Support email address</label>
 			<label index="install.field.support_mail.desc">This value specifies the support email address. This address is displayed as contact address in case of technical problems.</label>
@@ -121,40 +121,40 @@
 			<label index="install.field.indexCount.desc">To minimize the server load, the indexation process does not index all topics at once. Instead, the topics are split into several indexing processes. This variable defines how much topics are to be indexed at a time.</label>
 			<label index="install.field.indexingPassword.title">Indexing password</label>
 			<label index="install.field.indexingPassword.desc">This password is needed for a CronJob controlled peridoc indexing process. This password has to be submitted as parameter.</label>
-
-			<!-- HELP -->
-			<label index="install.help.title">mm_forum Configuration module</label>
-			<label index="install.help.content">This is the mm_forum configuration module. Here you can define all necessary settings required for running the mm_forum extension.&lt;br /&gt;&lt;br /&gt;Please note, by setting these values, you define the default values for the regarding properties. You can override these settings in a Template file by defining the regarding variables in the TypoScript constants or in the setup.</label>
-			<label index="install.start">The mm_forum install tool has detected that the mm_forum extension is not properly configured. In the following configuration steps, you will be asked to fill out some required fields necessary for the mm_forum extension to run.</label>
-
-			<!-- ATTACHMENTS -->
-			<label index="install.field.attachments.title">File attachments</label>
-			<label index="install.field.attachment_enable.title">Enable file attachments</label>
-			<label index="install.field.attachment_enable.desc">This option enables file attachments. Users can upload files to the server and attach them to posts.</label>
-			<label index="install.field.attachment_allow.title">Allowed file extensions</label>
-			<label index="install.field.attachment_allow.desc">This is a comma seperated list of file extensions that are allowed to be uploaded. You can use the * character to allow all extensions.</label>
-			<label index="install.field.attachment_deny.title">Denied file extensions</label>
-			<label index="install.field.attachment_deny.desc">This is a comma seperated list of file extensions that are denied to be uploaded. This overrides the list of allowed extensions. If you set the allowed extensions e.g. to * and the denyed extensions to php, all extensions except php will be accepted.</label>
-			<label index="install.field.attachment_filesize.title">Maximum file size</label>
-			<label index="install.field.attachment_filesize.desc">This option describes the maximum size for uploaded files. Bigger files will not be accepted.</label>
-			<label index="install.field.attachment_preview.title">Image preview</label>
-			<label index="install.field.attachment_preview.desc">This option enables preview images below the regarding posts for uploaded image files.</label>
-
-			<!-- ADDED IN 0.1.0 -->
-			<label index="install.field.signatureBBCodes.title">Enable BBCodes in signatures</label>
-			<label index="install.field.signatureBBCodes.desc">This options enables BBCodes in user signatures.</label>
             
-			<!-- ADDED IN 0.1.2 -->
-			<label index="install.field.enableRanks.title">Enable user ranks</label>
-			<label index="install.field.enableRanks.desc">This options enables user ranks. A user's rank depends on his/her post count.</label>
-			<label index="install.field.moderatedBoard.title">Moderated board</label>
+            <!-- HELP -->
+            <label index="install.help.title">mm_forum Configuration module</label>
+			<label index="install.help.content">This is the mm_forum configuration module. Here you can define all necessary settings required for running the mm_forum extension.&lt;br /&gt;&lt;br /&gt;Please note, by setting these values, you define the default values for the regarding properties. You can override these settings in a Template file by defining the regarding variables in the TypoScript constants or in the setup.</label>
+            <label index="install.start">The mm_forum install tool has detected that the mm_forum extension is not properly configured. In the following configuration steps, you will be asked to fill out some required fields necessary for the mm_forum extension to run.</label>
+            
+            <!-- ATTACHMENTS -->
+            <label index="install.field.attachments.title">File attachments</label>
+            <label index="install.field.attachment_enable.title">Enable file attachments</label>
+            <label index="install.field.attachment_enable.desc">This option enables file attachments. Users can upload files to the server and attach them to posts.</label>
+            <label index="install.field.attachment_allow.title">Allowed file extensions</label>
+            <label index="install.field.attachment_allow.desc">This is a comma seperated list of file extensions that are allowed to be uploaded. You can use the * character to allow all extensions.</label>
+            <label index="install.field.attachment_deny.title">Denied file extensions</label>
+			<label index="install.field.attachment_deny.desc">This is a comma seperated list of file extensions that are denied to be uploaded. This overrides the list of allowed extensions. If you set the allowed extensions e.g. to * and the denyed extensions to php, all extensions except php will be accepted.</label>
+            <label index="install.field.attachment_filesize.title">Maximum file size</label>
+            <label index="install.field.attachment_filesize.desc">This option describes the maximum size for uploaded files. Bigger files will not be accepted.</label>
+            <label index="install.field.attachment_preview.title">Image preview</label>
+            <label index="install.field.attachment_preview.desc">This option enables preview images below the regarding posts for uploaded image files.</label>
+            
+            <!-- ADDED IN 0.1.0 -->
+            <label index="install.field.signatureBBCodes.title">Enable BBCodes in signatures</label>
+            <label index="install.field.signatureBBCodes.desc">This options enables BBCodes in user signatures.</label>
+            
+            <!-- ADDED IN 0.1.2 -->
+            <label index="install.field.enableRanks.title">Enable user ranks</label>
+            <label index="install.field.enableRanks.desc">This options enables user ranks. A user's rank depends on his/her post count.</label>
+            <label index="install.field.moderatedBoard.title">Moderated board</label>
 			<label index="install.field.moderatedBoard.desc">This option makes mm_forum moderated. New posts and topics have to be approved by a moderator before becoming public.</label>
             
-			<!-- ADDED IN 0.1.4 -->
-			<label index="install.field.informal.title">Informal language</label>
-			<label index="install.field.informal.desc">This option switches between formal and informal language. This mainly affects the german language set when addressing the user either with Sie or with Du.</label>
+            <!-- ADDED IN 0.1.4 -->
+            <label index="install.field.informal.title">Informal language</label>
+            <label index="install.field.informal.desc">This option switches between formal and informal language. This mainly affects the german language set when addressing the user either with Sie or with Du.</label>
             
-			<!-- ADDED IN 0.1.5 -->
+            <!-- ADDED IN 0.1.5 -->
 			<label index="install.field.useCaptcha.title">Use Captcha library</label>
 			<label index="install.field.useCaptcha.desc">The option enables the use of the captcha library in order to generate random codes that users have to copy on registration. This is meant to prevent nonhuman visitors, i.e. bots, from registering. Requires the "captcha" library in order to work.</label>
 			
@@ -175,17 +175,17 @@
 			<label index="install.field.cron_pathTmpl.title">Template path</label>
 			<label index="install.field.cron_pathTmpl.desc">Template directory for templates used by Cronjobs.</label>
             
-			<!-- ADDED IN 0.1.6 -->
-			<label index="install.field.topicIconMode.title">Icon mode</label>
-			<label index="install.field.topicIconMode.desc">Defines the icon style used for topic and board icons.</label>
-			<label index="install.field.topicIconMode.options.classic">Classic</label>
-			<label index="install.field.topicIconMode.options.modern">Modern</label>
+            <!-- ADDED IN 0.1.6 -->
+            <label index="install.field.topicIconMode.title">Icon mode</label>
+            <label index="install.field.topicIconMode.desc">Defines the icon style used for topic and board icons.</label>
+            <label index="install.field.topicIconMode.options.classic">Classic</label>
+            <label index="install.field.topicIconMode.options.modern">Modern</label>
             
-			<!-- ADDED IN 0.1.7 -->
-			<label index="install.field.userNameField.title">User name field</label>
-			<label index="install.field.userNameField.desc">Database field name that should be used for the user's name. Can be any field from the fe_users table.</label>
-			<label index="install.field.attachment_count.title">Attachment count</label>
-			<label index="install.field.attachment_count.desc">Maximum amount of attachments for one post.</label>
+            <!-- ADDED IN 0.1.7 -->
+            <label index="install.field.userNameField.title">User name field</label>
+            <label index="install.field.userNameField.desc">Database field name that should be used for the user's name. Can be any field from the fe_users table.</label>
+            <label index="install.field.attachment_count.title">Attachment count</label>
+            <label index="install.field.attachment_count.desc">Maximum amount of attachments for one post.</label>
 			<label index="install.field.cron_verbose.title">Enable logging</label>
 			<label index="install.field.cron_verbose.desc">This option enables logging of cronjobs. This is useful for debugging. In order to store these logs, the output of the cronjob has to be piped into a log file.</label>
 			<label index="install.field.cron_verbose.options.all">Everything</label>
@@ -193,7 +193,7 @@
 			<label index="install.field.cron_verbose.options.quiet">Absolute silence</label>
 			<label index="install.field.rssPID.title">RSS page</label>
 			<label index="install.field.rssPID.desc">The page the mm_forum RSS plugin is placed on. Leave empty to disable RSS feeds.</label>
-			
+
 			<!-- ADDED IN 0.1.8 -->
 			<label index="install.cat.user">User</label>
 			<label index="install.title.user">User settings</label>
@@ -227,9 +227,9 @@
 			<label index="install.yes">Ja</label>
 			<label index="install.no">Nein</label>
 			<label index="install.save">Einstellungen speichern</label>
-			<label index="install.currentValue">Derzeitiger Wert</label>
-			<label index="install.usergroups">Benutzergruppen</label>
-			<label index="install.clearCacheReminder">Denken Sie daran, nach dem Speichern den Cache zu leeren.</label>
+            <label index="install.currentValue">Derzeitiger Wert</label>
+            <label index="install.usergroups">Benutzergruppen</label>
+            <label index="install.clearCacheReminder">Denken Sie daran, nach dem Speichern den Cache zu leeren.</label>
 			
 			<label index="install.unit.topics">Themen</label>
 			<label index="install.unit.posts">Beiträge</label>
@@ -237,7 +237,7 @@
 			<label index="install.unit.lines">Zeilen</label>
 			<label index="install.unit.chars">Zeichen</label>
 			<label index="install.unit.results">Suchergebnisse</label>
-			<label index="install.unit.bytes">Bytes</label>
+            <label index="install.unit.bytes">Bytes</label>
 			
 			<!-- GENERAL OPTIONS -->
 			<label index="install.field.storagePID.title">Datenspeicherseite</label>
@@ -281,8 +281,8 @@
 			<label index="install.field.polls_enable.desc">Diese Einstellung aktiviert Umfragen in Ihrem mm_forum</label>
 			<label index="install.field.polls_restrict.title">Umfragenerstellung einschränken</label>
 			<label index="install.field.polls_restrict.desc">Diese Einstellung schränkt das Erstellen von Umfragen auf bestimmte Benutzergruppen ein. Lassen Sie dieses Feld leer, um allen Benutzern zu erlauben, Umfragen zu erstellen.</label>
-			<label index="install.field.enableShadows.title">Schattenthemen aktivieren</label>
-			<label index="install.field.enableShadows.desc">Diese Einstellung aktiviert die Darstellung von "Schattenthemen". Wenn ein Thema in ein anderes Forum verschoben wird, bleibt im alten Forum ein "Schatten" zurück, welcher auf die neue Position des Themas zeigt.</label>
+            <label index="install.field.enableShadows.title">Schattenthemen aktivieren</label>
+            <label index="install.field.enableShadows.desc">Diese Einstellung aktiviert die Darstellung von "Schattenthemen". Wenn ein Thema in ein anderes Forum verschoben wird, bleibt im alten Forum ein "Schatten" zurück, welcher auf die neue Position des Themas zeigt.</label>
 			
 			<!-- PM OPTIONS -->
 			<label index="install.field.pmPID.title">PN-Seite</label>
@@ -303,8 +303,8 @@
 			<!-- CONTACT OPTIONS -->
 			<label index="install.field.boardName.title">Forumname</label>
 			<label index="install.field.boardName.desc">Dieser Parameter beschreibt den Namen dieses Forums. Dieser Wert wird in automatisch generierten Nachrichten verwendet.</label>
-			<label index="install.field.site_name.title">Seitenname</label>
-			<label index="install.field.site_name.desc">Dieser Parameter beschreibt den Namen dieser Internetseite. Wird in automatisch generierten Nachrichten verwendet.</label>
+            <label index="install.field.site_name.title">Seitenname</label>
+            <label index="install.field.site_name.desc">Dieser Parameter beschreibt den Namen dieser Internetseite. Wird in automatisch generierten Nachrichten verwendet.</label>
 			<label index="install.field.support_mail.title">Support-E-Mail-Adresse</label>
 			<label index="install.field.support_mail.desc">Dieser Wert gibt die Support-E-Mail-Adresse an. Diese Adresse wird im Falle eines technischen Problems als Kontaktadresse angezeigt.</label>
 			<label index="install.field.mailer_mail.title">Mailer-E-Mail-Adresse</label>
@@ -323,40 +323,40 @@
 			<label index="install.field.indexCount.desc">Um die Serverauslastung zu minimieren, indiziert der Indizierungsprozess nicht alle Themen auf einmal. Stattdessen werden die Themen auf mehrere Indizierungsvorgänge aufgeteilt. Diese Variable gibt an, wie viele Themen jeweils gleichzeitig indiziert werden sollen.</label>
 			<label index="install.field.indexingPassword.title">Indizierungspassword</label>
 			<label index="install.field.indexingPassword.desc">Dieses Password wird für den CronJob-kontrollierten Indizierungsprozess benötigt. Aus Sicherheitsgründen wird dieses Password lediglich als MD5-Hash gespeichert. Bei der Indizierung muss das Klartext-Password als Parameter übermittelt werden.</label>
-
-			<!-- HELP -->
-			<label index="install.help.title">mm_forum-Konfigurationsmodul</label>
-			<label index="install.help.content">Dies ist das mm_forum-Konfigurationsmodul. Hier können Sie alle notwendigen Einstellungen treffen, die für den Betrieb der mm_forum-Erweiterung notwendig sind.&lt;br /&gt;&lt;br /&gt;Beachten Sie, dass Sie, wenn Sie diese Werte setzen, global geltende Standardwerte für die betreffenden Eigenschaften definieren. Sie können diese Einstellungen in einem Template überschreiben, indem Sie die entsprechenden Variablen in den TypoScript-Konstanten oder im TypoScript-Setup angeben.</label>
-			<label index="install.start">Das mm_forum-Installationstool hat ermittelt, dass die mm_forum-Erweiterung nicht ordnungsgemäß konfiguriert wurde. In den folgenden Konfigurationsschritten werden Sie gebeten, einige benötigte Felder auszufüllen, damit die mm_forum-Erweiterung in Betrieb genommen werden kann.</label>
             
-			<!-- ATTACHMENTS -->
-			<label index="install.field.attachments.title">Dateianhänge</label>
-			<label index="install.field.attachment_enable.title">Dateianhänge aktivieren</label>
-			<label index="install.field.attachment_enable.desc">Diese Option aktiviert Dateianhänge. Benutzer können so Dateien auf den Server hochladen und an Beiträge anhängen.</label>
-			<label index="install.field.attachment_allow.title">Zugelassene Dateiendungen</label>
-			<label index="install.field.attachment_allow.desc">Dies ist eine kommaseparierte Liste von Dateiendungen, die für den Upload zugelassen sind. Sie können das *-Zeichen verwenden, um alle Endungen zuzulassen.</label>
-			<label index="install.field.attachment_deny.title">Nicht zugelassene Dateiendungen</label>
-			<label index="install.field.attachment_deny.desc">Dies ist eine kommaseparierte Liste von Dateiendungen, die nicht für den Upload zugelassen sind. Diese Eistellung überstimmt die Einstellung über zugelassene Dateiendungen. Wenn Sie also alle Dateiendungen zulassen (*) und lediglich z.B. "php" als Endung ablehnen, werden alle Dateien bis auf die mit der Endung "php" zugelassen.</label>
-			<label index="install.field.attachment_filesize.title">Maximale Dateigröße</label>
-			<label index="install.field.attachment_filesize.desc">Diese Eigenschaft beschreibt die maximale Dateigröße für hochgeladene Dateien. Größere Dateien werden nicht zugelassen.</label>
-			<label index="install.field.attachment_preview.title">Vorschaubilder</label>
-			<label index="install.field.attachment_preview.desc">Diese Eigenschaft aktiviert Vorschaubilder für Bilddateien unter den entsprechenden Beiträgen.</label>
-
-			<!-- ADDED IN 0.1.0 -->
-			<label index="install.field.signatureBBCodes.title">BBCodes in Signaturen aktivieren</label>
-			<label index="install.field.signatureBBCodes.desc">Diese Option aktiviert BBCodes in Benutzersignaturen.</label>
-
-			<!-- ADDED IN 0.1.2 -->
-			<label index="install.field.enableRanks.title">Benutzerränge aktivieren</label>
-			<label index="install.field.enableRanks.desc">Diese Einstellung aktiviert Benutzerränge. Der Rang eines Benutzers hängt von der Anzahl seiner/ihrer Beiträge ab.</label>
-			<label index="install.field.moderatedBoard.title">Moderiertes Forum</label>
-			<label index="install.field.moderatedBoard.desc">Diese Einstellung aktiviert das moderierte Forum. Beiträge müssen von einem Moderator freigeschaltet werden, bevor sie sichtbar werden.</label>
-
-			<!-- ADDED IN 0.1.4 -->
-			<label index="install.field.informal.title">Informelle Sprache</label>
-			<label index="install.field.informal.desc">Diese Einstellung schaltet zwischen formeller und informeller Sprache um. Dies betrifft hauptsächlich die deutsche Sprache, wo der Benutzer entweder mit Sie oder Du angesprochen wird.</label>
-
-			<!-- ADDED IN 0.1.5 -->
+            <!-- HELP -->
+            <label index="install.help.title">mm_forum-Konfigurationsmodul</label>
+            <label index="install.help.content">Dies ist das mm_forum-Konfigurationsmodul. Hier können Sie alle notwendigen Einstellungen treffen, die für den Betrieb der mm_forum-Erweiterung notwendig sind.&lt;br /&gt;&lt;br /&gt;Beachten Sie, dass Sie, wenn Sie diese Werte setzen, global geltende Standardwerte für die betreffenden Eigenschaften definieren. Sie können diese Einstellungen in einem Template überschreiben, indem Sie die entsprechenden Variablen in den TypoScript-Konstanten oder im TypoScript-Setup angeben.</label>
+            <label index="install.start">Das mm_forum-Installationstool hat ermittelt, dass die mm_forum-Erweiterung nicht ordnungsgemäß konfiguriert wurde. In den folgenden Konfigurationsschritten werden Sie gebeten, einige benötigte Felder auszufüllen, damit die mm_forum-Erweiterung in Betrieb genommen werden kann.</label>
+            
+            <!-- ATTACHMENTS -->
+            <label index="install.field.attachments.title">Dateianhänge</label>
+            <label index="install.field.attachment_enable.title">Dateianhänge aktivieren</label>
+            <label index="install.field.attachment_enable.desc">Diese Option aktiviert Dateianhänge. Benutzer können so Dateien auf den Server hochladen und an Beiträge anhängen.</label>
+            <label index="install.field.attachment_allow.title">Zugelassene Dateiendungen</label>
+            <label index="install.field.attachment_allow.desc">Dies ist eine kommaseparierte Liste von Dateiendungen, die für den Upload zugelassen sind. Sie können das *-Zeichen verwenden, um alle Endungen zuzulassen.</label>
+            <label index="install.field.attachment_deny.title">Nicht zugelassene Dateiendungen</label>
+            <label index="install.field.attachment_deny.desc">Dies ist eine kommaseparierte Liste von Dateiendungen, die nicht für den Upload zugelassen sind. Diese Eistellung überstimmt die Einstellung über zugelassene Dateiendungen. Wenn Sie also alle Dateiendungen zulassen (*) und lediglich z.B. "php" als Endung ablehnen, werden alle Dateien bis auf die mit der Endung "php" zugelassen.</label>
+            <label index="install.field.attachment_filesize.title">Maximale Dateigröße</label>
+            <label index="install.field.attachment_filesize.desc">Diese Eigenschaft beschreibt die maximale Dateigröße für hochgeladene Dateien. Größere Dateien werden nicht zugelassen.</label>
+            <label index="install.field.attachment_preview.title">Vorschaubilder</label>
+            <label index="install.field.attachment_preview.desc">Diese Eigenschaft aktiviert Vorschaubilder für Bilddateien unter den entsprechenden Beiträgen.</label>
+            
+            <!-- ADDED IN 0.1.0 -->
+            <label index="install.field.signatureBBCodes.title">BBCodes in Signaturen aktivieren</label>
+            <label index="install.field.signatureBBCodes.desc">Diese Option aktiviert BBCodes in Benutzersignaturen.</label>
+            
+            <!-- ADDED IN 0.1.2 -->
+            <label index="install.field.enableRanks.title">Benutzerränge aktivieren</label>
+            <label index="install.field.enableRanks.desc">Diese Einstellung aktiviert Benutzerränge. Der Rang eines Benutzers hängt von der Anzahl seiner/ihrer Beiträge ab.</label>
+            <label index="install.field.moderatedBoard.title">Moderiertes Forum</label>
+            <label index="install.field.moderatedBoard.desc">Diese Einstellung aktiviert das moderierte Forum. Beiträge müssen von einem Moderator freigeschaltet werden, bevor sie sichtbar werden.</label>
+            
+            <!-- ADDED IN 0.1.4 -->
+            <label index="install.field.informal.title">Informelle Sprache</label>
+            <label index="install.field.informal.desc">Diese Einstellung schaltet zwischen formeller und informeller Sprache um. Dies betrifft hauptsächlich die deutsche Sprache, wo der Benutzer entweder mit Sie oder Du angesprochen wird.</label>
+            
+            <!-- ADDED IN 0.1.5 -->
 			<label index="install.field.useCaptcha.title">Captcha-Bibliothek benutzen</label>
 			<label index="install.field.useCaptcha.desc">Diese Option aktiviert die Einbindung der Captcha-Erweiterung in die Benutzerregistrierung. Hier werden zufällige Codes erzeugt, die beim Registrieren kopiert werden müssen. Damit soll ausgeschlossen werden, dass sich z.B. Bots auf der Seite registrieren können. Dieses Feature erfordert, dass die "captcha"-Erweiterung installiert ist.</label>
 			<label index="install.cat.cron">Cronjobs</label>
@@ -375,18 +375,18 @@
 			<label index="install.field.cron_notifyPublishSender.desc">Der Absender automatisch erzeugter E-Mails.</label>
 			<label index="install.field.cron_pathTmpl.title">Vorlagenverzeichnis</label>
 			<label index="install.field.cron_pathTmpl.desc">Pfad der Designvorlagen für Cronjobs.</label>
-
-			<!-- ADDED IN 0.1.6 -->
-			<label index="install.field.topicIconMode.title">Icon-Modus</label>
-			<label index="install.field.topicIconMode.desc">Definiert den Icon-Stil von Foren und Themen.</label>
-			<label index="install.field.topicIconMode.options.classic">Klassisch</label>
-			<label index="install.field.topicIconMode.options.modern">Modern</label>
-
-			<!-- ADDED IN 0.1.7 -->
-			<label index="install.field.userNameField.title">Benutzernamenfeld</label>
-			<label index="install.field.userNameField.desc">Datenbankfeld, welches für den Benutzernamen verwendet werden soll. Kann jedes Feld aus der fe_users-Tabelle sein.</label>
-			<label index="install.field.attachment_count.title">Dateianhänge</label>
-			<label index="install.field.attachment_count.desc">Maximale Anzahl an Dateianhängen für einen Beitrag.</label>
+            
+            <!-- ADDED IN 0.1.6 -->
+            <label index="install.field.topicIconMode.title">Icon-Modus</label>
+            <label index="install.field.topicIconMode.desc">Definiert den Icon-Stil von Foren und Themen.</label>
+            <label index="install.field.topicIconMode.options.classic">Klassisch</label>
+            <label index="install.field.topicIconMode.options.modern">Modern</label>
+            
+            <!-- ADDED IN 0.1.7 -->
+            <label index="install.field.userNameField.title">Benutzernamenfeld</label>
+            <label index="install.field.userNameField.desc">Datenbankfeld, welches für den Benutzernamen verwendet werden soll. Kann jedes Feld aus der fe_users-Tabelle sein.</label>
+            <label index="install.field.attachment_count.title">Dateianhänge</label>
+            <label index="install.field.attachment_count.desc">Maximale Anzahl an Dateianhängen für einen Beitrag.</label>
 			<label index="install.field.cron_verbose.title">Protokollierung aktivieren</label>
 			<label index="install.field.cron_verbose.desc">Diese Einstellung aktiviert das Protokollieren von Cronjobs. Dies ist zum Beispiel zur Fehlerbehebung nützlich. Um diese Protokolle zu speichern, muss die Ausgabe des Cronjobs in eine Logdatei weitergeleitet werden.</label>
 			<label index="install.field.cron_verbose.options.all">Alles</label>
@@ -394,7 +394,7 @@
 			<label index="install.field.cron_verbose.options.quiet">Völlige Stille</label>
 			<label index="install.field.rssPID.title">RSS-Seite</label>
 			<label index="install.field.rssPID.desc">Die Seite, auf welcher das mm_forum-RSS-Plugin platziert ist. Lassen Sie dieses Feld leer, um die RSS-Funktion zu deaktivieren.</label>
-			
+
 			<!-- ADDED IN 0.1.8 -->
 			<label index="install.cat.user">Benutzereinstellungen</label>
 			<label index="install.title.user">Benutzereinstellungen</label>
@@ -403,9 +403,9 @@
 			<label index="install.field.emailConfirm.title">Anmeldung bestätigen</label>
 			<label index="install.field.emailConfirm.desc">Gibt an, ob Anmeldungen über einen per E-Mail verschickten Aktivierungslink bestätigt werden müssen.</label>
 		</languageKey>
-		
+
         <!-- FINNISH LANGUAGE DATA -->
-		<languageKey index="fi" type="array">
+        <languageKey index="fi" type="array">
 			<label index="install.cat.general">Yleiset asetukset</label>
 			<label index="install.cat.pm">Yksityisviestit</label>
 			<label index="install.cat.contact">Yhteystiedot</label>
@@ -499,9 +499,9 @@
 			<label index="install.yes">Oui</label>
 			<label index="install.no">Non</label>
 			<label index="install.save">Enregistrer les réglages</label>
-			<label index="install.currentValue">Valeur actuelle</label>
-			<label index="install.usergroups">Groupes d'intervenants</label>
-			<label index="install.clearCacheReminder">Penset à vider le cache après enregistrement.</label>
+            <label index="install.currentValue">Valeur actuelle</label>
+            <label index="install.usergroups">Groupes d'intervenants</label>
+            <label index="install.clearCacheReminder">Penset à vider le cache après enregistrement.</label>
 			
 			<label index="install.unit.topics">Thèmes</label>
 			<label index="install.unit.posts">interventions</label>
@@ -509,7 +509,7 @@
 			<label index="install.unit.lines">Lignes</label>
 			<label index="install.unit.chars">Charactères</label>
 			<label index="install.unit.results">Résultats de recherche</label>
-			<label index="install.unit.bytes">Octets</label>
+            <label index="install.unit.bytes">Octets</label>
 			
 			<!-- GENERAL OPTIONS -->
 			<label index="install.field.storagePID.title">Page contenant les données</label>
@@ -539,9 +539,9 @@
 			<label index="install.field.displayRealName.title">Montrer le vrai nom</label>
 			<label index="install.field.displayRealName.desc">Si cette option est cochée, le vrai nom de l'intervenant sera montré, en plus du pseudo.</label>
 			<label index="install.field.user_hotPosts.title">Nombre d'interventions avant décoration</label>
-			<label index="install.field.user_hotPosts.desc">Cette valeur indique à partir de combien d'interventions un intervenant sera décoré par une icône particulière.</label>
-			<label index="install.field.topic_hotPosts.title">Nombre d'interventions par fil interessant</label>
-			<label index="install.field.topic_hotPosts.desc">Indique combien d'interventions un fil de discussion doit obtenir avant d'être marqué comme fil interessant.</label>
+			<label index="install.field.user_hotPosts.desc">Cette valeur indique à partir de combien d'interventions un intervenant sera décoré par une icône le déclarant prolifique.</label>
+			<label index="install.field.topic_hotPosts.title">Un fil est prolifique à partir de ... interventions</label>
+			<label index="install.field.topic_hotPosts.desc">Indique combien d'interventions un fil de discussion doit recueillir avant d'être considéré comme fil prolifique.</label>
 			<label index="install.field.spamblock_interval.title">Intervale antispam</label>
 			<label index="install.field.spamblock_interval.desc">Le temps en secondes qui doit s'écouler avant qu'un itervenant puisse poster une nouvelle intervention. Pour desactiver cette option, inscrire 0.</label>
 			<label index="install.field.signatureLimit.title">Longuer maximale d'une signature</label>
@@ -553,8 +553,8 @@
 			<label index="install.field.polls_enable.desc">Cette option active l'option vote dans votre mm_forum</label>
 			<label index="install.field.polls_restrict.title">Limiter l'utilisation du vote</label>
 			<label index="install.field.polls_restrict.desc">cette option permet de limiter l'utilisation de l'option vote à certains groupes d'utilisateurs. Laisser vide pour ne fixer aucune restriction.</label>
-			<label index="install.field.enableShadows.title">Activer les fils phantômes</label>
-			<label index="install.field.enableShadows.desc">Cette option active les fils-phantômes. Un fil-phantôme est un fil déplacé vers un autre thème. Il reste grisé dans son lieu d'origine, avec un lien qui permet de trouver le nouveau fil.</label>
+            <label index="install.field.enableShadows.title">Activer les fils phantômes</label>
+            <label index="install.field.enableShadows.desc">Cette option active les fils-phantômes. Un fil-phantôme est un fil déplacé vers un autre thème. Il reste grisé dans son lieu d'origine, avec un lien qui permet de trouver le nouveau fil.</label>
 			
 			<!-- PM OPTIONS -->
 			<label index="install.field.pmPID.title">Page-MP</label>
@@ -575,8 +575,8 @@
 			<!-- CONTACT OPTIONS -->
 			<label index="install.field.boardName.title">Nom du forum</label>
 			<label index="install.field.boardName.desc">Ce paramètre contient le nom du forum qui sera utilisé lorsque des messages seront génerés par le système.</label>
-			<label index="install.field.site_name.title">Nom de la page</label>
-			<label index="install.field.site_name.desc">Ce paramètre contient le nom du site qui sera utilisé lorsque des messages seront génerés par le système.</label>
+            <label index="install.field.site_name.title">Nom de la page</label>
+            <label index="install.field.site_name.desc">Ce paramètre contient le nom du site qui sera utilisé lorsque des messages seront génerés par le système.</label>
 			<label index="install.field.support_mail.title">Adresse e-mail pour le support</label>
 			<label index="install.field.support_mail.desc">Ce paramètre contient l'adresse e-mail qui sera indiquée en cas de problème technique pour une prise de contact.</label>
 			<label index="install.field.mailer_mail.title">Adresse e-mail Expéditeur</label>
@@ -596,27 +596,70 @@
 			<label index="install.field.indexingPassword.title">Mot de passe d'indexation</label>
 			<label index="install.field.indexingPassword.desc">Ce mot de passe est utilisé pour l'indexation par CronJob. Par mesure de sécurité ce mot de pase est stocké comme MD5-Hash. Lors de l'indexation le mot de passe doit être indiqué en clair.</label>
             
-			<!-- HELP -->
-			<label index="install.help.title">Module de configuration de mm_forum</label>
-			<label index="install.help.content">Vous vous trouvez dans le module de configuration de mm_forum. tous les réglages utiles peuvent être paramétrés ici. Les valeurs que vous indiquez ici remplaceront les valeurs par défaut valables globalement dans mm_forum. Ces valeurs peuvent être écrasées dans un gabarit typo3 par des variables définies dans les champs constants et setup.</label>
-			<label index="install.start">Le module d'installation a constaté que l'extention mm_forum n'est pas configurée correctement. Les étapes suivantes vont vous permettre de fournir les indications indispensables au bon fonctionnement de mm_forum.</label>
+            <!-- HELP -->
+            <label index="install.help.title">Module de configuration de mm_forum</label>
+            <label index="install.help.content">Vous vous trouvez dans le module de configuration de mm_forum. tous les réglages utiles peuvent être paramétrés ici. Les valeurs que vous indiquez ici remplaceront les valeurs par défaut valables globalement dans mm_forum. Ces valeurs peuvent être écrasées dans un gabarit typo3 par des variables définies dans les champs constants et setup.</label>
+            <label index="install.start">Le module d'installation a constaté que l'extention mm_forum n'est pas configurée correctement. Les étapes suivantes vont vous permettre de fournir les indications indispensables au bon fonctionnement de mm_forum.</label>
+            
+            <!-- ATTACHMENTS -->
+            <label index="install.field.attachments.title">Pieces jointes</label>
+            <label index="install.field.attachment_enable.title">Activer l'option pièces-jointes</label>
+            <label index="install.field.attachment_enable.desc">cette option active la gestion des pièces-jointes. Ainsi les intervenants peuvent télécharger des fichiers dans leurs interventions.</label>
+            <label index="install.field.attachment_allow.title">Suffixes autorisés</label>
+            <label index="install.field.attachment_allow.desc">Ceci est une liste des suffixes autorisés au téléchargement (séparer les suffixes par une virgule). Vous pouvez utiliser le symbole * pour permettre tous les suffixes.</label>
+            <label index="install.field.attachment_deny.title">Suffixes interdits</label>
+            <label index="install.field.attachment_deny.desc">Ceci est une liste des suffixes interdits au téléchargement (séparer les suffixes par une virgule). Ce paramètre écrase celui des suffixe autorisés. Exemple: autoriser * et interdire PHP. Tous les suffixes, sauf le suffixe PHP seront autrisés.</label>
+            <label index="install.field.attachment_filesize.title">Taille maximale</label>
+            <label index="install.field.attachment_filesize.desc">Indique la taille maximale autorisée pour une pièce jointe.</label>
+            <label index="install.field.attachment_preview.title">Aperçus</label>
+            <label index="install.field.attachment_preview.desc">Cette option active l'aperçu en miniature d'une image téléchargée dans une intervention.</label>
+            
+            <!-- ADDED IN 0.1.0 -->
+            <label index="install.field.signatureBBCodes.title">Activer les BBCodes dans les signatures</label>
+            <label index="install.field.signatureBBCodes.desc">Cette option active les BBCodes dans les signatures d'intervenants.</label>
 
-			<!-- ATTACHMENTS -->
-			<label index="install.field.attachments.title">Pieces jointes</label>
-			<label index="install.field.attachment_enable.title">Activer l'option pièces-jointes</label>
-			<label index="install.field.attachment_enable.desc">cette option active la gestion des pièces-jointes. Ainsi les intervenants peuvent télécharger des fichiers dans leurs interventions.</label>
-			<label index="install.field.attachment_allow.title">Suffixes autorisés</label>
-			<label index="install.field.attachment_allow.desc">Ceci est une liste des suffixes autorisés au téléchargement (séparer les suffixes par une virgule). Vous pouvez utiliser le symbole * pour permettre tous les suffixes.</label>
-			<label index="install.field.attachment_deny.title">Suffixes interdits</label>
-			<label index="install.field.attachment_deny.desc">Ceci est une liste des suffixes interdits au téléchargement (séparer les suffixes par une virgule). Ce paramètre écrase celui des suffixe autorisés. Exemple: autoriser * et interdire PHP. Tous les suffixes, sauf le suffixe PHP seront autrisés.</label>
-			<label index="install.field.attachment_filesize.title">Taille maximale</label>
-			<label index="install.field.attachment_filesize.desc">Indique la taille maximale autorisée pour une pièce jointe.</label>
-			<label index="install.field.attachment_preview.title">Aperçus</label>
-			<label index="install.field.attachment_preview.desc">Cette option active l'aperçu en miniature d'une image téléchargée dans une intervention.</label>
+            <!-- ADDED IN 0.1.2 -->
+            <label index="install.field.enableRanks.title">Activer le classement des utilisateurs</label>
+            <label index="install.field.enableRanks.desc">Cette option active la classification des utilisateurs selon leur nombre d'interventions.</label>
+            <label index="install.field.moderatedBoard.title">Forum modéré</label>
+            <label index="install.field.moderatedBoard.desc">Cette option active la modération du forum. Les interventions devront être validées et publiées par un animateur.</label>
+            
+            <!-- ADDED IN 0.1.4 -->
+            <label index="install.field.informal.title">Language informel</label>
+            <label index="install.field.informal.desc">Cette option active le language informel (tu au lieu de vous).</label>
+            
+            <!-- ADDED IN 0.1.5 -->
+			<label index="install.field.useCaptcha.title">Activer la bibliothèque captch</label>
+			<label index="install.field.useCaptcha.desc">Cette option active l'extension captcha pour l'inscription de nouveaux utilisateurs. Des codes aléatoires sont produits qui doivent être copiés par le candidat lors de son inscription. Ceci évite des inscriptions par robots. Evidemment l'extension Captcha soi être installée à cette fin..</label>
+			<label index="install.cat.cron">Cronjobs</label>
+			<label index="install.title.cron">Cronjobs</label>
+			<label index="install.field.cron_htmlemail.title">Envoyer des mails en HTML</label>
+			<label index="install.field.cron_htmlemail.desc">Indique si des mails automatiques seront expédiés en texte ou en HTML.</label>
+			<label index="install.field.cron_notifyPublish_group.title">Groupe destinataires</label>
+			<label index="install.field.cron_notifyPublish_group.desc">Le groupe de destinataires qui valident et publient des interventions dans un forum modéré</label>
+			<label index="install.field.cron_lang.title">Langue des e-mails</label>
+			<label index="install.field.cron_lang.desc">La langue dans laquelle sont générés des mails automatiques.</label>
+			<label index="install.field.cron_sitetitle.title">Titre de page</label>
+			<label index="install.field.cron_sitetitle.desc">Le titre de page utilisé dans des mails générés automatiquement.</label>
+			<label index="install.field.cron_postqueue_link.title">Liens vers interventions à valider et publier</label>
+			<label index="install.field.cron_postqueue_link.desc">Lien absolu vers les nouvelels interventions en attente de validation / publication.</label>
+			<label index="install.field.cron_notifyPublishSender.title">Expéditeur d'e-Mail</label>
+			<label index="install.field.cron_notifyPublishSender.desc">L'expéditeur de mails automatiques.</label>
+			<label index="install.field.cron_pathTmpl.title">Répertoire de gabarits d'e-mails</label>
+			<label index="install.field.cron_pathTmpl.desc">Désigne le répertoire dans lequel sont stockés les gabarits utilisés par des cronjobs.</label>
 
-			<!-- ADDED IN 0.1.0 -->
-			<label index="install.field.signatureBBCodes.title">Activer les BBCodes dans les signatures</label>
-			<label index="install.field.signatureBBCodes.desc">Cette option active les BBCodes dans les signatures d'intervenants.</label>
+            <!-- ADDED IN 0.1.6 -->
+            <label index="install.field.topicIconMode.title">Mode des icônes</label>
+            <label index="install.field.topicIconMode.desc">Definit le style des icônes des thèmes et fils.</label>
+            <label index="install.field.topicIconMode.options.classic">Classique</label>
+            <label index="install.field.topicIconMode.options.modern">Moderne</label>
+            
+            <!-- ADDED IN 0.1.7 -->
+            <label index="install.field.userNameField.title">Champ_utilisateur</label>
+            <label index="install.field.userNameField.desc">Définit le champ qui sera utilisé comme nom d'utilisateur. Chaque champ du tableau fe_users peut être utilisé.</label>
+            <label index="install.field.attachment_count.title">Pièces jointes</label>
+            <label index="install.field.attachment_count.desc">Nombre max. de pièces jointes par intervention.</label>
+
 		</languageKey>
         <!-- RUSSIAN LANGUAGE DATA -->
 		<languageKey index="ru" type="array">

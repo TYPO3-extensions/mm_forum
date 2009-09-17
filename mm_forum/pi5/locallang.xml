@@ -1,119 +1,119 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <T3locallang>
-	<meta type="array">
-		<description>Language labels for plugin &quot;tx_mmforum_pi5&quot;</description>
-		<type></type>
-		<csh_table></csh_table>
-		<labelContext type="array">
-		</labelContext>
-	</meta>
-	<data type="array">
-		<!-- ENGLISH LANGUAGE DATA -->
-		<languageKey index="default" type="array">
-			<label index="tx_mmforum_user_sig">Signature</label>
-			<label index="about">All about</label>
-			<label index="descr_date">Register date</label>
-			<label index="zip">ZIP</label>
-			<label index="city">Town</label>
-			<label index="www">Website</label>
-			<label index="tx_mmforum_occ">Job</label>
-			<label index="tx_mmforum_interests">Interests</label>
-			<label index="email">Email</label>
-			<label index="descr_signatur_preview">Preview</label>
-			<label index="send">Save</label>
-			<label index="filename">File</label>
-			<label index="name">Name</label>
-			<label index="delete_avatar">Delete avatar</label>
+    <meta type="array">
+        <description>Language labels for plugin &quot;tx_mmforum_pi5&quot;</description>
+        <type></type>
+        <csh_table></csh_table>
+        <labelContext type="array">
+        </labelContext>
+    </meta>
+    <data type="array">
+    	<!-- ENGLISH LANGUAGE DATA -->
+        <languageKey index="default" type="array">
+            <label index="tx_mmforum_user_sig">Signature</label>
+            <label index="about">All about</label>
+            <label index="descr_date">Register date</label>
+            <label index="zip">ZIP</label>
+            <label index="city">Town</label>
+            <label index="www">Website</label>
+            <label index="tx_mmforum_occ">Job</label>
+            <label index="tx_mmforum_interests">Interests</label>
+            <label index="email">Email</label>
+            <label index="descr_signatur_preview">Preview</label>
+            <label index="send">Save</label>
+            <label index="filename">File</label>
+            <label index="name">Name</label>
+            <label index="delete_avatar">Delete avatar</label>
 			<label index="errorValidEmail">Please insert a valid email address.</label>
 			<label index="errorEmailTwice">The specified email address already exists.</label>
 			<label index="errorInsertOldPw">Please insert your old password.&lt;br /&gt;</label>
 			<label index="errorInsertNewPw">Please insert a new password.&lt;br /&gt;</label>
 			<label index="errorInsertNewPw2">In order to prevent typing errors, please repeat the new password.&lt;br /&gt;</label>
 			<label index="errorNewPwRepeat">The repetition of the password does not match the first input. Please check if you have entered the password correctly. &lt;br /&gt;</label>
-			<label index="errorOldPw">The old password is not correct.&lt;br /&gt;</label>
+            <label index="errorOldPw">The old password is not correct.&lt;br /&gt;</label>
 			<label index="errorPwLength">Please enter a password with a length of at least %s characters.&lt;br /&gt;</label>
 			<label index="pwChanged">The password has successfully been changed.</label>
-			<label index="nologin">You have to be logged in in order to edit your user settings.</label>
-			<label index="avatar-uploadAvatar">Upload avatar</label>
-			<label index="avatar-avatar">Avatar</label>
-			<label index="password-change">Change Password</label>
-			<label index="password-old">Old Password</label>
-			<label index="password-new">New password</label>
-			<label index="password-repeat">Repeat Password</label>
-			<label index="password-save">Save</label>
+            <label index="nologin">You have to be logged in in order to edit your user settings.</label>
+            <label index="avatar-uploadAvatar">Upload avatar</label>
+            <label index="avatar-avatar">Avatar</label>
+            <label index="password-change">Change Password</label>
+            <label index="password-old">Old Password</label>
+            <label index="password-new">New password</label>
+            <label index="password-repeat">Repeat Password</label>
+            <label index="password-save">Save</label>
             
-			<!-- Added in 0.1.5 -->
-			<label index="button-email">Email</label>
-			<label index="button-icq">ICQ</label>
-			<label index="button-aim">AIM</label>
-			<label index="button-yim">YIM</label>
-			<label index="button-msn">MSN</label>
-			<label index="button-skype">Skype</label>
+            <!-- Added in 0.1.5 -->
+            <label index="button-email">Email</label>
+            <label index="button-icq">ICQ</label>
+            <label index="button-aim">AIM</label>
+            <label index="button-yim">YIM</label>
+            <label index="button-msn">MSN</label>
+            <label index="button-skype">Skype</label>
             
-			<label index="settings2">Settings</label>
-			<label index="pmnotifymode">PM notification mode</label>
-			<label index="pmnotifymode-0">Send email as soon as PM was recieved</label>
-			<label index="pmnotifymode-1">Send accumulated emails once a day</label>
-			<label index="pmnotifymode-2">Do not notify about new PM at all</label>
+            <label index="settings2">Settings</label>
+            <label index="pmnotifymode">PM notification mode</label>
+            <label index="pmnotifymode-0">Send email as soon as PM was recieved</label>
+            <label index="pmnotifymode-1">Send accumulated emails once a day</label>
+            <label index="pmnotifymode-2">Do not notify about new PM at all</label>
 
 			<!-- Added in 0.1.8 -->
 			<label index="errorWWWInvalid">Please insert a correct URL for your website.</label>
 			<label index="errorRequiredMissing">Please fill out the following fields: %s</label>
 			<label index="error-userfieldEmpty">Please enter a correct value</label>
 			<label index="username">Username</label>
-		</languageKey>
-		<!-- GERMAN LANGUAGE DATA -->
-		<languageKey index="de" type="array">
-			<label index="tx_mmforum_user_sig">Signatur</label>
-			<label index="about">Alles über</label>
-			<label index="descr_date">Anmeldedatum</label>
-			<label index="zip">PLZ</label>
-			<label index="city">Stadt</label>
-			<label index="www">Webseite</label>
-			<label index="tx_mmforum_occ">Beruf</label>
-			<label index="tx_mmforum_interests">Interessen</label>
-			<label index="email">E-Mail</label>
-			<label index="descr_signatur_preview">Vorschau</label>
-			<label index="send">Speichern</label>
-			<label index="filename">Datei</label>
-			<label index="delete_avatar">Avatar löschen</label>
-			<label index="errorValidEmail">Bitte geben Sie eine gültige E-Mailadresse ein!</label>
-			<label index="errorEmailTwice">Die von Ihnen angegebene Emailadresse ist schon vergeben!</label>
-			<label index="errorInsertOldPw">Bitte geben Sie Ihr altes Passwort ein.&lt;br /&gt;</label>
-			<label index="errorInsertNewPw">Bitte geben Sie ein neues Passwort an.&lt;br /&gt;</label>
-			<label index="errorInsertNewPw2">Bitte wiederholen Sie das neue Passwort zu Ihrer eigenen Sicherheit, um Tippfehler zu vermeiden.&lt;br /&gt;</label>
-			<label index="errorValidEmail-inf">Bitte gib eine gültige E-Mailadresse ein!</label>
-			<label index="errorEmailTwice-inf">Die von dir angegebene Emailadresse ist schon vergeben!</label>
-			<label index="errorInsertOldPw-inf">Bitte gib dein altes Passwort ein.&lt;br /&gt;</label>
-			<label index="errorInsertNewPw-inf">Bitte gib ein neues Passwort an.&lt;br /&gt;</label>
-			<label index="errorInsertNewPw2-inf">Bitte wiederhole das neue Passwort zu deiner eigenen Sicherheit, um Tippfehler zu vermeiden.&lt;br /&gt;</label>
-			<label index="errorNewPwRepeat">Die Wiederholung des Passwortes stimmt nicht mit der ersten Eingabe überein.&lt;br /&gt;</label>
-			<label index="errorOldPw">Das alte Passwort ist nicht korrekt.&lt;br /&gt;</label>
-			<label index="errorPwLength">Das von Ihnen eingegebene Passwort muss mindestens %s Zeichen haben.&lt;br /&gt;</label>
-			<label index="errorPwLength-inf">Das von dir eingegebene Passwort muss mindestens %s Zeichen haben.&lt;br /&gt;</label>
-			<label index="pwChanged">Das Passwort wurde erfolgreich geändert</label>
-			<label index="nologin">Sie müssen eingeloggt sein, um Ihre Benutzereinstellungen zu bearbeiten.</label>
-			<label index="nologin-inf">Du musst eingeloggt sein, um deine Benutzereinstellungen zu bearbeiten.</label>
-			<label index="avatar-uploadAvatar">Avatar hochladen</label>
-			<label index="avatar-avatar">Avatar</label>
-			<label index="password-change">Passwort ändern</label>
-			<label index="password-old">Altes Passwort</label>
-			<label index="password-new">Neues Passwort</label>
-			<label index="password-repeat">Passwort wiederholen</label>
-			<label index="password-save">Speichern</label>
+        </languageKey>
+        <!-- GERMAN LANGUAGE DATA -->
+        <languageKey index="de" type="array">
+            <label index="tx_mmforum_user_sig">Signatur</label>
+            <label index="about">Alles über</label>
+            <label index="descr_date">Anmeldedatum</label>
+            <label index="zip">PLZ</label>
+            <label index="city">Stadt</label>
+            <label index="www">Webseite</label>
+            <label index="tx_mmforum_occ">Beruf</label>
+            <label index="tx_mmforum_interests">Interessen</label>
+            <label index="email">E-Mail</label>
+            <label index="descr_signatur_preview">Vorschau</label>
+            <label index="send">Speichern</label>
+            <label index="filename">Datei</label>
+            <label index="delete_avatar">Avatar löschen</label>
+            <label index="errorValidEmail">Bitte geben Sie eine gültige E-Mailadresse ein!</label>
+            <label index="errorEmailTwice">Die von Ihnen angegebene Emailadresse ist schon vergeben!</label>
+            <label index="errorInsertOldPw">Bitte geben Sie Ihr altes Passwort ein.&lt;br /&gt;</label>
+            <label index="errorInsertNewPw">Bitte geben Sie ein neues Passwort an.&lt;br /&gt;</label>
+            <label index="errorInsertNewPw2">Bitte wiederholen Sie das neue Passwort zu Ihrer eigenen Sicherheit, um Tippfehler zu vermeiden.&lt;br /&gt;</label>
+            <label index="errorValidEmail-inf">Bitte gib eine gültige E-Mailadresse ein!</label>
+            <label index="errorEmailTwice-inf">Die von dir angegebene Emailadresse ist schon vergeben!</label>
+            <label index="errorInsertOldPw-inf">Bitte gib dein altes Passwort ein.&lt;br /&gt;</label>
+            <label index="errorInsertNewPw-inf">Bitte gib ein neues Passwort an.&lt;br /&gt;</label>
+            <label index="errorInsertNewPw2-inf">Bitte wiederhole das neue Passwort zu deiner eigenen Sicherheit, um Tippfehler zu vermeiden.&lt;br /&gt;</label>
+            <label index="errorNewPwRepeat">Die Wiederholung des Passwortes stimmt nicht mit der ersten Eingabe überein.&lt;br /&gt;</label>
+            <label index="errorOldPw">Das alte Passwort ist nicht korrekt.&lt;br /&gt;</label>
+            <label index="errorPwLength">Das von Ihnen eingegebene Passwort muss mindestens %s Zeichen haben.&lt;br /&gt;</label>
+            <label index="errorPwLength-inf">Das von dir eingegebene Passwort muss mindestens %s Zeichen haben.&lt;br /&gt;</label>
+            <label index="pwChanged">Das Passwort wurde erfolgreich geändert</label>
+            <label index="nologin">Sie müssen eingeloggt sein, um Ihre Benutzereinstellungen zu bearbeiten.</label>
+            <label index="nologin-inf">Du musst eingeloggt sein, um deine Benutzereinstellungen zu bearbeiten.</label>
+            <label index="avatar-uploadAvatar">Avatar hochladen</label>
+            <label index="avatar-avatar">Avatar</label>
+            <label index="password-change">Passwort ändern</label>
+            <label index="password-old">Altes Passwort</label>
+            <label index="password-new">Neues Passwort</label>
+            <label index="password-repeat">Passwort wiederholen</label>
+            <label index="password-save">Speichern</label>
             
-			<!-- Added in 0.1.5 -->
-			<label index="button-icq">ICQ</label>
-			<label index="button-aim">AIM</label>
-			<label index="button-yim">YIM</label>
-			<label index="button-msn">MSN</label>
-			<label index="button-skype">Skype</label>
+            <!-- Added in 0.1.5 -->
+            <label index="button-icq">ICQ</label>
+            <label index="button-aim">AIM</label>
+            <label index="button-yim">YIM</label>
+            <label index="button-msn">MSN</label>
+            <label index="button-skype">Skype</label>
             
-			<label index="settings2">Einstellungen</label>
-			<label index="pmnotifymode">PN-Benachrichtungen</label>
-			<label index="pmnotifymode-0">E-Mail verschicken, sobald eine PN empfangen wurde</label>
-			<label index="pmnotifymode-1">Einmal täglich eine Sammel-E-Mail verschicken</label>
-			<label index="pmnotifymode-2">Gar nicht über neue PNs benachrichtigen</label>
+            <label index="settings2">Einstellungen</label>
+            <label index="pmnotifymode">PN-Benachrichtungen</label>
+            <label index="pmnotifymode-0">E-Mail verschicken, sobald eine PN empfangen wurde</label>
+            <label index="pmnotifymode-1">Einmal täglich eine Sammel-E-Mail verschicken</label>
+            <label index="pmnotifymode-2">Gar nicht über neue PNs benachrichtigen</label>
 
 			<!-- Added in 0.1.8 -->
 			<label index="errorWWWInvalid">Bitte geben Sie eine korrekte URL als Webseite an.</label>
@@ -123,9 +123,9 @@
 			<label index="error-userfieldEmpty">Bitte geben Sie einen korrekten Wert an</label>
 			<label index="error-userfieldEmpty-inf">Bitte gib einen korrekten Wert an</label>
 			<label index="username">Benutzername</label>
-		</languageKey>
-		<!-- FINNISH LANGUAGE DATA -->
-		<languageKey index="fi" type="array">
+        </languageKey>
+        <!-- FINNISH LANGUAGE DATA -->
+        <languageKey index="fi" type="array">
 			<label index="tx_mmforum_user_sig">Allekirjoitus</label>
 			<label index="about">Kaikki tiedot</label>
 			<label index="descr_date">Rekisteröintipvm</label>
@@ -158,96 +158,103 @@
 			<label index="password-repeat">Toista uusi salasana</label>
 			<label index="password-save">Tallenna</label>
             
-			<!-- Added in 0.1.5 -->
-			<label index="button-icq">ICQ</label>
-			<label index="button-aim">AIM</label>
-			<label index="button-yim">YIM</label>
-			<label index="button-msn">MSN</label>
-			<label index="button-skype">Skype</label>
+            <!-- Added in 0.1.5 -->
+            <label index="button-icq">ICQ</label>
+            <label index="button-aim">AIM</label>
+            <label index="button-yim">YIM</label>
+            <label index="button-msn">MSN</label>
+            <label index="button-skype">Skype</label>
 		</languageKey>
 		<!-- DUTCH LANGUAGE DATA -->
-		<languageKey index="nl" type="array">
-			<label index="tx_mmforum_user_sig">Handtekening</label>
-			<label index="about">Profiel van</label>
-			<label index="descr_date">Registratie datum</label>
-			<label index="zip">Postcode</label>
-			<label index="city">Plaats</label>
-			<label index="www">Website</label>
-			<label index="tx_mmforum_occ">Beroep</label>
-			<label index="tx_mmforum_interests">Interesses</label>
-			<label index="email">Email</label>
-			<label index="descr_signatur_preview">Voorbeschouwing</label>
-			<label index="send">Bewaar</label>
-			<label index="filename">Bestand</label>
-			<label index="name">Naam</label>
-			<label index="delete_avatar">Verwijder avatar</label>
-			<label index="errorValidEmail">Voer een geldig emailadres in!</label>
-			<label index="errorEmailTwice">Het ingevoerde emailadres wordt al gebruikt</label>
-			<label index="errorInsertOldPw">Voer uw oude wachtwoord in.&lt;br /&gt;</label>
-			<label index="errorInsertNewPw">Voer ue nieuwe wachtwoord in.&lt;br /&gt;</label>
-			<label index="errorInsertNewPw2">Om typfouten uit te sluiten, vragen we u om uw achtwoord nogmaals in te voeren.&lt;br /&gt;</label>
-			<label index="errorNewPwRepeat">Het tweede wachtwoord komt niet overeen met het eerste wachtwoord.&lt;br /&gt;</label>
-			<label index="errorOldPw">Het oude wachtwoord is niet correct.&lt;br /&gt;</label>
-			<label index="errorPwLength">Het wachtwoord moet minimaal %s tekens bevatten.&lt;br /&gt;</label>
-			<label index="pwChanged">Het wachtwoord is gewijzigd</label>
-			<label index="nologin">U moet ingelogd zijn om uw gebruikersinstellingen te wijzigen.</label>
-			<label index="avatar-uploadAvatar">Upload avatar</label>
-			<label index="avatar-avatar">Avatar</label>
-			<label index="password-change">Verander wachtwoord</label>
-			<label index="password-old">Oude wachtwoord</label>
-			<label index="password-new">Nieuw wachtwoord</label>
-			<label index="password-repeat">herhaal wachtwoord</label>
-			<label index="password-save">Bewaar</label>
+        <languageKey index="nl" type="array">
+            <label index="tx_mmforum_user_sig">Handtekening</label>
+            <label index="about">Profiel van</label>
+            <label index="descr_date">Registratie datum</label>
+            <label index="zip">Postcode</label>
+            <label index="city">Plaats</label>
+            <label index="www">Website</label>
+            <label index="tx_mmforum_occ">Beroep</label>
+            <label index="tx_mmforum_interests">Interesses</label>
+            <label index="email">Email</label>
+            <label index="descr_signatur_preview">Voorbeschouwing</label>
+            <label index="send">Bewaar</label>
+            <label index="filename">Bestand</label>
+            <label index="name">Naam</label>
+            <label index="delete_avatar">Verwijder avatar</label>
+            <label index="errorValidEmail">Voer een geldig emailadres in!</label>
+            <label index="errorEmailTwice">Het ingevoerde emailadres wordt al gebruikt</label>
+            <label index="errorInsertOldPw">Voer uw oude wachtwoord in.&lt;br /&gt;</label>
+            <label index="errorInsertNewPw">Voer ue nieuwe wachtwoord in.&lt;br /&gt;</label>
+            <label index="errorInsertNewPw2">Om typfouten uit te sluiten, vragen we u om uw achtwoord nogmaals in te voeren.&lt;br /&gt;</label>
+            <label index="errorNewPwRepeat">Het tweede wachtwoord komt niet overeen met het eerste wachtwoord.&lt;br /&gt;</label>
+            <label index="errorOldPw">Het oude wachtwoord is niet correct.&lt;br /&gt;</label>
+            <label index="errorPwLength">Het wachtwoord moet minimaal %s tekens bevatten.&lt;br /&gt;</label>
+            <label index="pwChanged">Het wachtwoord is gewijzigd</label>
+            <label index="nologin">U moet ingelogd zijn om uw gebruikersinstellingen te wijzigen.</label>
+            <label index="avatar-uploadAvatar">Upload avatar</label>
+            <label index="avatar-avatar">Avatar</label>
+            <label index="password-change">Verander wachtwoord</label>
+            <label index="password-old">Oude wachtwoord</label>
+            <label index="password-new">Nieuw wachtwoord</label>
+            <label index="password-repeat">herhaal wachtwoord</label>
+            <label index="password-save">Bewaar</label>
             
-			<!-- Added in 0.1.5 -->
-			<label index="button-icq">ICQ</label>
-			<label index="button-aim">AIM</label>
-			<label index="button-yim">YIM</label>
-			<label index="button-msn">MSN</label>
-			<label index="button-skype">Skype</label>
-		</languageKey>
-		<!-- FRENCH LANGUAGE DATA -->
-		<languageKey index="fr" type="array">
-			<label index="tx_mmforum_user_sig">Signature</label>
-			<label index="about">Tout sur...</label>
-			<label index="descr_date">Inscrit le</label>
-			<label index="zip">CP</label>
-			<label index="city">Ville</label>
-			<label index="www">Site Internet</label>
-			<label index="tx_mmforum_occ">Métier</label>
-			<label index="tx_mmforum_interests">Intérêts</label>
-			<label index="email">E-Mail</label>
-			<label index="descr_signatur_preview">Aperçu</label>
-			<label index="send">Enregistrer</label>
-			<label index="filename">Fichier</label>
-			<label index="delete_avatar">Supprimer l'avatar</label>
-			<label index="errorValidEmail">Merci d'indiquer une adresse e-mail valide !</label>
-			<label index="errorEmailTwice">Cette adresse mail est déjà utilisée sur ce forum !</label>
-			<label index="errorInsertOldPw">Merci d'indiquer votre ancien mot de passe.&lt;br /&gt;</label>
-			<label index="errorInsertNewPw">Merci d'indiquer votre nouveau mot de passe.&lt;br /&gt;</label>
-			<label index="errorInsertNewPw2">Merci de répéter votre nouoveau mot de passe, afin d'éviter les fautes de frappe.&lt;br /&gt;</label>
-			<label index="errorNewPwRepeat">Les 2 nouveaux mots de passe ne concordent pas.&lt;br /&gt;</label>
-			<label index="errorOldPw">L'ancien mot de passe est erronné.&lt;br /&gt;</label>
-			<label index="errorPwLength">Le mot de passe doit avoir minimum %s charatères.&lt;br /&gt;</label>
-			<label index="pwChanged">Le mot de passe a été modifié</label>
-			<label index="nologin">Merci de vous identifier, pour pouvoir modifier votre profil.</label>
-			<label index="avatar-uploadAvatar">Télécharger l'avatar</label>
-			<label index="avatar-avatar">Avatar</label>
-			<label index="password-change">Modifier le mot de passe</label>
-			<label index="password-old">Ancien mot de passe</label>
-			<label index="password-new">Nouveau mot de passe</label>
-			<label index="password-repeat">Répéter le mot de passe</label>
-			<label index="password-save">Enregistrer</label>
+            <!-- Added in 0.1.5 -->
+            <label index="button-icq">ICQ</label>
+            <label index="button-aim">AIM</label>
+            <label index="button-yim">YIM</label>
+            <label index="button-msn">MSN</label>
+            <label index="button-skype">Skype</label>
+        </languageKey>
+        <!-- FRENCH LANGUAGE DATA -->
+        <languageKey index="fr" type="array">
+            <label index="tx_mmforum_user_sig">Signature</label>
+            <label index="about">Tout sur...</label>
+            <label index="descr_date">Inscrit le</label>
+            <label index="zip">CP</label>
+            <label index="city">Ville</label>
+            <label index="www">Site Internet</label>
+            <label index="tx_mmforum_occ">Métier</label>
+            <label index="tx_mmforum_interests">Intérêts</label>
+            <label index="email">E-Mail</label>
+            <label index="descr_signatur_preview">Aperçu</label>
+            <label index="send">Enregistrer</label>
+            <label index="filename">Fichier</label>
+            <label index="delete_avatar">Supprimer l'avatar</label>
+            <label index="errorValidEmail">Merci d'indiquer une adresse e-mail valide !</label>
+            <label index="errorEmailTwice">Cette adresse mail est déjà utilisée sur ce forum !</label>
+            <label index="errorInsertOldPw">Merci d'indiquer votre ancien mot de passe.&lt;br /&gt;</label>
+            <label index="errorInsertNewPw">Merci d'indiquer votre nouveau mot de passe.&lt;br /&gt;</label>
+            <label index="errorInsertNewPw2">Merci de répéter votre nouoveau mot de passe, afin d'éviter les fautes de frappe.&lt;br /&gt;</label>
+            <label index="errorNewPwRepeat">Les 2 nouveaux mots de passe ne concordent pas.&lt;br /&gt;</label>
+            <label index="errorOldPw">L'ancien mot de passe est erronné.&lt;br /&gt;</label>
+            <label index="errorPwLength">Le mot de passe doit avoir minimum %s charatères.&lt;br /&gt;</label>
+            <label index="pwChanged">Le mot de passe a été modifié</label>
+            <label index="nologin">Merci de vous identifier, pour pouvoir modifier votre profil.</label>
+            <label index="avatar-uploadAvatar">Télécharger votre avatar</label>
+            <label index="avatar-avatar">Avatar</label>
+            <label index="password-change">Modifier votre mot de passe</label>
+            <label index="password-old">Ancien mot de passe</label>
+            <label index="password-new">Nouveau mot de passe</label>
+            <label index="password-repeat">Répéter le mot de passe</label>
+            <label index="password-save">Enregistrer</label>
             
-			<!-- Added in 0.1.5 -->
-			<label index="button-icq">ICQ</label>
-			<label index="button-aim">AIM</label>
-			<label index="button-yim">YIM</label>
-			<label index="button-msn">MSN</label>
-			<label index="button-skype">Skype</label>
-		</languageKey>
-		<!-- RUSSIAN LANGUAGE DATA -->
-		<languageKey index="ru" type="array">
+            <!-- Added in 0.1.5 -->
+            <label index="button-icq">ICQ</label>
+            <label index="button-aim">AIM</label>
+            <label index="button-yim">YIM</label>
+            <label index="button-msn">MSN</label>
+            <label index="button-skype">Skype</label>
+			
+            <label index="settings2">Paramètres Messages privés</label>
+            <label index="pmnotifymode">Notification par mail</label>
+            <label index="pmnotifymode-0">Notifier dès réception</label>
+            <label index="pmnotifymode-1">Notification cumulée une fois par jour</label>
+            <label index="pmnotifymode-2">Aucune notification</label>
+
+        </languageKey>
+        <!-- RUSSIAN LANGUAGE DATA -->
+        <languageKey index="ru" type="array">
 			<label index="tx_mmforum_user_sig">Подпись</label>
 			<label index="about">Все о</label>
 			<label index="descr_date">Дата регисрации</label>
@@ -279,20 +286,20 @@
 			<label index="password-new">Новый пароль</label>
 			<label index="password-repeat">Повторите пароль</label>
 			<label index="password-save">Сохранить</label>
-
-			<!-- Added in 0.1.5 -->
-			<label index="button-icq">ICQ</label>
-			<label index="button-aim">AIM</label>
-			<label index="button-yim">YIM</label>
-			<label index="button-msn">MSN</label>
-			<label index="button-skype">Skype</label>
+            
+            <!-- Added in 0.1.5 -->
+            <label index="button-icq">ICQ</label>
+            <label index="button-aim">AIM</label>
+            <label index="button-yim">YIM</label>
+            <label index="button-msn">MSN</label>
+            <label index="button-skype">Skype</label>
 
 			<label index="settings2">Установки</label>
 			<label index="pmnotifymode">Режим уведомления ЛС</label>
 			<label index="pmnotifymode-0">Отсылать email сразу по получении ЛС</label>
 			<label index="pmnotifymode-1">Отсылать накопленые email раз в день</label>
 			<label index="pmnotifymode-2">Не уведомлять про новые ЛС</label>
-		</languageKey>
+        </languageKey>
 		<!-- UKRAINIAN LANGUAGE DATA -->
 		<languageKey index="ua" type="array">
 			<label index="tx_mmforum_user_sig">Підпис</label>
@@ -340,5 +347,5 @@
 			<label index="pmnotifymode-1">Відсилати накопичені email раз у день</label>
 			<label index="pmnotifymode-2">Не сповіщати про нові ПС</label>
 		</languageKey>
-	</data>
+    </data>
 </T3locallang>
