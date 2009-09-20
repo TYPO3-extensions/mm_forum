@@ -310,4 +310,8 @@ class tx_mmforum_userfield {
 	
 }
 
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/includes/user/class.tx_mmforum_userfield.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/includes/user/class.tx_mmforum_userfield.php']);
+}
+
 ?>
