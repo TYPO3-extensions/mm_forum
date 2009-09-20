@@ -854,8 +854,8 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 	function count_new_pm($uid) {
 		if (empty($uid)) $uid = $GLOBALS['TSFE']->fe_user->user['uid'];
 		$where = 'hidden = 0 AND deleted = 0 AND read_flg = 0 AND mess_type = 0 AND to_uid = '.$GLOBALS['TSFE']->fe_user->user['uid'].$this->getStoragePIDQuery();
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_pminbox',$where,'','',$limit='');
-		return $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('count(uid)','tx_mmforum_pminbox',$where,'','',$limit='');
+		list($count) = $GLOBALS['TYPO3_DB']->sql_num_rows($res); return $count;
 	}
     
     

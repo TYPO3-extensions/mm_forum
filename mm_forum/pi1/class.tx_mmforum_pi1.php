@@ -983,14 +983,15 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$feUserId = intval(isset($GLOBALS['TSFE']->fe_user->user['uid']) ? $GLOBALS['TSFE']->fe_user->user['uid'] : 0);
 
 		if ($feUserId) {
-			$resunread = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-				'tx_mmforum_prelogin as lastlogin',
-				'fe_users',
-				'uid = ' . $feUserId
-			);
-			$rowunread = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resunread);
-			$lastlogin = $rowunread['lastlogin'];#-1814400;
-			$readarray = $this->getunreadposts($content, $conf, $lastlogin);
+			//$resunread = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			//	'tx_mmforum_prelogin as lastlogin',
+			//	'fe_users',
+			//	'uid = ' . $feUserId
+			//);
+			//$rowunread = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resunread);
+			//$lastlogin = $rowunread['lastlogin'];#-1814400;
+			//$readarray = $this->getunreadposts($content, $conf, $lastlogin);
+			$lastlogin = $GLOBALS['TSFE']->fe_user->user['tx_mmforum_prelogin'];
 		}
 
 		$catlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -1004,9 +1005,45 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'sorting ASC'
 		);
 
+        //Remember the read forum data na dextract only the needed subforums
+        $parents = array();
+        $parentIds = array();
+        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($catlist)) {
+        	$parents[] = $row;
+        	$parentIds[] = $row['uid'];
+        }
+        $catIdWhere = '(parentID='. implode(' OR parentID=', $parentIds).')';
+        $where ='deleted = 0 AND
+                 hidden = 0 AND
+                 '.$catIdWhere.
+                 $this->getPidQuery().
+                 $this->getMayRead_forum_query();
+        $forumlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+                '*',
+                'tx_mmforum_forums',
+        		$where,
+                '',
+                'sorting ASC'
+            );
+        $parentForums = array();
+        $visibleForumKeys = array();
+        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forumlist)) {
+        	$parentForums[$row['parentID']][] = $row;
+        	$visibleForumKeys[] = $row['uid'];
+        }
+
+        $filter = array(
+        	'forum_id' => $visibleForumKeys,
+			'onlyCategories' => 1
+        );
+
+		//get ids of unread posts in these forums
+        $unreadarray  = $this->getunreadposts($content, $conf, $lastlogin, $filter);
+
 		$x = 0;
 		$i = 1;
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($catlist)) {
+		//while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($catlist)) {
+		foreach ($parents as $row) {
 			$x++;
 			$template = $this->cObj->getSubpart($templateFile, '###LIST_CAT###');
 
@@ -1023,17 +1060,19 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 
-			$forumlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-				'*',
-				'tx_mmforum_forums f',
-				'deleted = 0 AND hidden = 0 AND parentID = ' . $row['uid'] .
-					 $this->getStoragePIDQuery() .
-					 $this->getMayRead_forum_query('f'),
-				'',
-				'sorting ASC'
-			);
-
-			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forumlist)) {
+//			$forumlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+//				'*',
+//				'tx_mmforum_forums f',
+//				'deleted = 0 AND hidden = 0 AND parentID = ' . $row['uid'] .
+//					 $this->getStoragePIDQuery() .
+//					 $this->getMayRead_forum_query('f'),
+//				'',
+//				'sorting ASC'
+//			);
+//
+//			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forumlist)) {
+			$parentID = $row['uid'];
+			foreach ($parentForums[$parentID] as $row) {
 				$forumId = intval($row['uid']);
 				$template = $this->cObj->getSubpart($templateFile, '###LIST_FORUM###');
 
@@ -1053,20 +1092,21 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 				// If there is a user logged in, it is checked if
 				//there are new posts since the last login.
-				if ($feUserId) {
-					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-						'*',
-						'tx_mmforum_topics',
-						'forum_id = ' . $forumId . $this->getStoragePIDQuery());
-					$blnnew = false;
-
-					while ($row_topic = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-						if (in_array($row_topic['uid'], $readarray)) {
-							$blnnew = true;
-							break;
-						}
-					}
-					$marker['###READIMAGE###'] = $this->getForumIcon(null, $closed, $blnnew);
+//				if ($feUserId) {
+//					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+//						'*',
+//						'tx_mmforum_topics',
+//						'forum_id = ' . $forumId . $this->getStoragePIDQuery());
+//					$blnnew = false;
+//
+//					while ($row_topic = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+//						if (in_array($row_topic['uid'], $readarray)) {
+//							$blnnew = true;
+//							break;
+//						}
+//					}
+				if ($feUserId && in_array($row['uid'], $unreadarray)) {
+					$marker['###READIMAGE###'] = $this->getForumIcon(null, $closed, true);
 				} else {
 					$marker['###READIMAGE###'] = $this->getForumIcon(null, $closed, false);
 				}
@@ -1113,25 +1153,24 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'style'  => ''
 		);
 
-		$templateFile = $this->cObj->fileResource($conf['template.']['list_topic']);
-		$template     = $this->cObj->getSubpart($templateFile, '###TOPICBEGIN###');
-		$marker       = array();
-
-		// find out the unread posts since the last login
-		if ($feUserId) {
-			list($rowUnread) = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-				'tx_mmforum_prelogin as lastLogin',
-				'fe_users',
-				'uid = ' . $feUserId);
-			$readarray = $this->getunreadposts($content, $conf, $rowUnread['lastLogin']);
-		}
-
-
 		// Checking the forum for read access
 		if (!$this->getMayRead_forum($forumId)) {
 			$content .= $this->errorMessage($conf, $this->pi_getLL('board.noAccess'));
 			return $content;
 		}
+
+		$templateFile = $this->cObj->fileResource($conf['template.']['list_topic']);
+		$template     = $this->cObj->getSubpart($templateFile, '###TOPICBEGIN###');
+		$marker       = array();
+
+		// find out the unread posts since the last login
+//		if ($feUserId) {
+//			list($rowUnread) = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+//				'tx_mmforum_prelogin as lastLogin',
+//				'fe_users',
+//				'uid = ' . $feUserId);
+//			$readarray = $this->getunreadposts($content, $conf, $rowUnread['lastLogin']);
+//		}
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'uid',
@@ -1197,7 +1236,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$marker['###HIDESOLVED_CHECKED###'] = ($this->piVars['hide_solved'] ? 'checked="checked"' : '');
 		$marker['###SETTINGS_ACTION###'] = htmlspecialchars($this->getAbsUrl($this->pi_linkTP_keepPIvars_url(array('hide_solved'=>0))));
 
-		$marker['###FORUMICON###'] = $this->getForumIcon($this->getMayWrite_forum($forumId), count($readarray));
+//		$marker['###FORUMICON###'] = $this->getForumIcon($this->getMayWrite_forum($forumId), count($readarray));
 
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_header'])) {
@@ -1242,7 +1281,22 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		if(!$isTopicRating) $template = $this->cObj->substituteSubpart($template, '###SUBP_RATING###', '');
 
 		$j = 1;
+		$topics = array();
+		$topicIds = array();
+
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($topiclist)) {
+			$topics[] = $row;
+			$topicIds[] = $row['uid'];
+		}
+
+		//get tuhe unread state _of only the 30 (or so) topics per page and not that _of all posts_
+		$conf['topic_id'] = $topicIds;
+		if($GLOBALS['TSFE']->fe_user->user['uid']) {
+			$lastlogin = $GLOBALS['TSFE']->fe_user->user['tx_mmforum_prelogin'];
+			$readarray = $this->getunreadposts($content, $conf, $lastlogin);
+		}
+
+		foreach ($topics as $row) {
 			// Check if solved flag is set.
 			$solved = '';
 			$favorit = '';
@@ -1348,7 +1402,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			}
 
 			// Get topic icon
-			$marker['###READIMAGE###'] = $this->getTopicIcon($row);
+			$marker['###READIMAGE###'] = $this->getTopicIcon($row, $readarray);
 
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_topicItem'])) {
@@ -4451,76 +4505,64 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
     /**
      * Displays a list of topics not yet read by the current user.
-     * @param  string $content   The plugin content
-     * @param  array  $conf      The configuration vars of the plugin
-     * @param  int    $lastlogin A unix timestamp specifying the last login date
-     *                           of the current user.
-     * @return string            The list of unread topics
+     * Returns the tx_mmforum_posts.topic_id or tx_mmforum_posts.forum_id of all unread posts/forums
+     * in a non-assoc array.
+     *
+     * To limit the amount of retrieved IDs, the $filter param has to be used.
+     * It supports the following settings:
+     * 	$filter['forum_id'] == array of forum IDs which are of interest.
+     * 						This is e.g. used in list_forum where the viewed at posts are
+     * 						limited to those which are actually displayed in that overview.
+     *  $filter['topic_id'] == array of topic ids to check. Useful for _all_ views which are displaying only a subset of topics
+     *  					E.g. list_topic, list_unanswered, etc. This will effectively look only at those posts in question.
+     *  $filter['onlyCategories'] == if set to 1, the result will be the forum_ids instead of topic_ids.
+     *  					Useful again for the forum list where we are not interested in unread posts but in unread forums.
+     *
+     *
+     * @param $content - unused, kept for backwards compatibility
+     * @param $conf - unused, kept for backwards compatibility
+     * @param $lastlogin - $GLOBALS['TSFE']->fe_user->user['tx_mmforum_prelogin'] == The time when a user last pressed "Mark all read"
+     * @param $filter - array used to limit the returned posts to those of interest. See method description
+     * @return array non-assoc
      */
-    function getunreadposts ($content, $conf, $lastlogin)
-    {
-        /*
-         * Retrieve read posts from database (tx_mmforum_postsread)
-         */
-        $uid        = $GLOBALS['TSFE']->fe_user->user['uid'];
-        $resread    = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            "*",
-            "tx_mmforum_postsread",
-            "user='$uid'".$this->getStoragePIDQuery()
-        );
+    function getunreadposts ($content, $conf, $lastlogin, $filter = array()) {
+//    	$starttime = microtime(true);
+		$uid        = $GLOBALS['TSFE']->fe_user->user['uid'];
 
-        $numread    = $GLOBALS['TYPO3_DB']->sql_num_rows($resread);
-        $arread        = array();
-        if($numread > 0) {
-            $countread = 0;
-            while($rowread = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resread))
-            {
-                $arread[$countread]['topic_id'] = $rowread['topic_id'];
-                $countread += 1;
-            }
-        }
-        else {
-            $arread[0]['topic_id'] = 0;
-        }
+		if(!$uid) return array();
 
-        /*
-         * Determine posts since last login (tx_mmforum_posts).
-         * (Posts are compared to read ones and if necessary inserted into
-         * output array)
-         */
-        $resposts    = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            "distinct topic_id",
-            "tx_mmforum_posts p ",
-            "deleted = 0 and p.post_time >= ".$lastlogin.$this->getStoragePIDQuery()
-        );
+		if (is_array($filter['forum_id'])) {
+			$where = '(forum_id=' . implode(' OR forum_id=', $filter['forum_id']). ') AND ';
+		} else if (is_array($filter['topic_id'])) {
+			$where = '(topic_id=' . implode(' OR topic_id=', $filter['topic_id']). ') AND ';
+		} else {
+			$where = '';
+		}
 
-        $numposts  = $GLOBALS['TYPO3_DB']->sql_num_rows($resposts);
-        $content   = $numposts;
-        $arposts   = array();
-        if($numposts > 0) {
-            $count = 0;
-            while($row = mysql_fetch_array($resposts)) {
-                if($arread[0]['topic_id'] != 0) {
-                    $read = false;
-                    for($i = 0; $i <= count($arread); $i++) {
-                        if($arread[$i]['topic_id'] == $row['topic_id']) {
-                            $read = true;
-                            break;
-                        }
-                    }
-                }
-                else
-                {
-                    $read = false;
-                }
-                if(!$read) {
-                    $arposts[$count]  = $row['topic_id'];
-                    $count += 1;
-                }
-            }
-        }
-        return $arposts;
-    }
+    	$where .= 'deleted = 0 AND crdate > '.intval($lastlogin).' AND a.topic_id NOT IN (SELECT topic_id FROM tx_mmforum_postsread WHERE user='.intval($uid).$this->getPidQuery(). ')';
+    	//debug ($where, 'where');
+    	if ($filter['onlyCategories']) {
+    		$select = 'distinct(forum_id)';
+    	} else {
+    		$select = 'distinct(topic_id)';
+    	}
+		$unread    = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		    $select ,
+            'tx_mmforum_posts a',
+            $where
+         );
+
+        $res = array();
+        while ($row = mysql_fetch_assoc($unread)) {
+        	if ($filter['onlyCategories']) {
+        		$res[] = $row['forum_id'];
+        	} else {
+        		$res[] = $row['topic_id'];
+        	}
+         }
+    	//t3lib_div::debug (count($res), 'number of unread posts : took ms: ' . (microtime(true) - $starttime));
+    	return $res;
+	}
 
 	/**
 	 * Marks all unread posts as read.
@@ -4938,30 +4980,22 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 *                        as associative array.
 	 * @return  string        The topic icon as HTML img tag
 	 */
-	function getTopicIcon($topic) {
+	function getTopicIcon($topic, $readarray=-1) {
 		if (!is_array($topic)) {
 			$topic = $this->getTopicData(intval($topic));
 		}
 		$userId = intval(isset($GLOBALS['TSFE']->fe_user->user['uid']) ? $GLOBALS['TSFE']->fe_user->user['uid'] : 0);
 
-		if ($userId) {
+		if ($userId && $readarray==-1) {
 			if(!isset($GLOBALS['tx_mmforum_pi1']['readarray'])) {
-				$resunread = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-					'tx_mmforum_prelogin as lastlogin',
-					'fe_users',
-					'uid= ' . $userId
-				);
-				$rowunread = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resunread);
-				$lastlogin = $rowunread['lastlogin'];
+				$lastlogin = $GLOBALS['TSFE']->fe_user->user['tx_mmforum_prelogin'];
 				$readarray = $this->getunreadposts('', $this->conf, $lastlogin);
 
 				$GLOBALS['tx_mmforum_pi1']['readarray'] = $readarray;
 			} else {
 				$readarray = $GLOBALS['tx_mmforum_pi1']['readarray'];
 			}
-		} else {
-			$readarray = array();
-		}
+		} else if (!is_array($readarray)) $readarray = array();
 
 		$isNew    = in_array($topic['uid'], $readarray);
 		$isHot    = ($this->conf['hotposts'] > 0) ? ($topic['topic_replies'] >= $this->conf['hotposts']) : false;

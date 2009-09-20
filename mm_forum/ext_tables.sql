@@ -160,7 +160,8 @@ CREATE TABLE tx_mmforum_posts (
     KEY forum_id (forum_id),
     KEY post_time (post_time),
     KEY deleted (deleted),
-    KEY hidden (hidden)
+    KEY hidden (hidden),
+	KEY is_read (deleted,forum_id,crdate,topic_id)
 );
 
 # 
@@ -202,7 +203,8 @@ CREATE TABLE tx_mmforum_postsread (
     PRIMARY KEY (uid),
     KEY user (user),
     KEY topic_id (topic_id),
-    KEY parent (pid)
+    KEY parent (pid),
+	KEY is_read (user,pid,topic_id)
 );
 
 # 
@@ -387,9 +389,9 @@ CREATE TABLE tx_mmforum_pminbox (
     deleted tinyint(4) unsigned default '0' NOT NULL,
     hidden tinyint(4) unsigned default '0' NOT NULL,
     sendtime tinytext NOT NULL,
-    from_uid tinytext NOT NULL,
+    from_uid int(11) unsigned default '0' NOT NULL,
     from_name tinytext NOT NULL,
-    to_uid tinytext NOT NULL,
+    to_uid int(11) unsigned default '0' NOT NULL,
     to_name tinytext NOT NULL,
     subject tinytext NOT NULL,
     message text NOT NULL,
@@ -398,7 +400,8 @@ CREATE TABLE tx_mmforum_pminbox (
     notified tinyint(1) default '0' NOT NULL,
 
     PRIMARY KEY (uid),
-    KEY parent (pid)
+    KEY parent (pid),
+	KEY receipient (to_uid,mess_type)
 );
 
 #
