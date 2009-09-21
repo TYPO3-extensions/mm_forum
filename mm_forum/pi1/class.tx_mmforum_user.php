@@ -102,36 +102,42 @@ class tx_mmforum_user extends tx_mmforum_base {
 		// Build page navigation
 		$pageCount = ceil($count / $itemsPerPage);
 
-		// find the page right now, but if ($page -3) is less than 1, set it to at least "1"
-		$page = max($page, 1);
-		// also, $page is not allowed to be bigger than the $pageCount
-		$page = min($page, $pageCount);
+		if (!intval($this->conf['doNotUsePageBrowseExtension'])===0) {
+			$page --;
 
-		// find the page links, but if ($page -3) is less than 1, set it to at least "1"
-		$i = max(($page - 3), 1);
+			// find the page right now, but if ($page -3) is less than 1, set it to at least "1"
+			$page = max($page, 1);
+			// also, $page is not allowed to be bigger than the $pageCount
+			$page = min($page, $pageCount);
 
-		for ($j = 1; $j <= 7; $j++) {
-			$pagelink = tx_mmforum_user::listpost_pagelink($i, $i, $userId);
+			// find the page links, but if ($page -3) is less than 1, set it to at least "1"
+			$i = max(($page - 3), 1);
 
-			if (($i >= 1 && $i <= $pageCount)) {
-				if ($i == $page) {
-					$pages .= '|<strong> ' . $i . ' </strong>|';
-				} else {
-					$pages .= $pagelink;
+			for ($j = 1; $j <= 7; $j++) {
+				$pagelink = tx_mmforum_user::listpost_pagelink($i, $i, $userId);
+
+				if (($i >= 1 && $i <= $pageCount)) {
+					if ($i == $page) {
+						$pages .= '|<strong> ' . $i . ' </strong>|';
+					} else {
+						$pages .= $pagelink;
+					}
 				}
+				$i++;
 			}
-			$i++;
+
+			$min   = ($page > 1) ? tx_mmforum_user::listpost_pagelink('' . $this->pi_getLL('page.first'), 1, $userId)      : '';
+			$left  = ($page > 2) ? tx_mmforum_user::listpost_pagelink('&laquo;' . $this->pi_getLL(''), $page - 1, $userId) : '';
+			$right = ($page < $pageCount-1) ? tx_mmforum_user::listpost_pagelink($this->pi_getLL('') . '&raquo;', $page + 1, $userId)    : '';
+			$max   = ($page < $pageCount)   ? tx_mmforum_user::listpost_pagelink($this->pi_getLL('page.last') . '', $pageCount, $userId) : '';
+
+			$marker['###PAGES###'] = $min . $left . $pages . $right . $max;
+			$marker['###PAGES###'] = str_replace('||', '|', $marker['###PAGES###']);
+		} else {
+			$marker['###PAGES###'] = $this->getListGetPageBrowser($pageCount);
 		}
 
-		$min   = ($page > 1) ? tx_mmforum_user::listpost_pagelink('' . $this->pi_getLL('page.first'), 1, $userId)      : '';
-		$left  = ($page > 2) ? tx_mmforum_user::listpost_pagelink('&laquo;' . $this->pi_getLL(''), $page - 1, $userId) : '';
-		$right = ($page < $pageCount-1) ? tx_mmforum_user::listpost_pagelink($this->pi_getLL('') . '&raquo;', $page + 1, $userId)    : '';
-		$max   = ($page < $pageCount)   ? tx_mmforum_user::listpost_pagelink($this->pi_getLL('page.last') . '', $pageCount, $userId) : '';
-
-		$marker['###PAGES###'] = $min . $left . $pages . $right . $max;
-		$marker['###PAGES###'] = str_replace('||', '|', $marker['###PAGES###']);
-
-		$from = $itemsPerPage * ($page-1);
+		$from = $itemsPerPage * ($page);
 
 		if ($count > 0) {
 			$template = $this->cObj->substituteSubpart($template, '###NOPOSTS###', '');

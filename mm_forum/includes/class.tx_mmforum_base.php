@@ -688,6 +688,28 @@ class tx_mmforum_base extends tslib_pibase {
 		return $rating != null ? $rating->getRatingDisplay("{$table}_{$uid}", $this->ratingConf) : '';
 	}
 
+
+
+    function getListGetPageBrowser($numberOfPages, $additionalParameters=array()) {
+    	// Get default configuration
+    	$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pagebrowse_pi1.'];
+
+    	// Modify this configuration
+		$conf['pageParameterName'] = $this->prefixId . '|page';
+		$conf['numberOfPages'] = $numberOfPages;
+
+		if(count($additionalParameters)>0) {
+			$conf['extraQueryString'] = t3lib_div::implodeArrayForUrl(null, $additionalParameters);
+		}
+
+    	// Get page browser
+    	$cObj = t3lib_div::makeInstance('tslib_cObj');
+
+    	/* @var $cObj tslib_cObj */
+    	$cObj->start(array(), '');
+    	return $cObj->cObjGetSingle('USER_INT', $conf);
+    }
+
 }
 
 // does not make sense to XCLASS here

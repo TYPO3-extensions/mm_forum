@@ -1079,3 +1079,7 @@ td.tx-mmforum-optth-disabled {
 .tx-mmforum-pi1-listpost-rating {
 	float: left;
 }
+
+.tx-mmforum-pagenav .tx-pagebrowse {
+	text-align: right !important;
+}

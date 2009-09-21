@@ -431,8 +431,11 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 
 		IF($treffer > 0) {
 			$find_array_split   = array_chunk($post_id_array, $conf['show_items'], true);     // Array in Pages Aufteilen 
-			IF(empty($param['page'])) $param['page'] = 1; 
-			$page = $param['page'] - 1;
+			IF(empty($param['page'])) $param['page'] = 0;
+			
+			if (!intval($this->conf['doNotUsePageBrowseExtension'])===0) $page = $param['page'] - 1;
+			else $page = $param['page'];
+
 			$post_id_array = $find_array_split[$page];
 			foreach($post_id_array as $post_id => $values) {
 				$topic_id	= tx_mmforum_pi1::get_topic_id($post_id);
@@ -492,7 +495,8 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				$content .= $this->cObj->substituteMarkerArrayCached($template_sub, $marker);  
 			}
 			$marker['###TREFFER###']    = $treffer;
-			$marker['###PAGES###']      = $this->pagebar($treffer,$conf['show_items'],$param);
+
+			$marker['###PAGES###']     = $this->pagebar($treffer,$conf['show_items'],$param);
 			
 			$template   = $this->cObj->substituteMarkerArrayCached($template, $marker);  
 			$content    = $this->cObj->substituteSubpart($template,'###SEARCHRESULT_SUB###',$content);  
@@ -522,6 +526,12 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			'solved'         => $param['solved'],
 			'groupPost'      => $param['groupPost']
 		);
+
+		if (intval($this->conf['doNotUsePageBrowseExtension'])===0) {
+			unset($linkparams[$this->prefixId]['page']);
+			return $this->getListGetPageBrowser($pages, $linkparams);
+		}
+
 		$content .= ' '.$this->pi_linkToPage(' &laquo; ',$GLOBALS["TSFE"]->id,$target='_self',$linkparams).' '; 
 		
 		while ($i <= $pages) {

@@ -191,6 +191,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		// Determine page number
 		if ($this->piVars['page']) {
 			$pageNum = $this->piVars['page'];
+			if($this->conf['doNotUsePageBrowseExtension']) $currentPage ++;
 		} elseif ($this->piVars['search_pid']) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid',
@@ -204,9 +205,9 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 					$pageNum = $i / $limitCount;
 				}
 			}
-			$pageNum = intval(++$pageNum);
+			$pageNum = intval($pageNum);
 		} else {
-			$pageNum = 1;
+			$pageNum = 0;
 		}
 		$forumpath_topic = $this->shield(stripslashes($topicData['topic_title']));
 		$topic_is        = $topicData['topic_is'];
@@ -238,7 +239,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		else $template = $this->cObj->substituteSubpart($template, '###SUBP_TOPIC_RATING###', '');
 
 		// Display poll
-		if ($topicData['poll_id'] > 0 && $pageNum == 1 && $this->conf['polls.']['enable']) {
+		if ($topicData['poll_id'] > 0 && $pageNum == 0 && $this->conf['polls.']['enable']) {
 			$marker['###POLL###'] = tx_mmforum_polls::display($topicData['poll_id']);
 		} else {
 			$marker['###POLL###'] = '';
@@ -269,14 +270,14 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			'deleted = 0 AND hidden = 0 AND topic_id = ' . $topicId . $this->getStoragePIDQuery(),
 			'',
 			'post_time ' . $userconfig['post_sort'],
-			$limitCount * ($pageNum - 1) . ', ' . $limitCount
+			$limitCount * ($pageNum) . ', ' . $limitCount
 		);
 
-		if (($GLOBALS['TYPO3_DB']->sql_num_rows($postList) == 0) && ($pageNum > 1)) {
+		if (($GLOBALS['TYPO3_DB']->sql_num_rows($postList) == 0) && ($pageNum > 0)) {
 			$linkParams[$this->prefixId] = array(
 				'action' => 'list_post',
 				'tid'    => $topicId,
-				'page'   => $pageNum - 1
+				'page'   => $pageNum
 			);
 			$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
 			$link = $this->getAbsUrl($link);

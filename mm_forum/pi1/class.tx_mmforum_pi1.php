@@ -1253,8 +1253,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$userFav = $this->get_user_fav();
 		}
 
-		$currentPage = (intval($this->piVars['page']) > 1 ? intval($this->piVars['page']) : 1);
-		$limit = ($limitcount-1)*($currentPage-1) . ',' . $limitcount;
+		$currentPage = (intval($this->piVars['page']) > 0 ? intval($this->piVars['page']) : 0);
+		if($this->conf['doNotUsePageBrowseExtension']) $currentPage ++;
+
+		$limit = ($limitcount-1)*($currentPage) . ',' . $limitcount;
 
 		$solvedCon = ($this->piVars['hide_solved'] ? ' AND solved=0 ' : '');
 		$shadowCon = ($this->conf['enableShadows'] ? '' : ' AND shadow_tid=0 ');
@@ -2031,9 +2033,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         list($user_num) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
         $page_max   = ceil($user_num / $list_count);
-        $page_cur   = intval($this->piVars['page'])?$this->piVars['page']:1;
+        $page_cur   = intval($this->piVars['page'])>0?$this->piVars['page']:0;
 
-        $page_menu  = $this->dynamicPageNav($page_max,'page',array('sorting'=>$sorting,'sorting_mode'=>$sorting_mode));
+		if (intval($this->conf['doNotUsePageBrowseExtension'])===0) {
+			$page_menu = $this->getListGetPageBrowser($page_max);
+		} else {
+			$page_menu = $this->dynamicPageNav($page_max,'page',array('sorting'=>$sorting,'sorting_mode'=>$sorting_mode));
+		}
 
         $marker		= array(
 			'###PAGES###'	=> $page_menu,
@@ -2041,7 +2047,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'###USERLIST_COLUMNCOUNT###'	=> count($list_fields)
 		);
 
-        $offset     = (($page_cur-1)*$list_count);
+        $offset     = (($page_cur)*$list_count);
         $limit      = $offset.','.$list_count;
 
 		if(is_numeric($sorting)) {
@@ -4139,6 +4145,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         if(! ($count === FALSE)) $postcount = intval($count);
 
         $maxpage = ceil($postcount / $limitcount);
+        
+        // should Dmitry's pagebrowse extension be used?
+        if (intval($this->conf['doNotUsePageBrowseExtension'])===0) {
+			$content = $this->getListGetPageBrowser($maxpage);
+			return $content;
+        }
+        
         if ($this->piVars['page'] == 0) $page = 1;
         else $page = $this->piVars['page'];
 
@@ -4222,6 +4235,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         else $page = $this->piVars['page'];
 
         $linkParams[$this->prefixId] = array("action"=>"list_unread");
+        // should Dmitry's pagebrowse extension be used?
+        if (intval($this->conf['doNotUsePageBrowseExtension'])===0) {
+          $content = $this->getListGetPageBrowser($maxpage);
+          return $content;
+        }
 
         IF ($maxpage > 1) {
             // First page
