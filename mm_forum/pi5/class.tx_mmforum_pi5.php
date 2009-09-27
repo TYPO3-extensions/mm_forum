@@ -366,10 +366,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		if ($error == 0) {
 
 			$where = 'uid = '.$GLOBALS['TSFE']->fe_user->user['uid'];
-            
-            //if kb_md5fepw is installed, crypt password
-            if(t3lib_extMgm::isLoaded('kb_md5fepw')) $updateArr['password']=md5($updateArr['password']);
-        
+
         	     // Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilUpdateArray'])) {
 			    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilUpdateArray'] as $_classRef) {
