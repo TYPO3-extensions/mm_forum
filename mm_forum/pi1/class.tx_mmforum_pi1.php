@@ -1298,6 +1298,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$readarray = $this->getunreadposts($content, $conf, $lastlogin);
 		}
 
+
+
+			/*
+			 * MAIN LOOP begin
+			 */
+
 		foreach ($topics as $row) {
 			// Check if solved flag is set.
 			$solved = '';
@@ -1356,13 +1362,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 				$interval = ceil($pages / 10);
 
-				for ($i = 1; $i <= $pages; $i += $interval) {
+				for ($i = 0; $i < $pages; $i += $interval) {
 					$linkParams[$this->prefixId] = array(
 						'action'    => 'list_post',
 						'tid'       => $row['uid'],
 						'page'      => $i
 					);
-					$page_link .= ' ' . $this->pi_linkToPage($i, $GLOBALS['TSFE']->id, '', $linkParams);
+					$page_link .= ' ' . $this->pi_linkToPage($i+1, $GLOBALS['TSFE']->id, '', $linkParams);
 
 					if ($interval > 1) {
 						if ($i == $interval+1) {
@@ -1416,6 +1422,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 		}
+
+			/*
+			 * MAIN LOOP end
+			 */
+
+
 
 		$template = $this->cObj->getSubpart($templateFile, '###TOPICEND###');
 		$marker['###PAGES###'] = $this->pagecount('tx_mmforum_topics', 'forum_id', $forumId, $limitcount);
@@ -4669,7 +4681,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         $linkparams[$this->prefixId] = array (
             'action'    => 'list_post',
             'tid'       => $topic_id,
-            'page'      => $seite
+            'page'      => $seite - 1
         );
         if($this->useRealUrl()) {
             $linkparams[$this->prefixId]['fid'] = $forum_id;

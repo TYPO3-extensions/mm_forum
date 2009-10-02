@@ -191,7 +191,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		// Determine page number
 		if ($this->piVars['page']) {
 			$pageNum = $this->piVars['page'];
-			if($this->conf['doNotUsePageBrowseExtension']) $currentPage ++;
+			if($this->conf['doNotUsePageBrowseExtension']) $pageNum ++;
 		} elseif ($this->piVars['search_pid']) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid',

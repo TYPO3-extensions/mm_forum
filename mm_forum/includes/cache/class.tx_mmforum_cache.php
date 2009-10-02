@@ -326,7 +326,7 @@ class tx_mmforum_cache {
 			/* Otherwise create a new cache object */
 		else {
 			$cacheObj = t3lib_div::makeInstance('tx_mmforum_cache');
-			$cacheObj->init('auto');
+			$cacheObj->init('database');
 			
 			$GLOBALS['mm_forum']['cacheObj'] =& $cacheObj;
 			
