@@ -54,7 +54,7 @@ class tx_mmforum_cache_database {
 	function save($key, $object, $override=false) {
 		
 			/* Prepare INSERT statement */
-		$sql = "INSERT INTO cache_hash SET hash=MD5('".$key."'), content='".serialize($object)."', ident='tx_mmforum_cache'";
+		$sql = "INSERT INTO cache_hash SET hash=MD5('".$key."'), content=".$GLOBALS['TYPO3_DB']->fullQuoteStr(serialize($object), 'cache_hash').", ident='tx_mmforum_cache'";
 		
 			/* If $override flag is set, append an 'ON DUPLICATE KEY UPDATE' statement
 			 * to the INSERT statement. */
