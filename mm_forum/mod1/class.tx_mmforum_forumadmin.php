@@ -775,7 +775,7 @@ class tx_mmforum_forumAdmin {
                 'tx_mmforum_forums',
                 'parentID='.$ctg['uid']
             );
-            while(list($fid)=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+            while(list($fid)=$GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
                 $this->delete_forumIndex($fid);
             }
         }
