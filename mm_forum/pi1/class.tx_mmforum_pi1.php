@@ -4690,9 +4690,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             }
         }
         $seite     = intval($seite);
-        if(!$this->conf['doNotUsePageBrowseExtension']) {
-          $seite--;
-        }
+
         $linkparams[$this->prefixId] = array (
             'action'    => 'list_post',
             'tid'       => $topic_id,
