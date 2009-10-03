@@ -249,8 +249,10 @@ class tx_mmforum_menus extends tx_mmforum_base {
 		            $user_id = tx_mmforum_tools::get_userid($this->piVars['fid']);
 		        } else $user_id = $this->piVars['user_id'];
 				
+				$conf['userNameField']?$conf['userNameField']:$conf['userNameField']='username';
+
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-					'username',
+					$conf['userNameField'],
 					'fe_users',
 					'uid="'.intval($user_id).'"'
 				);

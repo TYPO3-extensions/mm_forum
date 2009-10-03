@@ -34,8 +34,8 @@
 			<label index="error_logout">An error occured while writing into the database. You have been logged out.</label>
             <label index="page-goto">To page</label>
             <label index="page-first">First</label>
-            <label index="page-previous">Previous</label>
-            <label index="page-next">Next</label>
+            <label index="page-previous">&laquo; Previous</label>
+            <label index="page-next">Next &raquo;</label>
             <label index="page-last">Last</label>
             <label index="error-imgNotFound">[Error loading image ###IMGFILE###]</label>
             <label index="footermessage">Powered by mm_forum v%s</label>
@@ -409,8 +409,8 @@ To visit this new topic, follow the link below:
             <label index="error_logout">Beim Schreiben in die Datenbank ist ein Fehler aufgetreten. Sie sind nicht (mehr) eingelogt.</label>
             <label index="page-goto">Zur Seite</label>
             <label index="page-first">Erste</label>
-            <label index="page-previous">Vorige</label>
-            <label index="page-next">Nächste</label>
+            <label index="page-previous">&laquo; Vorige</label>
+            <label index="page-next">Nächste &raquo;</label>
             <label index="page-last">Letzte</label>
             <label index="board-unreadEntries">Ungelesene Einträge</label>
             <label index="board-markAllRead">Alle als gelesen markieren</label>
@@ -839,8 +839,8 @@ Hier der Link, mit dem Sie direkt in den Beitrag gelangen:
 			<label index="error_logout">Tietokantaan tallennuksessa tapahtui virhe. Sinut on ohjattu ulos.</label>
 			<label index="page-goto">Sivulle</label>
 			<label index="page-first">Ensimmäinen</label>
-			<label index="page-previous">Edellinen</label>
-			<label index="page-next">Seuraava</label>
+			<label index="page-previous">&laquo; Edellinen</label>
+			<label index="page-next">Seuraava &raquo;</label>
 			<label index="page-last">Viimeinen</label>
 			<label index="error-imgNotFound">[Virhe ladattaessa kuvaa ###IMGFILE###]</label>
 			<label index="footermessage">mm_forum v%s</label>
@@ -1149,8 +1149,8 @@ Klikkaa allaolevaa linkkiä päästäksesi keskusteluun:
             <label index="error_logout">Er is een fout opgetreden tijdens het opslaan in de database. U bent uitgelogd.</label>
             <label index="page-goto">Naar pagina</label>
             <label index="page-first">Eerste</label>
-            <label index="page-previous">Vorige</label>
-            <label index="page-next">Volgende</label>
+            <label index="page-previous">&laquo; Vorige</label>
+            <label index="page-next">Volgende &raquo;</label>
             <label index="page-last">Laatste</label>
             <label index="error-imgNotFound">[Fout bij het laden van afbeelding ###IMGFILE###]</label>
             <label index="footermessage">Powered by mm_forum v%s</label>
@@ -1501,8 +1501,8 @@ Klik op de volgende link om het onderwerp te openen:
             <label index="error_logout">Erreur lors de l'écriture dans la base de données - Vous n'êtes pas/plus identifié.</label>
             <label index="page-goto">Vers la page</label>
             <label index="page-first">Première</label>
-            <label index="page-previous">Précédente</label>
-            <label index="page-next">Suivante</label>
+            <label index="page-previous">&laquo; Précédente</label>
+            <label index="page-next">Suivante &raquo;</label>
             <label index="page-last">Dernière</label>
             <label index="board-unreadEntries">Interventions non-lues</label>
             <label index="board-markAllRead">Marquer toutes les nouvelles interventions comme lues</label>
@@ -1867,8 +1867,8 @@ Voici le lien vers un fil de discussion, pour lequel vous avez activé une notif
 			<label index="error_logout">Возникла ошибка при записи в базу данных. Вы не авторизированы на форуме.</label>
 			<label index="page-goto">На страницу</label>
 			<label index="page-first">Начало</label>
-			<label index="page-previous">Назад</label>
-			<label index="page-next">Дальше</label>
+			<label index="page-previous">&laquo; Назад</label>
+			<label index="page-next">Дальше &raquo;</label>
 			<label index="page-last">В конец</label>
 			<label index="error-imgNotFound">[Ошибка при загрузке изображения ###IMGFILE###]</label>
 			<label index="footermessage">Форум работает под управлением mm_forum v%s</label>
@@ -2231,8 +2231,8 @@ Voici le lien vers un fil de discussion, pour lequel vous avez activé une notif
 			<label index="error_logout">Виникла помилка під час запису до бази даних. Ви не авторизовані на форумі.</label>
 			<label index="page-goto">На сторінку</label>
 			<label index="page-first">Початок</label>
-			<label index="page-previous">Назад</label>
-			<label index="page-next">Далі</label>
+			<label index="page-previous">&laquo; Назад</label>
+			<label index="page-next">Далі &raquo;</label>
 			<label index="page-last">В кінець</label>
 			<label index="error-imgNotFound">[Помилка при завантажені зображення ###IMGFILE###]</label>
 			<label index="footermessage">Форум працює під керуванням mm_forum v%s</label>

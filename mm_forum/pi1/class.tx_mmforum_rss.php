@@ -60,7 +60,7 @@ class tx_mmforum_rss {
 		 * Fields that are to be selected into the post array
 		 */
 
-	var $selectFields = 'p.uid AS post_uid, p.post_time, x.post_text, t.topic_title, f.forum_name, u.username';
+	var $selectFields = 'p.uid AS post_uid, p.post_time, x.post_text, t.topic_title, f.forum_name, u.';
 
 
 
@@ -78,6 +78,9 @@ class tx_mmforum_rss {
 
 			// Initialize variables
 		$this->initialize($conf, $parent);
+
+		// load userfield
+		$this->selectFields .= $this->conf['userNameField'] ? $this->conf['userNameField'] : 'username';
 
 			// Load post array
 		if($this->piVars['tid']) {
@@ -215,7 +218,7 @@ class tx_mmforum_rss {
 				'###RSS_POST_TEXT_SHORT###' => $this->getPostTextShort($post['post_text']),
 				'###RSS_POST_TEXT###'       => $this->getPostTextComplete($post['post_text']),
 				'###RSS_FORUM_NAME###'      => $this->pObj->escape($post['forum_name']),
-				'###RSS_POST_AUTHOR###'     => $this->pObj->escape($post['username'])
+				'###RSS_POST_AUTHOR###'     => $this->pObj->escape($post[$this->conf['userNameField'] ? $this->conf['userNameField'] : 'username'])
 			);
 			$rowContent .= $this->cObj->substituteMarkerArray($rowTemplate, $rowMarker);
 
