@@ -672,6 +672,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                         'tid'    => $row['uid'],
                         'page'   => $i
                     );
+          					if ($linkparams[$this->prefixId]['page'] < 1) {
+                      $linkparams[$this->prefixId]['page'] = '';
+                    }
                     $page_link  .= ' '.$this->pi_linkToPage($i,$GLOBALS['TSFE']->id,'',$linkparams);
                     $menge = $menge - $conf['post_limit'];
                 }
@@ -1368,6 +1371,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						'tid'       => $row['uid'],
 						'page'      => $i
 					);
+					if ($linkParams[$this->prefixId]['page'] < 1) {
+            $linkParams[$this->prefixId]['page'] = '';
+          }
 					$page_link .= ' ' . $this->pi_linkToPage($i+1, $GLOBALS['TSFE']->id, '', $linkParams);
 
 					if ($interval > 1) {
@@ -1810,6 +1816,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				while ($topicPostsLeft >= 0) {
 					$i++;
 					$linkParams['page'] = $i;
+					if ($linkParams['page'] < 1) {
+            $linkParams['page'] = '';
+          }
 					$page_link .= ' '.$this->pi_linkToPage($i, $GLOBALS['TSFE']->id, '', $linkParams) . ' ';
 					$topicPostsLeft -= $postLimit;
 				}
@@ -4677,12 +4686,17 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             }
         }
         $seite     = intval($seite);
-
+        if(!$this->conf['doNotUsePageBrowseExtension']) {
+          $seite--;
+        }
         $linkparams[$this->prefixId] = array (
             'action'    => 'list_post',
             'tid'       => $topic_id,
             'page'      => $seite - 1
         );
+        if($linkparams[$this->prefixId]['page'] < 1) {
+          $linkparams[$this->prefixId]['page'] = '';
+        }
         if($this->useRealUrl()) {
             $linkparams[$this->prefixId]['fid'] = $forum_id;
             $linkparams[$this->prefixId]['pid'] = $this->pi_getLL('realurl.page');
