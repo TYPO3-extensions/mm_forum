@@ -17,6 +17,7 @@
             <label index="newmessage2">You have %s unread message</label>
             <label index="newmessages2">You have %s unread messages</label>
             <label index="msgError">You must be logged in to use this function</label>
+            <label index="msgErrorDeactivated">The private messaging functions are disabled.</label>
             <label index="headerTofromInbox">From</label>
             <label index="headerTofromOutbox">To</label>
             <label index="headerTofromArchiv">From/to</label>
@@ -86,6 +87,8 @@ To read the message please follow this link:
             <label index="newmessages2-inf">Du hast %s ungelesene Nachrichten</label>
             <label index="msgError">Sie müssen sich erst einloggen, um diese Funktion zu benutzen</label>
             <label index="msgError-inf">Du musst dich erst einloggen, um diese Funktion zu benutzen</label>
+            <label index="msgErrorDeactivated">Sie können keine Private Nachrichten lesen oder schreiben, da diese Funktion deaktiviert ist.</label>
+            <label index="msgErrorDeactivated-inf">Du kannst keine Private Nachrichten lesen oder schreiben, da diese Funktion deaktiviert ist.</label>
             <label index="headerTofromInbox">Von</label>
             <label index="headerTofromOutbox">An</label>
             <label index="headerTofromArchiv">Von/An</label>

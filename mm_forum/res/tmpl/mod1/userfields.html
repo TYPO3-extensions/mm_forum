@@ -49,6 +49,14 @@
         </td>
     </tr>
 	<tr class="mm_forum-listrow">
+        <td style="width:25%;">###UF_LLL_UNIQUE###</td>
+		<td style="width:1px;"><img src="img/uf-unique.png" /></td>
+        <td>
+        	<input type="hidden" name="tx_mmforum_userfields[unique]" value="0" />
+        	<input id="uf-unique" type="checkbox" name="tx_mmforum_userfields[unique]" value="1" />
+        </td>
+    </tr>
+	<tr class="mm_forum-listrow">
         <td style="width:25%;">###UF_LLL_LINKTOFEUSER###</td>
 		<td style="width:1px;"><img src="img/uf-link.png" style="vertical-align: middle;" /></td>
         <td>
@@ -170,6 +178,7 @@
 	userfields.delPath = '###UF_IMG_DEL###';
 	userfields.setRequired(###UF_REQUIRED###);
 	userfields.setPrivate(###UF_PRIVATE###);
+	userfields.setUnique(###UF_UNIQUE###);
 	<!-- ###USERFIELD_FORM_LABEL### -->
 	userfields.addLanguage('###UF_LANG_CONTENT###', '###UF_LANG_LABEL###');
 	<!-- ###USERFIELD_FORM_LABEL### -->

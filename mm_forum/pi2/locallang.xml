@@ -61,6 +61,7 @@
 			<label index="error-emailEmpty">Please specify an email address.</label>
 			<label index="error-wwwInvalid">Please insert a correct URL for your website.</label>
 			<label index="error-userfieldEmpty">Please insert a correct value.</label>
+			<label index="error-userfieldNotUnique">Please change your input, due it is allowed to be only once in our database.</label>
         </languageKey>
 		<!-- GERMAN LANGUAGE DATA -->
         <languageKey index="de" type="array">
@@ -133,6 +134,8 @@
 			<label index="error-wwwInvalid-inf">Bitte gib eine korrekte URL als Webseite an.</label>
 			<label index="error-userfieldEmpty">Bitte geben Sie einen korrekten Wert an.</label>
 			<label index="error-userfieldEmpty-inf">Bitte gib einen korrekten Wert an.</label>
+			<label index="error-userfieldNotUnique">Geben Sie bitte einen anderen Wert ein. Der aktuelle Wert ist bereits in der Datenbank vorhanden.</label>
+			<label index="error-userfieldNotUnique-inf">Bitte gib einen anderen Wert ein. Der aktuelle Wert ist bereits in der Datenbank vorhanden.</label>
         </languageKey>
         <!-- FINNISH LANGUAGE DATA -->
         <languageKey index="fi" type="array">

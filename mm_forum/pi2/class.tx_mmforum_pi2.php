@@ -641,7 +641,13 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 				$marker['fehler'] = 1;
 				$marker['userfield_error'][$arr['uid']] = $this->pi_getLL('error-userfieldEmpty');
 			}
-			
+
+  		if ((intval($userField->data['uniquefield']) === 1) &&
+            !($userField->isUnique($value,$userField->data['config_parsed']['datasource']))) {
+        $marker['fehler'] = 1;
+  			$marker['userfield_error'][$arr['uid']] = $this->pi_getLL('error-userfieldNotUnique');
+      }
+
 		}
 		
 			/* Include hooks */

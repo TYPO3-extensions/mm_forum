@@ -3780,6 +3780,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $marker['###MAIL###']                   = '';  #'<a href="index.php?id='.$GLOBALS["TSFE"]->id.'&tx_mmforum_pi1[action]=send_mail&tx_mmforum_pi1[uid]='.$row['uid'].'"><img src="'.$conf['path_img'].'mail.gif" border="0"></a>';
 
         // Private Messaging
+        if ($GLOBALS['TSFE']->fe_user->user['username'] && !((isset($conf['pm_enabled']) && intval($conf['pm_enabled']) === 0))) {
             $linkParams['tx_mmforum_pi3'] = array (
                 'action'    => 'message_write',
                 'folder'    => 'inbox',
@@ -3787,6 +3788,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 'userid'    => $user->getUID(),
             );
             $marker['###PM###']                     = $this->createButton('pm',$linkParams,$this->conf['pm_id'],true);
+        } else {
+          $marker['###PM###'] = '';
+        }
 
         // A link to a page presenting the last 10 posts by this user
             $linkparams = array();
@@ -4210,7 +4214,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             // First page
                 if (($page - 1) >= 1)           $content .= $this->pi_linkTP(''.$this->pi_getLL('page.first').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>1))).'|';
             // Previous page
-               if (($page - 1) > 1)            $content .= $this->pi_linkTP(' '.$this->pi_getLL('page.previous').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';
+                if (($page - 1) > 1)            $content .= $this->pi_linkTP(' '.$this->pi_getLL('page.previous').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';
             // List pages from 2 pages before current page to 2 pages after current page
                 if (($page - 2) >= 1)           $content .= '|'.$this->pi_linkTP(' '.($page-2).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-2))).'|';
                 if (($page - 1) >= 1)           $content .= '|'.$this->pi_linkTP(' '.($page-1).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';

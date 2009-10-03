@@ -10,6 +10,7 @@ Userfields_GeneralSettings.prototype = {
 	delPath: "",
 	required: false,
 	isPrivate: false,
+	isUnique: false,
 	
 		/**
 		 * 
@@ -137,6 +138,14 @@ Userfields_GeneralSettings.prototype = {
 		if(p == true)
 			$('uf-private').checked = true;
 		else $('uf-private').checked = false;
+	},
+	
+	setUnique: function(u) {
+		this.isUnique = u;
+		
+		if(u == true)
+			$('uf-unique').checked = true;
+		else $('uf-unique').checked = false;
 	}
 	
 }

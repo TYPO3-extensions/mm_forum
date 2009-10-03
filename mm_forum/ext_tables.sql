@@ -440,6 +440,7 @@ CREATE TABLE tx_mmforum_userfields (
   label tinytext NOT NULL,
   config text NOT NULL,
   public tinyint(1) NOT NULL default '0',
+  uniquefield tinyint(1) NOT NULL default '0',
   
   PRIMARY KEY (uid),
   KEY pid (pid)

@@ -392,6 +392,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			'label'				=> $uf_labels,
 			'required'			=> $data['required'] ? true : false,
 			'private'			=> $data['private'] ? true : false,
+			'unique'			=> $data['unique'] ? true : false,
 			'link'				=> $uf_link,
 			'type'				=> $uf_type,
 			'text'				=> array(
@@ -424,8 +425,9 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		$updateArray = array(
 			'tstamp'			=> time(),
 			'public'			=> $meta['private']?'0':'1',
+			'uniquefield'	=> $meta['unique']?'1':'0',
 			'label'				=> $meta['label']['default'],
-			'meta'				=> serialize($meta),
+			//'meta'				=> serialize($meta),
 			'config'			=> $config
 		);
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.intval($uid), $updateArray);
@@ -452,8 +454,9 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			'cruser_id'			=> $GLOBALS['BE_USER']->user['uid'],
 			'sorting'			=> $sorting,
 			'public'			=> $meta['private']?'0':'1',
+			'unique'			=> $meta['unique']?'1':'0',
 			'label'				=> $meta['label']['default'],
-			'meta'				=> serialize($meta),
+			//'meta'				=> serialize($meta),
 			'config'			=> $config
 		);
 		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userfields', $insertArray);
@@ -484,6 +487,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			'###UF_LLL_TYPE###'				=> $this->getLL('field.type'),
 			'###UF_LLL_REQUIRED###'			=> $this->getLL('field.required'),
 			'###UF_LLL_PRIVATE###'			=> $this->getLL('field.private'),
+			'###UF_LLL_UNIQUE###'			=> $this->getLL('field.unique'),
 			'###UF_LLL_TYPE_TEXT###'		=> $this->getLL('field.type.text'),
 			'###UF_LLL_TYPE_RADIO###'		=> $this->getLL('field.type.radio'),
 			'###UF_LLL_TYPE_CHECKBOX###'	=> $this->getLL('field.type.checkbox'),
@@ -524,6 +528,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 				'###UF_TYPE###'				=> 'text',
 				'###UF_REQUIRED###'			=> 'false',
 				'###UF_PRIVATE###'			=> 'false',
+				'###UF_UNIQUE###'			=> 'false',
 				'###UF_LABEL###'			=> '',
 				'###UF_TEXT_LENGTH###'		=> -1,
 				'###UF_TEXT_VALIDATE###'	=> 'none',
@@ -568,6 +573,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 				'###UF_TYPE###'				=> $userfield['meta']['type'],
 				'###UF_REQUIRED###'			=> $userfield['meta']['required']?'true':false,
 				'###UF_PRIVATE###'			=> $userfield['meta']['private']?'true':false,
+				'###UF_UNIQUE###'			=> $userfield['meta']['unique'] ? true : false,
 				'###UF_LABEL###'			=> '',
 				'###UF_TEXT_LENGTH###'		=> $userfield['meta']['text']['length'],
 				'###UF_TEXT_VALIDATE###'	=> $userfield['meta']['text']['validate'],

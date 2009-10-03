@@ -91,7 +91,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 	function main($content, $conf) {
         //add Javascript
-        $GLOBALS['TSFE']->additionalHeaderData['mm_forum'] = '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'res/scripts/prototype-1.6.0.3.js"></script>';
+        #$GLOBALS['TSFE']->additionalHeaderData['mm_forum'] = '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'res/scripts/prototype-1.6.0.3.js"></script>';
 
 		$this->init($conf);
 		$this->pi_USER_INT_obj = 1;
@@ -103,6 +103,18 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		if (!count($codes))  $codes=array("");
 
         $conf = $this->conf;
+
+		if ((isset($conf['pm_enabled']) && intval($conf['pm_enabled']) === 0)) {
+			$template = $this->cObj->fileResource($conf['template.']['error_message']);
+			if ($GLOBALS['TSFE']->fe_user->user['username']) {
+			  $marker['###ERROR###'] = $this->pi_getLL('msgErrorDeactivated');
+      } else {
+        $marker['###ERROR###'] = $this->pi_getLL('msgError');
+      }
+			$content = $this->cObj->substituteMarkerArrayCached($template, $marker);
+			
+      return $this->pi_wrapInBaseClass($content);
+    }
 		
 		if(!$conf['pm_pid']) $conf['pm_pid'] = $GLOBALS['TSFE']->id;
 		
@@ -139,7 +151,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						IF ($action == "message_del")    $content = $this->message_del($content,$conf);
 						IF ($action == "import")   		 $content = $this->import($content,$conf);
 					} else {
-						$template = $this->cObj->fileResource($conf['temp']['error_message']);
+						$template = $this->cObj->fileResource($conf['template.']['error_message']);
 						$marker['###ERROR###'] = $this->pi_getLL('msgError');
 						$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 					}
@@ -377,7 +389,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			header('Location: '.$link);
 		}
 		else {
-			$template = $this->cObj->fileResource($conf['temp']['error_message']);
+			$template = $this->cObj->fileResource($conf['template.']['error_message']);
 			$marker['###ERROR###'] = $this->pi_getLL('deleteError');
 		}
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);

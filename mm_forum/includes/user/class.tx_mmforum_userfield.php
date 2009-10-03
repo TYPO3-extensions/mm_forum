@@ -171,6 +171,46 @@ class tx_mmforum_userfield {
 	}
 	
 		/**
+		 * Checks if an input variable already exists in the database
+		 * 
+		 * @param  string $value The value that is to be checked.
+		 * @param  string $field The vdatabase field where the value should be unique
+		 * @return bool          TRUE, if the input is unique, otherwise FALSE.
+		 * 
+		 * @author  Hauke Hain <hhpreuss@googlemail.com>
+		 * @version 2009-09-09
+		 */
+	function isUnique($value, $field) {
+		$value = $GLOBALS['TYPO3_DB']->fullQuoteStr(trim($value), 'fe_users');
+		$uid = intval($GLOBALS['TSFE']->fe_user->user['uid']);
+
+		//no user logged in
+		if ($uid === 0) {
+  		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			              $field, 'fe_users', $field . ' LIKE ' . $value
+		        );
+      return ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1);
+    }
+    
+    //user logged in
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			             'uid,' . $field, 'fe_users', $field . ' LIKE ' . $value
+		      );
+		$count = intval($GLOBALS['TYPO3_DB']->sql_num_rows($res));
+		if ($count === 0) {
+      return true;
+    } elseif ($count === 1) {
+      // if the found value is from the current user, return true
+  		$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+  		if (intval($arr['uid']) === $uid) {
+        return true;
+      }
+    }
+    
+    return false;
+	}
+	
+		/**
 		 * Gets the fe_users field that this field is linked to.
 		 * 
 		 * @return string The field name of the fe_users field that this field

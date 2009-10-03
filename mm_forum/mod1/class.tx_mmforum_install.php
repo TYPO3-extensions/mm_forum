@@ -133,6 +133,7 @@ class tx_mmforum_install {
             'attachment_count'		=> 'int'
 		),
 		'pm'			=> array(
+			'pmEnabled'					=> 'checkbox',
 			'pmPID'					=> 'group:pages',
 			'pmBlocktime'			=> 'int/unit{seconds}',
 		),

@@ -83,6 +83,8 @@
             <label index="install.field.enableShadows.desc">This property enables the display of shadow topics. If you move a topic to another forum, a "shadow" remains in the old forum pointing to the new location.</label>
 			
 			<!-- PM OPTIONS -->
+			<label index="install.field.pmEnabled.title">PM enabled</label>
+			<label index="install.field.pmEnabled.desc">If not checked, you are not able to send private messages.</label>
 			<label index="install.field.pmPID.title">Private messaging page</label>
 			<label index="install.field.pmPID.desc">Specified the page the &lt;strong&gt;mm_forum :: Private messaging&lt;/strong&gt; plugin is placed on.</label>
 			<label index="install.field.pmBlocktime.title">Message block time</label>

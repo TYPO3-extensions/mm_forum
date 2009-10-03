@@ -36,6 +36,7 @@
 			<label index="userFields.field.type">Field Type</label>
 			<label index="userFields.field.required">Required</label>
 			<label index="userFields.field.private">Restricted visibility</label>
+			<label index="userFields.field.unique">Unique field (Read the manual!)</label>
 			<label index="userFields.field.type.text">Text field</label>
 			<label index="userFields.field.type.radio">Radio button</label>
 			<label index="userFields.field.type.checkbox">Checkbox</label>

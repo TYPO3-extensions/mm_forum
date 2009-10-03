@@ -121,6 +121,8 @@ class tx_mmforum_usermanagement {
 			$arr['meta']['link'] = $arr['config_parsed']['datasource'];
 		if(!isset($arr['meta']['required']) && isset($arr['config_parsed']['required']))
 			$arr['meta']['required'] = $arr['config_parsed']['required']?true:false;
+		if(!isset($arr['meta']['unique']))
+			$arr['meta']['unique'] = intval($arr['uniquefield'])===1?true:false;
 		if(!$arr['meta']['text']['validate'])
 			$arr['meta']['text']['validate'] = 'none';
 		if(!$arr['meta']['text']['length'])

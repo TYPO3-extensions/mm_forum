@@ -35,6 +35,14 @@ plugin.tx_mmforum {
 		
 		
 		#
+		# PM ENABLED
+		#
+		
+		pm_enabled 			= {$plugin.tx_mmforum.pmEnabled}
+		
+		
+		
+		#
 		# FILE PATHS
 		#
 
