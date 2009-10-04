@@ -111,6 +111,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
       } else {
         $marker['###ERROR###'] = $this->pi_getLL('msgError');
       }
+      $marker['###BACKLINK###'] = '<a href="javascript:history.back()">' . $this->pi_getLL('back') . '</a>';
 			$content = $this->cObj->substituteMarkerArrayCached($template, $marker);
 			
       return $this->pi_wrapInBaseClass($content);
@@ -153,6 +154,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 					} else {
 						$template = $this->cObj->fileResource($conf['template.']['error_message']);
 						$marker['###ERROR###'] = $this->pi_getLL('msgError');
+						$marker['###BACKLINK###'] = '<a href="javascript:history.back()">' . $this->pi_getLL('back') . '</a>';
 						$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 					}
 				break;
@@ -391,6 +393,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		else {
 			$template = $this->cObj->fileResource($conf['template.']['error_message']);
 			$marker['###ERROR###'] = $this->pi_getLL('deleteError');
+			$marker['###BACKLINK###'] = '<a href="javascript:history.back()">' . $this->pi_getLL('back') . '</a>';
 		}
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 		return $content;
@@ -475,6 +478,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		else {
 			$template = $this->cObj->fileResource($conf['template.']['error_message']);
 			$marker['###ERROR###'] = $this->pi_getLL('errorNoAccess');
+			$marker['###BACKLINK###'] = '<a href="javascript:history.back()">' . $this->pi_getLL('back') . '</a>';
 		}
 
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
@@ -555,6 +559,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			if ($error) {
 				$template = $this->cObj->fileResource($conf['template.']['error_message']);
 				$marker['###ERROR###'] = $errormessage;
+				$marker['###BACKLINK###'] = '<a href="javascript:history.back()">' . $this->pi_getLL('back') . '</a>';
 			}
 			else
 			{
@@ -673,6 +678,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				{
 					$template = $this->cObj->fileResource($conf['template.']['error_message']);
 					$marker['###ERROR###'] = $this->pi_getLL('errorRecipientNotExists');
+					$marker['###BACKLINK###'] = '<a href="javascript:history.back()">' . $this->pi_getLL('back') . '</a>';
 				}
 			}
 		}
