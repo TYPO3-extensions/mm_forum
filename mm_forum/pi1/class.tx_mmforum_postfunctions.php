@@ -625,7 +625,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			$profile .= tx_mmforum_postfunctions::getUserButtons($user);
         }
 
-        if ($GLOBALS['TSFE']->fe_user->user['username'] && $user['uid']!=$GLOBALS['TSFE']->fe_user->user['uid']){
+        if ($GLOBALS['TSFE']->fe_user->user['username'] && $user['uid']!=$GLOBALS['TSFE']->fe_user->user['uid'] && !(isset($this->conf['pm_enabled']) && intval($this->conf['pm_enabled']) === 0)){
         	if(intval($this->conf['pm_id']) > 0 && $user && $user['deleted']=='0' && !((isset($conf['pm_enabled']) && intval($conf['pm_enabled']) === 0))) {
                 $pmParams = array(
                     'tx_mmforum_pi3[action]'        => 'message_write',
