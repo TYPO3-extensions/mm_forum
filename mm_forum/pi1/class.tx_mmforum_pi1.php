@@ -3840,7 +3840,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 'tx_mmforum_userfields f',
                 'f.hidden=0 AND f.deleted=0'.$userField_private,
 				'',
-				'sorting ASC'
+				'sorting DESC'
             );
             $parser  = t3lib_div::makeInstance('t3lib_TSparser');
             while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
