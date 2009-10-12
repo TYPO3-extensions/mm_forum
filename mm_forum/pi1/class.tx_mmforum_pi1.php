@@ -1015,7 +1015,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         	$parents[] = $row;
         	$parentIds[] = $row['uid'];
         }
-        $catIdWhere = '(parentID='. implode(' OR parentID=', $parentIds).')';
+        $catIdWhere = count($parentIds) ? '(parentID='. implode(' OR parentID=', $parentIds).')' : '0=1';
         $where ='deleted = 0 AND
                  hidden = 0 AND
                  '.$catIdWhere.
