@@ -2356,19 +2356,22 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$template = $this->cObj->getSubpart($template, '###LIST_POSTS###');
 					$template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_SECTION###', '');
 
+                    $userSignature = tx_mmforum_postfunctions::marker_getUserSignature($GLOBALS['TSFE']->fe_user->user);
+
 					$posttext = $this->piVars['message'];
 					$postold  = $posttext;
-					$posttext = $this->bb2text($posttext, $conf);
+					$posttext = $this->bb2text($posttext, $conf) . ($this->conf['list_posts.']['appendSignatureToPostText'] ? $userSignature : '');
 
 					$marker['###POSTOPTIONS###'] = '';
 					$marker['###POSTMENU###']    = '';
-					$marker['###MESSAGEMENU###']= '';
-					$marker['###PROFILEMENU###']= '';
+					$marker['###MESSAGEMENU###'] = '';
+					$marker['###PROFILEMENU###'] = '';
 					$marker['###POSTUSER###']    = $this->ident_user($GLOBALS['TSFE']->fe_user->user['uid'], $conf);
 					$marker['###POSTTEXT###']    = $posttext;
 					$marker['###ANKER###']       = '';
 					$marker['###POSTANCHOR###']	 = '';
 					$marker['###POSTDATE###']    = $this->pi_getLL('post.writtenOn') . ': ' . $this->formatDate(time());
+					$marker['###POSTRATING###']  = '';
 
 					// Include hooks
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newTopic_INpreview'])) {
@@ -2614,9 +2617,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
                     $template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_SECTION###', '');
 
+                    $userSignature = tx_mmforum_postfunctions::marker_getUserSignature($GLOBALS['TSFE']->fe_user->user);
+
                     $posttext = $this->piVars['message'];
                     $postold = $posttext;
-                    $posttext = $this->bb2text($posttext,$conf);
+                    $posttext = $this->bb2text($posttext,$conf) . ($this->conf['list_posts.']['appendSignatureToPostText'] ? $userSignature : '');
 
                     $marker['###POSTOPTIONS###']= '';
                     $marker['###MESSAGEMENU###']= '';
