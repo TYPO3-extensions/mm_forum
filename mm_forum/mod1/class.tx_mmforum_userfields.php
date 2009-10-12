@@ -260,8 +260,6 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			case 'select':
 				$config['input'] = 'COA';
 				$i = 20;
-
-				t3lib_div::debug($meta); 
 				
 				$config['input.']['10'] = 'HTML';
 				$config['input.']['10.']['value'] = '<select name="###USERFIELD_NAME###">';
@@ -423,12 +421,12 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		}
 		
 		$updateArray = array(
-			'tstamp'			=> time(),
-			'public'			=> $meta['private']?'0':'1',
-			'uniquefield'	=> $meta['unique']?'1':'0',
-			'label'				=> $meta['label']['default'],
-			//'meta'				=> serialize($meta),
-			'config'			=> $config
+			'tstamp'            => time(),
+			'public'            => $meta['private']?'0':'1',
+			'uniquefield'       => $meta['unique']?'1':'0',
+			'label'             => $meta['label']['default'],
+			'meta'              => serialize($meta),
+			'config'	        => $config
 		);
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.intval($uid), $updateArray);
 		
@@ -454,9 +452,9 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			'cruser_id'			=> $GLOBALS['BE_USER']->user['uid'],
 			'sorting'			=> $sorting,
 			'public'			=> $meta['private']?'0':'1',
-			'unique'			=> $meta['unique']?'1':'0',
+			'uniquefield'		=> $meta['unique']?'1':'0',
 			'label'				=> $meta['label']['default'],
-			//'meta'				=> serialize($meta),
+			'meta'				=> serialize($meta),
 			'config'			=> $config
 		);
 		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userfields', $insertArray);

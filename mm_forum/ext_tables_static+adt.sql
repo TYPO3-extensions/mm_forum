@@ -158,6 +158,8 @@ CREATE TABLE tx_mmforum_userfields (
   config text NOT NULL,
   meta text NOT NULL,
   public tinyint(1) NOT NULL default '0',
+  uniquefield tinyint(1) NOT NULL default '0',
+
   PRIMARY KEY (`uid`),
   KEY `pid` (`pid`)
 );
