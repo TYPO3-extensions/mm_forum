@@ -138,7 +138,7 @@ class tx_mmforum_cache_file {
 
 		$files = glob($fullPath.'/*.mmforum_cache');
 
-		foreach($files as $file) unlink($file);
+		foreach((array)$files as $file) unlink($file);
 	}
 	
 }
