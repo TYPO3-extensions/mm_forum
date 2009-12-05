@@ -77,7 +77,7 @@ class tx_mmforum_updater {
 		$content .= sprintf($this->getLL('currentRevision'),$this->thisRevision).'<br />';		
 		$content .= sprintf($this->getLL('newestRevision'),$newestRevision).'<br /><br />';
 		
-		if(t3lib_div::GPvar('update_result')) {
+		if(t3lib_div::_GP('update_result')) {
 			unlink('../../tx_mmforum_update.php');
 			unlink('../../mm_forum_update.tar.gz');
 		
@@ -85,16 +85,16 @@ class tx_mmforum_updater {
 	        $TCE->admin = TRUE;
 	        $TCE->clear_cacheCmd('all');
 			
-			if(t3lib_div::GPvar('update_result') == 'error')
+			if(t3lib_div::_GP('update_result') == 'error')
 				return '<strong>'.$this->getLL('error').'</strong>';
-			if(t3lib_div::GPvar('update_result') == 'success')
+			if(t3lib_div::_GP('update_result') == 'success')
 				return '<strong>'.$this->getLL('success').'</strong>';
 		}
 			
 		if($this->thisRevision >= $newestRevision)
 			$content .= '<strong>'.$this->getLL('noUpdate').'</strong>';
 		else {
-			if(t3lib_div::GPvar('confirmUpdate')=='1') {
+			if(t3lib_div::_GP('confirmUpdate')=='1') {
 				$content .= $this->performUpdate();
 			} else {
 				$content .= '<strong>'.$this->getLL('updatePossible').'</strong>';

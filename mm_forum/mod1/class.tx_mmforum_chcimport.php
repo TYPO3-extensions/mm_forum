@@ -77,7 +77,7 @@ class tx_mmforum_chcimport {
      * @version 2007-05-03
      */
     function main($content) {
-        $this->importVars = t3lib_div::GPvar('tx_mmforum_chc');
+        $this->importVars = t3lib_div::_GP('tx_mmforum_chc');
         
         $this->ext_db = $this->dbObj->link;
         $this->loc_db = $GLOBALS['TYPO3_DB']->link;

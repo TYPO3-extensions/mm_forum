@@ -72,7 +72,7 @@ class tx_mmforum_import {
      * @uses    outputImportSettings
      */
     function main($content) {
-        $this->importData = t3lib_div::GPvar('tx_mmforum_import');
+        $this->importData = t3lib_div::_GP('tx_mmforum_import');
         
         if(!isset($this->importData['step']))
             $this->importData['step'] = 0;

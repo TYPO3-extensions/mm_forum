@@ -105,9 +105,9 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	 * @return  string          The content
 	 */
 	function list_userdata ($content,$conf) {
-		if (t3lib_div::GPvar("action") == "change_data")			   $this->write_userdata($content,$conf);
-		if (t3lib_div::GPvar("action") == "avatar_upload")	$content = $this->avatar_upload($content,$conf);
-		if (t3lib_div::GPvar("action") == "change_pass")	$content = $this->change_pass($content,$conf);
+		if (t3lib_div::_GP("action") == "change_data")			   $this->write_userdata($content,$conf);
+		if (t3lib_div::_GP("action") == "avatar_upload")	$content = $this->avatar_upload($content,$conf);
+		if (t3lib_div::_GP("action") == "change_pass")	$content = $this->change_pass($content,$conf);
 			
 		$template = $this->cObj->fileResource($conf['template']);
 		$template = $this->cObj->getSubpart($template, "###MAIN###");

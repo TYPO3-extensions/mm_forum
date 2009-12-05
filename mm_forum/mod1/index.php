@@ -366,12 +366,12 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 			$groups	= implode(',',array(intval($this->confArr['userGroup']),intval($this->confArr['modGroup']),intval($this->confArr['adminGroup'])));
 			$filter	= $mmforum['sword']?"username like '".mysql_escape_string($mmforum['sword'])."%'":'1';
             $order	= 'username '.$orderBy.'';
-            if(t3lib_div::GPvar('mmforum_sort') == 'username'){
-                $orderBy	= mysql_escape_string(t3lib_div::GPvar('mmforum_style'));
+            if(t3lib_div::_GP('mmforum_sort') == 'username'){
+                $orderBy	= mysql_escape_string(t3lib_div::_GP('mmforum_style'));
                 $order		= 'username '.$orderBy.'';
             }
-            if(t3lib_div::GPvar('mmforum_sort') == 'age'){
-                $orderBy	= mysql_escape_string(t3lib_div::GPvar('mmforum_style'));
+            if(t3lib_div::_GP('mmforum_sort') == 'age'){
+                $orderBy	= mysql_escape_string(t3lib_div::_GP('mmforum_style'));
                 $order		= 'crdate '.$orderBy.'';
             }
 			

@@ -66,7 +66,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 	 */
 	function list_alerts($conf)
 	{
-		$param = t3lib_div::GPvar('tx_mmforum_pi1');
+		$param = t3lib_div::_GP('tx_mmforum_pi1');
 		if($param['update'] == 'update_status') {
 			foreach($param as $key => $value) {
 				$key = str_replace('status_','',$key);
@@ -257,7 +257,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			$template		= $this->cObj->fileResource($conf['template.']['post_alert']);
 			$template		= $this->cObj->getSubpart($template, "###POST_ALERT###");
 
-			$param		= t3lib_div::GPvar('mm_forum');
+			$param		= t3lib_div::_GP('mm_forum');
 			$post_id 	= intval($this->piVars['pid']);
 
 			// Language dependent markers
@@ -287,7 +287,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 					);
 					$res        = $GLOBALS['TYPO3_DB']->exec_INSERTquery(' tx_mmforum_post_alert', $insertArray);
                     
-					$linkto		= $this->get_pid_link($post_id,t3lib_div::GPvar('sword'),$conf);
+					$linkto		= $this->get_pid_link($post_id,t3lib_div::_GP('sword'),$conf);
                     $linkto     = $this->getAbsUrl($linkto);
                     
 					header('Location: '.$linkto);

@@ -729,7 +729,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				$marker['###MESSAGE###']    = $this->shield($row['message']);
 			// Create entirely new PM
 			} else {
-				$to_userid = $this->piVars['userid']?intval($this->piVars['userid']): intval(t3lib_div::GPvar("userid"));
+				$to_userid = $this->piVars['userid']?intval($this->piVars['userid']): intval(t3lib_div::_GP('userid'));
 				if($to_userid != 0) {
 					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('username','fe_users',"uid='$to_userid'");
 					list($username)=$GLOBALS['TYPO3_DB']->sql_fetch_row($res);

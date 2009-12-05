@@ -33,7 +33,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 
 	function menuInit($conf) {
 		$this->prefixId = ($conf['prefixId'] ? $conf['prefixId'] : 'tx_mmforum_pi1');
-		$this->piVars   = t3lib_div::GParrayMerged($this->prefixId);
+		$this->piVars   = t3lib_div::_GPmerged($this->prefixId);
 		$this->pi_loadLL();
 		
 		$this->cObj = t3lib_div::makeInstance('tslib_cObj');

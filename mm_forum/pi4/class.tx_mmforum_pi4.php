@@ -88,7 +88,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		$this->init($conf);
         $this->pi_USER_INT_obj = 1;
 
-        $paramA = (t3lib_div::GPvar('mmfsearch') ? t3lib_div::GPvar('mmfsearch') : array());
+        $paramA = (t3lib_div::_GP('mmfsearch') ? t3lib_div::_GP('mmfsearch') : array());
         $paramB = $this->piVars?$this->piVars:array();
         $param = t3lib_div::array_merge_recursive_overrule($paramB,$paramA);
 
