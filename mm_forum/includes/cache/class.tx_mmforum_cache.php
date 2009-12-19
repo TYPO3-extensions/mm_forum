@@ -218,7 +218,7 @@ class tx_mmforum_cache {
 			$this->directCache[$key] = $object;
 
 		if($this->useTYPO3Cache) {
-			return $this->cacheObj->set($key, $object);
+			return $this->cacheObj->set(str_replace(',','&',$key), $object);
 		} else {
 			if($object === false) $object = 'boolean:false';
 
@@ -248,8 +248,8 @@ class tx_mmforum_cache {
 			/* If key is found in direct cache, return object from
 			 * direct cache, otherwise load from real cache. */
 		if($this->useTYPO3Cache) {
-			if(!$this->cacheObj->has($key)) return null;
-			$restore = $this->directCache[$key] ? $this->directCache[$key] : $this->cacheObj->get($key);
+			if(!$this->cacheObj->has(str_replace(',','&',$key))) return null;
+			$restore = $this->directCache[$key] ? $this->directCache[$key] : $this->cacheObj->get(str_replace(',','&',$key));
 		}
 		else $restore = $this->directCache[$key] ? $this->directCache[$key] : $this->cacheObj->restore($key);
 		
@@ -276,7 +276,7 @@ class tx_mmforum_cache {
 		
 			/* Delete from real cache and return result */
 		if($this->useTYPO3Cache)
-			return $this->cacheObj->remove($key);
+			return $this->cacheObj->remove(str_replace(',','&',$key));
 		else return $this->cacheObj->delete($key);
 		
 	}
