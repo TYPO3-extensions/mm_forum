@@ -53,6 +53,6 @@ plugin.tx_mmforum_pi2 {
 	# Settings for required fields
 		required {
 			fields = {$plugin.tx_mmforum.requiredFields}
-			fieldWrap = <strong>|</strong>
+			fieldWrap = <strong>|&nbsp;(*)</strong>
 		}
 }
