@@ -365,15 +365,20 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 			
 			$groups	= implode(',',array(intval($this->confArr['userGroup']),intval($this->confArr['modGroup']),intval($this->confArr['adminGroup'])));
 			$filter	= $mmforum['sword']?"username like '".mysql_escape_string($mmforum['sword'])."%'":'1';
-            $order	= 'username '.$orderBy.'';
+			$orderBy = t3lib_div::_GP('mmforum_style') ? strtoupper(mysql_escape_string(t3lib_div::_GP('mmforum_style'))) : 'ASC';
             if(t3lib_div::_GP('mmforum_sort') == 'username'){
-                $orderBy	= mysql_escape_string(t3lib_div::_GP('mmforum_style'));
                 $order		= 'username '.$orderBy.'';
-            }
-            if(t3lib_div::_GP('mmforum_sort') == 'age'){
-                $orderBy	= mysql_escape_string(t3lib_div::_GP('mmforum_style'));
+				$uOrder     = $orderBy == 'ASC' ? 'DESC' : 'ASC';
+				$aOrder     = 'ASC';
+            } elseif(t3lib_div::_GP('mmforum_sort') == 'age'){
                 $order		= 'crdate '.$orderBy.'';
-            }
+				$aOrder     = $orderBy == 'ASC' ? 'DESC' : 'ASC';
+				$uOrder     = 'ASC';
+            } else {
+				$order	= 'username '.$orderBy.'';
+				$aOrder		= 'ASC';
+				$uOrder		= 'DESC';
+			}
 			
             #$userGroup_query = "(".$this->confArr['userGroup']." IN (usergroup) OR ".$this->confArr['modGroup']." IN (usergroup) OR ".$this->confArr['adminGroup']." IN (usergroup))";
             $userGroup_query = "(FIND_IN_SET('".$this->confArr['userGroup']."',usergroup) OR FIND_IN_SET('".$this->confArr['modGroup']."',usergroup) OR FIND_IN_SET('".$this->confArr['adminGroup']."',usergroup))";
@@ -417,8 +422,8 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 				
 				$marker = array(
 					'###USERS_LLL_TITLE###'				=> $LANG->getLL('users.title'),
-					'###USERS_LLL_USERNAME###'			=> $LANG->getLL('useradmin.username'),
-					'###USERS_LLL_REGISTERED###'		=> $LANG->getLL('useradmin.age'),
+					'###USERS_LLL_USERNAME###'			=> '<a href="index.php?mmforum_sort=username&mmforum_style='.$uOrder.'">'.$LANG->getLL('useradmin.username').'</a>',
+					'###USERS_LLL_REGISTERED###'		=> '<a href="index.php?mmforum_sort=age&mmforum_style='.$aOrder.'">'.$LANG->getLL('useradmin.age').'</a>',
 					'###USERS_LLL_GROUPS###'			=> $LANG->getLL('useradmin.usergroup'),
 					'###USERS_LLL_OPTIONS###'			=> '&nbsp;'
 				);

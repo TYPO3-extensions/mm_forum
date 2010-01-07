@@ -128,7 +128,7 @@ class tx_mmforum_cache_file {
 		 * @return  void
 		 */
 	function deleteAll() {
-		$fullPath = dirname(PATH_thisScript).$GLOBALS['BACK_PATH'].'/../'.$this->path;
+		$fullPath = PATH_site . $this->path;
 
 			/* NOTE: The following condition is NOT a mistake, but is actually indented
 			 * not to match BOTH false (for "string not found") AND 0 (for "string found
