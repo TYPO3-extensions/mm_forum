@@ -150,6 +150,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		);
 		$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
 		$link = tx_mmforum_pi1::getAbsUrl($link);
+		$link = $this->tools->escapeBrackets($link);
 
 		$marker = $this->makeMarker();
 		$marker['###EMAIL_URL###']            = $link;
