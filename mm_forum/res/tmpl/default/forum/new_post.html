@@ -78,15 +78,15 @@
                 <script type="text/javascript" language="javascript">
                 <!--
                     function changePoll(caller) {
-                        if(caller.checked) {
-                            document.getElementById('poll').style.display='block';
-                        } else {
-                            document.getElementById('poll').style.display='none';
-                        }
+						if('###DISABLE_POLL_VAR###' == '0') {
+							if(caller.checked)
+								document.getElementById('poll').style.display='block';
+							else document.getElementById('poll').style.display='none';
+						}
                     }
                 //-->
                 </script>
-                <input type="checkbox" name="tx_mmforum_pi1[enable_poll]" value="1" onchange="changePoll(this);" ###ENABLE_POLL### style="vertical-align:middle;" /> ###LABEL_POLL_CE###
+                <input type="checkbox" name="tx_mmforum_pi1[enable_poll]" value="1" onchange="changePoll(this);" ###ENABLE_POLL### ###DISABLE_POLL### style="vertical-align:middle;" /> ###LABEL_POLL_CE###
                 <div id="poll" ###POLLDIV_STYLE###>
                     ###POLL###
                 </div>

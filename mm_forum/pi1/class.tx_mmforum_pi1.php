@@ -2435,7 +2435,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					'###LABEL_POLL###'          => $this->pi_getLL('poll.postattach'),
 					'###POLL###'                => $pollObj->display_createForm($this->piVars['poll'] ? $this->piVars['poll'] : array(),$this),
 					'###POLLDIV_STYLE###'       => ($this->piVars['enable_poll'] ? '' : 'style="display:none;"'),
-					'###ENABLE_POLL###'         => ($this->piVars['enable_poll'] ? 'checked="checked"' : '')
+					'###ENABLE_POLL###'         => ($this->piVars['enable_poll'] ? 'checked="checked"' : ''),
+					'###DISABLE_POLL###'        => '',
+					'###DISABLE_POLL_VAR###'    => 0
 				);
 
 				// Remove file attachment section if file attachments are disabled
@@ -3179,12 +3181,16 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                         $marker['###ENABLE_POLL###']    = $this->piVars['enable_poll']?'checked="checked"':'';
                         $marker['###POLLDIV_STYLE###']  = $this->piVars['enable_poll']?'':'style="display:none;"';
                         $marker['###LABEL_POLL_CE###']  = $this->pi_getLL('poll.postattach.new');
-                    }
-                    else {
+						$marker['###DISABLE_POLL###']   = '';
+						$marker['###DISABLE_POLL_VAR###'] = 0;
+                    } else {
+						$pollEnabled = $pollObj->getMayEditPoll($topicData['poll_id']);
                         $marker['###POLL###']           = $pollObj->display_editForm($topicData['poll_id'],$this->piVars['poll']?$this->piVars['poll']:array(),$this);
                         $marker['###ENABLE_POLL###']    = 'checked="checked"';
                         $marker['###POLLDIV_STYLE###']  = '';
                         $marker['###LABEL_POLL_CE###']  = $this->pi_getLL('poll.postattach.edit');
+						$marker['###DISABLE_POLL###']   = $pollEnabled ? '' : 'disabled="disabled"';
+						$marker['###DISABLE_POLL_VAR###'] = $pollEnabled ? 0 : 1;
                     }
                     $marker['###LABEL_POLL###']     = $this->pi_getLL('poll.postattach');
                 } else $template = $this->cObj->substituteSubpart($template, '###POLL_SECTION###', '');

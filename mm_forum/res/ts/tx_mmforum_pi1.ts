@@ -318,7 +318,11 @@ plugin.tx_mmforum_pi1 {
 		list_posts {
             # a new option since 0.1.7 that adds the users' signature to the main posttext
             # since 0.1.7 there is now a separate marker to add the user signature anywhere in the template
-            appendSignatureToPostText = 1
+				appendSignatureToPostText = 1
+
+			# New option since 1.9.0: Determine ordering of posts in post listing view.
+			# Allowed values are ASC and DESC
+				postOrdering = ASC
 
             # stdWraps for user information fields
                 userinfo {

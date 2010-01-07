@@ -42,38 +42,44 @@
 <script type="text/javascript">
 <!--
     function addPollField() {
-        //document.getElementById('poll_replies').innerHTML += '<li><input type="text" name="tx_mmforum_pi1[poll][answer][]" value="" /> <a href="javascript:void(0);" onclick="deletePollField(this,\'\');">###DELETE###</a></li>';
-        
-        var newLI = document.createElement('li');
-        newLI.innerHTML = '<input type="text" class="tx-mmforum-input" style="margin: 4px 0px; vertical-align:middle" name="tx_mmforum_pi1[poll][answer][new][]" value="" /> <a href="javascript:void(0);" onclick="deletePollField(this,\'\');">###DELETE###</a>';
-        
-        document.getElementById('poll_replies').appendChild(newLI);
+		if('###DISABLED_VAR###' == '0') {
+			var newLI = document.createElement('li');
+			newLI.innerHTML = '<input type="text" class="tx-mmforum-input" style="margin: 4px 0px; vertical-align:middle" name="tx_mmforum_pi1[poll][answer][new][]" value="" /> <a href="javascript:void(0);" onclick="deletePollField(this,\'\');">###DELETE###</a>';
+
+			document.getElementById('poll_replies').appendChild(newLI);
+		}
     }
     
     function deletePollField(obj,name) {
-        if(confirm("###DELCONFIRM###")) {
-            obj.parentNode.parentNode.removeChild(obj.parentNode);
-            if(name!='') {
-                var newHTML = '<input type="hidden" name="tx_mmforum_pi1[poll][answer][delete][]" value="'+name+'" />'
-                document.getElementById('poll_deletefields').innerHTML += newHTML;
-            }
-        }
+		if('###DISABLED_VAR###' == '0') {
+			if(confirm("###DELCONFIRM###")) {
+				obj.parentNode.parentNode.removeChild(obj.parentNode);
+				if(name!='') {
+					var newHTML = '<input type="hidden" name="tx_mmforum_pi1[poll][answer][delete][]" value="'+name+'" />'
+					document.getElementById('poll_deletefields').innerHTML += newHTML;
+				}
+			}
+		}
     }
     
     function enableExpField() {
-        document.getElementById('expDay').disabled = '';
-        document.getElementById('expMonth').disabled = '';
-        document.getElementById('expYear').disabled = '';
-        document.getElementById('expHour').disabled = '';
-        document.getElementById('expMinute').disabled = '';
+		if('###DISABLED_VAR###' == '0') {
+			document.getElementById('expDay').disabled = '';
+			document.getElementById('expMonth').disabled = '';
+			document.getElementById('expYear').disabled = '';
+			document.getElementById('expHour').disabled = '';
+			document.getElementById('expMinute').disabled = '';
+		}
     }
     
     function disableExpField() {
-        document.getElementById('expDay').disabled = 'disabled';
-        document.getElementById('expMonth').disabled = 'disabled';
-        document.getElementById('expYear').disabled = 'disabled';
-        document.getElementById('expHour').disabled = 'disabled';
-        document.getElementById('expMinute').disabled = 'disabled';
+		if('###DISABLED_VAR###' == '0') {
+			document.getElementById('expDay').disabled = 'disabled';
+			document.getElementById('expMonth').disabled = 'disabled';
+			document.getElementById('expYear').disabled = 'disabled';
+			document.getElementById('expHour').disabled = 'disabled';
+			document.getElementById('expMinute').disabled = 'disabled';
+		}
     }
     
     function changeExpField(caller) {
@@ -85,7 +91,7 @@
 <table cellspacing="0" cellpadding="3" border="0">
     <tr>
         <td>###LABEL_QUESTION###</td>
-        <td><textarea name="tx_mmforum_pi1[poll][question]" rows="5" cols="40">###QUESTION###</textarea></td>
+        <td><textarea name="tx_mmforum_pi1[poll][question]" rows="5" cols="40" ###DISABLED### >###QUESTION###</textarea></td>
     </tr>
     <tr>
         <td>###LABEL_ANSWERS###</td>
@@ -95,7 +101,16 @@
             <ol id="poll_replies" style="padding:0px; margin:0px; padding-left:2em;">
                 <!-- ###ANSWERSECTION### begin -->
                 <li>
-                    <input type="text" class="tx-mmforum-input" style="margin: 4px 0px; vertical-align:middle" name="tx_mmforum_pi1[poll][answer][###ANSWER_MODE###][###ANSWER_UID###]" value="###ANSWER###" /> <!--###DELLINK###--><a href="javascript:void(0);" onclick="deletePollField(this,'###ANSWER_UID###');">###DELETE###</a><!--###DELLINK###-->
+                    <input type  = "text"
+					       class = "tx-mmforum-input"
+						   style = "margin: 4px 0px; vertical-align:middle"
+					       name  = "tx_mmforum_pi1[poll][answer][###ANSWER_MODE###][###ANSWER_UID###]"
+						   value = "###ANSWER###"
+						   ###DISABLED###
+					/>
+					<!--###DELLINK###--><a href="javascript:void(0);"
+					                       onclick="deletePollField(this,'###ANSWER_UID###');"
+					>###DELETE###</a><!--###DELLINK###-->
                 </li>
                 <!-- ###ANSWERSECTION### end -->
             </ol>
@@ -104,10 +119,10 @@
         </td>
     </tr>
     <tr>
-        <td><label for="tx_mmforum_pi1-pollexpires">###LABEL_EXPIRES###</td>
+		<td><label for="tx_mmforum_pi1-pollexpires">###LABEL_EXPIRES###</label></td>
         <td>
             <input type="hidden" name="tx_mmforum_pi1[poll][expires][act]" value="0" />
-            <input type="checkbox" name="tx_mmforum_pi1[poll][expires][act]" value="1" ###EXPIRES### onchange="changeExpField(this);" id="tx_mmforum_pi1-pollexpires" />
+            <input type="checkbox" name="tx_mmforum_pi1[poll][expires][act]" value="1" ###EXPIRES### ###DISABLED### onchange="changeExpField(this);" id="tx_mmforum_pi1-pollexpires" />
             
             <input id="expDay"    ###ENB_EXP### type="text" class="tx-mmforum-input" size="2" maxlength="2" name="tx_mmforum_pi1[poll][expires][day]" value="###DAY###" />.
             <input id="expMonth"  ###ENB_EXP### type="text" class="tx-mmforum-input" size="2" maxlength="2" name="tx_mmforum_pi1[poll][expires][month]" value="###MONTH###" />.

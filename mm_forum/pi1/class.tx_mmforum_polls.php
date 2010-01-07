@@ -306,9 +306,10 @@ class tx_mmforum_polls {
     function editPoll($poll_id, $data, $pObj) {
         
         $poll_id = intval($poll_id);
+		$mayEdit = $this->getMayEditPoll($poll_id, $pObj);
         
         if(!$pObj->conf['polls.']['enable']) return $pObj->pi_getLL('poll.disabled');
-        if(!tx_mmforum_polls::getMayCreatePoll($pObj)) return $pObj->pi_getLL('poll.restricted');
+        if(!tx_mmforum_polls::getMayCreatePoll($pObj) || !$mayEdit) return $pObj->pi_getLL('poll.restricted');
         
         if(strlen(trim($data['question']))==0) return $pObj->pi_getLL('poll.noQuestion');
         
@@ -500,7 +501,9 @@ class tx_mmforum_polls {
      * @return  string      The form content
      * @version 2007-05-25
      */
-    function display_editForm($uid, $override=array(),$pObj) {
+    function display_editForm($uid, $override=array(),$pObj=NULL) {
+		global $TYPO3_DB;
+
         if(!$pObj->conf['polls.']['enable']) return "";
         $defACount = $pObj->conf['polls.']['minAnswers'];
         
@@ -512,7 +515,9 @@ class tx_mmforum_polls {
             'uid='.$uid.' AND deleted=0'
         );
         $poll = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-        
+
+		$mayEdit = $this->getMayEditPoll($uid, $pObj);
+
         $template = $pObj->cObj->fileResource($pObj->conf['template.']['polls']);
         $template = $pObj->cObj->getSubpart($template, '###POLL_FORM###');
         
@@ -540,8 +545,10 @@ class tx_mmforum_polls {
             '###HOUR###'                => $expDate?date("H",$expDate):'HH',
             '###MINUTE###'              => $expDate?date("i",$expDate):'MM',
             '###EXPIRES###'             => $expDate?'checked="checked"':'',
-            '###ENB_EXP###'             => $expDate?'':'disabled="disabled"', 
+            '###ENB_EXP###'             => $expDate && $mayEdit ?'':'disabled="disabled"',
             '###DELETEFIELDS###'        => '',
+			'###DISABLED###'			=> $mayEdit ? '' : 'disabled="disabled"',
+			'###DISABLED_VAR###'		=> $mayEdit ? 0 : 1
         );
         
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -596,7 +603,7 @@ class tx_mmforum_polls {
      * @return  string The form content
      * @version 2007-05-25
      */
-    function display_createForm($piVars = array(),$pObj) {
+    function display_createForm($piVars = array(),$pObj=NULL) {
         if(!$pObj->conf['polls.']['enable']) return "";
         
         $defACount = $pObj->conf['polls.']['minAnswers'];
@@ -699,6 +706,33 @@ class tx_mmforum_polls {
         }
         return true;
     }
+
+
+
+		/**
+		 *
+		 * Determines whether the currently logged in user is allowed to edit an
+		 * existing poll. Polls can only be edited if they have not been voted
+		 * on yet. Or if you are an administrator. Administrators are allowed to
+		 * do everythink. Just like root. Or god.
+		 *
+		 * @author  Martin Helmich <m.helmich@mittwald.de>
+		 * @version 2010-01-07
+		 * @param   int            $pollId The UID of the poll that is to be
+		 *                                 checked.
+		 * @param   tx_mmforum_pi1 $pObj   The parent object. Usually, this is
+		 *                                 instance of the tx_mmforum_pi1 class.
+		 * @return  boolean                TRUE, if the poll may be edited,
+		 *                                 otherwise FALSE.
+		 *
+		 */
+
+	function getMayEditPoll($pollId, $pObj) {
+		global $TYPO3_DB;
+		if(!$this->getMayCreatePoll($pObj)) return false;
+		list($voteCount) = $TYPO3_DB->sql_fetch_row($TYPO3_DB->exec_SELECTquery('COUNT(*)', 'tx_mmforum_polls_votes', 'poll_id='.intval($pollId).' AND deleted=0'));
+		return $voteCount == 0 || $pObj->getIsAdmin();
+	}
     
 }
 

@@ -82,21 +82,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		tx_mmforum_postfunctions::saveAdminChanges($topicData);
 
 		// Determine sorting mode
-		if ($order && !$feUserId) {
-			$userconfig['post_sort'] = $order;
-		} else {
-			// Load and evaluate user config
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-				'*',
-				'tx_mmforum_userconfig',
-				'userid = ' . $feUserId . $this->getStoragePIDQuery()
-			);
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
-				$userconfig = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-			} else {
-				$userconfig['post_sort'] = 'ASC';
-			}
-		}
+		$orderingMode = $this->conf['list_posts.']['postOrdering'] ? strtoupper($this->conf['list_posts.']['postOrdering']) : 'ASC';
+		if(!in_array($orderingMode, array('ASC','DESC'))) $orderingMode = 'ASC';
 
 		// load the topic data again, to make sure we get the latest additions from the admin changes
 		$topicData = $this->getTopicData($topicId);
@@ -196,7 +183,9 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid',
 				'tx_mmforum_posts',
-				'deleted = 0 AND hidden = 0 AND topic_id = ' . $topicId . $this->getStoragePIDQuery()
+				'deleted = 0 AND hidden = 0 AND topic_id = ' . $topicId . $this->getStoragePIDQuery(),
+				'',
+				'post_time ' . $orderingMode
 			);
 
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
@@ -269,7 +258,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			'tx_mmforum_posts',
 			'deleted = 0 AND hidden = 0 AND topic_id = ' . $topicId . $this->getStoragePIDQuery(),
 			'',
-			'post_time ' . $userconfig['post_sort'],
+			'post_time ' . $orderingMode,
 			$limitCount * ($pageNum) . ', ' . $limitCount
 		);
 
