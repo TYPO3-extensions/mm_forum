@@ -107,7 +107,8 @@ class tx_mmforum_ranksFE {
             $title = $this->cObj->stdWrap($title,$this->conf['ranks.']['title_stdWrap.']);
             
             if($rank['icon']) {
-                $icon = '<img src="uploads/tx_mmforum/'.$rank['icon'].'" style="vertical-align:middle;" />';
+                #$icon = '<img src="uploads/tx_mmforum/'.$rank['icon'].'" style="vertical-align:middle;" />';
+				$icon = $this->cObj->IMAGE(array('file' => 'uploads/tx_mmforum/'.$rank['icon'], 'file.' => array('params' => '-quiet')));
                 $icon = $this->cObj->stdWrap($icon,$this->conf['ranks.']['icon_stdWrap.']).' ';
             } else $icon = '';
             

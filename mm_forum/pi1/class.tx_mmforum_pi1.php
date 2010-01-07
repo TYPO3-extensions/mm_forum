@@ -2842,17 +2842,17 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 			}
 
-			if(!file_exists($this->conf['path_avatar'].'.htaccess'))
-				file_put_contents($this->conf['path_avatar'].'.htaccess', "deny from all");
+			#if(!file_exists($this->conf['path_avatar'].'.htaccess'))
+			#	file_put_contents($this->conf['path_avatar'].'.htaccess', "deny from all");
 
 			$dirname = $this->conf['attachments.']['attachmentDir'];
 			if (substr($newpath, -1, 1) != '/') {
 				$dirname .= '/';
 			}
 
-			$htaccessPath = $dirname.'.htaccess';
-			if(!file_exists($htaccessPath))
-				file_put_contents($htaccessPath, "deny from all");
+			#$htaccessPath = $dirname.'.htaccess';
+			#if(!file_exists($htaccessPath))
+			#	file_put_contents($htaccessPath, "deny from all");
 
 			$newpath = $dirname.'attachment_' . md5_file($file['tmp_name']);
 
@@ -3037,6 +3037,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 }
 
                 // Clearing for new indexing
+				require_once(t3lib_extMgm::extPath('mm_forum').'pi4/class.tx_mmforum_pi4.php');
                 tx_mmforum_indexing::delete_topic_ind_date($topic_id);
 
                 $linkParams[$this->prefixId] = array(
