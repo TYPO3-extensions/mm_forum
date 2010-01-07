@@ -440,9 +440,9 @@ class tx_mmforum_havealook {
 		}
 
 		$marker = array(
-			'###LINK###'      => $forumObj->escapeURL($link),
-			'###TOPICNAME###' => $forumObj->escape($topicName),
-			'###BOARDNAME###' => $forumObj->escape($forumObj->conf['boardName'])
+			'###LINK###'      => $link,
+			'###TOPICNAME###' => $topicName,
+			'###BOARDNAME###' => $forumObj->conf['boardName']
 		);
 
 
@@ -534,24 +534,22 @@ class tx_mmforum_havealook {
 		$link = $forumObj->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
 		$link = $forumObj->tools->escapeBrackets($link);
 
-		if (strlen($forumObj->conf['notifyingMail.']['topicLinkPrefix_override']) > 0) {
+		if (strlen($forumObj->conf['notifyingMail.']['topicLinkPrefix_override']) > 0)
 			$link = $forumObj->conf['notifyingMail.']['topicLinkPrefix_override'] . $link;
-		} else {
-			$link = $forumObj->getAbsUrl($link);
-		}
+		else $link = $forumObj->getAbsUrl($link);
 
 		$template = $forumObj->pi_getLL('ntfMailForum.text');
 
 		$marker = array(
-			'###LINK###'      => $forumObj->escapeURL($link),
-			'###USERNAME###'  => $forumObj->escape($toUsername),
-			'###FORUMNAME###' => $forumObj->escape($forumName),
+			'###LINK###'      => $link,
+			'###USERNAME###'  => $toUsername,
+			'###FORUMNAME###' => $forumName,
 		);
 
 		$subjectMarker = array(
-			'###TOPICNAME###' => $forumObj->escape($topicName),
-			'###FORUMNAME###' => $forumObj->escape($forumName),
-			'###BOARDNAME###' => $forumObj->escape($forumObj->conf['boardName'])
+			'###TOPICNAME###' => $topicName,
+			'###FORUMNAME###' => $forumName,
+			'###BOARDNAME###' => $forumObj->conf['boardName']
 		);
 
 		// loop through each user who subscribed

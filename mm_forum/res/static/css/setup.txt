@@ -1,0 +1,3 @@
+page.includeCSS {
+	mm_forum = {$plugin.tx_mmforum.style_path}/css/mm_forum.css
+}

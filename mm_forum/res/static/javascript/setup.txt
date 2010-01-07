@@ -1,0 +1,3 @@
+page.includeJS {
+	mm_forum_prototype = EXT:mm_forum/res/scripts/prototype-1.6.0.3.js
+}

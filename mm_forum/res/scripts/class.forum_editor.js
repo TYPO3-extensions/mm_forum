@@ -75,12 +75,17 @@ tx_mmforum_Editor.prototype = {
 			var range = document.selection.createRange();
 			var insText = range.text;
 
-			range.text = open + insText + close;
-			/* Anpassen der Cursorposition */
-			range = document.selection.createRange();
+			if (insText == '') {
+				editor.value += open + close;
+				editor.focus();
+			} else {
+				range.text = open + insText + close;
+				/* Anpassen der Cursorposition */
+				range = document.selection.createRange();
 
-			range.moveStart('character', open.length + insText.length + close.length);
-			range.select();
+				range.moveStart('character', open.length + insText.length + close.length);
+				range.select();
+			}
 		}
 
 			/* Gecko */
@@ -97,7 +102,7 @@ tx_mmforum_Editor.prototype = {
 
 			/* Other */
 		} else {
-			editor.value += smilie;
+			editor.value += open + close;
 			editor.focus();
 		}
 

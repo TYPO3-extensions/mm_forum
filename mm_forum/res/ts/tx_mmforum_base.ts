@@ -162,6 +162,7 @@ plugin.tx_mmforum {
 	        topicicon_unanswered_new = topic_unanswered_new.png
             topicicon_shadow    = topic_shadow.png
             topicicon_pinned	= topic_pinned.png
+			topicicon_pinned_new	= topic_pinned.png
             topicicon_pinned_hot = topic_pinned.png
             topicicon_pinned_hot_new = topic_pinned.png
             topicicon_pinned_closed = topic_pinned_closed.png

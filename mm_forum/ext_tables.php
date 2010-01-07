@@ -3,6 +3,10 @@ if (!defined('TYPO3_MODE')) {
 	die('Access denied.');
 }
 
+t3lib_extMgm::addStaticFile($_EXTKEY, 'res/ts', 'mm_forum');
+t3lib_extMgm::addStaticFile($_EXTKEY, 'res/static/css', 'mm_forum Stylesheets');
+t3lib_extMgm::addStaticFile($_EXTKEY, 'res/static/javascript', 'mm_forum Javascript');
+
 /*
  * Extend fe_user table
  */
