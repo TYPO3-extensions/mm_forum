@@ -1,8 +1,6 @@
 <?php
 if (!defined ("TYPO3_MODE")) 	die ("Access denied.");
 
-//include_once t3lib_extMgm::extPath('mm_forum').'includes/cache/class.tx_mmforum_cache.php';
-
 ## Extending TypoScript from static template uid=43 to set up userdefined tag:
 t3lib_extMgm::addTypoScript($_EXTKEY,"editorcfg","tt_content.CSS_editor.ch.tx_mmforum_pi1 = < plugin.tx_mmforum_pi1.CSS_editor",43);
 t3lib_extMgm::addTypoScript($_EXTKEY,"editorcfg","tt_content.CSS_editor.ch.tx_mmforum_pi2 = < plugin.tx_mmforum_pi2.CSS_editor",43);
@@ -17,6 +15,8 @@ t3lib_extMgm::addPItoST43($_EXTKEY,"pi3/class.tx_mmforum_pi3.php","_pi3","list_t
 t3lib_extMgm::addPItoST43($_EXTKEY,'pi4/class.tx_mmforum_pi4.php','_pi4','list_type',1); 
 t3lib_extMgm::addPItoST43($_EXTKEY,"pi5/class.tx_mmforum_pi5.php","_pi5","list_type",1);  
 t3lib_extMgm::addPItoST43($_EXTKEY,"pi6/class.tx_mmforum_pi6.php","_pi6","list_type",0);
+
+t3lib_extMgm::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mm_forum/res/ts/tx_mmforum_pagetsconfig.ts">');
 
 	/**
 	 * This is a hook to that triggers the tx_mmforum_cache class to

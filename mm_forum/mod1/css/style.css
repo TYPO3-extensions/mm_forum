@@ -22,6 +22,7 @@ h1,h2,h3,.mm_forum-buttons {
 	background-image: url('../bg.png');
 	background-position-y: bottom;
 	background-repeat: repeat-x;
+	background-position: bottom;
 	color: #1555A0 !important;
 	border-bottom: 1px solid #1555a0;
 }
