@@ -320,7 +320,7 @@ CREATE TABLE tx_mmforum_searchresults (
 
     PRIMARY KEY (uid),
     KEY parent (pid),
-    KEY search_string (search_string),
+    KEY search_string (search_string(166)),
     KEY tstamp (tstamp),
     KEY groupPosts (groupPost)
 );
@@ -341,7 +341,7 @@ CREATE TABLE tx_mmforum_wordlist (
 
     PRIMARY KEY (uid),
     KEY parent (pid),
-    KEY word (word)
+    KEY word (word(166))
 );
 
 # 
