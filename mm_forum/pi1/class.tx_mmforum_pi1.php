@@ -3910,7 +3910,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['userProfile_marker'])) {
                 foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['userProfile_marker'] as $_classRef) {
                     $_procObj = & t3lib_div::getUserObj($_classRef);
-                    $marker = $_procObj->userProfile_marker($marker, $row, $this);
+                    $marker = $_procObj->userProfile_marker($marker, $user->data, $this);
                 }
             }
 
@@ -4182,13 +4182,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         if(! ($count === FALSE)) $postcount = intval($count);
 
         $maxpage = ceil($postcount / $limitcount);
-        
+
         // should Dmitry's pagebrowse extension be used?
         if (intval($this->conf['doNotUsePageBrowseExtension'])===0) {
 			$content = $this->getListGetPageBrowser($maxpage);
 			return $content;
         }
-        
+
         if ($this->piVars['page'] == 0) $page = 1;
         else $page = $this->piVars['page'];
 
@@ -5921,7 +5921,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		 */
 
 	function formatLastPostDate($content, $conf) {
-		
+
 		$this->pi_loadLL();
 
 		$todayStart = mktime(0, 0, 0, date("m"), date('d'), date('Y'));
