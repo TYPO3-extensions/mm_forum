@@ -13,156 +13,101 @@ t3lib_extMgm::addStaticFile($_EXTKEY, 'res/static/javascript', 'mm_forum Javascr
 $tempColumns = array(
 	'tx_mmforum_avatar' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_avatar',
-		'config' => array(
-			'type' => 'group',
-			'internal_type' => 'file',
-			'allowed' => 'gif,png,jpeg,jpg',
-			'max_size' => 300,
-			'uploadfolder' => 'uploads/tx_mmforum',
-			'show_thumbs' => 1,
-			'size' => 1,
-			'minitems' => 0,
-			'maxitems' => 1,
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_avatar',
+		'config'  => array( 'type'          => 'group',
+		                    'internal_type' => 'file',
+		                    'allowed'       => 'gif,png,jpeg,jpg,tga,svg',
+		                    'max_size'      => 512,
+		                    'uploadfolder'  => 'uploads/tx_mmforum',
+		                    'show_thumbs'   => 1,
+		                    'size'          => 1,
+		                    'minitems'      => 0,
+		                    'maxitems'      => 1 ) ),
 	'tx_mmforum_icq' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_icq',
-		'config' => array(
-			'type' => 'input',
-			'size' => '20',
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_icq',
+		'config'  => array( 'type' => 'input',
+		                    'size' => '20' ) ),
 	'tx_mmforum_aim' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_aim',
-		'config' => array(
-			'type' => 'input',
-			'size' => '20',
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_aim',
+		'config'  => array( 'type' => 'input',
+		                    'size' => '20' ) ),
 	'tx_mmforum_yim' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_yim',
-		'config' => array(
-			'type' => 'input',
-			'size' => '20',
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_yim',
+		'config'  => array( 'type' => 'input',
+		                    'size' => '20' ) ),
 	'tx_mmforum_msn' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_msn',
-		'config' => array(
-			'type' => 'input',
-			'size' => '20',
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_msn',
+		'config'  => array( 'type' => 'input',
+		                    'size' => '20' ) ),
     'tx_mmforum_skype' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_skype',
-		'config' => array(
-			'type' => 'input',
-			'size' => '20',
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_skype',
+		'config'  => array( 'type' => 'input',
+		                    'size' => '20' ) ),
 	'tx_mmforum_md5' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_md5',
-		'config' => array(
-			'type' => 'input',
-			'size' => '30',
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_md5',
+		'config'  => array( 'type' => 'input',
+		                    'size' => '30' ) ),
 	'tx_mmforum_posts' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_posts',
-		'config' => array(
-			'type' => 'input',
-			'size' => 4,
-			'autoSizeMax' => 10,
-			'eval' => 'int',
-			'checkbox' => 0,
-			'range' => array(
-				'lower' => 0
-			),
-			'default' => 0
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_posts',
+		'config'  => array( 'type'        => 'input',
+		                    'size'        => 4,
+		                    'autoSizeMax' => 10,
+		                    'eval'        => 'int',
+		                    'checkbox'    => 0,
+		                    'range'       => array( 'lower' => 0 ),
+		                    'default'     => 0 ) ),
 	'tx_mmforum_user_sig' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_user_sig',
-		'config' => array(
-			'type' => 'text',
-			'cols' => 30,
-			'rows' => 5,
-			'wizards' => array(
-				'_PADDING' => 2,
-				'RTE' => array(
-					'notNewRecords' => 1,
-					'RTEonly' => 1,
-					'type' => 'script',
-					'title' => 'Full screen Rich Text Editing|Formatteret redigering i hele vinduet',
-					'icon' => 'wizard_rte2.gif',
-					'script' => 'wizard_rte.php',
-				),
-			),
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_user_sig',
+		'config'  => array( 'type' => 'text',
+		                    'cols' => 50,
+		                    'rows' => 5 ) ),
 	'tx_mmforum_prelogin' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_prelogin',
-		'config' => array(
-			'type' => 'input',
-			'size' => 12,
-			'max' => 20,
-			'eval' => 'datetime',
-			'checkbox' => 0,
-			'default' => 0
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_prelogin',
+		'config'  => array( 'type'     => 'input',
+		                    'size'     => 12,
+		                    'max'      => 20,
+		                    'eval'     => 'datetime',
+		                    'checkbox' => 0,
+		                    'default'  => 0 ) ),
     'tx_mmforum_interests' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_interests',
-		'config' => array(
-			'type' => 'input',
-			'size' => 30,
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_interests',
+		'config'  => array( 'type' => 'input',
+		                    'size' => 30 ) ),
 	'tx_mmforum_occ' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_occ',
-		'config' => array(
-			'type' => 'input',
-			'size' => 30,
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_occ',
+		'config'  => array( 'type' => 'input',
+		                    'size' => 30 ) ),
 	'tx_mmforum_reg_hash' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_reg_hash',
-		'config' => array(
-			'type' => 'input',
-			'size' => 20,
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.php:fe_users.tx_mmforum_reg_hash',
+		'config'  => array( 'type' => 'input',
+		                    'size' => 20 ) ),
 	'tx_mmforum_pmnotifymode'		=> array(
-		'exclude'						=> 1,
-		'label'							=> 'LLL:EXT:mm_forum/locallang_db.xml:fe_users.tx_mmforum_pmnotifymode',
-		'config'						=> array(
-			'type'							=> 'select',
-			'items'							=> array(
-				array('LLL:EXT:mm_forum/locallang_db.xml:fe_users.tx_mmforum_pmnotifymode.0', 0),
-				array('LLL:EXT:mm_forum/locallang_db.xml:fe_users.tx_mmforum_pmnotifymode.1', 1),
-				array('LLL:EXT:mm_forum/locallang_db.xml:fe_users.tx_mmforum_pmnotifymode.2', 2),
-			),
-		),
-	)
+		'exclude' => 1,
+		'label'	  => 'LLL:EXT:mm_forum/locallang_db.xml:fe_users.tx_mmforum_pmnotifymode',
+		'config'  => array( 'type'  => 'select',
+		                    'items'	=> array(
+								array('LLL:EXT:mm_forum/locallang_db.xml:fe_users.tx_mmforum_pmnotifymode.0', 0),
+								array('LLL:EXT:mm_forum/locallang_db.xml:fe_users.tx_mmforum_pmnotifymode.1', 1),
+								array('LLL:EXT:mm_forum/locallang_db.xml:fe_users.tx_mmforum_pmnotifymode.2', 2)
+		                    ) ) )
 );
 
 
 t3lib_div::loadTCA('fe_users');
-t3lib_extMgm::addTCAcolumns('fe_users', $tempColumns, 1);
-t3lib_extMgm::addToAllTCAtypes('fe_users', '--div--;LLL:EXT:mm_forum/locallang_db.xml:fe_users.tx_mmforum.tab.settings, tx_mmforum_avatar;;;;1-1-1, tx_mmforum_interests, tx_mmforum_occ, tx_mmforum_icq;;;;1-1-1, tx_mmforum_aim, tx_mmforum_yim, tx_mmforum_msn, tx_mmforum_skype, tx_mmforum_md5;;;;1-1-1, tx_mmforum_posts, tx_mmforum_user_sig;;;richtext[paste|bold|italic|underline|formatblock|class|left|center|right|orderedlist|unorderedlist|outdent|indent|link|image]:rte_transform[mode=ts], tx_mmforum_prelogin, tx_mmforum_reg_hash');
+t3lib_extMgm::addTCAcolumns    ( 'fe_users', $tempColumns, 1);
+t3lib_extMgm::addToAllTCAtypes ( 'fe_users', '--div--;LLL:EXT:mm_forum/locallang_db.xml:fe_users.tx_mmforum.tab.settings, tx_mmforum_avatar;;;;1-1-1, tx_mmforum_interests, tx_mmforum_occ, tx_mmforum_icq;;;;1-1-1, tx_mmforum_aim, tx_mmforum_yim, tx_mmforum_msn, tx_mmforum_skype, tx_mmforum_md5;;;;1-1-1, tx_mmforum_posts, tx_mmforum_user_sig, tx_mmforum_prelogin, tx_mmforum_reg_hash, tx_mmforum_pmnotifymode');
 
 
 /*
@@ -171,29 +116,23 @@ t3lib_extMgm::addToAllTCAtypes('fe_users', '--div--;LLL:EXT:mm_forum/locallang_d
 $tempColumns = array(
 	'tx_mmforum_rank' => array(
 		'exclude' => 1,
-		'label' => 'LLL:EXT:mm_forum/locallang_db.xml:fe_groups.tx_mmforum_rank',
-		'config' => array(
-			'type' => 'group',
-			'internal_type' => 'db',
-			'allowed' => 'tx_mmforum_ranks',
-			'max_size' => 1,
-			'size' => 2,
-			'minitems' => 0,
-			'maxitems' => 1,
-		)
-	),
+		'label'   => 'LLL:EXT:mm_forum/locallang_db.xml:fe_groups.tx_mmforum_rank',
+		'config'  => array( 'type'          => 'group',
+		                   'internal_type' => 'db',
+		                   'allowed'       => 'tx_mmforum_ranks',
+		                   'max_size'      => 1,
+		                   'size'          => 2,
+		                   'minitems'      => 0,
+		                   'maxitems'      => 1 ) ),
     'tx_mmforum_rank_excl' => array(
-        'exclude'              => 1,
-        'label'                => 'LLL:EXT:mm_forum/locallang_db.xml:fe_groups.tx_mmforum_rank_excl',
-        'config'               => array(
-            'type'                 => 'check'
-        ),
-    ),
+        'exclude' => 1,
+        'label'   => 'LLL:EXT:mm_forum/locallang_db.xml:fe_groups.tx_mmforum_rank_excl',
+        'config'  => array( 'type' => 'check' ) )
 );
 
 t3lib_div::loadTCA('fe_groups');
-t3lib_extMgm::addTCAcolumns('fe_groups', $tempColumns, 1);
-t3lib_extMgm::addToAllTCAtypes('fe_groups', 'tx_mmforum_rank, tx_mmforum_rank_excl');
+t3lib_extMgm::addTCAcolumns    ( 'fe_groups', $tempColumns, 1);
+t3lib_extMgm::addToAllTCAtypes ( 'fe_groups', 'tx_mmforum_rank, tx_mmforum_rank_excl');
 
 
 /*
@@ -201,17 +140,15 @@ t3lib_extMgm::addToAllTCAtypes('fe_groups', 'tx_mmforum_rank, tx_mmforum_rank_ex
  */
 $TCA['tx_mmforum_forums'] = array(
 	'ctrl' => array(
-		'title' => 'LLL:EXT:mm_forum/locallang_db.php:tx_mmforum_forums',
-		'label' => 'forum_name',
-		'tstamp' => 'tstamp',
-		'crdate' => 'crdate',
-		'cruser_id' => 'cruser_id',
-		'default_sortby' => 'ORDER BY crdate',
-		'delete' => 'deleted',
-		'dividers2tabs' => true,
-		'enablecolumns' => array(
-			'disabled' => 'hidden',
-		),
+		'title'             => 'LLL:EXT:mm_forum/locallang_db.php:tx_mmforum_forums',
+		'label'             => 'forum_name',
+		'tstamp'            => 'tstamp',
+		'crdate'            => 'crdate',
+		'cruser_id'         => 'cruser_id',
+		'default_sortby'    => 'ORDER BY sorting ASC',
+		'delete'            => 'deleted',
+		'dividers2tabs'     => true,
+		'enablecolumns'     => array( 'disabled' => 'hidden' ),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/report.png',
 	),
@@ -225,17 +162,15 @@ $TCA['tx_mmforum_forums'] = array(
  */
 $TCA['tx_mmforum_topics'] = array(
 	'ctrl' => array(
-		'title' => 'LLL:EXT:mm_forum/locallang_db.php:tx_mmforum_topics',
-		'label' => 'topic_title',
-		'tstamp' => 'tstamp',
-		'crdate' => 'crdate',
-		'cruser_id' => 'cruser_id',
-		'default_sortby' => 'ORDER BY crdate',
-		'delete' => 'deleted',
-		'dividers2tabs' => true,
-		'enablecolumns' => array(
-			'disabled' => 'hidden',
-		),
+		'title'             => 'LLL:EXT:mm_forum/locallang_db.php:tx_mmforum_topics',
+		'label'             => 'topic_title',
+		'tstamp'            => 'tstamp',
+		'crdate'            => 'crdate',
+		'cruser_id'         => 'cruser_id',
+		'default_sortby'    => 'ORDER BY crdate',
+		'delete'            => 'deleted',
+		'dividers2tabs'     => true,
+		'enablecolumns'     => array( 'disabled' => 'hidden' ),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/comments.png',
 	),
@@ -249,17 +184,15 @@ $TCA['tx_mmforum_topics'] = array(
  */
 $TCA['tx_mmforum_posts'] = array(
 	'ctrl' => array(
-		'title' => 'LLL:EXT:mm_forum/locallang_db.php:tx_mmforum_posts',
-		'label' => 'uid',
-		'tstamp' => 'tstamp',
-		'crdate' => 'crdate',
-		'cruser_id' => 'cruser_id',
-		'default_sortby' => 'ORDER BY crdate',
-		'delete' => 'deleted',
-		'dividers2tabs' => true,
-		'enablecolumns' => array(
-			'disabled' => 'hidden',
-		),
+		'title'             => 'LLL:EXT:mm_forum/locallang_db.php:tx_mmforum_posts',
+		'label'             => 'uid',
+		'tstamp'            => 'tstamp',
+		'crdate'            => 'crdate',
+		'cruser_id'         => 'cruser_id',
+		'default_sortby'    => 'ORDER BY crdate',
+		'delete'            => 'deleted',
+		'dividers2tabs'     => true,
+		'enablecolumns'     => array( 'disabled' => 'hidden' ),
 		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/comment.png',
 	),

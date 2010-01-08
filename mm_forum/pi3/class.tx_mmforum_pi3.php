@@ -711,6 +711,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			
 			session_start();
 			$_SESSION[$this->prefixId]['userPID'] = $this->conf['userPID'];
+			$_SESSION[$this->prefixId]['userGID'] = $this->conf['userGroup'];
 			
 			// If PM is a reply to another PM, there is a prefix in subject/msg-text
 			if($row) {

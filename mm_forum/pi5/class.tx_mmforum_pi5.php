@@ -118,37 +118,37 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
 		$marker = array(
-			'###LABEL_UPLOADAVATAR###'		=> $this->pi_getLL('avatar.uploadAvatar'),
-			'###LABEL_AVATAR###'			    => $this->pi_getLL('avatar.avatar'),
-			'###LABEL_CHANGEPASSWORD###'	=> $this->pi_getLL('password.change'),
-			'###LABEL_OLDPW###'				    => $this->pi_getLL('password.old'),
-			'###LABEL_NEWPW###'				    => $this->pi_getLL('password.new'),
-			'###LABEL_REPEAT###'			    => $this->pi_getLL('password.repeat'),
-			'###LABEL_CHANGE###'			    => $this->pi_getLL('password.save'),
+			'###LABEL_UPLOADAVATAR###'   => $this->pi_getLL('avatar.uploadAvatar'),
+			'###LABEL_AVATAR###'         => $this->pi_getLL('avatar.avatar'),
+			'###LABEL_CHANGEPASSWORD###' => $this->pi_getLL('password.change'),
+			'###LABEL_OLDPW###'          => $this->pi_getLL('password.old'),
+			'###LABEL_NEWPW###'          => $this->pi_getLL('password.new'),
+			'###LABEL_REPEAT###'         => $this->pi_getLL('password.repeat'),
+			'###LABEL_CHANGE###'         => $this->pi_getLL('password.save'),
 
-			'###LABEL_SETTINGS2###'			  => $this->pi_getLL('settings2'),
-			'###LABEL_PMNOTIFY###'			  => $this->pi_getLL('pmnotifymode'),
-			'###LABEL_PMNOTIFY_0###'		  => $this->pi_getLL('pmnotifymode.0'),
-			'###LABEL_PMNOTIFY_1###'		  => $this->pi_getLL('pmnotifymode.1'),
-			'###LABEL_PMNOTIFY_2###'		  => $this->pi_getLL('pmnotifymode.2'),
+			'###LABEL_SETTINGS2###'      => $this->pi_getLL('settings2'),
+			'###LABEL_PMNOTIFY###'       => $this->pi_getLL('pmnotifymode'),
+			'###LABEL_PMNOTIFY_0###'     => $this->pi_getLL('pmnotifymode.0'),
+			'###LABEL_PMNOTIFY_1###'     => $this->pi_getLL('pmnotifymode.1'),
+			'###LABEL_PMNOTIFY_2###'     => $this->pi_getLL('pmnotifymode.2'),
 
-      '###IMG_MAIL###'				=> tx_mmforum_pi1::createButton('email',array(),0,true,'',true),
-			'###IMG_ICQ###'					=> tx_mmforum_pi1::createButton('icq',array(),0,true,'',true),
-			'###IMG_AIM###'					=> tx_mmforum_pi1::createButton('aim',array(),0,true,'',true),
-			'###IMG_YIM###'					=> tx_mmforum_pi1::createButton('yim',array(),0,true,'',true),
-			'###IMG_MSN###'					=> tx_mmforum_pi1::createButton('msn',array(),0,true,'',true),
-      '###IMG_SKYPE###'			  => tx_mmforum_pi1::createButton('skype',array(),0,true,'',true),
-            
-      '###PMNOTIFY_0###'			=> ($row['tx_mmforum_pmnotifymode']==0)?'checked="checked"':'',
-      '###PMNOTIFY_1###'			=> ($row['tx_mmforum_pmnotifymode']==1)?'checked="checked"':'',
-      '###PMNOTIFY_2###'			=> ($row['tx_mmforum_pmnotifymode']==2)?'checked="checked"':'',
-        
-      '###SETTINGS_ICON###'		=> $this->cObj->cObjGetSingle($this->conf['icons.']['settings'],$this->conf['icons.']['settings.']),
-      '###SETTINGS2_ICON###'	=> $this->cObj->cObjGetSingle($this->conf['icons.']['settings'],$this->conf['icons.']['settings2.']),
-      '###AVATAR_ICON###'			=> $this->cObj->cObjGetSingle($this->conf['icons.']['settings'],$this->conf['icons.']['avatar.']),
-      '###PASSWORD_ICON###'		=> $this->cObj->cObjGetSingle($this->conf['icons.']['settings'],$this->conf['icons.']['password.']),
+			'###IMG_MAIL###'             => tx_mmforum_pi1::createButton('email',array(),0,true,'',true),
+			'###IMG_ICQ###'              => tx_mmforum_pi1::createButton('icq',array(),0,true,'',true),
+			'###IMG_AIM###'              => tx_mmforum_pi1::createButton('aim',array(),0,true,'',true),
+			'###IMG_YIM###'              => tx_mmforum_pi1::createButton('yim',array(),0,true,'',true),
+			'###IMG_MSN###'              => tx_mmforum_pi1::createButton('msn',array(),0,true,'',true),
+			'###IMG_SKYPE###'            => tx_mmforum_pi1::createButton('skype',array(),0,true,'',true),
 
-      '###FORMACTION###'      => $this->pi_getPageLink($GLOBALS['TSFE']->id)
+			'###PMNOTIFY_0###'           => ($row['tx_mmforum_pmnotifymode']==0)?'checked="checked"':'',
+			'###PMNOTIFY_1###'           => ($row['tx_mmforum_pmnotifymode']==1)?'checked="checked"':'',
+			'###PMNOTIFY_2###'           => ($row['tx_mmforum_pmnotifymode']==2)?'checked="checked"':'',
+
+			'###SETTINGS_ICON###'        => $this->cObj->cObjGetSingle($this->conf['icons.']['settings'],$this->conf['icons.']['settings.']),
+			'###SETTINGS2_ICON###'       => $this->cObj->cObjGetSingle($this->conf['icons.']['settings'],$this->conf['icons.']['settings2.']),
+			'###AVATAR_ICON###'          => $this->cObj->cObjGetSingle($this->conf['icons.']['settings'],$this->conf['icons.']['avatar.']),
+			'###PASSWORD_ICON###'        => $this->cObj->cObjGetSingle($this->conf['icons.']['settings'],$this->conf['icons.']['password.']),
+
+			'###FORMACTION###'           => $this->pi_getPageLink($GLOBALS['TSFE']->id)
 		);
 
 		// Create marker array, field names are retrieved from TypoScript
@@ -252,11 +252,11 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
             $userField_thisTemplate = $this->cObj->substituteSubpart($userField_template, '###DEFUSERFIELD###', $input);
 
             $userField_marker = array(
-                '###USERFIELD_LABEL###' => $label,
-                '###USERFIELD_VALUE###' => $value,
-                '###USERFIELD_UID###'   => $arr['uid'],
-                '###USERFIELD_NAME###'  => 'tx_mmforum_pi5[userfield]['.$arr['uid'].']',
-				        '###USERFIELD_ERROR###'	=> isset($this->userfield_error[$arr['uid']]) ? $this->cObj->wrap($this->userfield_error[$arr['uid']], $conf['userFields.']['wrap']) : ''
+				'###USERFIELD_LABEL###' => $label,
+				'###USERFIELD_VALUE###' => $value,
+				'###USERFIELD_UID###'   => $arr['uid'],
+				'###USERFIELD_NAME###'  => 'tx_mmforum_pi5[userfield]['.$arr['uid'].']',
+				'###USERFIELD_ERROR###'	=> isset($this->userfield_error[$arr['uid']]) ? $this->cObj->wrap($this->userfield_error[$arr['uid']], $conf['userFields.']['wrap']) : ''
             );
             $userField_content .= $this->cObj->substituteMarkerArrayCached($userField_thisTemplate, $userField_marker);
         }
@@ -514,6 +514,15 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 				 */
 			if(!file_exists($this->conf['path_avatar'].'.htaccess'))
 				file_put_contents($this->conf['path_avatar'].'.htaccess', "deny from all");
+
+				/*
+				 * Load the allowed file size for avatar image from the TCA and
+				 * check against the size of the uploaded image.
+				 */
+			global $TCA;
+			t3lib_div::loadTCA('fe_users');
+			if(filesize($_FILES[$this->prefixId]['tmp_name']['file']) > $TCA['fe_users']['columns']['tx_mmforum_avatar']['config']['max_size']*1024)
+				return;
             
 			$file = $userId.'_'.time().'.'.$extension;
 			$uploadfile = $uploaddir.$file;

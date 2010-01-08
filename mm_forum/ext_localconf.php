@@ -34,4 +34,6 @@ if($GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'])
 	$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] .= ',nav_hide';
 else $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = 'nav_hide';
 
+$TYPO3_CONF_VARS['FE']['eID_include']['tx_mmforum_UserSearch'] = 'EXT:mm_forum/pi3/ajax.tx_mmforum_usersearch.php';
+
 ?>

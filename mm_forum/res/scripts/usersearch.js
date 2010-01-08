@@ -111,14 +111,16 @@ UserSearch.prototype = {
 		if(value.length == 0) return;
 
 		this.userNameMatch = value;
-		new Ajax.Request( this.ajaxURL,
-			{
-				method: 'post',
-				onSuccess: this.handleSuccessResponse,
-				onFailure: this.handleFailedResponse,
-				parameters: { userSearch: value }
-			}
-		);
+		new Ajax.Request('index.php', {
+			method: 'post',
+			parameters: {
+				eID        : 'tx_mmforum_UserSearch',
+				id         : this.ajaxURL,
+				userSearch : value
+			},
+			onSuccess: this.handleSuccessResponse,
+			onFailure: this.handleFailedResponse
+		});
 	},
 
 	handleFailedResponse: function(response) {
