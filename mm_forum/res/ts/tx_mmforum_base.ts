@@ -345,9 +345,11 @@ plugin.tx_mmforum {
         
 			bb_code_linktarget	= _blank
 			bb_code_linkclass	= link_10
+			bb_code_linkclassinternal	< plugin.tx_mmforum.postparser.bb_code_linkclass
 			bb_code_bullet_img	= EXT:mm_forum/res/img/postparser-bb_code_bullet.gif
 			bb_code_path_smilie	= {$plugin.tx_mmforum.path_smilie}
 			bb_code_parser		= 1
+			bb_code_parser_differlinkclass = 0
 			code_protection		= 1
 			syntaxHighlighter	= 1
 			smilie_generator	= 1

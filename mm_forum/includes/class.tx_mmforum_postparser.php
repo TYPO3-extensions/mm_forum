@@ -255,7 +255,30 @@ class tx_mmforum_postparser {
         }
 		/* FILLING the Markers by TYPOScript Vars */
 		$text = str_replace('###TARGET###',$conf['postparser.']['bb_code_linktarget'],$text);
-		$text = str_replace('###CSS_CLASS###',$conf['postparser.']['bb_code_linkclass'],$text);
+		/* Different CSS classes for internal and external links */
+		if ($conf['postparser.']['bb_code_parser_differlinkclass'] == 1) {
+      $hostname = str_replace('www.', '', $_SERVER['SERVER_NAME']);
+      $temptext = '';
+      foreach (explode('<a ',$text) as $value) {
+        if (strpos($value, 'href=') > -1) {
+          $temptext .= '<a ';
+        }
+        if (strpos($value, $hostname) === FALSE)
+  		  {
+  		    $temptext .= str_replace('###CSS_CLASS###',$conf['postparser.']['bb_code_linkclass'],$value);
+        } else {
+          $temptext .= str_replace('###CSS_CLASS###',$conf['postparser.']['bb_code_linkclassinternal'],$value);
+        }
+      }
+      $text = $temptext;
+      unset($temptext);
+      unset($value);
+    } else {
+      $text = str_replace('###CSS_CLASS###',$conf['postparser.']['bb_code_linkclass'],$text);
+    }
+    /* remove unneeded HTML-code */
+    $text = str_replace('target=""','',$text);
+    $text = str_replace('class=""','',$text);
 		/* the list bb code */ 
 		$patterns = array(
 			"/\[list\](.*?)\[\/list\]/isS",
