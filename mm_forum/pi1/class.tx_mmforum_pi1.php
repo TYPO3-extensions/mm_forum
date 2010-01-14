@@ -1351,7 +1351,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$topic_is = $this->cObj->wrap($this->pi_getLL('topic.shadow'), $this->conf['list_topics.']['prefix_wrap']);
 			}
 
-			$marker['###TOPICNAME###'] = $favorit . $topic_is . '<a href="' . htmlspecialchars($this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams)) . '" title="' . $this->escape($row['topic_title']) . '">' . $this->escape($this->text_cut($row['topic_title'], 50, 0)) . '</a> ' . $solved;
+			$marker['###TOPICNAME###'] = $favorit . $topic_is .
+				'<a href="' . htmlspecialchars($this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams)) . '" title="' . $this->escape($row['topic_title']) . '">'
+				. $this->escape($this->cObj->stdWrap($row['topic_title'], $this->conf['list_topics.']['topicTitle_stdWrap.']))
+				. '</a> ' . $solved;
 
 			$page_link = '';
 			$last_post_link = '';

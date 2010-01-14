@@ -300,6 +300,9 @@ plugin.tx_mmforum_pi1 {
             # Display topic title in last post information
                 lastPostTopicTitle = 1
                 
+            # stdWrap for topic title in topic lists
+                topicTitle_stdWrap.crop = 50 | ... | 1
+                
             # Wrap for topic title
                 lastPostTopicTitle_outerStdWrap {
                     wrap = <div class="tx-mmforum-pi1-listtopic-lastpost-title"><strong>|</strong></div>
