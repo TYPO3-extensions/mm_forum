@@ -287,9 +287,27 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 		$this->data['reghash'] = substr(md5(time().$this->data['username']), 1, 15);
 
-			# If the extension kb_md5fepw is installed, encrypt password
-        if(t3lib_extMgm::isLoaded('kb_md5fepw')) $this->data['password'] = md5($this->data['password']);
-        
+		$objPHPass = null;
+		if (t3lib_extMgm::isLoaded('t3sec_saltedpw')) {
+			require_once(t3lib_extMgm::extPath('t3sec_saltedpw').'res/staticlib/class.tx_t3secsaltedpw_div.php');
+			if (tx_t3secsaltedpw_div::isUsageEnabled()) {
+				require_once(t3lib_extMgm::extPath('t3sec_saltedpw').'res/lib/class.tx_t3secsaltedpw_phpass.php');
+				$objPHPass = t3lib_div::makeInstance('tx_t3secsaltedpw_phpass');
+			}
+		}
+		if (!$objPHPass && t3lib_extMgm::isLoaded('saltedpasswords')) {
+			if (tx_saltedpasswords_div::isUsageEnabled()) {
+				$objPHPass = t3lib_div::makeInstance(tx_saltedpasswords_div::getDefaultSaltingHashingMethod());
+			}
+		}
+
+		if ($objPHPass) {
+			$this->data['password'] = $objPHPass->getHashedPassword($this->data['password']);
+
+		} else if(t3lib_extMgm::isLoaded('kb_md5fepw')) {	//if kb_md5fepw is installed, crypt password
+			$this->data['password']=md5($this->data['password']);
+		}
+
 		$insertArray = array(
 			'pid'				    => $pid,
 			'tstamp'			    => time(),

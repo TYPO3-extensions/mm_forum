@@ -583,12 +583,34 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			}
 			// Old password is not correct
 			else {
-				if(t3lib_extMgm::isLoaded('kb_md5fepw')) $this->piVars['oldpass'] = md5($this->piVars['oldpass']);
-				 
-				if ($this->piVars['oldpass'] <> $GLOBALS['TSFE']->fe_user->user['password']) {
-					if (md5($this->piVars['oldpass']) <> $GLOBALS['TSFE']->fe_user->user['tx_mmforum_md5']) {
+				$saltedSv = null;
+ 				if (t3lib_extMgm::isLoaded('t3sec_saltedpw')) {
+					require_once(t3lib_extMgm::extPath('t3sec_saltedpw', 'sv1/class.tx_t3secsaltedpw_sv1.php'));
+					if (tx_t3secsaltedpw_div::isUsageEnabled()) {
+						$saltedSv = t3lib_div::makeInstance('tx_t3secsaltedpw_sv1');
+					}
+				}
+				if (!$saltedSv && t3lib_extMgm::isLoaded('saltedpasswords')) {
+					if (tx_saltedpasswords_div::isUsageEnabled()) {
+						$saltedSv = t3lib_div::makeInstance('tx_saltedpasswords_sv1');
+					}
+				}
+				if ($saltedSv) {
+					$saltedSv->init();
+					if (!$saltedSv->compareUident($GLOBALS['TSFE']->fe_user->user, array('uident_text' => $this->piVars['oldpass']))) {
 						$error = 1;
 						$errormessage .= $this->pi_getLL('errorOldPw');
+					}
+				} else {
+					if(t3lib_extMgm::isLoaded('kb_md5fepw')) {
+						$this->piVars['oldpass'] = md5($this->piVars['oldpass']);
+					}
+
+					if ($this->piVars['oldpass'] <> $GLOBALS['TSFE']->fe_user->user['password']) {
+						if (md5($this->piVars['oldpass']) <> $GLOBALS['TSFE']->fe_user->user['tx_mmforum_md5']) {
+							$error = 1;
+							$errormessage .= $this->pi_getLL('errorOldPw');
+						}
 					}
 				}
 			}
@@ -605,9 +627,28 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 					'password' => $this->piVars['newpass1'],
 					'tx_mmforum_md5' => md5($this->piVars['newpass1'])
 				);
-                
-                //if kb_md5fepw is installed, crypt password
-                if(t3lib_extMgm::isLoaded('kb_md5fepw')) $val['password']=md5($val['password']);
+
+				$objPHPass = null;
+				if (t3lib_extMgm::isLoaded('t3sec_saltedpw')) {
+					require_once(t3lib_extMgm::extPath('t3sec_saltedpw').'res/staticlib/class.tx_t3secsaltedpw_div.php');
+					if (tx_t3secsaltedpw_div::isUsageEnabled()) {
+						require_once(t3lib_extMgm::extPath('t3sec_saltedpw').'res/lib/class.tx_t3secsaltedpw_phpass.php');
+						$objPHPass = t3lib_div::makeInstance('tx_t3secsaltedpw_phpass');
+					}
+				}
+				if (!$objPHPass && t3lib_extMgm::isLoaded('saltedpasswords')) {
+					if (tx_saltedpasswords_div::isUsageEnabled()) {
+						$objPHPass = t3lib_div::makeInstance(tx_saltedpasswords_div::getDefaultSaltingHashingMethod());
+					}
+				}
+
+				if ($objPHPass) {
+					$val['password'] = $objPHPass->getHashedPassword($val['password']);
+
+				} else if(t3lib_extMgm::isLoaded('kb_md5fepw')) {	//if kb_md5fepw is installed, crypt password
+					$val['password']=md5($val['password']);
+				}
+
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users',$where,$val);
 
 				$errormessage .= $this->pi_getLL('pwChanged');
