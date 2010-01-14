@@ -1,19 +1,19 @@
 <?php
 /***************************************************************
  *  Copyright notice
- *  
+ *
  *  (c) 2007 Mittwald CM Service
  *  All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is 
+ *  This script is part of the TYPO3 project. The TYPO3 project is
  *  free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  The GNU General Public License can be found at
  *  http://www.gnu.org/copyleft/gpl.html.
- * 
+ *
  *  This script is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -56,8 +56,9 @@
 
 require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_base.php');
 require_once(t3lib_extMgm::extPath('mm_forum') . 'pi4/class.tx_mmforum_indexing.php');
+require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_pi1.php');
 
-/** 
+/**
  * Plugin 'Forum Search' for the 'mm_forum_search' extension.
  * The plugin 'Search' for the 'mm_forum' extension displays the
  * search form to the user and conducts searches and presents the
@@ -96,40 +97,40 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		$this->conf['show_items']   = $conf['resultsPerPage'];
 
 		$conf = $this->conf;
-        	
+
         $content = $this->index($content,$param,$conf);
-        
+
 
 		$param = $this->piVars;
-		
+
 		$content   .= $this->searchform($conf,$param);
 
 		if($this->piVars['searchstring']) {
 			$content   .= $this->searchfind($conf,$this->piVars['searchstring'],$param);
 		}
-		
+
 		if($this->conf['displaySearchDuration'])
 			$content.= '<br />'.$this->pi_getLL('debug.duration').": ".($this->microtime_float()-$time);
-		
+
 		return $this->pi_wrapInBaseClass($content);
 	}
-	
+
 	/**
 	 * Conducts the indexing process.
 	 * The indexing process can only be executed by admin users.
-	 * 
+	 *
 	 * @param  string $content The plugin content
 	 * @param  array  $param   The plugin configuration vars
 	 * @return string          The indexing output
 	 */
 	function index($content,$param,$conf) {
-        
+
         if(! md5($this->piVars['indexingPassword']) == $conf['indexingPassword']) {
             if(!$GLOBALS['TSFE']->fe_user) return $content;
             $groups = t3lib_div::intExplode(',',$GLOBALS['TSFE']->fe_user->user['usergroup']);
             if(!in_array($conf['grp_admin'],$groups)) return $content;
         }
-		
+
 		// Index a specific topic
 		if($param['ind_topic']) {
 			$content .= tx_mmforum_indexing::ind_topic($param['ind_topic'],$conf);
@@ -139,18 +140,18 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		if($param['ind_check']) {
 			$content .= tx_mmforum_indexing::ind_check();
 		}
-		
+
 			// Instantiate indexing class
 		$indexing = t3lib_div::makeInstance('tx_mmforum_indexing');
 		$indexing->conf = $this->conf;
-        
-		// Indexes all topics currently 
+
+		// Indexes all topics currently
 		if($param['ind_auto']) {
 			if($indexing->ind_check() == 0) {
-                
+
                 $intern_forums = array ();
-                
-                $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(    
+
+                $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                     'uid',
                     'tx_mmforum_forums',
                     'forum_internal = 1'
@@ -161,10 +162,10 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 
                 $intern_forums_list = implode(',',$intern_forums);
 
-                
-                
+
+
 				$noIndex_cond = (strlen($conf['noIndex_boardUIDs'])>0)?'forum_id NOT IN ('.$conf['noIndex_boardUIDs'].')':'1';
-                
+
                 $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'*',
 					'tx_mmforum_topics',
@@ -173,7 +174,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 					'tx_mmforumsearch_index_write ASC',
 					$conf['indexCount']
 				);
-				
+
 				while ($row     = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				    $content   .= $indexing->ind_topic($row['uid'],$conf);
 					# $content   .= $row['uid'].' **<br />';
@@ -182,10 +183,10 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				echo $this->pi_getLL('indexing.running');
 			}
 		}
-		
+
 		return $content;
 	}
-	
+
 	function microtime_float() {
 		list($usec, $sec) = explode(" ", microtime());
 		return ((float)$usec + (float)$sec);
@@ -196,7 +197,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * The search form lets the user specify, in which board he wishes to
 	 * search, in which order the results are to be sorted, if unsolved topics
 	 * are to be hidden and so on.
-	 * 
+	 *
 	 * @version 13. 04. 2007
 	 * @param   array  $conf  The plugin's configuration vars
 	 * @param   array  $param The parameter array for this function. Obsolete, since
@@ -208,7 +209,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		$template = $this->cObj->getSubpart($template, "###SEARCHFORM###");
 
 		$this->piVars['searchstring'] = stripslashes($this->piVars['searchstring']);
-        
+
         $marker = array(
             '###LLL_SEARCH###'      => $this->pi_getLL('searchform.title'),
             '###LLL_SEARCHSTRING###'=> $this->pi_getLL('searchform.searchstring'),
@@ -235,7 +236,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			'###LABEL_SUBMIT###'			=> $this->pi_getLL('searchform.submit'),
 			'###IMG_SUBMIT###'				=> $this->conf['path_img'].$this->getLanguage().$conf['images.']['start_search'],
         );
-        
+
 		if($this->getIsAdmin()) {
             $linkParams[$this->prefixId] = array('ind_auto' => 1);
             $marker['###INDEX_LINK###'] = '&raquo; <a href="'.$this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$linkParams).'" >'.$this->pi_getLL('searchform.startIndex').'</a>';
@@ -245,7 +246,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
         } else {
             $template = $this->cObj->substituteSubpart($template, '###INDEXING_SECTION###', '');
         }
-	    
+
 		$marker['###ACTIONLINK###']     = $this->pi_getPageLink($GLOBALS["TSFE"]->id);
 		$marker['###SEARCHSTRING###']   = $this->shield($this->piVars['searchstring']);
 		$marker['###PLACES###']        .= '<option selected="selected">'.$this->pi_getLL('searchform.searchAllBoards').'</option>';
@@ -260,7 +261,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				else $select = '';
 
 				$marker['###PLACES###']     .= '<option value="'.intval($val['uid']).'" '.$select.'>'.$this->shield($val['name']).'</option>';
-				
+
 				if($count == count($cat_tree)-1) $marker['###PLACES###'] .= '</optgroup>';
 			}
 			$count ++;
@@ -283,7 +284,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		IF (is_numeric($this->piVars['search_place']) OR $this->piVars['solved'] == 1 OR $this->piVars['search_order'] > 0) {
 			$marker['###SEARCH_OPTIONS_DISPLAY###'] = 'block';
 		} else {
-			$marker['###SEARCH_OPTIONS_DISPLAY###'] = 'none';    
+			$marker['###SEARCH_OPTIONS_DISPLAY###'] = 'none';
 		}
 
 		IF (!empty($this->piVars['solved'])) {
@@ -296,21 +297,21 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			$marker['###POSTGROUP###'] = "checked=\"checked\"";
 		} else {
 			$marker['###POSTGROUP###'] = '';
-		} 
+		}
 
 		if($conf['debug_mode'] == 1) {
 			t3lib_div::debug ($this->piVars);
 		}
 
 		$content    = $this->cObj->substituteMarkerArrayCached($template, $marker);
-		return $content;    
+		return $content;
 	}
 
 	/**
 	 * Conducts a search and displays the results.
 	 * This function gets the search results from the database, dependent
 	 * of the search string.
-	 * 
+	 *
 	 * @version 11. 10. 2006
 	 * @param   array  $conf         The plugin's configuration vars
 	 * @param   string $searchstring The string of search words
@@ -320,8 +321,8 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 */
 	function searchfind($conf,$searchstring,$param) {
 		$template		= $this->cObj->fileResource($conf['template']);
-		$template       = $this->cObj->getSubpart($template, "###SEARCHRESULT###"); 
-		$template_sub   = $this->cObj->getSubpart($template, "###SEARCHRESULT_SUB###"); 
+		$template       = $this->cObj->getSubpart($template, "###SEARCHRESULT###");
+		$template_sub   = $this->cObj->getSubpart($template, "###SEARCHRESULT_SUB###");
 
 		// Language dependent markers
 		$marker = array(
@@ -335,7 +336,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			'###IMG_CORNER###'					=> $conf['path_img'].'search-haken.gif',
 			'###IMG_BACKGROUND###'				=> $conf['path_img'].'search-back.gif',
 		);
-		
+
 		// Replace all special characters with space characters
 		$orgsearchstring	= $searchstring;
 		$searchstring		= str_replace('"',' ',$searchstring);
@@ -348,17 +349,17 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		#$searchstring = utf8_decode($searchstring);
 		$searchstring		= preg_replace($pattern, " ", $searchstring);
 		//$searchstring		= utf8_encode($searchstring);
-		
+
 
 		$post_id_array = $this->get_search_results($searchstring,$param);
-		
+
 		IF (!is_array($post_id_array)) {
 			$word_array = explode(' ',$searchstring);
 
 			$good_words = array();
 			$bad_words  = array();
 			$good_word_count = 0;
-			
+
 			foreach($word_array as $val)
 			{
 				If(strtolower(substr($val,0,5)) == 'user:') {
@@ -392,7 +393,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				$good_posts = $this->find_posts($good_words,$param,$good_word_count,$username);
 			IF(count($bad_words) > 0)
 				$bad_posts  = $this->find_posts($bad_words,$param);
-					
+
 			IF($bad_posts AND $good_posts) {
 				// Remove bad posts
 				$post_id_array  = array_diff($good_posts,$bad_posts);
@@ -403,7 +404,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			IF(count($post_id_array) > 0) {
 				$post_id_array = array_flip($post_id_array);
 			}
-			
+
 			// Write search result to database for later requests
 			$userGroups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 			sort($userGroups);
@@ -426,13 +427,13 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			}
 		}
 
-				
+
 		$treffer = count($post_id_array);
 
 		IF($treffer > 0) {
-			$find_array_split   = array_chunk($post_id_array, $conf['show_items'], true);     // Array in Pages Aufteilen 
+			$find_array_split   = array_chunk($post_id_array, $conf['show_items'], true);     // Array in Pages Aufteilen
 			IF(empty($param['page'])) $param['page'] = 0;
-			
+
 			if (!intval($this->conf['doNotUsePageBrowseExtension'])===0) $page = $param['page'] - 1;
 			else $page = $param['page'];
 
@@ -441,10 +442,10 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				$topic_id	= tx_mmforum_pi1::get_topic_id($post_id);
 				$topic_info	= $this->topic_information($topic_id);
 				$post_info	= $this->post_information($post_id);
-				
+
 				$post_text	= $this->get_posttext($post_id);
 				$post_text	= $this->clear_phpBB($post_text);
-				
+
 				$linkparams['tx_mmforum_pi1'] = array (
 					'action'=> 'list_post',
 					'tid' 	=> $topic_id,
@@ -456,7 +457,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				$post_text  = $this->shield(tx_mmforum_tools::textCut($post_text,350,''));
 				$word_array = explode(" ",$searchstring);
 
-				// Cleaning empty elements 
+				// Cleaning empty elements
 				foreach($word_array as $key => $value) {
 					if($value == "") {
 						unset($word_array[$key]);
@@ -464,20 +465,20 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				}
 				$word_array = array_values($word_array);
 
-				// Highlight Text with each word 
+				// Highlight Text with each word
 				foreach($word_array as $word) {
 					$word   = str_replace('$','\$',$word);
 					$replace = $this->cObj->wrap("\\0",$this->conf['matchWrap']);
 					$post_text = preg_replace("/$word/i", $replace, $post_text);
 				}
-				
+
 				$marker['###TITLE###']      = $this->pi_linkToPage($this->shield($topic_info['topic_title']),$conf['pid_forum'],'',$linkparams);
 				$marker['###SHORTTEXT###']  = $post_text;
 				$dummylinkParams['tx_mmforum_pi1'] = array('action'=>'list_post','tid'=>$topic_id);
                 if(tx_mmforum_pi1::getIsRealURL()) $dummylinkParams['tx_mmforum_pi1']['fid'] = $topic_info['forum_id'];
 				#$link = t3lib_div::getIndpEnv("HTTP_HOST").'/'.$this->pi_getPageLink($conf['pid_forum'],'',$dummylinkParams);
         $link = tx_mmforum_pi1::getAbsUrl($this->pi_getPageLink($conf['pid_forum'],'',$dummylinkParams));
-				$link = $this->cObj->stdWrap($link,$conf['postPath.']);                
+				$link = $this->cObj->stdWrap($link,$conf['postPath.']);
 				$marker['###POSTPATH###']   = $this->pi_linkToPage($link,$conf['pid_forum'],'_self',$linkparams);
 				$marker['###VIEWS###']      = intval($topic_info['topic_views']);
 				$marker['###ANSWERS###']    = intval($topic_info['topic_replies']);
@@ -492,18 +493,18 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 					$marker['###SOLVEDIMAGE###']    = '';
 				}
 
-				$content .= $this->cObj->substituteMarkerArrayCached($template_sub, $marker);  
+				$content .= $this->cObj->substituteMarkerArrayCached($template_sub, $marker);
 			}
 			$marker['###TREFFER###']    = $treffer;
 
 			$marker['###PAGES###']     = $this->pagebar($treffer,$conf['show_items'],$param);
-			
-			$template   = $this->cObj->substituteMarkerArrayCached($template, $marker);  
-			$content    = $this->cObj->substituteSubpart($template,'###SEARCHRESULT_SUB###',$content);  
+
+			$template   = $this->cObj->substituteMarkerArrayCached($template, $marker);
+			$content    = $this->cObj->substituteSubpart($template,'###SEARCHRESULT_SUB###',$content);
 		} else {
 			$content = $this->pi_getLL('search.noResults');
 		}
-		return $content;    
+		return $content;
 	}
 
 	/**
@@ -532,10 +533,10 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			return $this->getListGetPageBrowser($pages, $linkparams);
 		}
 
-		$content .= ' '.$this->pi_linkToPage(' &laquo; ',$GLOBALS["TSFE"]->id,$target='_self',$linkparams).' '; 
-		
+		$content .= ' '.$this->pi_linkToPage(' &laquo; ',$GLOBALS["TSFE"]->id,$target='_self',$linkparams).' ';
+
 		while ($i <= $pages) {
-			
+
 			IF($i > ($param['page']-4) AND $i < ($param['page']+4)) {
 				$linkparams[$this->prefixId] = array (
 					'searchstring'   => $param['searchstring'],
@@ -545,27 +546,27 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 					'groupPost'      => $param['groupPost']
 				);
 				IF($param['page'] == $i)
-					$content    .= ' '.$this->pi_linkToPage('<strong>['.$i.']</strong>',$GLOBALS["TSFE"]->id,$target='_self',$linkparams).' '; 
-				else 
-					$content    .= ' '.$this->pi_linkToPage($i,$GLOBALS["TSFE"]->id,$target='_self',$linkparams).' '; 
+					$content    .= ' '.$this->pi_linkToPage('<strong>['.$i.']</strong>',$GLOBALS["TSFE"]->id,$target='_self',$linkparams).' ';
+				else
+					$content    .= ' '.$this->pi_linkToPage($i,$GLOBALS["TSFE"]->id,$target='_self',$linkparams).' ';
 			}
-			$i++;    
+			$i++;
 		}
-		
+
 		IF($param['page'] < $pages) {
 			$linkparams[$this->prefixId] = array (
 				'searchstring'   => $param['searchstring'],
 				'page'           => ($param['page'] + 1),
-				'search_place'   => $param['search_place'], 
+				'search_place'   => $param['search_place'],
 				'solved'         => $param['solved'],
-				'groupPost'      => $param['groupPost'] 
+				'groupPost'      => $param['groupPost']
 			);
-			$content .= ' '.$this->pi_linkToPage(' &raquo; ',$GLOBALS["TSFE"]->id,$target='_self',$linkparams).' '; 
+			$content .= ' '.$this->pi_linkToPage(' &raquo; ',$GLOBALS["TSFE"]->id,$target='_self',$linkparams).' ';
 		}
-		
+
 		return $content;
 	}
-	
+
 	/**
 	 * Finds all posts and topics containing a certain word specified by
 	 * the word UID.
@@ -583,8 +584,8 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		IF(!empty($word_id_list)) {
 			$mysql_option  .= ' AND word_id IN ('.$word_id_list.') ';
 		}
-		
-		
+
+
 		IF ($words > 0) {
 			IF($param['groupPost']) {
 				$mysql_group_option   .= ' topic_id HAVING count(post_id) >= '.$words.' ';
@@ -592,7 +593,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				$mysql_group_option   .= ' post_id HAVING count(post_id) >= '.$words.' ';
 			}
 		}
-		
+
 		IF(is_numeric($param['search_place']) AND ($param['search_place'] > 0))
 			$mysql_option   .= ' AND forum_id = '.mysql_escape_string($param['search_place']);
 
@@ -602,10 +603,10 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		IF(!empty($username)) {
 			 $user_id = tx_mmforum_pi1::get_userid($username);
 			 IF(is_numeric($user_id) AND $user_id != 0  ) {
-					$mysql_option   .= ' AND post_cruser = '.$user_id;      
+					$mysql_option   .= ' AND post_cruser = '.$user_id;
 			 }
 		}
-		
+
 		if($GLOBALS['TSFE']->fe_user->user) {
 			$userGroups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 			$grouprights_query = "";
@@ -621,7 +622,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		switch($param['search_order']) {
 			default:
 				$order_option = 'post_crdate DESC';
-			break;  
+			break;
 			case "1":
 				$order_option = 'post_crdate ASC';
 			break;
@@ -637,9 +638,9 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		}
 
 		IF ($words > 0) {
-			$count_option = ', count(post_id) as treffer';    
+			$count_option = ', count(post_id) as treffer';
 		} else {
-			$count_option = '';    
+			$count_option = '';
 		}
 
 		IF(!empty($mysql_option)) {
@@ -653,19 +654,19 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				''
 			);
 			if($this->conf['debug_mode']) echo $query;
-			
+
 			$res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query);
 			$post_id_array = array();            // Array in denen die gefundenen Posts gespeichert werden
 		}
-		
+
 		if(isset($res)) {
 			$topic_tmp_array    = array();
 
-			while($row  = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {  
+			while($row  = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				array_push($post_id_array,$row['post_id']);
 			}
 		}
-		
+
 		return $post_id_array;
 	}
 
@@ -708,7 +709,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		}
 		return $word_id_array;
 	}
-	
+
 	/**
 	 * Clears a string of all BBCodes
 	 * @param  string $string The string to be cleared
@@ -781,7 +782,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			$tmp_array['type']    = 'C';
 			array_push($cat_array,$tmp_array);
 		}
-	
+
 		return $cat_array;
 	}
 
@@ -799,7 +800,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				array_push($cat_tree,$subval);
 			}
 		}
-		return $cat_tree;   
+		return $cat_tree;
 	}
 
 	/**
@@ -855,13 +856,13 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			'1'
 		);
 
-		$res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query);    
+		$res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query);
 		$row  = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
 		$search_array = unserialize($row['array_string']);
 
 		return $search_array;
-		
+
 	}
 
 	/**
@@ -893,34 +894,34 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 		}
 		return $username;
-		
+
 	}
 
     /**
     * Check which language is set up in the TypoScript
     * @return string        The folder where language dependend images are stored
     */
-    
+
     function getLanguage(){
         if($GLOBALS['TSFE']->config['config']['language'] == 'en'){
-            $language = 'default/';   
+            $language = 'default/';
         }
         else{
-            $language = $GLOBALS['TSFE']->config['config']['language'].'/';   
+            $language = $GLOBALS['TSFE']->config['config']['language'].'/';
         }
-        return $language;   
+        return $language;
     }
-    
+
     /**
 	 * Delivers a MySQL-WHERE query checking the records' PID.
 	 * This allows it to exclusively select records from a very specific list
 	 * of pages.
-	 * 
+	 *
 	 * NOTE: This function is currently partially disabled.
 	 *       Instead of defining the PIDs to be checked via the plugin's Starting
 	 *       Point, the PID is in this version defined in the TS constant
 	 *       plugin.tx_mmforum.storagePID
-	 * 
+	 *
 	 * @param   string $tables The list of tables that are queried
 	 * @return  string         The query, following the pattern " AND pid IN (...)"
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -929,8 +930,8 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	function getPidQuery($conf=null, $tables="") {
 		return tx_mmforum_indexing::getPidQuery($conf?$conf:$this->conf,$tables);
 	}
-	
-    
+
+
     /**
 	 * Generates a MySQL-query to determine in which boards the current user may read.
 	 * @return string  A MySQL-WHERE-query, beginning with "AND", checking which boards the
@@ -940,7 +941,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	function getMayRead_forum_query($prefix="") {
 		if(strlen($prefix)>0) $prefix = "$prefix.";
 		if(!$GLOBALS['TSFE']->fe_user->user) return " AND (".$prefix."grouprights_read='')";
-		
+
 		$groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
 		foreach($groups as $group) {
@@ -948,7 +949,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		}
 		$query = implode(' OR ',$queryParts);
 		$query = " AND (($query) OR ".$prefix."grouprights_read='') ";
-		
+
 		return $query;
 	}
 
