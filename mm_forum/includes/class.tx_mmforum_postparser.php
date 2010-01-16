@@ -243,6 +243,7 @@ class tx_mmforum_postparser {
         }
 		$text = $this->links($text,$conf);
 		$text =	$this->linkgenerator($text,$conf,'cryptmail');
+		$text = $this->typolinks($text,$parent);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'pattern,replacement',
 			'tx_mmforum_postparser',
@@ -493,7 +494,77 @@ class tx_mmforum_postparser {
 		$text = preg_replace("/(\s)http:\/\/([\S]+?)(\s)/i","$1[url=\"http://$2\"]http://$2[/url]$3"," $text ");
 		$text = preg_replace("/(\s)([\.a-z0-9-]+@[\.a-z0-9-]+\.[a-z]+)(\s)/i","$1[url]mailto:$2[/url]$3","$text");
 	    return $text;
-	} 
+	}
+
+	/**
+	 * Generates TYPO3 links.
+	 * 
+	 * @author Hauke Hain <hhpreuss@googlemail.com>
+	 * @param  string $text The text, in which the links are to be generated.
+	 * @param  object $parent The calling object (regulary of type tx_mmforum_pi1), so this
+	 *                        object inherits all configuration and language options from the
+	 *                        calling object.
+	 * @return string       The parsed string
+	 */
+	function typolinks($text, &$parent) {
+		$ausgabe = array();
+		preg_match_all('(record\:[a-zA-Z_]+\:\d+)', $text, $ausgabe);
+		if (is_array($ausgabe) && is_array($ausgabe[0])) {
+  		for($i = 0; $i < sizeof($ausgabe[0]); ++$i)
+      {
+        $text = str_replace($ausgabe[0][$i], $this->typoLinkURL($ausgabe[0][$i], $parent), $text);
+      }
+    }
+	    return $text;
+	}
+
+	/**
+	 * Returns TYPO3 URL with the help of a linkhandler.
+	 * uses the TypoScript of the linkhandler of the extension tinymcr_rte  	 
+	 * 
+	 * @author Hauke Hain <hhpreuss@googlemail.com>
+	 * @param  string $id The link id or record parameter
+	 * @param  object $parent The calling object (regulary of type tx_mmforum_pi1), so this
+	 *                        object inherits all configuration and language options from the
+	 *                        calling object.
+	 * @return string       The parsed string
+	 */
+	function typoLinkURL($id, &$parent) {
+  	$localcObj = t3lib_div::makeInstance('tslib_cObj');
+
+	  if (strpos($id, 'record:page:') === false) {
+  		$PagesTSconfig = $GLOBALS['TSFE']->getPagesTSconfig();
+  		$linkhandler = $PagesTSconfig['RTE.']['default.']['linkhandler.'];
+  		$linkHandlerData = t3lib_div::trimExplode(':', $id);
+  		$row = $this->getRecordRow($linkHandlerData[1], $linkHandlerData[2], $localcObj);
+  		$localcObj->start($row, ''); // make data available in TypoScript
+  		$lconf = array();
+  		if (is_array($linkhandler[$linkHandlerData[1].'.'][$row['pid'].'.'])) {
+  			$lconf = $linkhandler[$linkHandlerData[1].'.'][$row['pid'].'.'];
+  		} else {
+  			$lconf = $linkhandler[$linkHandlerData[1].'.']['default.'];
+  		}
+  		// remove the tinymce_rte specific attributes
+		  unset( $lconf['select'], $lconf['sorting'] );
+  		return $_SERVER['SERVER_NAME'] . '/' . $localcObj->typoLink_URL($lconf);
+  	} else {
+  	  return $_SERVER['SERVER_NAME'] . '/' . $localcObj->typoLink_URL(array('parameter' => str_replace('record:page:', '', $id)));
+    }
+	}
+
+	 /**
+	  *('EXT:tinymce_rte/hooks/class.tx_tinymce_rte_handler.php:&tx_tinymce_rte_handler')	 
+    * allow to use links as "record:tt_news:3"
+    * original by Daniel Poetzinger (AOE media GmbH) in extension linkhandler
+    *
+    * @author Thomas Allmer <thomas.allmer@webteam.at>
+    *
+    */
+	function getRecordRow($table,$uid,&$localcObj) {
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $table, 'uid='.intval($uid).$localcObj->enableFields($table), '', '');
+		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		return $row;
+	}
 }
 
 if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/includes/class.tx_mmforum_postparser.php"])    {
