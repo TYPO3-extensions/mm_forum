@@ -454,31 +454,32 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
             
 			$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
 			$userField->init($this->userLib, $this->cObj);
-			
+
 			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$userField->get($arr);
 				
-				$label = $userField->getRenderedLabel();
-
-                if($userField->isRequired())
-                    $label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
-				
-				$input = $userField->getRenderedInput($this->piVars['userfields'][$userField->getUID()]);
-				if($input === null) $input = $this->cObj->getSubpart($userField_template, '###DEFUSERFIELD###');
-				$userField_thisTemplate = $this->cObj->substituteSubpart($userField_template, '###DEFUSERFIELD###', $input);
-				
-				$userFields_marker = array(
-                    '###USERFIELD_LABEL###'     => $label,
-                    '###USERFIELD_UID###'       => $userField->getUID(),
-                    '###USERFIELD_NAME###'      => 'tx_mmforum_pi2[userfields]['.$userField->getUID().']',
-                    '###USERFIELD_VALUE###'     => $this->piVars['userfields'][$userField->getUID()]?$this->piVars['userfields'][$arr['uid']]:'',
-					'###USERFIELD_ERROR###'		=> $marker['userfield_error'][$userField->getUID()]
-                );
-                if ($userFields_marker['###USERFIELD_ERROR###']) {
-                    $userFields_marker['###USERFIELD_ERROR###'] = $this->cObj->wrap($userFields_marker['###USERFIELD_ERROR###'], $this->conf['errorwrap']);
-                }
-                $userFields_content .= $this->cObj->substituteMarkerArrayCached($userField_thisTemplate, $userFields_marker);
-				
+				if (($this->conf['showOnlyRequiredUserfields'] == 1 && $userField->isRequired()) || ($this->conf['showOnlyRequiredUserfields'] != 1)) {
+  				$label = $userField->getRenderedLabel();
+  
+                  if($userField->isRequired())
+                      $label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
+  				
+  				$input = $userField->getRenderedInput($this->piVars['userfields'][$userField->getUID()]);
+  				if($input === null) $input = $this->cObj->getSubpart($userField_template, '###DEFUSERFIELD###');
+  				$userField_thisTemplate = $this->cObj->substituteSubpart($userField_template, '###DEFUSERFIELD###', $input);
+  				
+  				$userFields_marker = array(
+                      '###USERFIELD_LABEL###'     => $label,
+                      '###USERFIELD_UID###'       => $userField->getUID(),
+                      '###USERFIELD_NAME###'      => 'tx_mmforum_pi2[userfields]['.$userField->getUID().']',
+                      '###USERFIELD_VALUE###'     => $this->piVars['userfields'][$userField->getUID()]?$this->piVars['userfields'][$arr['uid']]:'',
+  					          '###USERFIELD_ERROR###'		=> $marker['userfield_error'][$userField->getUID()]
+                  );
+          if ($userFields_marker['###USERFIELD_ERROR###']) {
+            $userFields_marker['###USERFIELD_ERROR###'] = $this->cObj->wrap($userFields_marker['###USERFIELD_ERROR###'], $this->conf['errorwrap']);
+          }
+          $userFields_content .= $this->cObj->substituteMarkerArrayCached($userField_thisTemplate, $userFields_marker);
+			  }
 			}
 			
 			/*
