@@ -637,9 +637,12 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						$msgLink = $this->tools->escapeBrackets($msgLink);
 
 						$marker = array(
-							'###USERNAME###'		=> $row[tx_mmforum_pi1::getUserNameField()],
-	                        '###PMLINK###'          => tx_mmforum_pi1::getAbsUrl($msgLink),
-							'###SITENAME###'		=> $conf['siteName']
+							'###USERNAME###' => $row[tx_mmforum_pi1::getUserNameField()],
+	                        '###PMLINK###'   => tx_mmforum_pi1::getAbsUrl($msgLink),
+							'###SITENAME###' => $conf['siteName'],
+							'###MESSAGE###'  => $message,
+							'###SUBJECT###'  => $this->pi_getLL('messageReplySubjectPrefix').$subject,
+							'###FROM###'     => $GLOBALS['TSFE']->fe_user->user[tx_mmforum_pi1::getUserNameField()]
 						);
 						$mailtext = $this->cObj->substituteMarkerArrayCached($template, $marker);
 	
