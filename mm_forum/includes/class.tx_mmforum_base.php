@@ -52,7 +52,6 @@
  *  482:     function shieldURL($url)
  *  493:     function shield($str)
  *  504:     function getPidQuery($tbl = '')
- *  518:     function text_cut($text, $cut, $cutWithinWords = 0)
  *  533:     function imgtag($imgInfo, $debug = TRUE)
  *  544:     function getAdminGroup()
  *  559:     function getModeratorGroups()
@@ -474,24 +473,6 @@ class tx_mmforum_base extends tslib_pibase {
 	 */
 	function getPidQuery($tbl = '') {
 		return $this->getStoragePIDQuery($tbl);
-	}
-
-	/**
-	 * Shortens a text to a specified length.
-	 * @param  string $text     The text to be cut
-	 * @param  int    $cut      The length, the text is to be cut to
-	 * @param  bool   $word_cut Determines, if words are to be cut by this function or
-	 *                          to be preserved.
-	 * @return string           The cut text.
-	 * @deprecated: use the TYPO3 built-in cObject function "crop" directly
-	 */
-	function text_cut($text, $cut, $cutWithinWords = 0) {
-		if ($cutWithinWords) {
-			$options = $cut . ' | ... | 0';
-		} else {
-			$options = $cut . ' | | 1';
-		}
-		return $this->cObj->crop($text, $options);
 	}
 
 	/**
