@@ -58,7 +58,7 @@
  * cwt_community extension.
  * The CHC import was rewritten for version 0.1.3 due to unreliability
  * of previous version.
- * 
+ *
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @author     Nepa Design <extensions@nepa-design.de>
  * @copyright  2007 Mittwald CM Service
@@ -68,9 +68,9 @@
  * @subpackage Backend
  */
 class tx_mmforum_chcimport {
-    
+
     var $chc_clearTables = 'forums,posts,postread,posts_text,topics,favorites,post_alert,searchresults,wordlist,wordmatch,attachments,polls,polls_answers,polls_votes,postqueue';
-    
+
     /**
      * Main function.
      * @author Martin Helmich <m.helmich@mittwald.de>
@@ -78,31 +78,31 @@ class tx_mmforum_chcimport {
      */
     function main($content) {
         $this->importVars = t3lib_div::_GP('tx_mmforum_chc');
-        
+
         $this->ext_db = $this->dbObj->link;
         $this->loc_db = $GLOBALS['TYPO3_DB']->link;
-        
+
         if(is_array($this->importVars['import'])) {
-            
+
             foreach($this->importVars['import'] as $import) {
-                
+
                 $content .= '<fieldset><legend>'.$GLOBALS['LANG']->getLL('chc.step4').'</legend>';
-                
+
                 $conf        = $this->p->confArr;
                 $this->pid   = $conf['forumPID'];
-                
+
                 if($import == 'chc')        $content .= $this->import_chc();
                 if($import == 'cwt')        $content .= $this->import_cwt();
-                
+
                 $content .= '</fieldset>';
             }
-            
+
         }
         else $content .= $this->select_import();
-        
+
         return $content;
     }
-    
+
     /**
      * Displays a form for the user to select which data is to be imported.
      * @author Martin Helmich <m.helmich@mittwald.de>
@@ -110,10 +110,10 @@ class tx_mmforum_chcimport {
      */
     function select_import() {
         global $LANG;
-        
+
         $chc_enabled = t3lib_extMgm::isLoaded('chc_forum')?'checked="checked"':'disabled="disabled"';
         $cwt_enabled = t3lib_extMgm::isLoaded('cwt_community')?'checked="checked"':'disabled="disabled"';
-        
+
         $content .= '<fieldset><legend>'.$LANG->getLL('chc.step3').'</legend>';
         $content .= '<table cellspacing="0" cellpadding="2" border="0">
     <tr>
@@ -130,7 +130,7 @@ class tx_mmforum_chcimport {
 
         return $content;
     }
-    
+
     /**
      * Imports data from the CHC Forum extension.
      * This function was written as substitute for the CHC import
@@ -138,7 +138,7 @@ class tx_mmforum_chcimport {
      * for some CHC Forum versions. The new CHC import procedure is
      * conform to TYPO3 coding guidelines and should provide a better
      * performance.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-10-08
      * @return  void
@@ -152,7 +152,7 @@ class tx_mmforum_chcimport {
     function import_chc() {
     	// Clear mm_forum database
     		$this->clearDB();
-    	
+
     	// Import CHC categories
     		$this->chc_importCategories();
     	// Import CHC conferences
@@ -161,11 +161,11 @@ class tx_mmforum_chcimport {
     		$this->chc_importTopics();
     	// Import CHC posts
     		$this->chc_importPosts();
-    	
+
     	// Update database relations
     		$this->chc_updateRels();
     }
-    
+
     /**
      * Updates relations between imported mm_forum records.
      * This function updates database relations between imported mm_forum
@@ -174,21 +174,21 @@ class tx_mmforum_chcimport {
      * indices will have changed during the import procedure these relations
      * have to be updated.
      * This function also resets all users' post counter.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-10-08
      * @return  void
      */
     function chc_updateRels() {
-    	
+
     	// Update database relations
 	    	foreach($this->updateRel as $updateRel) {
 	    		list($table,$uid,$field,$mapping,$value) = explode(':',$updateRel);
-	    		
+
 	    		switch($mapping) {
 	    			case 'post': $mappingArr = &$this->postMapping; break;
 	    		}
-	    		
+
 	    		$updateArray = array(
 	    			$field			=> $mappingArr[$value]
 	    		);
@@ -198,7 +198,7 @@ class tx_mmforum_chcimport {
 	    			$updateArray
 	    		);
 	    	}
-    	
+
     	// Reset users' post counter
 	    	$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 	    		'u.uid, COUNT(p.uid) AS posts',
@@ -213,27 +213,27 @@ class tx_mmforum_chcimport {
 	    	);
 	    	$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$user.' AND pid='.$this->p->confArr['userPID'],$updateArray);
     }
-    
+
     /**
      * Imports CHC Categories.
      * This function imports categories from the CHC Forum extension
      * into the tx_mmforum_forum table of the mm_forum extension.
      * There is no data loss during the import procedure.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-10-08
      * @return  void
      * @uses	convertGroups
      */
     function chc_importCategories() {
-    	
+
     	$res		= $this->dbObj->exec_SELECTquery(
     		'*',
     		'tx_chcforum_category',
     		'deleted=0'
     	);
     	while($ctg = $this->dbObj->sql_fetch_assoc($res)) {
-    		
+
     		$insertArray = array(
     			'pid'				=> $this->pid,
     			'hidden'			=> $ctg['hidden'],
@@ -248,15 +248,15 @@ class tx_mmforum_chcimport {
     		);
     		$GLOBALS['TYPO3_DB']->exec_INSERTquery(
     			'tx_mmforum_forums',
-				$insertArray    			
+				$insertArray
     		);
     		$ctgUid		= $GLOBALS['TYPO3_DB']->sql_insert_id();
-    		
+
     		$this->categoryMapping[$ctg['uid']] = $ctgUid;
-    		
+
     	}
     }
-    
+
     /**
      * Imports CHC Conferences.
      * This function imports conferences from the CHC Forum extension
@@ -266,7 +266,7 @@ class tx_mmforum_chcimport {
      * During the import procedure, there is a slight data loss regarding
      * user rights management that is more differentiated in the CHC Forum
      * extension.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-10-08
      * @return  void
@@ -276,14 +276,14 @@ class tx_mmforum_chcimport {
      * @uses	chc_getConferenceLastPost
      */
     function chc_importConferences() {
-    	
+
     	$res		= $this->dbObj->exec_SELECTquery(
     		'*',
     		'tx_chcforum_conference',
     		'deleted=0'
     	);
     	while($conf = $this->dbObj->sql_fetch_assoc($res)) {
-    		
+
     		$insertArray = array(
     			'pid'				=> $this->pid,
     			'hidden'			=> $conf['hidden'],
@@ -303,20 +303,20 @@ class tx_mmforum_chcimport {
     			$insertArray
     		);
     		$forumUid		= $GLOBALS['TYPO3_DB']->sql_insert_id();
-    		
+
     		$this->forumMapping[$conf['uid']] = $forumUid;
-    		
+
     		$this->updateRel[] = 'forums:'.$forumUid.':forum_last_post_id:post:'.$this->chc_getConferenceLastPost($conf['uid']);
-    		
+
     	}
-    	
+
     }
-    
+
     /**
      * Imports CHC topics.
      * This function imports topics into the tx_mmforum_topics table.
      * There is no data loss during the import procedure.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-10-08
      * @return  void
@@ -326,14 +326,14 @@ class tx_mmforum_chcimport {
      * @uses	chc_getTopicFirstPost
      */
     function chc_importTopics() {
-    	
+
     	$res		= $this->dbObj->exec_SELECTquery(
     		'*',
     		'tx_chcforum_thread',
     		'deleted=0'
     	);
     	while($topic = $this->dbObj->sql_fetch_assoc($res)) {
-    		
+
     		$insertArray = array(
     			'pid'				=> $this->pid,
     			'hidden'			=> $topic['hidden'],
@@ -352,25 +352,25 @@ class tx_mmforum_chcimport {
     			$insertArray
     		);
     		$topicUid		= $GLOBALS['TYPO3_DB']->sql_insert_id();
-    		
+
     		$this->topicMapping[$topic['uid']] = $topicUid;
-    		
+
     		$this->updateRel[] = 'topics:'.$topicUid.':topic_last_post_id:post:'.$this->chc_getTopicLastPost($topic['uid']);
     		$this->updateRel[] = 'topics:'.$topicUid.':topic_first_post_id:post:'.$this->chc_getTopicFirstPost($topic['uid']);
-    		
+
     	}
-    	
+
     }
-    
+
     /**
      * Imports CHC posts.
      * This function imports posts into the tx_mmforum_posts table.
      * During the import procedure, there is a data loss regarding file
      * attachments (are not yet imported at all) and posts written by
      * anonymous authors.
-     * 
+     *
      * TODO: Import file attachments
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-10-08
      * @return  void
@@ -378,14 +378,14 @@ class tx_mmforum_chcimport {
      * @usesconvertUser
      */
     function chc_importPosts() {
-    	
+
     	$res		= $this->dbObj->exec_SELECTquery(
     		'*',
     		'tx_chcforum_post',
     		'deleted=0'
     	);
     	while($post = $this->dbObj->sql_fetch_assoc($res)) {
-    		
+
     		$insertArray = array(
     			'pid'				=> $this->pid,
     			'tstamp'			=> time(),
@@ -403,7 +403,7 @@ class tx_mmforum_chcimport {
     			$insertArray
     		);
     		$postUid		= $GLOBALS['TYPO3_DB']->sql_insert_id();
-    		
+
     		$insertArray = array(
     			'pid'				=> $this->pid,
     			'tstamp'			=> time(),
@@ -415,13 +415,13 @@ class tx_mmforum_chcimport {
     			'tx_mmforum_posts_text',
     			$insertArray
     		);
-    		
+
     		$this->postMapping[$post['uid']] = $postUid;
-    		
+
     	}
-    	
+
     }
-    
+
     /**
      * Converts CHC Forum groups into ordinary fe_groups.
      * This function converts a list of CHC forum groups into a list of the
@@ -431,7 +431,7 @@ class tx_mmforum_chcimport {
      * There will be a slight data loss regarding specific users that are
      * members of a CHC group. These users will not be included in the result,
      * since in the mm_forum access rights are handled using fe_groups ONLY.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-10-08
      * @param   string $groups A commaseperated list of CHC forum group UIDs.
@@ -441,9 +441,9 @@ class tx_mmforum_chcimport {
      */
     function convertGroups($groups) {
     	$groupArray = t3lib_div::intExplode(',',$groups);
-    	
+
     	$resultFeGroups = array();
-    	
+
     	foreach($groupArray as $group) {
     		$res = $this->dbObj->exec_SELECTquery(
     			'forumgroup_groups',
@@ -451,15 +451,15 @@ class tx_mmforum_chcimport {
     			'uid='.$groups.' AND deleted=0'
     		);
     		if(!$res || !$this->dbObj->sql_num_rows($res)) continue;
-    		
+
     		list($feGroups) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-    		
+
     		$feGroupArray = t3lib_div::intExplode(',',$feGroups);
     		foreach($feGroupArray as $feGroup) $resultFeGroups[] = $feGroup;
     	}
     	return implode(',',$resultFeGroups);
     }
-    
+
     /**
      * Converts user UIDs.
      * This function is intended for handling the import of users
@@ -468,7 +468,7 @@ class tx_mmforum_chcimport {
      * However, this function will be necessary for importing CHC Forum
      * data from one database to another where user UIDs are not constant
      * any more.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-10-08
      * @param   int $user The fe_user UID
@@ -477,31 +477,31 @@ class tx_mmforum_chcimport {
     function convertUser($user) {
     	return $user;
     }
-    
+
     /**
      * Clears the database before commiting the import procedure.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-10-08
      * @return  void
      */
     function clearDB() {
     	$clearTables_array = t3lib_div::trimExplode(',',$this->chc_clearTables);
-    	
+
     	foreach($clearTables_array as $clearTable) {
     		$GLOBALS['TYPO3_DB']->sql_query("TRUNCATE TABLE tx_mmforum_$clearTable");
     	}
-    	
+
     	$updateArray = array(
     		'tx_mmforum_posts'  => 0,
     		'tstamp'			=> 0
     	);
     	$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','pid='.$this->p->confArr['userPID'],$updateArray);
     }
-    
+
     /**
      * Conducts the data import from the CHC Forum extension.
-     * 
+     *
      * @author  Nepa Design <extensions@nepa-design.de>
      * @version 2007-05-03
      * @deprecated Was replaced by a better import procedure in version 0.1.4
@@ -514,21 +514,21 @@ class tx_mmforum_chcimport {
 	    mysql_query('TRUNCATE TABLE tx_mmforum_topics');
 
 	    $anz_cat = $anz_forum = $anz_threads = $anz_posts = 0;
-        
+
         $pid = $this->pid;
 
 	    //FORUM KATEGORIE
 	    $sql = 'SELECT * FROM tx_chcforum_category';
 	    $query=mysql_query($sql,$this->ext_db);
 	    while($res=mysql_fetch_array($query)) {
-		    
+
 		    $sql_insert = 'INSERT INTO tx_mmforum_forums SET
 				    uid = '.$res['uid'].',
 				    pid = '.$pid.',
 				    deleted = '.$res['deleted'].',
 				    hidden = '.$res['hidden'].',
-				    tstamp = '.$res['tstamp'].', 
-				    crdate = '.$res['crdate'].', 
+				    tstamp = '.$res['tstamp'].',
+				    crdate = '.$res['crdate'].',
 
 				    forum_name = "'.$res['cat_title'].'"
 		    ';
@@ -551,13 +551,13 @@ class tx_mmforum_chcimport {
                     r.uid = tx_chcforum_conference.auth_forumgroup_r';
 	    $query=mysql_query($sql,$this->ext_db);
 	    while($res=mysql_fetch_array($query)) {
-		    
+
 		    $anz_forum++;
 
 		    $sql_insert = 'INSERT INTO tx_mmforum_forums SET
 				    pid = '.$pid.',
-				    tstamp = '.$res['tstamp'].', 
-				    crdate = '.$res['crdate'].', 
+				    tstamp = '.$res['tstamp'].',
+				    crdate = '.$res['crdate'].',
 				    hidden = '.$res['hidden'].',
 				    parentID = '.$res['cat_id'].',
 				    deleted = '.$res['deleted'].',
@@ -583,10 +583,10 @@ class tx_mmforum_chcimport {
 			    $sql_insert = 'INSERT INTO tx_mmforum_topics SET
 				    uid = '.$res_topic['uid'].',
 				    pid = '.$pid.',
-				    tstamp = '.$res_topic['tstamp'].', 
-				    crdate = '.$res_topic['crdate'].', 
-				    deleted = '.$res_topic['deleted'].', 
-				    hidden = '.$res_topic['hidden'].',	
+				    tstamp = '.$res_topic['tstamp'].',
+				    crdate = '.$res_topic['crdate'].',
+				    deleted = '.$res_topic['deleted'].',
+				    hidden = '.$res_topic['hidden'].',
 				    forum_id = '.$forum_uid.',
 				    closed_flag = '.$res_topic['thread_closed'].',
 				    topic_title  = "'.$res_topic['thread_subject'].'",
@@ -595,7 +595,7 @@ class tx_mmforum_chcimport {
 				    topic_time  = '.$res_topic['thread_datetime'].',
 				    topic_last_post_id = '.$res_topic['thread_lastpostid'].',
 				    topic_first_post_id = '.$res_topic['thread_firstpostid'].'
-			    ';	
+			    ';
 
 			    mysql_query($sql_insert,$this->loc_db);
 			    $topics++;
@@ -611,10 +611,10 @@ class tx_mmforum_chcimport {
 				    $sql_insert = 'INSERT INTO tx_mmforum_posts SET
 					    uid = '.$res_post['uid'].',
 					    pid = '.$pid.',
-					    tstamp = '.$res_post['tstamp'].', 
-					    crdate = '.$res_post['crdate'].', 
-					    deleted = '.$res_post['deleted'].', 
-					    hidden = '.$res_post['hidden'].',	
+					    tstamp = '.$res_post['tstamp'].',
+					    crdate = '.$res_post['crdate'].',
+					    deleted = '.$res_post['deleted'].',
+					    hidden = '.$res_post['hidden'].',
 					    forum_id = '.$forum_uid.',
 					    topic_id  = '.$res_topic['uid'].',
 					    cruser_id = '.$res_post['post_author'].',
@@ -629,10 +629,10 @@ class tx_mmforum_chcimport {
 				    $sql_insert = 'INSERT INTO tx_mmforum_posts_text SET
 					    uid = '.$res_post['uid'].',
 					    pid = '.$pid.',
-					    tstamp = '.$res_post['tstamp'].', 
-					    crdate = '.$res_post['crdate'].', 
-					    deleted = '.$res_post['deleted'].', 
-					    hidden = '.$res_post['hidden'].',	
+					    tstamp = '.$res_post['tstamp'].',
+					    crdate = '.$res_post['crdate'].',
+					    deleted = '.$res_post['deleted'].',
+					    hidden = '.$res_post['hidden'].',
 					    post_id  = '.$res_post['uid'].',
 					    post_text  = "'.mysql_real_escape_string($res_post['post_text']).'"
 				    ';
@@ -679,13 +679,13 @@ class tx_mmforum_chcimport {
 	    $content.= '<br />'.$GLOBALS['LANG']->getLL('chc.topics').': '.$anz_threads;
 	    $content.= '<br />'.$GLOBALS['LANG']->getLL('chc.posts').': '.$anz_posts;
         $content.= '<br />';
-        
+
         return $content;
     }
-    
+
     /**
      * Conducts the data import from the CWT community extension.
-     * 
+     *
      * @author  Nepa Design <extensions@nepa-design.de>
      * @version 2007-05-03
      */
@@ -693,7 +693,7 @@ class tx_mmforum_chcimport {
         mysql_query('TRUNCATE TABLE tx_mmforum_pminbox');
 
 	    $anz_pm = 0;
-        
+
         $pid = $this->pid;
 
 	    //PM Importieren
@@ -705,14 +705,14 @@ class tx_mmforum_chcimport {
 			    $read = 'read_flg = 1,';
 		    else
 			    $read = '';
-		    
+
 		    $sql_insert = 'INSERT INTO tx_mmforum_pminbox SET
 				    pid = '.$pid.',
 				    deleted = '.$res['deleted'].',
 				    hidden = '.$res['hidden'].',
-				    tstamp = '.$res['tstamp'].', 
-				    crdate = '.$res['crdate'].', 
-				    sendtime = '.$res['crdate'].', 
+				    tstamp = '.$res['tstamp'].',
+				    crdate = '.$res['crdate'].',
+				    sendtime = '.$res['crdate'].',
 				    cruser_id  = '.$res['cruser_id'].',
 				    from_uid  = '.$res['cruser_id'].',
 				    from_name = "'.mysql_real_escape_string($res['from_user']).'",
@@ -729,9 +729,9 @@ class tx_mmforum_chcimport {
 				    pid = '.$pid.',
 				    deleted = '.$res['deleted'].',
 				    hidden = '.$res['hidden'].',
-				    tstamp = '.$res['tstamp'].', 
-				    crdate = '.$res['crdate'].', 
-				    sendtime = '.$res['crdate'].', 
+				    tstamp = '.$res['tstamp'].',
+				    crdate = '.$res['crdate'].',
+				    sendtime = '.$res['crdate'].',
 				    cruser_id  = '.$res['cruser_id'].',
 				    from_uid  = '.$res['cruser_id'].',
 				    from_name = "'.mysql_real_escape_string($res['to_user']).'",
@@ -745,72 +745,72 @@ class tx_mmforum_chcimport {
 
 		    $anz_pm++;
 	    }
-        
+
 	    $content.= '<strong>'.$GLOBALS['LANG']->getLL('cwt.success').'</strong><br/>';
 	    $content.= '<br />'.$GLOBALS['LANG']->getLL('cwt.pms').': '.$anz_pm.'<br />';
-        
+
         return $content;
     }
-    
+
     function chc_getConferenceLastPost($conf_uid) {
-    	
+
     	$res		= $this->dbObj->exec_SELECTquery(
     		'uid','tx_chcforum_post','conference_id='.$conf_uid.' AND deleted=0','','crdate DESC','1'
     	);
     	list($uid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
     	return $uid;
-    	
+
     }
-    
+
     function chc_getTopicLastPost($topic_id) {
-    	
+
     	$res		= $this->dbObj->exec_SELECTquery(
     		'uid','tx_chcforum_post','thread_id='.$topic_id.' AND deleted=0','','crdate DESC','1'
     	);
     	list($uid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
     	return $uid;
-    	
+
     }
-    
+
     function chc_getTopicFirstPost($topic_id) {
-    	
+
     	$res		= $this->dbObj->exec_SELECTquery(
     		'uid','tx_chcforum_post','thread_id='.$topic_id.' AND deleted=0','','crdate ASC','1'
     	);
     	list($uid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
     	return $uid;
-    	
+
     }
-    
+
     function chc_getTopicReplyCount($topic_id) {
-    	
+
     	$res		= $this->dbObj->exec_SELECTquery(
     		'COUNT(*)','tx_chcforum_post','thread_id='.$topic_id.' AND deleted=0'
     	);
     	list($count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
     	return $count-1;
     }
-    
+
     function chc_getConferencePostCount($conf_uid) {
-    	
+
     	$res		= $this->dbObj->exec_SELECTquery(
     		'COUNT(*)','tx_chcforum_post','conference_id='.$conf_uid.' AND deleted=0'
     	);
     	list($count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
     	return $count;
-    	
+
     }
-    
+
     function chc_getConferenceTopicCount($conf_uid) {
-    	
+
     	$res		= $this->dbObj->exec_SELECTquery(
     		'COUNT(*)','tx_chcforum_thread','conference_id='.$conf_uid.' AND deleted=0'
     	);
     	list($count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
     	return $count;
-    	
+
     }
-    
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_chcimport.php'])	{

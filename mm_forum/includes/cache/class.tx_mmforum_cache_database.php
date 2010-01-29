@@ -27,7 +27,7 @@
 	 * The tx_mmforum_cache_database class is a wrapper class for the
 	 * mm_forum database caching mechanism. Data is stored in the
 	 * cache_hash table provided by the TYPO3 caching mechanism.
-	 * 
+	 *
 	 * @author     Martin Helmich <m.helmich@mittwald.de>
 	 * @version    2008-10-11
 	 * @copyright  2008 Martin Helmich, Mittwald CM Service GmbH & Co. KG
@@ -35,10 +35,10 @@
 	 * @subpackage Cache
 	 */
 class tx_mmforum_cache_database {
-	
+
 		/**
 		 * Saves an object into the cache.
-		 * 
+		 *
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2008-10-11
 		 * @access  public
@@ -52,20 +52,20 @@ class tx_mmforum_cache_database {
 		 * @return  bool             TRUE on success, otherwise FALSE.
 		 */
 	function save($key, $object, $override=false) {
-		
+
 			/* Prepare INSERT statement */
 		$sql = "INSERT INTO cache_hash SET hash=MD5('".$key."'), content=".$GLOBALS['TYPO3_DB']->fullQuoteStr(serialize($object), 'cache_hash').", ident='tx_mmforum_cache'";
-		
+
 			/* If $override flag is set, append an 'ON DUPLICATE KEY UPDATE' statement
 			 * to the INSERT statement. */
 		if($override)
 			$sql .= " ON DUPLICATE KEY UPDATE content = '".serialize($object)."'";
-			
+
 			/* Execute and return result. */
 		return $GLOBALS['TYPO3_DB']->sql_query($sql) ? true : false;
-		
+
 	}
-	
+
 		/**
 		 * Restores an object from cache.
 		 *
@@ -76,24 +76,24 @@ class tx_mmforum_cache_database {
 		 * @return  mixed       The object
 		 */
 	function restore($key) {
-		
+
 			/* Try to select from database */
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('content','cache_hash','hash=MD5("'.$key.'") AND ident="tx_mmforum_cache"');
-		
+
 			/* If no results were found, return FALSE */
 		if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return null;
-		
+
 			/* Otherwise, load result, unserialize and return */
 		else {
 			list($content) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 			return unserialize($content);
 		}
-		
+
 	}
-	
+
 		/**
 		 * Deletes an object from cache.
-		 * 
+		 *
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2008-10-11
 		 * @access  public
@@ -104,7 +104,7 @@ class tx_mmforum_cache_database {
 		$res = $GLOBALS['TYPO3_DB']->exec_DELETEquery('cache_hash', 'hash=MD5("'.$key.'") AND ident="tx_mmforum_cache"');
 		return $res ? true : false;
 	}
-	
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/includes/cache/class.tx_mmforum_cache_database.php']) {

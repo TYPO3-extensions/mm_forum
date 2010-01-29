@@ -45,12 +45,12 @@
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
- 
+
 /**
  * This class contains the mm_forum statistics module. It gives information
  * on how much data records were created in which period of time and so
  * on.
- * 
+ *
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @version    2007-05-31
  * @copyright  2007 Mittwald CM Service
@@ -58,7 +58,7 @@
  * @subpackage Backend
  */
 class tx_mmforum_statistics {
-    
+
     /**
      * Defines in which database field the creation date is stored.
      */
@@ -68,23 +68,23 @@ class tx_mmforum_statistics {
         'tx_mmforum_pminbox'    => 'sendtime',
         'fe_users'              => 'crdate'
     );
-    
+
     /**
      * The module's main function.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
      * @param   string $content The content
      * @return  string          The content
      */
     function main($content) {
-        
+
         $this->init();
-        
+
         $this->defaultData();
-        
+
         $content = $this->displayMenu();
-        
+
         switch($this->param['groupBy']) {
             case 'tod':     $content .= $this->stat_timeOfDay(); break;
             case 'dom':     $content .= $this->stat_dayOfMonth(); break;
@@ -92,18 +92,18 @@ class tx_mmforum_statistics {
             case 'moy':     $content .= $this->stat_monthOfYear(); break;
             case 'frm':     $content .= $this->stat_forum(); break;
         }
-        
+
         $content .= $this->additionalStats();
-        
+
         return $content;
-        
+
     }
-    
+
     /**
      * Determines the time that is to be concerned as "forum starting time".
      * For this time, it is determined when the first post was created,
      * and this post's creation date is used as "forum starting time".
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
      * @return  int The forum starting time as UNIX-timestamp
@@ -117,10 +117,10 @@ class tx_mmforum_statistics {
         list($minPostTime) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
         return $minPostTime;
     }
-    
+
     /**
      * Displays the statistic module configuration module.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
      * @return  string The menu content
@@ -132,27 +132,27 @@ class tx_mmforum_statistics {
             'deleted=0'
         );
         list($minPostTime) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-        
+
         $first_Year     = intval(date("Y",$minPostTime));
-        
+
         $sOption_Years = '<option value="all">'.$this->getLL('menu.all').'</option>';
         for($i=date("Y"); $i >= $first_Year; $i --) {
             $sel = ($this->param['year']==$i)?'selected="selected"':'';
             $sOption_Years .= '<option value="'.$i.'" '.$sel.'>'.$i.'</option>';
         }
-        
+
         $sOption_Months = '<option value="all">'.$this->getLL('menu.all').'</option>';
         for($i=1; $i <= 12; $i ++) {
             $sel = ($this->param['month']==$i)?'selected="selected"':'';
             $sOption_Months .= '<option value="'.$i.'" '.$sel.'>'.$this->getLL('months.'.$i).'</option>';
         }
-        
+
         $sOption_Days = '<option value="all">'.$this->getLL('menu.all').'</option>';
         for($i=1; $i <= 31; $i ++) {
             $sel = ($this->param['day']==$i)?'selected="selected"':'';
             $sOption_Days .= '<option value="'.$i.'" '.$sel.'>'.$i.'</option>';
         }
-        
+
         $content .= '
     <table cellspacing="0" cellpadding="2">
         <tr>
@@ -206,19 +206,19 @@ class tx_mmforum_statistics {
 ';
         return $content;
     }
-    
+
     /**
      * Generates a table header.
      * This function generates a table header for the statistics output.
      * This table header contains the starting and the stop date of the
      * period that is displayed.
-     * 
+     *
      * @param   int    The starting date
      * @param   int    The stop date
      * @param   int    The colspan for the table header
      * @param   int    The cell padding for the whole table
      * @return  string The table header
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
      */
@@ -227,14 +227,14 @@ class tx_mmforum_statistics {
         return '<br /><table cellspacing="0" cellpadding="'.$padding.'" style="width:100%" class="mm_forum-list">
     <tr>
         <td class="mm_forum-listrow_header" colspan="'.$colspan.'">'.date("d. m. Y, H:i:s",$start).' &mdash; '.$sStop.'</td>
-    </tr>        
+    </tr>
 ';
     }
-    
+
     /**
      * Displays a statistic grouped by the forum the records are located in.
      * This is only possible for posts and topics.
-     * 
+     *
      * @return  The statistic table
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
@@ -244,18 +244,18 @@ class tx_mmforum_statistics {
         $tstamp_Stop    = $this->param['stop'];
         $table          = $this->param['table'];
         $timeField      = $this->timeFields[$table];
-        
+
         if(!in_array($table,array('tx_mmforum_posts','tx_mmforum_topics'))) return "<br />The selected display mode is not supported.";
 
         $content .= $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,3,0);
-        
+
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             'COUNT(*)',
             $table,
             "$timeField >= $tstamp_Start AND $timeField <= $tstamp_Stop AND deleted=0"
         );
         list($total_amount) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-        
+
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             '*',
             'tx_mmforum_forums',
@@ -265,7 +265,7 @@ class tx_mmforum_statistics {
         );
         $i = 0;
         while($ctg = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            
+
             $ctgRecords = 0;
             $ctgContent = '';
             $res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -277,7 +277,7 @@ class tx_mmforum_statistics {
             ); $ctgI = $i;
             $i ++;
             while($frm = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2)) {
-                
+
                 $res3 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                     'COUNT(*)',
                     $table,
@@ -285,7 +285,7 @@ class tx_mmforum_statistics {
                 );
                 list($records) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res3);
                 $ctgRecords += $records;
-                
+
                 $width    = $total_amount?round($records / $total_amount * 100,2):0;
                 $color = (($i%2)?'#e00000':'#ff0000');
                 $ctgContent .= '<tr class="mm_forum-listrow'.(($i%2)?'2':'').'">
@@ -294,9 +294,9 @@ class tx_mmforum_statistics {
         <td style="width:100%;"><div style="background-color: '.$color.'; height: 14px; width:'.$width.'%; border-right: 1px solid #660000; border-bottom: 1px solid #660000; border-top: 1px solid #ff6666;">&nbsp;</div></td>
         </tr>';
                 $i ++;
-                
+
             }
-            
+
             $width    = $total_amount?round($ctgRecords / $total_amount * 100,2):0;
             $color = (($ctgI%2)?'#e00000':'#ff0000');
             $content .= '<tr class="mm_forum-listrow'.(($ctgI%2)?'2':'').'">
@@ -305,17 +305,17 @@ class tx_mmforum_statistics {
         <td><div style="background-color: '.$color.'; height: 14px; width:'.$width.'%; border-right: 1px solid #660000; border-bottom: 1px solid #660000; border-top: 1px solid #ff6666;">&nbsp;</div></td>
         </tr>';
             $content .= $ctgContent;
-            
+
         }
-        
+
         $content .= '</table>';
-        
+
         return $content;
     }
-    
+
     /**
      * Displays a statistic grouped by the day of month.
-     * 
+     *
      * @return  The statistic table
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
@@ -325,14 +325,14 @@ class tx_mmforum_statistics {
         $tstamp_Stop    = $this->param['stop'];
         $table          = $this->param['table'];
         $timeField      = $this->timeFields[$table];
-        
+
         $dayCount = intval(date('t',$tstamp_Start));
-        
+
         if($this->param['mode']=='total') {
-            
+
             if($this->param['month']=='all') return '<br /><br />'.$this->getLL('error.noMonth').'<br /><br />';
             if($this->param['year']=='all') return '<br /><br />'.$this->getLL('error.noYear').'<br /><br />';
-            
+
             $tTstamp_Stop = $tstamp_Start;
             $maxValue       = 0;
             for($i=1; $i <= $dayCount; $i ++) {
@@ -358,13 +358,13 @@ class tx_mmforum_statistics {
             while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
                 $day = intval(date("j",$arr[$timeField]));
                 $results[$day] ++;
-                
+
                 if($results[$day] > $maxValue) $maxValue = $results[$day];
             }
         }
-        
+
         $content .= $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,3,0);
-        
+
         for($i=1; $i <= $dayCount; $i ++) {
             $result = intval($results[$i]);
             $width    = $maxValue?round($result / $maxValue * 100,2):0;
@@ -376,13 +376,13 @@ class tx_mmforum_statistics {
 </tr>';
         }
         $content .= '</table>';
-        
+
         return $content;
     }
-    
+
     /**
      * Displays a statistic grouped by the day of year.
-     * 
+     *
      * @return  The statistic table
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
@@ -392,13 +392,13 @@ class tx_mmforum_statistics {
         $tstamp_Stop    = $this->param['stop'];
         $table          = $this->param['table'];
         $timeField      = $this->timeFields[$table];
-        
+
         $results = array();
-        
+
         if($this->param['mode']=='total') {
-            
+
             if($this->param['year']=='all') return '<br /><br />'.$this->getLL('error.noYear').'<br /><br />';
-            
+
             $tTstamp_Stop = $tstamp_Start;
             $maxValue       = 0;
             for($i=1; $i <= 12; $i ++) {
@@ -415,7 +415,7 @@ class tx_mmforum_statistics {
                     $results[$i][$d] = $num;
                     if($num > $maxValue) $maxValue = $num;
                 }
-                
+
             }
         }
         else {
@@ -429,54 +429,54 @@ class tx_mmforum_statistics {
                 $month = intval(date("m",$arr[$timeField]));
                 $day   = intval(date("d",$arr[$timeField]));
                 $results[$month][$day] ++;
-                
+
                 if($results[$month][$day] > $maxValue) $maxValue = $results[$month][$day];
             }
             ksort($results);
         }
-        
+
         $content .= $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,2,0);
-        
+
         $i = 1;
         for($month = 1; $month <= 12; $month ++) {
             $days = $results[$month];
             $content .= '<tr class="mm_forum-listrow'.(($i%2)?'2':'').'">
     <td style="width:1px; white-space:nowrap; text-align:left; padding:0px 2px;">'.$this->getLL('months.'.$month).'</td>
     <td style="width:100%;">';
-        
+
             $color = (($i%2)?'#e00000':'#ff0000');
             $dayCount = date("t",mktime(0,0,0,$month,1,$this->param['year']));
             for($day = 1; $day <= $dayCount; $day ++) {
                 $result   = intval($results[$month][$day]);
                 $width    = $maxValue?round($result / $maxValue * 100,2):0;
-                
+
                 $tColor = $color;
                 $bWidth = 1;
                 if($width >= 1) {
                     if($day == 1) $tColor = '#ff6666';
                     if($day == $dayCount) $tColor = '#660000';
                 } else $bWidth = 0;
-                
+
                 $content  .= '<div style="background-color: '.$tColor.'; width:'.$width.'%; height:1px; border-right: '.$bWidth.'px solid #660000;"></div>'."\r\n";
                 if($result == $maxValue && $this->param['mode']!='total') $content .= '<div style="float:right">'.$maxValue.'</div>';
             }
-        
+
             $content .= '
     </td>
 </tr>';
             $i ++;
         }
-        
+
         if($this->param['mode']=='total') $content .= '<tr><td colspan="2"><div style="float:right">'.$maxValue.'</div></td></tr>';
-        
+
         $content .= '</table>';
-        
+
         return $content;
     }
-    
+
     /**
      * Displays a statistic grouped by the month of year.
-     * 
+     *
      * @return  The statistic table
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
@@ -486,13 +486,13 @@ class tx_mmforum_statistics {
         $tstamp_Stop    = $this->param['stop'];
         $table          = $this->param['table'];
         $timeField      = $this->timeFields[$table];
-        
+
         $results = array();
         if($this->param['mode']=='total') {
             $tTstamp_Stop = $tstamp_Start;
-            
+
             if($this->param['year']=='all') return '<br /><br />'.$this->getLL('error.noYear').'<br /><br />';
-            
+
             $maxValue       = 0;
             for($i=0;$i<=12;$i++) {
                 $tTstamp_Stop += 86400 * date("t",mktime(0,0,0,$i,1,$this->param['year']));
@@ -517,13 +517,13 @@ class tx_mmforum_statistics {
             while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
                 $month = intval(date("m",$arr[$timeField]));
                 $results[$month] ++;
-                
+
                 if($results[$month] > $maxValue) $maxValue = $results[$month];
             }
         }
-        
+
         $dayCount = intval(date('t',$tstamp_Start));
-        
+
         $content .= $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,3,0);
 
         for($i=1; $i <= 12; $i ++) {
@@ -537,13 +537,13 @@ class tx_mmforum_statistics {
 </tr>';
         }
         $content .= '</table>';
-        
+
         return $content;
     }
-    
+
     /**
      * Displays a statistic grouped by the time of day.
-     * 
+     *
      * @return  The statistic table
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
@@ -553,19 +553,19 @@ class tx_mmforum_statistics {
         $tstamp_Stop    = $this->param['stop'];
         $table          = $this->param['table'];
         $timeField      = $this->timeFields[$table];
-        
+
         $tstamp_Span    = $tstamp_Stop - $tstamp_Start;
         $hours          = $tstamp_Span / 60 / 60;
-        
+
         $results = array();
-        
+
         if($this->param['mode']=='total') {
             $tTstamp_Stop = $tstamp_Start;
-            
+
             if($this->param['month']=='all') return '<br /><br />'.$this->getLL('error.noMonth').'<br /><br />';
             if($this->param['day']=='all') return '<br /><br />'.$this->getLL('error.noDay').'<br /><br />';
             if($this->param['year']=='all') return '<br /><br />'.$this->getLL('error.noYear').'<br /><br />';
-            
+
             $maxValue       = 0;
             for($i=0;$i<24;$i++) {
                 $tTstamp_Stop += 3600*$i;
@@ -590,11 +590,11 @@ class tx_mmforum_statistics {
             while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
                 $hour = intval(date("H",$arr[$timeField]));
                 $results[$hour] ++;
-                
+
                 if($results[$hour] > $maxValue) $maxValue = $results[$hour];
             }
         }
-        
+
         $content .= $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,4,0);
 
         for($i=0; $i < 24; $i ++) {
@@ -609,13 +609,13 @@ class tx_mmforum_statistics {
 </tr>';
         }
         $content .= '</table>';
-        
+
         return $content;
     }
-    
+
     /**
      * Displays additional statistics.
-     * 
+     *
      * @return  The statistic table
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
@@ -624,7 +624,7 @@ class tx_mmforum_statistics {
         $startTime  = $this->getStartTime();
         $span       = time() - $startTime;
         $days       = round($span / 86400);
-        
+
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             'COUNT(*)',
             'tx_mmforum_posts',
@@ -632,7 +632,7 @@ class tx_mmforum_statistics {
         );
         list($post_count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
         $post_average = round($post_count / $days,4);
-        
+
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             'COUNT(*)',
             'tx_mmforum_topics',
@@ -640,7 +640,7 @@ class tx_mmforum_statistics {
         );
         list($topic_count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
         $topic_average = round($topic_count / $days,4);
-        
+
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             'COUNT(*)',
             'fe_users',
@@ -648,7 +648,7 @@ class tx_mmforum_statistics {
         );
         list($user_count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
         $user_average = round($user_count / $days,4);
-        
+
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             'COUNT(*)',
             'tx_mmforum_pminbox',
@@ -657,7 +657,7 @@ class tx_mmforum_statistics {
         list($pm_count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
         $pm_count /= 2;
         $pm_average = round($pm_count / $days,4);
-        
+
         $content .= '
     <table cellspacing="0" cellpadding="2">
         <tr>
@@ -678,10 +678,10 @@ class tx_mmforum_statistics {
         </tr>
     </table>
 ';
-        
+
         return $content;
     }
-    
+
     /**
      * Generates the default parameters for displaying the statistics table correctly.
      */
@@ -694,7 +694,7 @@ class tx_mmforum_statistics {
                 'mode'          => 'total'
             );
         }
-        
+
         if($this->param['groupBy'] == 'doy') {
             $this->param['month'] = 'all';
             $this->param['day']   = 'all';
@@ -705,7 +705,7 @@ class tx_mmforum_statistics {
         if($this->param['groupBy'] == 'moy') {
             $this->param['day']   = 'all';
         }
-        
+
         if($this->param['year'] == 'all') {
             $start = $this->getStartTime();
             $stop  = time();
@@ -729,12 +729,12 @@ class tx_mmforum_statistics {
         $this->param['start']   = $start;
         $this->param['stop']    = $stop;
     }
-    
+
     /**
      * Gets a language variable from the locallang_forumadmin.xml file.
      * Wrapper function to simplify retrieval of language dependent
      * strings.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-29
      * @param   string $key The language string key
@@ -743,10 +743,10 @@ class tx_mmforum_statistics {
     function getLL($key) {
         return $GLOBALS['LANG']->getLL('statistics.'.$key);
     }
-    
+
     /**
      * Initializes the forum administration tool.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-29
      * @return  void
@@ -755,9 +755,9 @@ class tx_mmforum_statistics {
         $this->param = t3lib_div::_GP('tx_mmforum_stats');
         $this->conf = $this->p->config['plugin.']['tx_mmforum.'];
         $this->pid  = intval($this->conf['storagePID']);
-        
+
         $this->func = $this->p->MOD_SETTINGS['function'];
-        
+
         $GLOBALS['LANG']->includeLLFile('EXT:mm_forum/mod1/locallang_statistics.xml');
     }
 }

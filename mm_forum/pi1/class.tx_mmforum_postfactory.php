@@ -24,14 +24,14 @@
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  */
- 
+
 /**
  *
  * This class provides a set of functions allowing it to create posts
  * and topics very easily (i.e. with a single function call). All other
  * necessary procedures are automatically done by the functions of this
  * class.
- * 
+ *
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @version    $Id$
  * @package    mm_forum
@@ -56,7 +56,7 @@ class tx_mmforum_postfactory {
 	/**
 	 *
 	 * Initializes the post factory.
-	 * 
+	 *
 	 * @author  Martin Helmich
 	 * @version 2007-07-21
 	 * @param   array $conf The configuration array of the calling object.
@@ -273,7 +273,7 @@ class tx_mmforum_postfactory {
 		if ($forumId === false) {
 			return false;
 		}
-		
+
 		// Insert post into post queue
 		$insertArray = array(
 			'pid'             => $this->getFirstPid(),
@@ -298,7 +298,7 @@ class tx_mmforum_postfactory {
 		}
 
 		// Insert data
-		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_postqueue', $insertArray);	
+		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_postqueue', $insertArray);
 	}
 
 
@@ -348,7 +348,7 @@ class tx_mmforum_postfactory {
 			'poster_ip'  => $ip,
 			'attachment' => (is_array($attachments) ? implode(',', $attachments) : ''),
 		);
-	
+
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPost'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPost'] as $_classRef) {
@@ -356,12 +356,12 @@ class tx_mmforum_postfactory {
 				$insertArray = $_procObj->processPostInsertArray($insertArray, $this);
 			}
 		}
-			
+
 		// Insert post record
 		if (!$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_posts', $insertArray)) {
 			return false;
 		}
-			
+
 		// Retrieve post uid
 		$postId = $GLOBALS['TYPO3_DB']->sql_insert_id();
 
@@ -369,7 +369,7 @@ class tx_mmforum_postfactory {
 		if (is_array($attachments) && count($attachments)) {
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid IN (' . implode(',', $attachments) . ')', array('post_id' => $postId));
 		}
-			
+
 		// Generate post text record
 		$insertArray = array(
 			'pid'       => $this->getFirstPid(),
@@ -386,13 +386,13 @@ class tx_mmforum_postfactory {
 				$insertArray = $_procObj->processPostTextInsertArray($insertArray, $this);
 			}
 		}
-			
+
 		// Insert post text record
 		if (!$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_posts_text', $insertArray)) {
 			$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_posts', 'uid = ', $postId);
 			return false;
 		}
-			
+
 		// Clear topic for indexing
 		if (class_exists('tx_mmforum_indexing')) {
 			tx_mmforum_indexing::delete_topic_ind_date($topicId);
@@ -404,7 +404,7 @@ class tx_mmforum_postfactory {
 			tx_mmforum_havealook::addSubscription($this->parent, $topicId, $author);
 			tx_mmforum_havealook::notifyTopicSubscribers($topicId, $this->parent);
 		}
-            
+
         // Set topic for all users to "not read"
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_postsread', 'topic_id = ' . $topicId);
 
@@ -651,7 +651,7 @@ class tx_mmforum_postfactory {
 			'poster_id='.$user_uid.' AND deleted=0'.$this->getPidQuery()
 		);
 		list($postcount) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-		
+
 		$updateArray = array(
 			'tstamp'			=> time(),
 			'tx_mmforum_posts'	=> $postcount
@@ -688,14 +688,14 @@ class tx_mmforum_postfactory {
 		);
 		list($last_post_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 		$postcount = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
-		
+
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'COUNT(*)',
 			'tx_mmforum_topics',
 			'forum_id='.$forum_uid.' AND deleted=0'.$this->getPidQuery()
 		);
 		list($topiccount) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-		
+
 		$updateArray = array(
 			'tstamp'				=> time(),
 			'forum_last_post_id'	=> $last_post_id,
@@ -734,7 +734,7 @@ class tx_mmforum_postfactory {
 		);
 		list($last_post_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 		$postcount = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
-		
+
 		$updateArray = array(
 			'tstamp'				=> time(),
 			'topic_last_post_id'	=> $last_post_id,
@@ -803,12 +803,12 @@ class tx_mmforum_postfactory {
 	 * Delivers a MySQL-WHERE query checking the records' PID.
 	 * This allows it to exclusively select records from a very specific list
 	 * of pages.
-	 * 
+	 *
 	 * @param   string $tables The list of tables that are queried
 	 * @return  string         The query, following the pattern " AND pid IN (...)"
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-04-03
-	 * 
+	 *
 	 */
 	function getPidQuery($tables="") {
 		if($this->conf['storagePID']==-1) return "";
@@ -816,17 +816,17 @@ class tx_mmforum_postfactory {
 		else {
 			if($tables == "")
 				return " AND pid='".$this->conf['storagePID']."'";
-			
+
 			$tables = t3lib_div::trimExplode(',',$tables);
 			$query = "";
-			
+
 			foreach($tables as $table) {
 				$query .= " AND $table.pid='".$this->conf['storagePID']."'";
 			}
 			return $query;
 		}
 	}
-	
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_postfactory.php'])	{

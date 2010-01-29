@@ -37,12 +37,12 @@
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
- 
+
 /**
  * This class handles user ranks in the frontend. This includes for
  * example to determine which ranks apply to a single user and to display
  * these ranks.
- * 
+ *
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @copyright  2007 Mittwald CM Service
  * @version    2008-04-20
@@ -72,57 +72,57 @@ class tx_mmforum_ranksFE {
      * UID is submitted as parameter. All user ranks are displayed in a
      * plain list, while the actual output may be configured using
      * TypoScript.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-06-06
      * @param   int    $user_id The UID of the user whose ranks are to be displayed
      * @return  string          The user ranks.
      */
     function displayUserRanks($user_id=-1) {
-        
+
         #$userRanksObj = t3lib_div::makeInstance('tx_mmforum_ranksFE');
         #$userRanksObj->setContentObject($this->cObj);
-        
+
         if($this->conf['ranks.']['enable']) {
             if($user_id == -1) $user_id = $GLOBALS['TSFE']->fe_user->user['uid'];
-            
+
             $post_count         = $this->getUserPostCount($user_id);
             $post_count_rank    = $this->getRankByPostCount($post_count);
             if($post_count_rank != 'error') $ranks[] = $post_count_rank;
         }
-        
+
         $usergroups         = $this->getUserGroupList($user_id);
         $usergroups_ranks   = $this->getRankByGroup($usergroups);
-        
+
         if($usergroups_ranks[0]['excl']) $ranks = $usergroups_ranks;
         else $ranks = array_merge((array)$ranks, (array)$usergroups_ranks);
-        
+
         if(count($ranks)==0) return '';
-        
+
         foreach($ranks as $rank) {
             if($rank['color'])
                 $title = '<span style="color: '.$rank['color'].'">'.$rank['title'].'</span>';
             else $title = $rank['title'];
-            
+
             $title = $this->cObj->stdWrap($title,$this->conf['ranks.']['title_stdWrap.']);
-            
+
             if($rank['icon']) {
                 #$icon = '<img src="uploads/tx_mmforum/'.$rank['icon'].'" style="vertical-align:middle;" />';
 				$icon = $this->cObj->IMAGE(array('file' => 'uploads/tx_mmforum/'.$rank['icon'], 'file.' => array('params' => '-quiet')));
                 $icon = $this->cObj->stdWrap($icon,$this->conf['ranks.']['icon_stdWrap.']).' ';
             } else $icon = '';
-            
+
             $sRank = $this->cObj->stdWrap($icon.$title,$this->conf['ranks.']['rank_stdWrap.']);
             $content .= $sRank;
         }
         $content = $this->cObj->stdWrap($content,$this->conf['ranks.']['all_stdWrap.']);
-        
+
         return $content;
     }
-    
+
     /**
      * Determines the post count of a user.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-06-06
      * @param   int $user_id The UID of the user whose post count is to be determined.
@@ -144,10 +144,10 @@ class tx_mmforum_ranksFE {
             }
         }
     }
-    
+
     /**
      * Determines the groups a user is in.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-06-06
      * @param   int   $user_id The UID of the user whose groups are to be
@@ -173,14 +173,14 @@ class tx_mmforum_ranksFE {
         $aGroup = tx_mmforum_tools::processArray_numeric($aGroup);
         return $aGroup;
     }
-    
+
     /**
      * Determines a user's ranks in dependence of his/her groups.
      * This function determines which user ranks of a user result from
      * groups ranks of groups the user is a member of. An example for this would
      * be the administrator rank, since all members of the administrator
      * groups should be ranked as administrator.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-06-06
      * @param   array $user_groups An array containing all user groups the user
@@ -189,10 +189,10 @@ class tx_mmforum_ranksFE {
      *                             the user's groups.
      */
     function getRankByGroup($user_groups) {
-        
+
         $ranks = array();
         if(!is_array($user_groups)) return array();
-        
+
         foreach($user_groups as $group) {
             if($GLOBALS['tx_mmforum_ranksFE']['groupCache'][$group])
                 $groupData = $GLOBALS['tx_mmforum_ranksFE']['groupCache'][$group];
@@ -205,7 +205,7 @@ class tx_mmforum_ranksFE {
                 $groupData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
                 $GLOBALS['tx_mmforum_ranksFE']['groupCache'][$group] = $groupData;
             }
-            
+
             if($groupData['tx_mmforum_rank']) {
                 $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                     '*',
@@ -218,17 +218,17 @@ class tx_mmforum_ranksFE {
                     $rank['excl'] = 1;
                     return array($rank);
                 }
-                
+
                 $ranks[] = $rank;
             }
         }
         return $ranks;
-        
+
     }
-    
+
     /**
      * Determines the user's rank by his/her post count.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-06-06
      * @param   int   $post_count The user's post count.
@@ -245,7 +245,7 @@ class tx_mmforum_ranksFE {
         if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return 'error';
         else return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
     }
-    
+
     /**
      * Sets the content object the content is rendered for.
      * @param tslib_cObj $cObj The content object.
@@ -253,7 +253,7 @@ class tx_mmforum_ranksFE {
     function setContentObject($cObj) {
     	$this->cObj = $cObj;
     }
-    
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_ranksfe.php'])	{

@@ -74,7 +74,7 @@
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
- 
+
 require_once(PATH_t3lib.'class.t3lib_tceforms.php');
 
 /**
@@ -85,13 +85,13 @@ require_once(PATH_t3lib.'class.t3lib_tceforms.php');
  * @version    2007-05-02
  * @package    mm_forum
  * @subpackage Backend
- */ 
+ */
 class tx_mmforum_phpbbimport {
-	
+
 	var $table_prefix = "phpbb";
 	var $steps = 4;
     var $stepOffset = 2;
-	
+
 	/**
 	 * An array containing a list of all tables used by the phpBB board in version 2.0.22
 	 */
@@ -115,24 +115,24 @@ class tx_mmforum_phpbbimport {
 		'smilies' => array('smilies'),
 		'subscr' => array('topics_watch','users')
 	);
-	
+
 	/**
 	 * Defines the interdependencies between different data fields.
 	 */
 	var $dependencies = array(
 		'0:2','2:0','2:1','3:1','5:2','5:1','7:1','0:1','4:2','4:1'
 	);
-	
+
 	var $userID_mapping, $usergroupID_mapping, $topicID_mapping, $postID_mapping, $categoryID_mapping, $boardID_mapping, $searchword_mapping;
 	var $updateMapping = array();
-	
+
     /**
      * Main functions
      */
-    
+
 	/**
 	 * Main function. Reads GP-Parameters and displays general options.
-	 * 
+	 *
 	 * @param   string $content The content variable
 	 * @return  string          The plugin content.
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -146,31 +146,31 @@ class tx_mmforum_phpbbimport {
 			is_array(t3lib_div::_GET('tx_mmforum_phpbb'))?t3lib_div::_GET('tx_mmforum_phpbb'):array(),
 			is_array(t3lib_div::_POST('tx_mmforum_phpbb'))?t3lib_div::_POST('tx_mmforum_phpbb'):array()
 		);
-        
+
         if(!$this->dbObj) $this->dbObj = $GLOBALS['TYPO3_DB'];
-        
+
         $content  = '<form action="" method="post">';
-		
+
         #$this->confArr= unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['mm_forum']);
         $this->confArr = $this->p->confArr;
-		
+
 		switch($this->data['step']) {
 			case 1: $content = $this->step1($content); break;
 			case 2: $content = $this->step2($content); break;
 			case 3: $content = $this->step3($content); break;
 			case 4: $content = $this->step4($content); break;
 		}
-		
+
 		$content .= $this->outputData();
 		$content .= '</form>';
-		
-		return $content;	
+
+		return $content;
 	}
-	
+
     /**
      * Step 1: Database checking
      */
-    
+
 	/**
 	 * Displays and conducts the first step of phpBB data import.
 	 * The first step consists of defining the database table prefix, since all
@@ -184,7 +184,7 @@ class tx_mmforum_phpbbimport {
 	 * not available for selection.
 	 * If all tables are found, of course no warning will be displayed and the
 	 * user may proceed with the next step.
-	 * 
+	 *
 	 * @param   string $content The content variable
 	 * @return  string          The content of step 1
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -192,7 +192,7 @@ class tx_mmforum_phpbbimport {
 	 */
 	function step1($content) {
 		global $LANG;
-		
+
 		// Continue to next step, if everything is alright
 			if($this->data['step1.']['submit'] == $LANG->getLL('phpbb.general.continue') && $this->data['step1.']['ignore'] != $LANG->getLL('phpbb.general.no')) {
 				if(($this->data['step1.']['found'] == count($this->phpbbTables)) || ($this->data['step1.']['ignore']==$LANG->getLL('phpbb.general.yes'))) {
@@ -200,32 +200,32 @@ class tx_mmforum_phpbbimport {
 					return $content;
 				}
 			}
-		
+
 		$content .= '<fieldset>';
 		$content .= '<legend>'.sprintf($LANG->getLL('phpbb.general.stepXofY'),1+$this->stepOffset,$this->steps+$this->stepOffset).': '.$LANG->getLL('phpbb.step1').'</legend>';
-		
+
 		// Display warning message
 			if($this->data['step1.']['submit'] == $LANG->getLL('phpbb.general.continue') && $this->data['step1.']['ignore'] != $LANG->getLL('phpbb.general.no')) {
 				unset($this->data['step1.']['submit']);
-				
+
 				if(($this->data['step1.']['found'] < count($this->phpbbTables)) && ($this->data['step1.']['ignore']!=$LANG->getLL('phpbb.general.yes'))) {
 					$content .= $LANG->getLL('phpbb.step1.warning').'<br /><br />';
 					$content .= '<input type="submit" value="'.$LANG->getLL('phpbb.general.yes').'" name="tx_mmforum_phpbb[step1.][ignore]" /> ';
 					$content .= '<input type="submit" value="'.$LANG->getLL('phpbb.general.no').'" name="tx_mmforum_phpbb[step1.][ignore]" /> ';
 					$content .= '<input type="hidden" name="tx_mmforum_phpbb[step1.][submit]" value="'.$LANG->getLL('phpbb.general.continue').'" />';
-					
+
 					$content .= '</fieldset>';
 					return $content;
 				}
 			}
-		
+
 			unset($this->data['step1.']['submit']);
 			unset($this->data['step1.']['ignore']);
-		
+
 		// Output table prefix definition field
 			$content .= $LANG->getLL('phpbb.general.prefix').': <input type="text" value="'.$this->data['prefix'].'" name="tx_mmforum_phpbb[prefix]" /> ';
 			$content .= '<input type="submit" value="'.$LANG->getLL('phpbb.general.update').'" name="tx_mmforum_phpbb[step1.][submit]" />';
-		
+
 		// Display MySQL table test
 			if(strlen($this->data['prefix'])>0) {
 				$content .= '<br /><br /><strong>'.$LANG->getLL('phpbb.step1.checking').'</strong><br />';
@@ -233,30 +233,30 @@ class tx_mmforum_phpbbimport {
 				foreach($this->phpbbTables as $table) {
 					$tablename = $this->data['prefix'].'_'.$table;
 					if(!$this->checkTable($tablename)) $content .= sprintf($LANG->getLL('phpbb.step1.notfound'),$tablename).'<br />';
-					else $found++;	
+					else $found++;
 				}
-				
+
 				if($found == 0) 							$content .= '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step1.fatalError').'</div>';
 				elseif($found < count($this->phpbbTables))	$content .= '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step1.error').'</div>';
 				else 										$content .= '<div class="mm_forum-ok">'.$LANG->getLL('phpbb.step1.ok').'</div>';
-				
+
 				if($found > 0)
 					$content .= '<br /><input type="submit" value="'.$LANG->getLL('phpbb.general.continue').'" name="tx_mmforum_phpbb[step1.][submit]" />';
-				
+
 				$content .= '<input type="hidden" name="tx_mmforum_phpbb[step1.][found]" value="'.$found.'" />';
-				
+
 				unset($this->data['prefix']);
 			}
-		
+
 		$content .= '</fieldset>';
-		
+
 		return $content;
 	}
-	
+
     /**
      * Step 2: Select data
      */
-    
+
 	/**
 	 * Displays and conducts the second step of phpBB data import.
 	 * The second step of phpBB data import consists of selecting which data
@@ -270,7 +270,7 @@ class tx_mmforum_phpbbimport {
 	 * during data import.
 	 * If the user tries to go on to the next step without selecting any data fields,
 	 * an error message will be displayed.
-	 * 
+	 *
 	 * @param   string $content The content variable
 	 * @return  string          The content of step 2
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -278,28 +278,28 @@ class tx_mmforum_phpbbimport {
 	 */
 	function step2($content) {
 		global $LANG;
-		
+
 		$this->data['step'] = 2;
 		$noSelectNote = "";
-		
+
 		if($this->data['step2.']['submit'] == $LANG->getLL('phpbb.general.continue')) {
 			if(count($this->data['step2.']['importdata'])==0) $noSelectNote = '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step2.noSelectNote').'</div>';
 			elseif(!$this->step2_checkDependencies()) $noSelectNote = '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step2.dependencyError').'</div>';
 			else {
 				$content = $this->step3($content);
-				return $content;	
+				return $content;
 			}
-			
+
 			unset($this->data['step2.']['submit']);
 		}
-		
+
 		$content .= '<fieldset>';
 		$content .= '<legend>'.sprintf($LANG->getLL('phpbb.general.stepXofY'),2+$this->stepOffset,$this->steps+$this->stepOffset).': '.$LANG->getLL('phpbb.step2').'</legend>';
-		
+
 		$content .= $LANG->getLL('phpbb.step2.instruction').$noSelectNote.'<br />';
-		
+
 		$content .= '<table border="0" cellspacing="0" cellpadding="3" width="100%">';
-		
+
 		$errorGlobal = false;
 		$i = 0;
 		foreach($this->reqTables as $data=>$tables) {
@@ -314,40 +314,40 @@ class tx_mmforum_phpbbimport {
 				}
 				else $dTables[$key] = $table;
 			}
-			
+
 			$checkboxChecked = 'checked="checked"';
 			if($this->getImported($data)) $checkboxChecked = '';
 			if($error) {
 				$checkboxChecked = 'disabled="disabled"';
 			}
-			
+
 			if(isset($this->data['step2.']['importdata'])) {
 				$checkboxChecked = in_array($data,$this->data['step2.']['importdata'])?'checked="checked"':'';
 			}
-			
+
 			$checkbox = '<input type="checkbox" name="tx_mmforum_phpbb[step2.][importdata][]" value="'.$data.'" '.$checkboxChecked.' />';
 			$caption  = ($error?'<span style="color:#808080;">':'').'<strong>'.$LANG->getLL('phpbb.step2.'.$data).'</strong>'.($this->getImported($data)?' <span style="color:008000;">('.$LANG->getLL('phpbb.step2.alreadyImported').')</span>':'').'<br />'.$LANG->getLL('phpbb.step2.tablesrequired').': '.implode(', ',$dTables).''.($error?'</span>':'');
 			$caption .= '<br />'.$LANG->getLL('phpbb.step2.dependsOn').': '.$this->step2_getDependencyList($i);
-			
+
 			$content .= '<tr><td>'.$checkbox.'</td><td>'.$caption.'</td></tr>';
 			$i ++;
 		}
-		
+
 		$content .= '</table>';
-		
+
 		if($errorGlobal) $content .= '<br />'.$LANG->getLL('phpbb.step2.note');
 		$content .= '<br /><input type="submit" value="'.$LANG->getLL('phpbb.general.continue').'" name="tx_mmforum_phpbb[step2.][submit]" />';
-		
+
 		$content .= '</fieldset>';
-		
+
 		unset($this->data['step2.']);
-		
+
 		return $content;
 	}
-	
+
 	/**
 	 * Generates a commalist of interdependencies between data to be imported.
-	 * 
+	 *
 	 * @param   string $field The field whose dependencies are to be listed.
 	 * @return  string        A commalist of depencencies
 	 * @version 2007-04-03
@@ -358,7 +358,7 @@ class tx_mmforum_phpbbimport {
 		foreach($this->dependencies as $dependency) {
 			$data = explode(':',$dependency);
 			$names = array_keys($this->reqTables);
-			
+
 			if($data[0] == $field) {
 				if(isset($this->data['step2.']['importdata'])) {
 					if(!in_array($names[$data[1]],$this->data['step2.']['importdata'])) {
@@ -373,22 +373,22 @@ class tx_mmforum_phpbbimport {
 		if(count($dep)==0) return "&mdash;";
 		return implode(', ',$dep);
 	}
-	
+
 	/**
 	 * Checks if all dependencies between different data fields are
 	 * fulfilled.
-	 * 
+	 *
 	 * @return boolean TRUE, if all depencencies are fulfilled, otherwise FALSE.
 	 * @version 2007-04-03
 	 */
 	function step2_checkDependencies() {
 		$selected = $this->data['step2.']['importdata'];
-		
+
 		$names = array_keys($this->reqTables);
-		
+
 		foreach($this->dependencies as $dependency) {
 			$data = explode(':',$dependency);
-			
+
 			if(in_array($names[$data[0]],$selected) && !in_array($names[$data[1]],$selected)) {
 				if(!$this->getImported($names[$data[1]]))
 					return false;
@@ -396,11 +396,11 @@ class tx_mmforum_phpbbimport {
 		}
 		return true;
 	}
-	
+
     /**
      * Step 3: Import settings
      */
-    
+
 	/**
 	 * Displays and conducts the third step of phpBB data import.
 	 * In this step, the user will specify several other setting needed
@@ -408,7 +408,7 @@ class tx_mmforum_phpbbimport {
 	 * of the page where the newly created records are to be stored on.
 	 * In dependence of which data fields the user chose to be imported in
 	 * step 2, there will be displayed different options.
-	 * 
+	 *
 	 * @param   string $content The content variable
 	 * @return  string          The content of step3
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -416,13 +416,13 @@ class tx_mmforum_phpbbimport {
 	 */
 	function step3($content) {
 		global $LANG;
-		
+
 		$this->data['step'] = 3;
 		$dataFields = $this->data['step2.']['importdata'];
-		
+
 		$warning = 0;
 		$error = 0;
-		
+
 		// Define default data
 		if(!isset($this->data['step3.'])) {
 			$this->data['step3.']['import0.']['pid'] = $this->confArr['forumPID'];
@@ -444,7 +444,7 @@ class tx_mmforum_phpbbimport {
 			$this->data['step3.']['import5.']['phpbb_smilie_url'] = 'images/smilies/';
 			$this->data['step3.']['import5.']['mmforum_smilie_url'] = t3lib_extMgm::siteRelPath('mm_forum').'res/smilies/';
 		}
-		
+
 		if($this->data['step3.']['submit'] == $LANG->getLL('phpbb.general.continue')) {
 			if(in_array('boards/categories',$dataFields)) {
 				// Check if board and category PID was specified
@@ -501,7 +501,7 @@ class tx_mmforum_phpbbimport {
 				if(strlen($this->data['step3.']['import1.']['avatarpath'])==0) {
 					$warning ++;
 					$warnings['import1.avatarpath'] = '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step3.import1.avatarpath.emptyWarning').'</div>';
-					
+
 					$this->data['step3.']['import1.']['avatarpath'] = 'uploads/tx_mmforum/';
 				}
 			}
@@ -548,24 +548,24 @@ class tx_mmforum_phpbbimport {
 					$this->data['step3.']['import6.']['pid'] = 0;
 				}
 			}
-			
+
 			if($error+$warning == 0) {
 				$content = $this->step4($content);
 				return $content;
 			}
 		}
-		
+
 		$content .= '<fieldset>';
 		$content .= '<legend>'.sprintf($LANG->getLL('phpbb.general.stepXofY'),3+$this->stepOffset,$this->steps+$this->stepOffset).': '.$LANG->getLL('phpbb.step3').'</legend>';
-		
+
 		$content .= '<table cellspacing="0" cellpadding="3" width="100%">';
-		
+
 		$checked = ($this->data['step3.']['clearAll'])?'checked="checked"':'';
 		$content .= '<tr><td style="width:1px; color:#ff8000;">&raquo;</td><td width="33%">'.$LANG->getLL('phpbb.step3.clearAll').'</td><td><input type="checkbox" name="tx_mmforum_phpbb[step3.][clearAll] value="1" '.$checked.' /></td></tr>';
-		
+
 		$checked = ($this->data['step3.']['clearReallyAll'])?'checked="checked"':'';
 		$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.clearReallyAll').'</td><td><input type="checkbox" name="tx_mmforum_phpbb[step3.][clearReallyAll] value="1" '.$checked.' /></td></tr>';
-		
+
 		if(in_array('boards/categories',$dataFields)) {
 			$content .= '<tr><td style="width:1px; color:#ff8000;">&raquo;</td><td colspan="2"><strong>'.$LANG->getLL('phpbb.step2.boards/categories').'</strong></td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import0.pid').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import0.][pid]" size="4" value="'.$this->data['step3.']['import0.']['pid'].'" />'.$warnings['import0.pid'].'</td></tr>';
@@ -573,29 +573,29 @@ class tx_mmforum_phpbbimport {
 		if(in_array('users/usergroups',$dataFields)) {
 			$content .= '<tr><td style="width:1px; color:#ff8000;">&raquo;</td><td colspan="2"><strong>'.$LANG->getLL('phpbb.step2.users/usergroups').'</strong></td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import1.pid').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import1.][pid]" size="4" value="'.$this->data['step3.']['import1.']['pid'].'" />'.$warnings['import1.pid'].'</td></tr>';
-			
+
 			$iChecked = ($this->data['step3.']['import1.']['users']=='import' )?'checked="checked"':'';
 			$nChecked = ($this->data['step3.']['import1.']['users']=='nothing')?'checked="checked"':'';
 			$cChecked = ($this->data['step3.']['import1.']['users']=='create' || !$this->data['step3.']['import1.']['users'])?'checked="checked"':'';
-			
+
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import1.users').'</td><td width="67%">
 				<input type="radio" name="tx_mmforum_phpbb[step3.][import1.][users]" value="create"  '.$cChecked.'> '.$LANG->getLL('phpbb.step3.import1.users.create').'<br />
 				<input type="radio" name="tx_mmforum_phpbb[step3.][import1.][users]" value="import"  '.$iChecked.'> '.$LANG->getLL('phpbb.step3.import1.users.import').': <input type="text" name="tx_mmforum_phpbb[step3.][import1.][usergroup]" value="'.$this->data['step3.']['import1.']['usergroup'].'" /><br />
 				<input type="radio" name="tx_mmforum_phpbb[step3.][import1.][users]" value="nothing" '.$nChecked.'> '.$LANG->getLL('phpbb.step3.import1.users.nothing').'
 				'.$warnings['import1.users'].'
 			</td></tr>';
-			
+
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import1.moderators').'</td><td width="67%">
 				<input type="radio" name="tx_mmforum_phpbb[step3.][import1.][mods]" value="create"  '.$cChecked.'> '.$LANG->getLL('phpbb.step3.import1.mods.create').'<br />
 				<input type="radio" name="tx_mmforum_phpbb[step3.][import1.][mods]" value="import"  '.$iChecked.'> '.$LANG->getLL('phpbb.step3.import1.mods.import').': <input type="text" name="tx_mmforum_phpbb[step3.][import1.][modgroup]" value="'.$this->data['step3.']['import1.']['modgroup'].'" /><br />
 				<input type="radio" name="tx_mmforum_phpbb[step3.][import1.][mods]" value="nothing" '.$nChecked.'> '.$LANG->getLL('phpbb.step3.import1.mods.nothing').'
 				'.$warnings['import1.mods'].'
 			</td></tr>';
-			
+
 			$iChecked = ($this->data['step3.']['import1.']['admins']=='import' )?'checked="checked"':'';
 			$nChecked = ($this->data['step3.']['import1.']['admins']=='nothing')?'checked="checked"':'';
 			$cChecked = ($this->data['step3.']['import1.']['admins']=='create' || !$this->data['step3.']['import1.']['mods'])?'checked="checked"':'';
-			
+
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import1.admins').'</td><td width="67%">
 				<input type="radio" name="tx_mmforum_phpbb[step3.][import1.][admins]" value="create"  '.$cChecked.'> '.$LANG->getLL('phpbb.step3.import1.admins.create').'<br />
 				<input type="radio" name="tx_mmforum_phpbb[step3.][import1.][admins]" value="import"  '.$iChecked.'> '.$LANG->getLL('phpbb.step3.import1.admins.import').': <input type="text" name="tx_mmforum_phpbb[step3.][import1.][admingroup]" value="'.$this->data['step3.']['import1.']['admingroup'].'" /><br />
@@ -603,7 +603,7 @@ class tx_mmforum_phpbbimport {
 				'.$warnings['import1.admins'].'
 			</td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import1.avatarpath').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import1.][avatarpath]" value="'.$this->data['step3.']['import1.']['avatarpath'].'" />'.$warnings['import1.avatarpath'].'</td></tr>';
-			
+
 			$isugChecked = ($this->data['step3.']['import1.']['importSingleUserGroups'])?'checked="checked"':'';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import1.createSingleUserGroups').'</td><td width="67%"><input type="checkbox" name="tx_mmforum_phpbb[step3.][import1.][importSingleUserGroups]" value="1" '.$isugChecked.' /></td></tr>';
 		}
@@ -621,7 +621,7 @@ class tx_mmforum_phpbbimport {
         }
 		if(in_array('search',$dataFields)) {
 			$checked = $this->data['step3.']['import4.']['group_post']?'checked="checked"':'';
-			
+
 			$content .= '<tr><td style="width:1px; color:#ff8000;">&raquo;</td><td colspan="2"><strong>'.$LANG->getLL('phpbb.step2.search').'</strong></td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import4.pid').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import4.][pid]" size="4" value="'.$this->data['step3.']['import4.']['pid'].'" />'.$warnings['import4.pid'].'</td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import4.group_post').'</td><td width="67%"><input type="hidden" name="tx_mmforum_phpbb[step3.][import4.][group_post]" value="0" /><input type="checkbox" name="tx_mmforum_phpbb[step3.][import4.][group_post]" value="1" '.$checked.' /></td></tr>';
@@ -636,26 +636,26 @@ class tx_mmforum_phpbbimport {
 			$content .= '<tr><td style="width:1px; color:#ff8000;">&raquo;</td><td colspan="2"><strong>'.$LANG->getLL('phpbb.step2.subscr').'</strong></td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import6.pid').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import6.][pid]" size="4" value="'.$this->data['step3.']['import6.']['pid'].'" />'.$warnings['import6.pid'].'</td></tr>';
 		}
-		
+
 		unset($this->data['step3.']);
-		
+
 		$content .= '</table>';
-		
+
 		if($warning > 0) $content .= '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step3.warning').'</div><input type="hidden" name="tx_mmforum_phpbb[step3.][ignore]" value="1" />';
 		if($error == 1) $content .= '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step3.error1').'</div>';
 		elseif($error > 1) $content .= '<div class="mm_forum-fatalerror">'.sprintf($LANG->getLL('phpbb.step3.errors'),$error).'</div>';
-		
+
 		$content .= '<br /><input type="submit" value="'.$LANG->getLL('phpbb.general.continue').'" name="tx_mmforum_phpbb[step3.][submit]" />';
-		
+
 		$content .= '</fieldset>';
-		
+
 		return $content;
 	}
-	
+
     /**
      * Step 4: Conduct import
      */
-    
+
 	/**
 	 * Displays and conducts the fourth step of phpBB data import.
 	 * In the fourth step, the data import is finally really conducted,
@@ -668,7 +668,7 @@ class tx_mmforum_phpbbimport {
 	 * in other records will be outdated when these records will be imported.
 	 * To solve this problem, global mapping arrays will be created allowing
 	 * to match old and new primary keys.
-	 * 
+	 *
 	 * @param   string $content The content variable
 	 * @return  string          The content of step4
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -676,21 +676,21 @@ class tx_mmforum_phpbbimport {
 	 */
 	function step4($content) {
 		global $LANG;
-		
+
 		$this->data['step'] = 4;
-		
+
 		$content .= '<fieldset>';
 		$content .= '<legend>'.sprintf($LANG->getLL('phpbb.general.stepXofY'),4+$this->stepOffset,$this->steps+$this->stepOffset).': '.$LANG->getLL('phpbb.step4').'</legend>';
-		
+
 		if($this->data['step4.']['submit']==$LANG->getLL('phpbb.step4.startButton')) {
 			$dataFields = $this->data['step2.']['importdata'];
-			
+
 			if($this->data['step3.']['clearAll']) {
 				$sql = "";
 				if(in_array('users/usergroups',$dataFields)) {
 					$userWhere = $this->data['step4.']['clearAll']['userWHERE']?$this->data['step4.']['clearAll']['userWHERE']:($this->data['step4.']['clearAll']['userUID']?"WHERE uid NOT IN (".$this->data['step4.']['clearAll']['userUID'].")":'');
 					$usergroupWhere = $this->data['step4.']['clearAll']['usergroupWHERE']?$this->data['step4.']['clearAll']['usergroupWHERE']:($this->data['step4.']['clearAll']['usergroupUID']?"WHERE uid NOT IN (".$this->data['step4.']['clearAll']['usergroupUID'].")":'');
-					
+
 					mysql_query("DELETE FROM fe_users $userWhere;");
                     #mysql_query("DELETE FROM fe_groups $usergroupWhere;");
 					$this->unsetImported('users/usergroups');
@@ -707,7 +707,7 @@ class tx_mmforum_phpbbimport {
 					mysql_query("DELETE FROM tx_mmforum_posts;");
                     mysql_query("DELETE FROM tx_mmforum_topics;");
                     mysql_query("DELETE FROM tx_mmforum_posts_text;");
-                    
+
 					$this->unsetImported('topics/posts');
 					$this->deleteMappingArray('postID_mapping');
 					$this->deleteMappingArray('topicID_mapping');
@@ -729,7 +729,7 @@ class tx_mmforum_phpbbimport {
 					$this->unsetImported('search');
 				}
 				if(in_array('smilies',$dataFields)) {
-					mysql_query("DELETE FROM tx_mmforum_smilies");	
+					mysql_query("DELETE FROM tx_mmforum_smilies");
 					$this->unsetImported('smilies');
 				}
 				if(in_array('substr',$dataFields)) {
@@ -740,7 +740,7 @@ class tx_mmforum_phpbbimport {
 			elseif($this->data['step3.']['clearReallyAll']) {
 				$userWhere = $this->data['step4.']['clearAll']['userWHERE']?$this->data['step4.']['clearAll']['userWHERE']:($this->data['step4.']['clearAll']['userUID']?"WHERE uid NOT IN (".$this->data['step4.']['clearAll']['userUID'].")":'');
 				$usergroupWhere = $this->data['step4.']['clearAll']['usergroupWHERE']?$this->data['step4.']['clearAll']['usergroupWHERE']:($this->data['step4.']['clearAll']['usergroupUID']?"WHERE uid NOT IN (".$this->data['step4.']['clearAll']['usergroupUID'].")":'');
-				
+
 				mysql_query("DELETE FROM fe_users $userWhere");
 				#mysql_query("DELETE FROM fe_groups $usergroupWhere");
 				mysql_query("DELETE FROM tx_mmforum_forums");
@@ -756,17 +756,17 @@ class tx_mmforum_phpbbimport {
 				mysql_query("DELETE FROM tx_mmforum_polls;");
 				mysql_query("DELETE FROM tx_mmforum_polls_votes;");
 				mysql_query("DELETE FROM tx_mmforum_polls_answers;");
-				
+
 				$this->unsetImported('users/usergroups');
 				$this->unsetImported('boards/categories');
 				$this->unsetImported('topics/posts');
 				$this->unsetImported('pms');
 				$this->unsetImported('polls');
-				$this->unsetImported('search');	
+				$this->unsetImported('search');
 				$this->unsetImported('smilies');
 				$this->unsetImported('subscr');
 				$this->unsetImported('polls');
-				
+
 				$this->deleteMappingArray('postID_mapping');
 				$this->deleteMappingArray('boardID_mapping');
 				$this->deleteMappingArray('categoryID_mapping');
@@ -774,80 +774,80 @@ class tx_mmforum_phpbbimport {
 				$this->deleteMappingArray('usergroupID_mapping');
 				$this->deleteMappingArray('userID_mapping');
 			}
-			
+
 			$this->retrieveMappingArray($this->postID_mapping,'postID_mapping');
 			$this->retrieveMappingArray($this->boardID_mapping,'boardID_mapping');
 			$this->retrieveMappingArray($this->categoryID_mapping,'categoryID_mapping');
 			$this->retrieveMappingArray($this->topicID_mapping,'topicID_mapping');
 			$this->retrieveMappingArray($this->usergroupID_mapping,'usergroupID_mapping');
 			$this->retrieveMappingArray($this->userID_mapping,'userID_mapping');
-			
+
 			if(in_array('users/usergroups',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.users/usergroups').'</div>';
-				
+
 				$res = $this->step4_importUsers();
 				$content .= $this->step4_outputReport($res['rep']);
 				$content .= $this->step4_outputErrors($res['err']);
 			}
-			
+
 			if(in_array('boards/categories',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.boards/categories').'</div>';
-				
+
 				$res = $this->step4_importBoards();
 				$content .= $this->step4_outputReport($res['rep']);
 				$content .= $this->step4_outputErrors($res['err']);
 			}
-			
+
 			if(in_array('topics/posts',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.topics/posts').'</div>';
-				
+
 				$res = $this->step4_importPosts();
 				$content .= $this->step4_outputReport($res['rep']);
 				$content .= $this->step4_outputErrors($res['err']);
 			}
-			
+
 			if(in_array('pms',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.pms').'</div>';
-				
+
 				$res = $this->step4_importPMs();
 				$content .= $this->step4_outputReport($res['rep']);
 				$content .= $this->step4_outputErrors($res['err']);
 			}
-            
+
             if(in_array('polls',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.polls').'</div>';
-				
+
 				$res = $this->step4_importPolls();
 				$content .= $this->step4_outputReport($res['rep']);
 				$content .= $this->step4_outputErrors($res['err']);
             }
-			
+
 			if(in_array('search',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.search').'</div>';
-				
+
 				$res = $this->step4_importSearch();
 				$content .= $this->step4_outputReport($res['rep']);
 				$content .= $this->step4_outputErrors($res['err']);
 			}
-			
+
 			if(in_array('smilies',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.smilies').'</div>';
-				
+
 				$res = $this->step4_importSmilies();
 				$content .= $this->step4_outputReport($res['rep']);
 				$content .= $this->step4_outputErrors($res['err']);
 			}
-			
+
 			if(in_array('subscr',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.subscr').'</div>';
-				
+
 				$res = $this->step4_importSubscriptions();
 				$content .= $this->step4_outputReport($res['rep']);
 				$content .= $this->step4_outputErrors($res['err']);
 			}
 		}
 		else {
-			
+
 			if($this->data['step3.']['clearReallyAll'] || ($this->data['step3.']['clearReallyAll'] && in_array('users/usergroups',$this->data['step2.']['importdata']))) {
 				$content .= '<div>'.$LANG->getLL('phpbb.step4.clearAllNote').'</div>';
 				$content .= '<table><tr><td>'.$LANG->getLL('phpbb.step4.clear.userUID').'</td><td><input type="text" name="tx_mmforum_phpbb[step4.][clearAll][userUID]" value="" /> '.$LANG->getLL('phpbb.step4.clear.uidEx').'</td></tr>';
@@ -855,20 +855,20 @@ class tx_mmforum_phpbbimport {
 				$content .= '<tr><td>'.$LANG->getLL('phpbb.step4.clear.usergroupUID').'</td><td><input type="text" name="tx_mmforum_phpbb[step4.][clearAll][usergroupUID]" value="" /></td></tr>';
 				$content .= '<tr><td>'.$LANG->getLL('phpbb.step4.clear.usergroupWHERE').'</td><td><input type="text" name="tx_mmforum_phpbb[step4.][clearAll][usergroupWHERE]" /></td></tr></table>';
 			}
-			
+
 			$content .= $LANG->getLL('phpbb.step4.startNote');
 			$content .= '<br /><br /><input type="submit" value="'.$LANG->getLL('phpbb.step4.startButton').'" name="tx_mmforum_phpbb[step4.][submit]" />';
 		}
-		
+
 		$content .= '</fieldset>';
-		
+
 		return $content;
 	}
-	
+
 	/**
 	 * Displays a set of reports that is generated during a data import
 	 * procedure.
-	 * 
+	 *
 	 * @param  array  $report An array of reports
 	 * @return string         A string representation of the reports in $report
 	 */
@@ -877,15 +877,15 @@ class tx_mmforum_phpbbimport {
 		if(!is_array($report)) return "";
 		foreach($report as $sReport) {
 		 	$content .= '<div>'.$sReport.'</div>';
-		}	
-		
+		}
+
 		return $content;
 	}
-	
+
 	/**
 	 * Displays a set of error messages that is generated during a data
 	 * import procedure.
-	 * 
+	 *
 	 * @param  array  $errors An array of errors
 	 * @return string         A string representration of the errors in $errors
 	 */
@@ -897,12 +897,12 @@ class tx_mmforum_phpbbimport {
 		}
 		return $content;
 	}
-	
+
 	/**
 	 * Imports boards and categories from phpBB tables.
 	 * This function imports the category and board data stored in the phpBB tables
 	 * prefix_categories and prefix_forums.
-	 * 
+	 *
 	 * @return  array  An array containing information on errors that occured during
 	 *                 data import (key 'err') and casual reports made during data
 	 *                 import (key 'rep').
@@ -911,13 +911,13 @@ class tx_mmforum_phpbbimport {
 	 */
 	function step4_importBoards() {
 		global $LANG;
-		
+
 		$err = array();
 		$rep = array();
-		
+
 		$successCategories = 0;
 		$successBoards     = 0;
-		
+
 		$res = $this->dbObj->exec_SELECTquery(
 			'*',
 			$this->data['prefix'].'_categories',
@@ -937,24 +937,24 @@ class tx_mmforum_phpbbimport {
 				$err[] = sprintf($LANG->getLL('phpbb.step4.errorCategoryImport'),$arr['cat_title']);
 				continue;
 			}
-			
+
 			$this->categoryID_mapping[$arr['cat_id']] = $GLOBALS['TYPO3_DB']->sql_insert_id();
 			$successCategories ++;
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.categoryimport_report'),$successCategories);
-		
+
 		$this->saveMappingArray($this->categoryID_mapping,'categoryID_mapping');
-		
+
 		$res = $this->dbObj->exec_SELECTquery(
 			'*',
 			$this->data['prefix'].'_forums',
 			'1'
 		);
 		while($arr = $this->dbObj->sql_fetch_assoc($res)) {
-			
+
 			$r_read = array();
             $r_write = array();
-            
+
             // Determine read rights
                 if($arr['auth_read'] == 0) $r_read[] = '';
             elseif($arr['auth_read'] == 1) {
@@ -980,7 +980,7 @@ class tx_mmforum_phpbbimport {
                     $this->updateMapping['groups'][] = 'forum:'.$arr['group_id'].':grouprights_read/list';
                 }
             }
-            
+
             // Determine write rights
                 if($arr['auth_reply'] == 0) $r_write[] = '';
             elseif($arr['auth_reply'] == 1) {
@@ -1006,12 +1006,12 @@ class tx_mmforum_phpbbimport {
                     $this->updateMapping['groups'][] = 'forum:'.$arr['group_id'].':grouprights_write/list';
                 }
             }
-            
+
             foreach($r_write as $wGroup)
                 if(intval($wGroup)>0) $rWGroup[] = $wGroup;
             foreach($r_read as $rGroup)
                 if(intval($rGroup)>0) $rRGroup[] = $rGroup;
-			
+
 			$insertArray = array(
 				'pid'			        => $this->data['step3.']['import0.']['pid'],
 				'tstamp'		        => time(),
@@ -1029,28 +1029,28 @@ class tx_mmforum_phpbbimport {
 				'parentID'		        => $this->categoryID_mapping[$arr['cat_id']],
                 'grouprights_read'      => count($rRGroup)?implode(',',$rRGroup):'',
                 'grouprights_write'     => count($rWGroup)?implode(',',$rWGroup):''
-			);                              
+			);
 			$iRes = @$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_forums',$insertArray);
 			if(!$iRes) {
 				$err[] = sprintf($LANG->getLL('phpbb.step4.errorBoardImport'),$arr['forum_name']);
 				continue;
 			}
-			
+
 			$newId = $GLOBALS['TYPO3_DB']->sql_insert_id();
 			$this->boardID_mapping[$arr['forum_id']] = $newId;
-			
+
 			$this->updateMapping['posts'][] = "forum:".$arr['forum_last_post_id'].":forum_last_post_id";
-			
+
 			$successBoards ++;
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.boardimport_report'),$successBoards);
-		
+
 		$this->saveMappingArray($this->boardID_mapping,'boardID_mapping');
 		$this->setImported("boards_categories");
-		
+
 		return array('err'=>$err,'rep'=>$rep);
 	}
-	
+
 	/**
 	 * Imports users and user groups from phpBB tables.
 	 * This function imports the user and usergroup data stored in the phpBB tables
@@ -1064,7 +1064,7 @@ class tx_mmforum_phpbbimport {
 	 * rights are to be handled before data import. The import script can either create
 	 * new groups in which the regarding users will be put or put these users into an
 	 * already existing admin/mod group. Admin/mod rights can also be ignored totally.
-	 * 
+	 *
 	 * @return  array  An array containing information on errors that occured during
 	 *                 data import (key 'err') and casual reports made during data
 	 *                 import (key 'rep').
@@ -1073,13 +1073,13 @@ class tx_mmforum_phpbbimport {
 	 */
 	function step4_importUsers() {
 		global $LANG;
-		
+
 		$err = array();
 		$rep = array();
-		
+
 		$successGroups = 0;
 		$successUsers = 0;
-		
+
 		/*
 		 * IMPORT USER GROUPS
 		 */
@@ -1090,7 +1090,7 @@ class tx_mmforum_phpbbimport {
 		);
 		while($arr = $this->dbObj->sql_fetch_assoc($res)) {
 			if(!$this->data['step3.']['import1.']['importSingleUserGroups'] && $arr['group_single_user']) continue;
-			
+
 			$insertArray = array(
 				'pid'			=> $this->data['step3.']['import1.']['pid'],
 				'tstamp'		=> time(),
@@ -1103,22 +1103,22 @@ class tx_mmforum_phpbbimport {
 				$err[] = sprintf($LANG->getLL('phpbb.step4.errorUsergroupImport'),$arr['group_name']);
 				continue;
 			}
-			
+
 			$this->usergroupID_mapping[$arr['group_id']] = $GLOBALS['TYPO3_DB']->sql_insert_id();
 			$successGroups ++;
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.groupimport_report'),$successGroups);
-		
+
 		$this->saveMappingArray($this->usergroupID_mapping,'usergroupID_mapping');
-		
+
 		/*
 		 * IMPORT USERS
 		 */
-		 
+
 		// Determine user, admin and moderator group UID
 			$admingroup_uid     = 0;
 			$moderatorgroup_uid = 0;
-			
+
 			if($this->data['step3.']['import1.']['admins'] == 'create') {
 				$insertArray = array(
 					'pid'			=> $this->data['step3.']['import1.']['pid'],
@@ -1130,7 +1130,7 @@ class tx_mmforum_phpbbimport {
 					$err[] = $LANG->getLL('phpbb.step4.errorAdmingroupCreate');
 					return array('err'=>$err,'rep'=>$rep);
 				}
-				
+
 				$admingroup_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
                 $this->usergroupID_mapping['{$admingroup}'] = $admingroup_uid;
 			}
@@ -1139,7 +1139,7 @@ class tx_mmforum_phpbbimport {
                 $this->usergroupID_mapping['{$admingroup}'] = $admingroup_uid;
 			}
             else $this->usergroupID_mapping['{$admingroup}'] = '';
-			
+
 			if($this->data['step3.']['import1.']['mods'] == 'create') {
 				$insertArray = array(
 					'pid'			=> $this->data['step3.']['import1.']['pid'],
@@ -1151,7 +1151,7 @@ class tx_mmforum_phpbbimport {
 					$err[] = $LANG->getLL('phpbb.step4.errorModgroupCreate');
 					return array('err'=>$err,'rep'=>$rep);
 				}
-				
+
 				$moderatorgroup_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
                 $this->usergroupID_mapping['{$modgroup}'] = $moderatorgroup_uid;
 			}
@@ -1160,7 +1160,7 @@ class tx_mmforum_phpbbimport {
                 $this->usergroupID_mapping['{$modgroup}'] = $moderatorgroup_uid;
 			}
             else $this->usergroupID_mapping['{$modgroup}'] = '';
-			
+
 			if($this->data['step3.']['import1.']['users'] == 'create') {
 				$insertArray = array(
 					'pid'			=> $this->data['step3.']['import1.']['pid'],
@@ -1172,7 +1172,7 @@ class tx_mmforum_phpbbimport {
 					$err[] = $LANG->getLL('phpbb.step4.errorUsergroupCreate');
 					return array('err'=>$err,'rep'=>$rep);
 				}
-				
+
 				$usergroup_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
                 $this->usergroupID_mapping['{$usergroup}'] = $usergroup_uid;
 			}
@@ -1181,7 +1181,7 @@ class tx_mmforum_phpbbimport {
                 $this->usergroupID_mapping['{$usergroup}'] = $usergroup_uid;
 			}
             else $this->usergroupID_mapping['{$usergroup}'] = '';
-		
+
 		// Load users
 			$res = $this->dbObj->exec_SELECTquery(
 				'*',
@@ -1190,7 +1190,7 @@ class tx_mmforum_phpbbimport {
 			);
 			while($arr = $this->dbObj->sql_fetch_assoc($res)) {
 				$groups = array();
-				
+
 				// Determine user groups
 					if(($arr['user_level'] == 2) && ($this->data['step3.']['import1.']['mods'] != 'nothing'))
 						$groups[] = $moderatorgroup_uid;
@@ -1198,7 +1198,7 @@ class tx_mmforum_phpbbimport {
 						$groups[] = $admingroup_uid;
 					if($this->data['step3.']['import1.']['mods'] != 'nothing')
 						$groups[] = $usergroup_uid;
-						
+
 					$res2 = $this->dbObj->exec_SELECTquery(
 						'*',
 						$this->data['prefix'].'_user_group',
@@ -1209,19 +1209,19 @@ class tx_mmforum_phpbbimport {
 							$groups[] = $this->usergroupID_mapping[$user_group['group_id']];
 					}
 					$usergroup_string = implode(',',$groups);
-					
+
 				// Determine avatar
 					if($arr['user_avatar_type']=='1') {
 						$filename_total = $arr['user_avatar'];
 						$filename_base  = basename($filename_total);
 						$filename_new	= $this->data['step3.']['import1.']['avatarpath'].$filename_base;
-						
+
 						if(file_exists($filename_total)) {
 							copy($filename_total,$filename_new);
 							$avatar = $filename_base;
 						}
 					}
-				
+
 				$insertArray = array(
 					'pid'				=> $this->data['step3.']['import1.']['pid'],
 					'tstamp'			=> time(),
@@ -1255,16 +1255,16 @@ class tx_mmforum_phpbbimport {
 					$err[] = sprintf($LANG->getLL('phpbb.step4.errorUserImport'),$arr['username']);
 					continue;
 				}
-				
+
 				$this->userID_mapping[$arr['user_id']] = $GLOBALS['TYPO3_DB']->sql_insert_id();
 				$successUsers ++;
 			}
 			$rep[] = sprintf($LANG->getLL('phpbb.step4.userimport_report'),$successUsers);
-		
+
         if(is_array($this->updateMapping['groups'])) {
             foreach($this->updateMapping['groups'] as $updateMapping_groups) {
 			    $data = t3lib_div::trimExplode(':',$updateMapping_groups);
-			    
+
 			    if($data[0] == 'forum') {
                     if(substr($data[2],-5,5)=='/list') {
                         $data[2] = substr($data[2],0,strlen($data[2])-5);
@@ -1277,7 +1277,7 @@ class tx_mmforum_phpbbimport {
                             $sList = $arr[$data[1]];
                             $uid = $arr['uid'];
                             $list = t3lib_div::trimExplode($sList);
-                            
+
                             foreach($list as $listItem) {
                                 if($listItem == $data[1]) {
                                     $updatedList[] = $this->usergroupID_mapping[$data[1]]; continue;
@@ -1296,18 +1296,18 @@ class tx_mmforum_phpbbimport {
 			    }
 		    }
         }
-        
+
 		$this->saveMappingArray($this->userID_mapping,'userID_mapping');
 		$this->setImported("users_usergroups");
-			
+
 		return array('err'=>$err,'rep'=>$rep);
 	}
-	
+
 	/**
 	 * Imports posts and topics from phpBB tables.
 	 * This function imports the post and topic data stored in the phpBB tables
 	 * prefix_topics, prefix_posts and prefix_posts_text.
-	 * 
+	 *
 	 * @return  array  An array containing information on errors that occured during
 	 *                 data import (key 'err') and casual reports made during data
 	 *                 import (key 'rep').
@@ -1316,13 +1316,13 @@ class tx_mmforum_phpbbimport {
 	 */
 	function step4_importPosts() {
 		global $LANG;
-		
+
 		$err = array();
 		$rep = array();
-		
+
 		$successTopics = 0;
 		$successPosts = 0;
-		
+
 		$res = $this->dbObj->exec_SELECTquery(
 			'*',
 			$this->data['prefix'].'_topics',
@@ -1355,7 +1355,7 @@ class tx_mmforum_phpbbimport {
 				$err[] = sprintf($LANG->getLL('phpbb.step4.errorTopicImport'),$arr['topic_title']);
 				continue;
 			}
-			
+
 			$newId = $GLOBALS['TYPO3_DB']->sql_insert_id();
 			$this->topicID_mapping[$arr['topic_id']] = $newId;
 			$this->updateMapping['posts'][] = "topic:".$arr['topic_last_post_id'].":topic_last_post_id";
@@ -1363,9 +1363,9 @@ class tx_mmforum_phpbbimport {
 			$successTopics ++;
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.topicimport_report'),$successTopics);
-		
-		
-		
+
+
+
 		$res = $this->dbObj->exec_SELECTquery(
 			'*',
 			$this->data['prefix'].'_posts',
@@ -1391,17 +1391,17 @@ class tx_mmforum_phpbbimport {
 				$err[] = sprintf($LANG->getLL('phpbb.step4.errorPostImport'),$arr['post_id']);
 				continue;
 			}
-			
+
 			$this->postID_mapping[$arr['post_id']] = $post_id;
 			$successPosts ++;
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.postimport_report'),$successPosts);
-		
+
 		$this->saveMappingArray($this->postID_mapping,'postID_mapping');
-		
+
 		foreach($this->updateMapping['posts'] as $updateMapping_post) {
 			$data = t3lib_div::trimExplode(':',$updateMapping_post);
-			
+
 			if($data[0] == 'forum') {
 				$updateArray = array($data[2] => $this->postID_mapping[$data[1]]);
 				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums',$data[2].'="'.$data[1].'"',$updateArray);
@@ -1411,7 +1411,7 @@ class tx_mmforum_phpbbimport {
 				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics',$data[2].'="'.$data[1].'"',$updateArray);
 			}
 		}
-		
+
 		$res = $this->dbObj->exec_SELECTquery(
 			'*',
 			$this->data['prefix'].'_posts_text',
@@ -1427,12 +1427,12 @@ class tx_mmforum_phpbbimport {
 			);
 			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_posts_text',$insertArray);
 		}
-		
+
 		$this->setImported("topics_posts");
-		
+
 		return array('err'=>$err,'rep'=>$rep);
 	}
-	
+
 	/**
 	 * Converts phpBB BBcodes into mm_forum BBcodes.
 	 * phpBB BBcodes use a ten-digit hexcode identification for each used
@@ -1454,15 +1454,15 @@ class tx_mmforum_phpbbimport {
 		$text = preg_replace("/\[code:[a-z0-9]{10}\]/","[code]",$text);
 		$text = preg_replace("/\[list:[a-z0-9]{10}\]/","[list]",$text);
 		$text = preg_replace("/\[img:[a-z0-9]{10}\]/","[img]",$text);
-		
+
 		return $text;
 	}
-	
+
 	/**
 	 * Imports private messages from phpBB tables.
 	 * This function imports private messages from the phpBB tables
 	 * prefix_privmsgs and prefix_privmsgs_text.
-	 * 
+	 *
 	 * @return  array  An array containing information on errors that occured during
 	 *                 data import (key 'err') and casual reports made during data
 	 *                 import (key 'rep').
@@ -1471,26 +1471,26 @@ class tx_mmforum_phpbbimport {
 	 */
 	function step4_importPMs() {
 		global $LANG;
-		
+
 		$err = array();
 		$rep = array();
-		
+
 		$successPMs = 0;
-		
+
 		$res = $this->dbObj->exec_SELECTquery(
 			'*',
 			$this->data['prefix'].'_privmsgs',
 			'1'
 		);
 		while($arr = $this->dbObj->sql_fetch_assoc($res)) {
-			
+
 			$res2 = $this->dbObj->exec_SELECTquery(
 				'*',
 				$this->data['prefix'].'_privmsgs_text',
 				'privmsgs_text_id = "'.$arr['privmsgs_id'].'"'
 			);
 			$tdata = $this->dbObj->sql_fetch_assoc($res2);
-			
+
 			switch($arr['privmsgs_type']) {
 				case 0: $read = '1'; $messType = '0'; break;
 				case 1: $read = '';  $messType = '1'; break;
@@ -1524,16 +1524,16 @@ class tx_mmforum_phpbbimport {
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.pmimport_report'),$successPMs);
 		$this->setImported("pms");
-			
+
 		return array('err'=>$err,'rep'=>$rep);
 	}
-	
+
 	/**
 	 * Imports the search index from phpBB tables.
 	 * This function imports the entire index of the phpBB search from
 	 * the phpBB tables prefix_search_results, prefix_wordlist and
 	 * prefix_wordmatch.
-	 * 
+	 *
 	 * @return  array  An array containing information on errors that occured during
 	 *                 data import (key 'err') and casual reports made during data
 	 *                 import (key 'rep').
@@ -1542,14 +1542,14 @@ class tx_mmforum_phpbbimport {
 	 */
 	function step4_importSearch() {
 		global $LANG;
-		
+
 		$wordsSuccess = 0;
 		$resultsSuccess = 0;
 		$matchesSuccess = 0;
-		
+
 		$err = array();
 		$rep = array();
-		
+
 		$res = $this->dbObj->exec_SELECTquery(
 			'*',
 			$this->data['prefix'].'_search_results',
@@ -1557,13 +1557,13 @@ class tx_mmforum_phpbbimport {
 		);
 		while($arr = $this->dbObj->sql_fetch_assoc($res)) {
 			$searchData = unserialize($arr['search_array']);
-			
+
 			if($arr['sort_dir'] == 'DESC') $searchOrder = 2;
 			else $searchOrder = 1;
-			
+
 			if(!is_array($searchData['split_search'])) $searchData['split_search'] = array($searchData['split_search']);
 			if(!is_array($searchData['search_results'])) $searchData['search_results'] = t3lib_div::trimExplode(',',$searchData['search_results']);
-			
+
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import4.']['pid'],
 				'tstamp'				=> time(),
@@ -1582,7 +1582,7 @@ class tx_mmforum_phpbbimport {
 			if($iRes) $resultsSuccess ++;
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.searchresultsimport_report'),$resultsSuccess);
-		
+
 		$res = $this->dbObj->exec_SELECTquery(
 			'*',
 			$this->data['prefix'].'_search_wordlist',
@@ -1602,11 +1602,11 @@ class tx_mmforum_phpbbimport {
 			$iRes = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_wordlist',$insertArray);
 			if($iRes) $wordsSuccess ++;
 			$newId = $GLOBALS['TYPO3_DB']->sql_insert_id();
-			
+
 			$this->searchword_mapping[$arr['word_id']] = $newId;
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.wordlistimport_report'),$wordsSuccess);
-		
+
 		$res = $this->dbObj->exec_SELECTquery(
 			'*',
 			$this->data['prefix'].'_search_wordmatch',
@@ -1619,14 +1619,14 @@ class tx_mmforum_phpbbimport {
 				'uid="'.$this->postID_mapping[$arr['post_id']].'"'
 			);
 			$postData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2);
-			
+
 			$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'*',
 				'tx_mmforum_topics',
 				'uid="'.$postData['topic_id'].'"'
 			);
 			$topicData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2);
-			
+
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import4.']['pid'],
 				'tstamp'				=> time(),
@@ -1651,10 +1651,10 @@ class tx_mmforum_phpbbimport {
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.matchesimport_report'),$matchesSuccess);
 		$this->setImported("search");
-			
+
 		return array('err'=>$err,'rep'=>$rep);
 	}
-	
+
 	/**
 	 * Imports smilies from phpBB tables.
 	 * This function imports all smilies from the phpBB table
@@ -1664,7 +1664,7 @@ class tx_mmforum_phpbbimport {
 	 * be specified before the import procedure in step 3.
 	 * This function also copies the regarding smilie files into the
 	 * respective mm_forum directory.
-	 * 
+	 *
 	 * @return  array  An array containing information on errors that occured during
 	 *                 data import (key 'err') and casual reports made during data
 	 *                 import (key 'rep').
@@ -1673,18 +1673,18 @@ class tx_mmforum_phpbbimport {
 	 */
 	function step4_importSmilies() {
 		global $LANG;
-		
+
 		$err = array();
 		$rep = array();
-		
+
 		$phpbb_smiliedir   = $this->data['step3.']['import5.']['phpbb_smilie_url'];
 		$mmforum_smiliedir = $this->data['step3.']['import5.']['mmforum_smilie_url'];
-		
+
 		$smilieImport_count = 0;
-		
+
 		if($phpbb_smiliedir{strlen($phpbb_smiliedir)-1} != "/") $phpbb_smiliedir = "$phpbb_smiliedir/";
 		if($mmforum_smiliedir{strlen($mmforum_smiliedir)-1} != "/") $mmforum_smiliedir = "$mmforum_smiliedir/";
-		
+
 		$res = $this->dbObj->exec_SELECTquery(
 			'*',
 			$this->data['prefix'].'_smilies',
@@ -1704,20 +1704,20 @@ class tx_mmforum_phpbbimport {
 			);
 			copy($phpbb_smiliedir.$arr['smile_url'],$mmforum_smiliedir.$arr['smile_url']);
 			$iRes = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_smilies',$insertArray);
-			
+
 			if($iRes) $smilieImport_count ++;
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.smilieimport_report'),$smilieImport_count);
 		$this->setImported("smilies");
-			
+
 		return array('err'=>$err,'rep'=>$rep);
 	}
-	
+
 	/**
 	 * Import email subscriptions from phpBB tables.
 	 * This function imports email subscriptions informing users about new
 	 * replies in certain topics from the phpBB table prefix_topics_watch.
-	 * 
+	 *
 	 * @return  array  An array containing information on errors that occured during
 	 *                 data import (key 'err') and casual reports made during data
 	 *                 import (key 'rep').
@@ -1727,10 +1727,10 @@ class tx_mmforum_phpbbimport {
 	function step4_importSubscriptions() {
 		global $LANG;
 		$subscrImport_count = 0;
-		
+
 		$err = array();
 		$rep = array();
-		
+
 		$res = $this->dbObj->exec_SELECTquery(
 			'*',
 			$this->data['prefix'].'_topics_watch',
@@ -1755,12 +1755,12 @@ class tx_mmforum_phpbbimport {
 
 		return array('err'=>$err,'rep'=>$rep);
 	}
-    
+
     /**
      * Import polls from phpBB tables.
      * This function imports polls from the phpBB tables vote_desc, vote_results
      * and vote_voters.
-	 * 
+	 *
 	 * @return  array  An array containing information on errors that occured during
 	 *                 data import (key 'err') and casual reports made during data
 	 *                 import (key 'rep').
@@ -1768,10 +1768,10 @@ class tx_mmforum_phpbbimport {
      */
     function step4_importPolls() {
         global $LANG;
-        
+
 		$err = array();
 		$rep = array();
-		
+
         $pollImport_count = 0;
         $res = $this->dbObj->exec_SELECTquery(
             '*',
@@ -1794,7 +1794,7 @@ class tx_mmforum_phpbbimport {
             $poll_id  = $GLOBALS['TYPO3_DB']->sql_insert_id();
             $poll_votes = 0;
             $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics','uid='.$topic_id,array('poll_id'=>$poll_id));
-            
+
             $res2 = $this->dbObj->exec_SELECTquery(
                 '*',
                 $this->data['prefix'].'_vote_results',
@@ -1815,9 +1815,9 @@ class tx_mmforum_phpbbimport {
                 $poll_votes += $answer['vote_result'];
                 $answer_id = $GLOBALS['TYPO3_DB']->sql_insert_id();
             }
-            
+
             $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls','uid='.$poll_id,array('votes'=>$poll_votes));
-            
+
             $res3 = $this->dbObj->exec_SELECTquery(
                 '*',
                 $this->data['prefix'].'_vote_voters',
@@ -1842,66 +1842,66 @@ class tx_mmforum_phpbbimport {
 
 		return array('err'=>$err,'rep'=>$rep);
     }
-    
+
     /**
      * Data storage functions
      */
-    
+
 	/**
 	 * Loads a stored mapping array from a temporary file.
-	 * 
+	 *
 	 * Mapping arrays are necessary in order to keep references between
 	 * different records valid, since all records get new primary keys
 	 * during the import procedure while there remain references to the
 	 * old primary keys.
-	 * 
+	 *
 	 * @param array  &$array   The array, into which the data is to be loaded.
 	 * @param string $filename The filename from which the array is to be loaded.
 	 */
 	function retrieveMappingArray(&$array, $filename) {
 		if(!file_exists("tmp.$filename")) return;
-		
+
 		$string = file_get_contents("tmp.$filename");
 		$array = unserialize($string);
 	}
-	
+
 	/**
 	 * Stores a mapping array to a temporary file.
-	 * 
+	 *
 	 * Mapping arrays are necessary in order to keep references between
 	 * different records valid, since all records get new primary keys
 	 * during the import procedure while there remain references to the
 	 * old primary keys.
-	 * 
+	 *
 	 * @param array  &$array   The array, in which the data is stored
 	 * @param string $filename The filename into which the data is to be stored
 	 */
 	function saveMappingArray($array, $filename) {
 		$arrayS = serialize($array);
-		
+
 		$file = fopen("tmp.$filename","w");
 		fwrite($file,$arrayS);
 		fclose($file);
 	}
-	
+
 	/**
 	 * Deletes a temporary file storing a mapping array.
-	 * 
+	 *
 	 * Mapping arrays are necessary in order to keep references between
 	 * different records valid, since all records get new primary keys
 	 * during the import procedure while there remain references to the
 	 * old primary keys.
-	 * 
+	 *
 	 * @param string $filename The filename in which the array is stored.
 	 */
 	function deleteMappingArray($filename) {
 		if(file_exists("tmp.$filename"))
-			unlink("tmp.$filename");	
+			unlink("tmp.$filename");
 	}
-	
+
 	/**
 	 * Determines if a data field has already been imported.
-	 * 
+	 *
 	 * @param  string  $field The data field that is to be checked.
 	 * @return boolean        TRUE, if the data field has already been imported, otherwise FALSE
 	 */
@@ -1909,10 +1909,10 @@ class tx_mmforum_phpbbimport {
 		$field = str_replace("/","_",$field);
 		return file_exists("tmp.$field");
 	}
-	
+
 	/**
 	 * Sets a data field to "imported".
-	 * 
+	 *
 	 * @param string $field The data field that is to be set to "imported".
 	 */
 	function setImported($field) {
@@ -1920,7 +1920,7 @@ class tx_mmforum_phpbbimport {
 		$file = fopen("tmp.$field","w");
 		fclose($file);
 	}
-	
+
 	/**
 	 * Sets a data field to "not imported"
 	 * @param string $field The data field that is to be set to "not imported"
@@ -1930,18 +1930,18 @@ class tx_mmforum_phpbbimport {
 		if(file_exists("tmp.$field"))
 			unlink("tmp.$field");
 	}
-	
+
     /**
      * Miscellaneous functions
      */
-    
+
 	/**
 	 * Checks if a table exists in the default database.
 	 * This function checks if a certain table specified by a parameter already
 	 * exists in the default TYPO3 database.
 	 * To speed up this process, the list of tables in the database will be
 	 * retrieved only once (see getAllTables).
-	 * 
+	 *
 	 * @param   string  $tablename The table that is to be checked
 	 * @return  boolean            TRUE, if the table specified by the parameter $tablename
 	 *                             exists in the default TYPO3 database, otherwise FALSE.
@@ -1953,12 +1953,12 @@ class tx_mmforum_phpbbimport {
 		if(!isset($this->allTables)) $this->getAllTables();
 		return in_array($tablename,$this->allTables);
 	}
-	
+
 	/**
 	 * Retrieves a list of all tables in the default TYPO3 database.
 	 * This function retrieves a full list of all tables that currently exist
 	 * in the default TYPO3 database.
-	 * 
+	 *
 	 * @return  void
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-03-08
@@ -1969,14 +1969,14 @@ class tx_mmforum_phpbbimport {
 			$this->allTables[] = $tablename;
 		}
 	}
-	
-	
+
+
 	/**
 	 * Outputs the current internal data array for GP-parameter transmission.
 	 * To transfer all internal data used in one step of data import to the
 	 * next step, this function will output the complete internal data array
 	 * as a set of hidden <INPUT> fields.
-	 * 
+	 *
 	 * @return  string The set of hidden fields containing the internal data array.
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-03-08
@@ -1984,16 +1984,16 @@ class tx_mmforum_phpbbimport {
 	 */
 	function outputData() {
 		$content = $this->outputData_recursiveArray($this->data,'');
-		
+
 		return $content;
 	}
-	
+
 	/**
 	 * Helper function for internal data array output.
 	 * This function is a helper function for the output of the internal data array
 	 * for GP-parameter transmission. Since this function works recursively,
 	 * it can handle arrays of any dimension.
-	 * 
+	 *
 	 * @param   array  $arr  The array that is to be output
 	 * @param   string $path The path to the current level of output. Used by recursive calls.
 	 * @return  string       The array submitted via $arr as a set of <INPUT> fields

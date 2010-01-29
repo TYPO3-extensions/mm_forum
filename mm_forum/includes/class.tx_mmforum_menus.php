@@ -26,7 +26,7 @@ require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_base
 
 class tx_mmforum_menus extends tx_mmforum_base {
 	var $prefixId = 'tx_mmforum_pi1';
-	
+
 		/* VERY dirty hack, but has to be this way in order for the
 		 * plugin to load the pi1 locallang file. */
     var $scriptRelPath = 'pi1/class.tx_mmforum_pi1.php';
@@ -35,7 +35,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 		$this->prefixId = ($conf['prefixId'] ? $conf['prefixId'] : 'tx_mmforum_pi1');
 		$this->piVars   = t3lib_div::_GPmerged($this->prefixId);
 		$this->pi_loadLL();
-		
+
 		$this->cObj = t3lib_div::makeInstance('tslib_cObj');
 	}
 
@@ -44,7 +44,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 	 * This function generates a custom navigation with a HMENU. This function can be included
 	 * as special.userfunc in HMENUs in TypoScript in order to display the mm_forum category
 	 * tree as a navigation line.
-	 * 
+	 *
 	 * @param   string $content The content variable
 	 * @param   array  $conf    The configuration array
 	 * @return  array           An array containing a set of HMENU items
@@ -147,7 +147,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 	 * as special.userfunc in HMENUs in TypoScript in order to merge the mm_forum
 	 * internal rootline with a global page rootline. On the same time, the property
 	 * tx_mmforum_pi1.disableRootline should be set to 1.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-07-23
 	 * @param   string $content The content variable
@@ -244,11 +244,11 @@ class tx_mmforum_menus extends tx_mmforum_base {
 			// User profile
 			// Displays a rootline like "mm_forum page -> User profile: Username"
 			case 'forum_view_profil':
-				
+
 				if($this->piVars['fid']) {
 		            $user_id = tx_mmforum_tools::get_userid($this->piVars['fid']);
 		        } else $user_id = $this->piVars['user_id'];
-				
+
 				$conf['userNameField']?$conf['userNameField']:$conf['userNameField']='username';
 
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -261,7 +261,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 					'action'  => 'forum_view_profil',
 					'user_id' => $this->piVars['user_id']
 				);
-				
+
 				$result[] = array(
 					'title'          => sprintf($this->pi_getLL('rootline.userprofile'), $username),
 					'_OVERRIDE_HREF' => $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams)
@@ -294,7 +294,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 			);
 		}
 
-		if ($forumId) {    
+		if ($forumId) {
 			$boardParams[$this->prefixId] = array(
 				'action' => 'list_topic',
 				'fid'    => $forumId
@@ -305,7 +305,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 			);
 		}
 
-		if ($catId) {    
+		if ($catId) {
 			$catParams[$this->prefixId] = array(
 				'action' => 'list_forum',
 			);
@@ -321,7 +321,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 		} else {
 			$pageRootline = $GLOBALS['TSFE']->config['rootLine'];
 		}
-		
+
 		if(!$conf['includeNotInMenu']) {
 			$pageRootline_final = array();
 			foreach($pageRootline as $pageRootline_element) {
@@ -329,7 +329,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 					$pageRootline_final[] = $pageRootline_element;
 			}
 		} else $pageRootline_final = $pageRootline;
-		
+
 		$result = array_merge((array)$pageRootline_final, $result);
 
 		// Include hooks

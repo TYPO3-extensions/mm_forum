@@ -29,7 +29,7 @@
  * The tx_mmforum_rss class handles the display and generation of
  * RSS feeds informing about latest posts in the forum.
  * The mm_forum RSS generator supports three kinds of feeds:
- * 
+ *
  *  1. A global feed for the entire forum. This contains posts from
  *     all PUBLIC boards (public meaning no restrictions regarding the
  *     reading rights whatsoever).
@@ -37,7 +37,7 @@
  *     specific forum and only if this forum is public (see above).
  *  3. A feed for a single thread. This contains only posts from this
  *     specific thread and only if this thread is in a public forum.
- * 
+ *
  * @copyright  2008 Martin Helmich, Mittwald CM Service
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @version    2008-07-17
@@ -401,7 +401,7 @@ class tx_mmforum_rss {
 
     /**
      * Returns the amount of posts to be listed in the feed.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2008-07-17
      * @return  integer Returns 30

@@ -69,7 +69,7 @@ require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/cache/class.tx_mmforu
 
 	/**
 	 * Provides basic functionalities for all mm_forum plugins.
-	 * 
+	 *
 	 * @author     Martin Helmich <m.helmich@mittwald.de>
 	 * @author     Benjamin Mack  <benni@typo3.org>
 	 * @version    2008-10-12
@@ -86,7 +86,7 @@ class tx_mmforum_base extends tslib_pibase {
 	/**
 	 * Initializes all the things for a mm_forum plugin that is needed
 	 * Should be run as the first thing when a plugin is called
-	 * 
+	 *
 	 * @param   string $conf the configuration array for the plugin
 	 * @return  void
 	 */
@@ -94,14 +94,14 @@ class tx_mmforum_base extends tslib_pibase {
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		
+
 			/* Initialize validator */
 		$this->validator = tx_mmforum_validator::getValidatorObject();
 		$this->validatorObj = &$this->validator;
-		
+
 			/* Initialize tools */
 		$this->tools = t3lib_div::makeInstance('tx_mmforum_tools');
-		
+
 			/* Initialize cache object */
 		$this->cache =& tx_mmforum_cache::getGlobalCacheObject();
 
@@ -122,7 +122,7 @@ class tx_mmforum_base extends tslib_pibase {
 		}
 	}
 
-    
+
 	/**
 	 * Wrapper function for retrieval of language dependent strings.
 	 * This function overrides the parent pi_getLL function. This was introduced
@@ -130,11 +130,11 @@ class tx_mmforum_base extends tslib_pibase {
 	 * not possible due to the dots used in the language indices) by accessing
 	 * the same language label with dashes indead of dots. This function allows this
 	 * without changing all pi_getLL calls in this class.
-	 * 
+	 *
 	 * Furthermore, as of version 0.1.4, the function controls the use of
 	 * formal or informal language (which is mainly characterized by the use of the
 	 * german "Sie" or "Du").
-	 * 
+	 *
 	 * @param   string $key The language key
 	 * @return  string      The language dependent label
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -146,7 +146,7 @@ class tx_mmforum_base extends tslib_pibase {
 		// first check the alternative syntax with the "-"
 		$llKey = parent::pi_getLL($altKey);
 		if ($llKey) {
-			// additionally check for the informal option (once we know there is a 
+			// additionally check for the informal option (once we know there is a
 			if ($this->conf['informal'] && (parent::pi_getLL($altKey . '-inf'))) {
 				$llKey = parent::pi_getLL($altKey . '-inf');
 			}
@@ -166,7 +166,7 @@ class tx_mmforum_base extends tslib_pibase {
 	 * TypoScript configuration. If this should not be the case, this function
 	 * will try to determine the page UID by searching the tt_content table
 	 * for a regarding content element.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-02-11
  	 * @return  int The page UID where the mm_forum plugin is placed on
@@ -180,7 +180,7 @@ class tx_mmforum_base extends tslib_pibase {
 		if (!$pid) {
 			$cacheRes = $this->cache->restore('forum_pid');
 			if($cacheRes !== null) return $cacheRes;
-			
+
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'pid',
 				'tt_content',
@@ -189,7 +189,7 @@ class tx_mmforum_base extends tslib_pibase {
 			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 				list($pid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 			}
-			
+
 			$this->cache->save('forum_pid', $pid);
 		}
 		return $pid;
@@ -197,7 +197,7 @@ class tx_mmforum_base extends tslib_pibase {
 
 	/**
 	 * Returns the page UID of the plugin where you want the user profile to display.
-	 * 
+	 *
 	 * @return  int The page UID where the mm_forum plugin is placed on to display the user profiles
 	 */
 	function getUserProfilePID() {
@@ -207,7 +207,7 @@ class tx_mmforum_base extends tslib_pibase {
 
 	/**
 	* Determines if this instance of the mm_forum is a moderated forum.
-	* 
+	*
 	* @author  Martin Helmich <m.helmich@mittwald.de>
 	* @version 2007-07-19
 	* @return  boolean	true if the forum is moderated, otherwise false.
@@ -230,7 +230,7 @@ class tx_mmforum_base extends tslib_pibase {
 	 * Delivers a MySQL-WHERE query checking the records' PID.
 	 * This allows it to exclusively select records from a very specific list
 	 * of pages.
-	 * 
+	 *
 	 * @param   string $tables The list of tables that are queried
 	 * @return  string         The query, following the pattern " AND pid IN (...)"
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -258,7 +258,7 @@ class tx_mmforum_base extends tslib_pibase {
 	 * the mm_forum extension will create links that will allow readUrl to create
 	 * nicer URLs (like for example "mm_forum/board_a/my_topic/reply" instead of
 	 * "mm_forum//my_topic/reply").
-	 * 
+	 *
 	 * @return boolean TRUE, if RealURL and realUrl_specialLinks is enabled, otherwise
 	 *                 FALSE.
 	 */
@@ -270,7 +270,7 @@ class tx_mmforum_base extends tslib_pibase {
 	/**
 	 * Formats a date, and checks if there is a "%" in the dateFormat. If so, then
 	 * the php function strftime() function is used, otherwise date() is used
-	 * 
+	 *
 	 * @param  int     the timestamp
 	 * @return boolean The formatted date
 	 */
@@ -296,7 +296,7 @@ class tx_mmforum_base extends tslib_pibase {
 
 	/**
 	 * Wraps a URL to make it safe for outputting to the browser
-	 * 
+	 *
 	 * @param   string  the uncertain variable
 	 * @return  string  a string ready to output
 	 */
@@ -339,7 +339,7 @@ class tx_mmforum_base extends tslib_pibase {
 	 * Returns a complete Image HTML String
 	 * Generates a complete XHTML img-tag from parameters submitted in an
 	 * associative array.
-	 * 
+	 *
 	 * @param array  $imgInfo The parameters for image creation as associative array.
 	 *                        The array is to be generated according to the following pattern:
 	 *                             'src'           => Image source file
@@ -481,10 +481,10 @@ class tx_mmforum_base extends tslib_pibase {
 	function imgtag($imgInfo, $debug = TRUE) {
 		return $this->buildImageTag($imgInfo);
 	}
-	
+
 	/**
 	 * Gets the UID of the administrator group.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-10-07
 	 * @return  int The UID of the administrator group
@@ -503,14 +503,14 @@ class tx_mmforum_base extends tslib_pibase {
 	 * This function gets an array of the UIDs of all moderator groups,
 	 * meaning all groups that have moderation access to at least one
 	 * forum.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-10-07
 	 * @return  array An array of moderator group UIDs
 	 */
 	function getModeratorGroups() {
 		$cacheRes = $this->cache->restore('moderator_groups');
-		
+
 		if($cacheRes === null) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'GROUP_CONCAT(grouprights_mod)',
@@ -519,16 +519,16 @@ class tx_mmforum_base extends tslib_pibase {
 			);
 			list($groups) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 			$groups = str_replace(',,',',',$groups);
-			
+
 			$groupArr = t3lib_div::intExplode(',',$groups);
 			$result   = array_unique($groupArr);
-			
+
 			$this->cache->save('moderator_groups', $result, true);
-			
+
 			return $result;
 		} else return $cacheRes;
 	}
-	
+
 	/**
 	 * Returns the UID of the currently logged in fe_user.
 	 *
@@ -537,7 +537,7 @@ class tx_mmforum_base extends tslib_pibase {
 	function getUserID() {
 		return intval($GLOBALS['TSFE']->fe_user->user['uid']);
 	}
-	
+
 
 	/**
 	 * Determines if the user that is currently logged in is an administrator.
@@ -554,7 +554,7 @@ class tx_mmforum_base extends tslib_pibase {
 
 	/**
 	 * Determines if the user that is currently logged in is an moderator.
-	 * 
+	 *
 	 * @return boolean  TRUE, if the user that is currently logged in is an moderator.
 	 */
 	function getIsMod($forum=0) {
@@ -583,7 +583,7 @@ class tx_mmforum_base extends tslib_pibase {
         $intersect = array_intersect($GLOBALS['TSFE']->fe_user->groupData['uid'], $auth);
 
         $isMod = count($intersect) > 0;
-		
+
 		$this->cache->store("userIsMod_{$userId}_{$forum}", $isMod);
 
         return $isMod;
@@ -601,7 +601,7 @@ class tx_mmforum_base extends tslib_pibase {
 
 	/**
 	 * Jumps back to the previous page via an HTTP redirect
-	 * 
+	 *
 	 * @return	boolean	checks if the referrer
 	 */
 	function redirectToReferrer() {

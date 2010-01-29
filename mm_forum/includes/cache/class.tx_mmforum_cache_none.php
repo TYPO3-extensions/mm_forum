@@ -26,7 +26,7 @@
 	 * A dummy class for disabled caching.
 	 * This class is just a dummy class without any actual functionality.
 	 * It is used when the mm_forum cache is to be disabled.
-	 * 
+	 *
 	 * @author     Martin Helmich <m.helmich@mittwald.de>
 	 * @version    2008-10-11
 	 * @copyright  2008 Martin Helmich, Mittwald CM Service GmbH & Co. KG
@@ -34,14 +34,14 @@
 	 * @subpackage Cache
 	 */
 class tx_mmforum_cache_none {
-	
+
 		/**
 		 * Supposed to store some data, but actually does nothing.
 		 */
 	function save($key, $object, $override=false) {
 		/* Do nothing */
 	}
-	
+
 		/**
 		 * Just return false.
 		 * @return bool FALSE
@@ -49,7 +49,7 @@ class tx_mmforum_cache_none {
 	function restore($key) {
 		return null;
 	}
-	
+
 		/**
 		 * Just return false.
 		 * @return bool FALSE
@@ -57,7 +57,7 @@ class tx_mmforum_cache_none {
 	function delete($key) {
 		return false;
 	}
-	
+
 }
 
 ?>

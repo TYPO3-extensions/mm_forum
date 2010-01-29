@@ -1,19 +1,19 @@
 <?php
 /***************************************************************
  *  Copyright notice
- *  
+ *
  *  (c) 2007 Mittwald CM Service
  *  All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is 
+ *  This script is part of the TYPO3 project. The TYPO3 project is
  *  free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  The GNU General Public License can be found at
  *  http://www.gnu.org/copyleft/gpl.html.
- * 
+ *
  *  This script is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -44,7 +44,7 @@
  *
  */
 
-/** 
+/**
  * The class 'tx_mmforum_indexing' is a subclass for the search plugin
  * (tx_mmforum_pi4). It manages the indexing of topics and posts.
  * Post texts are split into single words, these words are written
@@ -83,10 +83,10 @@ class tx_mmforum_indexing {
 		} else {
 			$content = 'Could not find topic '.$topic_id;
 		}
-		
+
 			// Update indexing date in topic record
 		$this->write_topic_ind_date($topic_id);
-            
+
 		return $content;
 	}
 
@@ -100,7 +100,7 @@ class tx_mmforum_indexing {
 		list($date) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 		// If last indexing process happened less than 10 seconds ago, return TRUE
-		IF($date < (time()-10)) {  
+		IF($date < (time()-10)) {
 			return 0;
 		}
 		// Otherwise, return FALSE.
@@ -108,10 +108,10 @@ class tx_mmforum_indexing {
 			return 1;
 		}
 	}
-    
+
     function ind_topic_title($conf,$topic_id) {
         $GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_wordmatch',"topic_id='".$topic_id."' AND is_header=1");
-        
+
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             '*',
             'tx_mmforum_topics',
@@ -119,9 +119,9 @@ class tx_mmforum_indexing {
         );
         $topicData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
-		if($topicData['deleted'] == 0) {        
+		if($topicData['deleted'] == 0) {
 	        $words = $this->wordArray($conf, $topicData['topic_title']);
-	        
+
 	        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'f.grouprights_read as f_read, c.grouprights_read as c_read',
 				'tx_mmforum_forums f, tx_mmforum_forums c',
@@ -130,19 +130,19 @@ class tx_mmforum_indexing {
 			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 			$f_groups = t3lib_div::intExplode(',',$arr['f_read']);
 			$c_groups = t3lib_div::intExplode(',',$arr['c_read']);
-			
+
 			$rFGroups = array();
 			foreach($f_groups as $group) {
 				if($group > 0) $rFGroups[] = $group;
 			}
 			$sFGroups = implode(',',$rFGroups);
-			
+
 			$rCGroups = array();
 			foreach($c_groups as $group) {
 				if($group > 0) $rCGroups[] = $group;
 			}
 			$sCGroups = implode(',',$rCGroups);
-	        
+
 	        $matchparams = array(
 	            'post_id'           => $topicData['topic_first_post_id'],
 	            'topic_id'          => $topicData['uid'],
@@ -157,14 +157,14 @@ class tx_mmforum_indexing {
 	            'reqUserGruops_c'   => $sCGroups,
 	            'is_header'			=> 1,
 	        );
-	        
+
 	        foreach($words as $word) {
 	            $word_id = $this->wordAdd($word);
 	            $this->wortMatchAdd($word_id,$matchparams,false);
 	        }
 		}
-        
-        
+
+
     }
 
 	/**
@@ -177,16 +177,16 @@ class tx_mmforum_indexing {
 			// Delete old records in the index table regarding this post.
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_wordmatch',"post_id='".$post_array['uid']."'");
 
-			// If post is deleted, do not index again... 
+			// If post is deleted, do not index again...
 		if($post_array['deleted'] == 0) {
 				// Get post content
 			$content		= $this->get_posttext($post_array['uid']);
 				// Retrieve all words in the post content as array
-			$wordArray		= $this->wordArray($conf,$content);	
-	
+			$wordArray		= $this->wordArray($conf,$content);
+
 				// Load topic information
 			$topic_array	= $this->topic_information($post_array['topic_id']);
-			
+
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'f.grouprights_read as f_read, c.grouprights_read as c_read',
 				'tx_mmforum_forums f, tx_mmforum_forums c',
@@ -195,20 +195,20 @@ class tx_mmforum_indexing {
 			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 			$f_groups = t3lib_div::intExplode(',',$arr['f_read']);
 			$c_groups = t3lib_div::intExplode(',',$arr['c_read']);
-			
+
 			#$groups = array_merge($f_groups,$c_groups);
 			$rFGroups = array();
 			foreach($f_groups as $group) {
 				if($group > 0) $rFGroups[] = $group;
 			}
 			$sFGroups = implode(',',$rFGroups);
-			
+
 			$rCGroups = array();
 			foreach($c_groups as $group) {
 				if($group > 0) $rCGroups[] = $group;
 			}
 			$sCGroups = implode(',',$rCGroups);
-	
+
 			// Compose data for word matches
 			$matchparams['post_id']			= $post_array['uid'];
 			$matchparams['topic_id']		= $post_array['topic_id'];
@@ -221,14 +221,14 @@ class tx_mmforum_indexing {
 			$matchparams['post_cruser']		= $post_array['cruser_id'];
 			$matchparams['reqUserGroups_f']	= $sFGroups;
 			$matchparams['reqUserGroups_c']	= $sCGroups;
-	
+
 			// Insert words and word matches into data base. Very time consuming.
 			foreach($wordArray as $value) {
 				$word_id = $this->wordAdd($value);			// Insert word into database and get UID
 				$this->wortMatchAdd($word_id,$matchparams,true);	// Write word match into database
 			}
 		}
-		
+
 		$this->write_post_ind_date($post_array['uid']);				// Update post indexing date
 	}
 
@@ -279,7 +279,7 @@ class tx_mmforum_indexing {
 		// Attempt to load word from database
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_wordlist',"word=".$GLOBALS['TYPO3_DB']->fullQuoteStr($word, 'tx_mmforum_wordlist')." ".$this->getPidQuery($this->conf));
 		IF(mysql_error()) echo mysql_error().'<hr>';
-		
+
 		// If words already exists, just return the UID
 		if($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 			list($uid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
@@ -290,7 +290,7 @@ class tx_mmforum_indexing {
 			$insertArray = array(
 				'pid'		=> $this->getFirstPid($this->conf),
 				'word'		=> $word,
-				'metaphone'	=> metaphone($word) 
+				'metaphone'	=> metaphone($word)
 			);
 
 			// Execute insert query
@@ -329,11 +329,11 @@ class tx_mmforum_indexing {
 		// Execute query
 		$query = $GLOBALS['TYPO3_DB']->INSERTquery('tx_mmforum_wordmatch', $insertArray);
         $GLOBALS['TYPO3_DB']->sql_query($query);
-        
+
         #if(!$res) echo "AAARGH!";
         #echo $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery.'<br />';
 	}
-	
+
 	/**
 	 * Delivers a MySQL-WHERE query checking the records' PID.
 	 * This allows it to exclusively select records from a very specific list
@@ -352,10 +352,10 @@ class tx_mmforum_indexing {
 				return ' AND pid = '.$conf['storagePID'].' ';
 			else return ' AND pid IN ('.$conf['pidList'].')';
 		}
-		
+
 		$tables = t3lib_div::trimExplode(',',$tables);
 		$query = "";
-		
+
 		foreach($tables as $table) {
 			if($conf['storagePID'])
 				$query .= " AND $table.pid = ".$conf['storagePID']." ";
@@ -363,7 +363,7 @@ class tx_mmforum_indexing {
 		}
 		return $query;
 	}
-	
+
 	function getFirstPid($conf) {
 			// If conf['storagePID'] is set, indexing is called in cronjob mode
 		if($conf['storagePID']) return $conf['storagePID'];
@@ -374,7 +374,7 @@ class tx_mmforum_indexing {
 			return $pids[0];
 		}
 	}
-	
+
 	/**
 	 * Clears a string of all BBCodes
 	 * @param  string $string The string to be cleared
@@ -421,7 +421,7 @@ class tx_mmforum_indexing {
 		$string     = preg_replace( $patterns, "", $string) ;
 		return $string;
 	}
-	
+
 	/**
 	 * Generates an array of search words out of a search string.
 	 * Strips the search words of invalid special chars and checks if
@@ -435,32 +435,32 @@ class tx_mmforum_indexing {
 		$string     = $this->clear_phpBB($string);
 		$string     = strip_tags($string);
 		$string		= preg_replace('/\W/',' ',$string);
-		
+
 		$wordArray  = explode(' ',$string);
 
 		// Explodes the string into an array
 		$clearWordArray = array();
 		foreach($wordArray as $val) {
 			$val = trim($val);
-			
+
 			$minLength = $conf['sword_minLength']?$conf['sword_minLength']:$conf['min_length'];
-			
+
 			if(strlen($val) >= $minLength) {
 				$val = strtoupper($val);
 				array_push($clearWordArray,$val);
 			}
 		}
-		
+
 		$clearWordArray = array_unique($clearWordArray);
 		return $clearWordArray;
 	}
-	
+
 	function get_posttext($post_id) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts_text',"post_id='$post_id' AND deleted='0' AND hidden='0'".$this->getPidQuery($this->conf),'','','1');
 		$row    = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		return $row['post_text'];
 	}
-	
+
 	/**
 	 * Returns information about a certain topic.
 	 * @param  int   $topic_id The topic UID

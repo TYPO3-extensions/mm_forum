@@ -516,7 +516,7 @@ $TCA['tx_mmforum_polls_answers'] = array(
         ),
         'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
 	'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/poll.png',
-    ),          
+    ),
     'feInterface' => array(
         'fe_admin_fieldList' => 'hidden, answer, poll_id, votes'
     )
@@ -562,7 +562,7 @@ $TCA['tx_mmforum_ranks'] = array(
         ),
         'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
         'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/rank.png',
-    ),          
+    ),
     'feInterface' => array(
         'fe_admin_fieldList' => 'hidden, icon, title, color, minPosts, special'
     )
@@ -585,14 +585,14 @@ $TCA['tx_mmforum_postqueue'] = array(
         ),
         'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
 	'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/comments.png',
-    ),          
+    ),
     'feInterface' => array(
         'fe_admin_fieldList' => 'hidden, topic, topic_forum, topic_title, topic_poll, topic_subscribe, post_parent, post_text, post_user, post_time, post_attachment, post_ip'
     )
 );
 
 
- 
+
 /*
  * Include plugin 'mm_forum :: Forum'
  */
@@ -600,7 +600,7 @@ t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi1'] = 'layout,select_key,pages';
 t3lib_extMgm::addPlugin(array('LLL:EXT:mm_forum/locallang_db.php:tt_content.list_type_pi1', $_EXTKEY . '_pi1'), 'list_type');
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_pi1'] = 'pi_flexform';
-t3lib_extMgm::addPiFlexFormValue($_EXTKEY . '_pi1', 'FILE:EXT:mm_forum/flexform_ds_pi1.xml'); 
+t3lib_extMgm::addPiFlexFormValue($_EXTKEY . '_pi1', 'FILE:EXT:mm_forum/flexform_ds_pi1.xml');
 
 if (TYPO3_MODE == 'BE') {
 	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_mmforum_pi1_wizicon'] = t3lib_extMgm::extPath($_EXTKEY) . 'pi1/class.tx_mmforum_pi1_wizicon.php';

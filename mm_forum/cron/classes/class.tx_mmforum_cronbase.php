@@ -57,7 +57,7 @@ require_once(PATH_t3lib.'class.t3lib_tsparser.php');
  * This class is the base object for all cronjob classes of the mm_forum.
  * Is provides basic functions for debugging and logging, loading of template
  * files, language control functions, cache control and so on.
- * 
+ *
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @copyright  2008 Martin Helmich, Mittwald CM Service
  * @version    $Id$
@@ -194,21 +194,21 @@ class tx_mmforum_cronbase {
 
 			// Load default constants file
 		$conf    = file_get_contents(dirname(PATH_thisScript).'/../ext_typoscript_constants.txt');
-		
+
 			// Load user settings file
 		$localSettings_filename = dirname(PATH_thisScript).'/../../../tx_mmforum_config.ts';
 		if(file_exists($localSettings_filename))
 		    $conf   .= "\n#LOCAL SETTINGS\n".file_get_contents( $localSettings_filename );
-		    
+
 		    // Parse setup
 		$parser  = new t3lib_TSparser();
 		$parser->parse($conf);
 		$this->conf = $parser->setup['plugin.']['tx_mmforum.'];
-		
+
 			// Load language files
 		$this->loadLanguageFile();
 
-			// Validate configuration		
+			// Validate configuration
 		$this->validateConfig();
 
 	}
@@ -248,11 +248,11 @@ class tx_mmforum_cronbase {
 
 	function loadLanguageFile($langFile='') {
 		if(empty($langFile)) $langFile = 'lang.'.$this->cron_name.'.php';
-		
+
 		$this->langFile = dirname(PATH_thisScript).'/lang/'.$langFile;
 		if(file_exists($this->langFile)) require_once($this->langFile);
 		else $this->debug("Language file not found.", $this->DEBUG_FATAL);
-		
+
 		if(isset($LANG)) $this->lang = $LANG;
 		else $this->debug("Language file could not be read.", $this->DEBUG_FATAL);
 	}
@@ -340,7 +340,7 @@ class tx_mmforum_cronbase {
 
 	function formatDate($tstamp) {
     	$df = $this->conf['dateFormat'];
-    	
+
     	if(strpos($df,'%')===false) return date($df,$tstamp);
     	else return strftime($df,$tstamp);
     }
@@ -360,7 +360,7 @@ class tx_mmforum_cronbase {
 
     function removeCacheValue($key) {
     	$res = $GLOBALS['TYPO3_DB']->exec_DELETEquery(
-			'tx_mmforum_cache', 'cache_key='.$GLOBALS['TYPO3_DB']->fullQuoteStr($key,'tx_mmforum_cache')    	
+			'tx_mmforum_cache', 'cache_key='.$GLOBALS['TYPO3_DB']->fullQuoteStr($key,'tx_mmforum_cache')
     	);
     	return $res?true:false;
     }
@@ -411,7 +411,7 @@ class tx_mmforum_cronbase {
     	$value = $this->getCacheValue($key);
     	$this->removeCacheValue($key);
     	return $value;
-    } 
+    }
 
 
 
@@ -442,7 +442,7 @@ class tx_mmforum_cronbase {
 			case $this->DEBUG_NOTICE: $this->debug('Note - '.$message); break;
 			default: if($this->conf['cron_verbose'] == $this->DEBUGMODE_ALL) echo $message.chr(10); break;
 		}
-	}	
+	}
 }
 
 	// XClass inclusion

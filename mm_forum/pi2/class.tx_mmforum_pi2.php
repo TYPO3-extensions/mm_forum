@@ -1,11 +1,11 @@
 <?php
 /**
  *  Copyright notice
- *  
+ *
  *  (c) 2007 Mittwald CM Service
  *  All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is 
+ *  This script is part of the TYPO3 project. The TYPO3 project is
  *  free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -50,13 +50,13 @@ require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/user/class.tx_mmforum
 require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/user/class.tx_mmforum_userfield.php');
 require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_pi1.php');
 
-/** 
+/**
  * The plugin 'User registration' for the 'mm_forum' extension
  * handles the registration, creation and activation of new users.
  * When a new user registrates, the regarding user record is created
  * as disabled, and the user is required to activate his account by
  * visiting a certain link unique for each user.
- *                     
+ *
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @author     Björn Detert <b.detert@mittwald.de>
  * @copyright  2007 Mittwald CM Service
@@ -67,7 +67,7 @@ require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_pi1.php')
 class tx_mmforum_pi2 extends tx_mmforum_base {
 	var $prefixId      = 'tx_mmforum_pi2';
 	var $scriptRelPath = 'pi2/class.tx_mmforum_pi2.php';
-	
+
 	var $userlib		= null;
 
 
@@ -88,7 +88,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		$this->tmpl = $this->cObj->fileResource($conf['templateFile']);
 
 		$userHash = $this->piVars['user_hash'];
-		
+
 			/* Instantiate user management library */
 		$this->userLib = t3lib_div::makeInstance('tx_mmforum_usermanagement');
 
@@ -234,14 +234,14 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			);
 
 			$res2 = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users',"tx_mmforum_reg_hash='$hash'",$updateArray);
-			
+
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['activateUser'])) {
 			    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['activateUser'] as $_classRef) {
 			        $_procObj = & t3lib_div::getUserObj($_classRef);
 			        $_procObj->activateUser($row,$this);
 			    }
 			}
-			
+
 			// Output error message in case of failure
 			if (mysql_error()) {
 				$template = $this->cObj->getSubpart($this->tmpl, "###FEHLER###");
@@ -256,7 +256,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			$marker = array();
 			$marker['###VALUE_username###'] = $row['username'];
 			$template = $this->cObj->getSubpart($this->tmpl, "###TEMPLATE_VALIDATION_OK###");
-			
+
 			$marker['###LABEL_HELLO###']     = $this->cObj->substituteMarker($this->pi_getLL('msg.hello'), '###USERNAME###', $marker['###VALUE_username###']);
 			$marker['###LABEL_ACTIVATED###'] = $this->cObj->substituteMarker($this->pi_getLL('msg.activated'), '###SITENAME###', $this->conf['siteName']);
 			$marker['###LABEL_YOURS###']     = $this->cObj->substituteMarker($this->pi_getLL('msg.yours'), '###TEAM###', $this->conf['teamName']);
@@ -266,7 +266,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		// If user records exists more than one time or not at all, abort.
 		else {
 			$template = $this->cObj->getSubpart($this->tmpl, "###FEHLER###");
-			
+
 			$marker = array(
 				'###LABEL_ERRORGENERAL###'  => $this->pi_getLL('error.generalError'),
 				'###LABEL_PLEASECONTACT###' => $this->cObj->substituteMarker($this->pi_getLL('error.support'),'###SUPPORTMAIL###',str_replace('@',' [at] ',$this->conf['supportMail'])),
@@ -318,7 +318,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			'disable'			    => 1,
 			'tx_mmforum_reg_hash'   => $this->data['reghash']
 		);
-		
+
 			# Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['saveData'])) {
 		    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['saveData'] as $_classRef) {
@@ -326,32 +326,32 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		        $insertArray = $_procObj->saveRegistrationFormData($insertArray,$this->data,$this);
 		    }
 		}
-		
+
 		$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('fe_users',$insertArray);
         $user_id = $GLOBALS['TYPO3_DB']->sql_insert_id();
-        
+
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_mmforum_userfields', 'deleted=0');
-        
+
         if($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
-            
+
 			$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
 			$userField->init($this->userLib, $this->cObj);
-			
+
 			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$userField->get($arr);
-				
+
 				$value = trim($this->piVars['userfields'][$userField->getUID()]);
 				$userField->setForUser($user_id, $value, $this->getStoragePID());
 
 				if($userField->isUsingExistingField()) $this->data[$userField->getLinkedUserField()] = $value;
 			}
 		}
-		
+
 		/*
         if(is_array($this->piVars['userfields'])) {
             foreach($this->piVars['userfields'] as $uid => $value) {
                 if(strlen(trim($value))==0) continue;
-                
+
                 if($this->piVars['userfields_exist'][$uid]) {
                     if($this->userLib->getUserfieldUsesExistingField($uid)) {
                         $updateArray = array(
@@ -373,7 +373,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
                 }
             }
         }*/
-		
+
 		if (mysql_error()) return 0;
 		return 1;
 	}
@@ -389,21 +389,21 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		$marker["###FORM_URL###"]= $this->pi_getPageLink($GLOBALS["TSFE"]->id);
 
 		$marker["###FORM_NAME###"]=$this->extKey."[reg]";
-		
+
 		if(t3lib_extMgm::isLoaded('captcha') && $this->conf['useCaptcha']) {
 			$marker['###CAPTCHA_IMAGE###'] = '<img src="'.t3lib_extMgm::siteRelPath('captcha').'captcha/captcha.php" alt="" />';
 		} else {
 			$template = $this->cObj->substituteSubpart($template, '###CAPTCHA###', '');
 		}
-		
+
 		$fields = 'username,name,tx_mmforum_occ,city,tx_mmforum_interests,www,email';
 		$fields = explode(',',$fields);
-		
+
 		$requiredFields = t3lib_div::trimExplode(',',$this->conf['required.']['fields']);
 		$requiredFields[] = 'username';
 		$requiredFields[] = 'password';
 		$requiredFields[] = 'passwordrepeat';
-		
+
 		$llMarker = array(
 			'###LABEL_REQUIRED###'			=> $this->pi_getLL('reg.requiredNote'),
 			'###LABEL_USERNAME###'			=> $this->pi_getLL('reg.username'),
@@ -418,7 +418,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			'###LABEL_EMAIL###'				=> $this->pi_getLL('reg.email'),
 			'###LABEL_CAPTCHA###'			=> $this->pi_getLL('reg.captcha'),
 			'###LABEL_REGISTRATION###'		=> $this->pi_getLL('reg.title'),
-            
+
             '###IMG_MAIL###'				=> tx_mmforum_pi1::createButton('email',array(),0,true,'',true),
 			'###IMG_ICQ###'					=> tx_mmforum_pi1::createButton('icq',array(),0,true,'',true),
 			'###IMG_AIM###'					=> tx_mmforum_pi1::createButton('aim',array(),0,true,'',true),
@@ -426,48 +426,48 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			'###IMG_MSN###'					=> tx_mmforum_pi1::createButton('msn',array(),0,true,'',true),
             '###IMG_SKYPE###'			   	=> tx_mmforum_pi1::createButton('skype',array(),0,true,'',true),
 		);
-		
+
 			/* Highlight required fields */
 		foreach($requiredFields as $field) {
 			$llMarker['###LABEL_'.strtoupper($field).'###'] = $this->cObj->wrap($llMarker['###LABEL_'.strtoupper($field).'###'], $this->conf['required.']['fieldWrap']);
 		}
-		
+
 			/* Restore old markers for backwards compatibility */
 		$llMarker['###LABEL_PROFESSION###']		= $llMarker['###LABEL_TX_MMFORUM_OCC###'];
 		$llMarker['###LABEL_LOCATION###']		= $llMarker['###LABEL_CITY###'];
 		$llMarker['###LABEL_INTERESTS###']		= $llMarker['###LABEL_TX_MMFORUM_INTERESTS###'];
 		$llMarker['###LABEL_WEBSITE###']		= $llMarker['###LABEL_WWW###'];
-		
+
 		$marker = array_merge($marker,$llMarker);
-        
+
         $userField_template = $this->cObj->getSubpart($template, '###USERFIELDS###');
         $userField_content  = '';
-        
+
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             '*',
             'tx_mmforum_userfields',
             'deleted=0',
             '','sorting DESC'
         );
-        
+
         if($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
-            
+
 			$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
 			$userField->init($this->userLib, $this->cObj);
 
 			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$userField->get($arr);
-				
+
 				if (($this->conf['showOnlyRequiredUserfields'] == 1 && $userField->isRequired()) || ($this->conf['showOnlyRequiredUserfields'] != 1)) {
   				$label = $userField->getRenderedLabel();
-  
+
                   if($userField->isRequired())
                       $label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
-  				
+
   				$input = $userField->getRenderedInput($this->piVars['userfields'][$userField->getUID()]);
   				if($input === null) $input = $this->cObj->getSubpart($userField_template, '###DEFUSERFIELD###');
   				$userField_thisTemplate = $this->cObj->substituteSubpart($userField_template, '###DEFUSERFIELD###', $input);
-  				
+
   				$userFields_marker = array(
                       '###USERFIELD_LABEL###'     => $label,
                       '###USERFIELD_UID###'       => $userField->getUID(),
@@ -481,7 +481,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
           $userFields_content .= $this->cObj->substituteMarkerArrayCached($userField_thisTemplate, $userFields_marker);
 			  }
 			}
-			
+
 			/*
 			$parser = t3lib_div::makeInstance('t3lib_TSparser');
             while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
@@ -490,30 +490,30 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
                     $parser->parse($arr['config']);
                     $config = $parser->setup;
                 } else $config = array();
-                
+
                 if($config['label']) $label = $this->cObj->cObjGetSingle($config['label'],$config['label.']);
                 else $label = $arr['label'];
-				
+
 				if($config['required'])
 					$label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
-                
+
                 if($config['input']) {
                     $data = array(
                         'fieldvalue'        => $value
                     );
                     $tmpData = $this->cObj->data;
                     $this->cObj->data = $data;
-                    
+
                     $input = $this->cObj->cObjGetSingle($config['input'],$config['input.']);
-                    
+
                     $this->cObj->data = $tmpData;
                 } else $input = $this->cObj->getSubpart($userField_template, '###DEFUSERFIELD###');
                 $userField_thisTemplate = $this->cObj->substituteSubpart($userField_template, '###DEFUSERFIELD###', $input);
-                
+
                 if($config['datasource']) {
                     $label .= '<input type="hidden" name="tx_mmforum_pi2[userfields_exist]['.$arr['uid'].']" value="'.$config['datasource'].'" />';
                 }
-                
+
                 $userFields_marker = array(
                     '###USERFIELD_LABEL###'     => $label,
                     '###USERFIELD_UID###'       => $arr['uid'],
@@ -523,12 +523,12 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
                 );
                 $userFields_content .= $this->cObj->substituteMarkerArrayCached($userField_thisTemplate, $userFields_marker);
             }
-            
+
             */
-            
+
         }
         $template = $this->cObj->substituteSubpart($template, '###USERFIELDS###', $userFields_content);
-		
+
 		$template = $this->cObj->substituteMarkerArrayCached($template,$marker);
 		return $template;
 	}
@@ -578,7 +578,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		$marker["###VALUE_yim###"]				= $this->data['yim'];
 		$marker["###VALUE_aim###"]				= $this->data['aim'];
 		$marker["###VALUE_icq###"]				= $this->data['icq'];
-        $marker["###VALUE_skype###"]			= $this->data['skype'];  
+        $marker["###VALUE_skype###"]			= $this->data['skype'];
 
 			/*
 			 * Check captcha
@@ -591,7 +591,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			}
 			$_SESSION['tx_captcha_string'] = '';
 		}
-		
+
 			/*
 			 * Check username
 			 * A username must be at least 3 characters long and has a maximum length of 30 chars.
@@ -601,7 +601,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			$marker["###ERROR_username###"] = $this->cObj->wrap($this->pi_getLL('error.usernameLength'), $this->conf['errorwrap']);
 			$marker["fehler"] = 1;
 		}
-		
+
 		if($this->conf['username_pattern']) {
 			$username_pattern			= $this->conf['username_pattern'];
 			$username_useMatchPattern	= true;
@@ -609,7 +609,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			$username_pattern			= '/[^'.preg_quote($this->conf['username_allowed']).']/i';
 			$username_useMatchPattern	= false;
 		}
-		
+
         if ((preg_match_all($username_pattern,$this->data['username'],$matches) && !$username_useMatchPattern) ||
 		    (!preg_match_all($username_pattern,$this->data['username'],$matches) && $username_useMatchPattern)) {
 			$matches[0] = array_unique($matches[0]);
@@ -640,23 +640,23 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			$marker["###ERROR_password###"] = $this->cObj->wrap($this->pi_getLL('error.passwordLength'), $this->conf['errorwrap']);
 			$marker["fehler"] = 1;
 		}
-		
+
 			/* Validate user defined fields */
 			/* Check required user fields */
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*', 'tx_mmforum_userfields', 'deleted=0'
 		);
-		
+
 		$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
 		$userField->init($this->userLib, $this->cObj);
-		
+
 		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-		
+
 			$userField->get($arr);
-		
+
 			$value		= $this->piVars['userfields'][$userField->getUID()];
 			$validate	= $userField->isValid($value);
-			
+
 			if(!$validate) {
 				$marker['fehler'] = 1;
 				$marker['userfield_error'][$arr['uid']] = $this->pi_getLL('error-userfieldEmpty');
@@ -669,7 +669,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
       }
 
 		}
-		
+
 			/* Include hooks */
 	    if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['validateFormData'])) {
 	        foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['validateFormData'] as $_classRef) {
@@ -714,10 +714,10 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		$marker["###VALUE_yim###"]				= $this->data['yim'];
 		$marker["###VALUE_aim###"]				= $this->data['aim'];
 		$marker["###VALUE_icq###"]				= $this->data['icq'];
-        $marker["###VALUE_skype###"]			= $this->data['skype']; 
-        $marker["###VALUE_city###"]				= $this->data['city']; 
-        $marker["###VALUE_tx_mmforum_occ###"]			= $this->data['tx_mmforum_occ']; 
-        $marker["###VALUE_tx_mmforum_interests###"]			= $this->data['tx_mmforum_interests']; 
+        $marker["###VALUE_skype###"]			= $this->data['skype'];
+        $marker["###VALUE_city###"]				= $this->data['city'];
+        $marker["###VALUE_tx_mmforum_occ###"]			= $this->data['tx_mmforum_occ'];
+        $marker["###VALUE_tx_mmforum_interests###"]			= $this->data['tx_mmforum_interests'];
 
 			// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['makeMarker'])) {
@@ -729,7 +729,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 		return $marker;
 	}
-	
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi2/class.tx_mmforum_pi2.php']) {

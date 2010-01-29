@@ -18,7 +18,7 @@
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- * 
+ *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 /**
@@ -76,7 +76,7 @@ class tx_mmforum_havealookforum {
 			$insertArray = array(
 				'pid'      => $forumObj->getStoragePID(),
 				'tstamp'   => time(),
-				'crdate'   => time(), 
+				'crdate'   => time(),
 				'forum_id' => $forumId,
 				'user_id'  => $feUserId
 			);
@@ -90,7 +90,7 @@ class tx_mmforum_havealookforum {
 
 	/**
 	 * Removes a topic from a user's list of email subscriptions.
-	 * 
+	 *
 	 * @param  array  $forumObj The plugin object
 	 * @return string           An error message in case the redirect attempt to
 	 *                          the previous page fails.
@@ -99,11 +99,11 @@ class tx_mmforum_havealookforum {
 		$feUserId = intval($GLOBALS['TSFE']->fe_user->user['uid']);
 		$forumId  = intval($forumObj->piVars['fid']);
 
-		// Executing database operations 
+		// Executing database operations
 		$res = $GLOBALS['TYPO3_DB']->exec_DELETEquery(
 			'tx_mmforum_forummail',
 			'user_id = ' . $feUserId . ' AND forum_id = ' . $forumId . $forumObj->getStoragePIDQuery()
-		); 
+		);
 
 		// Redirecting visitor back to previous page
 		$forumObj->redirectToReferrer();

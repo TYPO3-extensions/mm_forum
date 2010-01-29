@@ -1,11 +1,11 @@
 <?php
 /**
  *  Copyright notice
- *  
+ *
  *  (c) 2007-2009 Mittwald CM Service GmbH & Co. KG
  *  All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is 
+ *  This script is part of the TYPO3 project. The TYPO3 project is
  *  free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
@@ -27,7 +27,7 @@
  * This class provides functions regarding user management. Is is e.g.
  * used in the user registration and user settings plugin (tx_mmforum_pi2
  * and tx_mmforum_pi5) and in the mm_forum backend module.
- * 
+ *
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @copyright  2009 Martin Helmich, Mittwald CM Service GmbH & Co. KG
  * @version    2009-02-16
@@ -35,15 +35,15 @@
  * @subpackage Includes
  */
 class tx_mmforum_usermanagement {
-	
+
 		/** An instance of the t3lib_TSparser class */
 	var $parser;
-	
+
 		/**
 		 * Gets an instance of the t3lib_TSparser class.
-		 * 
+		 *
 		 * @return &t3lib_TSparser A reference to an t3lib_TSparser object.
-		 * 
+		 *
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2009-02-16
 		 */
@@ -57,41 +57,41 @@ class tx_mmforum_usermanagement {
 
 		/**
 		 * Determines if a user field uses an existing fe_user field
-		 * 
+		 *
 		 * @param  int $uid The UID of the userfield
 		 * @return boolean  TRUE, if the userfield uses an existing fe_user field,
 		 * 	                otherwise FALSE.
-		 * 
+		 *
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2009-02-16
 		 */
 	function getUserfieldUsesExistingField($uid) {
-		
+
 		$userField = $this->getUserFieldData($uid);
 		if ($userField !== null) {
 			return ($userField['config_parsed']['datasource'] ? true : false);
 		}
 		return false;
-		
+
 	}
-	
+
 		/**
 		 * Loads the record of an user field.
 		 * This function load the entire record of a custom user field. The
 		 * field's typoscript configuration is automatically parsed and the
 		 * array of metadata that is stored in the database is automatically
 		 * unserialized.
-		 * 
+		 *
 		 * @param  mixed $data Some data the record is to be initialized with.
 		 *                     This may be either the record's UID or the entire
 		 *                     record itself as array.
 		 * @return array       The record of the user field.
-		 * 
+		 *
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2009-02-16
 		 */
 	function getUserFieldData($data) {
-		
+
 		if(is_int($data) || intval($data) != 0 ) {
 				/* Load record from database */
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -102,16 +102,16 @@ class tx_mmforum_usermanagement {
 		} elseif (is_array($arr)) {
 			$arr = $data;
 		}
-		
+
 			/* Unserialize array with meta information */
 		$arr['meta'] = unserialize($arr['meta']);
-		
+
 			/* Parse configuration TypoScript */
         $parser = $this->getTSParser();
         $parser->parse($arr['config']);
         $arr['config_parsed'] = $parser->setup;
 		$parser->setup = null;
-		
+
 			/* Do some corrections for backwards compatibility */
 		if(!$arr['meta']['label']['default'])
 			$arr['meta']['label']['default'] = $arr['label'];
@@ -127,11 +127,11 @@ class tx_mmforum_usermanagement {
 			$arr['meta']['text']['validate'] = 'none';
 		if(!$arr['meta']['text']['length'])
 			$arr['meta']['text']['length'] = '-1';
-		
+
 		return $arr;
-		
+
 	}
-	
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/includes/user/class.tx_mmforum_usermanagement.php']) {

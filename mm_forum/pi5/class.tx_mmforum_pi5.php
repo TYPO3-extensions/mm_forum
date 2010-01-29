@@ -1,19 +1,19 @@
 <?php
 /***************************************************************
  *  Copyright notice
- *  
+ *
  *  (c) 2007 Mittwald CM Service
  *  All rights reserved
  *
- *  This script is part of the TYPO3 project. The TYPO3 project is 
+ *  This script is part of the TYPO3 project. The TYPO3 project is
  *  free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- * 
+ *
  *  The GNU General Public License can be found at
  *  http://www.gnu.org/copyleft/gpl.html.
- * 
+ *
  *  This script is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -45,7 +45,7 @@ require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_post
 require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/user/class.tx_mmforum_usermanagement.php');
 require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_pi1.php');
 
-/** 
+/**
  * The plugin 'Change Userdetails' for the 'mm_forum' extension
  * offers forms for fe_users to change their user settings. This
  * means fields like interests, homepage, email address etc., furthermore
@@ -69,7 +69,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 	/**
 	 * Main method. Calls the function list_userdata.
-	 * 
+	 *
 	 * @author  Georg Ringer <typo3@ringerge.org>
 	 * @version 2007-05-15
 	 * @param   string $content The content
@@ -83,7 +83,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 			/* Instantiate user management library */
 		$this->userLib = t3lib_div::makeInstance('tx_mmforum_usermanagement');
-        
+
         if($GLOBALS['TSFE']->fe_user->user['uid'])
 		    $content = $this->list_userdata($content,$conf);
         else {
@@ -96,7 +96,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 	/**
 	 * Displays a form for editing the data of the current user.
-	 * 
+	 *
 	 * @author  Georg Ringer <typo3@ringerge.org>
      * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-05-15
@@ -108,10 +108,10 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		if (t3lib_div::_GP("action") == "change_data")			   $this->write_userdata($content,$conf);
 		if (t3lib_div::_GP("action") == "avatar_upload")	$content = $this->avatar_upload($content,$conf);
 		if (t3lib_div::_GP("action") == "change_pass")	$content = $this->change_pass($content,$conf);
-			
+
 		$template = $this->cObj->fileResource($conf['template']);
 		$template = $this->cObj->getSubpart($template, "###MAIN###");
-		$extrafields = 'uid,username,crdate,tx_mmforum_posts,tx_mmforum_avatar,image,';	
+		$extrafields = 'uid,username,crdate,tx_mmforum_posts,tx_mmforum_avatar,image,';
 		$fields = $extrafields.str_replace(' ', '', $conf['userFields']);
 		$where = 'uid = "'.$GLOBALS['TSFE']->fe_user->user['uid'].'"';
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users',$where,$groupBy='');
@@ -154,7 +154,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		// Create marker array, field names are retrieved from TypoScript
 		$data = explode(',', $fields);
 		$required = t3lib_div::trimExplode(',',$this->conf['required.']['fields']);
-		
+
 		foreach ($data as $k=>$v) {
 			$marker['###'.strtoupper($v).'###'] = isset($this->piVars[$v])?$this->piVars[$v]:$row[$v];
 			$marker['###DESCR_'.strtoupper($v).'###'] = $this->pi_getLL($v);
@@ -166,24 +166,24 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		// Some special fields
 		$marker['###CRDATE###']				= date($conf['date'], $row['crdate']);
         $marker['###ACTIONLINK###']         = '';
-		$marker['###SIGNATUR_PREVIEW###']	= tx_mmforum_postparser::main($this,$conf,$row['tx_mmforum_user_sig'],'textparser'); 
+		$marker['###SIGNATUR_PREVIEW###']	= tx_mmforum_postparser::main($this,$conf,$row['tx_mmforum_user_sig'],'textparser');
 
 		// Avatar
 		$imgTSConfig = $conf['avatar.'];
-        
+
         if($row['tx_mmforum_avatar'])
             $imgTSConfig['file'] = $conf['path_avatar'].$row['tx_mmforum_avatar'];
         elseif($row['image']) {
             if(strstr($row['image'],',') !== false) {
             	$avatarArray = t3lib_div::trimExplode(',',$row['image']);
             	$row['image'] = $avatarArray[0];
-            } 
-            
+            }
+
             if(file_exists('uploads/pics/'.$row['image']))
             	$imgTSConfig['file'] = 'uploads/pics/'.$row['image'];
             elseif(file_exists('uploads/tx_srfeuserregister/'.$row['image']))
             	$imgTSConfig['file'] = 'uploads/tx_srfeuserregister/'.$row['image'];
-        }    
+        }
 		$marker['###AVATAR###'] =  $this->cObj->IMAGE($imgTSConfig);
 
 		if ($row['tx_mmforum_avatar'] || $row['image']) {
@@ -192,14 +192,14 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 		// Language markers
 		$dataLL = Array ('descr_signatur_preview', 'send', 'about','filename', 'descr_date');
-		foreach ($dataLL as $k=>$v) { 
+		foreach ($dataLL as $k=>$v) {
 			$marker['###'.strtoupper($v).'###'] = $this->pi_getLL($v);
 		}
-        
+
         // User fields
         $userField_template = $this->cObj->getSubpart($template, "###USERFIELDS###");
         $userField_content  = '';
-        
+
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             '*',
             'tx_mmforum_userfields',
@@ -221,32 +221,32 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	            if($GLOBALS['TYPO3_DB']->sql_num_rows($res2)>0) list($value) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res2);
 	            else $value = '';
 			}
-            
+
             $parser->setup = array();
             if(strlen($arr['config'])>0) {
                 $parser->parse($arr['config']);
                 $config = $parser->setup;
             } else $config = array();
-            
+
             if($config['label']) $label = $this->cObj->cObjGetSingle($config['label'],$config['label.']);
             else $label = $arr['label'];
-			
+
 			if($config['required']) $label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
-            
+
             if($config['datasource']) {
             	$value = isset($this->piVars['userfield'][$arr['uid']])?$this->piVars['userfield'][$arr['uid']]:$row[$config['datasource']];
             	$label .= '<input type="hidden" name="tx_mmforum_pi5[userfield_exists]['.$arr['uid'].']" value="'.$config['datasource'].'" />';
             }
-            
+
             if($config['input']) {
                 $data = array(
                     'fieldvalue'        => $value
                 );
                 $tmpData = $this->cObj->data;
                 $this->cObj->data = $data;
-                
+
                 $input = $this->cObj->cObjGetSingle($config['input'],$config['input.']);
-                
+
                 $this->cObj->data = $tmpData;
             } else $input = $this->cObj->getSubpart($userField_template, '###DEFUSERFIELD###');
             $userField_thisTemplate = $this->cObj->substituteSubpart($userField_template, '###DEFUSERFIELD###', $input);
@@ -261,7 +261,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
             $userField_content .= $this->cObj->substituteMarkerArrayCached($userField_thisTemplate, $userField_marker);
         }
         $template = $this->cObj->substituteSubpart($template, "###USERFIELDS###", $userField_content);
-        
+
 			// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilMarkerArray'])) {
 		    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilMarkerArray'] as $_classRef) {
@@ -269,11 +269,11 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		        $marker = $_procObj->processProfilMarkerArray($marker,$this->cObj);
 		    }
 		}
-		
+
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 		return $content;
 	}
-	
+
 	function &getTSParser() {
 		if($this->parser) return $this->parser;
 		else {
@@ -281,7 +281,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			return $this->parser;
 		}
 	}
-	
+
 	function getUserFieldIsRequired($uid) {
 		$uid = intval($uid);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -290,15 +290,15 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			'uid='.$uid.' AND deleted=0 AND hidden=0'
 		);
 		if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return false;
-		
+
 		$arr		= $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		$parser		= $this->getTSParser();
 		$parser->parse($arr['config']);
 		$config		= $parser->setup;
-		
+
 		return $config['required']?true:false;
 	}
-	
+
 	function getUserfieldUsesExistingField($uid) {
 		$uid = intval($uid);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -307,12 +307,12 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			'uid='.$uid.' AND deleted=0 AND hidden=0'
 		);
 		if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return false;
-		
+
 		$arr		= $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		$parser		= $this->getTSParser();
 		$parser->parse($arr['config']);
 		$config		= $parser->setup;
-		
+
 		return $config['datasource']?true:false;
 	}
 
@@ -364,7 +364,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
       }
 
 		}
-		
+
 		if($requiredMissing)
 			$error = 1;
 
@@ -381,15 +381,15 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			    }
 			}
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users',$where,$updateArr);
-			
+
 			// Save user fields
 	        if(is_array($this->piVars['userfield'])) {
 	            foreach($this->piVars['userfield'] as $uid => $value) {
 	                if(strlen(trim($value))==0) continue;
-	                
+
 	                $uid		= intval($uid);
 	                #$value		= mysql_escape_string($value);		// Escaping the string is not necessary since this is done by the TYPO3_DB class
-	                
+
 	                if($this->piVars['userfield_exists'][$uid]) {
 	                	if($this->getUserfieldUsesExistingField($uid)) {
 	                		$updateArray = array(
@@ -429,7 +429,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	                }
 	            }
 	        }
-			
+
 		// Otherwise...
 		} else {
 			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
@@ -437,26 +437,26 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 		return $content;
 	}
-	
+
 	/**
 	 * Completely removes an user avatar.
 	 * This function completely removes an user avatar by removing
 	 * the avatar from the user record and by deleting the avatar file
 	 * in the file system.
-	 * 
+	 *
 	 * @author  Martin Helmich
 	 * @version 2007-10-03
 	 * @param   int  $user_uid The user's UID whose avatar is to be deleted
 	 * @return  void
 	 */
 	function remove_avatar($user_uid) {
-		
+
 		// Retrieve avatar filename
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('tx_mmforum_avatar,image','fe_users','uid='.intval($user_uid));
 			list($avatar,$image) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-			
+
 			if(!$avatar && !$image) return;
-			
+
             if($avatar) {
 		        // Delete avatar file
                     $avatar_fullPath = $this->conf['path_avatar'].$avatar;
@@ -467,7 +467,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
                     $image_fullPath = 'uploads/pics/'.$image;
                     @unlink($image_fullPath);
             }
-			
+
 		// Remove avatar from user record
 			$updateArr = array(
 				'tstamp'			=> time(),
@@ -475,9 +475,9 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
                 'image'             => ''
 			);
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.intval($user_uid),$updateArr);
-		
+
 	}
-	
+
 	/**
 	 * Uploads a new avatar to the server.
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -488,7 +488,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	 * @return  string          The content
 	 */
 	function avatar_upload($content , $conf) {
-		
+
         $userId = $GLOBALS['TSFE']->fe_user->user['uid'];
 
 		// Remove avatar. This does not remove the actual image file, but sets the
@@ -523,10 +523,10 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			t3lib_div::loadTCA('fe_users');
 			if(filesize($_FILES[$this->prefixId]['tmp_name']['file']) > $TCA['fe_users']['columns']['tx_mmforum_avatar']['config']['max_size']*1024)
 				return;
-            
+
 			$file = $userId.'_'.time().'.'.$extension;
 			$uploadfile = $uploaddir.$file;
-            
+
 			if (move_uploaded_file($_FILES[$this->prefixId]['tmp_name']['file'], $uploadfile)) {
 					/* Paranoid? Eh, you never know... */
 				chmod($uploadfile, 0444);
@@ -549,18 +549,18 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	 * @param   string $content The plugin content
 	 * @param   array  $conf    The plugin's configuration vars
 	 * @return  string          The content
-	 */	
+	 */
 	function change_pass($content,$conf)	{
 		$this->conf=$conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		
+
 		#$param = t3lib_div::_POST('mmf-pw');
-        
+
 		// Check parameters
 		if (isset($this->piVars['newpass1']) OR isset($this->piVars['newpass2']) OR isset($this->piVars['oldpass'])) {
 			$error = 0;
-			
+
 			// Old password is not set
 			if (empty($this->piVars['oldpass'])) {
 				$error = 1;

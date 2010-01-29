@@ -27,7 +27,7 @@
  * versions. For example, there was a change of table and field
  * names between versions 0.0.3 and 0.0.4. This script guarantees
  * backwards compatibility.
- * 
+ *
  * @author Martin Helmich <m.helmich@mittwald.de>
  * @version 2007-04-25
  * @package mm_forum
@@ -44,7 +44,7 @@ class ext_update {
         'tx_mmforumsearch_wordlist'     => 'tx_mmforum_wordlist',
         'tx_mmforumsearch_wordmatch'    => 'tx_mmforum_wordmatch'
     );
-    
+
     /**
      * Obsolete field names in the fe_user table and their new names
      */
@@ -54,21 +54,21 @@ class ext_update {
         'tx_mmfeuserreg_reg_hash'       => 'tx_mmforum_reg_hash'
     );
     var $action;
-    
+
     /**
      * The main function. Executes all updates.
      * @return string  The update process output.
      */
     function main() {
         $content = "";
-        
+
         foreach($this->action as $action) {
             if($action == 'rename_tables') $content .= $this->renameTables();
         }
-        
+
         return $content;
     }
-    
+
     /**
      * Renames tables and field names to make them 0.0.4-conform.
      * @return string  The update process output.
@@ -77,20 +77,20 @@ class ext_update {
         $sql = $this->renameTables_getQuery();
         $content .= 'Executing the following MySQL queries:<br /><br />'.implode('<br />',$sql);
         $content .= '<br /><br />';
-        
+
         foreach($sql as $singleQuery)
             mysql_query($singleQuery);
-        
+
         return $content;
     }
-    
+
     /**
      * Generates the MySQL-queries for renaming all obsolete table and field names.
      * @return array  An array containing the MySQL-queries
      */
     function renameTables_getQuery() {
         $sql = array();
-        
+
         foreach($this->obsTableNames as $oldTable => $newTable) {
             $sql[] = "DROP TABLE IF EXISTS $newTable";
             $sql[] = "ALTER TABLE ".$oldTable." RENAME ".$newTable."";
@@ -99,10 +99,10 @@ class ext_update {
             $sql[] = "ALTER TABLE fe_users DROP $newField";
             $sql[] = "ALTER TABLE fe_users CHANGE $oldField $newField tinytext NOT NULL";
         }
-        
+
         return $sql;
     }
-    
+
     /**
      * Determines if an update is required and if so, what has to be done.
      * This function determines if an update to a newer version is necessary.
@@ -111,7 +111,7 @@ class ext_update {
      * @return boolean TRUE, if an update is required, otherwise FALSE.
      */
     function access() {
-        
+
         // Check for deprecated table names
         // Update check from 0.0.3 to 0.0.4
             $res = $GLOBALS['TYPO3_DB']->sql_query('SHOW TABLES');
@@ -122,11 +122,11 @@ class ext_update {
                     return true;
                 }
             }
-        
+
         return false;
-        
+
     }
-    
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/class.ext_update.php'])	{

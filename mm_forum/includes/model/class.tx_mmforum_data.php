@@ -1,9 +1,9 @@
 <?php
 
 class tx_mmforum_data {
-	
+
 	var $table;
-	
+
 	var $data;
 	var $uid;
 	var $loaded = false;
@@ -43,7 +43,7 @@ class tx_mmforum_data {
 		/*
 		 * GETTER FUNCTIONS
 		 */
-	
+
 	function gD($key) {
 		if(!$this->loaded) $this->loadFromDB();
 		return $this->data[$key];
@@ -52,7 +52,7 @@ class tx_mmforum_data {
 	function getCrdate() {
 		return $this->gD('crdate');
 	}
-	
+
 	function getUID() {
 		return $this->uid;
 	}
@@ -68,7 +68,7 @@ class tx_mmforum_data {
 	function setUID($uid) {
 		$this->uid = intval($uid);
 	}
-		
+
 }
 
 ?>

@@ -68,7 +68,7 @@ function arraypop(thearray) {
 
 function checkForm() {
 
-	formErrors = false;    
+	formErrors = false;
 
 	if (document.post.message.value.length < 2) {
 		formErrors = "{L_EMPTY_MESSAGE}";
@@ -160,7 +160,7 @@ function bbstyle(bbnumber) {
 
 	if ((clientVer >= 4) && is_ie && is_win)
 		theSelection = document.selection.createRange().text; // Get text selection
-		
+
 	if (theSelection) {
 		// Add tags around selection
 		document.selection.createRange().text = bbtags[bbnumber] + theSelection + bbtags[bbnumber+1];
@@ -168,7 +168,7 @@ function bbstyle(bbnumber) {
 		theSelection = '';
 		return;
 	}
-	
+
 	// Find last occurance of an open tag the same as the one just clicked
 	for (i = 0; i < bbcode.length; i++) {
 		if (bbcode[i] == bbnumber+1) {
@@ -188,14 +188,14 @@ function bbstyle(bbnumber) {
 			document.post.message.focus();
 			return;
 	} else { // Open tags
-	
+
 		if (imageTag && (bbnumber != 14)) {		// Close image tag before adding another
 			document.post.message.value += bbtags[15];
 			lastValue = arraypop(bbcode) - 1;	// Remove the close image tag from the list
 			document.post.addbbcode14.value = "Img";	// Return button back to normal state
 			imageTag = false;
 		}
-		
+
 		// Open tag
 		document.post.message.value += bbtags[bbnumber];
 		if ((bbnumber == 14) && (imageTag == false)) imageTag = 1; // Check to stop additional tags after an unclosed image tag
@@ -214,7 +214,7 @@ function storeCaret(textEl) {
 }
 
 // Creates a new Request for the AJAX function
-function createRequestObject() 
+function createRequestObject()
 {
     var req;
     try
@@ -259,19 +259,19 @@ function closeSearch(id)
   {
     for(var i =0;i<obj.childNodes.length;i++)
     {
-       if(i>1 && (obj.childNodes[i]).nodeType==1) 
+       if(i>1 && (obj.childNodes[i]).nodeType==1)
        obj.childNodes[i].style.backgroundColor='#f8f8f8';
     }
   }
-  
-  
+
+
   function unhoverthis(obj)
   {
      for(var i =0;i<obj.childNodes.length;i++)
     {
        if(i>1 && (obj.childNodes[i]).nodeType==1)
        obj.childNodes[i].style.backgroundColor='#FFFFFF';
-    } 
+    }
   }
 
 var request;

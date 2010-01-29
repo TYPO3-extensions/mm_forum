@@ -191,12 +191,12 @@ class tx_mmforum_tools extends tslib_pibase {
 			// nach dem ersten vorkommen einer needle suchen
 			foreach ($needle as $wert) {
 				$newPos = strpos($text,$wert);
-				
+
 				if (empty($pos) || $newPos < $pos) {
 					$pos = $newPos;
 				}
 			}
-			// Text beschneiden 
+			// Text beschneiden
 			$text = substr($text, $pos, $cut);
 		}
 		return $text;
@@ -210,20 +210,20 @@ class tx_mmforum_tools extends tslib_pibase {
 	function getsessid($conf) {
 		$httpVars = explode(';', $_SERVER['HTTP_COOKIE']);
 		foreach ($httpVars as $string) {
-			if (strpos($string, 'PHPSESSID') > 0) {  
+			if (strpos($string, 'PHPSESSID') > 0) {
 				list($key, $sessionId) = explode('=', $string);
 			}
 		}
 		if (empty($sessionId)) {
 			session_start();
-			$sessionId = session_id(); 
+			$sessionId = session_id();
 		}
 		return $sessionId;
 	}
-	
+
 	/**
 	 * Removes empty values from an array.
-	 * 
+	 *
 	 * @param  array $arr The array to be processed
 	 * @return array      The processed array
 	 * @author Martin Helmich <m.helmich@mittwald.de>
@@ -237,10 +237,10 @@ class tx_mmforum_tools extends tslib_pibase {
 		}
 		return $res;
 	}
-	
+
 	/**
 	 * Delivers the data record of a FE user group.
-	 * 
+	 *
 	 * @param   int   $uid The user group's UID
 	 * @return  array      The user group's data record as associative
 	 *                     array.
@@ -251,15 +251,15 @@ class tx_mmforum_tools extends tslib_pibase {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_groups', 'uid = ' . intval($uid));
 		return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 	}
-	
+
 		/**
 		 * Gets all parent user groups of a user group.
 		 * This function gets all parent groups of a user groups and returns
 		 * the result as an array containing all group uids.
-		 * 
+		 *
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2008-10-11
-		 * @param   int $group The UID of the group whose parent groups are to 
+		 * @param   int $group The UID of the group whose parent groups are to
 		 *                     be determined.
 		 * @return  array      An array of user group UIDs.
 		 */
@@ -271,28 +271,28 @@ class tx_mmforum_tools extends tslib_pibase {
 			/* Try to load result from cache */
 		$cache =& tx_mmforum_cache::getGlobalCacheObject();
 		$cacheRes = $cache->restore('pgrpCache_'.$group);
-		
+
 			/* Is result was found in cache, return */
 		if($cacheRes !== null) return $cacheRes;
-		
+
 			/* Otherwise get groups */
 		$groups = tx_mmforum_tools::getParentUserGroupsR($group);
 		$groups = t3lib_div::intExplode(',',$groups);
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
 		$groups = array_unique($groups);
-		
+
 			/* Implode groups to string */
 		$groupString = implode(',',$groups);
-		
+
 			/* Save groups to cache and return */
 		$cache->save('pgrpCache_'.$group, $groupString);
 		return $groupString;
-		
+
 	}
-	
+
 	/**
 	 * Recursively called helper function for getParentUserGroups function.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-06-22
 	 * @return  string        A list of group uids as commaseperated list
@@ -322,7 +322,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * This functions delivers a commaseperated list of all subordinate user
 	 * groups of a frontend user group. Subgroups are determined resursively
 	 * up to infinity.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-11-24
 	 * @param   mixed  $group The user group UID whose subgroups are to be checked.
@@ -333,35 +333,35 @@ class tx_mmforum_tools extends tslib_pibase {
 	 */
 	function getSubUserGroups($group) {
 
-			/* Parse to int for security reasons */		
+			/* Parse to int for security reasons */
 		$group = intval($group);
-		
+
 			/* Try to load value from cache */
 		$cache =& tx_mmforum_cache::getGlobalCacheObject();
 		$cacheRes = $cache->restore('sgrpCache_'.$group);
-		
+
 			/* If value was found in cache, return */
 		if($cacheRes !== null) return $cacheRes;
-		
+
 			/* Otherwise load all subgroups now */
 		$groups = tx_mmforum_tools::getSubUserGroupsR($group);
 		$groups = t3lib_div::intExplode(',', $groups);
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
 		$groups = array_unique($groups);
-			
+
 			/* Implode to string */
 		$groupString = implode(',',$groups);
-		
+
 			/* Save to cache and return */
 		$cache->save('sgrpCache_'.$group,$groupString);
 		return $groupString;
 
 	}
-	
+
 	/**
 	 * Recursive helper function for sub user group determination.
 	 * This function does the actual determination of the user subgroups.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-11-24
 	 * @param   mixed  $group Same as the parameter of getSubUserGroups.
@@ -387,7 +387,7 @@ class tx_mmforum_tools extends tslib_pibase {
 
 	/**
 	 * Translates a commaseperated list of group UIDs into a list of group names.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-24-11
 	 * @param   string $content The commaseperated list of group UIDs
@@ -420,7 +420,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * This function replaces references to an extension directory in a file
 	 * path (like e.g. EXT:mm_forum) with the actual path of the extension using
 	 * the t3lib_extMgm class.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-01-06
 	 * @param   string $path The path containing an extension reference.
@@ -440,7 +440,7 @@ class tx_mmforum_tools extends tslib_pibase {
 
 	/**
 	 * Stores a variable into the mm_forum cache table.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-06-22
 	 * @param   string  $key   The key this cache variable shall be referenced with
@@ -457,7 +457,7 @@ class tx_mmforum_tools extends tslib_pibase {
 			'tx_mmforum_cache',
 			'cache_key = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($key, 'tx_mmforum_cache')
 		);
-	
+
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 			if ($forceOverwrite) {
 				$updateArray = array(
@@ -479,7 +479,7 @@ class tx_mmforum_tools extends tslib_pibase {
 			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_cache', $insertArray);
 		}
 	}
-	
+
 	/**
 	 * Gets a cache variable from the database
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -502,7 +502,7 @@ class tx_mmforum_tools extends tslib_pibase {
 
 	/**
 	 * Deletes a cache variable.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-06-22
 	 * @param   string $key The variable key
@@ -571,7 +571,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * $_ENV[HTTP_HOST] variable.
 	 * This function was introduced due to problems with some realUrl
 	 * configuration.
-	 * 
+	 *
 	 * @param  string $link A relative link
 	 * @return string       The submitted string converted into an absolute link
 	 * @author Martin Helmich <m.helmich@mittwald.de>

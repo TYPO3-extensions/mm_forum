@@ -54,9 +54,9 @@
 class tx_mmforum_havealook {
 
 	/**
-	 * Adds a topic to a user's list of email subscriptions and then does a 
+	 * Adds a topic to a user's list of email subscriptions and then does a
 	 * redirect to the previous page.
-	 * this function is called from teh 
+	 * this function is called from teh
 	 * @param  string $forumObj The plugin object
 	 * @return string           An error message in case the redirect attempt to
 	 *                          the previous page fails.
@@ -166,7 +166,7 @@ class tx_mmforum_havealook {
 				'###ORDER_CAT###'          => ($orderBy == 'cat'   ) ? 'selected="selected"' : '',
 				'###ORDER_ADDED###'        => ($orderBy == 'added' ) ? 'selected="selected"' : '',
 				'###ORDER_ALPHAB###'       => ($orderBy == 'alphab') ? 'selected="selected"' : '',
-		
+
 				'###LABEL_ORDERBY###'      => $forumObj->pi_getLL('favorites.orderBy'),
 				'###LABEL_ORDER_LPDATE###' => $forumObj->pi_getLL('favorites.orderBy.lpdate'),
 				'###LABEL_ORDER_CAT###'    => $forumObj->pi_getLL('favorites.orderBy.cat'),
@@ -192,7 +192,7 @@ class tx_mmforum_havealook {
 				'###LABEL_OPTIONS###'         => $forumObj->pi_getLL('favorites.options'),
 				'###LABEL_TOPICNAME###'       => $forumObj->pi_getLL('topic.title'),
 				'###LABEL_CONFIRMMULTIPLE###' => $forumObj->pi_getLL('havealook.confirmMultiple')
-			); 
+			);
 			$content .= $forumObj->cObj->substituteMarkerArray($template, $marker);
 
 			switch($orderBy) {
@@ -239,7 +239,7 @@ class tx_mmforum_havealook {
 					'	c.deleted = 0 ' .
 						$forumObj->getMayRead_forum_query('f').
 						$forumObj->getMayRead_forum_query('c');
-					
+
 				$sqlForum = 'SELECT' .
 					'	f.forum_name			AS item_title,' .
 					'	f.uid					AS item_uid,' .
@@ -284,7 +284,7 @@ class tx_mmforum_havealook {
 				$content .= $forumObj->cObj->substituteMarker($template, '###LLL_HAVEALOOK_EMPTY###', $forumObj->pi_getLL('havealook.empty'));
 			} else {
 				$template = $forumObj->cObj->getSubpart($templateFile, '###LIST_HAVEALOOK###');
-				
+
 				// go through every found subscription
 				while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 
@@ -363,7 +363,7 @@ class tx_mmforum_havealook {
 
 	/**
 	 * Adds a topic to a (logged in) user's list of email subscriptions.
-	 * 
+	 *
 	 * @param  string $forumObj The plugin object
 	 * @param  string $topicId  The topic identifier
 	 * @return bool             Whether it worked or not
@@ -383,7 +383,7 @@ class tx_mmforum_havealook {
 				$insertData = array(
 					'pid'      => $forumObj->getStoragePID(),
 					'tstamp'   => time(),
-					'crdate'   => time(), 
+					'crdate'   => time(),
 					'topic_id' => $topicId,
 					'user_id'  => $feUserId
 				);
@@ -400,7 +400,7 @@ class tx_mmforum_havealook {
 
     /**
      * Sends an e-mail to users who have subscribed a certain topic.
-     * 
+     *
      * @param  int            $topicId  The UID of the topic about which the users are
      *                                  to be alerted.
 	 * @param  tx_mmforum_pi1 $forumObj An instance of the tx_mmforum_pi1 class.
@@ -432,7 +432,7 @@ class tx_mmforum_havealook {
 
 		$link = $forumObj->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
 		$link = $forumObj->tools->escapeBrackets($link);
-		
+
 		if (strlen($forumObj->conf['notifyingMail.']['topicLinkPrefix_override']) > 0) {
 			$link = $forumObj->conf['notifyingMail.']['topicLinkPrefix_override'] . $link;
 		} else {
@@ -450,7 +450,7 @@ class tx_mmforum_havealook {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'DISTINCT m.user_id, u.email, u.' . $forumObj->getUserNameField(),
 			'tx_mmforum_topicmail m, fe_users u',
-			'm.user_id = u.uid AND m.topic_id = ' . $topicId . 
+			'm.user_id = u.uid AND m.topic_id = ' . $topicId .
 			' AND u.deleted = 0 AND u.email != "" AND u.disable = 0 AND m.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('m')
 		);
 
@@ -480,7 +480,7 @@ class tx_mmforum_havealook {
 						$subject = $_procObj->newPostMail_subject($subject, $row, $forumObj);
 					}
 				}
-				
+
 				$subject = $forumObj->cObj->substituteMarkerArray($subject, $llMarker);
 
 				t3lib_div::plainMailEncoded (

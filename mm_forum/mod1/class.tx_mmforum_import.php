@@ -43,9 +43,9 @@
 /**
  * This class manages data import into the mm_forum extension.
  * The import script allows the administrator to import data from
- * other applications, like the phpBB message board or the 
+ * other applications, like the phpBB message board or the
  * "CHC Forum" TYPO3 extension.
- * 
+ *
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @copyright  2007 Mittwald CM Service
  * @version    2007-05-02
@@ -56,16 +56,16 @@ class tx_mmforum_import {
 
     var $importData;
     var $actions = array('phpbb','chc');
-    
+
     /**
      * Main function. Generates all output.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-02
-     * 
+     *
      * @param   string $content The content that was generated until now
      * @return  string          The import script content
-     * 
+     *
      * @uses    display_step0
      * @uses    display_step1
      * @uses    display_step2
@@ -73,35 +73,35 @@ class tx_mmforum_import {
      */
     function main($content) {
         $this->importData = t3lib_div::_GP('tx_mmforum_import');
-        
+
         if(!isset($this->importData['step']))
             $this->importData['step'] = 0;
         if(isset($this->importData['extdb']) && !is_array($this->importData['extdb'])) {
             $this->importData['extdb'] = stripslashes($this->importData['extdb']);
             $this->importData['extdb'] = unserialize($this->importData['extdb']);
         }
-        
+
         if($this->importData['action'] == 'phpbb') $this->maxSteps = 6;
         else $this->maxSteps = 4;
-        
+
         switch($this->importData['step']) {
             case 0:             $content .= $this->display_step0(); break;
             case 1:             $content .= $this->display_step1(); break;
             case 2:             $content .= $this->display_step2(); break;
         }
-        
+
         $content .= $this->outputImportSettings();
-        
+
         return $content;
     }
-    
+
     /**
      * Displays the first step of the import procedure.
      * This functions displays the first step of the mm_forum data import
      * procedure. This step consists of selecting the import procedure
      * that is to be conducted. Currently (0.0.5) the user may choose
      * between importing data from a phpBB board and a CHC forum.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-02
      * @return  string The content of step 1
@@ -109,17 +109,17 @@ class tx_mmforum_import {
      */
     function display_step0() {
         global $LANG;
-        
+
         if(isset($this->importData['step0']['submit'])) {
             if(in_array($this->importData['action'],$this->actions)) {
-                $this->importData['step'] = 1;      
+                $this->importData['step'] = 1;
                 return $this->display_step1();
             }
             else $error = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step0.error').'</div>';
         }
-        
+
         $content .= '<fieldset><legend>'.sprintf($LANG->getLL('import.stepX'),1).': '.$LANG->getLL('import.step0').'</legend>';
-        
+
         $content .= '<table cellspacing="0" cellpadding="3" style="width:100%;">';
         $content .= '<tr><td valign="top" style="width:32px;"><input id="import_phpbb" type="radio" name="tx_mmforum_import[action]" value="phpbb" /></td>';
         $content .= '<td valign="top"><label for="import_phpbb" style="display:block; width:100%;"><strong>'.$LANG->getLL('import.step0.phpBB').'</strong><br />'.$LANG->getLL('import.step0.phpBB.desc').'</label></td></tr>';
@@ -127,13 +127,13 @@ class tx_mmforum_import {
         $content .= '<td valign="top"><label for="import_chc" style="display:block; width:100%;"><strong>'.$LANG->getLL('import.step0.CHC').'</strong><br />'.$LANG->getLL('import.step0.CHC.desc').'</label></td></tr>';
         $content .= '</table>';
         $content .= $error?$error:'';
-        
+
         $content .= '<br /><input type="submit" name="tx_mmforum_import[step0][submit]" value="'.$LANG->getLL('import.step0.continue').'" />';
-        
+
         $content .= '</fieldset>';
         return $content;
     }
-    
+
     /**
      * Displays the second step of the import procedure.
      * This function displays the second step of the mm_forum data import
@@ -141,7 +141,7 @@ class tx_mmforum_import {
      * which the data is to be imported. This may be the local TYPO3 database
      * or another external database. In the latter case, the user will have
      * to specify the connection data for this database.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-02
      * @return  string The content of step 2
@@ -149,13 +149,13 @@ class tx_mmforum_import {
      */
     function display_step1() {
         global $LANG;
-        
+
         if(isset($this->importData['step1']['submit'])) {
             if($this->importData['db'] == 'external') {
                 if(strlen($this->importData['extdb']['server']) == 0 ) $error['server'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_server').'</div>';
                 if(strlen($this->importData['extdb']['user'])   == 0 ) $error['user']   = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_user').'</div>';
                 if(strlen($this->importData['extdb']['dbname']) == 0 ) $error['dbname'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_dbname').'</div>';
-                
+
                 $link = @mysql_connect($this->importData['extdb']['server'],$this->importData['extdb']['user'],$this->importData['extdb']['password'],true);
                 if(!$link) $error['connect'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_connect').'</div>';
                 else {
@@ -163,18 +163,18 @@ class tx_mmforum_import {
                     if(!$res) $error['selectdb'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_selectdb').'</div>';
                 }
             }
-            
+
             if(count($error) == 0) {
                 $this->importData['step'] = 2;
                 return $this->display_step2();
             }
         }
-        
+
         $content .= '<fieldset><legend>'.sprintf($LANG->getLL('import.stepXofY'),2,$this->maxSteps).': '.$LANG->getLL('import.step1').'</legend>';
-        
+
         $db_ext = ( $this->importData['db']=='external')?'checked="checked"':'';
         $db_loc = (!$this->importData['db']=='external')?'checked="checked"':'';
-        
+
         $content .= '<table cellspacing="0" cellpadding="3" border="0">
     <tr>
         <td style="width:32px" valign="top"><input type="radio" name="tx_mmforum_import[db]" value="local" '.$db_loc.' /></td>
@@ -207,20 +207,20 @@ class tx_mmforum_import {
 </table>'.$error['connect'].$error['selectdb'].'
 <br /><input type="submit" name="tx_mmforum_import[step1][submit]" value="'.$LANG->getLL('import.step1.continue').'" />
     ';
-        
+
         $content .= '</fieldset>';
-        
+
         unset($this->importData['extdb']);
-        
+
         return $content;
     }
-    
+
     /**
      * Displays the second step of the import procedure.
      * This function displays the third step of the mm_forum data import
      * procedure. This step consists of starting the part of the import
      * process that is dependend on the selected method in step 1.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-02
      * @return  string The import procedure content
@@ -234,17 +234,17 @@ class tx_mmforum_import {
             $dbObj->sql_pconnect($this->importData['extdb']['server'],$this->importData['extdb']['user'],$this->importData['extdb']['password']);
             $dbObj->sql_select_db($this->importData['extdb']['dbname']);
         }
-        
+
         switch($this->importData['action']) {
             case 'phpbb':       $content = $this->import_phpbb($dbObj); break;
             case 'chc':         $content = $this->import_chc($dbObj); break;
         }
         return $content;
     }
-    
+
     /**
      * Conducts the CHC Forum data import.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-02
      * @param   object dbObj A database object signifying the database the data
@@ -256,13 +256,13 @@ class tx_mmforum_import {
         $import_chc = t3lib_div::makeInstance('tx_mmforum_chcimport');
         $import_chc->dbObj = $dbObj;
         $import_chc->p     = $this->p;
-        
+
         return $import_chc->main('');
     }
-    
+
     /**
      * Conducts the phpBB data import.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-02
      * @param   object dbObj A database object signifying the database the data
@@ -274,15 +274,15 @@ class tx_mmforum_import {
         $import_phpbb = t3lib_div::makeInstance('tx_mmforum_phpbbimport');
         $import_phpbb->dbObj = $dbObj;
         $import_phpbb->p     = $this->p;
-        
+
         return $import_phpbb->main('');
     }
-    
+
     /**
      * Outputs imporant configuration variables.
      * This function outputs important configurations variables for
      * submission to the next step.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-02
      * @return  string The configuration vars in hidden HTML input fields
@@ -291,15 +291,15 @@ class tx_mmforum_import {
         if(!empty($this->importData['action']))
             $content .= '<input type="hidden" name="tx_mmforum_import[action]" value="'.$this->importData['action'].'" />';
         $content .= '<input type="hidden" name="tx_mmforum_import[step]" value="'.$this->importData['step'].'" />';
-                                                   
+
         if(isset($this->importData['extdb']))
             $content .= '<input type="hidden" name="tx_mmforum_import[extdb]" value="'.htmlspecialchars(serialize($this->importData['extdb'])).'" />';
         if(!empty($this->importData['db']))
-            $content .= '<input type="hidden" name="tx_mmforum_import[db]" value="'.$this->importData['db'].'" />'; 
-        
+            $content .= '<input type="hidden" name="tx_mmforum_import[db]" value="'.$this->importData['db'].'" />';
+
         return $content;
     }
-    
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_import.php'])	{

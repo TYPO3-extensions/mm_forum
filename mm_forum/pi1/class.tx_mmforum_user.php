@@ -36,8 +36,8 @@
  *
  */
 
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_base.php'); 
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_postparser.php'); 
+require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_base.php');
+require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_postparser.php');
 
 /**
  * Plugin 'class.tx_mmforum_user.php' for the 'mm_forum' extension.
@@ -48,9 +48,9 @@ require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_post
  * @copyright  2007 Mittwald CM Service
  * @package    mm_forum
  * @subpackage Forum
- */   
+ */
 class tx_mmforum_user extends tx_mmforum_base {
-   
+
 	/**
 	 * Lists all current user's posts in a HTML table, including page navigation and
 	 * general information like total post/topic count and average posts per day.
@@ -192,7 +192,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 						$postMarker = $_procObj->listUserPosts_item($postMarker, $row, $this);
 					}
 				}
-				$content .= $this->cObj->substituteMarkerArrayCached($template_sub, $postMarker);  
+				$content .= $this->cObj->substituteMarkerArrayCached($template_sub, $postMarker);
 			}
 		} else {
 			$marker['###LABEL_NOPOSTS###'] = $this->pi_getLL('user.noposts');
@@ -204,8 +204,8 @@ class tx_mmforum_user extends tx_mmforum_base {
 		$marker['###STAT###'] .= '<strong>' . $count . '</strong> ' . $this->pi_getLL('user.totalPosts') . ', <strong>' . $topics . '</strong> ' . $this->pi_getLL('user.topicsTotal') . '<br />';
 		$marker['###STAT###'] .= $this->cObj->substituteMarker($this->pi_getLL('user.postsPerDay'), '###POSTS###', '<strong>' . round($count / ceil(((time() - $ucrdate) / 86400)), 2) . '</strong>');
 
-		$template = $this->cObj->substituteMarkerArray($template, $marker);  
-		$content = $this->cObj->substituteSubpart($template, '###LIST###', $content);  
+		$template = $this->cObj->substituteMarkerArray($template, $marker);
+		$content = $this->cObj->substituteSubpart($template, '###LIST###', $content);
 		return $content;
 	}
 

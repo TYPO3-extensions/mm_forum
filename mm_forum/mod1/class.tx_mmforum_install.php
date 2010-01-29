@@ -66,12 +66,12 @@
  */
 
 require_once(PATH_t3lib.'class.t3lib_tcemain.php');
- 
+
 /**
  * This class handles the backend mm_forum configuration. If offers
  * dynamically generated forms to allow the user to edit the mm_forum
  * configuration vars in a very easy way.
- * 
+ *
  * @author     Martin Helmich
  * @version    2009-02-12
  * @copyright  2007-2009 Mittwald CM Service
@@ -79,7 +79,7 @@ require_once(PATH_t3lib.'class.t3lib_tcemain.php');
  * @subpackage Backend
  */
 class tx_mmforum_install {
-	
+
 	    /**
 	     * Required configuration variables
 	     */
@@ -112,12 +112,12 @@ class tx_mmforum_install {
 
 	function main() {
 		$this->init();
-		
+
 		$this->save();
-		
+
 		if($this->getIsConfigured()) 	$content = $this->display_allConfigForm();
 		else							$content = $this->display_installation();
-		
+
 		return $content;
 	}
 
@@ -155,7 +155,7 @@ class tx_mmforum_install {
 		$this->instVars    = t3lib_div::_GP('tx_mmforum_install');
 		$this->conf        = $this->p->config['plugin.']['tx_mmforum.'];
 		$this->fieldConfig = $this->p->modTSconfig['properties']['submodules.']['installation.']['categories.'];
-		
+
 		$GLOBALS['LANG']->includeLLFile('EXT:mm_forum/mod1/locallang_install.xml');
 	}
 
@@ -174,7 +174,7 @@ class tx_mmforum_install {
         $conf    = file_get_contents('../ext_typoscript_constants.txt');
         $parser  = t3lib_div::makeInstance('t3lib_TSparser');
         $parser->parse($conf);
-        
+
         return $parser->setup['plugin.']['tx_mmforum.'];
 	}
 
@@ -216,7 +216,7 @@ class tx_mmforum_install {
 				}
 			}
 		}
-		
+
 		return '<div class="mm_forum-buttons">'.implode('',$items).'<div style="clear:both;"></div></div>';
 	}
 
@@ -252,12 +252,12 @@ class tx_mmforum_install {
     function display_helpForm() {
         $template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/install.html'));
 		$template = t3lib_parsehtml::getSubpart($template, '###INSTALL_HELP###');
-		
+
 		$marker = array(
 			'###INST_HELP_TITLE###'		=> $this->getLL('help.title'),
 			'###INST_HELP_TEXT###'		=> $this->getLL('help.content')
 		);
-        
+
         return t3lib_parsehtml::substituteMarkerArray($template, $marker);
     }
 
@@ -286,7 +286,7 @@ class tx_mmforum_install {
 		 */
 
 	function display_allConfigForm() {
-		
+
 		$defaultVars = $this->loadDefaultConfiguration();
 
 		if($this->getIsConfigured()) {
@@ -301,12 +301,12 @@ class tx_mmforum_install {
 			$categoryData = array_shift($fieldData);
 			$categoryData = $this->fieldConfig[$categoryData['category'].'.'];
 		}
-		
+
 		if(count($fieldData)==0) return $content;
 
 		$label = $categoryData['name'] ? $GLOBALS['LANG']->sL($categoryData['title'],1) : $this->getLL('title.'.$this->instVars['ctg']);
 		$icon = $GLOBALS['BACK_PATH'].preg_replace_callback("/^EXT:([a-z0-9_-]+)\//",array('tx_mmforum_install','replaceRelativeExtReference'), $categoryData['icon']);
-	
+
 		$content .= '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
     <tr>
         <td class="mm_forum-listrow_header" valign="top" style="width:1px;"><img src="'.$icon.'" style="vertical-align: middle; margin-right:8px;" /></td>
@@ -338,7 +338,7 @@ class tx_mmforum_install {
             }
 
 			$unit = $config['type.']['unit'] ? $GLOBALS['LANG']->sL($config['type.']['unit']) : '';
-				
+
 				if($config['type'] == 'string')	            $input = $this->getTextField($field,$this->conf[$field]);
 			elseif($config['type'] == 'int')                $input = $this->getTextField($field,$this->conf[$field],12);
             elseif($config['type'] == 'md5')                $input = $this->getMD5Field($field,$this->conf[$field]);
@@ -377,18 +377,18 @@ class tx_mmforum_install {
 				}
             }
 			$bigField = $config['type.']['big'] ? true : false;
-			
+
 			$input .= ' ' . $unit;
-			
+
 			if(isset($defaultVars[$field]) && strlen($defaultVars[$field])>0) {
 				$defValue = $defaultVars[$field];
-				
+
 				if($config['type'] == 'checkbox') $defValue=($defValue=='1')?$this->getLL('yes'):$this->getLL('no');
 				elseif($config['type.']['options.']) $defValue = $GLOBALS['LANG']->sL($config['type.']['options.'][$defValue]);
-				
+
 				$default = '<br />'.$this->getLL('default').': '.htmlentities($defValue).' '.$unit;
 			} else $default = '';
-			
+
             if(!$bigField)
 			    $content .= '<tr class="mm_forum-listrow">
 	    <td valign="top"><span style="color: #1555a0;">&#8718;</span></td>
@@ -507,12 +507,12 @@ class tx_mmforum_install {
 
 	function getSelectField($fieldname,$value,$table,$pid,$limit) {
 		$size = ($limit<=5 && $limit > 0)?$limit:5;
-        
+
         switch($table) {
             case 'fe_groups':   $titlefield = 'title';
             default:            $titlefield = 'title';
         }
-        
+
         if($limit > 1)
             $value = $this->p->convertToTCEList($value,$table,$titlefield);
         $conf = array(
@@ -542,18 +542,18 @@ class tx_mmforum_install {
 		 * This function generates a dynamic selector field for user fields
 		 * that are required to be filled in upon registration. The fields of
 		 * the fe_user table are loaded directly from the TCA.
-		 * 
+		 *
 		 * @param  string $value     The value of this form element. This is
 		 *                           a commaseperated list of fe_user fields.
 		 * @param  string $fieldname The name of this form element.
 		 * @return string            The HTML code for this input field.
-		 * 
+		 *
 		 * @author Martin Helmich <m.helmich@mittwald.de>
 		 *
 		 */
 
 	function getUserRequiredField($value,$fieldname) {
-		
+
 			/* A list of fields that cannot be selected */
 		$excludeFields = array(
 			'username','password','lockToDomain','disable','starttime','endtime',
@@ -561,15 +561,15 @@ class tx_mmforum_install {
 			'tx_mmforum_md5','tx_mmforum_reg_hash','tx_mmforum_pmnotifymode',
 			'lastlogin','TSconfig','lastlogin'
 		);
-		
+
 			/* Get TCA of fe_user table */
 		global $TCA;
 		t3lib_div::loadTCA('fe_users');
-		
+
 			/* Get list of selected fields */
 		$selFields = t3lib_div::trimExplode(',',$value);
 		$selFieldsLabels = array();
-		
+
 			/* Iterate through all fields and retrieve labels. */
 		foreach($TCA['fe_users']['columns'] as $field => $fConfig) {
 			if(in_array($field, $excludeFields)) continue;
@@ -577,11 +577,11 @@ class tx_mmforum_install {
 			$label = $GLOBALS['LANG']->sL($fConfig['label'],$fConfig['label']);
 			$label = preg_replace('/:$/','',$label);
 			$arr[] = array($label,$field);
-			
+
 			if(in_array($field, $selFields))
 				$selFieldsLabels[] = $field.'|'.$label;
 		}
-		
+
 			/* Compose select field's configuration array */
 		$conf = array(
 			'itemFormElName' => 'tx_mmforum_install[conf][0]['.$fieldname.']',
@@ -597,7 +597,7 @@ class tx_mmforum_install {
 				)
 			)
 		);
-		
+
 			/* Create select field using the TCEForms class and return */
 		return $this->p->tceforms->getSingleField_typeSelect('','tx_mmforum_install[conf][0]['.$fieldname.']',array(),$conf);
 	}
@@ -621,7 +621,7 @@ class tx_mmforum_install {
             $checked = ($option == $value)?'selected="selected"':'';
             $optionStr .= '<option value="'.$option.'" '.$checked.'>'.$label.'</option>';
         }
-        
+
         return '<select name="tx_mmforum_install[conf][0]['.$fieldname.']">'.$optionStr.'</select>';
     }
 
@@ -635,7 +635,7 @@ class tx_mmforum_install {
 		 * @param  string $fieldname n/a
 		 * @param  array  $config    n/a
 		 * @return array             All columns of the fe_users table as numeric array
-		 * 
+		 *
 		 */
 
 	function getFeUserFields($value, $fieldname, $config) {
@@ -671,10 +671,10 @@ class tx_mmforum_install {
 			'itemFormElValue' => $value?$table.'_'.$value:'',
 			'fieldConf' => array(
 				'config' => array(
-					"type" => "group",	
-					"internal_type" => "db",	
-					"allowed" => $table,	
-					"size" => 1,	
+					"type" => "group",
+					"internal_type" => "db",
+					"allowed" => $table,
+					"size" => 1,
 					"minitems" => 0,
 					"maxitems" => 1,
 					'wizards' => $add_button?array(
@@ -729,7 +729,7 @@ class tx_mmforum_install {
 			$content .= $this->display_install_userGroups();
 		elseif(!$this->getIsConfigured())
 			$content .= $this->display_allConfigForm();
-		
+
 		return $content;
 	}
 
@@ -801,10 +801,10 @@ class tx_mmforum_install {
 			'itemFormElName' => 'tx_mmforum_install[conf][0][storagePID]',
 			'fieldConf' => array(
 				'config' => array(
-					"type" => "group",	
-					"internal_type" => "db",	
-					"allowed" => "pages",	
-					"size" => 1,	
+					"type" => "group",
+					"internal_type" => "db",
+					"allowed" => "pages",
+					"size" => 1,
 					"minitems" => 0,
 					"maxitems" => 1,
 				)
@@ -855,10 +855,10 @@ class tx_mmforum_install {
 			'itemFormElName' => 'tx_mmforum_install[conf][0][userPID]',
 			'fieldConf' => array(
 				'config' => array(
-					"type" => "group",	
-					"internal_type" => "db",	
-					"allowed" => "pages",	
-					"size" => 1,	
+					"type" => "group",
+					"internal_type" => "db",
+					"allowed" => "pages",
+					"size" => 1,
 					"minitems" => 0,
 					"maxitems" => 1,
 				)
@@ -918,7 +918,7 @@ class tx_mmforum_install {
         $conf = $this->instVars['conf'][0];
         $ctg = $this->instVars['ctg']?$this->instVars['ctg']:'general';
 		if(count($conf)==0) return;
-        
+
 		foreach($conf as $var=>$value) {
 			$config = $ctg=='required' ? $this->getFieldConfigByIdentifier($var) : $this->fieldConfig["$ctg."]['items.']["$var."];
 			$type = $config['type'];
@@ -930,15 +930,15 @@ class tx_mmforum_install {
                 if(strlen(trim($value))==0) continue;
                 else $value = md5($value);
             }
-			
+
 			if($value != $this->p->config['plugin.']['tx_mmforum.'][$var])
 				$this->p->setConfVar($var,$value);
 		}
-        
+
         $TCE = t3lib_div::makeInstance('t3lib_tcemain');
         $TCE->admin = TRUE;
         $TCE->clear_cacheCmd('all');
-		
+
 		$this->conf = $this->p->config['plugin.']['tx_mmforum.'];
 	}
 
@@ -966,10 +966,10 @@ class tx_mmforum_install {
 
 	function getUserGroupsConfigured() {
 		$c = $this->p->config['plugin.']['tx_mmforum.'];
-		
+
 		if(!$c['userGroup']) return false;
 		if(!$c['adminGroup']) return false;
-		
+
 		return true;
 	}
 
@@ -982,15 +982,15 @@ class tx_mmforum_install {
 		 * @version 2007-05-14
 		 * @return  boolean TRUE, if the extension is properly configured, otherwise
 		 *                  FALSE
-		 * 
+		 *
 		 */
 
 	function getIsConfigured() {
 		$c = $this->p->config['plugin.']['tx_mmforum.'];
-		
+
 		foreach($this->p->modTSconfig['properties']['essentialConfiguration.'] as $prop => $e)
 			if(!$c[$prop]) return false;
-			
+
 		return true;
 	}
 
@@ -1002,7 +1002,7 @@ class tx_mmforum_install {
 	}
 
 	function getFieldConfigByIdentifier($fieldId) {
-		
+
 			// Most important rule againt clear code: Avoid ALL necessary
 			// brackets!
 		foreach($this->fieldConfig as $category => $ctgType)
@@ -1039,7 +1039,7 @@ class tx_mmforum_install {
 		}
 		return $propConfig;
 	}
-	
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_install.php'])	{

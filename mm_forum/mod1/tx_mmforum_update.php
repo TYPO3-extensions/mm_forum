@@ -1,4 +1,4 @@
-<?php	
+<?php
 /***************************************************************
  *  Copyright notice
  *
@@ -20,23 +20,23 @@
  *  GNU General Public License for more details.
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
- ***************************************************************/	
-	
+ ***************************************************************/
+
 /**
  * This script performs the actual update of the mm_forum extension
  * to the newest version.
- * 
+ *
  * @author    Martin Helmich <m.helmich@mittwald.de
  * @version   2008-04-20
  * @copyright 2008 Martin Helmich, Mittwald CM Service
  */
- 
+
 /**
  * Redirects back to updater in case of an error.
  * This function redirects the browser back to the mm_forum updater
  * module in case an error occurs during update. Also restores the
  * backup copy of the extension directory.
- * 
+ *
  * @author  Martin Helmich <m.helmich@mittwald.de
  * @version 2008-04-20
  * @param   boolean $revertBackup Defines whether the extension directory
@@ -56,7 +56,7 @@ function dieError($revertBackup) {
  * This function redirects the browser back to the mm_forum updater
  * module after the update has been completed successfully. Also removes
  * the mm_forum backup copy.
- * 
+ *
  * @author  Martin Helmich <m.helmich@mittwald.de
  * @version 2008-04-20
  * @return  void
@@ -77,7 +77,7 @@ function dieSuccess() {
 // Unzip the tarball archive
 	if(system('tar -xzf mm_forum_update.tar.gz') === false)
 		dieError(true);
-		
+
 // Set access rights
 	system('chmod -R 755 ./mm_forum');
 

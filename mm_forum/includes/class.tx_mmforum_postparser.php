@@ -48,7 +48,7 @@
 if(t3lib_extMgm::isLoaded('geshilib')) {
 	include_once ( t3lib_extMgm::siteRelPath('geshilib').'res/geshi.php' );
 }
-elseif(!class_exists("GeSHi")) { // Checks if there is an instance of this class already in use! 
+elseif(!class_exists("GeSHi")) { // Checks if there is an instance of this class already in use!
 	include_once ( t3lib_extMgm::extPath('mm_forum').'includes/geshi/geshi.php' );
 }
 
@@ -64,13 +64,13 @@ elseif(!class_exists("GeSHi")) { // Checks if there is an instance of this class
  * @package    mm_forum
  * @subpackage Includes
  * @copyright  2007, Mittwald CM Service
- */ 
+ */
 class tx_mmforum_postparser {
 
 	/**
 	 * Initialization function. A text is submitted as parameter and the parsed text
 	 * is returned.
-	 * 
+	 *
 	 * @author  Björn Detert <b.detert@mittwald.de>
  	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 20. 9. 2006
@@ -83,16 +83,16 @@ class tx_mmforum_postparser {
 	 * @return  string         The parsed text.
 	 */
 	function main($parent,$conf,$text,$job='textparser'){
-		
+
 		$postParserObj = t3lib_div::makeInstance('tx_mmforum_postparser');
-		
+
 		switch($job){
 			case 'textparser':
 				$content	= $postParserObj->parse_text($text,$parent,$conf);
 			break;
 			default:
 				$content	= $parent->pi_getLL('postparser_noJob');
-			break; 
+			break;
 		}
 		return $content;
 	}
@@ -102,7 +102,7 @@ class tx_mmforum_postparser {
 	 * This function parses the text submitted as parameter. Delegates the
 	 * different parsing tasks to the regarding functions.
 	 * The different parsing options can be configured via TypoScript
-	 * 
+	 *
 	 * @author  Björn Detert <b.detert@mittwald.de>
 	 * @version 20. 9. 2006
 	 * @param   string $text The text to be parsed
@@ -119,7 +119,7 @@ class tx_mmforum_postparser {
 		if($conf['postparser.']['smilie_generator']  ==1) 	$content = $this->generate_smilies($content,$parent,$conf);
 		if($conf['postparser.']['zitat_div']	==1)		$content = $this->zitat($content,$parent,$conf);
 		$content	=	nl2br(str_replace('\r\n',"\r\n",$content));
-		if($conf['postparser.']['syntaxHighlighter'] ==1)	$content = $this->syntaxhighlighting($content,$parent,$conf); 
+		if($conf['postparser.']['syntaxHighlighter'] ==1)	$content = $this->syntaxhighlighting($content,$parent,$conf);
 		/* Need for no double parsing, for example that the codeboxes are not double parsed. That really would not good look :-) */
 		$content = str_replace("###DONT_PARSE_AGAIN_START###","",$content);
 		$content = str_replace("###DONT_PARSE_AGAIN_ENDE###","",$content);
@@ -128,7 +128,7 @@ class tx_mmforum_postparser {
 
 	/**
 	 * Generates crypted email links.
-	 * 
+	 *
 	 * @author  Björn Detert <b.detert@mittwald.de>
 	 * @version 20. 9. 2006
 	 * @param   string $content The string in which the email links are to be generated
@@ -163,26 +163,26 @@ class tx_mmforum_postparser {
 					),
 				);
 				while(list($k,$v)= each($patterns)){
-					$bool = preg_match_all($v['pattern'],$content,$res_arr); 
+					$bool = preg_match_all($v['pattern'],$content,$res_arr);
 					if($bool == TRUE && is_array($res_arr)){
 						while(list($key,$value)=each($res_arr[1])){
 							$value = str_replace('mailto:','',$value);
-							$link = $this->getMailTo($value,$value,'');     
-							$content = str_replace($v['front'].$value.$v['end'],'<a href="'.$link[0].'">'.$link[1].'</a>',$content);   
+							$link = $this->getMailTo($value,$value,'');
+							$content = str_replace($v['front'].$value.$v['end'],'<a href="'.$link[0].'">'.$link[1].'</a>',$content);
 						}
-					}  
+					}
 				}
 				return $content;
 			break;
 			default:
 				// Nothing at the moment :-)
 			break;
-		}	
+		}
 	}
 
 	/**
 	 * Generates data for a single crypted email link from the mail address.
-	 * 
+	 *
 	 * @author  Björn Detert <b.detert@mittwald.de>
 	 * @version 20. 9. 2006
 	 * @param   string $mailAddress The email address to be linked
@@ -194,11 +194,11 @@ class tx_mmforum_postparser {
 	 */
 	function getMailTo($mailAddress,$linktxt,$initP='?') {
 		if(!strcmp($linktxt,''))    { $linktxt = $mailAddress; }
-		$mailToUrl = 'mailto:'.$mailAddress; 
+		$mailToUrl = 'mailto:'.$mailAddress;
 		if ($GLOBALS['TSFE']->spamProtectEmailAddresses) {
-			$email_substr = $parent->config['email_subst'] = $GLOBALS['TSFE']->tmpl->setup['config.']['spamProtectEmailAddresses_atSubst']; 
+			$email_substr = $parent->config['email_subst'] = $GLOBALS['TSFE']->tmpl->setup['config.']['spamProtectEmailAddresses_atSubst'];
 			$mailToUrl = "javascript:linkTo_UnCryptMailto('".$GLOBALS['TSFE']->encryptEmail($mailToUrl)."');";
-			$mailToUrl = str_replace('<','&lt;',$mailToUrl);    
+			$mailToUrl = str_replace('<','&lt;',$mailToUrl);
 			$linktxt = str_replace('@',$email_substr,$linktxt);
 			$lastDotLabel = $lastDotLabel ? $lastDotLabel : '[dot]';
 			$linktxt = preg_replace('/\.([^\.]+)$/', $lastDotLabel.'$1', $linktxt);
@@ -210,7 +210,7 @@ class tx_mmforum_postparser {
 	 * Parses BBCode in a string.
 	 * This function parses all BBCodes in a string. Most of the BBCodes and
 	 * their substitution patterns are loaded from database.
-	 * 
+	 *
 	 * @author  Björn Detert <b.detert@mittwald.de>
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-12-08
@@ -221,9 +221,9 @@ class tx_mmforum_postparser {
 	 * @param   array  $conf   The calling plugin's configuration vars
 	 * @return  string         The parsed string
 	 */
-	function bbcode2html($text,$parent,$conf){  
+	function bbcode2html($text,$parent,$conf){
 
-			/* Parse special characters */		
+			/* Parse special characters */
 		$text = $parent->validatorObj->specialChars($text);
 
 		/* SET Buffer markers for Syntax Highlithing Boxes */
@@ -232,13 +232,13 @@ class tx_mmforum_postparser {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'lang_title,lang_pattern,lang_code',
 				'tx_mmforum_syntaxhl',
-				'deleted=0 AND hidden=0' 
-		);	
+				'deleted=0 AND hidden=0'
+		);
         if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) $buffer = array();
         else {
 		    while($data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 			    $check = preg_match_all($data['lang_pattern'],$text,$buffer[$data['lang_title']]);
-			    $text = preg_replace($data['lang_pattern'],'###'.$data['lang_title'].'_BUFFER_MARKER_MMCMS###',$text);	
+			    $text = preg_replace($data['lang_pattern'],'###'.$data['lang_title'].'_BUFFER_MARKER_MMCMS###',$text);
 		    }
         }
 		$text = $this->links($text,$conf);
@@ -247,7 +247,7 @@ class tx_mmforum_postparser {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'pattern,replacement',
 			'tx_mmforum_postparser',
-			'deleted=0' 
+			'deleted=0'
 		);
         if($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
 		    while($data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
@@ -280,7 +280,7 @@ class tx_mmforum_postparser {
     /* remove unneeded HTML-code */
     $text = str_replace('target=""','',$text);
     $text = str_replace('class=""','',$text);
-		/* the list bb code */ 
+		/* the list bb code */
 		$patterns = array(
 			"/\[list\](.*?)\[\/list\]/isS",
 			"/\[list:[a-z0-9]{10}\](.*?)\[\/list:[a-z0-9]{10}\]/isS",
@@ -296,7 +296,7 @@ class tx_mmforum_postparser {
 		}
 	    return $text;
 	}
-    
+
     /**
      * Parses a list.
      * This function generates a XHTML compatible list of items that is
@@ -304,7 +304,7 @@ class tx_mmforum_postparser {
      * [*] in the beginning.
      * This function is used as callback function for a preg_replace_callback
      * expression.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-07-17
      * @param   array  $matches An array containing the matches of the regular
@@ -313,21 +313,21 @@ class tx_mmforum_postparser {
      */
     function processList($matches) {
         $listContent = $matches[1];
-        
+
         $itemString = '';
         $itemsRaw = explode('[*]',$listContent);
         foreach($itemsRaw as $itemRaw) {
             $itemRaw = trim($itemRaw);
             if(strlen($itemRaw)>0) $itemString .= '<li class="tx-mmforum-listitem">'.$itemRaw.'</li>';
         }
-        
+
         if(strlen($itemString) > 0) return '<ul class="tx-mmforum-list">'.$itemString.'</ul>';
     }
 
 	/**
 	 * Substitutes smilie tags like :) or ;) with corresponding <img> tags.
 	 * The smilie tags and there image equivalents are loaded from database.
-	 * 
+	 *
 	 * @author  Björn Detert <b.detert@mittwald.de>
 	 * @version 20. 9. 2006
 	 * @param   string $text   The text to be parsed
@@ -346,13 +346,13 @@ class tx_mmforum_postparser {
 			'LENGTH(code) DESC'
 		);
 		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			if(substr($conf['postparser.']['bb_code_path_smilie'],0,4) == 'EXT:') {            // Is the Path includet with the EXT: Function ? 
-				$smiliepath = tx_mmforum_tools::generateSiteRelExtPath($conf['postparser.']['bb_code_path_smilie'].$row['smile_url']); 
+			if(substr($conf['postparser.']['bb_code_path_smilie'],0,4) == 'EXT:') {            // Is the Path includet with the EXT: Function ?
+				$smiliepath = tx_mmforum_tools::generateSiteRelExtPath($conf['postparser.']['bb_code_path_smilie'].$row['smile_url']);
 			}
 			else{
-				$smiliepath = $conf['postparser.']['bb_code_path_smilie'].$row['smile_url'];    
+				$smiliepath = $conf['postparser.']['bb_code_path_smilie'].$row['smile_url'];
 			}
-			
+
 			$smilieimage 	=	'<img src="'.$smiliepath.'" alt="'.$row['smile_url'].'" />';
 			#$text 			= 	str_replace(' '.$row['code'].' ',$smilieimage,$text);
 			$text 			= 	str_replace($row['code'],$smilieimage,$text);
@@ -385,14 +385,14 @@ class tx_mmforum_postparser {
 	 */
 	function syntaxhighlighting($content, $parent, $conf){
 		/* Path to Geshi Syntax-Highlighting files. */
-		$path = t3lib_div::getFileAbsFileName('EXT:mm_forum/includes/geshi/geshi/',$onlyRelative=1,$relToTYPO3_mainDir=0); 
+		$path = t3lib_div::getFileAbsFileName('EXT:mm_forum/includes/geshi/geshi/',$onlyRelative=1,$relToTYPO3_mainDir=0);
 		($conf['postparser.']['tsrefUrl'])? define('GESHI_TS_REF',$conf['postparser.']['tsrefUrl']) : define('GESHI_TS_REF','www.typo3.net');
-		
+
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'lang_title,lang_pattern,lang_code',
 				'tx_mmforum_syntaxhl',
-				'deleted=0 AND hidden=0' 
-		);	
+				'deleted=0 AND hidden=0'
+		);
 		while($data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 			preg_match_all($data['lang_pattern'],$content,$source_arr);
 			while(list($key,$value)	=	each($source_arr[1])){
@@ -401,29 +401,29 @@ class tx_mmforum_postparser {
 					if(!preg_match("/<\?/",trim(substr($value,0,6)))) $value = "<?\n".$value."\n?>";
 				}
 				$geshi = new GeSHi($value, $data['lang_code'], $path);
-				$geshi->set_header_type(GESHI_HEADER_PRE); 
-                #$geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);    	
+				$geshi->set_header_type(GESHI_HEADER_PRE);
+                #$geshi->enable_line_numbers(GESHI_NORMAL_LINE_NUMBERS);
 				$geshi->set_line_style('background: '.$conf['postparser.']['sh_linestyle_bg'].';','background: '.$conf['postparser.']['sh_linestyle_bg2'].';', true);
-				$geshi->set_overall_style('margin:0px;', true); 
+				$geshi->set_overall_style('margin:0px;', true);
 				$geshi->enable_classes();
 				$style 		= 	'<style type="text/css"><!--';
 				$style		.= 	$geshi->get_stylesheet();
 				$style		.= 	'--></style>';
 				$geshi->enable_strict_mode('FALSE');
 				$replace 	= 	$geshi->parse_code();
-				$time 		= 	$geshi->get_time();	
+				$time 		= 	$geshi->get_time();
 				$CodeHead	= '<div class="tx-mmforum-pi1-codeheader">'.strtoupper($data['lang_title']).'</div>'; // $code_header , check this out?? I get confused ^^
 				$replace	= '###DONT_PARSE_AGAIN_START###'.$CodeHead.'<div class="tx-mmforum-pi1-codeblock">'.$style.$replace.'</div>###DONT_PARSE_AGAIN_ENDE###';
-				$content	= str_replace($source_arr[0][$key],$replace,$content); 
+				$content	= str_replace($source_arr[0][$key],$replace,$content);
 			}
-				
+
 		}
 	    return $content;
 	}
 
 	/**
 	 * Parses quotes in the text.
-	 * 
+	 *
 	 * @author  Björn Detert <b.detert@mittwald.de>
 	 * @version 20. 9. 2006
 	 * @param   string $text   The text to be parsed
@@ -449,7 +449,7 @@ class tx_mmforum_postparser {
 		$text = preg_replace('/\[\/quote:[a-zA-Z0-9]{10}]/isS', '</div>', $text);
 		$text = preg_replace("/\[quote\](.*?)\[\/quote\]/isS","<div class=\"".$conf['postparser.']['quoteClass']."\">\\1</div>",$text);
 		$text = preg_replace('/\[\/quote]/isS', '</div>', $text);
-		
+
 		preg_match_all('/\[quote="[^\"]{1,30}"]/isS',$text,$quote_data);
 		while(list ($k,$v) = each ($quote_data)){
 			$pattern = '/"[^\"]{1,30}"/';
@@ -460,8 +460,8 @@ class tx_mmforum_postparser {
 				}
 			}
 		}
-		$text = preg_replace('/\[quote:[a-zA-Z0-9]{10}]/isS', '<div class="'.$conf['postparser.']['quoteClass'].'">', $text);       
-		$text = preg_replace('/\[\/quote:[a-zA-Z0-9]{10}]/isS', '</div>', $text);                  
+		$text = preg_replace('/\[quote:[a-zA-Z0-9]{10}]/isS', '<div class="'.$conf['postparser.']['quoteClass'].'">', $text);
+		$text = preg_replace('/\[\/quote:[a-zA-Z0-9]{10}]/isS', '</div>', $text);
 		$text = preg_replace("/\[quote\](.*?)\[\/quote\]/isS","<div class=\"".$conf['postparser.']['quoteClass']."\">\\1</div",$text);
 	    return $text;
 	}
@@ -484,7 +484,7 @@ class tx_mmforum_postparser {
 
 	/**
 	 * Generates links.
-	 * 
+	 *
 	 * @author Martin Helmich <m.helmich@mittwald.de>
 	 * @param  string $text The text, in which the links are to be generated.
 	 * @param  array  $conf The calling plugin's configuration vars
@@ -498,7 +498,7 @@ class tx_mmforum_postparser {
 
 	/**
 	 * Generates TYPO3 links.
-	 * 
+	 *
 	 * @author Hauke Hain <hhpreuss@googlemail.com>
 	 * @param  string $text The text, in which the links are to be generated.
 	 * @param  object $parent The calling object (regulary of type tx_mmforum_pi1), so this
@@ -520,8 +520,8 @@ class tx_mmforum_postparser {
 
 	/**
 	 * Returns TYPO3 URL with the help of a linkhandler.
-	 * uses the TypoScript of the linkhandler of the extension tinymcr_rte  	 
-	 * 
+	 * uses the TypoScript of the linkhandler of the extension tinymcr_rte
+	 *
 	 * @author Hauke Hain <hhpreuss@googlemail.com>
 	 * @param  string $id The link id or record parameter
 	 * @param  object $parent The calling object (regulary of type tx_mmforum_pi1), so this
@@ -553,7 +553,7 @@ class tx_mmforum_postparser {
 	}
 
 	 /**
-	  *('EXT:tinymce_rte/hooks/class.tx_tinymce_rte_handler.php:&tx_tinymce_rte_handler')	 
+	  *('EXT:tinymce_rte/hooks/class.tx_tinymce_rte_handler.php:&tx_tinymce_rte_handler')
     * allow to use links as "record:tt_news:3"
     * original by Daniel Poetzinger (AOE media GmbH) in extension linkhandler
     *

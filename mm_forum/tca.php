@@ -129,13 +129,13 @@ $TCA['tx_mmforum_forums'] = array(
 			)
 		),
        'userrights_read' => array(
-            'exclude'       => 1,        
-            'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_forums.forum_userrights_read',        
+            'exclude'       => 1,
+            'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_forums.forum_userrights_read',
             'config'        => array(
-                'type'          => 'group',    
-                'internal_type' => 'db',    
-                'allowed'       => 'fe_users',    
-                'size'          => 10,    
+                'type'          => 'group',
+                'internal_type' => 'db',
+                'allowed'       => 'fe_users',
+                'size'          => 10,
                 'minitems'      => 0,
                 'maxitems'      => 100,
             )
@@ -144,10 +144,10 @@ $TCA['tx_mmforum_forums'] = array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_forums.forum_userrights_write',
 			'config'        => array(
-                'type'          => 'group',    
-                'internal_type' => 'db',    
-                'allowed'       => 'fe_users',    
-                'size'          => 10,    
+                'type'          => 'group',
+                'internal_type' => 'db',
+                'allowed'       => 'fe_users',
+                'size'          => 10,
                 'minitems'      => 0,
                 'maxitems'      => 100,
             )
@@ -156,10 +156,10 @@ $TCA['tx_mmforum_forums'] = array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_forums.forum_userrights_mod',
 			'config'        => array(
-                'type'          => 'group',    
-                'internal_type' => 'db',    
-                'allowed'       => 'fe_users',    
-                'size'          => 10,    
+                'type'          => 'group',
+                'internal_type' => 'db',
+                'allowed'       => 'fe_users',
+                'size'          => 10,
                 'minitems'      => 0,
                 'maxitems'      => 100,
             )
@@ -1236,7 +1236,7 @@ $TCA['tx_mmforum_userfields'] = array(
 			'config' => array(
 				'type' => 'text',
 				'cols' => '40',
-				'rows' => '5', 
+				'rows' => '5',
 			),
 			'defaultExtras' => 'fixed-font : enable-tab',
 		),
@@ -1534,10 +1534,10 @@ $TCA['tx_mmforum_ranks'] = array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_ranks.color',
 			'config'        => array(
-				"type"          => "input",    
+				"type"          => "input",
                 "size"          => "10",
                 'checkbox'      => '1',
-                'default'       => '',    
+                'default'       => '',
                 "wizards"       => Array(
                     "_PADDING"      => 2,
                     "color"         => Array(
@@ -1557,11 +1557,11 @@ $TCA['tx_mmforum_ranks'] = array(
             'config'        => array(
                 "type"          => "group",
                 "internal_type" => "file",
-                "allowed"       => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],    
-                "max_size"      => 500,    
+                "allowed"       => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],
+                "max_size"      => 500,
                 "uploadfolder"  => "uploads/tx_mmforum",
-                "show_thumbs"   => 1,    
-                "size"          => 1,    
+                "show_thumbs"   => 1,
+                "size"          => 1,
                 "minitems"      => 0,
                 "maxitems"      => 1,
             )

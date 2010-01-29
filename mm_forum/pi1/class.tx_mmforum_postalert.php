@@ -58,7 +58,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 
 	/**
 	 * Outputs a list of all posts alerted by users.
-	 * 
+	 *
 	 * This function output a list of all post alerts submitted by users.
 	 * It allows a filtering by post alert status and different ordering options.
 	 * @param  array  $conf The calling plugin's configuration vars
@@ -103,7 +103,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			'###LABEL_STATUS###'			=> $this->pi_getLL('postalert.status'),
 			'###LABEL_POSTTEXT###'			=> $this->pi_getLL('postalert.posttext'),
 		);
-		
+
 		$marker['###ORDERBY_USER###']	= '';
 		$marker['###ORDERBY_DATE###']	= '';
 		$marker['###ORDERBY_STAT###']	= '';
@@ -130,7 +130,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			default:
 				$order_by = 'status';
 				$marker['###ORDERBY_STAT###'] = 'selected';
-			break;  
+			break;
 		}
 		switch($param['order']) {
 			case "up":
@@ -144,7 +144,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			default:
 				$order = 'ASC';
 				$marker['###ORDERASC###'] = 'selected';
-			break;  
+			break;
 		}
 
 		// Determine filtering mode
@@ -167,15 +167,15 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 		if($param['view_close'] == '' AND $param['view_work'] == '' AND $param['view_open'] == '' AND empty($param) ) {
 			$marker['###VIEW_OPEN###']		= 'checked';
 			$marker['###VIEW_WORK###']		= 'checked';
-			$marker['###VIEW_CLOSE###']		= ''; 
+			$marker['###VIEW_CLOSE###']		= '';
 			#$where = ' OR status = -1 OR status = 0';
 			$allowedStatus = array(0,-1);
 		}
-		
+
 		$where = count($allowedStatus) ? ' AND status IN ('.implode(',',$allowedStatus).') ' : '';
-		
+
 		$boards = tx_mmforum_postalert::getModeratorBoards();
-		
+
 		if($boards === false)
 			$accessWhere = ' AND 0=1 ';
 		elseif($boards === true)
@@ -183,7 +183,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 		else {
 			$accessWhere = ' AND t.forum_id IN ('.implode(',',$boards).') ';
 		}
-		
+
 			// Load post alert records from database
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'a.*',
@@ -191,10 +191,10 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			"1 = 1 $where $accessWhere",
 			'',
 			$order_by.' '.$order);
-		
+
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$marker['###STATUS###'] = '';
-			
+
 			switch ($row['status']) {
 				case('-1') :
                     $marker['###STATCOLOR###']  = $this->conf['postalerts.']['statusColors.']['open'];
@@ -224,20 +224,20 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			);
 
 			list($posttext) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery('post_text','tx_mmforum_posts_text','deleted="0" AND hidden="0" AND post_id="'.$row['post_id'].'"'));
-			
+
 			$marker['###UID###']		= $row['uid'];
 			$marker['###TOPIC###']		= $this->pi_linkToPage(tx_mmforum_pi1::get_topic_name($row['topic_id']),$conf['pid_forum'],$target='_self',$linkparams);
 			$marker['###DATE###']		= $this->formatDate($row['crdate']);
 			$marker['###POST_TEXT###']	= nl2br($this->shield($posttext));
 			$marker['###TEXT_SHORT###']	= $this->shield(tx_mmforum_tools::textCut($row['alert_text'],15,''));
 			$marker['###TEXT###']		= nl2br($this->shield($row['alert_text']));
-			
+
 			$mod_data					= tx_mmforum_tools::get_userdata($row['cruser_id']);
 			$marker['###MOD###']		= $mod_data[tx_mmforum_pi1::getUserNameField()];
 
 			$marker['###POST_USER###']	= $this->pi_linkToPage($mod_data[tx_mmforum_pi1::getUserNameField()],$conf['pm_id'],'',array('tx_mmforum_pi3[action]'=>'message_write','userid'=>$row['cruser_id']));
 
-			$content_sub .= $this->cObj->substituteMarkerArrayCached($template_sub, $marker); 
+			$content_sub .= $this->cObj->substituteMarkerArrayCached($template_sub, $marker);
 		}
 		$content = $this->cObj->substituteSubpart($template,'###ALERT_LIST_SUB###',$content_sub);
 		$marker['###FORMACTION###'] = $this->shieldURL($this->getAbsUrl($this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$linkparams)));
@@ -267,9 +267,9 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 				'###LABEL_REASON###'		=> $this->pi_getLL('postalert.reason'),
 				'###LABEL_ALERT###'			=> $this->pi_getLL('postalert.alert')
 			);
-			
+
 			$marker['###ERRORMESSAGE###'] = '';
-			
+
 			// Create alert record
 			if($param['submit'] == $this->pi_getLL('postalert.alert')) {
 				if(empty($param['alert_text'])) {
@@ -282,17 +282,17 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 						'alert_text'	=> $param['alert_text'],
 						'post_id'		=> $post_id,
 						'topic_id'		=> tx_mmforum_pi1::get_topic_id($post_id),
-						'mod_id'		=> '', 
+						'mod_id'		=> '',
 						'status'		=> '-1'
 					);
 					$res        = $GLOBALS['TYPO3_DB']->exec_INSERTquery(' tx_mmforum_post_alert', $insertArray);
-                    
+
 					$linkto		= $this->get_pid_link($post_id,t3lib_div::_GP('sword'),$conf);
                     $linkto     = $this->getAbsUrl($linkto);
-                    
+
 					header('Location: '.$linkto);
 				}
-			} 
+			}
 
 			list($posttext) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery('post_text','tx_mmforum_posts_text',"deleted='0' AND hidden='0' AND post_id='$post_id'"));
 
@@ -301,9 +301,9 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 				'tid'			=> tx_mmforum_pi1::get_topic_id($post_id),
 				'pid'			=> 'last'
 			);
-            
+
             $posttext = $this->bb2text($posttext,$this->conf);
-			
+
 			$marker['###ACTIONLINK###'] = $this->shieldURL($this->getAbsUrl($this->pi_linkTP_keepPIvars_url()));
 			$marker['###POSTTEXT###']   = nl2br($posttext);
 
@@ -317,14 +317,14 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 
 		return $content;
 	}
-	
+
     function getModeratorBoards() {
-        
+
 		$this->parent = $this;
 		$result = tx_mmforum_postqueue::getModeratorBoards();
 		unset($this->parent);
 		return $result;
-		
+
     }
 
 }

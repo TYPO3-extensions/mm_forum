@@ -42,7 +42,7 @@ require(dirname(PATH_thisScript).'/../pi4/class.tx_mmforum_indexing.php');
  * This cronjob script handles the automatic indexing of the mm_forum
  * search. To keep the search index up-to-date, it should be called at
  * least once an hour, preferably several times an hour.
- * 
+ *
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @version    2008-06-22
  * @copyright  2008 Martin Helmich, Mittwald CM Service
@@ -50,17 +50,17 @@ require(dirname(PATH_thisScript).'/../pi4/class.tx_mmforum_indexing.php');
  * @subpackage Cronjobs
  */
 class tx_mmforum_cron_indexing extends tx_mmforum_cronbase {
-	
+
 	/**
 	 * This cronjob's name
 	 */
 	var $cron_name = 'tx_mmforum_cron_indexing';
-	
+
 	/**
 	 * The main function.
 	 * This function delegates the indexing class to the tx_mmforum_indexing
 	 * class which performs the actual indexing.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-06-22
 	 * @return  void
@@ -74,29 +74,29 @@ class tx_mmforum_cron_indexing extends tx_mmforum_cronbase {
 		$indexing = t3lib_div::makeInstance('tx_mmforum_indexing');
 		$indexing->objectMode = true;
 		$indexing->conf = $this->conf;
-		
+
 			// Load topics that are to be indexed
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*',
 			'tx_mmforum_topics',
-			'pid='.$this->getPid(),		// Deleted posts have to be selected too in order to remove deleted posts from index			
+			'pid='.$this->getPid(),		// Deleted posts have to be selected too in order to remove deleted posts from index
 			'',
 			'tx_mmforumsearch_index_write ASC',
 			$this->getIndexCount()
 		);
-		
+
 		while($topic = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$this->debug($indexing->ind_topic($topic['uid'],$this->conf));
 		}
-		
+
 			// Report success
 		$this->debug('Finished indexing');
 	}
-	
+
 	/**
 	 * Determines how much topics are to be indexed at a time. This value can be configured
 	 * in the mm_forum configuration file.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-06-22
 	 * @return  int The number of topics to be indexed at a time.
@@ -104,7 +104,7 @@ class tx_mmforum_cron_indexing extends tx_mmforum_cronbase {
 	function getIndexCount() {
 		return $this->conf['cron_index_count']?intval($this->conf['cron_index_count']):'';
 	}
-	
+
 }
 
 	// XClass inclusion

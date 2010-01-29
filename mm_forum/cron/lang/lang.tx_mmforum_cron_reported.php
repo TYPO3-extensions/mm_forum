@@ -12,7 +12,7 @@ $LANG = array(
 		'postreporter'		=> 'Meldender Benutzer',
 		'alerttext'			=> 'Anmerkung:',
 		'reportedcontent'	=> 'Inhalt des gemeldeten Beitrags:'
-		
+
 	),
 	'en' => array(
 		'subject'			=> '%s posts reported',
@@ -23,11 +23,11 @@ $LANG = array(
 		'reportdate'		=> 'Date',
 		'topicforum'		=> 'Forum',
 		'deletedUser'		=> 'Deleted user',
-		
+
 		'postreporter'		=> 'Reporter',
-		
+
 		'alerttext'			=> 'Reporter\'s Comment:',
-		
+
 		'reportedcontent'	=> 'Content of reported post:'
 	)
 );

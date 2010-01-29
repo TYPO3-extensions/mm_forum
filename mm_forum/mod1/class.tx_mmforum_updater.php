@@ -28,69 +28,69 @@
  * repository and first determines the current version that is available
  * in SVN. If the version is newer than the one installed, the updater
  * is able to download the tarball archive and unzip it automatically.
- * 
+ *
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @version    2008-04-20
  * @copyright  2008 Martin Helmich, Mittwald CM Service
  * @package    mm_forum
- * @subpackage Backend 
+ * @subpackage Backend
  */
 class tx_mmforum_updater {
-	
+
 	/**
 	 * The revision number of this version
 	 */
 	var $thisRevision = 212;
-	
+
 	/**
 	 * The URL of the mm_forum repository.
 	 * This can be any URL, the response just has to contain the string
 	 * "Revision XYZ", with XYZ equalling the newest revision number.
 	 */
 	var $url_rep		= 'http://svn.typo3.net/listing.php?repname=mm_forum&path=%2F&sc=0';
-	
+
 	/**
 	 * The URL supplying the newest revision as tarball archive.
 	 */
 	var $url_download	= 'http://svn.typo3.net/dl.php?repname=mm_forum&path=%2Fmm_forum%2Fmm_forum%2F&rev=0&isdir=1';
-	
+
 	/**
 	 * Main function of the module.
 	 * This function displays the updating form.
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-04-20
 	 * @return  string The HTML content of the module
 	 */
 	function main() {
 		$this->init();
-		
+
 		$newestRevision		= $this->getNewestRevision();
-		
+
 		if($newestRevision === false) return $this->getLL('noURLfopen');
-		
+
 		$content  = '<table style="width:100%;" cellspacing="0" cellpadding="0">' .
 				'<tr>' .
 				'<td style="width:50%; padding-right:8px;">'.$this->getLL('intro').'</td>' .
 				'<td><fieldset><legend>'.$this->getLL('title').'</legend>';
-		
-		$content .= sprintf($this->getLL('currentRevision'),$this->thisRevision).'<br />';		
+
+		$content .= sprintf($this->getLL('currentRevision'),$this->thisRevision).'<br />';
 		$content .= sprintf($this->getLL('newestRevision'),$newestRevision).'<br /><br />';
-		
+
 		if(t3lib_div::_GP('update_result')) {
 			unlink('../../tx_mmforum_update.php');
 			unlink('../../mm_forum_update.tar.gz');
-		
+
 	        $TCE = t3lib_div::makeInstance('t3lib_tcemain');
 	        $TCE->admin = TRUE;
 	        $TCE->clear_cacheCmd('all');
-			
+
 			if(t3lib_div::_GP('update_result') == 'error')
 				return '<strong>'.$this->getLL('error').'</strong>';
 			if(t3lib_div::_GP('update_result') == 'success')
 				return '<strong>'.$this->getLL('success').'</strong>';
 		}
-			
+
 		if($this->thisRevision >= $newestRevision)
 			$content .= '<strong>'.$this->getLL('noUpdate').'</strong>';
 		else {
@@ -102,12 +102,12 @@ class tx_mmforum_updater {
 						'<input type="submit" value="'.$this->getLL('updateNow').'" />';
 			}
 		}
-		
+
 		$content .= '</fieldset></td></tr></table>';
-		
+
 		return $content;
 	}
-	
+
 	/**
 	 * Performs the actual update.
 	 * This function performs the actual update to the current version.
@@ -130,47 +130,47 @@ class tx_mmforum_updater {
 	 */
 	function performUpdate() {
 		$c		= $this->getLL('progress.loadTarball');
-		
+
 		if(file_exists('../../tx_mmforum_update.php'))
 			unlink('../../tx_mmforum_update.php');
-		
+
 		// Load Tarball
 			$tarball = @file_get_contents($this->url_download, false);
 			if(!$tarball) return $c.$this->getLL('progress.failure');
 			else $c .= $this->getLL('progress.success').'<br />';
-			
+
 		// Validate Tarball
 			if(strlen($tarball) == 0 || stristr($tarball, 'Unable to open file mm_forum.tar.gz'))
 				return $c.$this->getLL('progress.failure');
-			
+
 		$c		.= $this->getLL('progress.storeToHD');
-		
+
 		// Store Tarball to disc
 			$tarballFile = fopen('../../mm_forum_update.tar.gz','w');
 			if(fwrite($tarballFile, $tarball)===false)
 				return $c.$this->getLL('progress.failure');
 			else $c .= $this->getLL('progress.success').'<br />';
-			
+
 		$c		.= $this->getLL('progress.moveInstaller');
-		
+
 		// Move install script into ext/ directory
 			if(system('cp tx_mmforum_update.php ../../tx_mmforum_update.php')===false)
 				return $c.$this->getLL('progress.failure');
 			else $c .= $this->getLL('progress.success');
-			
+
 		$c		.= $this->getLL('progress.performInstallation');
-		
+
 		// Perform installation
 			header('Location: ../../tx_mmforum_update.php');
-		
+
 		return $c;
 	}
-	
+
     /**
      * Gets a language variable from the locallang_install.xml file.
      * Wrapper function to simplify retrieval of language dependent
      * strings.
-     * 
+     *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-14
      * @param   string $key The language string key
@@ -179,7 +179,7 @@ class tx_mmforum_updater {
 	function getLL($key) {
 		return $GLOBALS['LANG']->getLL('updater.'.$key);
 	}
-	
+
     /**
      * Initializes the installation module.
      * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -189,10 +189,10 @@ class tx_mmforum_updater {
 	function init() {
 		$GLOBALS['LANG']->includeLLFile('EXT:mm_forum/mod1/locallang_updater.xml');
 	}
-	
+
 	/**
 	 * Loads the newest revision number from svn.typo3.net
-	 * 
+	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-04-20
 	 * @return  int The newest revision number

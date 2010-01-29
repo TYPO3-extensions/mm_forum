@@ -36,7 +36,7 @@
  * ./cli.tx_mmforumcron.php). The operation that is to be performed (meaning e.g.
  * search indexing or message reminders) has to be submitted as first parameter.
  * At the moment, available parameters are:
- * 
+ *
  * indexing  - Starts the mm_forum search indexing. This cronjob should be called
  *             at least hourly in order to keep the search index up to date.
  * messaging - Sends notification emails about private messages that have been

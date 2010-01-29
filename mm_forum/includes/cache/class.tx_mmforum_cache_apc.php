@@ -27,7 +27,7 @@
 	 * The tx_mmforum_cache_apc class is a wrapper class for the caching
 	 * functions provided by the APC extension. Cached data is stored
 	 * in the server's RAM persistently between requests.
-	 * 
+	 *
 	 * @author     Martin Helmich <m.helmich@mittwald.de>
 	 * @version    2008-10-11
 	 * @copyright  2008 Martin Helmich, Mittwald CM Service GmbH & Co. KG
@@ -35,7 +35,7 @@
 	 * @subpackage Cache
 	 */
 class tx_mmforum_cache_apc {
-	
+
 		/**
 		 * The prefix string for all cache keys.
 		 * This attribute may be of importance, if on the server there is more
@@ -47,10 +47,10 @@ class tx_mmforum_cache_apc {
 		 * value of your choice.
 		 */
 	var $prefix = '1';
-	
+
 		/**
 		 * Saves an object into the cache.
-		 * 
+		 *
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2008-10-11
 		 * @access  public
@@ -68,7 +68,7 @@ class tx_mmforum_cache_apc {
 			return apc_store($this->getCacheKey($key),$object);
 		else return apc_add($this->getCacheKey($key),$object);
 	}
-	
+
 		/**
 		 * Restores an object from cache.
 		 *
@@ -82,10 +82,10 @@ class tx_mmforum_cache_apc {
 		$res = apc_fetch($this->getCacheKey($key));
 		return ($res === false) ? null : $res;
 	}
-	
+
 		/**
 		 * Deletes an object from cache.
-		 * 
+		 *
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2008-10-11
 		 * @access  public
@@ -95,11 +95,11 @@ class tx_mmforum_cache_apc {
 	function delete($key) {
 		return apc_delete($this->getCacheKey($key));
 	}
-	
+
 		/**
 		 * Generates a cache key used for the APC key.
 		 * By default, the key is just prepended with 'tx_mmforum_1_'.
-		 * 
+		 *
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2008-10-11
 		 * @access  private
@@ -109,7 +109,7 @@ class tx_mmforum_cache_apc {
 	function getCacheKey($key) {
 		return 'tx_mmforum_'.$this->prefix.'_'.$key;
 	}
-	
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/includes/cache/class.tx_mmforum_cache_apc.php']) {
