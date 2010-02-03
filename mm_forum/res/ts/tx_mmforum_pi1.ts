@@ -165,7 +165,7 @@ plugin.tx_mmforum_pi1 {
             username = TEXT
             username {
                 field = username
-                typolink.parameter = {$plugin.tx_mmforum.userProfilePID}
+                typolink.parameter < plugin.tx_mmforum.userProfilePID
                 typolink.additionalParams.field = uid
                 typolink.additionalParams.wrap = &tx_mmforum_pi1[action]=forum_view_profil&tx_mmforum_pi1[user_id]=|
             }

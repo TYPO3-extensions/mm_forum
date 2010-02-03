@@ -21,7 +21,7 @@ plugin.tx_mmforum {
 		pid_forum       	= {$plugin.tx_mmforum.boardPID}
 
 	# Page ID where the User Profile is displayed
-		userProfilePID     	= {$plugin.tx_mmforum.userProfilePID}
+		userProfilePID     	= {$plugin.tx_mmforum.boardPID}
 
 	# Page ID for Private Messages
 		pm_id         	    = {$plugin.tx_mmforum.pmPID}

@@ -327,7 +327,7 @@ class tx_mmforum_postfactory {
 		 *
 		 */
 
-	function create_post($topicId, $author, $text, $date, $ip, $attachments = array(), $noUpdate = false) {
+	function create_post($topicId, $author, $text, $date, $ip, $attachments = array(), $noUpdate = false, $subscribe=FALSE) {
 		$author = intval($author);
 
 		// Retrieve forum uid
@@ -401,7 +401,7 @@ class tx_mmforum_postfactory {
         // Send notification email to users who have subscribed this topic
 		if ($this->parent != null) {
 			// Subscribe to the topic
-			tx_mmforum_havealook::addSubscription($this->parent, $topicId, $author);
+			If($subscribe) tx_mmforum_havealook::addSubscription($this->parent, $topicId, $author);
 			tx_mmforum_havealook::notifyTopicSubscribers($topicId, $this->parent);
 		}
 
