@@ -31,7 +31,7 @@
             <label index="info-todayTotal">Today  ###BESUCHER_REG_HEUTE### ###BESUCHER_REG_HEUTE_LABEL### and ###BESUCHER_GAST_HEUTE### ###BESUCHER_GAST_HEUTE_LABEL### ###PRD### already online.</label>
             <label index="info-currentlyOnline">Now online</label>
             <label index="info-todayOnline">Today's visitors</label>
-            <label index="info-stats">###SITENAME### has ###BENUTZER_TOTAL### registered user, ###THEMEN_TOTAL### topics and ###ANTWORTEN_TOTAL### answers. On the average ###BEITRAEGE_SCHNITT### posts are written per day.</label>
+            <label index="info-stats">###SITENAME### has ###BENUTZER_TOTAL### registered user, ###THEMEN_TOTAL### topics and ###ANTWORTEN_TOTAL### answers. On average ###BEITRAEGE_SCHNITT### posts are written per day.</label>
         </languageKey>
         <!-- GERMAN LANGUAGE DATA -->
         <languageKey index="de" type="array">

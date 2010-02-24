@@ -26,7 +26,7 @@
             <label index="fri">Fri</label>
             <label index="sat">Sat</label>
             <label index="sun">Sun</label>
-            <label index="login_error">You have been logged out, at first please log in.</label>
+            <label index="login_error">You are currently logged out, please log in again.</label>
             <label index="on">On</label>
             <label index="off">Off</label>
             <label index="save">Save</label>
@@ -43,7 +43,7 @@
             <label index="board-unreadEntries">Unread entries</label>
             <label index="board-markAllRead">Mark all as read</label>
             <label index="board-unansweredEntries">Unanswered entries</label>
-			<label index="board-noAccess">The selected forum has not been found. It is oossible that you do not have the necessary rights.</label>
+            <label index="board-noAccess">The selected forum has not been found. Either you do not have the necessary rights or you need to log in to view the forum.</label>
             <label index="board-markedAllRead">All messages were marked as read.</label>
             <label index="board-rootline">Forum</label>
             <label index="board-board">Forum</label>
@@ -73,7 +73,7 @@
             <label index="topic-read">No new posts</label>
             <label index="topic-unread">New posts</label>
             <label index="topic-isFavorite">Favorite</label>
-			<label index="topic-noAccess">The selected topic has not been found. It is possible that you do not have the necessary rights.</label>
+			<label index="topic-noAccess">The selected topic has not been found. Either you do not have the necessary rights or you need to log in to view the topic.</label>
 			<label index="topic-noSolveRights">You do not have the authorisation to change solved status</label>
             <label index="topic-closed">Closed</label>
             <label index="topic-adminsOnly">Only administrators can answer to this topic</label>
