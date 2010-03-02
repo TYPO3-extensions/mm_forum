@@ -31,7 +31,7 @@
             <label index="off">Off</label>
             <label index="save">Save</label>
             <label index="options">Options</label>
-			<label index="error_logout">An error occured while writing into the database. You have been logged out.</label>
+			      <label index="error_logout">An error occured while writing into the database. You have been logged out.</label>
             <label index="page-goto">To page</label>
             <label index="page-first">First</label>
             <label index="page-previous"><![CDATA[&laquo;]]> Previous</label>
@@ -40,9 +40,9 @@
             <label index="error-imgNotFound">[Error loading image ###IMGFILE###]</label>
             <label index="footermessage">Powered by mm_forum v%s</label>
             
-            <label index="board-unreadEntries">Unread entries</label>
+            <label index="board-unreadEntries">Unread posts</label>
             <label index="board-markAllRead">Mark all as read</label>
-            <label index="board-unansweredEntries">Unanswered entries</label>
+            <label index="board-unansweredEntries">Unanswered posts</label>
             <label index="board-noAccess">The selected forum has not been found. Either you do not have the necessary rights or you need to log in to view the forum.</label>
             <label index="board-markedAllRead">All messages were marked as read.</label>
             <label index="board-rootline">Forum</label>
@@ -73,12 +73,12 @@
             <label index="topic-read">No new posts</label>
             <label index="topic-unread">New posts</label>
             <label index="topic-isFavorite">Favorite</label>
-			<label index="topic-noAccess">The selected topic has not been found. Either you do not have the necessary rights or you need to log in to view the topic.</label>
-			<label index="topic-noSolveRights">You do not have the authorisation to change solved status</label>
+      			<label index="topic-noAccess">The selected topic has not been found. Either you do not have the necessary rights or you need to log in to view the topic.</label>
+      			<label index="topic-noSolveRights">You do not have the authorisation to change solved status</label>
             <label index="topic-closed">Closed</label>
             <label index="topic-adminsOnly">Only administrators can answer to this topic</label>
-			<label index="topic-emailSubscr-off">Email notification is switched off.</label>
-			<label index="topic-emailSubscr-on">Email notification is switched on.</label>
+      			<label index="topic-emailSubscr-off">Email notification is switched off.</label>
+      			<label index="topic-emailSubscr-on">Email notification is switched on.</label>
             <label index="topic-favorite-off">This topic is not a favorite</label>
             <label index="topic-favorite-on">This topic is a favorite</label>
             <label index="topic-reportToMods">Report this post to the moderators</label>
@@ -100,7 +100,7 @@
             <label index="topic-noTopicsFound">No topics found</label>
             <label index="topic-shadow">Moved</label>
             
-			<label index="newTopic-noAccess">You are not allowed to open a new topic in the forum. It is possible that you do not have the necessary rights.</label>
+			      <label index="newTopic-noAccess">You are not allowed to open a new topic in the forum. It is possible that you do not have the necessary rights.</label>
             <label index="newTopic-noTitle">The topic title has not been specified.</label>
             <label index="newTopic-noText">The topic text has not been specified.</label>
             <label index="newTopic-preview">Preview</label>
@@ -126,10 +126,10 @@
             
             <label index="newPost-save">Send</label>
             <label index="newPost-preview">Preview</label>
-			<label index="newPost-spamBlock">For security reasons you can commit a new post only every ###SPAMBLOCK### seconds.</label>
-			<label index="newPost-quote-error">A error occured while quoting the post. It is possible that you do not have the necessary rights</label>
+      			<label index="newPost-spamBlock">For security reasons you can commit a new post only every ###SPAMBLOCK### seconds.</label>
+      			<label index="newPost-quote-error">A error occured while quoting the post. It is possible that you do not have the necessary rights</label>
             <label index="newPost-title">Please enter post text.</label>
-			<label index="newPost-noLogin">It is possible that you do not have the necessary authorization or you did not log in.&lt;br /&gt;Please log in first to create a new topic.</label>
+			      <label index="newPost-noLogin">It is possible that you do not have the necessary authorization or you did not log in.&lt;br /&gt;Please log in first to create a new topic.</label>
             <label index="newPost-titleField">Title</label>
             <label index="newPost-reset">Reset</label>
             <label index="newPost-attention">Note</label>
@@ -196,7 +196,7 @@
             <label index="favorites-options">Options</label>
             <label index="favorites-title">Favorite Topics</label>
             
-			<label index="havealook-confirmMultiple">You are about to edit several data records at one time. Do you really want to continue?</label>
+			      <label index="havealook-confirmMultiple">You are about to edit several data records at one time. Do you really want to continue?</label>
             <label index="havealook-markedTopics">Marked items</label>
             <label index="havealook-delete">Delete</label>
             <label index="havealook-go">Go</label>
@@ -206,7 +206,7 @@
             <label index="subscr-delSuccess">The topic was removed from your notification list.</label>
             <label index="subscr-noLogin">You need to be logged in in order to see your subscription list.</label>
             
-			<label index="ntfMail-subject">There is a new answer to the topic ###TOPICNAME### at ###BOARDNAME###.</label>
+			      <label index="ntfMail-subject">There is a new answer to the topic ###TOPICNAME### at ###BOARDNAME###.</label>
             <label index="ntfMail-text">Hello ###USERNAME###,
 
 You received this mail, because you indicated that you would like to be informed
@@ -217,7 +217,7 @@ To visit this topic, follow the link below:
 ###LINK###</label>
             <label index="redirect-error">Unfortunately we could not return you on the last site, becaue your system suppresses the conveying of the last site.</label>
             <label index="ntfMailForum-subject">There is a new topic called '###TOPICNAME###' in the forumcategory '###FORUMNAME###' at ###BOARDNAME###</label>
-			<label index="ntfMailForum-text">Hello ###USERNAME###,
+			      <label index="ntfMailForum-text">Hello ###USERNAME###,
 				
 You received this mail, because you indicated that you would like to be informed
 if someone creates a new topic in the forumcategory (###FORUMNAME###) observed by you.
@@ -225,7 +225,7 @@ if someone creates a new topic in the forumcategory (###FORUMNAME###) observed b
 To visit this new topic, follow the link below:
 
 ###LINK###
-			</label>
+			      </label>
             <label index="prefix-title">Prefix: &amp;quot;###PREFIX###&amp;quot;</label>
             <label index="prefix-all">All</label>
             <label index="prefix-rootline">Prefix: &amp;quot;###PREFIX###&amp;quot;</label>
@@ -273,8 +273,8 @@ To visit this new topic, follow the link below:
             <label index="rootline-post_alert">Report post</label>
             <label index="rootline-new_topic">New topic</label>
             <label index="rootline-edit_post">Edit post</label>
-            <label index="rootline-list_unread">List unread topics</label>
-            <label index="rootline-list_unans">List unanswered topics</label>
+            <label index="rootline-list_unread">List unread posts</label>
+            <label index="rootline-list_unans">List unanswered posts</label>
             <label index="rootline-userprofile">User profile: &quot;%s&quot;</label>
             
             <label index="realurl-pages">pages</label>
@@ -345,7 +345,7 @@ To visit this new topic, follow the link below:
             <label index="postqueue-title">Posts to be published</label>
             <label index="postqueue-publishbutton">Publish</label>
             <label index="postqueue-noitems">There are no posts to be published.</label>
-            <label index="postqueue-success">Your entry was successfully created. It will be published by a moderator shortly.</label>
+            <label index="postqueue-success">Your post was successfully created. It will be published by a moderator shortly.</label>
             
             <label index="button-reply">Reply</label>
             <label index="button-quote">Quote</label>
@@ -370,18 +370,18 @@ To visit this new topic, follow the link below:
             <label index="topic-solvedshort-off">Open</label>
             <label index="options_mail_forum">Options</label>
 			
-			<!-- Added in 0.1.7 -->
-			<label index="userlist-title">User list</label>
-			<label index="user-profile">User profile</label>
-			<label index="user-field">User field</label>
-			<label index="user-username">User name</label>
-			<label index="user-value">Value</label>
-
-			<!-- Added in 0.1.8 -->
-			<label index="board-rating">Rating</label>
-			<label index="user-rating">Rating</label>
-			<label index="date-today">Today</label>
-			<label index="date-yesterday">Yesterday</label>
+      			<!-- Added in 0.1.7 -->
+      			<label index="userlist-title">User list</label>
+      			<label index="user-profile">User profile</label>
+      			<label index="user-field">User field</label>
+      			<label index="user-username">User name</label>
+      			<label index="user-value">Value</label>
+      
+      			<!-- Added in 0.1.8 -->
+      			<label index="board-rating">Rating</label>
+      			<label index="user-rating">Rating</label>
+      			<label index="date-today">Today</label>
+      			<label index="date-yesterday">Yesterday</label>
         </languageKey>
         <!-- GERMAN LANGUAGE DATA -->
         <languageKey index="de" type="array">
@@ -412,9 +412,9 @@ To visit this new topic, follow the link below:
             <label index="page-previous"><![CDATA[&laquo;]]> Vorige</label>
             <label index="page-next">Nächste <![CDATA[&raquo;]]></label>
             <label index="page-last">Letzte</label>
-            <label index="board-unreadEntries">Ungelesene Einträge</label>
+            <label index="board-unreadEntries">Ungelesene Beiträge</label>
             <label index="board-markAllRead">Alle als gelesen markieren</label>
-            <label index="board-unansweredEntries">Unbeantwortete Einträge</label>
+            <label index="board-unansweredEntries">Unbeantwortete Beiträge</label>
             <label index="board-noAccess">Das von Ihnen gewünschte Forum kann nicht angezeigt werden. Möglicherweise haben Sie nicht die erforderlichen Rechte.</label>
             <label index="board-markedAllRead">Es wurden alle Nachrichten als gelesen markiert.</label>
             <label index="board-rootline">Forum</label>
@@ -521,7 +521,7 @@ To visit this new topic, follow the link below:
             <label index="user-admin">Administrator</label>
             <label index="user-postTotal">Beiträge insgesamt</label>
             <label index="user-topicsTotal">Themen eröffnet</label>
-            <label index="user-postsPerDay">ca ###POSTS### Posts pro Tag</label>
+            <label index="user-postsPerDay">ca. ###POSTS### Beiträge pro Tag</label>
             <label index="user-allAbout">Alles über</label>
             <label index="user-regDate">Anmeldedatum</label>
             <label index="user-totalPosts">Beiträge insgesamt</label>
@@ -535,8 +535,8 @@ To visit this new topic, follow the link below:
             <label index="user-10topics">Letzte 10 Themen</label>
             <label index="user-avatar">Avatar</label>
             <label index="user-postList">Alle Beiträge</label>
-            <label index="user-postOrder">Reihenfolge der Posts</label>
-            <label index="user-postOrder-postFirst">Post als erstes anzeigen</label>
+            <label index="user-postOrder">Reihenfolge der Beiträge</label>
+            <label index="user-postOrder-postFirst">Beitrag als erstes anzeigen</label>
             <label index="user-postOrder-first">Ersten</label>
             <label index="user-postOrder-last">Letzten</label>
             <label index="user-save">Speichern</label>
@@ -597,7 +597,7 @@ Hier der Link, mit dem Sie direkt in den Beitrag gelangen:
             <label index="postalert-status-open">Offen</label>
             <label index="postalert-status-progress">In Bearbeitung</label>
             <label index="postalert-status-done">Erledigt</label>
-			<label index="postalert-errorNoReason">Bitte einen Grund eingeben, warum dieser Post gemeldet wird.</label>
+			      <label index="postalert-errorNoReason">Bitte einen Grund eingeben, warum dieser Post gemeldet wird.</label>
             <label index="postalert-errorNoLogin">Sie müssen eingeloggt sein, um diese Funktion nutzen zu können.</label>
             <label index="postalert-heading">Beitrag melden</label>
             <label index="postalert-posttext">Beitragstext</label>
@@ -743,7 +743,7 @@ Hier der Link, mit dem Sie direkt in den Beitrag gelangen:
             
             <!-- Added in 0.1.4 -->            
             <label index="postalert-errorNoLogin-inf">Du musst eingeloggt sein, um diese Funktion nutzen zu können.</label>
-			<label index="ntfMail-text-inf">Hallo ###USERNAME###,
+			      <label index="ntfMail-text-inf">Hallo ###USERNAME###,
 
 Du bekommst diese Mail, da du angegeben hast, dass du informiert werden möchtest,
 wenn jemand auf ein von dir beobachtetes Thema antwortet.
@@ -771,7 +771,7 @@ Hier der Link, mit dem du direkt in den Beitrag gelangst:
             <label index="newPost-noLogin-inf">Eventuell hast du nicht die nötige Berechtigung oder du hast dich nicht eingeloggt.&lt;br /&gt;Bitte logge dich zunächst ein, um einen neuen Beitrag zu verfassen.</label>
             <label index="newPost-quote-error-inf">Beim Zitieren des Beitrages ist ein Fehler aufgetreten. Möglicherweise hast du nicht die erforderlichen Rechte.</label>
             <label index="error_logout-inf">Beim Schreiben in die Datenbank ist ein Fehler aufgetreten. Du bist nicht (mehr) eingelogt.</label>
-			<label index="forum_desc-inf">Deine Forumsbeschreibung</label>
+			      <label index="forum_desc-inf">Deine Forumsbeschreibung</label>
             <label index="forum_head-inf">Dein Forum</label>
             <label index="login_error-inf">Du bist nicht (mehr) eingeloggt, bitte melde dich zunächst an</label>
             <label index="postqueue-success-inf">Dein Beitrag wurde erfolgreich erstellt und wird in Kürze von einem Moderator freigeschaltet.</label>
@@ -791,7 +791,7 @@ Hier der Link, mit dem du direkt in den Beitrag gelangst:
             
             <!-- Added in 0.1.6 -->
             <label index="ntfMailForum-subject">Neues Thema '###TOPICNAME###' im Forum '###FORUMNAME###' in ###BOARDNAME###</label>
-			<label index="ntfMailForum-text">Hallo ###USERNAME###,
+			      <label index="ntfMailForum-text">Hallo ###USERNAME###,
 				
 Sie bekommen diese Mail, da Sie angegeben haben, dass Sie informiert werden möchten,
 wenn jemand ein neues Thema im Forum '###FORUMNAME###' erstellt.
@@ -799,301 +799,301 @@ wenn jemand ein neues Thema im Forum '###FORUMNAME###' erstellt.
 Hier der Link, mit dem Sie direkt in den Beitrag gelangen:
 
 ###LINK###
-			</label>
+			      </label>
 			
-			<!-- Added in 0.1.7 -->
-			<label index="userlist-title">Benutzerliste</label>
-			<label index="user-profile">Benutzerprofil</label>
-			<label index="user-field">Benutzerfeld</label>
-			<label index="user-username">Benutzername</label>
-			<label index="user-value">Wert</label>
-
-			<!-- Added in 0.1.8 -->
-			<label index="board-rating">Bewertung</label>
-			<label index="user-rating">Bewertung</label>
-			<label index="date-today">Heute</label>
-			<label index="date-yesterday">Gestern</label>
+      			<!-- Added in 0.1.7 -->
+      			<label index="userlist-title">Benutzerliste</label>
+      			<label index="user-profile">Benutzerprofil</label>
+      			<label index="user-field">Benutzerfeld</label>
+      			<label index="user-username">Benutzername</label>
+      			<label index="user-value">Wert</label>
+      
+      			<!-- Added in 0.1.8 -->
+      			<label index="board-rating">Bewertung</label>
+      			<label index="user-rating">Bewertung</label>
+      			<label index="date-today">Heute</label>
+      			<label index="date-yesterday">Gestern</label>
         </languageKey>
         <!-- FINNISH LANGUAGE DATA -->
         <languageKey index="fi" type="array">
-			<label index="forum_head">Foorumisi nimi</label>
-			<label index="forum_desc">Foorumisi kuvaus</label>
-			<label index="linenumbering_label">Rivinumerointi</label>
-			<label index="linenumbering_switch_on">Päällä</label>
-			<label index="linenumbering_switch_off">Pois</label>
-			<label index="quote_prefix">kirjoitti</label>
-			<label index="helpbox_header">&lt;img src=&quot;fileadmin/img/mm_forum/favorit.gif&quot; /&gt;&amp;nbsp;Apua</label>
-			<label index="no_info">Ei tietoja</label>
-			<label index="mon">Ma</label>
-			<label index="tue">Ti</label>
-			<label index="wed">Ke</label>
-			<label index="thu">To</label>
-			<label index="fri">Pe</label>
-			<label index="sat">La</label>
-			<label index="sun">Su</label>
-			<label index="login_error">Olet kirjautunut ulos. Ole hyvä ja kirjaudu ensin sisään.</label>
-			<label index="on">Päällä</label>
-			<label index="off">Pois</label>
-			<label index="save">Tallenna</label>
-			<label index="options">Asetukset</label>
-			<label index="error_logout">Tietokantaan tallennuksessa tapahtui virhe. Sinut on ohjattu ulos.</label>
-			<label index="page-goto">Sivulle</label>
-			<label index="page-first">Ensimmäinen</label>
-			<label index="page-previous"><![CDATA[&laquo;]]> Edellinen</label>
-			<label index="page-next">Seuraava <![CDATA[&raquo;]]></label>
-			<label index="page-last">Viimeinen</label>
-			<label index="error-imgNotFound">[Virhe ladattaessa kuvaa ###IMGFILE###]</label>
-			<label index="footermessage">mm_forum v%s</label>
-			<label index="board-unreadEntries">Lukemattomia posteja</label>
-			<label index="board-markAllRead">Merkitse kaikki luetuiksi</label>
-			<label index="board-unansweredEntries">Vastaamattomia posteja</label>
-			<label index="board-noAccess">Valittua forumia ei löydy. Syynä on mahdollisesti puutteelliset käyttöoikeudet.</label>
-			<label index="board-markedAllRead">Kaikki viestit on merkitty luetuiksi.</label>
-			<label index="board-topics">Aiheet</label>
-			<label index="board-posts">Viestit</label>
-			<label index="board-lastPost">Viimeinen viesti</label>
-			<label index="board-topic">Aihe</label>
-			<label index="board-replies">Vastaukset (luettu)</label>
-			<label index="board-author">Kirjoittaja</label>
-			<label index="board-hideSolved">Piilota selvitetyt aiheet</label>
-			<label index="topic-topicicon">Aihe - ei uusia vastauksia</label>
-			<label index="topic-topicicon_closed">Suljettu aihe</label>
-			<label index="topic-topicicon_closed_new">Suljettu aihe (lukematon)</label>
-			<label index="topic-topicicon_hot">Aiheella monta vastausta</label>
-			<label index="topic-topicicon_hot_new">Aiheella monta vastausta (lukematon)</label>
-			<label index="topic-topicicon_unanswered">Vastaamaton aihe</label>
-			<label index="topic-topicicon_unanswered_new">Vastaamaton aihe (lukematon)</label>
-			<label index="topic-topicicon_shadow">Aihe on siirretty toiseen paikkaan.</label>
-			<label index="topic-lastarticle">Viimeisiin artikkeleihin</label>
-			<label index="topic-isSolved">On vastattu</label>
-			<label index="topic-gotoLastPost">Mene viimeiseen aiheeseen</label>
-			<label index="topic-isClosed">Aihe suljettu</label>
-			<label index="topic-hot">&quot;Kuumat&quot;</label>
-			<label index="topic-hotUnread">Kuumat ja uudet viestit</label>
-			<label index="topic-unanswered">Vastaamattomat</label>
-			<label index="topic-read">Ei uusia viestejä</label>
-			<label index="topic-unread">Uudet viestit</label>
-			<label index="topic-isFavorite">Suosikit</label>
-			<label index="topic-noAccess">Valittua ei aihetta ei löydy. Sinulla ei mahdollisesti ole tarvittavia oikeuksia.</label>
-			<label index="topic-noSolveRights">Sinulla ei ole oikeuksia muuttaa &quot;Ratkaistu&quot;-statusta.</label>
-			<label index="topic-closed">Suljettu</label>
-			<label index="topic-adminsOnly">Vain hallinnoijat voivat vastata tähän aiheeseen</label>
-			<label index="topic-emailSubscr-off">Sähköposti-ilmoitus ei ole päällä.</label>
-			<label index="topic-emailSubscr-on">Sähköposti-ilmoitus on päällä.</label>
-			<label index="topic-favorite-off">Tämä aihe ei ole suosikki</label>
-			<label index="topic-favorite-on">Tämä aihe on suosikki</label>
-			<label index="topic-reportToMods">Ilmoita tästä viestistä ylläpitäjälle.</label>
-			<label index="topic-thisTopicIs">Tämä aihe on</label>
-			<label index="topic-solved">ratkaistu</label>
-			<label index="topic-notSolved">ratkaisematon</label>
-			<label index="topic-topicauthor">Aiheen luoja</label>
-			<label index="topic-title">Aiheen nimi</label>
-			<label index="topic-admin-adminoptions">Hallinnoijan asetukset</label>
-			<label index="topic-admin-expand">Näytä</label>
-			<label index="topic-admin-collapse">Piilota</label>
-			<label index="topic-admin-topictitle">Aiheen nimi</label>
-			<label index="topic-admin-topicprefix">Aiheen alku</label>
-			<label index="topic-admin-closed">Aihe on suljettu</label>
-			<label index="topic-admin-delete">Poista aihe</label>
-			<label index="topic-admin-move">Siirrä aihe</label>
-			<label index="topic-admin-save">Tallenna</label>
-			<label index="topic-noTopicsFound">Ei aiheita</label>
-			<label index="topic-shadow">Siirretty</label>
-			<label index="newTopic-noAccess">Sinun ei ole sallittua aloittaa uutta aihetta forumissa. Mahdolliset puutteet käyttöoikeuksissa.</label>
-			<label index="newTopic-noTitle">Aiheen otsikkoa ei ole määritelty.</label>
-			<label index="newTopic-noText">Aiheen tekstiä ei ole määritelty.</label>
-			<label index="newTopic-preview">Esikatselu</label>
-			<label index="newTopic-save">Lähetä</label>
-			<label index="newTopic-noLogin">Luodaksesi uuden keskusteluaiheen kirjaudu ensin sisään.</label>
-			<label index="newTopic-create">Luo uusi</label>
-			<label index="newTopic-title">Otsikko</label>
-			<label index="newTopic-setHaveALook">Haluan tiedon sähköpostitse tämän aiheen viesteistä.</label>
-			<label index="newTopic-reset">Tyhjennä</label>
-			<label index="newtopic-editor-bold">Lihava</label>
-			<label index="newtopic-editor-italic">Kursiivi</label>
-			<label index="newtopic-editor-color">Väri</label>
-			<label index="newtopic-editor-size">Koko</label>
-			<label index="newtopic-editor-underline">Alleviivaus</label>
-			<label index="newtopic-editor-quote">Lainaus</label>
-			<label index="newtopic-editor-list">Luettelo</label>
-			<label index="newtopic-editor-image">Kuva</label>
-			<label index="newtopic-editor-link">Linkki</label>
-			<label index="newPost-save">Lähetä</label>
-			<label index="newPost-preview">Esikatsele</label>
-			<label index="newPost-spamBlock">Turvallisuussyistä voit kirjoittaa vain joka ###SPAMBLOCK### sekunti uuden viestin.</label>
-			<label index="newPost-quote-error">Virhe viestiä lainatessa. Mahdolliset puutteet käyttöoikeuksissa.</label>
-			<label index="newPost-title">Ole hyvä ja anna viestin teksti.</label>
-			<label index="newPost-noLogin">Mahdolliset puutteet käyttöoikeuksissa tai et ole kirjautunut sisään.&lt;br /&gt; Ole hyvä ja kirjaudu sisään luodaksesi uuden keskustelunaiheen.</label>
-			<label index="newPost-titleField">Otsikko</label>
-			<label index="newPost-reset">Tyhjennä</label>
-			<label index="newPost-attention">Huomautus</label>
-			<label index="newPost-codeSamples">Koodiesimerkit, jotka haluat lähettää forumiin, pitää olla asianmukaisissa sulkeissa.</label>
-			<label index="newPost-attachment">Liitetiedosto</label>
-			<label index="newPost-maxFileSize">Maksimikoko %s</label>
-			<label index="editPost-noAccess">Sinulla ei ole oikeuksia muokata tätä viestiä.</label>
-			<label index="deletePost-noAccess">Sinulla ei ole oikeuksia poistaa tätä viestiä.</label>
-			<label index="post-confirmDelete">Haluatko todella poistaa tämän viestin?</label>
-			<label index="post-edited">[Tätä artikkelia on muutettu ###COUNT### kertaa, viimeisen kerran ###DATE### klo ###TIME###.]</label>
-			<label index="post-writtenOn">Kirjoitettu</label>
-			<label index="post-author">Kirjoittaja</label>
-			<label index="post-message">Viesti</label>
-			<label index="mail-success">Sähköpostiviestisi on lähetetty ###RECIPIENT###.</label>
-			<label index="mail-timeout">Sähköpostiviestiäsi ei voitu toimittaa koska olet sen jo lähettänyt tai lähettäminen ylitti aikarajan (###TIMEOUT### min).</label>
-			<label index="mail-noLogin">Ole hyvä ja kirjaudu sisään lähettääksesi sähköpostiviestin.</label>
-			<label index="user-userConf">Käyttäjäasetukset</label>
-			<label index="user-hot">###HOTPOSTS###-artikkeleista</label>
-			<label index="user-lastPostsLink">LINKKI</label>
-			<label index="user-regSince">rekisteröitynyt</label>
-			<label index="user-posts">Viestiä</label>
-			<label index="user-mod">Moderaattori</label>
-			<label index="user-admin">Hallinnoija</label>
-			<label index="user-postTotal">Viestejä yhteensä</label>
-			<label index="user-topicsTotal">Avattuja aiheita</label>
-			<label index="user-postsPerDay">keskimäärin ###POSTS### viestiä päivässä</label>
-			<label index="user-allAbout">Kaikki tiedot</label>
-			<label index="user-regDate">Rekisteröitymispäivä</label>
-			<label index="user-totalPosts">Viestit yhteensä</label>
-			<label index="user-location">Sijainti</label>
-			<label index="user-website">Kotisivut</label>
-			<label index="user-profession">Ammatti</label>
-			<label index="user-interests">Mielenkiinnon kohteet</label>
-			<label index="user-contact">Yhteystiedot</label>
-			<label index="user-lastLogin">Viimeksi kirjautunut</label>
-			<label index="user-posthistory">Viestit</label>
-			<label index="user-10topics">Viimeiset 10 aihetta</label>
-			<label index="user-postList">Kaikki viestit</label>
-			<label index="user-postOrder">Viestien järjestys</label>
-			<label index="user-postOrder-postFirst">Näytä viesti ensimmäisenä</label>
-			<label index="user-postOrder-first">Ensimmäinen</label>
-			<label index="user-postOrder-last">Viimeinen</label>
-			<label index="user-save">Tallenna</label>
-			<label index="user-statistic">Käyttäjätilastot</label>
-			<label index="user-noposts">Ei luotuja viestejä</label>
-			<label index="user-noLogin">Sinun täytyy kirjautua sisään nähdäksesi viestihistoriasi.</label>
-			<label index="user-deleted">Poistettu käyttäjä</label>
-			<label index="user-error_notExist">Tätä käyttäjää ei ole.</label>
-			<label index="favorites-addSuccess">Aihe lisättiin suosikkeihisi.</label>
-			<label index="favorites-delSuccess">Aihe poistettiin suosikeistasi.</label>
-			<label index="favorites-delete">Poista</label>
-			<label index="favorites-noLogin">Sinun täytyy kirjautua sisään nähdäksesi suosikkisi.</label>
-			<label index="favorites-orderBy">Järjestä</label>
-			<label index="favorites-orderBy-lpdate">Viimeinen viesti</label>
-			<label index="favorites-orderBy-cat">Kategoria</label>
-			<label index="favorites-orderBy-added">Lisätty</label>
-			<label index="favorites-orderBy-alphab">Aakkosellinen</label>
-			<label index="favorites-options">Asetukset</label>
-			<label index="favorites-title">Suositut aiheet</label>
-			<label index="havealook-confirmMultiple">Olet muokkaamassa useaa tietuetta yhtä aikaa. Haluatko todella jatkaa?</label>
-			<label index="havealook-markedTopics">Merkityt aiheet</label>
-			<label index="havealook-delete">Poista</label>
-			<label index="havealook-go">Mene</label>
-			<label index="havealook-title">Seuratut aiheet</label>
-			<label index="subscr-addSuccess">Aihe lisättiin seurauslistallesi.</label>
-			<label index="subscr-delSuccess">Aihe poistettiin seurauslistaltasi.</label>
-			<label index="subscr-noLogin">Sinun täytyy kirjautua sisään nähdäksesi listan seuratuista aiheista.</label>
-			<label index="ntfMail-subject">Uusi vastaus aiheeseen ###TOPICNAME### keskustelussa ###BOARDNAME###.</label>
-			<label index="ntfMail-text">Hei ###USERNAME###,
+      			<label index="forum_head">Foorumisi nimi</label>
+      			<label index="forum_desc">Foorumisi kuvaus</label>
+      			<label index="linenumbering_label">Rivinumerointi</label>
+      			<label index="linenumbering_switch_on">Päällä</label>
+      			<label index="linenumbering_switch_off">Pois</label>
+      			<label index="quote_prefix">kirjoitti</label>
+      			<label index="helpbox_header">&lt;img src=&quot;fileadmin/img/mm_forum/favorit.gif&quot; /&gt;&amp;nbsp;Apua</label>
+      			<label index="no_info">Ei tietoja</label>
+      			<label index="mon">Ma</label>
+      			<label index="tue">Ti</label>
+      			<label index="wed">Ke</label>
+      			<label index="thu">To</label>
+      			<label index="fri">Pe</label>
+      			<label index="sat">La</label>
+      			<label index="sun">Su</label>
+      			<label index="login_error">Olet kirjautunut ulos. Ole hyvä ja kirjaudu ensin sisään.</label>
+      			<label index="on">Päällä</label>
+      			<label index="off">Pois</label>
+      			<label index="save">Tallenna</label>
+      			<label index="options">Asetukset</label>
+      			<label index="error_logout">Tietokantaan tallennuksessa tapahtui virhe. Sinut on ohjattu ulos.</label>
+      			<label index="page-goto">Sivulle</label>
+      			<label index="page-first">Ensimmäinen</label>
+      			<label index="page-previous"><![CDATA[&laquo;]]> Edellinen</label>
+      			<label index="page-next">Seuraava <![CDATA[&raquo;]]></label>
+      			<label index="page-last">Viimeinen</label>
+      			<label index="error-imgNotFound">[Virhe ladattaessa kuvaa ###IMGFILE###]</label>
+      			<label index="footermessage">mm_forum v%s</label>
+      			<label index="board-unreadEntries">Lukemattomia posteja</label>
+      			<label index="board-markAllRead">Merkitse kaikki luetuiksi</label>
+      			<label index="board-unansweredEntries">Vastaamattomia posteja</label>
+      			<label index="board-noAccess">Valittua forumia ei löydy. Syynä on mahdollisesti puutteelliset käyttöoikeudet.</label>
+      			<label index="board-markedAllRead">Kaikki viestit on merkitty luetuiksi.</label>
+      			<label index="board-topics">Aiheet</label>
+      			<label index="board-posts">Viestit</label>
+      			<label index="board-lastPost">Viimeinen viesti</label>
+      			<label index="board-topic">Aihe</label>
+      			<label index="board-replies">Vastaukset (luettu)</label>
+      			<label index="board-author">Kirjoittaja</label>
+      			<label index="board-hideSolved">Piilota selvitetyt aiheet</label>
+      			<label index="topic-topicicon">Aihe - ei uusia vastauksia</label>
+      			<label index="topic-topicicon_closed">Suljettu aihe</label>
+      			<label index="topic-topicicon_closed_new">Suljettu aihe (lukematon)</label>
+      			<label index="topic-topicicon_hot">Aiheella monta vastausta</label>
+      			<label index="topic-topicicon_hot_new">Aiheella monta vastausta (lukematon)</label>
+      			<label index="topic-topicicon_unanswered">Vastaamaton aihe</label>
+      			<label index="topic-topicicon_unanswered_new">Vastaamaton aihe (lukematon)</label>
+      			<label index="topic-topicicon_shadow">Aihe on siirretty toiseen paikkaan.</label>
+      			<label index="topic-lastarticle">Viimeisiin artikkeleihin</label>
+      			<label index="topic-isSolved">On vastattu</label>
+      			<label index="topic-gotoLastPost">Mene viimeiseen aiheeseen</label>
+      			<label index="topic-isClosed">Aihe suljettu</label>
+      			<label index="topic-hot">&quot;Kuumat&quot;</label>
+      			<label index="topic-hotUnread">Kuumat ja uudet viestit</label>
+      			<label index="topic-unanswered">Vastaamattomat</label>
+      			<label index="topic-read">Ei uusia viestejä</label>
+      			<label index="topic-unread">Uudet viestit</label>
+      			<label index="topic-isFavorite">Suosikit</label>
+      			<label index="topic-noAccess">Valittua ei aihetta ei löydy. Sinulla ei mahdollisesti ole tarvittavia oikeuksia.</label>
+      			<label index="topic-noSolveRights">Sinulla ei ole oikeuksia muuttaa &quot;Ratkaistu&quot;-statusta.</label>
+      			<label index="topic-closed">Suljettu</label>
+      			<label index="topic-adminsOnly">Vain hallinnoijat voivat vastata tähän aiheeseen</label>
+      			<label index="topic-emailSubscr-off">Sähköposti-ilmoitus ei ole päällä.</label>
+      			<label index="topic-emailSubscr-on">Sähköposti-ilmoitus on päällä.</label>
+      			<label index="topic-favorite-off">Tämä aihe ei ole suosikki</label>
+      			<label index="topic-favorite-on">Tämä aihe on suosikki</label>
+      			<label index="topic-reportToMods">Ilmoita tästä viestistä ylläpitäjälle.</label>
+      			<label index="topic-thisTopicIs">Tämä aihe on</label>
+      			<label index="topic-solved">ratkaistu</label>
+      			<label index="topic-notSolved">ratkaisematon</label>
+      			<label index="topic-topicauthor">Aiheen luoja</label>
+      			<label index="topic-title">Aiheen nimi</label>
+      			<label index="topic-admin-adminoptions">Hallinnoijan asetukset</label>
+      			<label index="topic-admin-expand">Näytä</label>
+      			<label index="topic-admin-collapse">Piilota</label>
+      			<label index="topic-admin-topictitle">Aiheen nimi</label>
+      			<label index="topic-admin-topicprefix">Aiheen alku</label>
+      			<label index="topic-admin-closed">Aihe on suljettu</label>
+      			<label index="topic-admin-delete">Poista aihe</label>
+      			<label index="topic-admin-move">Siirrä aihe</label>
+      			<label index="topic-admin-save">Tallenna</label>
+      			<label index="topic-noTopicsFound">Ei aiheita</label>
+      			<label index="topic-shadow">Siirretty</label>
+      			<label index="newTopic-noAccess">Sinun ei ole sallittua aloittaa uutta aihetta forumissa. Mahdolliset puutteet käyttöoikeuksissa.</label>
+      			<label index="newTopic-noTitle">Aiheen otsikkoa ei ole määritelty.</label>
+      			<label index="newTopic-noText">Aiheen tekstiä ei ole määritelty.</label>
+      			<label index="newTopic-preview">Esikatselu</label>
+      			<label index="newTopic-save">Lähetä</label>
+      			<label index="newTopic-noLogin">Luodaksesi uuden keskusteluaiheen kirjaudu ensin sisään.</label>
+      			<label index="newTopic-create">Luo uusi</label>
+      			<label index="newTopic-title">Otsikko</label>
+      			<label index="newTopic-setHaveALook">Haluan tiedon sähköpostitse tämän aiheen viesteistä.</label>
+      			<label index="newTopic-reset">Tyhjennä</label>
+      			<label index="newtopic-editor-bold">Lihava</label>
+      			<label index="newtopic-editor-italic">Kursiivi</label>
+      			<label index="newtopic-editor-color">Väri</label>
+      			<label index="newtopic-editor-size">Koko</label>
+      			<label index="newtopic-editor-underline">Alleviivaus</label>
+      			<label index="newtopic-editor-quote">Lainaus</label>
+      			<label index="newtopic-editor-list">Luettelo</label>
+      			<label index="newtopic-editor-image">Kuva</label>
+      			<label index="newtopic-editor-link">Linkki</label>
+      			<label index="newPost-save">Lähetä</label>
+      			<label index="newPost-preview">Esikatsele</label>
+      			<label index="newPost-spamBlock">Turvallisuussyistä voit kirjoittaa vain joka ###SPAMBLOCK### sekunti uuden viestin.</label>
+      			<label index="newPost-quote-error">Virhe viestiä lainatessa. Mahdolliset puutteet käyttöoikeuksissa.</label>
+      			<label index="newPost-title">Ole hyvä ja anna viestin teksti.</label>
+      			<label index="newPost-noLogin">Mahdolliset puutteet käyttöoikeuksissa tai et ole kirjautunut sisään.&lt;br /&gt; Ole hyvä ja kirjaudu sisään luodaksesi uuden keskustelunaiheen.</label>
+      			<label index="newPost-titleField">Otsikko</label>
+      			<label index="newPost-reset">Tyhjennä</label>
+      			<label index="newPost-attention">Huomautus</label>
+      			<label index="newPost-codeSamples">Koodiesimerkit, jotka haluat lähettää forumiin, pitää olla asianmukaisissa sulkeissa.</label>
+      			<label index="newPost-attachment">Liitetiedosto</label>
+      			<label index="newPost-maxFileSize">Maksimikoko %s</label>
+      			<label index="editPost-noAccess">Sinulla ei ole oikeuksia muokata tätä viestiä.</label>
+      			<label index="deletePost-noAccess">Sinulla ei ole oikeuksia poistaa tätä viestiä.</label>
+      			<label index="post-confirmDelete">Haluatko todella poistaa tämän viestin?</label>
+      			<label index="post-edited">[Tätä artikkelia on muutettu ###COUNT### kertaa, viimeisen kerran ###DATE### klo ###TIME###.]</label>
+      			<label index="post-writtenOn">Kirjoitettu</label>
+      			<label index="post-author">Kirjoittaja</label>
+      			<label index="post-message">Viesti</label>
+      			<label index="mail-success">Sähköpostiviestisi on lähetetty ###RECIPIENT###.</label>
+      			<label index="mail-timeout">Sähköpostiviestiäsi ei voitu toimittaa koska olet sen jo lähettänyt tai lähettäminen ylitti aikarajan (###TIMEOUT### min).</label>
+      			<label index="mail-noLogin">Ole hyvä ja kirjaudu sisään lähettääksesi sähköpostiviestin.</label>
+      			<label index="user-userConf">Käyttäjäasetukset</label>
+      			<label index="user-hot">###HOTPOSTS###-artikkeleista</label>
+      			<label index="user-lastPostsLink">LINKKI</label>
+      			<label index="user-regSince">rekisteröitynyt</label>
+      			<label index="user-posts">Viestiä</label>
+      			<label index="user-mod">Moderaattori</label>
+      			<label index="user-admin">Hallinnoija</label>
+      			<label index="user-postTotal">Viestejä yhteensä</label>
+      			<label index="user-topicsTotal">Avattuja aiheita</label>
+      			<label index="user-postsPerDay">keskimäärin ###POSTS### viestiä päivässä</label>
+      			<label index="user-allAbout">Kaikki tiedot</label>
+      			<label index="user-regDate">Rekisteröitymispäivä</label>
+      			<label index="user-totalPosts">Viestit yhteensä</label>
+      			<label index="user-location">Sijainti</label>
+      			<label index="user-website">Kotisivut</label>
+      			<label index="user-profession">Ammatti</label>
+      			<label index="user-interests">Mielenkiinnon kohteet</label>
+      			<label index="user-contact">Yhteystiedot</label>
+      			<label index="user-lastLogin">Viimeksi kirjautunut</label>
+      			<label index="user-posthistory">Viestit</label>
+      			<label index="user-10topics">Viimeiset 10 aihetta</label>
+      			<label index="user-postList">Kaikki viestit</label>
+      			<label index="user-postOrder">Viestien järjestys</label>
+      			<label index="user-postOrder-postFirst">Näytä viesti ensimmäisenä</label>
+      			<label index="user-postOrder-first">Ensimmäinen</label>
+      			<label index="user-postOrder-last">Viimeinen</label>
+      			<label index="user-save">Tallenna</label>
+      			<label index="user-statistic">Käyttäjätilastot</label>
+      			<label index="user-noposts">Ei luotuja viestejä</label>
+      			<label index="user-noLogin">Sinun täytyy kirjautua sisään nähdäksesi viestihistoriasi.</label>
+      			<label index="user-deleted">Poistettu käyttäjä</label>
+      			<label index="user-error_notExist">Tätä käyttäjää ei ole.</label>
+      			<label index="favorites-addSuccess">Aihe lisättiin suosikkeihisi.</label>
+      			<label index="favorites-delSuccess">Aihe poistettiin suosikeistasi.</label>
+      			<label index="favorites-delete">Poista</label>
+      			<label index="favorites-noLogin">Sinun täytyy kirjautua sisään nähdäksesi suosikkisi.</label>
+      			<label index="favorites-orderBy">Järjestä</label>
+      			<label index="favorites-orderBy-lpdate">Viimeinen viesti</label>
+      			<label index="favorites-orderBy-cat">Kategoria</label>
+      			<label index="favorites-orderBy-added">Lisätty</label>
+      			<label index="favorites-orderBy-alphab">Aakkosellinen</label>
+      			<label index="favorites-options">Asetukset</label>
+      			<label index="favorites-title">Suositut aiheet</label>
+      			<label index="havealook-confirmMultiple">Olet muokkaamassa useaa tietuetta yhtä aikaa. Haluatko todella jatkaa?</label>
+      			<label index="havealook-markedTopics">Merkityt aiheet</label>
+      			<label index="havealook-delete">Poista</label>
+      			<label index="havealook-go">Mene</label>
+      			<label index="havealook-title">Seuratut aiheet</label>
+      			<label index="subscr-addSuccess">Aihe lisättiin seurauslistallesi.</label>
+      			<label index="subscr-delSuccess">Aihe poistettiin seurauslistaltasi.</label>
+      			<label index="subscr-noLogin">Sinun täytyy kirjautua sisään nähdäksesi listan seuratuista aiheista.</label>
+      			<label index="ntfMail-subject">Uusi vastaus aiheeseen ###TOPICNAME### keskustelussa ###BOARDNAME###.</label>
+      			<label index="ntfMail-text">Hei ###USERNAME###,
 
 Sait tämän sähköpostin, koska olet merkinnyt tämän keskustelunaiheen seurauslistallesi.
 
-Klikkaa allaolevaa linkkiä päästäksesi keskusteluun:
+      Klikkaa allaolevaa linkkiä päästäksesi keskusteluun:
 
 ###LINK###</label>
-			<label index="redirect-error">Emme voi valitettavasti palauttaa sinua edelliselle sivustolle.</label>
-			<label index="prefix-title">Etuliite: &amp;quot;###PREFIX###&amp;quot;</label>
-			<label index="prefix-all">Kaikki</label>
-			<label index="prefix-rootline">Etuliite: &amp;quot;###PREFIX###&amp;quot;</label>
-			<label index="prefix-displaySettings">Näyttöasetukset</label>
-			<label index="prefix-display">Näyttö</label>
-			<label index="prefix-orderby">Järjestys</label>
-			<label index="prefix-orderby-lastPost">viimeinen viesti</label>
-			<label index="prefix-orderby-category">Kategoria</label>
-			<label index="prefix-orderby-crdate">Luontipvm</label>
-			<label index="prefix-outOfCategory">kategoriassa</label>
-			<label index="prefix-categories-all">Kaikki alakategoriat</label>
-			<label index="prefix-limit">Raja</label>
-			<label index="prefix-limit-all">Kaikki</label>
-			<label index="prefix-prefixNotFound">Haluttua etuliitettä ei ole.</label>
-			<label index="postalert-title">Ilmoitetut viestit</label>
-			<label index="postalert-status-open">Avaa</label>
-			<label index="postalert-status-progress">Käsittelyssä</label>
-			<label index="postalert-status-done">Tehty</label>
-			<label index="postalert-errorNoReason">Ole hyvä ja anna raporttisi syy.</label>
-			<label index="postalert-errorNoLogin">Sinun täytyy kirjautua sisään käyttääksesi tätä toimintoa.</label>
-			<label index="postalert-heading">Raportoi tästä viestistä.</label>
-			<label index="postalert-posttext">Lähetä teksti</label>
-			<label index="postalert-reason">Ole hyvä ja anna raporttisi syy.</label>
-			<label index="postalert-alert">Raportoi tästä viestistä.</label>
-			<label index="postalert-orderby">Järjestys</label>
-			<label index="postalert-orderby-status">Tila</label>
-			<label index="postalert-orderby-date">Pvm</label>
-			<label index="postalert-orderby-user">Käyttäjä</label>
-			<label index="postalert-ordermode-asc">Nouseva</label>
-			<label index="postalert-ordermode-desc">Laskeva</label>
-			<label index="postalert-number">Nro</label>
-			<label index="postalert-date">Pvm</label>
-			<label index="postalert-problem">Ongelma</label>
-			<label index="postalert-post">Artikkeli</label>
-			<label index="postalert-user">Käyttäjä</label>
-			<label index="postalert-status">Tila</label>
-			<label index="postalert-display">Näyttö</label>
-			<label index="rootline-reply">Vastaa</label>
-			<label index="rootline-post_alert">Raportoi viesti</label>
-			<label index="rootline-new_topic">Uusi aihe</label>
-			<label index="rootline-edit_post">Muokkaa viestiä</label>
-			<label index="rootline-list_unread">Listaa lukemattomat aiheet</label>
-			<label index="rootline-list_unans">Listaa vastaamattomat aiheet</label>
-			<label index="rootline-userprofile">Käyttäjäprofiili: &quot;%s&quot;</label>
-			<label index="realurl-pages">sivua</label>
-			<label index="realurl-pmnew">uusi</label>
-			<label index="realurl-quote">lainaa</label>
-			<label index="realurl-page">sivu</label>
-			<label index="realurl-attachment">liite</label>
-			<label index="attachment-disabled">Liitteiden lähettäminen kielletty.</label>
-			<label index="attachment-toobig">Sähköpostiliite liian iso (%s)</label>
-			<label index="attachment-denyed">Tiedostomuoto ei ole sallittu.</label>
-			<label index="attachments-title">Liite</label>
-			<label index="attachment-type">Tiedostomuoto</label>
-			<label index="attachment-size">Koko</label>
-			<label index="attachment-bytes">tavua</label>
-			<label index="attachment-kilobytes">kilotavua</label>
-			<label index="attachment-megabytes">megatavua</label>
-			<label index="attachment-downloads">imurointia</label>
-			<label index="attachment-doesNotExist">Liitetiedostoa ei ole.</label>
-			<label index="attachment-delete">Poista liite</label>
-			<label index="poll-postattach">Liitä kysely</label>
-			<label index="poll-postattach-new">Liitä kysely (luo uusi kysely)</label>
-			<label index="poll-postattach-edit">Liitä kysely (muokkaa kyselyä)</label>
-			<label index="poll-question">Kysymys</label>
-			<label index="poll-answers">Vastaukset</label>
-			<label index="poll-addAnswer">Lisää uusi vastaus</label>
-			<label index="poll-deleteAnswer">Poista vastaus</label>
-			<label index="poll-deleteAnswerConf">Haluatko todella poistaa tämän vastauksen?</label>
-			<label index="poll-expires">Vanhenee</label>
-			<label index="poll-title">Kysely</label>
-			<label index="poll-vote">Äänestä</label>
-			<label index="poll-replies">%s / %s vastauksesta (%s)</label>
-			<label index="poll-disabled">Kyselyt pois päältä.</label>
-			<label index="poll-restricted">Sinulla ei ole oikeuksia luoda kyselyä.</label>
-			<label index="poll-noQuestion">Sinun täytyy tehdä kysymys luodaksesi kyselyn.</label>
-			<label index="poll-noAnswers">Sinun täytyy tehdä vähintään %s vastausvaihtoehtoa.</label>
-			<label index="latest-title">Viimeiset viestit</label>
-			<label index="havealook-empty">Sähköpostiseurauslistasi on tyhjä</label>
-			<label index="favorites-empty">Suosikkilistasi on tyhjä</label>
-			<label index="userlist-fields-username">Käyttäjänimi</label>
-			<label index="userlist-fields-usergroup">Ryhmät</label>
-			<label index="userlist-fields-crdate">Rekisteröintipvm</label>
-			<label index="userlist-fields-name">Todellinen nimi</label>
-			<label index="userlist-fields-email">Sähköpostiosoite</label>
-			<label index="userlist-fields-__pm">Yksityisviesti</label>
-			<label index="userlist-fields-city">Sijainti</label>
-			<label index="userlist-fields-www">Kotisivut</label>
-			<label index="userlist-fields-tx_mmforum_posts">Viestit</label>
-			<label index="userlist-fields-tx_mmforum_interests">Kiinnostuksen kohteet</label>
-			<label index="userlist-fields-tx_mmforum_occ">Ammatti</label>
-			
-			<!-- Added in 0.1.5 -->
-			<label index="button-newtopic">Uusi aihe</label>
+      			<label index="redirect-error">Emme voi valitettavasti palauttaa sinua edelliselle sivustolle.</label>
+      			<label index="prefix-title">Etuliite: &amp;quot;###PREFIX###&amp;quot;</label>
+      			<label index="prefix-all">Kaikki</label>
+      			<label index="prefix-rootline">Etuliite: &amp;quot;###PREFIX###&amp;quot;</label>
+      			<label index="prefix-displaySettings">Näyttöasetukset</label>
+      			<label index="prefix-display">Näyttö</label>
+      			<label index="prefix-orderby">Järjestys</label>
+      			<label index="prefix-orderby-lastPost">viimeinen viesti</label>
+      			<label index="prefix-orderby-category">Kategoria</label>
+      			<label index="prefix-orderby-crdate">Luontipvm</label>
+      			<label index="prefix-outOfCategory">kategoriassa</label>
+      			<label index="prefix-categories-all">Kaikki alakategoriat</label>
+      			<label index="prefix-limit">Raja</label>
+      			<label index="prefix-limit-all">Kaikki</label>
+      			<label index="prefix-prefixNotFound">Haluttua etuliitettä ei ole.</label>
+      			<label index="postalert-title">Ilmoitetut viestit</label>
+      			<label index="postalert-status-open">Avaa</label>
+      			<label index="postalert-status-progress">Käsittelyssä</label>
+      			<label index="postalert-status-done">Tehty</label>
+      			<label index="postalert-errorNoReason">Ole hyvä ja anna raporttisi syy.</label>
+      			<label index="postalert-errorNoLogin">Sinun täytyy kirjautua sisään käyttääksesi tätä toimintoa.</label>
+      			<label index="postalert-heading">Raportoi tästä viestistä.</label>
+      			<label index="postalert-posttext">Lähetä teksti</label>
+      			<label index="postalert-reason">Ole hyvä ja anna raporttisi syy.</label>
+      			<label index="postalert-alert">Raportoi tästä viestistä.</label>
+      			<label index="postalert-orderby">Järjestys</label>
+      			<label index="postalert-orderby-status">Tila</label>
+      			<label index="postalert-orderby-date">Pvm</label>
+      			<label index="postalert-orderby-user">Käyttäjä</label>
+      			<label index="postalert-ordermode-asc">Nouseva</label>
+      			<label index="postalert-ordermode-desc">Laskeva</label>
+      			<label index="postalert-number">Nro</label>
+      			<label index="postalert-date">Pvm</label>
+      			<label index="postalert-problem">Ongelma</label>
+      			<label index="postalert-post">Artikkeli</label>
+      			<label index="postalert-user">Käyttäjä</label>
+      			<label index="postalert-status">Tila</label>
+      			<label index="postalert-display">Näyttö</label>
+      			<label index="rootline-reply">Vastaa</label>
+      			<label index="rootline-post_alert">Raportoi viesti</label>
+      			<label index="rootline-new_topic">Uusi aihe</label>
+      			<label index="rootline-edit_post">Muokkaa viestiä</label>
+      			<label index="rootline-list_unread">Listaa lukemattomat aiheet</label>
+      			<label index="rootline-list_unans">Listaa vastaamattomat aiheet</label>
+      			<label index="rootline-userprofile">Käyttäjäprofiili: &quot;%s&quot;</label>
+      			<label index="realurl-pages">sivua</label>
+      			<label index="realurl-pmnew">uusi</label>
+      			<label index="realurl-quote">lainaa</label>
+      			<label index="realurl-page">sivu</label>
+      			<label index="realurl-attachment">liite</label>
+      			<label index="attachment-disabled">Liitteiden lähettäminen kielletty.</label>
+      			<label index="attachment-toobig">Sähköpostiliite liian iso (%s)</label>
+      			<label index="attachment-denyed">Tiedostomuoto ei ole sallittu.</label>
+      			<label index="attachments-title">Liite</label>
+      			<label index="attachment-type">Tiedostomuoto</label>
+      			<label index="attachment-size">Koko</label>
+      			<label index="attachment-bytes">tavua</label>
+      			<label index="attachment-kilobytes">kilotavua</label>
+      			<label index="attachment-megabytes">megatavua</label>
+      			<label index="attachment-downloads">imurointia</label>
+      			<label index="attachment-doesNotExist">Liitetiedostoa ei ole.</label>
+      			<label index="attachment-delete">Poista liite</label>
+      			<label index="poll-postattach">Liitä kysely</label>
+      			<label index="poll-postattach-new">Liitä kysely (luo uusi kysely)</label>
+      			<label index="poll-postattach-edit">Liitä kysely (muokkaa kyselyä)</label>
+      			<label index="poll-question">Kysymys</label>
+      			<label index="poll-answers">Vastaukset</label>
+      			<label index="poll-addAnswer">Lisää uusi vastaus</label>
+      			<label index="poll-deleteAnswer">Poista vastaus</label>
+      			<label index="poll-deleteAnswerConf">Haluatko todella poistaa tämän vastauksen?</label>
+      			<label index="poll-expires">Vanhenee</label>
+      			<label index="poll-title">Kysely</label>
+      			<label index="poll-vote">Äänestä</label>
+      			<label index="poll-replies">%s / %s vastauksesta (%s)</label>
+      			<label index="poll-disabled">Kyselyt pois päältä.</label>
+      			<label index="poll-restricted">Sinulla ei ole oikeuksia luoda kyselyä.</label>
+      			<label index="poll-noQuestion">Sinun täytyy tehdä kysymys luodaksesi kyselyn.</label>
+      			<label index="poll-noAnswers">Sinun täytyy tehdä vähintään %s vastausvaihtoehtoa.</label>
+      			<label index="latest-title">Viimeiset viestit</label>
+      			<label index="havealook-empty">Sähköpostiseurauslistasi on tyhjä</label>
+      			<label index="favorites-empty">Suosikkilistasi on tyhjä</label>
+      			<label index="userlist-fields-username">Käyttäjänimi</label>
+      			<label index="userlist-fields-usergroup">Ryhmät</label>
+      			<label index="userlist-fields-crdate">Rekisteröintipvm</label>
+      			<label index="userlist-fields-name">Todellinen nimi</label>
+      			<label index="userlist-fields-email">Sähköpostiosoite</label>
+      			<label index="userlist-fields-__pm">Yksityisviesti</label>
+      			<label index="userlist-fields-city">Sijainti</label>
+      			<label index="userlist-fields-www">Kotisivut</label>
+      			<label index="userlist-fields-tx_mmforum_posts">Viestit</label>
+      			<label index="userlist-fields-tx_mmforum_interests">Kiinnostuksen kohteet</label>
+      			<label index="userlist-fields-tx_mmforum_occ">Ammatti</label>
+      			
+      			<!-- Added in 0.1.5 -->
+      			<label index="button-newtopic">Uusi aihe</label>
             <label index="button-reply">Vastaa</label>
             <label index="button-quote">Lainaa</label>
             <label index="button-profile">Profiili</label>
@@ -1108,20 +1108,20 @@ Klikkaa allaolevaa linkkiä päästäksesi keskusteluun:
             <label index="button-delete">Poista</label>
             <label index="button-msn">MSN</label>
             <label index="postqueue-publishtab">Julkaise</label>
-	        <label index="postqueue-deletetab">Poista</label>
-	        <label index="postqueue-ignoretab">Jätä huomiotta</label>
-	        <label index="postqueue-posttext">Viestiteksti</label>
-	        <label index="postqueue-wrote">kirjoitti</label>
-	        <label index="postqueue-newTopic">Uusi aihe</label>
-	        <label index="postqueue-title">Julkaistavat</label>
-	        <label index="postqueue-publishbutton">Julkaise</label>
-	        <label index="postqueue-noitems">Ei julkaistavia viestejä.</label>
-	        <label index="postqueue-success">Viestisi on tallennettu. Moderaattori julkaisee sen pian.</label>
-	        <label index="topic-solved-on">Tämä aihe on ratkaistu.</label>
-	        <label index="topic-solved-off">Tätä aihetta ei ole ratkaistu.</label>
-	        <label index="topic-solvedshort-on">Ratkaistu</label>
-	        <label index="topic-solvedshort-off">Avoin</label>
-			<label index="options_mail_forum">Asetukset</label>
+  	        <label index="postqueue-deletetab">Poista</label>
+  	        <label index="postqueue-ignoretab">Jätä huomiotta</label>
+  	        <label index="postqueue-posttext">Viestiteksti</label>
+  	        <label index="postqueue-wrote">kirjoitti</label>
+  	        <label index="postqueue-newTopic">Uusi aihe</label>
+  	        <label index="postqueue-title">Julkaistavat</label>
+  	        <label index="postqueue-publishbutton">Julkaise</label>
+  	        <label index="postqueue-noitems">Ei julkaistavia viestejä.</label>
+  	        <label index="postqueue-success">Viestisi on tallennettu. Moderaattori julkaisee sen pian.</label>
+  	        <label index="topic-solved-on">Tämä aihe on ratkaistu.</label>
+  	        <label index="topic-solved-off">Tätä aihetta ei ole ratkaistu.</label>
+  	        <label index="topic-solvedshort-on">Ratkaistu</label>
+  	        <label index="topic-solvedshort-off">Avoin</label>
+  			    <label index="options_mail_forum">Asetukset</label>
 		</languageKey>
 		<!-- DUTCH LANGUAGE DATA -->
 		<languageKey index="nl" type="array">
@@ -1331,7 +1331,7 @@ Klik op de volgende link om het onderwerp te openen:
 
 ###LINK###</label>
             <label index="redirect-error">We kunnen u helaas niet terugsturen naar de laatste website omdat uw systeem niet laat zien wat de laaste website was.</label>
-            
+
             <label index="prefix-title">Voorvoegsel: &amp;quot;###PREFIX###&amp;quot;</label>
             <label index="prefix-all">Alle</label>
             <label index="prefix-rootline">Voorvoegsel: &amp;quot;###PREFIX###&amp;quot;</label>
@@ -1350,7 +1350,7 @@ Klik op de volgende link om het onderwerp te openen:
             <label index="prefix-limit-100">100</label>
             <label index="prefix-limit-all">Alle</label>
             <label index="prefix-prefixNotFound">The requested prefix does not exist.</label>
-            
+
             <label index="postalert-title">Gerapporteerde berichten</label>
             <label index="postalert-status-open">Open</label>
             <label index="postalert-status-progress">In bewerking</label>
@@ -1834,213 +1834,213 @@ Voici le lien vers un fil de discussion, pour lequel vous avez activé une notif
             <label index="topic-solvedshort-off">Ouvert</label>
             <label index="options_mail_forum">Options</label>
 
-			<!-- Added in 0.1.7 -->
-			<label index="userlist-title">Liste des utilisateurs</label>
-			<label index="user-profile">Profil d'utilisateur</label>
-			<label index="user-field">Pseudo</label>
-			<label index="user-username">Nom</label>
-			<label index="user-value">Valeur</label>
+      			<!-- Added in 0.1.7 -->
+      			<label index="userlist-title">Liste des utilisateurs</label>
+      			<label index="user-profile">Profil d'utilisateur</label>
+      			<label index="user-field">Pseudo</label>
+      			<label index="user-username">Nom</label>
+      			<label index="user-value">Valeur</label>
         </languageKey>
         <!-- RUSSIAN LANGUAGE DATA -->
         <languageKey index="ru" type="array">
-			<label index="forum_head">Ваш форум</label>
-			<label index="forum_desc">Описание Вашего форума</label>
-			<label index="postparser_noJob">Parameteruebergabe fuer Job fehlt:: Funtionsaufruf fuer postparser pruefen!</label>
-			<label index="linenumbering_label">Linenumber :: </label>
-			<label index="linenumbering_switch_on">Вкл.</label>
-			<label index="linenumbering_switch_off">Выкл.</label>
-			<label index="quote_prefix">wrote:</label>
-			<label index="helpbox_header">&lt;img src=&quot;fileadmin/img/mm_forum/favorit.gif&quot; /&gt;&amp;nbsp;Help</label>
-			<label index="no_info">Нет информации</label>
-			<label index="mon">Пн</label>
-			<label index="tue">Вт</label>
-			<label index="wed">Ср</label>
-			<label index="thu">Чт</label>
-			<label index="fri">Пт</label>
-			<label index="sat">Сб</label>
-			<label index="sun">Вс</label>
-			<label index="login_error">Вы не авторизированны на форуме. Пожалуйста, авторизируйтесь.</label>
-			<label index="on">Вкл.</label>
-			<label index="off">Выкл.</label>
-			<label index="save">Сохранить</label>
-			<label index="options">Опции</label>
-			<label index="error_logout">Возникла ошибка при записи в базу данных. Вы не авторизированы на форуме.</label>
-			<label index="page-goto">На страницу</label>
-			<label index="page-first">Начало</label>
-			<label index="page-previous"><![CDATA[&laquo;]]> Назад</label>
-			<label index="page-next">Дальше <![CDATA[&raquo;]]></label>
-			<label index="page-last">В конец</label>
-			<label index="error-imgNotFound">[Ошибка при загрузке изображения ###IMGFILE###]</label>
-			<label index="footermessage">Форум работает под управлением mm_forum v%s</label>
-			
-			<label index="board-unreadEntries">Непрочитаных</label>
-			<label index="board-markAllRead">Отметить все как прочитанное</label>
-			<label index="board-unansweredEntries">Неотвеченных</label>
-			<label index="board-noAccess">Указанный форум не найден. Возможно у Вас недостаточно прав.</label>
-			<label index="board-markedAllRead">Все сообщения отмечены как прочитанные.</label>
-			<label index="board-rootline">Форум</label>
-			<label index="board-board">Обсуждение</label>
-			<label index="board-topics">Тем</label>
-			<label index="board-posts">Сообщений</label>
-			<label index="board-lastPost">Последнее сообщение</label>
-			<label index="board-topic">Тема</label>
-			<label index="board-replies">Ответов (Просмотров)</label>
-			<label index="board-author">Автор</label>
-			<label index="board-hideSolved">Спрятать законченные обсуждения</label>
-			
-			<label index="topic-topicicon">В теме нет новых постов</label>
-			<label index="topic-topicicon_closed">Закрытая тема</label>
-			<label index="topic-topicicon_closed_new">Закрыть тему (непрочитано)</label>
-			<label index="topic-topicicon_hot">В теме много сообщений</label>
-			<label index="topic-topicicon_hot_new">Много сообщений в теме (не прочитано)</label>
-			<label index="topic-topicicon_unanswered">Тема без ответов</label>
-			<label index="topic-topicicon_unanswered_new">Тема без ответов (непрочитано)</label>
-			<label index="topic-topicicon_shadow">Тема переехала в другой форум</label>
-			<label index="topic-lastarticle">К последней статье</label>
-			<label index="topic-isSolved">Отвечено</label>
-			<label index="topic-gotoLastPost">К последней теме</label>
-			<label index="topic-isClosed">Тема закрыта</label>
-			<label index="topic-hot">Горячее</label>
-			<label index="topic-hotUnread">Горячее и новое сообщения</label>
-			<label index="topic-unanswered">Без ответа</label>
-			<label index="topic-read">Нет новых сообщений</label>
-			<label index="topic-unread">Новые сообщения</label>
-			<label index="topic-isFavorite">Избранное</label>
-			<label index="topic-noAccess">Указанная тема не найдена. Возможно у Вас недостаточно прав.</label>
-			<label index="topic-noSolveRights">У Вас нет прав для изменения статуса темы</label>
-			<label index="topic-closed">Закрыта</label>
-			<label index="topic-adminsOnly">Только администраторы могут отвечать на эту тему</label>
-			<label index="topic-emailSubscr-off">Уведомление по e-mail выключено.</label>
-			<label index="topic-emailSubscr-on">Уведомление по e-mail включено.</label>
-			<label index="topic-favorite-off">Это тема не в избранном</label>
-			<label index="topic-favorite-on">Эта тема в избранном</label>
-			<label index="topic-reportToMods">Сообщить об этом сообщении модератору</label>
-			<label index="topic-thisTopicIs">Статус темы </label>
-			<label index="topic-solved">раскрыта</label>
-			<label index="topic-notSolved">не раскрыта</label>
-			<label index="topic-topicauthor">Создатель темы</label>
-			<label index="topic-title">Имя темы</label>
-			<label index="topic-admin-adminoptions">Опции администратора</label>
-			<label index="topic-admin-expand">Открыть</label>
-			<label index="topic-admin-collapse">Скрыть</label>
-			<label index="topic-admin-topictitle">Заголовок темы</label>
-			<label index="topic-admin-topicprefix">Префикс темы</label>
-			<label index="topic-admin-first">Тема находится вначале</label>
-			<label index="topic-admin-closed">Тема закрыта</label>
-			<label index="topic-admin-delete">Удалить тему</label>
-			<label index="topic-admin-move">Перенести в тему: </label>
-			<label index="topic-admin-save">Сохранить</label>
-			<label index="topic-noTopicsFound">Не найдено тему</label>
-			<label index="topic-shadow">Перемещена</label>
-			
-			<label index="newTopic-noAccess">У Вас недостаточно прав для открытия новой темы в этом форуме.</label>
-			<label index="newTopic-noTitle">Не указан заголовок темы.</label>
-			<label index="newTopic-noText">Отсутствует текст темы.</label>
-			<label index="newTopic-preview">Предпросмотр</label>
-			<label index="newTopic-save">Отправить</label>
-			<label index="newTopic-noLogin">Чтобы создать новую тему необходимо войти на сайт под своим именем пользователя. Если у вас нет имени, пожалуйста, зарегистрируйтесь.</label>
-			<label index="newTopic-create">Создать новую запись</label>
-			<label index="newTopic-title">Заголовок</label>
-			<label index="newTopic-setHaveALook">Обо всех ответах на это сообщения информировать меня по e-mail.</label>
-			<label index="newTopic-reset">Очистить форму</label>
-			<label index="newtopic-editor-bold">Жирный</label>
-			<label index="newtopic-editor-italic">Курсив</label>
-			<label index="newtopic-editor-color">Цвет</label>
-			<label index="newtopic-editor-size">Размер</label>
-			<label index="newtopic-editor-underline">Подчеркнутый</label>
-			<label index="newtopic-editor-quote">Цитата</label>
-			<label index="newtopic-editor-list">Список</label>
-			<label index="newtopic-editor-image">Рисунок</label>
-			<label index="newtopic-editor-link">Ссылка</label>
-			<label index="newtopic-editor-php">PHP</label>
-			<label index="newtopic-editor-ts">TypoScript</label>
-			<label index="newtopic-editor-html">HTML</label>
-			<label index="newtopic-editor-js">Javascript</label>
-			
-			<label index="newPost-save">Отправить</label>
-			<label index="newPost-preview">Предпросмотр</label>
-			<label index="newPost-spamBlock">По соображениям безопасности вы можете создать новое сообщение не раньше чем через ###SPAMBLOCK### секунд.</label>
-			<label index="newPost-quote-error">Во время цитирования сообщения произошла ошибка. Возможно у Вас недостаточно прав</label>
-			<label index="newPost-title">Пожалуйста, введите текст собщения.</label>
-			<label index="newPost-noLogin">Возможно Вы не прошли необходимую авторизацию или вы не вошли на сайт.&lt;br /&gt;Для того, что бы создать новую тему, зайдите на сайт под своим именем.</label>
-			<label index="newPost-titleField">Заголовок</label>
-			<label index="newPost-reset">Очистить форму</label>
-			<label index="newPost-attention">Записка</label>
-			<label index="newPost-codeSamples">Примеры кода, которые Вы желаете вставить в форум, должны вводиться в соответствующем контейнере.</label>
-			<label index="newPost-attachment">Добавить файл</label>
-			<label index="newPost-maxFileSize">Максимальный размер файла: %s</label>
-			
-			<label index="editPost-noAccess">У Вас недостаточно прав для того чтобы редактировать это сообщение.</label>
-			<label index="deletePost-noAccess">У Вас недостаточно прав для того чтобы удалить это сообщение.</label>
-			
-			<label index="post-confirmDelete">Вы действительно хотите удалить это сообщение?</label>
-			<label index="post-edited">[Сообщение редактировалось ###COUNT### раз(а), в последний раз  ###DATE### в ###TIME###.]</label>
-			<label index="post-writtenOn">Сообщение создано</label>
-			<label index="post-author">Автор</label>
-			<label index="post-message">Сообщение</label>
-			
-			<label index="mail-success">Ваш email был успешно отправлен получателю: ###RECIPIENT###.</label>
-			<label index="mail-timeout">Ваш email не может быть отправлен потому что Вы либо уже его отправили, либо время отрпавки превысило (###TIMEOUT### мин).</label>
-			<label index="mail-noLogin">Пожалуйста, войдите на сайт для того чтобы отправить E-Mail.</label>
-			
-			<label index="user-userConf">Конфигурация пользователя</label>
-			<label index="user-hot">О сообщении ###HOTPOSTS### </label>
-			<label index="user-lastPostsLink">ССЫЛКА</label>
-			<label index="user-regSince">Зарегистрирован(а) с</label>
-			<label index="user-posts">Сообщения</label>
-			<label index="user-mod">Модератор</label>
-			<label index="user-admin">Админинстратор</label>
-			<label index="user-postTotal">Всего сообщений</label>
-			<label index="user-topicsTotal">открыто тем</label>
-			<label index="user-postsPerDay">примерно ###POSTS### сообщений в день</label>
-			<label index="user-allAbout">Все о</label>
-			<label index="user-regDate">Дата регистрации</label>
-			<label index="user-totalPosts">сообщений всего</label>
-			<label index="user-location">Находиться</label>
-			<label index="user-website">Website</label>
-			<label index="user-profession">Профессия</label>
-			<label index="user-interests">Интересы</label>
-			<label index="user-contact">Контакты</label>
-			<label index="user-lastLogin">Время последнего захода</label>
-			<label index="user-posthistory">Сообщения</label>
-			<label index="user-10topics">Последние десять сообщений</label>
-			<label index="user-avatar">Аватар</label>
-			<label index="user-postList">Все Сообщения</label>
-			<label index="user-postOrder">Порядок вывода сообщений</label>
-			<label index="user-postOrder-postFirst">Показывать это сообщение первым</label>
-			<label index="user-postOrder-first">Первое</label>
-			<label index="user-postOrder-last">Последнее</label>
-			<label index="user-save">Сохранить</label>
-			<label index="user-statistic">Статистика пользователя</label>
-			<label index="user-noposts">Ни одно сообщение не создано</label>
-			<label index="user-noLogin">Вы должны быть авторизированы на сайте, чтобы просмотреть историю Ваших сообщений.</label>
-			<label index="user-deleted">Удалить пользователя</label>
-			<label index="user-error_notExist">Такой пользователь не существует.</label>
-			
-			<label index="favorites-addSuccess">Сообщение добавлено в избранные.</label>
-			<label index="favorites-delSuccess">Сообщение удалено из избранных.</label>
-			<label index="favorites-delete">Удалить</label>
-			<label index="favorites-noLogin">Чтобы просматривать избранное, Вы должны быть авторизированны на сайте.</label>
-			<label index="favorites-orderBy">Порядок сортировки</label>
-			<label index="favorites-orderBy-lpdate">Последнее</label>
-			<label index="favorites-orderBy-cat">По категориям</label>
-			<label index="favorites-orderBy-added">По времени добавления</label>
-			<label index="favorites-orderBy-alphab">По алфавиту</label>
-			<label index="favorites-options">Опции</label>
-			<label index="favorites-title">Избранные сообщения</label>
-			
-			<label index="havealook-confirmMultiple">Вы пытаестесь редактировать несколько записей одновременно. Вы действетельно хотите внести эти изменения?</label>
-			<label index="havealook-markedTopics">Отмеченные темы</label>
-			<label index="havealook-delete">Удалить</label>
-			<label index="havealook-go">Просмотреть</label>
-			<label index="havealook-title">Наблюдаемые темы</label>
-			
-			<label index="subscr-addSuccess">Тема добавлена в Ваш список уведомлений.</label>
-			<label index="subscr-delSuccess">Тема удалена из Вашего списка уведомлений.</label>
-			<label index="subscr-noLogin">Для того, чтобы просмотреть список уведомлений, Вы должны быть авторизированны.</label>
-			
-			<label index="ntfMail-subject">Появилось ноовое сообщение в теме ###TOPICNAME### в обсуждении ###BOARDNAME###.</label>
-			<label index="ntfMail-text">Здравствуйте ###USERNAME###,
+      			<label index="forum_head">Ваш форум</label>
+      			<label index="forum_desc">Описание Вашего форума</label>
+      			<label index="postparser_noJob">Parameteruebergabe fuer Job fehlt:: Funtionsaufruf fuer postparser pruefen!</label>
+      			<label index="linenumbering_label">Linenumber :: </label>
+      			<label index="linenumbering_switch_on">Вкл.</label>
+      			<label index="linenumbering_switch_off">Выкл.</label>
+      			<label index="quote_prefix">wrote:</label>
+      			<label index="helpbox_header">&lt;img src=&quot;fileadmin/img/mm_forum/favorit.gif&quot; /&gt;&amp;nbsp;Help</label>
+      			<label index="no_info">Нет информации</label>
+      			<label index="mon">Пн</label>
+      			<label index="tue">Вт</label>
+      			<label index="wed">Ср</label>
+      			<label index="thu">Чт</label>
+      			<label index="fri">Пт</label>
+      			<label index="sat">Сб</label>
+      			<label index="sun">Вс</label>
+      			<label index="login_error">Вы не авторизированны на форуме. Пожалуйста, авторизируйтесь.</label>
+      			<label index="on">Вкл.</label>
+      			<label index="off">Выкл.</label>
+      			<label index="save">Сохранить</label>
+      			<label index="options">Опции</label>
+      			<label index="error_logout">Возникла ошибка при записи в базу данных. Вы не авторизированы на форуме.</label>
+      			<label index="page-goto">На страницу</label>
+      			<label index="page-first">Начало</label>
+      			<label index="page-previous"><![CDATA[&laquo;]]> Назад</label>
+      			<label index="page-next">Дальше <![CDATA[&raquo;]]></label>
+      			<label index="page-last">В конец</label>
+      			<label index="error-imgNotFound">[Ошибка при загрузке изображения ###IMGFILE###]</label>
+      			<label index="footermessage">Форум работает под управлением mm_forum v%s</label>
+      			
+      			<label index="board-unreadEntries">Непрочитаных</label>
+      			<label index="board-markAllRead">Отметить все как прочитанное</label>
+      			<label index="board-unansweredEntries">Неотвеченных</label>
+      			<label index="board-noAccess">Указанный форум не найден. Возможно у Вас недостаточно прав.</label>
+      			<label index="board-markedAllRead">Все сообщения отмечены как прочитанные.</label>
+      			<label index="board-rootline">Форум</label>
+      			<label index="board-board">Обсуждение</label>
+      			<label index="board-topics">Тем</label>
+      			<label index="board-posts">Сообщений</label>
+      			<label index="board-lastPost">Последнее сообщение</label>
+      			<label index="board-topic">Тема</label>
+      			<label index="board-replies">Ответов (Просмотров)</label>
+      			<label index="board-author">Автор</label>
+      			<label index="board-hideSolved">Спрятать законченные обсуждения</label>
+      			
+      			<label index="topic-topicicon">В теме нет новых постов</label>
+      			<label index="topic-topicicon_closed">Закрытая тема</label>
+      			<label index="topic-topicicon_closed_new">Закрыть тему (непрочитано)</label>
+      			<label index="topic-topicicon_hot">В теме много сообщений</label>
+      			<label index="topic-topicicon_hot_new">Много сообщений в теме (не прочитано)</label>
+      			<label index="topic-topicicon_unanswered">Тема без ответов</label>
+      			<label index="topic-topicicon_unanswered_new">Тема без ответов (непрочитано)</label>
+      			<label index="topic-topicicon_shadow">Тема переехала в другой форум</label>
+      			<label index="topic-lastarticle">К последней статье</label>
+      			<label index="topic-isSolved">Отвечено</label>
+      			<label index="topic-gotoLastPost">К последней теме</label>
+      			<label index="topic-isClosed">Тема закрыта</label>
+      			<label index="topic-hot">Горячее</label>
+      			<label index="topic-hotUnread">Горячее и новое сообщения</label>
+      			<label index="topic-unanswered">Без ответа</label>
+      			<label index="topic-read">Нет новых сообщений</label>
+      			<label index="topic-unread">Новые сообщения</label>
+      			<label index="topic-isFavorite">Избранное</label>
+      			<label index="topic-noAccess">Указанная тема не найдена. Возможно у Вас недостаточно прав.</label>
+      			<label index="topic-noSolveRights">У Вас нет прав для изменения статуса темы</label>
+      			<label index="topic-closed">Закрыта</label>
+      			<label index="topic-adminsOnly">Только администраторы могут отвечать на эту тему</label>
+      			<label index="topic-emailSubscr-off">Уведомление по e-mail выключено.</label>
+      			<label index="topic-emailSubscr-on">Уведомление по e-mail включено.</label>
+      			<label index="topic-favorite-off">Это тема не в избранном</label>
+      			<label index="topic-favorite-on">Эта тема в избранном</label>
+      			<label index="topic-reportToMods">Сообщить об этом сообщении модератору</label>
+      			<label index="topic-thisTopicIs">Статус темы </label>
+      			<label index="topic-solved">раскрыта</label>
+      			<label index="topic-notSolved">не раскрыта</label>
+      			<label index="topic-topicauthor">Создатель темы</label>
+      			<label index="topic-title">Имя темы</label>
+      			<label index="topic-admin-adminoptions">Опции администратора</label>
+      			<label index="topic-admin-expand">Открыть</label>
+      			<label index="topic-admin-collapse">Скрыть</label>
+      			<label index="topic-admin-topictitle">Заголовок темы</label>
+      			<label index="topic-admin-topicprefix">Префикс темы</label>
+      			<label index="topic-admin-first">Тема находится вначале</label>
+      			<label index="topic-admin-closed">Тема закрыта</label>
+      			<label index="topic-admin-delete">Удалить тему</label>
+      			<label index="topic-admin-move">Перенести в тему: </label>
+      			<label index="topic-admin-save">Сохранить</label>
+      			<label index="topic-noTopicsFound">Не найдено тему</label>
+      			<label index="topic-shadow">Перемещена</label>
+      			
+      			<label index="newTopic-noAccess">У Вас недостаточно прав для открытия новой темы в этом форуме.</label>
+      			<label index="newTopic-noTitle">Не указан заголовок темы.</label>
+      			<label index="newTopic-noText">Отсутствует текст темы.</label>
+      			<label index="newTopic-preview">Предпросмотр</label>
+      			<label index="newTopic-save">Отправить</label>
+      			<label index="newTopic-noLogin">Чтобы создать новую тему необходимо войти на сайт под своим именем пользователя. Если у вас нет имени, пожалуйста, зарегистрируйтесь.</label>
+      			<label index="newTopic-create">Создать новую запись</label>
+      			<label index="newTopic-title">Заголовок</label>
+      			<label index="newTopic-setHaveALook">Обо всех ответах на это сообщения информировать меня по e-mail.</label>
+      			<label index="newTopic-reset">Очистить форму</label>
+      			<label index="newtopic-editor-bold">Жирный</label>
+      			<label index="newtopic-editor-italic">Курсив</label>
+      			<label index="newtopic-editor-color">Цвет</label>
+      			<label index="newtopic-editor-size">Размер</label>
+      			<label index="newtopic-editor-underline">Подчеркнутый</label>
+      			<label index="newtopic-editor-quote">Цитата</label>
+      			<label index="newtopic-editor-list">Список</label>
+      			<label index="newtopic-editor-image">Рисунок</label>
+      			<label index="newtopic-editor-link">Ссылка</label>
+      			<label index="newtopic-editor-php">PHP</label>
+      			<label index="newtopic-editor-ts">TypoScript</label>
+      			<label index="newtopic-editor-html">HTML</label>
+      			<label index="newtopic-editor-js">Javascript</label>
+      			
+      			<label index="newPost-save">Отправить</label>
+      			<label index="newPost-preview">Предпросмотр</label>
+      			<label index="newPost-spamBlock">По соображениям безопасности вы можете создать новое сообщение не раньше чем через ###SPAMBLOCK### секунд.</label>
+      			<label index="newPost-quote-error">Во время цитирования сообщения произошла ошибка. Возможно у Вас недостаточно прав</label>
+      			<label index="newPost-title">Пожалуйста, введите текст собщения.</label>
+      			<label index="newPost-noLogin">Возможно Вы не прошли необходимую авторизацию или вы не вошли на сайт.&lt;br /&gt;Для того, что бы создать новую тему, зайдите на сайт под своим именем.</label>
+      			<label index="newPost-titleField">Заголовок</label>
+      			<label index="newPost-reset">Очистить форму</label>
+      			<label index="newPost-attention">Записка</label>
+      			<label index="newPost-codeSamples">Примеры кода, которые Вы желаете вставить в форум, должны вводиться в соответствующем контейнере.</label>
+      			<label index="newPost-attachment">Добавить файл</label>
+      			<label index="newPost-maxFileSize">Максимальный размер файла: %s</label>
+      			
+      			<label index="editPost-noAccess">У Вас недостаточно прав для того чтобы редактировать это сообщение.</label>
+      			<label index="deletePost-noAccess">У Вас недостаточно прав для того чтобы удалить это сообщение.</label>
+      			
+      			<label index="post-confirmDelete">Вы действительно хотите удалить это сообщение?</label>
+      			<label index="post-edited">[Сообщение редактировалось ###COUNT### раз(а), в последний раз  ###DATE### в ###TIME###.]</label>
+      			<label index="post-writtenOn">Сообщение создано</label>
+      			<label index="post-author">Автор</label>
+      			<label index="post-message">Сообщение</label>
+      			
+      			<label index="mail-success">Ваш email был успешно отправлен получателю: ###RECIPIENT###.</label>
+      			<label index="mail-timeout">Ваш email не может быть отправлен потому что Вы либо уже его отправили, либо время отрпавки превысило (###TIMEOUT### мин).</label>
+      			<label index="mail-noLogin">Пожалуйста, войдите на сайт для того чтобы отправить E-Mail.</label>
+      			
+      			<label index="user-userConf">Конфигурация пользователя</label>
+      			<label index="user-hot">О сообщении ###HOTPOSTS### </label>
+      			<label index="user-lastPostsLink">ССЫЛКА</label>
+      			<label index="user-regSince">Зарегистрирован(а) с</label>
+      			<label index="user-posts">Сообщения</label>
+      			<label index="user-mod">Модератор</label>
+      			<label index="user-admin">Админинстратор</label>
+      			<label index="user-postTotal">Всего сообщений</label>
+      			<label index="user-topicsTotal">открыто тем</label>
+      			<label index="user-postsPerDay">примерно ###POSTS### сообщений в день</label>
+      			<label index="user-allAbout">Все о</label>
+      			<label index="user-regDate">Дата регистрации</label>
+      			<label index="user-totalPosts">сообщений всего</label>
+      			<label index="user-location">Находиться</label>
+      			<label index="user-website">Website</label>
+      			<label index="user-profession">Профессия</label>
+      			<label index="user-interests">Интересы</label>
+      			<label index="user-contact">Контакты</label>
+      			<label index="user-lastLogin">Время последнего захода</label>
+      			<label index="user-posthistory">Сообщения</label>
+      			<label index="user-10topics">Последние десять сообщений</label>
+      			<label index="user-avatar">Аватар</label>
+      			<label index="user-postList">Все Сообщения</label>
+      			<label index="user-postOrder">Порядок вывода сообщений</label>
+      			<label index="user-postOrder-postFirst">Показывать это сообщение первым</label>
+      			<label index="user-postOrder-first">Первое</label>
+      			<label index="user-postOrder-last">Последнее</label>
+      			<label index="user-save">Сохранить</label>
+      			<label index="user-statistic">Статистика пользователя</label>
+      			<label index="user-noposts">Ни одно сообщение не создано</label>
+      			<label index="user-noLogin">Вы должны быть авторизированы на сайте, чтобы просмотреть историю Ваших сообщений.</label>
+      			<label index="user-deleted">Удалить пользователя</label>
+      			<label index="user-error_notExist">Такой пользователь не существует.</label>
+      			
+      			<label index="favorites-addSuccess">Сообщение добавлено в избранные.</label>
+      			<label index="favorites-delSuccess">Сообщение удалено из избранных.</label>
+      			<label index="favorites-delete">Удалить</label>
+      			<label index="favorites-noLogin">Чтобы просматривать избранное, Вы должны быть авторизированны на сайте.</label>
+      			<label index="favorites-orderBy">Порядок сортировки</label>
+      			<label index="favorites-orderBy-lpdate">Последнее</label>
+      			<label index="favorites-orderBy-cat">По категориям</label>
+      			<label index="favorites-orderBy-added">По времени добавления</label>
+      			<label index="favorites-orderBy-alphab">По алфавиту</label>
+      			<label index="favorites-options">Опции</label>
+      			<label index="favorites-title">Избранные сообщения</label>
+      			
+      			<label index="havealook-confirmMultiple">Вы пытаестесь редактировать несколько записей одновременно. Вы действетельно хотите внести эти изменения?</label>
+      			<label index="havealook-markedTopics">Отмеченные темы</label>
+      			<label index="havealook-delete">Удалить</label>
+      			<label index="havealook-go">Просмотреть</label>
+      			<label index="havealook-title">Наблюдаемые темы</label>
+      			
+      			<label index="subscr-addSuccess">Тема добавлена в Ваш список уведомлений.</label>
+      			<label index="subscr-delSuccess">Тема удалена из Вашего списка уведомлений.</label>
+      			<label index="subscr-noLogin">Для того, чтобы просмотреть список уведомлений, Вы должны быть авторизированны.</label>
+      			
+      			<label index="ntfMail-subject">Появилось ноовое сообщение в теме ###TOPICNAME### в обсуждении ###BOARDNAME###.</label>
+      			<label index="ntfMail-text">Здравствуйте ###USERNAME###,
 				
 		Вы получили это сообщений, так как указали, что Вы желает получать уведомления
 		про ответы на ваши сообщение в форуме.
@@ -2048,162 +2048,162 @@ Voici le lien vers un fil de discussion, pour lequel vous avez activé une notif
 				Чтобы просмотреть эту тему на форуме, перейдите по следующей ссылке:
 				
 				###LINK###</label>
-			<label index="redirect-error">К сожалению, мы не можем вернуть Вас на последнюю просматриваемую страницу, так как ваша система не позволяет этого сделать.</label>
-			<label index="ntfMailForum-subject">Появилась новая тема с названием '###TOPICNAME###' в категории форума '###FORUMNAME###' на ###BOARDNAME###</label>
-			<label index="ntfMailForum-text">Здравствуйте ###USERNAME###,
+      			<label index="redirect-error">К сожалению, мы не можем вернуть Вас на последнюю просматриваемую страницу, так как ваша система не позволяет этого сделать.</label>
+      			<label index="ntfMailForum-subject">Появилась новая тема с названием '###TOPICNAME###' в категории форума '###FORUMNAME###' на ###BOARDNAME###</label>
+      			<label index="ntfMailForum-text">Здравствуйте ###USERNAME###,
 			
 		Вы получили это сообщений, так как указали, что Вы желает получать уведомления
 		про создание тем в категории форума (###FORUMNAME###) наблюдаемой вами.
 
 		Для посещения новой темы перейдите по ссылке: ###LINK###</label>
-			<label index="prefix-title">Префикс: &amp;quot;###PREFIX###&amp;quot;</label>
-			<label index="prefix-all">Все</label>
-			<label index="prefix-rootline">Префикс: &amp;quot;###PREFIX###&amp;quot;</label>
-			<label index="prefix-displaySettings">Отобразить настройки</label>
-			<label index="prefix-display">Отобразить</label>
-			<label index="prefix-orderby">Сортировать по</label>
-			<label index="prefix-orderby-lastPost">последнее сообщение</label>
-			<label index="prefix-orderby-category">Категории</label>
-			<label index="prefix-orderby-crdate">Дата создания</label>
-			<label index="prefix-outOfCategory">в категории</label>
-			<label index="prefix-categories-all">Все подкатегории</label>
-			<label index="prefix-limit">Ограничение</label>
-			<label index="prefix-limit-10">10</label>
-			<label index="prefix-limit-20">20</label>
-			<label index="prefix-limit-50">50</label>
-			<label index="prefix-limit-100">100</label>
-			<label index="prefix-limit-all">Все</label>
-			<label index="prefix-prefixNotFound">Запрошенный префикс не существует.</label>
+      			<label index="prefix-title">Префикс: &amp;quot;###PREFIX###&amp;quot;</label>
+      			<label index="prefix-all">Все</label>
+      			<label index="prefix-rootline">Префикс: &amp;quot;###PREFIX###&amp;quot;</label>
+      			<label index="prefix-displaySettings">Отобразить настройки</label>
+      			<label index="prefix-display">Отобразить</label>
+      			<label index="prefix-orderby">Сортировать по</label>
+      			<label index="prefix-orderby-lastPost">последнее сообщение</label>
+      			<label index="prefix-orderby-category">Категории</label>
+      			<label index="prefix-orderby-crdate">Дата создания</label>
+      			<label index="prefix-outOfCategory">в категории</label>
+      			<label index="prefix-categories-all">Все подкатегории</label>
+      			<label index="prefix-limit">Ограничение</label>
+      			<label index="prefix-limit-10">10</label>
+      			<label index="prefix-limit-20">20</label>
+      			<label index="prefix-limit-50">50</label>
+      			<label index="prefix-limit-100">100</label>
+      			<label index="prefix-limit-all">Все</label>
+      			<label index="prefix-prefixNotFound">Запрошенный префикс не существует.</label>
 			
-			<label index="postalert-title">Сообщения отчётов</label>
-			<label index="postalert-status-open">Открыть</label>
-			<label index="postalert-status-progress">В процессе</label>
-			<label index="postalert-status-done">Готово</label>
-			<label index="postalert-errorNoReason">Пожалуйста, укажите причину.</label>
-			<label index="postalert-errorNoLogin">Вы должны быть авторизированны, чтобы воспользоваться этой функцией.</label>
-			<label index="postalert-heading">Сообщить</label>
-			<label index="postalert-posttext">Текст сообщения</label>
-			<label index="postalert-reason">Пожалуйста, укажите причину.</label>
-			<label index="postalert-alert">Сообщить</label>
-			<label index="postalert-orderby">Сортировать по</label>
-			<label index="postalert-orderby-status">Статусу</label>
-			<label index="postalert-orderby-date">Дате</label>
-			<label index="postalert-orderby-user">Пользователю</label>
-			<label index="postalert-ordermode-asc">Возростанию</label>
-			<label index="postalert-ordermode-desc">Убыванию</label>
-			<label index="postalert-number">№</label>
-			<label index="postalert-date">Дата</label>
-			<label index="postalert-problem">Проблема</label>
-			<label index="postalert-post">Сообщение</label>
-			<label index="postalert-user">Пользователь</label>
-			<label index="postalert-status">Статус</label>
-			<label index="postalert-display">Показать</label>
-			
-			<label index="rootline-reply">Ответить</label>
-			<label index="rootline-post_alert">Сообщить о посте</label>
-			<label index="rootline-new_topic">Новая тема</label>
-			<label index="rootline-edit_post">Редактировать сообщение</label>
-			<label index="rootline-list_unread">Список непрочитанных тем</label>
-			<label index="rootline-list_unans">Список неотвеченных тем</label>
-			<label index="rootline-userprofile">Профиль пользователя: &quot;%s&quot;</label>
-			
-			<label index="realurl-pages">страницы</label>
-			<label index="realurl-pmnew">новое</label>
-			<label index="realurl-quote">цитировать</label>
-			<label index="realurl-page">страницы</label>
-			<label index="realurl-attachment">приложение</label>
-			
-			<label index="attachment-disabled">Загрузка файлов отключена.</label>
-			<label index="attachment-toobig">Файл вложения слишком большой (%s)</label>
-			<label index="attachment-denyed">Файлы этого расширения загружать запрещено.</label>
-			<label index="attachments-title">Вложенный файл</label>
-			<label index="attachment-type">Тип файла</label>
-			<label index="attachment-size">Размер</label>
-			<label index="attachment-bytes">байт</label>
-			<label index="attachment-kilobytes">килобайт</label>
-			<label index="attachment-megabytes">магабайт</label>
-			<label index="attachment-downloads">загрузок</label>
-			<label index="attachment-doesNotExist">Файл не существует.</label>
-			<label index="attachment-delete">Удалить вложенный файл</label>
-			
-			<label index="poll-postattach">Добавить голосование</label>
-			<label index="poll-postattach-new">Добавить голосование (Создать новое голосование)</label>
-			<label index="poll-postattach-edit">Добавить голосование (Редактировать голосование)</label>
-			<label index="poll-question">Вопрос</label>
-			<label index="poll-answers">Вариант ответ</label>
-			<label index="poll-addAnswer">Добавить еще вариант ответа</label>
-			<label index="poll-deleteAnswer">Удалить вариант ответа</label>
-			<label index="poll-deleteAnswerConf">Вы действительно хотите удалить этот вариант ответа?</label>
-			<label index="poll-expires">Действителен до</label>
-			<label index="poll-title">Голосование</label>
-			<label index="poll-vote">Проголосовать</label>
-			<label index="poll-replies">%s из %s ответов (%s)</label>
-			<label index="poll-disabled">Система голосований отключена.</label>
-			<label index="poll-restricted">У Вас недостаточно прав для создания голосования.</label>
-			<label index="poll-noQuestion">Для того, чтобы создать голосование, необходимо указать вопрос.</label>
-			<label index="poll-noAnswers">Необходимо указать по крайней мере %s вариантов ответа.</label>
-			<label index="latest-title">Последние сообщения</label>
-			
-			<!-- Added in 0.1.1 -->
-			<label index="havealook-empty">Ваш список подписки пуст.</label>
-			<label index="favorites-empty">Ваш список избранных пуст.</label>
-			<label index="userlist-fields-username">Имя пользователя</label>
-			<label index="userlist-fields-usergroup">Членство в группах</label>
-			<label index="userlist-fields-crdate">Дата регистрации</label>
-			<label index="userlist-fields-name">Настоящее имя</label>
-			<label index="userlist-fields-email">Адрес email</label>
-			<label index="userlist-fields-__pm">Частное сообщение</label>
-			<label index="userlist-fields-city">Город</label>
-			<label index="userlist-fields-www">WWW</label>
-			<label index="userlist-fields-tx_mmforum_icq">ICQ</label>
-			<label index="userlist-fields-tx_mmforum_aim">AIM</label>
-			<label index="userlist-fields-tx_mmforum_yim">YIM</label>
-			<label index="userlist-fields-tx_mmforum_msn">MSN</label>
-			<label index="userlist-fields-tx_mmforum_skype">Skype</label>
-			<label index="userlist-fields-tx_mmforum_posts">Сообщения</label>
-			<label index="userlist-fields-tx_mmforum_interests">Интересы</label>
-			<label index="userlist-fields-tx_mmforum_occ">Род занятий</label>
-			
-			<!-- Added in 0.1.2 -->
-			<label index="postqueue-publishtab">П</label>
-			<label index="postqueue-deletetab">У</label>
-			<label index="postqueue-ignoretab">И</label>
-			<label index="postqueue-posttext">Отправить</label>
-			<label index="postqueue-wrote">написать</label>
-			<label index="postqueue-newTopic">Новая тема</label>
-			<label index="postqueue-title">Добавить в очередь публикаций</label>
-			<label index="postqueue-publishbutton">Опубликовать</label>
-			<label index="postqueue-noitems">Нет сообщений в очереди публикаций.</label>
-			<label index="postqueue-success">Ваша запись была успешно создана. В ближайшее врема она будет опубликована модератором.</label>
-			
-			<label index="button-reply">Ответить</label>
-			<label index="button-quote">Цитировать</label>
-			<label index="button-profile">Профиль</label>
-			<label index="button-post-alert">Сообщить</label>
-			<label index="button-pm">ЛС</label>
-			<label index="button-skype">Skype</label>
-			<label index="button-yim">YIM</label>
-			<label index="button-aim">AIM</label>
-			<label index="button-icq">ICQ</label>
-			<label index="button-www">WWW</label>
-			<label index="button-edit">Править</label>
-            <label index="button-delete">Удалить</label>
-            
-            <!-- Added in 0.1.5 -->
-			<label index="button-newtopic">Новая тема</label>
-            <label index="button-msn">MSN</label>
-			<label index="topic-solved-on">Эта тема закрыта.</label>
-			<label index="topic-solved-off">Эта тема не закрыта.</label>
-			<label index="topic-solvedshort-on">Закр.</label>
-			<label index="topic-solvedshort-off">Откр.</label>
-			<label index="options_mail_forum">Опции</label>
-
-			<!-- Added in 0.1.7 -->
-			<label index="userlist-title">Список пользователей</label>
-			<label index="user-profile">Профиль пользователя</label>
-			<label index="user-field">Поле пользователя</label>
-			<label index="user-username">Имя пользователя</label>
-			<label index="user-value">Значение</label>
+      			<label index="postalert-title">Сообщения отчётов</label>
+      			<label index="postalert-status-open">Открыть</label>
+      			<label index="postalert-status-progress">В процессе</label>
+      			<label index="postalert-status-done">Готово</label>
+      			<label index="postalert-errorNoReason">Пожалуйста, укажите причину.</label>
+      			<label index="postalert-errorNoLogin">Вы должны быть авторизированны, чтобы воспользоваться этой функцией.</label>
+      			<label index="postalert-heading">Сообщить</label>
+      			<label index="postalert-posttext">Текст сообщения</label>
+      			<label index="postalert-reason">Пожалуйста, укажите причину.</label>
+      			<label index="postalert-alert">Сообщить</label>
+      			<label index="postalert-orderby">Сортировать по</label>
+      			<label index="postalert-orderby-status">Статусу</label>
+      			<label index="postalert-orderby-date">Дате</label>
+      			<label index="postalert-orderby-user">Пользователю</label>
+      			<label index="postalert-ordermode-asc">Возростанию</label>
+      			<label index="postalert-ordermode-desc">Убыванию</label>
+      			<label index="postalert-number">№</label>
+      			<label index="postalert-date">Дата</label>
+      			<label index="postalert-problem">Проблема</label>
+      			<label index="postalert-post">Сообщение</label>
+      			<label index="postalert-user">Пользователь</label>
+      			<label index="postalert-status">Статус</label>
+      			<label index="postalert-display">Показать</label>
+      			
+      			<label index="rootline-reply">Ответить</label>
+      			<label index="rootline-post_alert">Сообщить о посте</label>
+      			<label index="rootline-new_topic">Новая тема</label>
+      			<label index="rootline-edit_post">Редактировать сообщение</label>
+      			<label index="rootline-list_unread">Список непрочитанных тем</label>
+      			<label index="rootline-list_unans">Список неотвеченных тем</label>
+      			<label index="rootline-userprofile">Профиль пользователя: &quot;%s&quot;</label>
+      			
+      			<label index="realurl-pages">страницы</label>
+      			<label index="realurl-pmnew">новое</label>
+      			<label index="realurl-quote">цитировать</label>
+      			<label index="realurl-page">страницы</label>
+      			<label index="realurl-attachment">приложение</label>
+      			
+      			<label index="attachment-disabled">Загрузка файлов отключена.</label>
+      			<label index="attachment-toobig">Файл вложения слишком большой (%s)</label>
+      			<label index="attachment-denyed">Файлы этого расширения загружать запрещено.</label>
+      			<label index="attachments-title">Вложенный файл</label>
+      			<label index="attachment-type">Тип файла</label>
+      			<label index="attachment-size">Размер</label>
+      			<label index="attachment-bytes">байт</label>
+      			<label index="attachment-kilobytes">килобайт</label>
+      			<label index="attachment-megabytes">магабайт</label>
+      			<label index="attachment-downloads">загрузок</label>
+      			<label index="attachment-doesNotExist">Файл не существует.</label>
+      			<label index="attachment-delete">Удалить вложенный файл</label>
+      			
+      			<label index="poll-postattach">Добавить голосование</label>
+      			<label index="poll-postattach-new">Добавить голосование (Создать новое голосование)</label>
+      			<label index="poll-postattach-edit">Добавить голосование (Редактировать голосование)</label>
+      			<label index="poll-question">Вопрос</label>
+      			<label index="poll-answers">Вариант ответ</label>
+      			<label index="poll-addAnswer">Добавить еще вариант ответа</label>
+      			<label index="poll-deleteAnswer">Удалить вариант ответа</label>
+      			<label index="poll-deleteAnswerConf">Вы действительно хотите удалить этот вариант ответа?</label>
+      			<label index="poll-expires">Действителен до</label>
+      			<label index="poll-title">Голосование</label>
+      			<label index="poll-vote">Проголосовать</label>
+      			<label index="poll-replies">%s из %s ответов (%s)</label>
+      			<label index="poll-disabled">Система голосований отключена.</label>
+      			<label index="poll-restricted">У Вас недостаточно прав для создания голосования.</label>
+      			<label index="poll-noQuestion">Для того, чтобы создать голосование, необходимо указать вопрос.</label>
+      			<label index="poll-noAnswers">Необходимо указать по крайней мере %s вариантов ответа.</label>
+      			<label index="latest-title">Последние сообщения</label>
+      			
+      			<!-- Added in 0.1.1 -->
+      			<label index="havealook-empty">Ваш список подписки пуст.</label>
+      			<label index="favorites-empty">Ваш список избранных пуст.</label>
+      			<label index="userlist-fields-username">Имя пользователя</label>
+      			<label index="userlist-fields-usergroup">Членство в группах</label>
+      			<label index="userlist-fields-crdate">Дата регистрации</label>
+      			<label index="userlist-fields-name">Настоящее имя</label>
+      			<label index="userlist-fields-email">Адрес email</label>
+      			<label index="userlist-fields-__pm">Частное сообщение</label>
+      			<label index="userlist-fields-city">Город</label>
+      			<label index="userlist-fields-www">WWW</label>
+      			<label index="userlist-fields-tx_mmforum_icq">ICQ</label>
+      			<label index="userlist-fields-tx_mmforum_aim">AIM</label>
+      			<label index="userlist-fields-tx_mmforum_yim">YIM</label>
+      			<label index="userlist-fields-tx_mmforum_msn">MSN</label>
+      			<label index="userlist-fields-tx_mmforum_skype">Skype</label>
+      			<label index="userlist-fields-tx_mmforum_posts">Сообщения</label>
+      			<label index="userlist-fields-tx_mmforum_interests">Интересы</label>
+      			<label index="userlist-fields-tx_mmforum_occ">Род занятий</label>
+      			
+      			<!-- Added in 0.1.2 -->
+      			<label index="postqueue-publishtab">П</label>
+      			<label index="postqueue-deletetab">У</label>
+      			<label index="postqueue-ignoretab">И</label>
+      			<label index="postqueue-posttext">Отправить</label>
+      			<label index="postqueue-wrote">написать</label>
+      			<label index="postqueue-newTopic">Новая тема</label>
+      			<label index="postqueue-title">Добавить в очередь публикаций</label>
+      			<label index="postqueue-publishbutton">Опубликовать</label>
+      			<label index="postqueue-noitems">Нет сообщений в очереди публикаций.</label>
+      			<label index="postqueue-success">Ваша запись была успешно создана. В ближайшее врема она будет опубликована модератором.</label>
+      			
+      			<label index="button-reply">Ответить</label>
+      			<label index="button-quote">Цитировать</label>
+      			<label index="button-profile">Профиль</label>
+      			<label index="button-post-alert">Сообщить</label>
+      			<label index="button-pm">ЛС</label>
+      			<label index="button-skype">Skype</label>
+      			<label index="button-yim">YIM</label>
+      			<label index="button-aim">AIM</label>
+      			<label index="button-icq">ICQ</label>
+      			<label index="button-www">WWW</label>
+      			<label index="button-edit">Править</label>
+                  <label index="button-delete">Удалить</label>
+                  
+                  <!-- Added in 0.1.5 -->
+      			<label index="button-newtopic">Новая тема</label>
+                  <label index="button-msn">MSN</label>
+      			<label index="topic-solved-on">Эта тема закрыта.</label>
+      			<label index="topic-solved-off">Эта тема не закрыта.</label>
+      			<label index="topic-solvedshort-on">Закр.</label>
+      			<label index="topic-solvedshort-off">Откр.</label>
+      			<label index="options_mail_forum">Опции</label>
+      
+      			<!-- Added in 0.1.7 -->
+      			<label index="userlist-title">Список пользователей</label>
+      			<label index="user-profile">Профиль пользователя</label>
+      			<label index="user-field">Поле пользователя</label>
+      			<label index="user-username">Имя пользователя</label>
+      			<label index="user-value">Значение</label>
         </languageKey>
 		<!-- UKRAINIAN LANGUAGE DATA -->
 		<languageKey index="ua" type="array">
