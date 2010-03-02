@@ -41,7 +41,7 @@
  *  948:     function list_forum($content, $conf)
  * 1094:     function list_topic($content, $conf)
  * 1409:     function list_prefix($content, $conf, $prefix)
- * 1774:     function list_latest()
+ * 1774:     function list_latest($conf)
  * 1852:     function list_users()
  * 2009:     function userdef_cmp($a,$b)
  * 2117:     function list_postqueue()
@@ -244,7 +244,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$content =  $this->post_history($conf);
 					break;
 				case 'LATEST':
-					$content = $this->list_latest();
+					$content = $this->list_latest($conf);
 					break;
 				case 'USERLIST':
 					$content = $this->list_users();
@@ -639,7 +639,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $imgInfo['src'] = $conf['path_img'].$conf['images.']['jump_to'];
             $imgInfo['alt'] = $this->pi_getLL('topic.gotoLastPost');
             $imgInfo['title'] = $this->pi_getLL('topic.gotoLastPost');
-            $last_post_link = $this->pi_linkToPage($this->buildImageTag($imgInfo), $GLOBALS['TSFE']->id,'',$linkparams);
+            $last_post_link = $this->pi_linkToPage($this->buildImageTag($imgInfo), $GLOBALS['TSFE']->id, '', $linkparams);
 
             if($row['topic_is'])
                 $topic_is = $this->cObj->wrap($row['topic_is'],$this->conf['list_topics.']['prefix_wrap']);
@@ -656,7 +656,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $marker['###UNDERLINE###']  = $this->escape($rowc['cat_title']).' &raquo; '.$this->escape($rowf['forum_name']);
             $marker['###POSTS###']      = intval($row['topic_replies']).' ('.intval($row['topic_views']).')';
             $marker['###AUTHOR###']		= $this->linkToUserProfile($row['topic_poster']);
-            $marker['###LAST###']       = $this->getlastpost($row['topic_last_post_id'],$conf).$last_post_link;
+            $marker['###LAST###']       = $this->getlastpost($row['topic_last_post_id'],$conf).' '.$last_post_link;
             $marker['###READIMAGE###'] = $this->getTopicIcon($row);
 			$marker['###RATING###']		= $this->getRatingDisplay('tx_mmforum_topic', $row['uid']);
 
@@ -820,7 +820,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$marker['###TOPICNAME###'] = $prefix . $this->pi_linkTP($this->escape($row['topic_title']), $linkParams);
 			$marker['###UNDERLINE###'] = $this->escape($rowc['cat_title']) . ' &raquo; ' . $this->escape($rowf['forum_name']);
 			$marker['###AUTHOR###']    = $this->getauthor($row['topic_poster']);
-			$marker['###LAST###']      = $this->getlastpost($row['topic_last_post_id'], $conf);
+			$linkParams[$this->prefixId]['pid'] = 'last';
+			$imgInfo['src']		= $conf['path_img'] . $conf['images.']['jump_to'];
+			$imgInfo['alt']		= $this->pi_getLL('topic.gotoLastPost');
+			$imgInfo['title']	= $this->pi_getLL('topic.gotoLastPost');
+			$last_post_link = $this->pi_linkToPage($this->buildImageTag($imgInfo), $GLOBALS['TSFE']->id, '', $linkParams);
+			$marker['###LAST###']      = $this->getlastpost($row['topic_last_post_id'], $conf).' '.$last_post_link;
 			$marker['###READIMAGE###'] = $this->getTopicIcon($row);
 			$marker['###PREFIX###']    = $prefix;
 
@@ -1870,7 +1875,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @version 2007-05-23
 	 * @return  string	The latest topic list
 	 */
-	function list_latest() {
+	function list_latest($conf) {
 		$templateFile = $this->cObj->fileResource($this->conf['template.']['latest']);
 		$template     = $this->cObj->getSubpart($templateFile, '###LATEST###');
 		$templateRow  = $this->cObj->getSubpart($template, '###LATEST_POST###');
@@ -1908,10 +1913,15 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				'###TOPICNAME###'   => $this->pi_linkToPage($this->escape($row['topic_title']), $this->getForumPID(), '', $linkParams),
 				'###TOPICSUB###'    => $this->escape($row['category_name'] . ' / '.  $row['forum_name']),
 				'###TOPICICON###'   => $this->getTopicIcon($row),
-				'###LASTPOST###'    => $this->getlastpost($row['post_id'], $this->conf),
 				'###TOPICAUTHOR###' => $this->getauthor($row['author']),
 				'###NUMPOSTS###'    => $row['topic_replies'],
 			);
+			$linkParams[$this->prefixId]['pid'] = 'last';
+			$imgInfo['src']		= $conf['path_img'] . $conf['images.']['jump_to'];
+			$imgInfo['alt']		= $this->pi_getLL('topic.gotoLastPost');
+			$imgInfo['title']	= $this->pi_getLL('topic.gotoLastPost');
+			$last_post_link = $this->pi_linkToPage($this->buildImageTag($imgInfo), $this->getForumPID(), '', $linkParams);
+			$rMarker['###LASTPOST###'] = $this->getlastpost($row['post_id'], $this->conf).' '.$last_post_link;
 
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_topicItem'])) {

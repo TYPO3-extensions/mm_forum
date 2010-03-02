@@ -65,7 +65,7 @@
             <label index="topic-topicicon_shadow">Topic was moved to another board</label>
             <label index="topic-lastarticle">To the last articles</label>
             <label index="topic-isSolved">Has been answered</label>
-            <label index="topic-gotoLastPost">Go to last topic</label>
+            <label index="topic-gotoLastPost">Go to last post</label>
             <label index="topic-isClosed">Topic closed</label>
             <label index="topic-hot">Hot</label>
             <label index="topic-hotUnread">Hot and new posts</label>
