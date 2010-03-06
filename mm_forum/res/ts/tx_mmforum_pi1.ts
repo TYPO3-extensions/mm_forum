@@ -431,6 +431,8 @@ plugin.tx_mmforum_pi1 {
 		display {
 			# Separator between rootline elements
 				rootline.separator = &nbsp;&raquo;&nbsp;
+			# Separator between pagetitle elements
+				pageTitle.separator = &nbsp;-&nbsp;
 			# CSS class of button-like links
 				linkButton.cssClass = tx-mmforum-button
 			# Even list item class

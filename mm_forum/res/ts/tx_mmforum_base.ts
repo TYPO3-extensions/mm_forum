@@ -82,6 +82,11 @@ plugin.tx_mmforum {
 	# Disable rootline
 		disableRootline = {$plugin.tx_mmforum.disableRootline}
 		
+	# Substitute the page title
+		substitutePagetitle = {$plugin.tx_mmforum.substitutePagetitle}
+		pagetitleLastForumPageTitleOnly = {$plugin.tx_mmforum.pagetitleLastForumPageTitleOnly}
+		pagetitleWrap = {$plugin.tx_mmforum.pagetitleWrap}
+		
 	# RealUrl special links
 		realUrl_specialLinks = {$plugin.tx_mmforum.realUrl_specialLinks}
 

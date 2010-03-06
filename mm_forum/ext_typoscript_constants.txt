@@ -81,6 +81,15 @@ plugin.tx_mmforum {
 
     # cat=plugin.mm_forum - general//; type=boolean; label=Disable rootline: Disables the mm_forum rootline allowing you to integrate a dynamic rootline into your already existing rootline menu.
     disableRootline = 0
+    
+    # cat=plugin.mm_forum - general//; type=boolean; label=Substitute pagetitle: You can enable mm_forum to overwrite the default page title.
+    substitutePagetitle = 0
+    
+    # cat=plugin.mm_forum - general//; type=boolean; label=adds only the last forum pagetitle: If set to true, only the last part of the rootline (except from action names) is added to the pagetitle
+    pagetitleLastForumPageTitleOnly = 0
+    
+    # cat=plugin.mm_forum - general//; type=string; label=pagetitle wrap: A string that is placed right before and after the new pagetitle.
+    pagetitleWrap = |
 
     # cat=plugin.mm_forum - message board//; type=int+; label=Hot topic post limit: Number of posts necessary to make a topic a hot topic
     topic_hotPosts = 10

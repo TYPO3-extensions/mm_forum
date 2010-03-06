@@ -198,11 +198,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 */
 	function main($content, $conf) {
 
-			/* Include mm_forum javascript into page header */
-
-		# Moved to TypoScript!
-		#$GLOBALS['TSFE']->additionalHeaderData['mm_forum'] .= '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'res/scripts/prototype-1.6.0.3.js"></script>';
-
 			/* Initialize base object */
 		$this->init($conf);
 		$this->pi_USER_INT_obj = 1;
@@ -225,6 +220,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			/* Include RSS feed to header */
 		tx_mmforum_rss::setHTMLHeadData('all');
+
+			/* Change page title */
+		if ($this->conf['substitutePagetitle']) {
+			$this->createPageTitle();
+		}
 
 		foreach ($codes as $theCode) {
 			list($theCode, $cat, $aFlag) = explode('/', $theCode);
@@ -5658,6 +5658,137 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         $query = " AND $prefix"."uid IN (".$this->limitCat.")";
         return $query;
     }
+    
+  /**
+	 * Creates the mm_forum page title.
+	 * This function generates the title of the mm_forum using the rootline
+	 * locallang names.
+	 */
+	function createPageTitle() {
+		switch ($this->piVars['action']) {
+			// List post view, new post form, post alert form
+			// Sets a title like "mm_forum page -> Category -> Board -> Topic (-> New post/Report post)""
+			case 'list_post':
+			case 'new_post':
+			case 'post_alert':
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					'topic_title, f.forum_name, c.forum_name',
+					'tx_mmforum_topics t, tx_mmforum_forums f, tx_mmforum_forums c',
+					't.uid="' . intval($this->piVars['tid']) . '" AND f.uid=t.forum_id AND c.uid=f.parentID'
+				);
+				list($topicTitle,$forumTitle,$catTitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+
+				if ($this->piVars['action'] == 'new_post') {
+					$pageTitle = $this->pi_getLL('rootline.reply');
+				} elseif ($this->piVars['action'] == 'post_alert') {
+					$pageTitle = $this->pi_getLL('rootline.post_alert');
+				}
+			break;
+
+			// New topic form, topic listing view
+			// Sets a title like "mm_forum page -> Category -> Board (-> New topic)"
+			case 'new_topic':
+			case 'list_topic':
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					'f.forum_name, c.forum_name',
+					'tx_mmforum_forums f, tx_mmforum_forums c',
+					'f.uid="'.intval($this->piVars['fid']).'" AND c.uid=f.parentID'
+				);
+				list($forumTitle,$catTitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+
+				if ($this->piVars['action'] == 'new_topic') {
+					$pageTitle = $this->pi_getLL('rootline.new_topic');
+				}
+			break;
+
+			// Post editing form
+			// Sets a title like "mm_forum page -> Category -> Board -> Topic -> Edit post"
+			case 'post_edit':
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					'topic_title,f.forum_name,c.forum_name',
+					'tx_mmforum_posts p, tx_mmforum_topics t, tx_mmforum_forums f, tx_mmforum_forums c',
+					'p.uid="' . intval($this->piVars['pid']) . '" AND t.uid=p.topic_id AND f.uid=p.forum_id AND c.uid=f.parentID'
+				);
+				list($topicTitle,$forumTitle,$catTitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+
+				$pageTitle = $this->pi_getLL('rootline.edit_post');
+			break;
+
+			// User profile
+			// Sets a title like "mm_forum page -> User profile: Username"
+			case 'forum_view_profil':
+
+				if ($this->piVars['fid']) {
+				  $user_id = tx_mmforum_tools::get_userid($this->piVars['fid']);
+				} else {
+          $user_id = $this->piVars['user_id'];
+        }
+
+				$conf['userNameField']?$conf['userNameField']:$conf['userNameField']='username';
+
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					$conf['userNameField'],
+					'fe_users',
+					'uid="'.intval($user_id).'"'
+				);
+				list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+
+				$pageTitle = sprintf($this->pi_getLL('rootline.userprofile'), $username);
+			break;
+
+			// List unread or unanswered topics
+			// Sets a title like "mm_forum page -> List unread/unanswered topics"
+			case 'list_unread':
+			case 'list_unans':
+			  $pageTitle = $this->pi_getLL('rootline.' . $this->piVars['action']);
+			break;
+		}
+
+		if ($this->conf['pagetitleLastForumPageTitleOnly']) {
+
+  		if (isset($topicTitle)) {
+  			$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$topicTitle;
+  		} elseif (isset($forumTitle)) {
+        $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$forumTitle;
+      } elseif(isset($catTitle)) {
+  			$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$catTitle;
+  		}
+      
+    } else {
+
+  		if (isset($catTitle)) {
+  			$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$catTitle;
+  		}
+  
+  		if (isset($forumTitle)) {
+  			$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$forumTitle;
+  		}
+  
+  		if (isset($topicTitle)) {
+  			$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$topicTitle;
+  		}
+    
+    }
+
+		if (isset($pageTitle)) {
+			$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$pageTitle;
+		}
+
+    //wrap the page title
+		$GLOBALS['TSFE']->page['title'] = $this->cObj->wrap($GLOBALS['TSFE']->page['title'], $this->conf['pagetitleWrap']);
+		// set page title for indexed search
+		$GLOBALS['TSFE']->indexedDocTitle = $GLOBALS['TSFE']->page['title'];
+		
+		//get to know if it is a USER_INT extension
+		if ($this->pi_USER_INT_obj == true) {
+		  //$GLOBALS['TSFE']->page['title'] is already written, so the change does
+		  //not have any effect
+		  $GLOBALS['TSFE']->content = preg_replace('/<title>.+<\/title>/',
+                                  '<title>'.$GLOBALS['TSFE']->page['title'].'</title>',
+                                  $GLOBALS['TSFE']->content, 1); 
+    }
+		
+	}
 
 	/**
 	 * Generates a custom rootline menu.
