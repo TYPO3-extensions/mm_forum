@@ -86,6 +86,7 @@ plugin.tx_mmforum {
 		substitutePagetitle = {$plugin.tx_mmforum.substitutePagetitle}
 		pagetitleLastForumPageTitleOnly = {$plugin.tx_mmforum.pagetitleLastForumPageTitleOnly}
 		pagetitleWrap = {$plugin.tx_mmforum.pagetitleWrap}
+		removeOriginalPagetitle = {$plugin.tx_mmforum.removeOriginalPagetitle}
 		
 	# RealUrl special links
 		realUrl_specialLinks = {$plugin.tx_mmforum.realUrl_specialLinks}

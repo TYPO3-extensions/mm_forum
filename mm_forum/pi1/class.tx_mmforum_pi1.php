@@ -5665,6 +5665,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * locallang names.
 	 */
 	function createPageTitle() {
+	  if ($this->conf['removeOriginalPagetitle']) {
+	    $GLOBALS['TSFE']->page['title'] = '';
+    }
+    
 		switch ($this->piVars['action']) {
 			// List post view, new post form, post alert form
 			// Sets a title like "mm_forum page -> Category -> Board -> Topic (-> New post/Report post)""
@@ -5747,25 +5751,49 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		if ($this->conf['pagetitleLastForumPageTitleOnly']) {
 
   		if (isset($topicTitle)) {
-  			$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$topicTitle;
+  		  if ($GLOBALS['TSFE']->page['title'] == '') {
+          $GLOBALS['TSFE']->page['title'] = $topicTitle;
+        } else {
+          $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$topicTitle;
+        }
   		} elseif (isset($forumTitle)) {
-        $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$forumTitle;
+  		  if ($GLOBALS['TSFE']->page['title'] == '') {
+          $GLOBALS['TSFE']->page['title'] = $forumTitle;
+        } else {
+          $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$forumTitle;
+        }
       } elseif(isset($catTitle)) {
-  			$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$catTitle;
+  		  if ($GLOBALS['TSFE']->page['title'] == '') {
+          $GLOBALS['TSFE']->page['title'] = $catTitle;
+        } else {
+          $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$catTitle;
+        }
   		}
       
     } else {
 
   		if (isset($catTitle)) {
-  			$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$catTitle;
+  		  if ($GLOBALS['TSFE']->page['title'] == '') {
+          $GLOBALS['TSFE']->page['title'] = $catTitle;
+        } else {
+          $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$catTitle;
+        }
   		}
   
   		if (isset($forumTitle)) {
-  			$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$forumTitle;
+  		  if ($GLOBALS['TSFE']->page['title'] == '') {
+          $GLOBALS['TSFE']->page['title'] = $forumTitle;
+        } else {
+          $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$forumTitle;
+        }
   		}
   
   		if (isset($topicTitle)) {
-  			$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$topicTitle;
+  		  if ($GLOBALS['TSFE']->page['title'] == '') {
+          $GLOBALS['TSFE']->page['title'] = $topicTitle;
+        } else {
+          $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$topicTitle;
+        }
   		}
     
     }
