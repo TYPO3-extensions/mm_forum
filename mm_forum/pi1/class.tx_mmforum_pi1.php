@@ -2609,7 +2609,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$this->piVars['message'],
 						time(),
 						$this->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
-						$attachment_ids
+						$attachment_ids,
+						FALSE,
+						$this->piVars['havealook'] == 'havealook'
 					);
 
 						// Redirect user to new post

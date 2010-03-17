@@ -339,7 +339,7 @@ plugin.tx_mmforum {
 
 	# Settings for output validation
         validatorSettings {
-        	quotes = none
+        	quotes = double
         	charset = auto
         	stripTags = 0
         	replace = specialchars
