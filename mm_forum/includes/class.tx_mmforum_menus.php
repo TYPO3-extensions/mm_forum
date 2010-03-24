@@ -172,6 +172,11 @@ class tx_mmforum_menus extends tx_mmforum_base {
 				);
 				list($topicId,$forumId,$catId,$topicTitle,$forumTitle,$catTitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
+				$topicTitle = stripslashes($topicTitle);
+
+				$topicTitle = str_replace('<','&lt;',$topicTitle);
+				$topicTitle = str_replace('>','&gt;',$topicTitle);
+
 				if ($action == 'new_post') {
 					$linkParams[$this->prefixId] = array(
 						'action' => 'new_post',
@@ -228,6 +233,11 @@ class tx_mmforum_menus extends tx_mmforum_base {
 					'p.uid="' . intval($this->piVars['pid']) . '" AND t.uid=p.topic_id AND f.uid=p.forum_id AND c.uid=f.parentID'
 				);
 				list($topicId,$forumId,$catId,$topicTitle,$forumTitle,$catTitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+
+				$topicTitle = stripslashes($topicTitle);
+
+				$topicTitle = str_replace('<','&lt;',$topicTitle);
+				$topicTitle = str_replace('>','&gt;',$topicTitle);
 
 				$linkParams[$this->prefixId] = array(
 					'action' => 'post_edit',

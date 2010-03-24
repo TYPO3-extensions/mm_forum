@@ -648,6 +648,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
             $row['topic_title'] = stripslashes($row['topic_title']);
 
+            $row['topic_title'] = str_replace('<','&lt;',$row['topic_title']);
+            $row['topic_title'] = str_replace('>','&gt;',$row['topic_title']);
+
             $linkParams[$this->prefixId] = array(
                 'action'    => 'list_post',
                 'tid'       => $row['uid']
@@ -658,7 +661,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $marker['###AUTHOR###']		= $this->linkToUserProfile($row['topic_poster']);
             $marker['###LAST###']       = $this->getlastpost($row['topic_last_post_id'],$conf).' '.$last_post_link;
             $marker['###READIMAGE###'] = $this->getTopicIcon($row);
-			$marker['###RATING###']		= $this->getRatingDisplay('tx_mmforum_topic', $row['uid']);
+            $marker['###RATING###']		= $this->getRatingDisplay('tx_mmforum_topic', $row['uid']);
 
             IF (($row['topic_replies'] + 1) > $conf['post_limit'])
             {
@@ -1909,6 +1912,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			if ($this->useRealUrl()) {
 				$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
 			}
+
+			$row['topic_title'] = stripslashes($row['topic_title']);
+
+			$row['topic_title'] = str_replace('<','&lt;',$row['topic_title']);
+			$row['topic_title'] = str_replace('>','&gt;',$row['topic_title']);
+
 			$rMarker = array(
 				'###TOPICNAME###'   => $this->pi_linkToPage($this->escape($row['topic_title']), $this->getForumPID(), '', $linkParams),
 				'###TOPICSUB###'    => $this->escape($row['category_name'] . ' / '.  $row['forum_name']),
@@ -3460,6 +3469,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						'action' => 'list_post',
 						'tid'    => $row['topic_id']
 					);
+
+					$row['topic_title'] = stripslashes($row['topic_title']);
+
+					$row['topic_title'] = str_replace('<','&lt;',$row['topic_title']);
+					$row['topic_title'] = str_replace('>','&gt;',$row['topic_title']);
+
 					$topicLink = $this->pi_linkToPage($this->escape($row['topic_title']), $this->getForumPID(), '', $topicParams);
 					$delParams[$this->prefixId]['fav']['deltid'] = $row['topic_id'];
 					$delLink = $this->pi_linkTP($this->pi_getLL('favorites.delete'), $delParams);
@@ -5684,6 +5699,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				);
 				list($topicTitle,$forumTitle,$catTitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
+				$topicTitle = stripslashes($topicTitle);
+
+				$topicTitle = str_replace('<','&lt;',$topicTitle);
+				$topicTitle = str_replace('>','&gt;',$topicTitle);
+
 				if ($this->piVars['action'] == 'new_post') {
 					$pageTitle = $this->pi_getLL('rootline.reply');
 				} elseif ($this->piVars['action'] == 'post_alert') {
@@ -5716,6 +5736,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					'p.uid="' . intval($this->piVars['pid']) . '" AND t.uid=p.topic_id AND f.uid=p.forum_id AND c.uid=f.parentID'
 				);
 				list($topicTitle,$forumTitle,$catTitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+
+				$topicTitle = stripslashes($topicTitle);
+
+				$topicTitle = str_replace('<','&lt;',$topicTitle);
+				$topicTitle = str_replace('>','&gt;',$topicTitle);
 
 				$pageTitle = $this->pi_getLL('rootline.edit_post');
 			break;
