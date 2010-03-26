@@ -635,6 +635,7 @@ class tx_mmforum_polls {
             '###MINUTE###'              => $piVars['expires']['act']?$piVars['expires']['minute']:'MM',
             '###EXPIRES###'             => $piVars['expires']['act']?'checked="checked"':'',
             '###DELETEFIELDS###'        => '',
+			'###DISABLED_VAR###'		=> $this->getMayCreatePoll($pObj) ? 0 : 1
         );
         $template = $pObj->cObj->substituteMarkerArrayCached($template, $marker);
 
