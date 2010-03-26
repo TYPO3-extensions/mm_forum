@@ -27,7 +27,7 @@
 	 * The tx_mmforum_cache_file class is a wrapper class for the
 	 * mm_forum file caching mechanism. Data is stored in the
 	 * typo3temp/mm_forum directory.
-	 * 
+	 *
 	 * @author     Martin Helmich <m.helmich@mittwald.de>
 	 * @version    2008-10-13
 	 * @copyright  2008 Martin Helmich, Mittwald CM Service GmbH & Co. KG
@@ -35,15 +35,15 @@
 	 * @subpackage Cache
 	 */
 class tx_mmforum_cache_file {
-	
+
 		/**
 		 * The path in which to store the cache files.
 		 */
 	var $path = 'typo3temp/mm_forum';
-	
+
 		/**
 		 * Saves an object into the cache.
-		 * 
+		 *
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2008-10-11
 		 * @access  public
@@ -60,17 +60,17 @@ class tx_mmforum_cache_file {
 		if(!is_dir($this->path)) mkdir($this->path);
 
 		$filename = $this->getFilename($key);
-		
+
 		if($override === false && file_exists($filename)) return false;
 		else {
 			$file = fopen($filename,"w");
 			$res = fwrite($file, serialize($object));
 			fclose($file);
-			
+
 			return $res ? true : false;
 		}
 	}
-	
+
 		/**
 		 * Restores an object from cache.
 		 *
@@ -86,10 +86,10 @@ class tx_mmforum_cache_file {
 		if(!file_exists($filename)) return null;
 		else return unserialize(file_get_contents($filename));
 	}
-	
+
 		/**
 		 * Deletes an object from cache.
-		 * 
+		 *
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2008-10-11
 		 * @access  public
@@ -102,10 +102,10 @@ class tx_mmforum_cache_file {
 		if(!file_exists($filename)) return false;
 		else return unlink($filename);
 	}
-	
+
 		/**
 		 * Gets a filename based on a cache key.
-		 * 
+		 *
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2008-10-11
 		 * @access  private
@@ -115,20 +115,20 @@ class tx_mmforum_cache_file {
 	function getFilename($key) {
 		return $this->path.'/'.md5($key).'.mmforum_cache';
 	}
-	
+
 		/**
 		 * Delete the entire file cache.
 		 * Thie function deletes the entire mm_forum file cache by
 		 * just deleting all files from the directory specified in
 		 * $this->path.
-		 * 
+		 *
 		 * @author  Martin Helmich <m.helmich@mittwald.de>
 		 * @version 2008-10-13
 		 * @access  public
 		 * @return  void
 		 */
 	function deleteAll() {
-		$fullPath = dirname(PATH_thisScript).$GLOBALS['BACK_PATH'].'/../'.$this->path;
+		$fullPath = PATH_site . $this->path;
 
 			/* NOTE: The following condition is NOT a mistake, but is actually indented
 			 * not to match BOTH false (for "string not found") AND 0 (for "string found
@@ -138,9 +138,9 @@ class tx_mmforum_cache_file {
 
 		$files = glob($fullPath.'/*.mmforum_cache');
 
-		foreach($files as $file) unlink($file);
+		foreach((array)$files as $file) unlink($file);
 	}
-	
+
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/includes/cache/class.tx_mmforum_cache_file.php']) {
