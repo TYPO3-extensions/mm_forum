@@ -198,11 +198,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 */
 	function main($content, $conf) {
 
-			/* Include mm_forum javascript into page header */
-
-		# Moved to TypoScript!
-		#$GLOBALS['TSFE']->additionalHeaderData['mm_forum'] .= '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'res/scripts/prototype-1.6.0.3.js"></script>';
-
 			/* Initialize base object */
 		$this->init($conf);
 		$this->pi_USER_INT_obj = 1;
@@ -658,7 +653,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $marker['###AUTHOR###']		= $this->linkToUserProfile($row['topic_poster']);
             $marker['###LAST###']       = $this->getlastpost($row['topic_last_post_id'],$conf).$last_post_link;
             $marker['###READIMAGE###'] = $this->getTopicIcon($row);
-			$marker['###RATING###']		= $this->getRatingDisplay('tx_mmforum_topic', $row['uid']);
+            $marker['###RATING###']		= $this->getRatingDisplay('tx_mmforum_topic', $row['uid']);
 
             IF (($row['topic_replies'] + 1) > $conf['post_limit'])
             {
@@ -1012,7 +1007,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         	$parents[] = $row;
         	$parentIds[] = $row['uid'];
         }
-        $catIdWhere = '(parentID='. implode(' OR parentID=', $parentIds).')';
+        $catIdWhere = count($parentIds) ? '(parentID='. implode(' OR parentID=', $parentIds).')' : '0=1';
         $where ='deleted = 0 AND
                  hidden = 0 AND
                  '.$catIdWhere.
@@ -1296,6 +1291,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$readarray = $this->getunreadposts($content, $conf, $lastlogin);
 		}
 
+
+
+			/*
+			 * MAIN LOOP begin
+			 */
+
 		foreach ($topics as $row) {
 			// Check if solved flag is set.
 			$solved = '';
@@ -1414,6 +1415,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 		}
+
+			/*
+			 * MAIN LOOP end
+			 */
+
+
 
 		$template = $this->cObj->getSubpart($templateFile, '###TOPICEND###');
 		$marker['###PAGES###'] = $this->pagecount('tx_mmforum_topics', 'forum_id', $forumId, $limitcount);
@@ -2564,7 +2571,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$this->piVars['message'],
 						time(),
 						$this->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
-						$attachment_ids
+						$attachment_ids,
+						FALSE,
+						$this->piVars['havealook'] == 'havealook'
 					);
 
 						// Redirect user to new post
@@ -3005,6 +3014,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 }
 
                 // Clearing for new indexing
+				require_once(t3lib_extMgm::extPath('mm_forum').'pi4/class.tx_mmforum_pi4.php');
                 tx_mmforum_indexing::delete_topic_ind_date($topic_id);
 
                 $linkParams[$this->prefixId] = array(
@@ -3558,7 +3568,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         // Display smilies in table, 4 smilies a row.
         while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
             $imgInfo['src'] = $conf['path_smilie'].$row['smile_url'];
-            $imgInfo['alt'] = $row['emoticon'];
+            $imgInfo['alt'] = $row['code'];
+            $imgInfo['title'] = $row['code'];
             if($this->conf['postForm.']['smiliesAsDiv']) {
             	$content .= $this->cObj->wrap("<a href=\"javascript:editor.insertSmilie('".$row['code']."')\">".$this->buildImageTag($imgInfo)."</a>",$this->conf['postForm.']['smiliesAsDiv.']['itemWrap']);
             } else {
@@ -3867,7 +3878,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['userProfile_marker'])) {
                 foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['userProfile_marker'] as $_classRef) {
                     $_procObj = & t3lib_div::getUserObj($_classRef);
-                    $marker = $_procObj->userProfile_marker($marker, $row, $this);
+                    $marker = $_procObj->userProfile_marker($marker, $user->data, $this);
                 }
             }
 
@@ -5586,8 +5597,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         $query = " AND $prefix"."uid IN (".$this->limitCat.")";
         return $query;
     }
-
-	/**
+    
+  /**
 	 * Generates a custom rootline menu.
 	 * This function generates a custom rootline menu. This function can be included
 	 * as special.userfunc in HMENUs in TypoScript in order to merge the mm_forum
@@ -5863,7 +5874,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		 */
 
 	function formatLastPostDate($content, $conf) {
-		
+
 		$this->pi_loadLL();
 
 		$todayStart = mktime(0, 0, 0, date("m"), date('d'), date('Y'));
