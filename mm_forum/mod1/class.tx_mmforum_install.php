@@ -269,14 +269,14 @@ class tx_mmforum_install {
      */
     function display_helpForm() {
         $template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/install.html'));
-		$template = t3lib_parsehtml::getSubpart($template, '###INSTALL_HELP###');
+		$template = tx_mmforum_BeTools::getSubpart($template, '###INSTALL_HELP###');
 		
 		$marker = array(
 			'###INST_HELP_TITLE###'		=> $this->getLL('help.title'),
 			'###INST_HELP_TEXT###'		=> $this->getLL('help.content')
 		);
         
-        return t3lib_parsehtml::substituteMarkerArray($template, $marker);
+        return tx_mmforum_BeTools::substituteMarkerArray($template, $marker);
     }
     
     /**

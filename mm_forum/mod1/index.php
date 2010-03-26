@@ -88,6 +88,7 @@ require_once('./class.tx_mmforum_forumadmin.php');
 require_once('./class.tx_mmforum_statistics.php');
 require_once('./class.tx_mmforum_ranksbe.php');
 require_once('./class.tx_mmforum_updater.php');
+require_once('./class.tx_mmforum_betools.php');
 
 $LANG->includeLLFile('EXT:mm_forum/mod1/locallang.xml');
 
@@ -350,8 +351,8 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		
 			/* Get template */
         $template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/users.html'));
-		$template = t3lib_parsehtml::getSubpart($template, '###USERS_LIST###');
-		$uTemplate = t3lib_parsehtml::getSubpart($template, '###USERS_LIST_ITEM###');
+		$template = tx_mmforum_BeTools::getSubpart($template, '###USERS_LIST###');
+		$uTemplate = tx_mmforum_BeTools::getSubpart($template, '###USERS_LIST_ITEM###');
 		
 		// Retrieve global variables
 			global $LANG;
@@ -454,12 +455,12 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 							'###USER_GROUPS###'				=> (substr($outg,-2)==', '?substr($outg,0,strlen($outg)-2):$outg),
 							'###USER_OPTIONS###'			=> '<img src="img/edit.png" onclick="'.htmlspecialchars($editOnClick).'" style="cursor:pointer;" />'
 						);
-						$uContent .= t3lib_parsehtml::substituteMarkerArray($uTemplate, $uMarker);
+						$uContent .= tx_mmforum_BeTools::substituteMarkerArray($uTemplate, $uMarker);
 						
 				}
 				
-				$template = t3lib_parsehtml::substituteSubpart($template, '###USERS_LIST_ITEM###', $uContent);
-				$template = t3lib_parsehtml::substituteMarkerArray($template, $marker);
+				$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERS_LIST_ITEM###', $uContent);
+				$template = tx_mmforum_BeTools::substituteMarkerArray($template, $marker);
 				
 				$out .= $template;
 			}

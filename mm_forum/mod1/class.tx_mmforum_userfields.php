@@ -472,7 +472,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		if($uid != -1) $userfield = $this->getuserFieldData($uid);
 		
 		$template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/userfields.html'));
-		$template = t3lib_parsehtml::getSubpart($template, '###USERFIELD_FORM###');
+		$template = tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_FORM###');
 		
 		$llMarker		= array(
 			'###UF_IMG_LANG###'				=> '<img src="img/language.png" title="'.$this->getLL('form.language').'" />',
@@ -514,12 +514,12 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			
 			'###UF_BACKLINK###'					=> $this->generateLink('',1),
 		);
-		$template = t3lib_parsehtml::substituteMarkerArray($template, $llMarker);
+		$template = tx_mmforum_BeTools::substituteMarkerArray($template, $llMarker);
 		
 		if($uid == -1) {
-			$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_FORM_LABEL###', '');
-			$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_FORM_RADIOVALUE###', '');
-			$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_FORM_SELECTVALUE###', '');
+			$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_FORM_LABEL###', '');
+			$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_FORM_RADIOVALUE###', '');
+			$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_FORM_SELECTVALUE###', '');
 			$marker = array(
 				'###UF_TYPE###'				=> 'text',
 				'###UF_REQUIRED###'			=> 'false',
@@ -532,9 +532,9 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 				'###UF_CONFIG###'			=> ''
 			);
 		} else {
-			$lTemplate	= t3lib_parsehtml::getSubpart($template, '###USERFIELD_FORM_LABEL###');
-			$rTemplate	= t3lib_parsehtml::getSubpart($template, '###USERFIELD_FORM_RADIOVALUE###');
-			$sTemplate	= t3lib_parsehtml::getSubpart($template, '###USERFIELD_FORM_SELECTVALUE###');
+			$lTemplate	= tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_FORM_LABEL###');
+			$rTemplate	= tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_FORM_RADIOVALUE###');
+			$sTemplate	= tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_FORM_SELECTVALUE###');
 			
 				/* Generate labels */
 			foreach((array)$userfield['meta']['label'] as $key=>$content) {
@@ -542,27 +542,27 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 					'###UF_LANG_CONTENT###'			=> addslashes($content),
 					'###UF_LANG_LABEL###'			=> addslashes($key)
 				);
-				$lContent .= t3lib_parsehtml::substituteMarkerArray($lTemplate, $lMarker);
+				$lContent .= tx_mmforum_BeTools::substituteMarkerArray($lTemplate, $lMarker);
 			}
-			$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_FORM_LABEL###', $lContent);
+			$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_FORM_LABEL###', $lContent);
 			
 				/* Generate radio values */
 			foreach((array)$userfield['meta']['radio']['value'] as $key=>$content) {
 				$rMarker = array(
 					'###UF_RADIO_VALUE###'			=> addslashes($content),
 				);
-				$rContent .= t3lib_parsehtml::substituteMarkerArray($rTemplate, $rMarker);
+				$rContent .= tx_mmforum_BeTools::substituteMarkerArray($rTemplate, $rMarker);
 			}
-			$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_FORM_RADIOVALUE###', $rContent);
+			$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_FORM_RADIOVALUE###', $rContent);
 			
 				/* Generate select values */
 			foreach((array)$userfield['meta']['select']['value'] as $key=>$content) {
 				$sMarker = array(
 					'###UF_SELECT_VALUE###'			=> addslashes($content),
 				);
-				$sContent .= t3lib_parsehtml::substituteMarkerArray($sTemplate, $sMarker);
+				$sContent .= tx_mmforum_BeTools::substituteMarkerArray($sTemplate, $sMarker);
 			}
-			$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_FORM_SELECTVALUE###', $sContent);
+			$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_FORM_SELECTVALUE###', $sContent);
 			
 			$marker = array(
 				'###UF_TYPE###'				=> $userfield['meta']['type'],
@@ -577,7 +577,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			);
 		}
 		
-		$template = t3lib_parsehtml::substituteMarkerArray($template, $marker);
+		$template = tx_mmforum_BeTools::substituteMarkerArray($template, $marker);
 		
 		return $template;
 		
@@ -614,9 +614,9 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
         $content .= $this->saveData();
 		
 		$template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/userfields.html'));
-		$template = t3lib_parsehtml::getSubpart($template, '###USERFIELD_LIST###');
+		$template = tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_LIST###');
 		
-		$iTemplate = t3lib_parsehtml::getSubpart($template, '###USERFIELD_LIST_ITEM###');
+		$iTemplate = tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_LIST_ITEM###');
 		
 		$marker = array(
 			'###UF_LLL_TITLE###'				=> $this->getLL('list.title'),
@@ -628,7 +628,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			
 			'###UF_LINK_NEW###'					=> $this->generateLink('&tx_mmforum_userfields[edit]=-1',1)
 		);
-		$template = t3lib_parsehtml::substituteMarkerArray($template, $marker);
+		$template = tx_mmforum_BeTools::substituteMarkerArray($template, $marker);
         
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             '*',
@@ -653,12 +653,12 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 				'###UF_TYPE###'				=> $this->getLL('field.type.'.$meta['type']),
 				'###UF_EDIT###'				=> $extButton.$delButton.$upButton.$downButton
 			);
-			$iContent .= t3lib_parsehtml::substituteMarkerArray($iTemplate, $iMarker);
+			$iContent .= tx_mmforum_BeTools::substituteMarkerArray($iTemplate, $iMarker);
 			
 			$i ++;
         }
 		
-		$template = t3lib_parsehtml::substituteSubpart($template, '###USERFIELD_LIST_ITEM###', $iContent);
+		$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_LIST_ITEM###', $iContent);
 		$content .= $template;
         
         return $content;
