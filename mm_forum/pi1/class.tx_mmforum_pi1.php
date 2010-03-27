@@ -2813,6 +2813,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 }
             }
 
+        $marker['###HAVEALOOK###'] = ($this->piVars['havealook'] ? 'checked="checked"' : '');
+
         $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 
         return $content;
