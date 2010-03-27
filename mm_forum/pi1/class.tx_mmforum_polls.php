@@ -635,7 +635,8 @@ class tx_mmforum_polls {
             '###MINUTE###'              => $piVars['expires']['act']?$piVars['expires']['minute']:'MM',
             '###EXPIRES###'             => $piVars['expires']['act']?'checked="checked"':'',
             '###DELETEFIELDS###'        => '',
-			'###DISABLED_VAR###'		=> $this->getMayCreatePoll($pObj) ? 0 : 1
+      			'###DISABLED###'			      => $this->getMayCreatePoll($pObj) ? '' : 'disabled="disabled"',
+			      '###DISABLED_VAR###'		    => $this->getMayCreatePoll($pObj) ? 0 : 1
         );
         $template = $pObj->cObj->substituteMarkerArrayCached($template, $marker);
 
@@ -645,6 +646,7 @@ class tx_mmforum_polls {
                 '###ANSWER_UID###'  => '',
                 '###ANSWER_MODE###' => 'new',
                 '###DELETE###'      => $pObj->pi_getLL('poll.deleteAnswer'),
+      			    '###DISABLED###'		=> '',
             );
             if($i < $rDefACount)
                 $tAnswTmpl = $pObj->cObj->substituteSubpart($answerTemplate, '###DELLINK###', '');
