@@ -326,7 +326,7 @@ class tx_mmforum_install {
             if($config['type'] == 'div') {
 				$icon = $config['type.']['icon']
 					? $GLOBALS['BACK_PATH'].preg_replace_callback("/^EXT:([a-z0-9_-]+)\//",array('tx_mmforum_install','replaceRelativeExtReference'), $config['type.']['icon'])
-					: "img/install-'.$field.'.png";
+					: 'img/install-'.$field.'.png';
 				$content .= '</table>
 <table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
     <tr>
