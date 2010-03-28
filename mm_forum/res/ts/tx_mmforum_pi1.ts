@@ -488,10 +488,7 @@ plugin.tx_mmforum_pi1 {
 	        
 	        footer              = {$plugin.tx_mmforum.style_path}/forum/footer.html
 		}
-	    
-	# Text editor JavScript
-		scripts.editor           = typo3conf/ext/mm_forum/res/scripts/editor_javascript.inc.js
-        
+
     # Topic icons
         topicIcon = IMAGE
         topicIcon {

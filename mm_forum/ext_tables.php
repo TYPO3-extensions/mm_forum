@@ -5,7 +5,8 @@ if (!defined('TYPO3_MODE')) {
 
 t3lib_extMgm::addStaticFile($_EXTKEY, 'res/ts', 'mm_forum');
 t3lib_extMgm::addStaticFile($_EXTKEY, 'res/static/css', 'mm_forum Stylesheets');
-t3lib_extMgm::addStaticFile($_EXTKEY, 'res/static/javascript', 'mm_forum Javascript');
+t3lib_extMgm::addStaticFile($_EXTKEY, 'res/static/javascript', 'mm_forum Javascript: Prototype');
+t3lib_extMgm::addStaticFile($_EXTKEY, 'res/static/javascriptJquery', 'mm_forum Javascript: jQuery');
 
 /*
  * Extend fe_user table

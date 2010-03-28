@@ -1,7 +1,4 @@
 <?php
-
-
-
 /***************************************************************
  *  Copyright notice
  *
@@ -90,10 +87,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		 */
 
 	function main($content, $conf) {
-        //add Javascript
-        #$GLOBALS['TSFE']->additionalHeaderData['mm_forum'] = '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'res/scripts/prototype-1.6.0.3.js"></script>';
-
-		$this->init($conf);
+    $this->init($conf);
 		$this->pi_USER_INT_obj = 1;
 
 		$this->config["code"] = $this->cObj->stdWrap($this->conf["code"],$this->conf["code."]);
@@ -638,7 +632,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 						$marker = array(
 							'###USERNAME###' => $row[tx_mmforum_pi1::getUserNameField()],
-	                        '###PMLINK###'   => tx_mmforum_pi1::getAbsUrl($msgLink),
+							'###PMLINK###'   => tx_mmforum_pi1::getAbsUrl($msgLink),
 							'###SITENAME###' => $conf['siteName'],
 							'###MESSAGE###'  => $message,
 							'###SUBJECT###'  => $this->pi_getLL('messageReplySubjectPrefix').$subject,
@@ -694,9 +688,6 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			$template = $this->cObj->fileResource($conf['template.']['message_write']);
 			$template = $this->cObj->getSubpart($template, "###MESSAGE_WRITE###");
 
-				// Include Javascript
-			$GLOBALS['TSFE']->additionalHeaderData['mm_forum'] .= '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'res/scripts/usersearch.js"></script>'.chr(10);
-
 				// Set language-dependent markers
 			$marker = array(
 				'###LABEL_WRITEMESSAGE###'		=> $this->pi_getLL('write.writeMessage'),
@@ -710,6 +701,9 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
                 '###LANG###'                    => $this->pi_getLL('write.search'),
                 '###PM###'                      => $conf['pm_pid'],
 				'###AJAX_URL###'				=> t3lib_extMgm::siteRelPath('mm_forum').'pi3/tx_mmforum_usersearch.php',
+				'###JAVASCRIPTUSERSEARCHREFRESH###'     => $conf['pm_refreshUserSearch'],
+				'###JAVASCRIPTUSERSEARCHHIDE###'        => $conf['pm_hideUserSearch'],
+				'###JAVASCRIPTUSERSEARCH###'            => str_replace('###AJAX_URL###',t3lib_extMgm::siteRelPath('mm_forum').'pi3/tx_mmforum_usersearch.php',$conf['pm_UserSearch'])
 			);
 
 			session_start();

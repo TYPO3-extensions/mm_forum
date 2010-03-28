@@ -11,8 +11,8 @@
 		<td class="tx-mmforum-pi1-newpost-left">###LABEL_TO###:</td>
 		<td class="tx-mmforum-pi1-newpost-left" style="text-align:left;">
 			<table cellspacing="0" cellpadding="0"><tr>
-            	<td><input type="text" id="username" name="tx_mmforum_pi3[user]" onkeyup="userSearch.refreshUserSearch(this, event);" value="###TO_USER###" /></td>
-                <td><input onfocus="userSearch.hideUserSearch();" class="tx-mmforum-button" type="submit" name="tx_mmforum_pi3[save]" value="###LABEL_SEARCH###" /></td>
+            	<td><input type="text" id="username" name="tx_mmforum_pi3[user]" value="###TO_USER###" ###JAVASCRIPTUSERSEARCHREFRESH### /></td>
+                <td><input class="tx-mmforum-button" type="submit" name="tx_mmforum_pi3[save]" value="###LABEL_SEARCH###" ###JAVASCRIPTUSERSEARCHHIDE### /></td>
             </tr></table>
                 <div style="display:none;" id="tx_mmforum_pi3_quicksearch"><ul id="userlist"></ul></div>
             
@@ -29,15 +29,12 @@
 	</tr>
 	<tr>
 		<td class="tx-mmforum-pi1-newpost-right" colspan="2">
-			<input onfocus="userSearch.hideUserSearch();" class="tx-mmforum-button" type="submit" name="tx_mmforum_pi3[save]" value="###LABEL_SEND###" accesskey="s" />
-			<input onfocus="userSearch.hideUserSearch();" type="reset" class="tx-mmforum-button" style="margin-left:10px;" value="###LABEL_RESET###" />
+			<input class="tx-mmforum-button" type="submit" name="tx_mmforum_pi3[save]" value="###LABEL_SEND###" accesskey="s" ###JAVASCRIPTUSERSEARCHHIDE### />
+			<input type="reset" class="tx-mmforum-button" style="margin-left:10px;" value="###LABEL_RESET###" ###JAVASCRIPTUSERSEARCHHIDE### />
 		</td>
 	</tr>
 </table>
-<script type="text/javascript">
-	userSearch.ajaxURL		= '###AJAX_URL###';
-	$('username').setAttribute('autocomplete','off');
-</script>
+###JAVASCRIPTUSERSEARCH###
     <!-- <INPUT TYPE="HIDDEN"  name="action" value="message_send">-->
 </form>
 <!-- ###MESSAGE_WRITE### end-->

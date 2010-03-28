@@ -2422,9 +2422,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$content .= $this->cObj->substituteMarkerArrayCached($previewTemplate, $previewMarker);
 				}
 
-				// Include editor Javascript
-				//$content .= $this->cObj->fileResource($conf['scripts.']['editor']);
-
 				$template = $this->cObj->fileResource($conf['template.']['new_topic']);
 				$template = $this->cObj->getSubpart($template, '###NEWTOPIC###');
 
@@ -2435,7 +2432,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$actionURL = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $actionParams);
 
 				$bbCodeButtons_template = $this->cObj->getSubpart($template, '###BBCODEBUTTONS###');
-				$bbCodeButtons          = $this->generateBBCodeButtons($bbCodeButtons_template);
+
+				if (empty($conf['jQueryEditorJavaScript'])) {
+				  $bbCodeButtons = $this->generateBBCodeButtons($bbCodeButtons_template);
+				} else {
+					$bbCodeButtons = stristr($bbCodeButtons_template, '<td>') ? '<td></td>' : '';
+				}
+
 				$template = $this->cObj->substituteSubpart($template, '###BBCODEBUTTONS###', $bbCodeButtons);
 
 				$pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
@@ -2512,6 +2515,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$marker = $_procObj->newTopic_formMarker($marker, $this);
 			}
 		}
+
+    $marker['###STARTJAVASCRIPT###'] = $this->includeEditorJavaScript();
 
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 		return $content;
@@ -2687,9 +2692,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     $content .= $this->cObj->substituteMarkerArrayCached($previewTemplate, $previewMarker);
                 }
 
-                // Include editor Javascript
-                $content   .=   $this->cObj->fileResource($conf['scripts.']['editor']);
-
                 $template = $this->cObj->fileResource($conf['template.']['new_topic']);
                 $template = $this->cObj->getSubpart($template, "###NEWTOPIC###");
 				$template = $this->cObj->substituteSubpart($template, '###TITLE_SUBPART###', '');
@@ -2782,7 +2784,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $actionLink = $this->pi_getPageLink($GLOBALS['TSFE']->id,'',$actionParams);
 
                 $bbCodeButtons_template = $this->cObj->getSubpart($template, '###BBCODEBUTTONS###');
-                $bbCodeButtons = $this->generateBBCodeButtons($bbCodeButtons_template);
+
+                if (empty($conf['jQueryEditorJavaScript'])) {
+        				  $bbCodeButtons = $this->generateBBCodeButtons($bbCodeButtons_template);
+                } else {
+                  $bbCodeButtons = stristr($bbCodeButtons_template, '<td>') ? '<td></td>' : '';
+                }
+
                 $template = $this->cObj->substituteSubpart($template,'###BBCODEBUTTONS###',$bbCodeButtons);
 
                 $marker['###SMILIES###']			= $this->show_smilie_db($conf);
@@ -2814,11 +2822,59 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             }
 
         $marker['###HAVEALOOK###'] = ($this->piVars['havealook'] ? 'checked="checked"' : '');
+        $marker['###STARTJAVASCRIPT###'] = $this->includeEditorJavaScript();
 
         $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 
         return $content;
     }
+	
+  	function includeEditorJavaScript() {
+  	  $js = '';
+      if (!empty($this->conf['jQueryEditorJavaScript'])) {
+        $jsmarker = array(
+  					'###BBCOLOR###'   => $this->pi_getLL('markItUp-bbcolor'),
+  					'###YELLOW###'    => $this->pi_getLL('markItUp-bbcolor-Yellow'),
+  					'###ORANGE###'    => $this->pi_getLL('markItUp-bbcolor-Orange'),
+  					'###RED###'       => $this->pi_getLL('markItUp-bbcolor-Red'),
+  					'###BLUE###'      => $this->pi_getLL('markItUp-bbcolor-Blue'),
+  					'###PURPLE###'    => $this->pi_getLL('markItUp-bbcolor-Purple'),
+  					'###GREEN###'     => $this->pi_getLL('markItUp-bbcolor-Green'),
+  					'###WHITE###'     => $this->pi_getLL('markItUp-bbcolor-White'),
+  					'###GRAY###'      => $this->pi_getLL('markItUp-bbcolor-Gray'),
+  					'###BLACK###'     => $this->pi_getLL('markItUp-bbcolor-Black'),
+  					'###BBIMAGEURL###'=> $this->pi_getLL('markItUp-bbimage'),
+  					'###BBLINKURL###' => $this->pi_getLL('markItUp-bblink'),
+  					'###BBLISTNR###'  => $this->pi_getLL('markItUp-bblistnr'),
+  					'###BBSIZE###'    => $this->pi_getLL('markItUp-bbsize'),
+  					'###BOLD###'      => $this->pi_getLL('markItUp-Bold'),
+  					'###ITALIC###'    => $this->pi_getLL('markItUp-Italic'),
+  					'###UNDERLINE###' => $this->pi_getLL('markItUp-Underline'),
+  					'###PICTURE###'   => $this->pi_getLL('markItUp-Picture'),
+  					'###LINK###'      => $this->pi_getLL('markItUp-Link'),
+  					'###COLOR###'     => $this->pi_getLL('markItUp-Colors'),
+  					'###SIZE###'      => $this->pi_getLL('markItUp-Size'),
+  					'###SIZEBIG###'   => $this->pi_getLL('markItUp-Size-Big'),
+  					'###SIZENORMAL###'=> $this->pi_getLL('markItUp-Size-Normal'),
+  					'###SIZESMALL###' => $this->pi_getLL('markItUp-Size-Small'),
+  					'###BLIST###'     => $this->pi_getLL('markItUp-blist'),
+  					'###NLIST###'     => $this->pi_getLL('markItUp-nlist'),
+  					'###LITEM###'     => $this->pi_getLL('markItUp-litem'),
+  					'###QUOTES###'    => $this->pi_getLL('markItUp-Quotes'),
+  					'###CODE###'      => $this->pi_getLL('markItUp-Code'),
+  					'###CLEAN###'     => $this->pi_getLL('markItUp-Clean'),
+  					'###PREVIEW###'   => $this->pi_getLL('markItUp-Preview')
+  			);
+        $js = "\n".$this->cObj->substituteMarkerArray($this->conf['jQueryEditorJavaScript'], $jsmarker);
+      }
+      if (!empty($this->conf['editorJavaScript'])) {
+        $js .= "\n".$this->conf['editorJavaScript']."\n";
+      }
+      if (!empty($js)) {
+        $js = '<script type="text/javascript">' . $js . '</script>';
+      }#debugster($this->piVars);
+      return $js;
+  	}
 
 	/**
 	 * Performs a file upload.
@@ -3231,9 +3287,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics','uid="'.$this->get_topic_id($pid).'"');
                 list($title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-                // Include editor Javascript
-                $content   .=   $this->cObj->fileResource($conf['scripts.']['editor']);
-
 				$marker['###POSTTEXT###'] = $this->piVars['message'] ? $this->escape($this->piVars['message']) : $this->escape($posttext);
 
                 if($this->getIsMod($row['forum_id']) || $this->getIsAdmin())
@@ -3255,7 +3308,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $marker['###LABEL_NOTECODESAMPLES###'] = $this->pi_getLL('newPost.codeSamples');
 
                 $bbCodeButtons_template = $this->cObj->getSubpart($template, '###BBCODEBUTTONS###');
-                $bbCodeButtons = $this->generateBBCodeButtons($bbCodeButtons_template);
+
+                if (empty($conf['jQueryEditorJavaScript'])) {
+        				  $bbCodeButtons = $this->generateBBCodeButtons($bbCodeButtons_template);
+                } else {
+                  $bbCodeButtons = stristr($bbCodeButtons_template, '<td>') ? '<td></td>' : '';
+                }
+
                 $template = $this->cObj->substituteSubpart($template,'###BBCODEBUTTONS###',$bbCodeButtons);
 
             }
@@ -3273,6 +3332,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 }
             }
 
+        $marker['###STARTJAVASCRIPT###'] = $this->includeEditorJavaScript();
         $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
         return $content;
     }
@@ -3604,10 +3664,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             }
         }
 
-		$GLOBALS['TSFE']->additionalHeaderData['mm_forum'] .= '<script type="text/javascript" src="'.t3lib_extMgm::siteRelPath('mm_forum').'res/scripts/class.forum_editor.js"></script>';
-
         return $content;
-
     }
 
     /**
@@ -3633,15 +3690,20 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $imgInfo['src'] = $conf['path_smilie'].$row['smile_url'];
             $imgInfo['alt'] = $row['code'];
             $imgInfo['title'] = $row['code'];
+            if (empty($conf['jQueryEditorJavaScript'])) {
+              $href= 'javascript:editor.insertSmilie(\''.$row['code'].'\')';
+            } else {
+              $href= '#';
+            }
             if($this->conf['postForm.']['smiliesAsDiv']) {
-            	$content .= $this->cObj->wrap("<a href=\"javascript:editor.insertSmilie('".$row['code']."')\">".$this->buildImageTag($imgInfo)."</a>",$this->conf['postForm.']['smiliesAsDiv.']['itemWrap']);
+            	$content .= $this->cObj->wrap('<a href="'.$href.'" title="'.$row['code'].'">'.$this->buildImageTag($imgInfo).'</a>',$this->conf['postForm.']['smiliesAsDiv.']['itemWrap']);
             } else {
 	            if($i >= 4){
 	                $content .= "\r\n</tr><tr>\r\n";
 	                $i = 0;
 	            }
 	            $i++;
-	            $content .="<td><a href=\"javascript:editor.insertSmilie('".$row['code']."')\">".$this->buildImageTag($imgInfo)."</a></td>\n";
+	            $content .='<td><a href="'.$href.'" title="'.$row['code'].'">'.$this->buildImageTag($imgInfo)."</a></td>\n";
             }
         }
 

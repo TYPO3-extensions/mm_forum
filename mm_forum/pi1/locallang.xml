@@ -382,6 +382,39 @@ To visit this new topic, follow the link below:
       			<label index="user-rating">Rating</label>
       			<label index="date-today">Today</label>
       			<label index="date-yesterday">Yesterday</label>
+      
+      			<!-- Added in 0.1.9 -->
+      			<label index="markItUp-bbcolor">HTML color name</label>
+      			<label index="markItUp-bbcolor-Yellow">Yellow</label>
+      			<label index="markItUp-bbcolor-Orange">Orange</label>
+      			<label index="markItUp-bbcolor-Red">Red</label>
+      			<label index="markItUp-bbcolor-Blue">Blue</label>
+      			<label index="markItUp-bbcolor-Purple">Purple</label>
+      			<label index="markItUp-bbcolor-Green">Green</label>
+      			<label index="markItUp-bbcolor-White">White</label>
+      			<label index="markItUp-bbcolor-Gray">Gray</label>
+      			<label index="markItUp-bbcolor-Black">Black</label>
+      			<label index="markItUp-bbimage">URL to image</label>
+      			<label index="markItUp-bblink">Link URL</label>
+      			<label index="markItUp-bbsize">Text size</label>
+      			<label index="markItUp-bblistnr">Starting number</label>
+      			<label index="markItUp-Bold">Bold</label>
+      			<label index="markItUp-Italic">Italic</label>
+      			<label index="markItUp-Underline">Underline</label>
+      			<label index="markItUp-Picture">Picture</label>
+      			<label index="markItUp-Link">Link</label>
+      			<label index="markItUp-Colors">Colors</label>
+      			<label index="markItUp-Size">Size</label>
+      			<label index="markItUp-Size-Big">Big</label>
+      			<label index="markItUp-Size-Normal">Normal</label>
+      			<label index="markItUp-Size-Small">Small</label>
+      			<label index="markItUp-blist">Bulleted list</label>
+      			<label index="markItUp-nlist">Numeric list</label>
+      			<label index="markItUp-litem">List item</label>
+      			<label index="markItUp-Quotes">Quotes</label>
+      			<label index="markItUp-Code">Code</label>
+      			<label index="markItUp-Clean">Clean</label>
+      			<label index="markItUp-Preview">Preview</label>
         </languageKey>
         <!-- GERMAN LANGUAGE DATA -->
         <languageKey index="de" type="array">
@@ -813,6 +846,39 @@ Hier der Link, mit dem Sie direkt in den Beitrag gelangen:
       			<label index="user-rating">Bewertung</label>
       			<label index="date-today">Heute</label>
       			<label index="date-yesterday">Gestern</label>
+      
+      			<!-- Added in 0.1.9 -->
+      			<label index="markItUp-bbcolor">Englischer HTML-Farbname</label>
+      			<label index="markItUp-bbcolor-Yellow">Gelb</label>
+      			<label index="markItUp-bbcolor-Orange">Orange</label>
+      			<label index="markItUp-bbcolor-Red">Rot</label>
+      			<label index="markItUp-bbcolor-Blue">Blau</label>
+      			<label index="markItUp-bbcolor-Purple">Lila</label>
+      			<label index="markItUp-bbcolor-Green">Grün</label>
+      			<label index="markItUp-bbcolor-White">Weiß</label>
+      			<label index="markItUp-bbcolor-Gray">Grau</label>
+      			<label index="markItUp-bbcolor-Black">Schwarz</label>
+      			<label index="markItUp-bbimage">URL (mit http//:) zum Bild</label>
+      			<label index="markItUp-bblink">Link URL (mit http//:)</label>
+      			<label index="markItUp-bbsize">Textgröße (Ganzzahl)</label>
+      			<label index="markItUp-bblistnr">Startnummer (Ganzzahl)</label>
+      			<label index="markItUp-Bold">Fett</label>
+      			<label index="markItUp-Italic">Kursiv</label>
+      			<label index="markItUp-Underline">Unterstrichen</label>
+      			<label index="markItUp-Picture">Bild</label>
+      			<label index="markItUp-Link">Link</label>
+      			<label index="markItUp-Colors">Schriftfarbe</label>
+      			<label index="markItUp-Size">Schriftgröße</label>
+      			<label index="markItUp-Size-Big">Groß</label>
+      			<label index="markItUp-Size-Normal">Normal</label>
+      			<label index="markItUp-Size-Small">Klein</label>
+      			<label index="markItUp-blist">Liste</label>
+      			<label index="markItUp-nlist">Numerische Liste</label>
+      			<label index="markItUp-litem">Listenelement</label>
+      			<label index="markItUp-Quotes">Zitat</label>
+      			<label index="markItUp-Code">Code</label>
+      			<label index="markItUp-Clean">BBCode entfernen</label>
+      			<label index="markItUp-Preview">Vorschau</label>
         </languageKey>
         <!-- FINNISH LANGUAGE DATA -->
         <languageKey index="fi" type="array">

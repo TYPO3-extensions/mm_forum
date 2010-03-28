@@ -2,11 +2,7 @@
 <!-- ###ROOTLINE_CONTAINER### begin -->
 <div class="tx-mmforum-rootline">###FORUMPATH###</div>
 <!-- ###ROOTLINE_CONTAINER### end -->
-<script type="text/javascript">
-
-	var editor = new tx_mmforum_Editor();
-
-</script>
+###STARTJAVASCRIPT###
 <form action="###ACTION###" method="post" id="post" name="post" enctype="multipart/form-data">
 	<div style="width: 100%;">
 		<table class="tx-mmforum-table" width="100%">
@@ -24,23 +20,23 @@
 			</tr>
 			<!-- ###TITLE_SUBPART### end -->
 			<tr align="left" valign="top">
-				<td class="tx-mmforum-pi1-newpost-left">
+				<td class="tx-mmforum-pi1-newpost-left" id="smilies">
 					###SMILIES###
 				</td>
 				<td class="tx-mmforum-pi1-newpost-middle">
 					<table width="100%" border="0" cellspacing="0" cellpadding="2">
 						<tr>
-                            <td>
+              <td>
 								<table width="100%" border="0" cellspacing="0" cellpadding="2">
 						        <tr>
-						<!-- ###BBCODEBUTTONS### -->
-                                    <td>
-                                        <img src="###CODE_IMAGE###" alt="###CODE_LABEL###" title="###CODE_LABEL###" onmouseover="this.style.cursor='pointer';" onclick="editor.applyBBCode('###CODE_OPEN###', '###CODE_CLOSE###')" />
-                                    </td>
-                        <!-- ###BBCODEBUTTONS### -->
-                                </tr>
-                            </table>
-                            </td>
+						          <!-- ###BBCODEBUTTONS### -->
+                        <td>
+                          <img src="###CODE_IMAGE###" alt="###CODE_LABEL###" title="###CODE_LABEL###" onmouseover="this.style.cursor='pointer';" onclick="editor.applyBBCode('###CODE_OPEN###', '###CODE_CLOSE###')" />
+                        </td>
+                      <!-- ###BBCODEBUTTONS### -->
+                    </tr>
+                </table>
+              </td>
 						</tr>
 						<tr>
 							<td>
