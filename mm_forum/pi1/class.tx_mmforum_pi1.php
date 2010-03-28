@@ -3098,7 +3098,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     $marker['###POSTUSER###']       = $this->ident_user($row['poster_id'],$conf);
                     $marker['###POSTTEXT###']       = $posttext;
                     $marker['###ANKER###']          = '';
+                    $marker['###POSTANCHOR###']	    = '';
                     $marker['###POSTDATE###']       = $this->pi_getLL('post.writtenOn').': '.$this->formatDate(time());
+                    $marker['###POSTRATING###']     = '';
 
                     // Include hooks
                         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_INpreviewMarker'])) {
