@@ -3268,7 +3268,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$marker['###DISABLE_POLL###']   = '';
 						$marker['###DISABLE_POLL_VAR###'] = 0;
                     } else {
-						$pollEnabled = $pollObj->getMayEditPoll($topicData['poll_id']);
+						$pollEnabled = $pollObj->getMayEditPoll($topicData['poll_id'],$this);
                         $marker['###POLL###']           = $pollObj->display_editForm($topicData['poll_id'],$this->piVars['poll']?$this->piVars['poll']:array(),$this);
                         $marker['###ENABLE_POLL###']    = 'checked="checked"';
                         $marker['###POLLDIV_STYLE###']  = '';
