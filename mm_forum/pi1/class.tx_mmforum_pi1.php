@@ -2440,6 +2440,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 
 				$template = $this->cObj->substituteSubpart($template, '###BBCODEBUTTONS###', $bbCodeButtons);
+				$template = str_replace('###POLLJAVASCRIPT###',$this->conf['polljavascript'],$template);
 
 				$pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
 
@@ -2462,7 +2463,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					'###POLLDIV_STYLE###'       => ($this->piVars['enable_poll'] ? '' : 'style="display:none;"'),
 					'###ENABLE_POLL###'         => ($this->piVars['enable_poll'] ? 'checked="checked"' : ''),
 					'###DISABLE_POLL###'        => '',
-					'###DISABLE_POLL_VAR###'    => 0
+					'###DISABLE_POLL_VAR###'    => 0,
+					'###CALLPOLLJS###'    => $this->conf['callpolljs']
 				);
 
 				// Remove file attachment section if file attachments are disabled
@@ -2872,7 +2874,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
       }
       if (!empty($js)) {
         $js = '<script type="text/javascript">' . $js . '</script>';
-      }#debugster($this->piVars);
+      }
       return $js;
   	}
 
@@ -3099,9 +3101,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	                        }
 	                        $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid='.$topic_id, array('poll_id' => $poll_id,'tstamp'=>time()));
 	                    }
-	                } elseif($firstPost) {
-	                    if($topicData['poll_id'] > 0)
-	                        $pollObj->deletePoll($topicData['poll_id'],$topicData['uid']);
+	                } elseif($firstPost && $topicData['poll_id'] > 0) {
+	                    $pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
+	                    $pollObj->deletePoll($topicData['poll_id'],$topicData['uid']);
 	                }
                 }
 
@@ -3137,7 +3139,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             else {
                 // Display post preview
                 if($this->piVars['button'] == $this->pi_getLL('newPost.preview')) {
-                    if($this->piVars['enable_poll'] == '1' && $this->conf['polls.']['enable']) $content .= tx_mmforum_polls::displayPreview($this->piVars['poll']);
+                    if($this->piVars['enable_poll'] == '1' && $this->conf['polls.']['enable']) $content .= tx_mmforum_polls::displayPreview($this->piVars['poll'], $this);
 
                     $template   = $this->cObj->fileResource($conf['template.']['list_post']);
                     $template   = $this->cObj->getSubpart($template, "###LIST_POSTS###");
@@ -3267,6 +3269,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                         $marker['###LABEL_POLL_CE###']  = $this->pi_getLL('poll.postattach.new');
 						$marker['###DISABLE_POLL###']   = '';
 						$marker['###DISABLE_POLL_VAR###'] = 0;
+						$marker['###CALLPOLLJS###'] = $this->conf['callpolljs'];
                     } else {
 						$pollEnabled = $pollObj->getMayEditPoll($topicData['poll_id'],$this);
                         $marker['###POLL###']           = $pollObj->display_editForm($topicData['poll_id'],$this->piVars['poll']?$this->piVars['poll']:array(),$this);
@@ -3275,6 +3278,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                         $marker['###LABEL_POLL_CE###']  = $this->pi_getLL('poll.postattach.edit');
 						$marker['###DISABLE_POLL###']   = $pollEnabled ? '' : 'disabled="disabled"';
 						$marker['###DISABLE_POLL_VAR###'] = $pollEnabled ? 0 : 1;
+						$marker['###CALLPOLLJS###'] = $this->conf['callpolljs'];
                     }
                     $marker['###LABEL_POLL###']     = $this->pi_getLL('poll.postattach');
                 } else $template = $this->cObj->substituteSubpart($template, '###POLL_SECTION###', '');
@@ -3316,6 +3320,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 }
 
                 $template = $this->cObj->substituteSubpart($template,'###BBCODEBUTTONS###',$bbCodeButtons);
+                $template = str_replace('###POLLJAVASCRIPT###',$this->conf['polljavascript'],$template);
 
             }
         } else {

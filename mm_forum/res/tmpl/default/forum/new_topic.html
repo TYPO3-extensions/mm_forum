@@ -63,25 +63,13 @@
             <tr>
                 <td class="tx-mmforum-pi1-newpost-left">###LABEL_POLL###</td>
                 <td class="tx-mmforum-pi1-newpost-middle" style="text-align: left !important;">
-                    <script type="text/javascript">
-                    <!--
-                        function changePoll(caller) {
-							if('###DISABLE_POLL_VAR###' == '0') {
-								if(caller.checked)
-									document.getElementById('poll').style.display='block';
-								else document.getElementById('poll').style.display='none';
-							}
-                        }
-                    //-->
-                    </script>
+                ###POLLJAVASCRIPT###
                     <input type     = "checkbox"
 					       id       = "tx_mmforum_pi1-poll"
 						   name     = "tx_mmforum_pi1[enable_poll]"
 						   value    = "1"
-						   onchange = "changePoll(this);"
-						   style    = "vertical-align:middle;"
-						    ###DISABLE_POLL###
-					       ###ENABLE_POLL### /> <label for="tx_mmforum_pi1-poll">###LABEL_POLL###</label>
+						   style    = "vertical-align:middle;" ###DISABLE_POLL### ###ENABLE_POLL### ###CALLPOLLJS### />
+               <label for="tx_mmforum_pi1-poll">###LABEL_POLL###</label>
                     <div id="poll" ###POLLDIV_STYLE###>
                         ###POLL###
                     </div>

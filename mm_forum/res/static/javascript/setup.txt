@@ -4,6 +4,20 @@
   	mm_forum_editor = EXT:mm_forum/res/scripts/class.forum_editor.js
   }
 plugin.tx_mmforum.editorJavaScript = var editor = new tx_mmforum_Editor();
+plugin.tx_mmforum.callpolljs = onchange="changePoll(this);"
+plugin.tx_mmforum.polljavascript (
+  <script type="text/javascript">
+  <!--
+    function changePoll(caller) {
+      if('###DISABLE_POLL_VAR###' == '0') {
+        if(caller.checked)
+          document.getElementById('poll').style.display='block';
+        else document.getElementById('poll').style.display='none';
+      }
+    }
+  //-->
+  </script>
+)
 #[global]
 
 [globalVar = GP:tx_mmforum_pi3|action = message_write]

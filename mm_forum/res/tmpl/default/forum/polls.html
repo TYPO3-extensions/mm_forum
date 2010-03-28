@@ -96,7 +96,7 @@
     <tr>
         <td>###LABEL_ANSWERS###</td>
         <td>
-            <a href="javascript:void(0);" onclick="addPollField();">###LABEL_NEWANSWER###</a>
+            <a href="javascript:void(0);" onclick="addPollField();" ###DISABLEDSTYLE###>###LABEL_NEWANSWER###</a>
             <br /><br />
             <ol id="poll_replies" style="padding:0px; margin:0px; padding-left:2em;">
                 <!-- ###ANSWERSECTION### begin -->
@@ -108,7 +108,7 @@
 						   value = "###ANSWER###"
 						   ###DISABLED###
 					/>
-					<!--###DELLINK###--><a href="javascript:void(0);"
+					<!--###DELLINK###--><a href="javascript:void(0);" ###DISABLEDSTYLE###
 					                       onclick="deletePollField(this,'###ANSWER_UID###');"
 					>###DELETE###</a><!--###DELLINK###-->
                 </li>

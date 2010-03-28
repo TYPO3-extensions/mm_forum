@@ -547,6 +547,7 @@ class tx_mmforum_polls {
             '###EXPIRES###'             => $expDate?'checked="checked"':'',
             '###ENB_EXP###'             => $expDate && $mayEdit ?'':'disabled="disabled"',
             '###DELETEFIELDS###'        => '',
+            '###DISABLEDSTYLE###'       => $mayEdit ? '' : 'style="display:none;"',
 			'###DISABLED###'			=> $mayEdit ? '' : 'disabled="disabled"',
 			'###DISABLED_VAR###'		=> $mayEdit ? 0 : 1
         );
