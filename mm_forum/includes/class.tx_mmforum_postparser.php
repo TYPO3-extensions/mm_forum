@@ -548,7 +548,13 @@ class tx_mmforum_postparser {
 		  unset( $lconf['select'], $lconf['sorting'] );
   		return $_SERVER['SERVER_NAME'] . '/' . $localcObj->typoLink_URL($lconf);
   	} else {
-  	  return $_SERVER['SERVER_NAME'] . '/' . $localcObj->typoLink_URL(array('parameter' => str_replace('record:page:', '', $id)));
+  	  $SERVER_NAME = $_SERVER['SERVER_NAME'];
+
+  	  if (strpos($SERVER_NAME, 'http://') === false) {
+        $SERVER_NAME = 'http://' . $SERVER_NAME;
+      }
+
+  	  return $SERVER_NAME . '/' . $localcObj->typoLink_URL(array('parameter' => str_replace('record:page:', '', $id)));
     }
 	}
 
