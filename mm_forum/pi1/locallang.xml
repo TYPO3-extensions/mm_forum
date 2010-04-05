@@ -55,6 +55,10 @@
             <label index="board-author">Author</label>
             <label index="board-hideSolved">Hide solved topics</label>
             
+            <label index="board-forum">You have read all posts in this forum</label>
+            <label index="board-forum_new">Forum with new replies</label>
+            <label index="board-closed_forum">Closed forum</label>
+            <label index="board-closed_forum_new">Closed forum (unread)</label>
             <label index="topic-topicicon">Topic with no new replies</label>
             <label index="topic-topicicon_closed">Closed topic</label>
             <label index="topic-topicicon_closed_new">Closed topic (unread)</label>
@@ -459,6 +463,10 @@ To visit this new topic, follow the link below:
             <label index="board-replies">Antworten (gelesen)</label>
             <label index="board-author">Autor</label>
             <label index="board-hideSolved">Gelöste&amp;nbsp;Themen&amp;nbsp;ausblenden</label>
+            <label index="board-forum">Du hast alle Beiträge in diesem Forum gelesen</label>
+            <label index="board-forum_new">Forum mit ungelesenen Antworten</label>
+            <label index="board-closed_forum">Geschlossenes Forum</label>
+            <label index="board-closed_forum_new">Geschlossenes Forum (nicht gelesen)</label>
             <label index="topic-topicicon">Thema ohne neue Antworten</label>
             <label index="topic-topicicon_closed">Geschlossenes Thema</label>
             <label index="topic-topicicon_closed_new">Geschlossenes Thema (nicht gelesen)</label>
