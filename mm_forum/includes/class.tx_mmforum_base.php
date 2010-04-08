@@ -152,8 +152,8 @@ class tx_mmforum_base extends tslib_pibase {
 			}
 		} else {
 			$llKey = parent::pi_getLL($key);
-			if ($this->conf['informal'] && (parent::pi_getLL($key . ' - inf'))) {
-				$llKey = parent::pi_getLL($key . ' - inf');
+			if ($this->conf['informal'] && (parent::pi_getLL($key . '-inf'))) {
+				$llKey = parent::pi_getLL($key . '-inf');
 			}
 		}
 		return $llKey;

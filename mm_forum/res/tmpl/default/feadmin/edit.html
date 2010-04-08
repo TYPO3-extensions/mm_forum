@@ -1,0 +1,45 @@
+<form action="###FORM_ACTION###" method="post">
+	<table class="tx-mmforum-table" width="100%">
+		<tr>
+			<th class="tx-mmforum-th" colspan="2">###L:edit-title###: ###FORUM_NAME###</th>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###L:edit-name###</td>
+			<td class="tx-mmforum-td">
+				<input type="text" name="tx_mmforum_pi1[forum][name]" value="###FORUM_NAME###" />
+				###ERRORS_NAME###
+			</td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###L:edit-description###</td>
+			<td class="tx-mmforum-td">
+				<input type="text" name="tx_mmforum_pi1[forum][description]" value="###FORUM_DESCRIPTION###" />
+				###ERRORS_DESCRIPTION###
+			</td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###L:edit-parent###</td>
+			<td class="tx-mmforum-td">
+				<select name="tx_mmforum_pi1[forum][parent]">
+					<option value="">###L:edit-parent-toplevel###</option>
+					###FORUM_PARENT_OPTIONS###
+				</select>
+				###ERRORS_PARENT###
+			</td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td">###L:edit-hidden###</td>
+			<td class="tx-mmforum-td">
+				<input type="checkbox" name="tx_mmforum_pi1[forum][hidden]" value="1" ###FORUM_HIDDEN_CHECKED### />
+			</td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-subth"></td>
+			<td class="tx-mmforum-subth">
+				<input type="submit" class="tx-mmforum-button" name="tx_mmforum_pi1[forum][save]" value="###L:edit-save###" />
+				<input type="submit" class="tx-mmforum-button" name="tx_mmforum_pi1[forum][cancel]" value="###L:edit-cancel###" />
+			</td>
+		</tr>
+	</table>
+	<input type="hidden" name="tx_mmforum_pi1[editForum]" value="###FORUM_UID###" />
+</form>

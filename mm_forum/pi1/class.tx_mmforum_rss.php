@@ -150,7 +150,7 @@ class tx_mmforum_rss {
 				$rssLink = $this->pObj->getAbsURL($rssLink);
 
 					// Include RSS URL in HTML header data
-				$GLOBALS['TSFE']->additionalHeaderData['mm_forum_rss_'.$mode] = '<link rel="alternate" type="application/rss+xml" title="'.$this->getFeedTitle($mode, $param).'" href="'.$rssLink.'" />';
+				$GLOBALS['TSFE']->additionalHeaderData['mm_forum_rss_'.$mode] = '<link rel="alternate" type="application/rss+xml" title="'.$this->pObj->escape($this->getFeedTitle($mode, $param)).'" href="'.$rssLink.'" />';
 			}
 		}
 	}
@@ -356,10 +356,10 @@ class tx_mmforum_rss {
 			);
         } elseif($this->piVars['fid']) {
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-				'forum_name',
-				'tx_mmforum_forums f,
+				'f.forum_name',
+				'tx_mmforum_forums f
 				 LEFT JOIN tx_mmforum_forums c ON c.uid = f.parentID',
-				'uid='.intval($this->piVars['fid']).
+				'f.uid='.intval($this->piVars['fid']).
 				$this->pObj->getMayRead_forum_query('f').
 				$this->pObj->getMayRead_forum_query('c')
 			);

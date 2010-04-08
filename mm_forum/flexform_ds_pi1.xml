@@ -54,6 +54,10 @@
 									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.code.rss</numIndex>
 								        <numIndex index="1">RSS</numIndex>
 								    </numIndex>
+									<numIndex index="9" type="array">
+									    <numIndex index="0">LLL:EXT:mm_forum/locallang.xml:flex.code.feadmin</numIndex>
+								        <numIndex index="1">FEADMIN</numIndex>
+								    </numIndex>
 							    </items>	
 							    <maxitems>1</maxitems>
 							    <size>6</size>

@@ -1,0 +1,84 @@
+<script type="text/javascript">
+
+	function checkAnonReadFlag() {
+		var elems = document.getElementById('acl-form').getElementsByTagName('input');
+		for each(var input in elems) {
+			if(input.type != 'checkbox' || input.name.search(/\[read\]/) == -1) continue;
+			if(input.id == 'check_anon_read' || input.id == 'check_all_read')
+				input.checked=true;
+			else if(!input.disabled) input.checked=false;
+		}
+	}
+
+	function checkAllWriteFlag() {
+		var elems = document.getElementById('acl-form').getElementsByTagName('input');
+		for each(var input in elems) {
+			if(input.type != 'checkbox' || input.name.search(/\[write\]/) == -1) continue;
+			if(input.id == 'check_all_write') input.checked=true;
+			else if(!input.disabled) input.checked=false;
+		}
+	}
+
+	function checkACLFlag(flag, id) {
+		var elem = document.getElementById('check_'+id+'_'+flag);
+		elem.checked = true;
+	}
+
+	function uncheckACLFlag(flag, id) {
+		var elem = document.getElementById('check_'+id+'_'+flag);
+		elem.checked = false;
+	}
+
+</script>
+<form id="acl-form" action="###FORM_ACTION###" method="post">
+	<table class="tx-mmforum-table" width="100%">
+		<tr>
+			<th class="tx-mmforum-th" colspan="4">###L:acl-title###</th>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-subth2" style="width:70%"></td>
+			<td class="tx-mmforum-subth2" style="width:10%">###L:acl-read###</td>
+			<td class="tx-mmforum-subth2" style="width:10%">###L:acl-write###</td>
+			<td class="tx-mmforum-subth2" style="width:10%">###L:acl-moderate###</td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td"><em>[###L:acl-group-anonymous###]</em></td>
+			<td class="tx-mmforum-td" style="text-align: center">
+				<input id="check_anon_read" onchange="if(this.checked) checkAnonReadFlag()" type="checkbox" name="tx_mmforum_pi1[acl][read][]" value="anon" ###ANON_READ_CHECKED### />
+			</td>
+			<td class="tx-mmforum-td" style="text-align: center"></td>
+			<td class="tx-mmforum-td" style="text-align: center"></td>
+		</tr>
+		<tr>
+			<td class="tx-mmforum-td"><em>[###L:acl-group-all###]</em></td>
+			<td class="tx-mmforum-td" style="text-align: center">
+				<input id="check_all_read" onchange="if(this.checked) checkAnonReadFlag()" type="checkbox" name="tx_mmforum_pi1[acl][read][]" value="all" ###ALL_READ_CHECKED### />
+			</td>
+			<td class="tx-mmforum-td" style="text-align: center">
+				<input id="check_all_write" type="checkbox" onchange="if(this.checked) checkAllWriteFlag();" name="tx_mmforum_pi1[acl][write][]" value="all" ###ALL_WRITE_CHECKED### />
+			</td>
+			<td class="tx-mmforum-td" style="text-align: center"></td>
+		</tr>
+		<!-- ###GROUP_ROW### begin -->
+			<tr>
+				<td class="tx-mmforum-td"><div style="padding-left: ###GROUP_INDENT###px">###GROUP_NAME###</div></td>
+				<td class="tx-mmforum-td" style="text-align: center">
+					<input id="check_###GROUP_UID###_read" onchange="if(this.checked) { uncheckACLFlag('read', 'anon'); uncheckACLFlag('read', 'all'); ###GROUP_ONCHECK_READ### } else { ###GROUP_ONUNCHECK_READ### }" type="checkbox" name="tx_mmforum_pi1[acl][read][]" value="###GROUP_UID###" ###GROUP_READ_CHECKED### />
+				</td>
+				<td class="tx-mmforum-td" style="text-align: center">
+					<input id="check_###GROUP_UID###_write" onchange="if(this.checked) { uncheckACLFlag('write', 'all'); ###GROUP_ONCHECK_WRITE### } else { ###GROUP_ONUNCHECK_WRITE### }"type="checkbox" name="tx_mmforum_pi1[acl][write][]" value="###GROUP_UID###" ###GROUP_WRITE_CHECKED### />
+				</td>
+				<td class="tx-mmforum-td" style="text-align: center">
+					<input id="check_###GROUP_UID###_moderate" onchange="if(this.checked) { ###GROUP_ONCHECK_MOD### } else { ###GROUP_ONUNCHECK_MOD### }" type="checkbox" name="tx_mmforum_pi1[acl][moderate][]" value="###GROUP_UID###" ###GROUP_MOD_CHECKED### />
+				</td>
+			</tr>
+		<!-- ###GROUP_ROW### end -->
+		<tr>
+			<td colspan="4" class="tx-mmforum-subth" style="padding-left: 100px">
+				<input name="tx_mmforum_pi1[acl_save]" type="submit" class="tx-mmforum-button" value="###L:acl-save###" />
+				<input name="tx_mmforum_pi1[acl_cancel]" type="submit" class="tx-mmforum-button" value="###L:acl-cancel###" />
+			</td>
+		</tr>
+	</table>
+	<input type="hidden" name="tx_mmforum_pi1[setACLs]" value="###FORUM_UID###" />
+</form>

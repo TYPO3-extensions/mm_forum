@@ -68,6 +68,9 @@
 			<label index="pi6_plus_wiz_description">This plugin adds a portal information field.</label>
 
 			<label index="flex.code.rss">RSS feed</label>
+
+			<!-- ADDED IN 1.9.0 -->
+            <label index="flex.code.feadmin">Frontend administration</label>
         </languageKey>
         <!-- GERMAN LANGUAGE DATA -->
         <languageKey index="de" type="array">
@@ -128,6 +131,9 @@
 			<label index="pi5_plus_wiz_description">Dieses Plugin fügt Ihrer Seite eine Benutzereinstellungsverwaltung hinzu.</label>
 			<label index="pi6_plus_wiz_description">Dieses Plugin fügt Ihrer Seite eine Portalinformationseite hinzu.</label>
 			<label index="flex.code.rss">RSS-Feed</label>
+
+			<!-- ADDED IN 1.9.0 -->
+            <label index="flex.code.feadmin">Frontend-Administration</label>
         </languageKey>
         <!-- FINNISH LANGUAGE DATA -->
         <languageKey index="fi" type="array">

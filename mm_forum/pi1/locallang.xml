@@ -374,51 +374,96 @@ To visit this new topic, follow the link below:
             <label index="topic-solvedshort-off">Open</label>
             <label index="options_mail_forum">Options</label>
 			
-      			<!-- Added in 0.1.7 -->
-      			<label index="userlist-title">User list</label>
-      			<label index="user-profile">User profile</label>
-      			<label index="user-field">User field</label>
-      			<label index="user-username">User name</label>
-      			<label index="user-value">Value</label>
-      
-      			<!-- Added in 0.1.8 -->
-      			<label index="board-rating">Rating</label>
-      			<label index="user-rating">Rating</label>
-      			<label index="date-today">Today</label>
-      			<label index="date-yesterday">Yesterday</label>
-      
-      			<!-- Added in 0.1.9 -->
-      			<label index="markItUp-bbcolor">HTML color name</label>
-      			<label index="markItUp-bbcolor-Yellow">Yellow</label>
-      			<label index="markItUp-bbcolor-Orange">Orange</label>
-      			<label index="markItUp-bbcolor-Red">Red</label>
-      			<label index="markItUp-bbcolor-Blue">Blue</label>
-      			<label index="markItUp-bbcolor-Purple">Purple</label>
-      			<label index="markItUp-bbcolor-Green">Green</label>
-      			<label index="markItUp-bbcolor-White">White</label>
-      			<label index="markItUp-bbcolor-Gray">Gray</label>
-      			<label index="markItUp-bbcolor-Black">Black</label>
-      			<label index="markItUp-bbimage">URL to image</label>
-      			<label index="markItUp-bblink">Link URL</label>
-      			<label index="markItUp-bbsize">Text size</label>
-      			<label index="markItUp-bblistnr">Starting number</label>
-      			<label index="markItUp-Bold">Bold</label>
-      			<label index="markItUp-Italic">Italic</label>
-      			<label index="markItUp-Underline">Underline</label>
-      			<label index="markItUp-Picture">Picture</label>
-      			<label index="markItUp-Link">Link</label>
-      			<label index="markItUp-Colors">Colors</label>
-      			<label index="markItUp-Size">Size</label>
-      			<label index="markItUp-Size-Big">Big</label>
-      			<label index="markItUp-Size-Normal">Normal</label>
-      			<label index="markItUp-Size-Small">Small</label>
-      			<label index="markItUp-blist">Bulleted list</label>
-      			<label index="markItUp-nlist">Numeric list</label>
-      			<label index="markItUp-litem">List item</label>
-      			<label index="markItUp-Quotes">Quotes</label>
-      			<label index="markItUp-Code">Code</label>
-      			<label index="markItUp-Clean">Clean</label>
-      			<label index="markItUp-Preview">Preview</label>
+			<!-- Added in 0.1.7 -->
+			<label index="userlist-title">User list</label>
+			<label index="user-profile">User profile</label>
+			<label index="user-field">User field</label>
+			<label index="user-username">User name</label>
+			<label index="user-value">Value</label>
+
+			<!-- Added in 0.1.8 -->
+			<label index="board-rating">Rating</label>
+			<label index="user-rating">Rating</label>
+			<label index="date-today">Today</label>
+			<label index="date-yesterday">Yesterday</label>
+
+			<!-- Added in 0.1.9 -->
+			<label index="markItUp-bbcolor">HTML color name</label>
+			<label index="markItUp-bbcolor-Yellow">Yellow</label>
+			<label index="markItUp-bbcolor-Orange">Orange</label>
+			<label index="markItUp-bbcolor-Red">Red</label>
+			<label index="markItUp-bbcolor-Blue">Blue</label>
+			<label index="markItUp-bbcolor-Purple">Purple</label>
+			<label index="markItUp-bbcolor-Green">Green</label>
+			<label index="markItUp-bbcolor-White">White</label>
+			<label index="markItUp-bbcolor-Gray">Gray</label>
+			<label index="markItUp-bbcolor-Black">Black</label>
+			<label index="markItUp-bbimage">URL to image</label>
+			<label index="markItUp-bblink">Link URL</label>
+			<label index="markItUp-bbsize">Text size</label>
+			<label index="markItUp-bblistnr">Starting number</label>
+			<label index="markItUp-Bold">Bold</label>
+			<label index="markItUp-Italic">Italic</label>
+			<label index="markItUp-Underline">Underline</label>
+			<label index="markItUp-Picture">Picture</label>
+			<label index="markItUp-Link">Link</label>
+			<label index="markItUp-Colors">Colors</label>
+			<label index="markItUp-Size">Size</label>
+			<label index="markItUp-Size-Big">Big</label>
+			<label index="markItUp-Size-Normal">Normal</label>
+			<label index="markItUp-Size-Small">Small</label>
+			<label index="markItUp-blist">Bulleted list</label>
+			<label index="markItUp-nlist">Numeric list</label>
+			<label index="markItUp-litem">List item</label>
+			<label index="markItUp-Quotes">Quotes</label>
+			<label index="markItUp-Code">Code</label>
+			<label index="markItUp-Clean">Clean</label>
+			<label index="markItUp-Preview">Preview</label>
+
+				<!-- FE ADMINISTRATION LABELS begin -->
+			<label index="feadmin-list-title">Frontend administration</label>
+			<label index="feadmin-list-edit">Edit this forum</label>
+			<label index="feadmin-list-newchild">Create a new subforum</label>
+			<label index="feadmin-list-remove">Remove this forum</label>
+			<label index="feadmin-list-acl">Edit the access control lists for this forum</label>
+			<label index="feadmin-list-moveDown">Move this forum downwards</label>
+			<label index="feadmin-list-moveUp">Move this forum upwards</label>
+			<label index="feadmin-list-newcategory">Create a new category</label>
+
+			<label index="feadmin-edit-title">Edit forum</label>
+			<label index="feadmin-edit-name">Name</label>
+			<label index="feadmin-edit-description">Description</label>
+			<label index="feadmin-edit-parent">Parent forum</label>
+			<label index="feadmin-edit-parent-toplevel">No parent</label>
+			<label index="feadmin-edit-hidden">Hidden</label>
+			<label index="feadmin-edit-save">Save</label>
+			<label index="feadmin-edit-cancel">Cancel</label>
+			<label index="feadmin-edit-success">The forum %s has successfully been saved.</label>
+
+			<label index="feadmin-delete-success">The forum %s has successfully been deleted.</label>
+
+			<label index="feadmin-new-dummytitle">New forum</label>
+
+			<label index="feadmin-acl-title">Access settings</label>
+			<label index="feadmin-acl-read">Read</label>
+			<label index="feadmin-acl-write">Write</label>
+			<label index="feadmin-acl-moderate">Moderate</label>
+			<label index="feadmin-acl-group-anonymous">Anonymous</label>
+			<label index="feadmin-acl-group-all">Any user</label>
+			<label index="feadmin-acl-save">Save</label>
+			<label index="feadmin-acl-cancel">Cancel</label>
+			<label index="feadmin-acl-success">The ACLs for this forum have successfully been edited.</label>
+
+			<label index="feadmin-error-forumnotfound">The specified forum does not exist.</label>
+			<label index="feadmin-error-description-empty">Please specify a description for this forum.</label>
+			<label index="feadmin-error-description-tooshort">The forum description needs to be at least %d characters long.</label>
+			<label index="feadmin-error-description-toolong">The forum description must not be longer then %d characters.</label>
+			<label index="feadmin-error-name-empty">Please specify a name for this forum.</label>
+			<label index="feadmin-error-name-tooshort">The forum name needs to be at least %d characters long.</label>
+			<label index="feadmin-error-name-toolong">The forum name must not be longer then %d characters.</label>
+			<label index="feadmin-error-parent-no-nested-forums">This forum has %d subforums. It cannot be made subforum of another forum.</label>
+			<label index="feadmin-access-error">You do not have access to this functionality.</label>
+				<!-- FE ADMINISTRATION LABELS end -->
         </languageKey>
         <!-- GERMAN LANGUAGE DATA -->
         <languageKey index="de" type="array">
@@ -832,7 +877,7 @@ Hier der Link, mit dem du direkt in den Beitrag gelangst:
             
             <!-- Added in 0.1.6 -->
             <label index="ntfMailForum-subject">Neues Thema '###TOPICNAME###' im Forum '###FORUMNAME###' in ###BOARDNAME###</label>
-			      <label index="ntfMailForum-text">Hallo ###USERNAME###,
+			<label index="ntfMailForum-text">Hallo ###USERNAME###,
 				
 Sie bekommen diese Mail, da Sie angegeben haben, dass Sie informiert werden möchten,
 wenn jemand ein neues Thema im Forum '###FORUMNAME###' erstellt.
@@ -840,53 +885,100 @@ wenn jemand ein neues Thema im Forum '###FORUMNAME###' erstellt.
 Hier der Link, mit dem Sie direkt in den Beitrag gelangen:
 
 ###LINK###
-			      </label>
+			</label>
 			
-      			<!-- Added in 0.1.7 -->
-      			<label index="userlist-title">Benutzerliste</label>
-      			<label index="user-profile">Benutzerprofil</label>
-      			<label index="user-field">Benutzerfeld</label>
-      			<label index="user-username">Benutzername</label>
-      			<label index="user-value">Wert</label>
+			<!-- Added in 0.1.7 -->
+			<label index="userlist-title">Benutzerliste</label>
+			<label index="user-profile">Benutzerprofil</label>
+			<label index="user-field">Benutzerfeld</label>
+			<label index="user-username">Benutzername</label>
+			<label index="user-value">Wert</label>
+
+			<!-- Added in 0.1.8 -->
+			<label index="board-rating">Bewertung</label>
+			<label index="user-rating">Bewertung</label>
+			<label index="date-today">Heute</label>
+			<label index="date-yesterday">Gestern</label>
       
-      			<!-- Added in 0.1.8 -->
-      			<label index="board-rating">Bewertung</label>
-      			<label index="user-rating">Bewertung</label>
-      			<label index="date-today">Heute</label>
-      			<label index="date-yesterday">Gestern</label>
-      
-      			<!-- Added in 0.1.9 -->
-      			<label index="markItUp-bbcolor">Englischer HTML-Farbname</label>
-      			<label index="markItUp-bbcolor-Yellow">Gelb</label>
-      			<label index="markItUp-bbcolor-Orange">Orange</label>
-      			<label index="markItUp-bbcolor-Red">Rot</label>
-      			<label index="markItUp-bbcolor-Blue">Blau</label>
-      			<label index="markItUp-bbcolor-Purple">Lila</label>
-      			<label index="markItUp-bbcolor-Green">Grün</label>
-      			<label index="markItUp-bbcolor-White">Weiß</label>
-      			<label index="markItUp-bbcolor-Gray">Grau</label>
-      			<label index="markItUp-bbcolor-Black">Schwarz</label>
-      			<label index="markItUp-bbimage">URL (mit http//:) zum Bild</label>
-      			<label index="markItUp-bblink">Link URL (mit http//:)</label>
-      			<label index="markItUp-bbsize">Textgröße (Ganzzahl)</label>
-      			<label index="markItUp-bblistnr">Startnummer (Ganzzahl)</label>
-      			<label index="markItUp-Bold">Fett</label>
-      			<label index="markItUp-Italic">Kursiv</label>
-      			<label index="markItUp-Underline">Unterstrichen</label>
-      			<label index="markItUp-Picture">Bild</label>
-      			<label index="markItUp-Link">Link</label>
-      			<label index="markItUp-Colors">Schriftfarbe</label>
-      			<label index="markItUp-Size">Schriftgröße</label>
-      			<label index="markItUp-Size-Big">Groß</label>
-      			<label index="markItUp-Size-Normal">Normal</label>
-      			<label index="markItUp-Size-Small">Klein</label>
-      			<label index="markItUp-blist">Liste</label>
-      			<label index="markItUp-nlist">Numerische Liste</label>
-      			<label index="markItUp-litem">Listenelement</label>
-      			<label index="markItUp-Quotes">Zitat</label>
-      			<label index="markItUp-Code">Code</label>
-      			<label index="markItUp-Clean">BBCode entfernen</label>
-      			<label index="markItUp-Preview">Vorschau</label>
+			<!-- Added in 0.1.9 -->
+			<label index="markItUp-bbcolor">Englischer HTML-Farbname</label>
+			<label index="markItUp-bbcolor-Yellow">Gelb</label>
+			<label index="markItUp-bbcolor-Orange">Orange</label>
+			<label index="markItUp-bbcolor-Red">Rot</label>
+			<label index="markItUp-bbcolor-Blue">Blau</label>
+			<label index="markItUp-bbcolor-Purple">Lila</label>
+			<label index="markItUp-bbcolor-Green">Grün</label>
+			<label index="markItUp-bbcolor-White">Weiß</label>
+			<label index="markItUp-bbcolor-Gray">Grau</label>
+			<label index="markItUp-bbcolor-Black">Schwarz</label>
+			<label index="markItUp-bbimage">URL (mit http//:) zum Bild</label>
+			<label index="markItUp-bblink">Link URL (mit http//:)</label>
+			<label index="markItUp-bbsize">Textgröße (Ganzzahl)</label>
+			<label index="markItUp-bblistnr">Startnummer (Ganzzahl)</label>
+			<label index="markItUp-Bold">Fett</label>
+			<label index="markItUp-Italic">Kursiv</label>
+			<label index="markItUp-Underline">Unterstrichen</label>
+			<label index="markItUp-Picture">Bild</label>
+			<label index="markItUp-Link">Link</label>
+			<label index="markItUp-Colors">Schriftfarbe</label>
+			<label index="markItUp-Size">Schriftgröße</label>
+			<label index="markItUp-Size-Big">Groß</label>
+			<label index="markItUp-Size-Normal">Normal</label>
+			<label index="markItUp-Size-Small">Klein</label>
+			<label index="markItUp-blist">Liste</label>
+			<label index="markItUp-nlist">Numerische Liste</label>
+			<label index="markItUp-litem">Listenelement</label>
+			<label index="markItUp-Quotes">Zitat</label>
+			<label index="markItUp-Code">Code</label>
+			<label index="markItUp-Clean">BBCode entfernen</label>
+			<label index="markItUp-Preview">Vorschau</label>
+
+				<!-- FE ADMINISTRATION LABELS begin -->
+			<label index="feadmin-list-title">Frontend-Administration</label>
+			<label index="feadmin-list-edit">Dieses Forum bearbeiten</label>
+			<label index="feadmin-list-newchild">Ein neues Unterforum anlegen</label>
+			<label index="feadmin-list-remove">Dieses Forum löschen</label>
+			<label index="feadmin-list-acl">Zugriffsberechtigungen bearbeiten</label>
+			<label index="feadmin-list-moveDown">Nach unten verschieben</label>
+			<label index="feadmin-list-moveUp">Nach oben verschieben</label>
+			<label index="feadmin-list-newcategory">Eine neue Kategorie anlegen</label>
+
+			<label index="feadmin-edit-title">Forum bearbeiten</label>
+			<label index="feadmin-edit-name">Name</label>
+			<label index="feadmin-edit-description">Beschreibung</label>
+			<label index="feadmin-edit-parent">Übergeordnetes Forum</label>
+			<label index="feadmin-edit-parent-toplevel">Kein übergeordnetes Forum</label>
+			<label index="feadmin-edit-hidden">Versteckt</label>
+			<label index="feadmin-edit-save">Speichern</label>
+			<label index="feadmin-edit-cancel">Abbrechen</label>
+			<label index="feadmin-edit-success">Das Forum %s wurde erfolgreich gespeichert.</label>
+
+			<label index="feadmin-delete-success">Das Forum %s wurde erfolgreich gelöscht.</label>
+
+			<label index="feadmin-new-dummytitle">Neues Forum</label>
+
+			<label index="feadmin-acl-title">Zugriffsberechtigungen</label>
+			<label index="feadmin-acl-read">Lesen</label>
+			<label index="feadmin-acl-write">Schreiben</label>
+			<label index="feadmin-acl-moderate">Moderieren</label>
+			<label index="feadmin-acl-group-anonymous">Anonyme Besucher</label>
+			<label index="feadmin-acl-group-all">Alle Benutzer</label>
+			<label index="feadmin-acl-save">Speichern</label>
+			<label index="feadmin-acl-cancel">Abbrechen</label>
+			<label index="feadmin-acl-success">Die Zugriffsberechtigungen für dieses Forum wurden erfolgreich bearbeitet.</label>
+
+			<label index="feadmin-error-forumnotfound">Das angegebene Forum existiert nicht.</label>
+			<label index="feadmin-error-description-empty">Bitte geben Sie eine Beschreibung für dieses Forum an.</label>
+			<label index="feadmin-error-description-empty-inf">Bitte gib eine Beschreibung für dieses Forum an.</label>
+			<label index="feadmin-error-description-tooshort">Die Forenbeschreibung muss mindestens %d Zeichen lang sein.</label>
+			<label index="feadmin-error-description-toolong">Die Forenbeschreibung darf nicht länger als %d Zeichen lang sein.</label>
+			<label index="feadmin-error-name-empty">Bitte geben Sie einen Namen für dieses Forum an.</label>
+			<label index="feadmin-error-name-empty-inf">Bitte gib einen Namen für dieses Forum an.</label>
+			<label index="feadmin-error-name-tooshort">Der Forenname muss mindestens %d Zeichen lang sein.</label>
+			<label index="feadmin-error-name-toolong">Der Forenname darf nicht länger als %d Zeichen lang sein.</label>
+			<label index="feadmin-error-parent-no-nested-forums">Dieses Forum hat %d Unterforen. Es kann daher nicht zum Unterforume einer anderen Kategorie gemacht werden.</label>
+			<label index="feadmin-access-error">Sie haben keinen Zugriff auf diese Funktionalität.</label>
+				<!-- FE ADMINISTRATION LABELS end -->
         </languageKey>
         <!-- FINNISH LANGUAGE DATA -->
         <languageKey index="fi" type="array">

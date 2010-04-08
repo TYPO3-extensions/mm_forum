@@ -255,6 +255,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				case 'RSS':
 					$content = $this->list_rss();
 					break;
+				Case 'FEADMIN':
+					$content = $this->frontendAdministration();
+					Break;
 				default:
 
 					// Include hook to add own content and do change the action to direct it differently
@@ -1913,6 +1916,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
 			}
 
+			If($this->conf['listLatest.']['linkToLatestPost'])
+				$linkParams[$this->prefixId]['pid'] = 'last';
+
 			$row['topic_title'] = stripslashes($row['topic_title']);
 
 			$row['topic_title'] = str_replace('<','&lt;',$row['topic_title']);
@@ -2253,16 +2259,40 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		return $rss->main($this->conf, $this);
 	}
 
-	/**
-	 * Forum content management functions
-	 */
+		/**
+		 *
+		 * Displays a frontend administration form.
+		 *
+		 * @author Martin Helmich <m.helmich@mittwald.de>
+		 * @since  2010-04-06
+		 * @return string HTML content
+		 *
+		 */
 
-	/**
-	 * Displays the form for creating a new topic.
-	 * @param  string $content The plugin content
-	 * @param  array  $conf    The plugin's configuration vars
-	 * @return string          The content
-	 */
+	Function frontendAdministration() {
+		Require_Once(t3lib_extMgm::extPath('mm_forum').'pi1/feadmin/class.tx_mmforum_frontendadministration.php');
+		$frontendAdministration = t3lib_div::makeInstance('tx_mmforum_FrontendAdministration');
+		Return $frontendAdministration->main($this->conf, $this);
+	}
+
+
+
+
+
+		/*
+		 * Forum content management functions
+		 */
+
+
+
+
+
+		/**
+		 * Displays the form for creating a new topic.
+		 * @param  string $content The plugin content
+		 * @param  array  $conf    The plugin's configuration vars
+		 * @return string          The content
+		 */
 	function new_topic($content, $conf) {
 
 		// Check if there is a user logged in
@@ -2518,7 +2548,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			}
 		}
 
-    $marker['###STARTJAVASCRIPT###'] = $this->includeEditorJavaScript();
+		$marker['###STARTJAVASCRIPT###'] = $this->includeEditorJavaScript();
 
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 		return $content;
@@ -2832,51 +2862,51 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
     }
 	
   	function includeEditorJavaScript() {
-  	  $js = '';
-      if (!empty($this->conf['jQueryEditorJavaScript'])) {
-        $jsmarker = array(
-  					'###BBCOLOR###'   => $this->pi_getLL('markItUp-bbcolor'),
-  					'###YELLOW###'    => $this->pi_getLL('markItUp-bbcolor-Yellow'),
-  					'###ORANGE###'    => $this->pi_getLL('markItUp-bbcolor-Orange'),
-  					'###RED###'       => $this->pi_getLL('markItUp-bbcolor-Red'),
-  					'###BLUE###'      => $this->pi_getLL('markItUp-bbcolor-Blue'),
-  					'###PURPLE###'    => $this->pi_getLL('markItUp-bbcolor-Purple'),
-  					'###GREEN###'     => $this->pi_getLL('markItUp-bbcolor-Green'),
-  					'###WHITE###'     => $this->pi_getLL('markItUp-bbcolor-White'),
-  					'###GRAY###'      => $this->pi_getLL('markItUp-bbcolor-Gray'),
-  					'###BLACK###'     => $this->pi_getLL('markItUp-bbcolor-Black'),
-  					'###BBIMAGEURL###'=> $this->pi_getLL('markItUp-bbimage'),
-  					'###BBLINKURL###' => $this->pi_getLL('markItUp-bblink'),
-  					'###BBLISTNR###'  => $this->pi_getLL('markItUp-bblistnr'),
-  					'###BBSIZE###'    => $this->pi_getLL('markItUp-bbsize'),
-  					'###BOLD###'      => $this->pi_getLL('markItUp-Bold'),
-  					'###ITALIC###'    => $this->pi_getLL('markItUp-Italic'),
-  					'###UNDERLINE###' => $this->pi_getLL('markItUp-Underline'),
-  					'###PICTURE###'   => $this->pi_getLL('markItUp-Picture'),
-  					'###LINK###'      => $this->pi_getLL('markItUp-Link'),
-  					'###COLOR###'     => $this->pi_getLL('markItUp-Colors'),
-  					'###SIZE###'      => $this->pi_getLL('markItUp-Size'),
-  					'###SIZEBIG###'   => $this->pi_getLL('markItUp-Size-Big'),
-  					'###SIZENORMAL###'=> $this->pi_getLL('markItUp-Size-Normal'),
-  					'###SIZESMALL###' => $this->pi_getLL('markItUp-Size-Small'),
-  					'###BLIST###'     => $this->pi_getLL('markItUp-blist'),
-  					'###NLIST###'     => $this->pi_getLL('markItUp-nlist'),
-  					'###LITEM###'     => $this->pi_getLL('markItUp-litem'),
-  					'###QUOTES###'    => $this->pi_getLL('markItUp-Quotes'),
-  					'###CODE###'      => $this->pi_getLL('markItUp-Code'),
-  					'###CLEAN###'     => $this->pi_getLL('markItUp-Clean'),
-  					'###PREVIEW###'   => $this->pi_getLL('markItUp-Preview')
-  			);
-        $js = "\n".$this->cObj->substituteMarkerArray($this->conf['jQueryEditorJavaScript'], $jsmarker);
-      }
-      if (!empty($this->conf['editorJavaScript'])) {
-        $js .= "\n".$this->conf['editorJavaScript']."\n";
-      }
-      if (!empty($js)) {
-        $js = '<script type="text/javascript">' . $js . '</script>';
-      }
-      return $js;
-  	}
+		$js = '';
+		if (!empty($this->conf['jQueryEditorJavaScript'])) {
+			$jsmarker = array(
+					'###BBCOLOR###'   => $this->pi_getLL('markItUp-bbcolor'),
+					'###YELLOW###'    => $this->pi_getLL('markItUp-bbcolor-Yellow'),
+					'###ORANGE###'    => $this->pi_getLL('markItUp-bbcolor-Orange'),
+					'###RED###'       => $this->pi_getLL('markItUp-bbcolor-Red'),
+					'###BLUE###'      => $this->pi_getLL('markItUp-bbcolor-Blue'),
+					'###PURPLE###'    => $this->pi_getLL('markItUp-bbcolor-Purple'),
+					'###GREEN###'     => $this->pi_getLL('markItUp-bbcolor-Green'),
+					'###WHITE###'     => $this->pi_getLL('markItUp-bbcolor-White'),
+					'###GRAY###'      => $this->pi_getLL('markItUp-bbcolor-Gray'),
+					'###BLACK###'     => $this->pi_getLL('markItUp-bbcolor-Black'),
+					'###BBIMAGEURL###'=> $this->pi_getLL('markItUp-bbimage'),
+					'###BBLINKURL###' => $this->pi_getLL('markItUp-bblink'),
+					'###BBLISTNR###'  => $this->pi_getLL('markItUp-bblistnr'),
+					'###BBSIZE###'    => $this->pi_getLL('markItUp-bbsize'),
+					'###BOLD###'      => $this->pi_getLL('markItUp-Bold'),
+					'###ITALIC###'    => $this->pi_getLL('markItUp-Italic'),
+					'###UNDERLINE###' => $this->pi_getLL('markItUp-Underline'),
+					'###PICTURE###'   => $this->pi_getLL('markItUp-Picture'),
+					'###LINK###'      => $this->pi_getLL('markItUp-Link'),
+					'###COLOR###'     => $this->pi_getLL('markItUp-Colors'),
+					'###SIZE###'      => $this->pi_getLL('markItUp-Size'),
+					'###SIZEBIG###'   => $this->pi_getLL('markItUp-Size-Big'),
+					'###SIZENORMAL###'=> $this->pi_getLL('markItUp-Size-Normal'),
+					'###SIZESMALL###' => $this->pi_getLL('markItUp-Size-Small'),
+					'###BLIST###'     => $this->pi_getLL('markItUp-blist'),
+					'###NLIST###'     => $this->pi_getLL('markItUp-nlist'),
+					'###LITEM###'     => $this->pi_getLL('markItUp-litem'),
+					'###QUOTES###'    => $this->pi_getLL('markItUp-Quotes'),
+					'###CODE###'      => $this->pi_getLL('markItUp-Code'),
+					'###CLEAN###'     => $this->pi_getLL('markItUp-Clean'),
+					'###PREVIEW###'   => $this->pi_getLL('markItUp-Preview')
+			);
+			$js = "\n".$this->cObj->substituteMarkerArray($this->conf['jQueryEditorJavaScript'], $jsmarker);
+		}
+		if (!empty($this->conf['editorJavaScript'])) {
+			$js .= "\n".$this->conf['editorJavaScript']."\n";
+		}
+		if (!empty($js)) {
+			$js = '<script type="text/javascript">' . $js . '</script>';
+		}
+		return $js;
+	}
 
 	/**
 	 * Performs a file upload.

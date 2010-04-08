@@ -197,7 +197,7 @@ plugin.tx_mmforum_pi1 {
                 stdWrap.if.isTrue.field = tx_mmforum_icq
                 stdWrap.typolink {
                     parameter.field = tx_mmforum_icq
-                    parameter.wrap = http://www.icq.com/ |
+                    parameter.wrap = http://www.icq.com/people/&uin= |
                 }
             }
             tx_mmforum_yim = IMAGE
@@ -452,6 +452,7 @@ plugin.tx_mmforum_pi1 {
 
 		listLatest {
 			limit = 10
+			linkToLatestPost = 0
 		}
 		
 	# User profile
@@ -547,6 +548,100 @@ plugin.tx_mmforum_pi1 {
 			topics			= 1
 			posts			= 0
 			users			= 0
+		}
+
+	# Frontend administration settings
+		feAdmin {
+			enable = 0
+			templates {
+				list = {$plugin.tx_mmforum.style_path}/feadmin/list.html
+				edit = {$plugin.tx_mmforum.style_path}/feadmin/edit.html
+				acl  = {$plugin.tx_mmforum.style_path}/feadmin/acl.html
+			}
+
+			imagePath = {$plugin.tx_mmforum.style_path}/img/default/feadmin
+
+			format {
+				errorMessage.wrap = <div class="error"> | </div>
+			}
+
+			acl {
+				category {
+					create = all
+					edit = all
+					remove = all
+					acl = all
+					order = all
+				}
+				forum {
+					create = all
+					edit = all
+					remove = all
+					acl = all
+					order = all
+				}
+			}
+
+			list.buttons {
+				button = IMAGE
+				button {
+					file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-edit.png
+					file.maxW = 24
+					stdWrap.typolink {
+						parameter.data = TSFE:id
+						additionalParams.field = uid
+						additionalParams.wrap = &tx_mmforum_pi1[editForum]=|
+					}
+				}
+
+				edit < .button
+				edit.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-edit.png
+				edit.stdWrap.typolink.additionalParams.wrap = &tx_mmforum_pi1[editForum]=|
+				edit.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-edit
+
+				remove < .button
+				remove.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-delete.png
+				remove.stdWrap.typolink.additionalParams.wrap = &tx_mmforum_pi1[removeForum]=|
+				remove.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-remove
+
+				access < .button
+				access.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-access.png
+				access.stdWrap.typolink.additionalParams.wrap = &tx_mmforum_pi1[setACLs]=|
+				access.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-acl
+
+				newsub < .button
+				newsub.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-newforum.png
+				newsub.stdWrap.typolink.additionalParams.wrap = &tx_mmforum_pi1[newForum]=1&tx_mmforum_pi1[forum][parent]=|
+				newsub.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-newchild
+
+				up < .button
+				up.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-up.png
+				up.stdWrap.typolink.additionalParams.wrap = &tx_mmforum_pi1[moveUp]=|
+				up.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-moveUp
+
+				down < .button
+				down.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-down.png
+				down.stdWrap.typolink.additionalParams.wrap = &tx_mmforum_pi1[moveDown]=|
+				down.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-moveDown
+
+				newctg < .button
+				newctg.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-newcategory.png
+				newctg.stdWrap.typolink.additionalParams >
+				newctg.stdWrap.typolink.additionalParams = &tx_mmforum_pi1[newForum]=1
+				newctg.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-newcategory
+			}
+
+			validation {
+				name {
+					maxLength = 255
+					minLength = 3
+				}
+
+				description {
+					maxLength = 255
+					minLength = 3
+				}
+			}
 		}
 
             
