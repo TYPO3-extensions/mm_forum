@@ -312,7 +312,8 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 				list($className, $methodName) = explode('->',$moduleSettings['handler']);
 				$obj = t3lib_div::getUserObj($className);
 				$obj->p =& $this;
-				$content .= $obj->$methodName();
+				$settings = $moduleSettings['handler.']['settings.'];
+				$content .= $obj->$methodName('', $settings);
 
 				/*                                                                 *
 				 * Otherwise, just call the internal method specified by the       *
