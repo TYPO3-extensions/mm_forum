@@ -147,7 +147,7 @@ class tx_mmforum_rss {
 			if($this->conf['rssPID']) {
 					// Compose RSS URL
 				$rssLink = $this->pObj->pi_getPageLink($this->conf['rssPID'], null, $linkParams);
-				$rssLink = $this->pObj->getAbsURL($rssLink);
+				$rssLink = $this->pObj->tools->getAbsoluteUrl($rssLink);
 
 					// Include RSS URL in HTML header data
 				$GLOBALS['TSFE']->additionalHeaderData['mm_forum_rss_'.$mode] = '<link rel="alternate" type="application/rss+xml" title="'.$this->pObj->escape($this->getFeedTitle($mode, $param)).'" href="'.$rssLink.'" />';
@@ -293,7 +293,7 @@ class tx_mmforum_rss {
             'action'	=> 'list_post',
             'pid'		=> $post_id
         );
-        return $this->pObj->escapeURL($this->pObj->getAbsURL($this->pObj->pi_getPageLink($this->conf['pid_forum'], '', $linkParams)));
+        return $this->pObj->escapeURL($this->pObj->tools->getAbsoluteUrl($this->pObj->pi_getPageLink($this->conf['pid_forum'], '', $linkParams)));
     }
 
 
@@ -394,7 +394,7 @@ class tx_mmforum_rss {
 			);
 		}
 
-		return $this->pObj->getAbsURL($this->pObj->pi_getPageLink($this->conf['pid_forum'], '', $linkParams));
+		return $this->pObj->tools->getAbsoluteUrl($this->pObj->pi_getPageLink($this->conf['pid_forum'], '', $linkParams));
 	}
 
 

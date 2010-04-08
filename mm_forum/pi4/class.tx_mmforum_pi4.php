@@ -248,19 +248,19 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
         }
 
 		$marker['###ACTIONLINK###']     = $this->pi_getPageLink($GLOBALS["TSFE"]->id);
-		$marker['###SEARCHSTRING###']   = $this->shield($this->piVars['searchstring']);
+		$marker['###SEARCHSTRING###']   = $this->escape($this->piVars['searchstring']);
 		$marker['###PLACES###']        .= '<option selected="selected">'.$this->pi_getLL('searchform.searchAllBoards').'</option>';
 		$cat_tree = $this->list_cat_tree();
 		$count = 0;
 		foreach($cat_tree as $val) {
 			IF($val['type'] == 'C') {
 				if($count>0) $marker['###PLACES###'] .= '</optgroup>';
-				$marker['###PLACES###']     .= '<optgroup label="'.$this->shield($val['name']).'">';
+				$marker['###PLACES###']     .= '<optgroup label="'.$this->escape($val['name']).'">';
 			} else {
 				IF($val['uid'] == $param['search_place']) $select = 'selected';
 				else $select = '';
 
-				$marker['###PLACES###']     .= '<option value="'.intval($val['uid']).'" '.$select.'>'.$this->shield($val['name']).'</option>';
+				$marker['###PLACES###']     .= '<option value="'.intval($val['uid']).'" '.$select.'>'.$this->escape($val['name']).'</option>';
 
 				if($count == count($cat_tree)-1) $marker['###PLACES###'] .= '</optgroup>';
 			}
@@ -454,7 +454,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				);
                 if(tx_mmforum_pi1::getIsRealURL()) $linkparams['tx_mmforum_pi1']['fid'] = $topic_info['forum_id'];
 
-				$post_text  = $this->shield(tx_mmforum_tools::textCut($post_text,350,''));
+				$post_text  = $this->escape(tx_mmforum_tools::textCut($post_text,350,''));
 				$word_array = explode(" ",$searchstring);
 
 				// Cleaning empty elements
@@ -472,7 +472,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 					$post_text = preg_replace("/$word/i", $replace, $post_text);
 				}
 
-				$marker['###TITLE###']      = $this->pi_linkToPage($this->shield($topic_info['topic_title']),$conf['pid_forum'],'',$linkparams);
+				$marker['###TITLE###']      = $this->pi_linkToPage($this->escape($topic_info['topic_title']),$conf['pid_forum'],'',$linkparams);
 				$marker['###SHORTTEXT###']  = $post_text;
 				$dummylinkParams['tx_mmforum_pi1'] = array('action'=>'list_post','tid'=>$topic_id);
                 if(tx_mmforum_pi1::getIsRealURL()) $dummylinkParams['tx_mmforum_pi1']['fid'] = $topic_info['forum_id'];

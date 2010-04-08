@@ -103,7 +103,7 @@ class tx_mmforum_base extends tslib_pibase {
 		$this->tools = t3lib_div::makeInstance('tx_mmforum_tools');
 
 			/* Initialize cache object */
-		$this->cache =& tx_mmforum_cache::getGlobalCacheObject();
+		$this->cache = &tx_mmforum_cache::getGlobalCacheObject();
 
 			/* Local cObj */
 		$this->local_cObj = t3lib_div::makeInstance('tslib_cObj');
@@ -385,104 +385,6 @@ class tx_mmforum_base extends tslib_pibase {
 	}
 
 	/**
-	 * @deprecated: use the $this->getStoragePID() method
-	 */
-	function getFirstPid() {
-		return $this->getStoragePID();
-	}
-
-	/**
-	 * @deprecated: use the direct call to the tools method
-	 */
-	function randkey($length) {
-		return $this->tools->generateRandomString($length);
-	}
-
-	/**
-	 * Converts a hexadecimal string into an IP Address
-	 * @param  string $hex The hexadecimal string
-	 * @return string      The IP Address
-	 */
-	function hex2ip($hex) {
-		return $this->tools->hex2ip($hex);
-	}
-
-	/**
-	 * @deprecated: use the direct call to the tools method
-	 */
-	function ip2hex($val) {
-		return $this->tools->ip2hex($val);
-	}
-
-	/**
-	 * @deprecated: use the direct call to the tools method
-	 */
-	function getAbsUrl($link) {
-		return $this->tools->getAbsoluteUrl($link);
-	}
-
-	/**
-	 * @deprecated: use the direct call to the tools method
-	 */
-	function appendTrailingSlash($str) {
-		return $this->tools->appendTrailingSlash($str);
-	}
-
-	/**
-	 * @deprecated: use the direct call to the tools method
-	 */
-	function removeLeadingSlash($str) {
-		return $this->tools->removeLeadingSlash($str);
-	}
-
-	/**
-	 * @deprectated, now it's only a wrapper, will be removed in future versions
-	 * use $this->isModeratedForum();
-	 */
-	function getIsModeratedBoard() {
-		return $this->isModeratedForum();
-	}
-
-	/**
-	 * @deprectated, now it's only a wrapper, will be removed in future versions
-	 * use $this->useRealUrl();
-	 */
-	function getIsRealURL() {
-		return $this->useRealUrl();
-	}
-
-	/**
-	 * @deprectated, now it's only a wrapper, will be removed in future versions
-	 * use $this->escapeURL();
-	 */
-	function shieldURL($url) {
-		return $this->escapeURL($url);
-	}
-
-	/**
-	 * @deprectated, now it's only a wrapper, will be removed in future versions
-	 * use $this->escape();
-	 */
-	function shield($str) {
-		return $this->escape($str);
-	}
-
-	/**
-	 * @deprectated, now it's only a wrapper, will be removed in future versions
-	 * use $this->getStoragePIDQuery();
-	 */
-	function getPidQuery($tbl = '') {
-		return $this->getStoragePIDQuery($tbl);
-	}
-
-	/**
-	 * @deprecated: use the buildImageTag() function now
-	 */
-	function imgtag($imgInfo, $debug = TRUE) {
-		return $this->buildImageTag($imgInfo);
-	}
-
-	/**
 	 * Gets the UID of the administrator group.
 	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -518,9 +420,8 @@ class tx_mmforum_base extends tslib_pibase {
 				'deleted=0 '.$this->getStoragePIDQuery()
 			);
 			list($groups) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-			$groups = str_replace(',,',',',$groups);
 
-			$groupArr = t3lib_div::intExplode(',',$groups);
+			$groupArr = t3lib_div::intExplode(',', $groups, true);
 			$result   = array_unique($groupArr);
 
 			$this->cache->save('moderator_groups', $result, true);
@@ -608,7 +509,7 @@ class tx_mmforum_base extends tslib_pibase {
 		// Redirecting visitor back to previous page
 		$ref = t3lib_div::getIndpEnv('HTTP_REFERER');
 		if ($ref) {
-			$ref = $this->getAbsUrl($ref);
+			$ref = $this->tools->getAbsoluteUrl($ref);
 			header('Location: ' . t3lib_div::locationHeaderUrl($ref));
 			exit();
 			return true;
@@ -691,6 +592,111 @@ class tx_mmforum_base extends tslib_pibase {
     	return $cObj->cObjGetSingle('USER_INT', $conf);
     }
 
+
+	/**
+	 * DEPRECATED METHODS
+	 * (kept for compatability reasons
+	 */
+
+
+	/**
+	 * @deprecated: use the $this->getStoragePID() method
+	 */
+	function getFirstPid() {
+		return $this->getStoragePID();
+	}
+
+	/**
+	 * @deprecated: use the direct call to the tools method
+	 */
+	function randkey($length) {
+		return $this->tools->generateRandomString($length);
+	}
+
+	/**
+	 * Converts a hexadecimal string into an IP Address
+	 * @deprecated: use the direct call to the tools method
+	 * @param  string $hex The hexadecimal string
+	 * @return string      The IP Address
+	 */
+	function hex2ip($hex) {
+		return $this->tools->hex2ip($hex);
+	}
+
+	/**
+	 * @deprecated: use the direct call to the tools method
+	 */
+	function ip2hex($val) {
+		return $this->tools->ip2hex($val);
+	}
+
+	/**
+	 * @deprecated: use the direct call to the tools method
+	 */
+	function getAbsUrl($link) {
+		return $this->tools->getAbsoluteUrl($link);
+	}
+
+	/**
+	 * @deprecated: use the direct call to the tools method
+	 */
+	function appendTrailingSlash($str) {
+		return $this->tools->appendTrailingSlash($str);
+	}
+
+	/**
+	 * @deprecated: use the direct call to the tools method
+	 */
+	function removeLeadingSlash($str) {
+		return $this->tools->removeLeadingSlash($str);
+	}
+
+	/**
+	 * @deprectated, now it's only a wrapper, will be removed in future versions
+	 * use $this->isModeratedForum();
+	 */
+	function getIsModeratedBoard() {
+		return $this->isModeratedForum();
+	}
+
+	/**
+	 * @deprectated, now it's only a wrapper, will be removed in future versions
+	 * use $this->useRealUrl();
+	 */
+	function getIsRealURL() {
+		return $this->useRealUrl();
+	}
+
+	/**
+	 * @deprectated, now it's only a wrapper, will be removed in future versions
+	 * use $this->escapeURL();
+	 */
+	function shieldURL($url) {
+		return $this->escapeURL($url);
+	}
+
+	/**
+	 * @deprectated, now it's only a wrapper, will be removed in future versions
+	 * use $this->escape();
+	 */
+	function shield($str) {
+		return $this->escape($str);
+	}
+
+	/**
+	 * @deprectated, now it's only a wrapper, will be removed in future versions
+	 * use $this->getStoragePIDQuery();
+	 */
+	function getPidQuery($tbl = '') {
+		return $this->getStoragePIDQuery($tbl);
+	}
+
+	/**
+	 * @deprecated: use the buildImageTag() function now
+	 */
+	function imgtag($imgInfo, $debug = TRUE) {
+		return $this->buildImageTag($imgInfo);
+	}
 }
 
 // does not make sense to XCLASS here

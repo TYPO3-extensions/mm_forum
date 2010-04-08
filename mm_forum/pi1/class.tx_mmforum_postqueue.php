@@ -260,7 +260,7 @@ class tx_mmforum_postqueue {
 			'###LLL_POSTQUEUE###'		=> $this->pi_getLL('postqueue.title'),
 			'###LLL_PUBLISHBUTTON###'	=> $this->pi_getLL('postqueue.publishbutton'),
 			'###LLL_NOITEMS###'			=> $this->pi_getLL('postqueue.noitems'),
-			'###ACTION###'				=> $this->parent->shieldURL($this->parent->getAbsUrl($this->parent->pi_getPageLink($GLOBALS['TSFE']->id)))
+			'###ACTION###'				=> $this->parent->escapeURL($this->parent->tools->getAbsoluteUrl($this->parent->pi_getPageLink($GLOBALS['TSFE']->id)))
 		);
 		$template		= $this->cObj->substituteMarkerArray($template, $marker);
 		$rContent		= '';
@@ -296,7 +296,7 @@ class tx_mmforum_postqueue {
 				$rMarker = array(
 					'###LLL_WROTE###'		=> $this->pi_getLL('postqueue.wrote'),
 					'###DATE###'			=> $this->parent->formatDate($arr['post_time']),
-					'###POST_TEXT###'		=> $this->parent->bb2text($this->parent->shield($arr['post_text']),$this->conf),
+					'###POST_TEXT###'		=> $this->parent->bb2text($this->parent->escape($arr['post_text']),$this->conf),
 					'###UID###'				=> $arr['uid'],
 					'###POST_POSTER###'		=> $this->parent->linkToUserProfile($arr['post_user']),
 					'###CHECK_DELETE###'	=> '',
@@ -305,7 +305,7 @@ class tx_mmforum_postqueue {
 					'###FORUMPATH###'		=> $this->getForumLink($arr['topic_forum']),
 				);
 				if($arr['topic']) {
-					$rMarker['###TOPIC_LINK###'] = $this->parent->shield($arr['topic_title']).' ['.$this->pi_getLL('postqueue.newTopic').']';
+					$rMarker['###TOPIC_LINK###'] = $this->parent->escape($arr['topic_title']).' ['.$this->pi_getLL('postqueue.newTopic').']';
 				} else {
 					$tData = $this->parent->getTopicData($arr['post_parent']);
 					$linkParams[$this->parent->prefixId] = array(
@@ -314,7 +314,7 @@ class tx_mmforum_postqueue {
 					);
 					if($this->parent->getIsRealURL()) $linkParams[$this->parent->prefixId]['fid'] = $tData['forum_id'];
 
-					$rMarker['###TOPIC_LINK###'] = $this->parent->pi_linkToPage($this->parent->shield($tData['topic_title']),$this->conf['pid_forum'],'',$linkParams);
+					$rMarker['###TOPIC_LINK###'] = $this->parent->pi_linkToPage($this->parent->escape($tData['topic_title']),$this->conf['pid_forum'],'',$linkParams);
 				}
 
 				$rContent .= $this->cObj->substituteMarkerArray($template_row, $rMarker);

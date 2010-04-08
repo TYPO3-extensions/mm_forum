@@ -441,7 +441,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						);
 					}
 					$link = $this->pi_getPageLink($this->getForumPID(), '', $linkParams);
-					$this->redirectTo = $this->getAbsUrl($link);
+					$this->redirectTo = $this->tools->getAbsoluteUrl($link);
 				}
 				break;
 		}
@@ -1030,7 +1030,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         $where ='deleted = 0 AND
                  hidden = 0 AND
                  '.$catIdWhere.
-                 $this->getPidQuery().
+                 $this->getStoragePIDQuery().
                  $this->getMayRead_forum_query();
         $forumlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                 '*',
@@ -1248,7 +1248,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$marker['###PAGES###'] = $this->pagecount('tx_mmforum_topics', 'forum_id', $forumId, $limitcount);
 
 		$marker['###HIDESOLVED_CHECKED###'] = ($this->piVars['hide_solved'] ? 'checked="checked"' : '');
-		$marker['###SETTINGS_ACTION###'] = htmlspecialchars($this->getAbsUrl($this->pi_linkTP_keepPIvars_url(array('hide_solved'=>0))));
+		$marker['###SETTINGS_ACTION###'] = htmlspecialchars($this->tools->getAbsoluteUrl($this->pi_linkTP_keepPIvars_url(array('hide_solved'=>0))));
 
 //		$marker['###FORUMICON###'] = $this->getForumIcon($this->getMayWrite_forum($forumId), count($readarray));
 
@@ -1539,7 +1539,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$templateFile = $this->cObj->fileResource($conf['template.']['list_topic']);
 		$template     = $this->cObj->getSubpart($templateFile, '###PREFIX_SETTINGS###');
 		$marker = array(
-			'###ACTION###'                  => $this->getAbsUrl($this->pi_linkTP_keepPIvars_url()),
+			'###ACTION###'                  => $this->tools->getAbsoluteUrl($this->pi_linkTP_keepPIvars_url()),
 			'###CATEGORIES###'              => '<option value="all">' . $this->pi_getLL('prefix.all') . '</option>',
 			'###ORDER_LASTPOST###'          => '',
 			'###ORDER_CATEGORY###'          => '',
@@ -2363,7 +2363,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$this->piVars['topicname'],
 						$this->piVars['message'],
 						time(),
-						$this->ip2hex(t3lib_div::getIndpEnv('REMOTE_ADDR')),
+						$this->tools->ip2hex(t3lib_div::getIndpEnv('REMOTE_ADDR')),
 						$attachment_ids,
 						$poll_id
 					);
@@ -2378,7 +2378,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$this->piVars['topicname'],
 						$this->piVars['message'],
 						time(),
-						$this->ip2hex(t3lib_div::getIndpEnv('REMOTE_ADDR')),
+						$this->tools->ip2hex(t3lib_div::getIndpEnv('REMOTE_ADDR')),
 						$attachment_ids,
 						$poll_id,
 						$this->piVars['havealook'] == 'havealook'
@@ -2393,7 +2393,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$linkParams[$this->prefixId]['fid'] = $forumId;
 					}
 					$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
-					$link = $this->getAbsUrl($link);
+					$link = $this->tools->getAbsoluteUrl($link);
 					header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $postid));
 					exit();
 				}
@@ -2485,7 +2485,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					'###TOPICNAME###'           => $this->escape($this->piVars['topicname']),
 					'###HAVEALOOK###'           => ($this->piVars['havealook'] ? 'checked="checked"' : ''),
 					'###OLDPOSTTEXT###'         => '',
-					'###ACTION###'              => htmlspecialchars($this->getAbsUrl($actionURL)),
+					'###ACTION###'              => htmlspecialchars($this->tools->getAbsoluteUrl($actionURL)),
 					'###SMILIES###'             => $this->show_smilie_db($conf),
 					'###LABEL_ATTACHMENT###'    => $this->pi_getLL('newPost.attachment'),
 					'###LABEL_POLL###'          => $this->pi_getLL('poll.postattach'),
@@ -2640,7 +2640,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$this->getUserID(),
 						$this->piVars['message'],
 						time(),
-						  $this->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
+						  $this->tools->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
 						  $attachment_ids
 					);
 
@@ -2654,7 +2654,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$this->getUserID(),
 						$this->piVars['message'],
 						time(),
-						$this->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
+						$this->tools->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
 						$attachment_ids,
 						FALSE,
 						$this->piVars['havealook'] == 'havealook'
@@ -2667,7 +2667,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						'tx_mmforum_pi1[pid]'     => $post_uid
 					);
 					$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
-					$link = $this->getAbsUrl($link);
+					$link = $this->tools->getAbsoluteUrl($link);
 					header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $post_uid));
 					exit();
                 }
@@ -2812,7 +2812,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     'action'            => 'new_post',
                     'tid'                => $this->piVars['tid']
                 );
-				if($this->getIsRealURL()) $actionParams[$this->prefixId]['fid'] = $forumId;
+				if($this->useRealUrl()) $actionParams[$this->prefixId]['fid'] = $forumId;
                 $actionLink = $this->pi_getPageLink($GLOBALS['TSFE']->id,'',$actionParams);
 
                 $bbCodeButtons_template = $this->cObj->getSubpart($template, '###BBCODEBUTTONS###');
@@ -2826,7 +2826,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $template = $this->cObj->substituteSubpart($template,'###BBCODEBUTTONS###',$bbCodeButtons);
 
                 $marker['###SMILIES###']			= $this->show_smilie_db($conf);
-                $marker['###ACTION###']				= htmlspecialchars($this->getAbsUrl($actionLink));
+                $marker['###ACTION###']				= htmlspecialchars($this->tools->getAbsoluteUrl($actionLink));
                 $marker['###LABEL_CREATETOPIC###']	= $this->pi_getLL('newPost.title');
 
                 $marker['###OLDPOSTTEXT###'] = '<hr />'.tx_mmforum_postfunctions::list_post('',$conf,'DESC');
@@ -2958,17 +2958,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 			}
 
-			#if(!file_exists($this->conf['path_avatar'].'.htaccess'))
-			#	file_put_contents($this->conf['path_avatar'].'.htaccess', "deny from all");
-
 			$dirname = $this->conf['attachments.']['attachmentDir'];
 			if (substr($newpath, -1, 1) != '/') {
 				$dirname .= '/';
 			}
-
-			#$htaccessPath = $dirname.'.htaccess';
-			#if(!file_exists($htaccessPath))
-			#	file_put_contents($htaccessPath, "deny from all");
 
 			$newpath = $dirname.'attachment_' . md5_file($file['tmp_name']);
 
@@ -3162,7 +3155,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     'pid'     => $this->piVars['pid'],
                 );
                 $link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
-                $link = $this->getAbsUrl($link);
+                $link = $this->tools->getAbsoluteUrl($link);
                 header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $this->piVars['pid']));
                 exit();
             }
@@ -3333,7 +3326,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $marker['###OLDPOSTTEXT###']           = '';
                 $marker['###SMILIES###']               = $this->show_smilie_db($conf);
                 $marker['###SOLVEDOPTION###']          = '';
-                $marker['###ACTION###']                = htmlspecialchars($this->getAbsUrl($this->pi_getPageLink($GLOBALS['TSFE']->id,'',array($this->prefixId=>array('action'=>'post_edit','pid'=>$this->piVars['pid'])))));
+                $marker['###ACTION###']                = htmlspecialchars($this->tools->getAbsoluteUrl($this->pi_getPageLink($GLOBALS['TSFE']->id,'',array($this->prefixId=>array('action'=>'post_edit','pid'=>$this->piVars['pid'])))));
 
                 $marker['###LABEL_SEND###']            = $this->pi_getLL('newPost.save');
                 $marker['###LABEL_PREVIEW###']         = $this->pi_getLL('newPost.preview');
@@ -3484,7 +3477,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$template = $this->cObj->fileResource($conf['template.']['favorites']);
 			$template = $this->cObj->getSubpart($template, '###FAVORITES_SETTINGS###');
 			$settingsMarker = array(
-				'###ACTION###'             => htmlspecialchars($this->getAbsUrl($this->pi_linkTP_keepPIvars_url())),
+				'###ACTION###'             => htmlspecialchars($this->tools->getAbsoluteUrl($this->pi_linkTP_keepPIvars_url())),
 				'###ORDER_LPDATE###'       => ($orderBy == 'lpdate' ? 'selected="selected"' : ''),
 				'###ORDER_CAT###'          => ($orderBy == 'cat'    ? 'selected="selected"' : ''),
 				'###ORDER_ADDED###'        => ($orderBy == 'added'  ? 'selected="selected"' : ''),
@@ -3510,7 +3503,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$template = $this->cObj->fileResource($conf['template.']['favorites']);
 			$template = $this->cObj->getSubpart($template, '###FAVORITES_BEGIN###');
 			$marker = array(
-				'###ACTION###'                => $this->escapeURL($this->getAbsUrl($this->pi_linkTP_keepPIvars_url())),
+				'###ACTION###'                => $this->escapeURL($this->tools->getAbsoluteUrl($this->pi_linkTP_keepPIvars_url())),
 				'###LABEL_OPTIONS###'         => $this->pi_getLL('favorites.options'),
 				'###LABEL_FAVORITES###'       => $this->pi_getLL('favorites.title'),
 				'###LABEL_TOPICNAME###'       => $this->pi_getLL('topic.title'),
@@ -4139,7 +4132,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $template = $this->cObj->getSubpart($template, "###SENDMAIL###");
                 $marker = array();
                 // Generate authencification code and insert into database
-                    $mailcode = md5(getenv("REMOTE_ADDR").time().$this->randkey(10));
+                    $mailcode = md5(getenv("REMOTE_ADDR").time().$this->tools->generateRandomString(10));
                     $insertArray = array(
                         'code'          => $mailcode,
                         'tstamp'        => time(),
@@ -4726,7 +4719,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$where = '';
 		}
 
-    	$where .= 'deleted = 0 AND crdate > '.intval($lastlogin).' AND a.topic_id NOT IN (SELECT topic_id FROM tx_mmforum_postsread WHERE user='.intval($uid).$this->getPidQuery(). ')';
+    	$where .= 'deleted = 0 AND crdate > '.intval($lastlogin).' AND a.topic_id NOT IN (SELECT topic_id FROM tx_mmforum_postsread WHERE user='.intval($uid).$this->getStoragePIDQuery(). ')';
     	//debug ($where, 'where');
     	if ($filter['onlyCategories']) {
     		$select = 'distinct(forum_id)';
@@ -4770,7 +4763,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Redirecting visitor back to previous page
 		$ref = t3lib_div::getIndpEnv('HTTP_REFERER');
 		if ($ref) {
-			$ref = $this->getAbsUrl($ref);
+			$ref = $this->tools->getAbsoluteUrl($ref);
 			header('Location: ' . t3lib_div::locationHeaderUrl($ref));
 			exit();
 		}
@@ -4961,7 +4954,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'pid'    => 'last'
 		);
 		$linkto = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
-		$linkto = $this->getAbsUrl($linkto);
+		$linkto = $this->tools->getAbsoluteUrl($linkto);
 		header('Location: ' . t3lib_div::locationHeaderUrl($linkto));
 		exit();
 	}
@@ -6044,7 +6037,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$linkParams[$this->prefixId]['fid'] = $topicData['forum_id'];
 			}
 
-			$link = $this->getAbsUrl($this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams));
+			$link = $this->tools->getAbsoluteUrl($this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams));
 			header('Location: ' . t3lib_div::locationHeaderUrl($link));
 			exit();
 		} else {

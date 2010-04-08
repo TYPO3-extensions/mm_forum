@@ -198,7 +198,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		} else {
 			$pageNum = 0;
 		}
-		$forumpath_topic = $this->shield(stripslashes($topicData['topic_title']));
+		$forumpath_topic = $this->escape(stripslashes($topicData['topic_title']));
 		$topic_is        = $topicData['topic_is'];
 		$closed = $this->local_cObj->cObjGetSingle($this->conf['list_posts.']['closed'], $this->conf['list_posts.']['closed.']);
 		$prefix = $this->local_cObj->cObjGetSingle($this->conf['list_posts.']['prefix'], $this->conf['list_posts.']['prefix.']);
@@ -269,7 +269,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				'page'   => $pageNum
 			);
 			$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
-			$link = $this->getAbsUrl($link);
+			$link = $this->tools->getAbsoluteUrl($link);
 			header('Location: ' . t3lib_div::locationHeaderUrl($link));
 			exit();
 		}
@@ -300,7 +300,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 					'action' => 'new_post',
 					'tid'    => $topicId
 				);
-				if ($this->getIsRealURL()) {
+				if ($this->useRealUrl()) {
 					$linkParams[$this->prefixId]['fid'] = $topicData['forum_id'];
 				}
 				$marker['###POSTBOTTOM###'] = $this->createButton('reply', $linkParams);
@@ -331,7 +331,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				$marker['###SOLVED_TRUE###']		= ($topicData['solved']  ? 'selected="selected"' : '');
 				$marker['###SOLVED_TOPICUID###']	= $topicId;
 				$marker['###ACTION###']				= $this->piVars['action'];
-				$marker['###FORMACTION###']         = $this->shieldURL($this->getAbsUrl($this->pi_getPageLink($GLOBALS['TSFE']->id)));
+				$marker['###FORMACTION###']         = $this->escapeURL($this->tools->getAbsoluteUrl($this->pi_getPageLink($GLOBALS['TSFE']->id)));
 			} else {
 				$template_option = $this->cObj->substituteSubpart($templateOptions, '###SOLVEDOPTION###', '');
 			}
@@ -377,7 +377,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
     		$link = $topic_data['solved']?$this->pi_getLL('topic-solvedshort-on'):$this->pi_getLL('topic-solvedshort-off');
     	}
 
-        $image = $this->imgtag($imgInfo);
+        $image = $this->buildImageTag($imgInfo);
         $image = $this->cObj->stdWrap($image,$this->conf['list_posts.']['optImgWrap.']);
         $link  = $this->cObj->stdWrap($link,$this->conf['list_posts.']['optLinkWrap.']);
 
@@ -401,7 +401,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
             	'action'		=> 'set_favorite',
             	'tid'			=> $this->piVars['tid']
             );
-            if($this->getIsRealURL()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+            if($this->useRealUrl()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
 
             $link = $this->pi_linkTP($this->pi_getLL('on'),$favlinkParams).' / <strong>'.$this->pi_getLL('off').'</strong>';
         } else {
@@ -412,12 +412,12 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
             	'action'		=> 'del_favorite',
             	'tid'			=> $this->piVars['tid']
             );
-            if($this->getIsRealURL()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+            if($this->useRealUrl()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
 
             $link = '<strong>'.$this->pi_getLL('on').'</strong> / '.$this->pi_linkTP($this->pi_getLL('off'),$favlinkParams);
         }
 
-        $image = $this->imgtag($imgInfo);
+        $image = $this->buildImageTag($imgInfo);
         $image = $this->cObj->stdWrap($image,$this->conf['list_posts.']['optImgWrap.']);
         $link  = $this->cObj->stdWrap($link,$this->conf['list_posts.']['optLinkWrap.']);
 
@@ -440,7 +440,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                 'action'        => 'set_havealook',
                 'tid'           => $this->piVars['tid']
             );
-            if($this->getIsRealURL()) $linkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+            if($this->useRealUrl()) $linkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
             $link = $this->pi_linkTP($this->pi_getLL('on'),$linkParams).' / <strong>'.$this->pi_getLL('off').'</strong>';
         } else {
             $imgInfo['alt'] = $this->pi_getLL('topic.emailSubscr.on');
@@ -450,11 +450,11 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                 'action'        => 'del_havealook',
                 'tid'           => $this->piVars['tid']
             );
-            if($this->getIsRealURL()) $linkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+            if($this->useRealUrl()) $linkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
             $link = '<strong>'.$this->pi_getLL('on').'</strong> / '.$this->pi_linkTP($this->pi_getLL('off'),$linkParams);
         }
 
-        $image = $this->imgtag($imgInfo);
+        $image = $this->buildImageTag($imgInfo);
         $image = $this->cObj->stdWrap($image,$this->conf['list_posts.']['optImgWrap.']);
         $link  = $this->cObj->stdWrap($link,$this->conf['list_posts.']['optLinkWrap.']);
 
@@ -557,7 +557,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 	function marker_getUserSignature($userData) {
 		$signature = '';
 		if ($userData['tx_mmforum_user_sig']) {
-			$signature = $this->shield($userData['tx_mmforum_user_sig']);
+			$signature = $this->escape($userData['tx_mmforum_user_sig']);
 
 			if ($this->conf['signatureBBCodes']) {
 				$signature = tx_mmforum_postparser::main($this, $this->conf, $signature, 'textparser');
@@ -597,7 +597,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                     'tid'           => $this->piVars['tid'],
                     'quote'         => $row['uid']
                 );
-	            if($this->getIsRealURL()) {
+	            if($this->useRealUrl()) {
 	            	$quoteParams[$this->prefixId]['fid'] = $row['forum_id'];
                     $quoteParams[$this->prefixId]['pid'] = $this->pi_getLL('realurl.quote');
 	            }
@@ -620,7 +620,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                     'tx_mmforum_pi3[action]'        => 'message_write',
                     'tx_mmforum_pi3[userid]'        => $user['uid']
                 );
-                if($this->getIsRealUrl()) {
+                if($this->useRealUrl()) {
                     $pmParams['tx_mmforum_pi3']['folder'] = 'inbox';
                     $pmParams['tx_mmforum_pi3']['messid'] = $this->pi_getLL('realurl.pmnew');
                 }
@@ -631,7 +631,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                 'action'        => 'post_alert',
                 'pid'     		=> $row['uid'],
             );
-            if($this->getIsRealUrl()) {
+            if($this->useRealUrl()) {
                 $alertParams[$this->prefixId]['tid'] = $this->piVars['tid'];
                 $alertParams[$this->prefixId]['fid'] = $row['forum_id'];
             }
@@ -651,7 +651,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                 'action'        => 'post_edit',
                 'pid'           => $row['uid']
             );
-            if($this->getIsRealURL()) {
+            if($this->useRealUrl()) {
             	$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
             	$linkParams[$this->prefixId]['tid'] = $row['topic_id'];
             }
@@ -661,7 +661,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                 'action'        => 'post_del',
                 'pid'           => $row['uid']
             );
-            if($this->getIsRealURL()) {
+            if($this->useRealUrl()) {
             	$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
             	$linkParams[$this->prefixId]['tid'] = $row['topic_id'];
             }
@@ -708,7 +708,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 					'action'     => 'get_attachment',
 					'attachment' => $attachment['uid']
 				);
-				if ($this->getIsRealURL()) {
+				if ($this->useRealUrl()) {
 					unset($linkParams[$this->prefixId]['attachment']);
 					$linkParams[$this->prefixId]['fid'] = $this->pi_getLL('realurl.attachment') . $attachment['uid'];
 				}
@@ -940,7 +940,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                         'fid'       => $forum_id
                     );
                     $link = $this->pi_getPageLink($GLOBALS['TSFE']->id,'',$linkParams);
-                    $link = $this->getAbsUrl($link);
+                    $link = $this->tools->getAbsoluteUrl($link);
                     header("Location: $link"); die();
                 } else {
 
@@ -953,7 +953,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                         'pid'       => 'last'
                     );
                     $link = $this->pi_getPageLink($GLOBALS['TSFE']->id,'',$linkParams);
-                    $link = $this->getAbsUrl($link);
+                    $link = $this->tools->getAbsoluteUrl($link);
                     header("Location: $link"); die();
                 }
 
@@ -1074,7 +1074,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 					'fid'    => $topicData['forum_id']
 				);
 				$link = $this->pi_getPageLink($this->getForumPID(), '', $linkParams);
-				$link = $this->getAbsUrl($link);
+				$link = $this->tools->getAbsoluteUrl($link);
 				header('Location: ' . t3lib_div::locationHeaderUrl($link));
 				exit();
 			}
@@ -1124,7 +1124,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			);
 
 			// Create action link for form
-			$marker['###ACTIONLINK###'] = $this->shieldURL($this->getAbsUrl($this->pi_linkTP_keepPIvars_url()));
+			$marker['###ACTIONLINK###'] = $this->escapeURL($this->tools->getAbsoluteUrl($this->pi_linkTP_keepPIvars_url()));
 
 			// Generate prefix list
 			$prefixes = t3lib_div::trimExplode(',', $this->conf['prefixes']);
@@ -1141,7 +1141,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			$marker['###READ_FLAG###']   = ($topicData['read_flag']   == 1 ? ' checked="checked"' : '');
 			$marker['###CLOSED_FLAG###'] = ($topicData['closed_flag'] == 1 ? ' checked="checked"' : '');;
 			$marker['###DELETE_FLAG###'] = '';
-			$marker['###TOPICTITLE###'] = $marker['###TOPICTITEL###'] = $this->shield(stripslashes($topicData['topic_title']));
+			$marker['###TOPICTITLE###'] = $marker['###TOPICTITEL###'] = $this->escape(stripslashes($topicData['topic_title']));
 
 			// Generate "move topic" select box
 			$marker['###FORUM_BOX###'] = $this->get_forumbox($topicId);
@@ -1176,7 +1176,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		}
 		if ($postId) {
 			$link = $this->get_pid_link($postId, $this->piVars['sword'], $this->conf);
-			$link = $this->getAbsUrl($link);
+			$link = $this->tools->getAbsoluteUrl($link);
 			header('Location: ' . t3lib_div::locationHeaderUrl($link));
 			exit();
 		}

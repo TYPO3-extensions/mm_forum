@@ -66,7 +66,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 		if (!$userId) {
 			return $this->errorMessage($conf, $this->pi_getLL('user.noLogin'));
 		}
-		$page = intval($this->getIsRealURL() ? str_replace($this->pi_getLL('realurl.page') . '_', '', $page) : $page);
+		$page = intval($this->useRealUrl() ? str_replace($this->pi_getLL('realurl.page') . '_', '', $page) : $page);
 
 
 		$itemsPerPage = 10;
@@ -159,7 +159,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 				$from . ', ' . $itemsPerPage
 			);
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$title = $this->shield($row['topic_title']);
+				$title = $this->escape($row['topic_title']);
 				if ($row['topic_is']) {
 					$title = '<span class="tx-mmforum-prefix">[{'.$row['topic_is'].'}] </span>' . $title;
 				}
@@ -173,15 +173,15 @@ class tx_mmforum_user extends tx_mmforum_base {
 					'action' => 'list_post',
 					'tid'    => $row['topic_id']
 				);
-				if ($this->getIsRealURL()) {
+				if ($this->useRealUrl()) {
 					$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
 				}
 				$postMarker = array(
 					'###TOPICNAME###' => $this->pi_linkToPage($title, $conf['pid_forum'], '', $linkParams) . $solved,
 					'###TOPICDATE###' => $this->formatDate($row['crdate']),
-					'###PREFIX###'    => $this->shield($row['topic_is']),
-					'###CATEGORY###'  => $this->shield($row['category_name']),
-					'###FORUM###'     => $this->shield($row['forum_name']),
+					'###PREFIX###'    => $this->escape($row['topic_is']),
+					'###CATEGORY###'  => $this->escape($row['category_name']),
+					'###FORUM###'     => $this->escape($row['forum_name']),
 					'###READIMAGE###' => $this->getTopicIcon($row['topic_id']),
 				);
 
@@ -222,7 +222,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 			'user_id' => $userId,
 			'page'    => $page
 		);
-		if ($this->getIsRealURL()) {
+		if ($this->useRealUrl()) {
 			$linkParams[$this->prefixId] = array(
 				'action' => 'post_history',
 				'fid'    => tx_mmforum_tools::get_username($userId),

@@ -151,7 +151,7 @@ class tx_mmforum_polls {
 
             $aMarker = array(
                 '###ANSWER_UID###'          => '',
-                '###ANSWER_TEXT###'         => $pObj->shield($answer),
+                '###ANSWER_TEXT###'         => $pObj->escape($answer),
                 '###ENABLE###'              => 'disabled="disabled"',
             );
             $aContent .= $pObj->cObj->substituteMarkerArray($row_template, $aMarker);
@@ -162,7 +162,7 @@ class tx_mmforum_polls {
             '###LABEL_POLL###'          => $pObj->pi_getLL('poll.title'),
             '###LABEL_VOTE###'          => $pObj->pi_getLL('poll.vote'),
             '###LABEL_QUESTION###'      => $pObj->pi_getLL('poll.question'),
-            '###QUESTION###'            => $pObj->shield($data['question']),
+            '###QUESTION###'            => $pObj->escape($data['question']),
             '###EXPIRES###'             => $expDate?($pObj->pi_getLL('poll.expires').' '.date('d. m. Y, H:i',$expDate)):'',
             '###ICON###'				=> $pObj->cObj->cObjGetSingle($pObj->conf['polls.']['poll_icon'],$pObj->conf['polls.']['poll_icon.']),
         );
@@ -254,7 +254,7 @@ class tx_mmforum_polls {
 
             $aMarker = array(
                 '###ANSWER_UID###'          => $arr['uid'],
-                '###ANSWER_TEXT###'         => $this->p->shield($arr['answer']),
+                '###ANSWER_TEXT###'         => $this->p->escape($arr['answer']),
                 '###ANSWER_COUNT###'        => sprintf($this->p->pi_getLL('poll.replies'),$arr['votes'],$this->data['votes'],$pAnswers.'%'),
                 '###ANSWER_ANSWERS###'      => '<div style="width: '.$pAnswers.'%; height:10px; background-color: '.$color.';">&nbsp;</div>',
                 '###ENABLE###'              => '',
@@ -274,9 +274,9 @@ class tx_mmforum_polls {
             '###LABEL_POLL###'          => $this->p->pi_getLL('poll.title'),
             '###LABEL_VOTE###'          => $this->p->pi_getLL('poll.vote'),
             '###LABEL_QUESTION###'      => $this->p->pi_getLL('poll.question'),
-            '###QUESTION###'            => $this->p->shield($this->data['question']),
+            '###QUESTION###'            => $this->p->escape($this->data['question']),
             '###EXPIRES###'             => $this->data['endtime']?($this->p->pi_getLL('poll.expires').' '.date('d. m. Y, H:i',$this->data['endtime'])):'',
-            '###ACTION###'              => $this->p->shieldURL($this->p->getAbsUrl($actionLink)),
+            '###ACTION###'              => $this->p->escapeURL($this->p->tools->getAbsoluteUrl($actionLink)),
             '###ICON###'				=> $this->cObj->cObjGetSingle($this->conf['polls.']['poll_icon'],$this->conf['polls.']['poll_icon.']),
         );
         $marker['###EXPIRES###'] = $this->cObj->stdWrap($marker['###EXPIRES###'], $this->conf['polls.']['expired_stdWrap.']);
@@ -532,7 +532,7 @@ class tx_mmforum_polls {
         $marker = array(
             '###LABEL_QUESTION###'      => $pObj->pi_getLL('poll.question'),
             '###LABEL_ANSWERS###'       => $pObj->pi_getLL('poll.answers'),
-            '###QUESTION###'            => $pObj->shield($override['question']?$override['question']:$poll['question']),
+            '###QUESTION###'            => $pObj->escape($override['question']?$override['question']:$poll['question']),
             '###ANSWER###'              => '',
             '###DELETE###'              => $pObj->pi_getLL('poll.deleteAnswer'),
             '###ADD_ANSWER###'          => $pObj->pi_getLL('poll.addAnswer'),
@@ -566,7 +566,7 @@ class tx_mmforum_polls {
                 }
             }
             $aMarker = array(
-                '###ANSWER###'      => $pObj->shield($answer),
+                '###ANSWER###'      => $pObj->escape($answer),
                 '###ANSWER_UID###'  => $arr['uid'],
                 '###ANSWER_MODE###' => 'edit'
             );
@@ -579,7 +579,7 @@ class tx_mmforum_polls {
         if(is_array($override['answer']['new'])) {
             foreach($override['answer']['new'] as $nAnswer) {
                 $aMarker = array(
-                    '###ANSWER###'      => $pObj->shield($nAnswer),
+                    '###ANSWER###'      => $pObj->escape($nAnswer),
                     '###ANSWER_UID###'  => '',
                     '###ANSWER_MODE###' => 'new'
                 );
@@ -621,7 +621,7 @@ class tx_mmforum_polls {
         $marker = array(
             '###LABEL_QUESTION###'      => $pObj->pi_getLL('poll.question'),
             '###LABEL_ANSWERS###'       => $pObj->pi_getLL('poll.answers'),
-            '###QUESTION###'            => $pObj->shield($piVars?$piVars['question']:''),
+            '###QUESTION###'            => $pObj->escape($piVars?$piVars['question']:''),
             '###ANSWER###'              => '',
             '###DELETE###'              => $pObj->pi_getLL('poll.deleteAnswer'),
             '###ADD_ANSWER###'          => $pObj->pi_getLL('poll.addAnswer'),
@@ -643,7 +643,7 @@ class tx_mmforum_polls {
 
         for($i = 0; $i < $defACount; $i ++) {
             $marker = array(
-                '###ANSWER###'      => $pObj->shield($piVars?$piVars['answer']['new'][$i]:''),
+                '###ANSWER###'      => $pObj->escape($piVars?$piVars['answer']['new'][$i]:''),
                 '###ANSWER_UID###'  => '',
                 '###ANSWER_MODE###' => 'new',
                 '###DELETE###'      => $pObj->pi_getLL('poll.deleteAnswer'),

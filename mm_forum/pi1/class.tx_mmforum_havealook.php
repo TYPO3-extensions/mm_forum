@@ -161,7 +161,7 @@ class tx_mmforum_havealook {
 			$templateFile = $forumObj->cObj->fileResource($forumObj->conf['template.']['havealook']);
 			$template     = $forumObj->cObj->getSubpart($templateFile, '###HAVEALOOK_SETTINGS###');
 			$marker = array(
-				'###ACTION###'             => $forumObj->escapeURL($forumObj->getAbsUrl($forumObj->pi_linkTP_keepPIvars_url())),
+				'###ACTION###'             => $forumObj->escapeURL($forumObj->tools->getAbsoluteUrl($forumObj->pi_linkTP_keepPIvars_url())),
 				'###ORDER_LPDATE###'       => ($orderBy == 'lpdate') ? 'selected="selected"' : '',
 				'###ORDER_CAT###'          => ($orderBy == 'cat'   ) ? 'selected="selected"' : '',
 				'###ORDER_ADDED###'        => ($orderBy == 'added' ) ? 'selected="selected"' : '',
@@ -187,7 +187,7 @@ class tx_mmforum_havealook {
 			// rendering the head part
 			$template      = $forumObj->cObj->getSubpart($templateFile, '###HAVEALOOK_BEGIN###');
 			$marker = array(
-				'###ACTION###'                => $forumObj->escapeURL($forumObj->getAbsUrl($forumObj->pi_linkTP_keepPIvars_url())),
+				'###ACTION###'                => $forumObj->escapeURL($forumObj->tools->getAbsoluteUrl($forumObj->pi_linkTP_keepPIvars_url())),
 				'###LABEL_HAVEALOOK###'       => $forumObj->pi_getLL('havealook.title'),
 				'###LABEL_OPTIONS###'         => $forumObj->pi_getLL('favorites.options'),
 				'###LABEL_TOPICNAME###'       => $forumObj->pi_getLL('topic.title'),
@@ -436,7 +436,7 @@ class tx_mmforum_havealook {
 		if (strlen($forumObj->conf['notifyingMail.']['topicLinkPrefix_override']) > 0) {
 			$link = $forumObj->conf['notifyingMail.']['topicLinkPrefix_override'] . $link;
 		} else {
-			$link = $forumObj->getAbsUrl($link);
+			$link = $forumObj->tools->getAbsoluteUrl($link);
 		}
 
 		$marker = array(
@@ -536,7 +536,7 @@ class tx_mmforum_havealook {
 
 		if (strlen($forumObj->conf['notifyingMail.']['topicLinkPrefix_override']) > 0)
 			$link = $forumObj->conf['notifyingMail.']['topicLinkPrefix_override'] . $link;
-		else $link = $forumObj->getAbsUrl($link);
+		else $link = $forumObj->tools->getAbsoluteUrl($link);
 
 		$template = $forumObj->pi_getLL('ntfMailForum.text');
 

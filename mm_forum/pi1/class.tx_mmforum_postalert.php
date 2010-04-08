@@ -228,9 +228,9 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			$marker['###UID###']		= $row['uid'];
 			$marker['###TOPIC###']		= $this->pi_linkToPage(tx_mmforum_pi1::get_topic_name($row['topic_id']),$conf['pid_forum'],$target='_self',$linkparams);
 			$marker['###DATE###']		= $this->formatDate($row['crdate']);
-			$marker['###POST_TEXT###']	= nl2br($this->shield($posttext));
-			$marker['###TEXT_SHORT###']	= $this->shield(tx_mmforum_tools::textCut($row['alert_text'],15,''));
-			$marker['###TEXT###']		= nl2br($this->shield($row['alert_text']));
+			$marker['###POST_TEXT###']	= nl2br($this->escape($posttext));
+			$marker['###TEXT_SHORT###']	= $this->escape(tx_mmforum_tools::textCut($row['alert_text'],15,''));
+			$marker['###TEXT###']		= nl2br($this->escape($row['alert_text']));
 
 			$mod_data					= tx_mmforum_tools::get_userdata($row['cruser_id']);
 			$marker['###MOD###']		= $mod_data[tx_mmforum_pi1::getUserNameField()];
@@ -240,7 +240,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			$content_sub .= $this->cObj->substituteMarkerArrayCached($template_sub, $marker);
 		}
 		$content = $this->cObj->substituteSubpart($template,'###ALERT_LIST_SUB###',$content_sub);
-		$marker['###FORMACTION###'] = $this->shieldURL($this->getAbsUrl($this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$linkparams)));
+		$marker['###FORMACTION###'] = $this->escapeURL($this->tools->getAbsoluteUrl($this->pi_getPageLink($GLOBALS["TSFE"]->id,'',$linkparams)));
 		$content = $this->cObj->substituteMarkerArrayCached($content, $marker);
 
 		return $content;
@@ -288,7 +288,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 					$res        = $GLOBALS['TYPO3_DB']->exec_INSERTquery(' tx_mmforum_post_alert', $insertArray);
 
 					$linkto		= $this->get_pid_link($post_id,t3lib_div::_GP('sword'),$conf);
-                    $linkto     = $this->getAbsUrl($linkto);
+                    $linkto     = $this->tools->getAbsoluteUrl($linkto);
 
 					header('Location: '.$linkto);
 				}
@@ -304,10 +304,10 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 
             $posttext = $this->bb2text($posttext,$this->conf);
 
-			$marker['###ACTIONLINK###'] = $this->shieldURL($this->getAbsUrl($this->pi_linkTP_keepPIvars_url()));
+			$marker['###ACTIONLINK###'] = $this->escapeURL($this->tools->getAbsoluteUrl($this->pi_linkTP_keepPIvars_url()));
 			$marker['###POSTTEXT###']   = nl2br($posttext);
 
-			$marker['###FORMOPTIONS###'] .= '<input type="hidden"  name="tx_mmforum_pi1[action]" value="'.$this->shield($this->piVars['action']).'" />';
+			$marker['###FORMOPTIONS###'] .= '<input type="hidden"  name="tx_mmforum_pi1[action]" value="'.$this->escape($this->piVars['action']).'" />';
 			$marker['###FORMOPTIONS###'] .= '<input type="hidden"  name="tx_mmforum_pi1[pid]" value="'.$post_id.'" />';
 
 			$content = $this->cObj->substituteMarkerArrayCached($template, $marker);
