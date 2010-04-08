@@ -241,7 +241,7 @@ class tx_mmforum_indexing {
 			' tx_mmforumsearch_index_write' => time(),
 		);
 		$query = $GLOBALS['TYPO3_DB']->UPDATEquery('tx_mmforum_posts', 'uid = '.$post_id, $updateArray);
-		$res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 	}
 
 	/**
@@ -253,7 +253,7 @@ class tx_mmforum_indexing {
 			' tx_mmforumsearch_index_write' => time(),
 		);
 		$query = $GLOBALS['TYPO3_DB']->UPDATEquery('tx_mmforum_topics', "uid = ".$topic_id, $updateArray);
-		$res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 	}
 
 	/**
@@ -266,7 +266,7 @@ class tx_mmforum_indexing {
 			' tx_mmforumsearch_index_write' => 0,
 		);
 		$query = $GLOBALS['TYPO3_DB']->UPDATEquery('tx_mmforum_topics', "uid = ".$topic_id, $updateArray);
-		$res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 	}
 
 	/**
