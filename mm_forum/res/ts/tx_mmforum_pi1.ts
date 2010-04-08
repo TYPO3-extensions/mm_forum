@@ -197,7 +197,7 @@ plugin.tx_mmforum_pi1 {
                 stdWrap.if.isTrue.field = tx_mmforum_icq
                 stdWrap.typolink {
                     parameter.field = tx_mmforum_icq
-                    parameter.wrap = http://www.icq.com/ |
+                    parameter.wrap = http://www.icq.com/people/&uin= |
                 }
             }
             tx_mmforum_yim = IMAGE
