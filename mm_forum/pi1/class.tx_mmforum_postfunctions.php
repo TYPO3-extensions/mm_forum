@@ -122,7 +122,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 
 		// Output post listing START
-		$template = $this->cObj->getSubpart($templateFile, '###LIST_POSTS_BEGIN###');
+		$template = $this->cObj->getSubpart($templateFile, empty($this->conf['LIST_POSTS_BEGIN']) ? '###LIST_POSTS_BEGIN###' : $this->conf['LIST_POSTS_BEGIN']);
 		$marker = array(
 			'###LABEL_AUTHOR###'  => $this->pi_getLL('post.author'),
 			'###LABEL_MESSAGE###' => $this->pi_getLL('post.message'),
@@ -252,11 +252,17 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		);
 		list ($lastpostdate) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 		$topicData['_v_last_post_date'] = $lastpostdate;
+		$DoNotSelectFirstPost = '';
+
+		if (intval($this->firstPostID) > 0) {
+			$DoNotSelectFirstPost = ' AND uid <> ' . intval($this->firstPostID);
+		}
 
 		$postList = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*',
 			'tx_mmforum_posts',
-			'deleted = 0 AND hidden = 0 AND topic_id = ' . $topicId . $this->getStoragePIDQuery(),
+			'deleted = 0 AND hidden = 0 AND topic_id = ' . $topicId .
+			$this->getStoragePIDQuery() . $DoNotSelectFirstPost,
 			'',
 			'post_time ' . $orderingMode,
 			$limitCount * ($pageNum) . ', ' . $limitCount
@@ -292,7 +298,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 		// Output post listing END
 		$templateOptions = $this->cObj->getSubpart($templateFile, '###LIST_POSTS_OPTIONEN###');
-		$template        = $this->cObj->getSubpart($templateFile, '###LIST_POSTS_END###');
+		$template        = $this->cObj->getSubpart($templateFile, empty($this->conf['LIST_POSTS_END']) ? '###LIST_POSTS_END###' : $this->conf['LIST_POSTS_END']);
 
 		if ((!$topicData['read_flag'] && !$topicData['closed_flag']) || $this->getIsMod($topicData['forum_id']) || $this->getIsAdmin()) {
 			if ($this->getMayWrite_topic($topicId)) {
