@@ -5979,7 +5979,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      * @return  string          The button.
      */
     function createButton($label,$params,$id=0,$small=false,$href='',$nolink=false,$atagparams='') {
-        if($id==0) $id = $GLOBALS['TSFE']->id;
+        if($id==0) $id = intval($this->fid) == 0 ? $GLOBALS['TSFE']->id : intval($this->fid);
 
     	$prefixId = $this->prefixId_pi1?$this->prefixId_pi1:$this->prefixId;
 
