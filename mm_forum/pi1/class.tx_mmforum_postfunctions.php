@@ -83,6 +83,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 		// Determine sorting mode
 		$orderingMode = $this->conf['list_posts.']['postOrdering'] ? strtoupper($this->conf['list_posts.']['postOrdering']) : 'ASC';
+		if (!empty($order)) $orderingMode = $order;
 		if(!in_array($orderingMode, array('ASC','DESC'))) $orderingMode = 'ASC';
 
 		// load the topic data again, to make sure we get the latest additions from the admin changes
@@ -152,14 +153,9 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		// Increase hit counter
 		$GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_topics SET topic_views = topic_views+1 WHERE uid = ' . $topicId);
 
-
 		// Generate page navigation
 		$limitCount = $this->conf['post_limit'];
-		if ($order != 'DESC') {
-			$marker['###PAGES###'] = $this->pagecount('tx_mmforum_posts', 'topic_id', $topicId, $limitCount);
-		} else {
-			$marker['###PAGES###'] = '';
-		}
+		$marker['###PAGES###'] = $this->pagecount('tx_mmforum_posts', 'topic_id', $topicId, $limitCount);
 
 		// Generate breadcrumb menu
 		if ($this->conf['disableRootline']) {
@@ -255,14 +251,14 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		$DoNotSelectFirstPost = '';
 
 		if (intval($this->firstPostID) > 0) {
-			$DoNotSelectFirstPost = ' AND uid <> ' . intval($this->firstPostID);
-		}
+      $DoNotSelectFirstPost = ' AND uid <> ' . intval($this->firstPostID);
+    }
 
 		$postList = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*',
 			'tx_mmforum_posts',
 			'deleted = 0 AND hidden = 0 AND topic_id = ' . $topicId .
-			$this->getStoragePIDQuery() . $DoNotSelectFirstPost,
+      $this->getStoragePIDQuery() . $DoNotSelectFirstPost,
 			'',
 			'post_time ' . $orderingMode,
 			$limitCount * ($pageNum) . ', ' . $limitCount
