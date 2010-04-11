@@ -83,7 +83,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 		// Determine sorting mode
 		$orderingMode = $this->conf['list_posts.']['postOrdering'] ? strtoupper($this->conf['list_posts.']['postOrdering']) : 'ASC';
-		if (!empty($order)) $orderingMode = $order;
+		$order = strtoupper($order);
+		if (in_array($order, array('ASC','DESC'))) $orderingMode = $order;
 		if(!in_array($orderingMode, array('ASC','DESC'))) $orderingMode = 'ASC';
 
 		// load the topic data again, to make sure we get the latest additions from the admin changes
