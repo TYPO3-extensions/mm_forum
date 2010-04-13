@@ -160,7 +160,7 @@ Class tx_mmforum_FrontendAdministration {
 				# Load all subforums for the current category from the database.
 				# NOTE: The "hidden" flag is NOT queried on purpose!
 			$forumHandle = $TYPO3_DB->exec_SELECTquery ( '*', 'tx_mmforum_forums',
-			                                             'parentID='.$categoryArray['uid'].' '.$this->p->getStoragePIDQuery(),
+			                                             'parentID='.$categoryArray['uid'].' AND deleted=0 '.$this->p->getStoragePIDQuery(),
 			                                             '', 'sorting ASC' );
 			$forumContent = '';
 			$forumCount = $TYPO3_DB->sql_num_rows($forumHandle); $j = 1;
