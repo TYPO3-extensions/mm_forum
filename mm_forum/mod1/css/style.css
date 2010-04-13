@@ -90,6 +90,10 @@ tr.mm_forum-listrow_active td {
 	clear: both;
 }
 
+tr.mm_forum-listrow td, tr.mm_forum-listrow_active td {
+	padding: 6px;
+}
+
 
 
 td.mm_forum-listrow_header {

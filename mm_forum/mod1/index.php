@@ -313,6 +313,9 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 				$obj = t3lib_div::getUserObj($className);
 				$obj->p =& $this;
 				$settings = $moduleSettings['handler.']['settings.'];
+				$settings['settings.']['pids']['user'] = $this->confArr['userPID'];
+				$settings['settings.']['pids']['forum'] = $this->confArr['forumPID'];
+				$settings['settings.']['parentObject'] =& $this;
 				$content .= $obj->$methodName('', $settings);
 
 				/*                                                                 *
