@@ -346,12 +346,14 @@ class tx_mmforum_postparser {
 			'LENGTH(code) DESC'
 		);
 		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			if(substr($conf['postparser.']['bb_code_path_smilie'],0,4) == 'EXT:') {            // Is the Path includet with the EXT: Function ?
-				$smiliepath = tx_mmforum_tools::generateSiteRelExtPath($conf['postparser.']['bb_code_path_smilie'].$row['smile_url']);
-			}
-			else{
-				$smiliepath = $conf['postparser.']['bb_code_path_smilie'].$row['smile_url'];
-			}
+
+			$uploadPath = 'uploads/tx_mmforum/'.$row['smile_url'];
+
+			If(!file_exists($uploadPath)) {
+				if(substr($conf['postparser.']['bb_code_path_smilie'],0,4) == 'EXT:')
+					$smiliepath = tx_mmforum_tools::generateSiteRelExtPath($conf['postparser.']['bb_code_path_smilie'].$row['smile_url']);
+				else $smiliepath = $conf['postparser.']['bb_code_path_smilie'].$row['smile_url'];
+			} Else $smiliepath = $uploadPath;
 
 			$smilieimage 	=	'<img src="'.$smiliepath.'" alt="'.$row['smile_url'].'" />';
 			#$text 			= 	str_replace(' '.$row['code'].' ',$smilieimage,$text);
