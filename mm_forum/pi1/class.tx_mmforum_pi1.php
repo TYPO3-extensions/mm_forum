@@ -3715,7 +3715,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
         // Display smilies in table, 4 smilies a row.
         while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
-            $imgInfo['src'] = $conf['path_smilie'].$row['smile_url'];
+
+			$smiliePath = 'uploads/tx_mmforum/'.$row['smile_url'];
+			If(!file_exists($smiliePath)) $smiliePath = $conf['path_smilie'].$row['smile_url'];
+
+            $imgInfo['src'] = $smiliePath;
             $imgInfo['alt'] = $row['code'];
             $imgInfo['title'] = $row['code'];
             if (empty($conf['jQueryEditorJavaScript'])) {
