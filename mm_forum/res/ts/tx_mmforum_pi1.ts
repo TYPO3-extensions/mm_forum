@@ -598,37 +598,44 @@ plugin.tx_mmforum_pi1 {
 				edit.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-edit.png
 				edit.stdWrap.typolink.additionalParams.wrap = &tx_mmforum_pi1[editForum]=|
 				edit.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-edit
+				edit.altText.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-edit
 
 				remove < .button
 				remove.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-delete.png
 				remove.stdWrap.typolink.additionalParams.wrap = &tx_mmforum_pi1[removeForum]=|
 				remove.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-remove
+				remove.altText.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-remove
 
 				access < .button
 				access.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-access.png
 				access.stdWrap.typolink.additionalParams.wrap = &tx_mmforum_pi1[setACLs]=|
 				access.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-acl
+				access.altText.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-acl
 
 				newsub < .button
 				newsub.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-newforum.png
 				newsub.stdWrap.typolink.additionalParams.wrap = &tx_mmforum_pi1[newForum]=1&tx_mmforum_pi1[forum][parent]=|
 				newsub.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-newchild
+				newsub.altText.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-newchild
 
 				up < .button
 				up.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-up.png
 				up.stdWrap.typolink.additionalParams.wrap = &tx_mmforum_pi1[moveUp]=|
 				up.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-moveUp
+				up.altText.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-listmoveUpedit
 
 				down < .button
 				down.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-down.png
 				down.stdWrap.typolink.additionalParams.wrap = &tx_mmforum_pi1[moveDown]=|
 				down.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-moveDown
+				down.altText.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-moveDown
 
 				newctg < .button
 				newctg.file = {$plugin.tx_mmforum.style_path}/img/default/feadmin/feadmin-newcategory.png
 				newctg.stdWrap.typolink.additionalParams >
 				newctg.stdWrap.typolink.additionalParams = &tx_mmforum_pi1[newForum]=1
 				newctg.stdWrap.typolink.title.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-newcategory
+				newctg.altText.data = LLL:EXT:mm_forum/pi1/locallang.xml:feadmin-list-newcategory
 			}
 
 			validation {
