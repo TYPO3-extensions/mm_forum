@@ -294,7 +294,7 @@ Class tx_mmforum_FrontendAdministration {
 
 		Global $TYPO3_DB;
 
-		$where = ($parent == NULL) ? ' AND subgroup="" ' : ' AND find_in_set('.intval($parent).',subgroup) ';
+		$where = ($parent == NULL) ? ' AND (subgroup="" OR subgroup IS NULL) ' : ' AND find_in_set('.intval($parent).',subgroup) ';
 		$res = $TYPO3_DB->exec_SELECTquery('*', 'fe_groups', 'deleted=0 '.$this->p->getUserPidQuery('fe_groups').$where);
 
 		$content = '';
