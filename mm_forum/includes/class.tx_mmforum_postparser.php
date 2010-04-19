@@ -510,7 +510,7 @@ class tx_mmforum_postparser {
 	 */
 	function typolinks($text, &$parent) {
 		$ausgabe = array();
-		preg_match_all('(record\:[a-zA-Z_]+\:\d+)', $text, $ausgabe);
+		preg_match_all('(record\:[\w_]+\:\d+)', $text, $ausgabe);
 		if (is_array($ausgabe) && is_array($ausgabe[0])) {
   		for($i = 0; $i < sizeof($ausgabe[0]); ++$i)
       {
