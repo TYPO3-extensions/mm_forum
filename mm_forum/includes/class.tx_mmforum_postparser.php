@@ -543,17 +543,22 @@ class tx_mmforum_postparser {
   		$PagesTSconfig = $GLOBALS['TSFE']->getPagesTSconfig();
   		$linkhandler = $PagesTSconfig['RTE.']['default.']['linkhandler.'];
   		$linkHandlerData = t3lib_div::trimExplode(':', $id);
-  		$row = $this->getRecordRow($linkHandlerData[1], $linkHandlerData[2], $localcObj);
-  		$localcObj->start($row, ''); // make data available in TypoScript
-  		$lconf = array();
-  		if (is_array($linkhandler[$linkHandlerData[1].'.'][$row['pid'].'.'])) {
-  			$lconf = $linkhandler[$linkHandlerData[1].'.'][$row['pid'].'.'];
-  		} else {
-  			$lconf = $linkhandler[$linkHandlerData[1].'.']['default.'];
-  		}
-  		// remove the tinymce_rte specific attributes
-		  unset( $lconf['select'], $lconf['sorting'] );
-  		return $SERVER_NAME . '/' . $localcObj->typoLink_URL($lconf);
+
+  		if (is_array($GLOBALS['TCA'][$linkHandlerData[1]]['ctrl'])) {
+    		$row = $this->getRecordRow($linkHandlerData[1], $linkHandlerData[2], $localcObj);
+    		$localcObj->start($row, ''); // make data available in TypoScript
+    		$lconf = array();
+    		if (is_array($linkhandler[$linkHandlerData[1].'.'][$row['pid'].'.'])) {
+    			$lconf = $linkhandler[$linkHandlerData[1].'.'][$row['pid'].'.'];
+    		} else {
+    			$lconf = $linkhandler[$linkHandlerData[1].'.']['default.'];
+    		}
+    		// remove the tinymce_rte specific attributes
+  		  unset( $lconf['select'], $lconf['sorting'] );
+    		return $SERVER_NAME . '/' . $localcObj->typoLink_URL($lconf);
+    	}
+
+    	return $id;
   	} else {
   	  return $SERVER_NAME . '/' . $localcObj->typoLink_URL(array('parameter' => str_replace('record:page:', '', $id)));
     }
