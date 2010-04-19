@@ -1566,7 +1566,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'###LIMIT_ALL###'               => '',
 		);
 
-		$page = ($this->piVars['page'] ? $this->piVars['page'] : 1);
+		$page = ($this->piVars['page'] ? $this->piVars['page'] : 0);
 
 		// Evaluate settings
 		$settings = (is_array($this->piVars['list_prefix']) ? $this->piVars['list_prefix'] : array('order' => 'lastpost', 'show' => 'all'));
@@ -1631,7 +1631,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		if ($settings['limit'] == 'all') {
 			$limit = '';
 		} else {
-			$limit = (($page-1)*$settings['limit']) . ', ' . $settings['limit'];
+			$limit = (($page)*$settings['limit']) . ', ' . $settings['limit'];
 		}
 
 		// Set limitation markers for settings form
@@ -1747,7 +1747,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'###LABEL_TOPIC###'        => $this->pi_getLL('board.topic'),
 			'###LABEL_REPLIES_HITS###' => $this->pi_getLL('board.replies'),
 			'###LABEL_AUTHOR###'       => $this->pi_getLL('board.author'),
-			'###LABEL_LASTPOST###'     => $this->pi_getLL('board.lastPost')
+			'###LABEL_LASTPOST###'     => $this->pi_getLL('board.lastPost'),
+			'###LABEL_RATING###'       => $this->pi_getLL('board.rating')
 		);
 
 		$template = $this->cObj->substituteSubpart($template, '###SETTINGS###', '');
@@ -1814,6 +1815,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				'###DATE###'        => $this->formatDate($topicRow['topic_time']),
 				'###LAST###'		=> $this->getlastpost($topicRow['topic_last_post_id'], $conf).' '.$lastPostLink,
 				'###POSTS_HITS###'  => intval($topicRow['topic_replies']) .' ('. intval($topicRow['topic_views']) . ')',
+				'###RATING###'      => $this->getRatingDisplay('tx_mmforum_topic', $topicRow['uid'])
 			);
 			$location = $topicRow['cat_title'] . ' / ' . $topicRow['forum_name'];
 			$postLimit = intval($conf['post_limit']);
@@ -1829,9 +1831,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 				while ($topicPostsLeft >= 0) {
 					$i++;
-					$linkParams['page'] = $i;
-					if ($linkParams['page'] < 1) {
-            $linkParams['page'] = '';
+					$linkParams[$this->prefixId]['page'] = $i;
+					if ($linkParams[$this->prefixId]['page'] < 1) {
+            $linkParams[$this->prefixId]['page'] = '';
           }
 					$page_link .= ' '.$this->pi_linkToPage($i, $GLOBALS['TSFE']->id, '', $linkParams) . ' ';
 					$topicPostsLeft -= $postLimit;
@@ -1892,7 +1894,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			't.topic_last_post_id as post_id, t.uid as topic_id, t.*,
 				f.uid as forum_id, f.forum_name as forum_name,
 				c.forum_name as category_name,
-				p.poster_id as author',
+				p.poster_id as author, p.post_time',
 			'tx_mmforum_posts p, tx_mmforum_forums f, tx_mmforum_forums c, tx_mmforum_topics t',
 			't.uid = p.topic_id AND
 				f.uid = p.forum_id AND
@@ -1903,7 +1905,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$this->getMayRead_forum_query('c').
 				$this->getCategoryLimit_query('c'),
 			'p.topic_id',
-			't.topic_last_post_id DESC',
+			'p.post_time DESC',
 			$limit
 		);
 
@@ -1930,6 +1932,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				'###TOPICICON###'   => $this->getTopicIcon($row),
 				'###TOPICAUTHOR###' => $this->getauthor($row['author']),
 				'###NUMPOSTS###'    => $row['topic_replies'],
+				'###TOPICFORUM###'  => $this->escape($row['category_name']),
+				'###TOPICDATE###'   => date('d. m. Y, H:i', $row['post_time'])
 			);
 			$linkParams[$this->prefixId]['pid'] = 'last';
 			$imgInfo['src']		= $conf['path_img'] . $conf['images.']['jump_to'];
@@ -3272,7 +3276,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 	                    $aMarker['###LABEL_DELETEATTACHMENT###'] = $this->pi_getLL('attachment.delete');
 
-	                    $sAttachment = $attachment['file_name'].' ('.$this->pi_getLL('attachment.type').': '.$attachment['file_type'].', '.$this->pi_getLL('attachment.size').': '.$size.') &mdash; '.$attachment['downloads'].' '.$this->pi_getLL('attachment.downloads');
+	                    $sAttachment = $attachment['file_name'].' ('.$this->pi_getLL('attachment.type').': '.$attachment['file_type'].', '.$this->pi_getLL('attachment.size').': '.$size.'), '.$attachment['downloads'].' '.$this->pi_getLL('attachment.downloads');
 	                    $sAttachment = $this->escape($sAttachment);
 	                    $sAttachment = $this->cObj->stdWrap($sAttachment, $this->conf['attachments.']['attachmentEditLabel_stdWrap.']);
 
@@ -5360,7 +5364,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
         $a = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
-        if(@file_exists($a['file_path']) && $this->getMayRead_post($a['post_id'])) {
+        if(@file_exists($a['file_path']) /*&& $this->getMayRead_post($a['post_id'])*/) {
             $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_attachments SET downloads = downloads + 1 WHERE uid='.$aUID);
 
             header('Content-Type: '.$a['file_type']);

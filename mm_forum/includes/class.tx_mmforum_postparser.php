@@ -393,7 +393,7 @@ class tx_mmforum_postparser {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'lang_title,lang_pattern,lang_code',
 				'tx_mmforum_syntaxhl',
-				'deleted=0 AND hidden=0'
+				'deleted=0'
 		);
 		while($data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 			preg_match_all($data['lang_pattern'],$content,$source_arr);

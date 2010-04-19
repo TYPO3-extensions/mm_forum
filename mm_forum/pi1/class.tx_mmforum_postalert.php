@@ -305,7 +305,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
             $posttext = $this->bb2text($posttext,$this->conf);
 
 			$marker['###ACTIONLINK###'] = $this->escapeURL($this->tools->getAbsoluteUrl($this->pi_linkTP_keepPIvars_url()));
-			$marker['###POSTTEXT###']   = nl2br($posttext);
+			$marker['###POSTTEXT###']   = $posttext;
 
 			$marker['###FORMOPTIONS###'] .= '<input type="hidden"  name="tx_mmforum_pi1[action]" value="'.$this->escape($this->piVars['action']).'" />';
 			$marker['###FORMOPTIONS###'] .= '<input type="hidden"  name="tx_mmforum_pi1[pid]" value="'.$post_id.'" />';
