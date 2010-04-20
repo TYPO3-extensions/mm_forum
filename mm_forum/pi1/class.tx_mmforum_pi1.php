@@ -3184,7 +3184,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     $marker['###POSTTEXT###']       = $posttext;
                     $marker['###ANKER###']          = '';
                     $marker['###POSTANCHOR###']	    = '';
-                    $marker['###POSTDATE###']       = $this->pi_getLL('post.writtenOn').': '.$this->formatDate(time());
+                    $marker['###POSTDATE###']       = $this->pi_getLL('post.writtenOn').': '.$this->formatDate($topicData['topic_time']);
                     $marker['###POSTRATING###']     = '';
 
                     // Include hooks
