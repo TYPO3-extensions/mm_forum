@@ -73,7 +73,9 @@ CREATE TABLE tx_mmforum_forums (
     parentID int(11) default '0' NOT NULL,
 
     PRIMARY KEY (uid),
-    KEY parent (pid)
+    KEY parent (pid),
+    KEY parent_forum (parentID),
+    KEY select_all (pid,deleted,hidden,sorting)
 );
 
 # 
@@ -277,7 +279,8 @@ CREATE TABLE tx_mmforum_topics (
 
     PRIMARY KEY (uid),
     KEY parent (pid),
-    KEY forum_id (forum_id)
+    KEY forum_id (forum_id),
+    KEY select_all (pid, deleted, hidden, forum_id, at_top_flag, topic_last_post_id)
 );
 
 # 

@@ -434,7 +434,7 @@ class tx_mmforum_rss {
 			 p.topic_id='.intval($topic_id).
 			 $this->pObj->getMayRead_forum_query('f').
 			 $this->pObj->getMayRead_forum_query('c'),
-			'p.uid',
+			/*'p.uid',*/ '',
 			'p.post_time DESC',
 			$this->getPostNum()
 		);
@@ -470,7 +470,7 @@ class tx_mmforum_rss {
 			 f.uid='.intval($forum_id).
 			 $this->pObj->getMayRead_forum_query('f').
 			 $this->pObj->getMayRead_forum_query('c'),
-			'p.uid',
+			/*'p.uid',*/ '',
 			'p.post_time DESC',
 			$this->getPostNum()
 		);
@@ -505,7 +505,7 @@ class tx_mmforum_rss {
 			 f.deleted=0 '.
 			 $this->pObj->getMayRead_forum_query('f').
 			 $this->pObj->getMayRead_forum_query('c'),
-			'p.uid',
+			/*'p.uid',*/ '',
 			'p.post_time DESC',
 			$this->getPostNum()
 		);

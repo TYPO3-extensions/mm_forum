@@ -606,7 +606,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			$username_pattern			= $this->conf['username_pattern'];
 			$username_useMatchPattern	= true;
 		} else {
-			$username_pattern			= '/[^'.preg_quote($this->conf['username_allowed']).']/i';
+			$username_pattern			= '/[^'.$this->conf['username_allowed'].']/i';
 			$username_useMatchPattern	= false;
 		}
 

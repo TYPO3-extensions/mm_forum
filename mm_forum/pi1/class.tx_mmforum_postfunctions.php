@@ -120,7 +120,9 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 
 		// generate the marker for the admin panel
-		$adminPanel = tx_mmforum_postfunctions::getAdminPanel($topicData);
+		If(!$conf['slimPostList'])
+			$adminPanel = tx_mmforum_postfunctions::getAdminPanel($topicData);
+		Else $adminPanel = '';
 
 
 		// Output post listing START
@@ -130,6 +132,10 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			'###LABEL_MESSAGE###' => $this->pi_getLL('post.message'),
 			'###ADMIN_PANEL###'   => $adminPanel,
 		);
+		If($conf['slimPostList']) {
+			$template = $this->cObj->substituteSubpart($template, '###HEADER_SUBPART###', '');
+			$template = $this->cObj->substituteSubpart($template, '###ROOTLINE_CONTAINER###', '');
+		}	
 
 		// Log if topic has been read since last visit
 		if ($feUserId) {
@@ -560,11 +566,11 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 	function marker_getUserSignature($userData) {
 		$signature = '';
 		if ($userData['tx_mmforum_user_sig']) {
-			$signature = $this->escape($userData['tx_mmforum_user_sig']);
 
 			if ($this->conf['signatureBBCodes']) {
-				$signature = tx_mmforum_postparser::main($this, $this->conf, $signature, 'textparser');
+				$signature = tx_mmforum_postparser::main($this, $this->conf, $userData['tx_mmforum_user_sig'], 'textparser');
 			} else {
+				$signature = $this->escape($userData['tx_mmforum_user_sig']);
 				$signature = nl2br($signature);
 			}
 

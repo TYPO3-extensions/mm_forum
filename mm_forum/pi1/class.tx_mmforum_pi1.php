@@ -200,7 +200,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			/* Initialize base object */
 		$this->init($conf);
-		$this->pi_USER_INT_obj = 1;
+		$this->pi_USER_INT_obj = $this->conf['cache'] ? 0 : 1;
 		$this->config['code'] = $this->cObj->stdWrap($this->conf['code'], $this->conf['code.']);
 
 			/* Evaluate flexform values */
@@ -1178,13 +1178,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$marker       = array();
 
 		// find out the unread posts since the last login
-//		if ($feUserId) {
-//			list($rowUnread) = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-//				'tx_mmforum_prelogin as lastLogin',
-//				'fe_users',
-//				'uid = ' . $feUserId);
-//			$readarray = $this->getunreadposts($content, $conf, $rowUnread['lastLogin']);
-//		}
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'uid',
@@ -1216,6 +1209,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$marker['###PAGETITLE###'] = $this->cObj->data['header'];
 		$marker['###FORUMNAME###'] = $this->escape($rowForum['forum_name']);
+		$marker['###FORUMICON###'] = $this->getForumIcon($rowForum, $this->getMayRead_forum($rowForum), FALSE);
 
 		$linkParams[$this->prefixId] = array(
 			'action'    => 'new_topic',
@@ -1249,8 +1243,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$marker['###HIDESOLVED_CHECKED###'] = ($this->piVars['hide_solved'] ? 'checked="checked"' : '');
 		$marker['###SETTINGS_ACTION###'] = htmlspecialchars($this->tools->getAbsoluteUrl($this->pi_linkTP_keepPIvars_url(array('hide_solved'=>0))));
-
-//		$marker['###FORUMICON###'] = $this->getForumIcon($this->getMayWrite_forum($forumId), count($readarray));
 
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_header'])) {
@@ -1336,10 +1328,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$imgInfo['title']	= $this->pi_getLL('topic.isFavorite');
 				$favorit			= $this->buildImageTag($imgInfo);
 			}
-
-			$row['topic_title'] = str_replace('<', '&lt;', $row['topic_title']);
-			$row['topic_title'] = str_replace('>', '&gt;', $row['topic_title']);
-			$row['topic_title'] = stripslashes($row['topic_title']);
 
 			$topic_is = ($row['topic_is'] ? $this->cObj->wrap($row['topic_is'], $this->conf['list_topics.']['prefix_wrap']) : '');
 
@@ -1740,6 +1728,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$prefixLink     = $this->pi_linkTP($prefixRootline, $prefixParams);
 
 		$marker = array(
+			'###FORUMICON###'          => $this->getForumIcon(), 
 			'###FORUMPATH###'          => $forumLink . ' &raquo; ' . $prefixLink,
 			'###NEWTOPICLINK###'       => '',
 			'###FORUMNAME###'          => $this->cObj->substituteMarker($this->pi_getLL('prefix.title'), '###PREFIX###', $realPrefix),
@@ -2439,6 +2428,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 					$previewTemplate = $this->cObj->fileResource($conf['template.']['new_topic']);
 					$previewTemplate = $this->cObj->getSubpart($previewTemplate, '###PREVIEW###');
+					$previewTemplate = $this->cObj->substituteSubpart($previewTemplate, '###HEADER_SUBPART###', '');
 					$previewMarker = array(
 						'###TOPIC_TITLE###'   => $this->escape($this->piVars['topicname']),
 						'###LABEL_PREVIEW###' => $this->pi_getLL('newTopic.preview'),
@@ -2453,7 +2443,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						}
 					}
 
-					$content .= $this->cObj->substituteMarkerArrayCached($previewTemplate, $previewMarker);
+					$previewContent = $this->cObj->substituteMarkerArrayCached($previewTemplate, $previewMarker);
 				}
 
 				$template = $this->cObj->fileResource($conf['template.']['new_topic']);
@@ -2498,7 +2488,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					'###ENABLE_POLL###'         => ($this->piVars['enable_poll'] ? 'checked="checked"' : ''),
 					'###DISABLE_POLL###'        => '',
 					'###DISABLE_POLL_VAR###'    => 0,
-					'###CALLPOLLJS###'    => $this->conf['callpolljs']
+					'###CALLPOLLJS###'          => $this->conf['callpolljs'],
+					'###POST_PREVIEW###'        => $previewContent ? $previewContent : '',
+					'###TOPICICON###'           => $this->getTopicIcon(Array()),
+					'###TOPICTITLE###'          => $this->pi_getLL('newTopic.create')
 				);
 
 				// Remove file attachment section if file attachments are disabled
@@ -2725,7 +2718,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                             }
                         }
 
-                    $content .= $this->cObj->substituteMarkerArrayCached($previewTemplate, $previewMarker);
+                    $previewContent = $this->cObj->substituteMarkerArrayCached($previewTemplate, $previewMarker);
                 }
 
                 $template = $this->cObj->fileResource($conf['template.']['new_topic']);
@@ -2741,6 +2734,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     '###LABEL_ATTACHMENT###'        => $this->pi_getLL('newPost.attachment'),
 					'###LABEL_SETHAVEALOOK###'		=> $this->pi_getLL('newTopic.setHaveALook')
                 );
+				
+				$marker['###TOPICICON###' ] = $this->getTopicIcon($topicData);
+				$marker['###TOPICTITLE###'] = $this->escape($topicData['topic_title']);
+
+				if($previewContent) $marker['###POST_PREVIEW###'] = $previewContent;
+				else $marker['###POST_PREVIEW###'] = '';
 
                 // Remove file attachment section if file attachments are disabled
                 if(!$this->conf['attachments.']['enable']) $template = $this->cObj->substituteSubpart($template, "###ATTACHMENT_SECTION###", '');
@@ -2833,6 +2832,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $marker['###ACTION###']				= htmlspecialchars($this->tools->getAbsoluteUrl($actionLink));
                 $marker['###LABEL_CREATETOPIC###']	= $this->pi_getLL('newPost.title');
 
+				$conf['slimPostList'] = 1;
                 $marker['###OLDPOSTTEXT###'] = '<hr />'.tx_mmforum_postfunctions::list_post('',$conf,'DESC');
 
 				if($this->conf['disableRootline'])
@@ -3321,11 +3321,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$marker['###POSTTEXT###'] = $this->piVars['message'] ? $this->escape($this->piVars['message']) : $this->escape($posttext);
 
                 if($this->getIsMod($row['forum_id']) || $this->getIsAdmin())
-                    $marker['###POSTTITLE###']         = '<div style="padding-left:130px;">'.$this->pi_getLL('newPost.titleField').' : <input type="text"  name="tx_mmforum_pi1[title]" size="50" value="'.$this->escape($title).'"></div>';
+                    $marker['###POSTTITLE###']         = '<input type="text"  name="tx_mmforum_pi1[title]" size="50" value="'.$this->escape($title).'" style="width:80%;"></div>';
                 elseif($firstPost && $row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid'])
-                    $marker['###POSTTITLE###']         = '<div style="padding-left:130px;">'.$this->pi_getLL('newPost.titleField').' : <input type="text"  name="tx_mmforum_pi1[title]" size="50" value="'.$this->escape($title).'"></div>';
-                else
-                    $marker['###POSTTITLE###']         = $this->pi_getLL('newPost.title');
+                    $marker['###POSTTITLE###']         = '<input type="text"  name="tx_mmforum_pi1[title]" size="50" value="'.$this->escape($title).'" style="width:80%;"></div>';
+                else $marker['###POSTTITLE###'] = $this->escape($title);
 
                 $marker['###OLDPOSTTEXT###']           = '';
                 $marker['###SMILIES###']               = $this->show_smilie_db($conf);
@@ -3337,6 +3336,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 $marker['###LABEL_RESET###']           = $this->pi_getLL('newPost.reset');
                 $marker['###LABEL_ATTENTION###']       = $this->pi_getLL('newPost.attention');
                 $marker['###LABEL_NOTECODESAMPLES###'] = $this->pi_getLL('newPost.codeSamples');
+		$marker['###TOPICICON###'] = $this->getTopicIcon($topicData);
+		$marker['###TOPICTITLE###'] = $this->escape($topicData['topic_title']);
 
                 $bbCodeButtons_template = $this->cObj->getSubpart($template, '###BBCODEBUTTONS###');
 
@@ -5300,7 +5301,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             );
             $oldData = $this->cObj->data;
             $this->cObj->data = $dataArray;
-            $image = $this->cObj->cObjGetSingle($this->conf['topicIcon'],$this->conf['topicIcon.']);
+
+			If($this->conf['forumIcon'])
+            	$image = $this->cObj->cObjGetSingle($this->conf['forumIcon'],$this->conf['forumIcon.']);
+            Else $image = $this->cObj->cObjGetSingle($this->conf['topicIcon'],$this->conf['topicIcon.']);
+
             $this->cObj->data = $oldData;
 
             return $image;

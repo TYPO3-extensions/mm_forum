@@ -508,14 +508,6 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
             $uploaddir = $this->conf['path_avatar'];
 
 				/*
-				 * Just to be REALLY sure... Prevent stupid users from doing very stupid
-				 * things and prevent bad users from doing very bad things...
-				 * Cannot be careful enough with user-uploaded data.
-				 */
-			if(!file_exists($this->conf['path_avatar'].'.htaccess'))
-				file_put_contents($this->conf['path_avatar'].'.htaccess', "deny from all");
-
-				/*
 				 * Load the allowed file size for avatar image from the TCA and
 				 * check against the size of the uploaded image.
 				 */

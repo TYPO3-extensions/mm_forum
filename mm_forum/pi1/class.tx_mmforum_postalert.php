@@ -226,7 +226,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			list($posttext) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery('post_text','tx_mmforum_posts_text','deleted="0" AND hidden="0" AND post_id="'.$row['post_id'].'"'));
 
 			$marker['###UID###']		= $row['uid'];
-			$marker['###TOPIC###']		= $this->pi_linkToPage(tx_mmforum_pi1::get_topic_name($row['topic_id']),$conf['pid_forum'],$target='_self',$linkparams);
+			$marker['###TOPIC###']		= $this->pi_linkToPage($this->escape(tx_mmforum_pi1::get_topic_name($row['topic_id'])),$conf['pid_forum'],$target='_self',$linkparams);
 			$marker['###DATE###']		= $this->formatDate($row['crdate']);
 			$marker['###POST_TEXT###']	= nl2br($this->escape($posttext));
 			$marker['###TEXT_SHORT###']	= $this->escape(tx_mmforum_tools::textCut($row['alert_text'],15,''));
