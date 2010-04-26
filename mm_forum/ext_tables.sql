@@ -280,7 +280,7 @@ CREATE TABLE tx_mmforum_topics (
     PRIMARY KEY (uid),
     KEY parent (pid),
     KEY forum_id (forum_id),
-    KEY select_all (pid, deleted, hidden, forum_id, at_top_flag, topic_last_post_id)
+    KEY select_all (pid,deleted,hidden,forum_id,at_top_flag,topic_last_post_id)
 );
 
 # 
