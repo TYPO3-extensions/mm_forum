@@ -316,18 +316,19 @@ class tx_mmforum_rss {
 	function getFeedTitle($mode='all', $param=null) {
 		$mode = $mode?$mode:$this->mode;
 		$param = $param?$param:$this->param;
+		$pageTitle = $this->conf['rssTitle']?$this->conf['rssTitle']:$GLOBALS['TSFE']->page['title'];
 
 		switch($mode) {
 			default:
-			case 'all':     return $GLOBALS['TSFE']->page['title']; break;
+			case 'all':     return $pageTitle; break;
 			case 'topic':
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title, forum_name', 'tx_mmforum_topics t LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid', 't.uid='.intval($param));
 				list($topic_title, $forum_title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-				return $GLOBALS['TSFE']->page['title'].' : '.$forum_title.' : '.$topic_title; break;
+				return $pageTitle.' : '.$forum_title.' : '.$topic_title; break;
 			case 'forum':
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('forum_name', 'tx_mmforum_forums', 'uid='.intval($param));
 				list($forum_title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-				return $GLOBALS['TSFE']->page['title'].' : '.$forum_title; break;
+				return $pageTitle.' : '.$forum_title; break;
 		}
 
 		return $GLOBALS['TSFE']->page['title'];
@@ -545,4 +546,5 @@ class tx_mmforum_rss {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_rss.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_rss.php']);
 }
+
 ?>
