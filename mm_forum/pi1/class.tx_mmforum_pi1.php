@@ -547,7 +547,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         $marker['###PAGES###']              = $this->pagecount2 ($lastlogin, $conf['topic_count']); // Anzeigen der Seiten, durch die man blÃ¯Â¿Â½ttern kann
 
 		if(!$this->isTopicRating()) {
-			$template = $this->cObj->substituteSubpart($template, '###SUBP_LABEL_RATING###', '');
+			$template = $this->cObj->substituteSubpart($template, '###SUBP_RATING_LABEL###', '');
 		}
 
 		// Include hooks
