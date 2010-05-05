@@ -2705,8 +2705,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     $previewTemplate    = $this->cObj->fileResource($conf['template.']['new_post']);
                     $previewTemplate    = $this->cObj->getSubpart($previewTemplate,"###PREVIEW###");
                     $previewMarker = array(
-                        "###TOPIC_TITLE###"      => $this->escape($this->piVars['topicname']),
-                        "###LABEL_PREVIEW###"    => $this->pi_getLL('newTopic.preview'),
+                        "###LABEL_PREVIEW###"    => $this->pi_getLL('newPost.preview'),
                         "###PREVIEW_POST###"     => $this->cObj->substituteMarkerArrayCached($template, $marker)
                     );
 
@@ -2721,9 +2720,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                     $previewContent = $this->cObj->substituteMarkerArrayCached($previewTemplate, $previewMarker);
                 }
 
-                $template = $this->cObj->fileResource($conf['template.']['new_topic']);
-                $template = $this->cObj->getSubpart($template, "###NEWTOPIC###");
-				$template = $this->cObj->substituteSubpart($template, '###TITLE_SUBPART###', '');
+                $template = $this->cObj->fileResource($conf['template.']['new_post']);
+                $template = $this->cObj->getSubpart($template,
+					stristr($template, '###NEWTOPIC###') === false ? '###NEWPOST###' : '###NEWTOPIC###');	// compatibility: typo in template file fixed. was 'NEWTOPIC'
 
                 $marker = array(
                     '###LABEL_SEND###'              => $this->pi_getLL('newPost.save'),
@@ -2735,8 +2734,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					'###LABEL_SETHAVEALOOK###'		=> $this->pi_getLL('newTopic.setHaveALook')
                 );
 				
-				$marker['###TOPICICON###' ] = $this->getTopicIcon($topicData);
-				$marker['###TOPICTITLE###'] = $this->escape($topicData['topic_title']);
+				$marker['###POSTTITLE###'] = $this->escape($topicData['topic_title']);
 
 				if($previewContent) $marker['###POST_PREVIEW###'] = $previewContent;
 				else $marker['###POST_PREVIEW###'] = '';
@@ -3215,7 +3213,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 }
 
                 $template    = $this->cObj->fileResource($conf['template.']['new_post']);
-                $template    = $this->cObj->getSubpart($template, "###NEWTOPIC###");
+                $template    = $this->cObj->getSubpart($template, 
+					stristr($template, '###NEWTOPIC###') === false ? '###NEWPOST###' : '###NEWTOPIC###');	// compatibility: typo in template file fixed. was 'NEWTOPIC'
 
 				$attachments = t3lib_div::intExplode(',',$row['attachment']);
 				$attachments = tx_mmforum_tools::processArray_numeric($attachments);
