@@ -1024,6 +1024,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				tx_mmforum_postfunctions::update_forum_posts_n_topics($changeForumId);
 
 				// Clearance for new indexing
+				require_once(t3lib_extMgm::extPath('mm_forum') . 'pi4/class.tx_mmforum_indexing.php');
 				tx_mmforum_indexing::delete_topic_ind_date($topicId);
 			}
 
