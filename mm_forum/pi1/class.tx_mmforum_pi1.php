@@ -1209,6 +1209,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$marker['###PAGETITLE###'] = $this->cObj->data['header'];
 		$marker['###FORUMNAME###'] = $this->escape($rowForum['forum_name']);
+		$marker['###FORUMDESC###'] = $this->escape($rowForum['forum_desc']);
 		$marker['###FORUMICON###'] = $this->getForumIcon($rowForum, $this->getMayRead_forum($rowForum), FALSE);
 
 		$linkParams[$this->prefixId] = array(
