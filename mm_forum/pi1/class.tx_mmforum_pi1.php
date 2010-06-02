@@ -1265,18 +1265,19 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$limit = ($limitcount-1)*($currentPage) . ',' . $limitcount;
 
-		$solvedCon = ($this->piVars['hide_solved'] ? ' AND solved=0 ' : '');
-		$shadowCon = ($this->conf['enableShadows'] ? '' : ' AND shadow_tid=0 ');
+		$solvedCon = ($this->piVars['hide_solved'] ? ' AND t.solved=0 ' : '');
+		$shadowCon = ($this->conf['enableShadows'] ? '' : ' AND t.shadow_tid=0 ');
 
 
 		// load all the posts
 		$topiclist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'*',
-			'tx_mmforum_topics',
-			'deleted = 0 AND hidden = 0 AND forum_id = ' . $forumId .
-				$solvedCon . $shadowCon . $this->getStoragePIDQuery(),
+			't.*',
+			'tx_mmforum_topics t, tx_mmforum_posts p',
+			'p.uid = t.topic_last_post_id AND ' .
+      't.deleted = 0 AND t.hidden = 0 AND t.forum_id = ' . $forumId .
+				$solvedCon . $shadowCon . $this->getStoragePIDQuery('t'),
 			'',
-			'at_top_flag DESC, topic_last_post_id DESC',
+			't.at_top_flag DESC, p.post_time DESC',
 			$limit
 		);
 
@@ -1887,7 +1888,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				p.poster_id as author, p.post_time',
 			'tx_mmforum_posts p, tx_mmforum_forums f, tx_mmforum_forums c, tx_mmforum_topics t',
 			't.uid = p.topic_id AND
-				p.uid = t.topic_last_post_id AND
+			  p.uid = t.topic_last_post_id AND
 				f.uid = p.forum_id AND
 				c.uid = f.parentID AND
 				p.deleted = 0 AND t.deleted = 0 AND f.deleted = 0 AND c.deleted = 0 AND
