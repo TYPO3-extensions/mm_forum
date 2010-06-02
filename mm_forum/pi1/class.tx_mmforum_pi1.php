@@ -1886,6 +1886,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				p.poster_id as author, p.post_time',
 			'tx_mmforum_posts p, tx_mmforum_forums f, tx_mmforum_forums c, tx_mmforum_topics t',
 			't.uid = p.topic_id AND
+				p.uid = t.topic_last_post_id AND
 				f.uid = p.forum_id AND
 				c.uid = f.parentID AND
 				p.deleted = 0 AND t.deleted = 0 AND f.deleted = 0 AND c.deleted = 0 AND
@@ -4092,7 +4093,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             if($this->useRealUrl()) {
                 $linkParams[$this->prefixId]['fid'] = $row['forum_id'];
             }
-            $content .= $this->formatDate($row['tstamp']).' - '.$this->pi_linkTP($topic_is.$row['topic_title'],$linkParams).$solved.'<br />';
+            $content .= $this->formatDate($row['topic_time']).' - '.$this->pi_linkTP($topic_is.$row['topic_title'],$linkParams).$solved.'<br />';
         }
         return $content;
     }
@@ -4115,7 +4116,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 'tid'         => $row['topic_id'],
                 'search_pid'  => $row['uid']
             );
-            $content .= $this->formatDate($row['tstamp']).' - '.$this->pi_linkTP($topic_name,$linkParams).'<br />';
+            $content .= $this->formatDate($row['post_time']).' - '.$this->pi_linkTP($topic_name,$linkParams).'<br />';
         }
         return $content;
     }
