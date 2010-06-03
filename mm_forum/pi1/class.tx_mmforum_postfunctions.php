@@ -1050,6 +1050,10 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, $updateArray);
 
+			if ($this->conf['enableShadows'] == true) {
+        $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'shadow_tid = ' . $topicId, $updateArray);
+      }
+
 			if ($deleteFlag) {
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'*',
