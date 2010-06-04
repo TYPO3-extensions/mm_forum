@@ -5857,23 +5857,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// User profile
 			// Sets a title like "mm_forum page -> User profile: Username"
 			case 'forum_view_profil':
-
-				if ($this->piVars['fid']) {
-				  $user_id = tx_mmforum_tools::get_userid($this->piVars['fid']);
-				} else {
-          $user_id = $this->piVars['user_id'];
+				if($this->useRealUrl() && $this->piVars['fid']) {
+          $user = tx_mmforum_FeUser::GetByUsername($this->piVars['fid']);
+        } else {
+          $user = tx_mmforum_FeUser::GetByUID($this->piVars['user_id']);
         }
 
-				$conf['userNameField']?$conf['userNameField']:$conf['userNameField']='username';
-
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-					$conf['userNameField'],
-					'fe_users',
-					'uid="'.intval($user_id).'"'
-				);
-				list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-
-				$pageTitle = sprintf($this->pi_getLL('rootline.userprofile'), $username);
+				$pageTitle = sprintf($this->pi_getLL('rootline.userprofile'), $this->escape($user->gD($this->getUserNameField())));
 			break;
 
 			// List unread or unanswered topics
