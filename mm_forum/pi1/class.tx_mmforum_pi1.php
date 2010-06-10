@@ -2593,9 +2593,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 				$time   = time() - $interval;
 				$res    = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-					"*",
-					"tx_mmforum_posts",
-					"poster_id='".$this->getUserID()."' AND post_time >= '".$time."'"
+					'*',
+					'tx_mmforum_posts',
+					'poster_id=\''.$this->getUserID().
+					'\' AND post_time >= \''.$time.'\''.
+					$this->cObj->enableFields('tx_mmforum_posts')
 				);
 
 				$abort = ($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0)?TRUE:FALSE;
