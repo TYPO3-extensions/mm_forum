@@ -877,7 +877,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
             // Mark post as deleted
                 $updArray = array(
-					"deleted" => 1,
+					'deleted' => 1,
 					'tx_mmforumsearch_index_write' => 0,
 				);
                 $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts','uid = "'.intval($this->piVars['pid']).'"',$updArray);
@@ -1070,6 +1070,13 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				);
 				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'topic_id = ' . $topicData['uid'], $updateArray);
 
+				//mark all posts_text as deleted
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+					'tx_mmforum_posts_text',
+					'post_id IN (SELECT uid FROM tx_mmforum_posts WHERE topic_id = ' .
+					topicData['uid'] . ')',
+					array('deleted' => 1)
+				);
 
 				// get all posters of this thread, and update their posts
 				$uRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
