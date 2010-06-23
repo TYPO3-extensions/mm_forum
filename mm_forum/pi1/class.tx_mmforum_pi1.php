@@ -3214,7 +3214,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                             }
                         }
 
-                    $content .= $this->cObj->substituteMarkerArrayCached($previewTemplate, $previewMarker);
+                    $previewContent = $this->cObj->substituteMarkerArrayCached($previewTemplate, $previewMarker);
                 }
 
                 $template    = $this->cObj->fileResource($conf['template.']['new_post']);
@@ -3370,6 +3370,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             }
 
         $marker['###STARTJAVASCRIPT###'] = $this->includeEditorJavaScript();
+        $marker['###POST_PREVIEW###']    = $previewContent ? $previewContent : '';
         $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
         return $content;
     }
