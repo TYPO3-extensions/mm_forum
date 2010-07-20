@@ -1086,53 +1086,55 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 //
 //			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forumlist)) {
 			$parentID = $row['uid'];
-			foreach ($parentForums[$parentID] as $row) {
-				$forumId = intval($row['uid']);
-				$template = $this->cObj->getSubpart($templateFile, '###LIST_FORUM###');
+			if (is_array($parentForums[$parentID])) {
+				foreach ($parentForums[$parentID] as $row) {
+					$forumId = intval($row['uid']);
+					$template = $this->cObj->getSubpart($templateFile, '###LIST_FORUM###');
 
-				$linkparams[$this->prefixId] = array(
-					'action' => 'list_topic',
-					'fid'    => $row['uid']
-				);
-				$marker['###FORUMNAME###'] = $this->pi_linkToPage($this->escape($row['forum_name']), $GLOBALS['TSFE']->id, '', $linkparams);
-				$marker['###FORUMDESC###'] = $this->escape($row['forum_desc']);
-				$marker['###THEMES###']    = ($row['forum_topics'] ? intval($row['forum_topics']) : '');
-				$marker['###POSTS###']     = ($row['forum_posts']  ? intval($row['forum_posts'])  : '');
-				$marker['###LASTPOSTS###'] = $this->getlastpost($row['forum_last_post_id'], $conf, true);
-				$marker['###FORUMID###']   = 'f' . $forumId;
-				$marker['###LIST_FORUM_EVENODD###'] = $this->conf['display.']['listItem.'][($i % 2 ? 'odd' : 'even' ) . 'Class'];
-				$i++;
-				$closed = (!$this->getMayWrite_forum($row));
+					$linkparams[$this->prefixId] = array(
+						'action' => 'list_topic',
+						'fid'    => $row['uid']
+					);
+					$marker['###FORUMNAME###'] = $this->pi_linkToPage($this->escape($row['forum_name']), $GLOBALS['TSFE']->id, '', $linkparams);
+					$marker['###FORUMDESC###'] = $this->escape($row['forum_desc']);
+					$marker['###THEMES###']    = ($row['forum_topics'] ? intval($row['forum_topics']) : '');
+					$marker['###POSTS###']     = ($row['forum_posts']  ? intval($row['forum_posts'])  : '');
+					$marker['###LASTPOSTS###'] = $this->getlastpost($row['forum_last_post_id'], $conf, true);
+					$marker['###FORUMID###']   = 'f' . $forumId;
+					$marker['###LIST_FORUM_EVENODD###'] = $this->conf['display.']['listItem.'][($i % 2 ? 'odd' : 'even' ) . 'Class'];
+					$i++;
+					$closed = (!$this->getMayWrite_forum($row));
 
-				// If there is a user logged in, it is checked if
-				//there are new posts since the last login.
-//				if ($feUserId) {
-//					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-//						'*',
-//						'tx_mmforum_topics',
-//						'forum_id = ' . $forumId . $this->getStoragePIDQuery());
-//					$blnnew = false;
-//
-//					while ($row_topic = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-//						if (in_array($row_topic['uid'], $readarray)) {
-//							$blnnew = true;
-//							break;
-//						}
-//					}
-				if ($feUserId && in_array($row['uid'], $unreadarray)) {
-					$marker['###READIMAGE###'] = $this->getForumIcon(null, $closed, true);
-				} else {
-					$marker['###READIMAGE###'] = $this->getForumIcon(null, $closed, false);
-				}
-
-				// Include hooks
-				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listForums_forumItem'])) {
-					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listForums_forumItem'] as $_classRef) {
-						$_procObj = & t3lib_div::getUserObj($_classRef);
-						$marker = $_procObj->listForums_forumItem($marker, $row, $this);
+					// If there is a user logged in, it is checked if
+					//there are new posts since the last login.
+	//				if ($feUserId) {
+	//					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+	//						'*',
+	//						'tx_mmforum_topics',
+	//						'forum_id = ' . $forumId . $this->getStoragePIDQuery());
+	//					$blnnew = false;
+	//
+	//					while ($row_topic = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+	//						if (in_array($row_topic['uid'], $readarray)) {
+	//							$blnnew = true;
+	//							break;
+	//						}
+	//					}
+					if ($feUserId && in_array($row['uid'], $unreadarray)) {
+						$marker['###READIMAGE###'] = $this->getForumIcon(null, $closed, true);
+					} else {
+						$marker['###READIMAGE###'] = $this->getForumIcon(null, $closed, false);
 					}
+
+					// Include hooks
+					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listForums_forumItem'])) {
+						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listForums_forumItem'] as $_classRef) {
+							$_procObj = & t3lib_div::getUserObj($_classRef);
+							$marker = $_procObj->listForums_forumItem($marker, $row, $this);
+						}
+					}
+					$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 				}
-				$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 			}
 
 			$template = $this->cObj->getSubpart($templateFile, '###LIST_CAT_END###');
