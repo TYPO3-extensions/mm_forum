@@ -1074,7 +1074,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 					'tx_mmforum_posts_text',
 					'post_id IN (SELECT uid FROM tx_mmforum_posts WHERE topic_id = ' .
-					topicData['uid'] . ')',
+					$topicData['uid'] . ')',
 					array('deleted' => 1)
 				);
 
