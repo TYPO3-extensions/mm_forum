@@ -512,6 +512,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 				 * check against the size of the uploaded image.
 				 */
 			global $TCA;
+			$GLOBALS['TSFE']->includeTCA();
 			t3lib_div::loadTCA('fe_users');
 			if(filesize($_FILES[$this->prefixId]['tmp_name']['file']) > $TCA['fe_users']['columns']['tx_mmforum_avatar']['config']['max_size']*1024)
 				return;
