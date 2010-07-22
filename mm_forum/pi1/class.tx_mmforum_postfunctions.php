@@ -877,7 +877,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
             // Mark post as deleted
                 $updArray = array(
-					"deleted" => 1,
+					'deleted' => 1,
 					'tx_mmforumsearch_index_write' => 0,
 				);
                 $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts','uid = "'.intval($this->piVars['pid']).'"',$updArray);
@@ -1024,6 +1024,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				tx_mmforum_postfunctions::update_forum_posts_n_topics($changeForumId);
 
 				// Clearance for new indexing
+				require_once(t3lib_extMgm::extPath('mm_forum') . 'pi4/class.tx_mmforum_indexing.php');
 				tx_mmforum_indexing::delete_topic_ind_date($topicId);
 			}
 
@@ -1049,6 +1050,10 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, $updateArray);
 
+			if ($this->conf['enableShadows'] == true) {
+        $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'shadow_tid = ' . $topicId, $updateArray);
+      }
+
 			if ($deleteFlag) {
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'*',
@@ -1065,6 +1070,13 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				);
 				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'topic_id = ' . $topicData['uid'], $updateArray);
 
+				//mark all posts_text as deleted
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+					'tx_mmforum_posts_text',
+					'post_id IN (SELECT uid FROM tx_mmforum_posts WHERE topic_id = ' .
+					$topicData['uid'] . ')',
+					array('deleted' => 1)
+				);
 
 				// get all posters of this thread, and update their posts
 				$uRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery(

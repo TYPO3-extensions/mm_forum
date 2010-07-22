@@ -178,7 +178,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 				}
 				$postMarker = array(
 					'###TOPICNAME###' => $this->pi_linkToPage($title, $conf['pid_forum'], '', $linkParams) . $solved,
-					'###TOPICDATE###' => $this->formatDate($row['crdate']),
+					'###TOPICDATE###' => $this->formatDate($row['post_time']),
 					'###PREFIX###'    => $this->escape($row['topic_is']),
 					'###CATEGORY###'  => $this->escape($row['category_name']),
 					'###FORUM###'     => $this->escape($row['forum_name']),

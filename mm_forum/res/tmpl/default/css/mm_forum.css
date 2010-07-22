@@ -122,6 +122,11 @@ td.tx-mmforum-subth2 {
  line-height: 12px;
 }
  
+th.tx-mmforum-th .tx-mmforum-desc {
+ color: #fff;
+ margin-left: 0;
+}
+ 
 .tx-mmforum-smalldesc {
  font-size: 10px;
  color: #666666;
