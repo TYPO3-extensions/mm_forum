@@ -33,31 +33,144 @@
 	 * the first two letters of a user name, this script presents a list of
 	 * all users whose usernames start with these two letters.
 	 *
-	 * @version    2010-01-08
+	 * @version    2010-07-23
 	 * @author     Martin Helmich <m.helmich@mittwald.de>
+	 * @author     Peter Schuster <typo3@peschuster.de>
 	 * @package    mm_forum
 	 * @subpackage Messaging
 	 */
 
-error_reporting(0);
+class tx_mmforum_userSearch {
+	/**
+	 * Page id of user records
+	 *
+	 * @var int
+	 */
+	protected $pid;
+	/**
+	 * Allowed fe_groups id for users.
+	 *
+	 * @var int
+	 */
+	protected $group_id;
+	protected $field;
+
+	/**
+	 * True, if object is initialized.
+	 *
+	 * @var boolean
+	 */
+	protected $is_init = false;
+
+	/**
+	 * Initialize internal variables and db connection.
+	 *
+	 * @return void
+	 */
+	protected function init() {
+		error_reporting(0);
+		session_start();
+
+		tslib_eidtools::connectDB();
+
+		$this->pid = $_SESSION['tx_mmforum_pi3']['userPID'];
+		$this->group_id = $_SESSION['tx_mmforum_pi3']['userGID'];
+		$this->field = $_SESSION['tx_mmforum_pi3']['usernameField'];
+
+		$this->is_init = true;
+	}
+
+	/**
+	 * Check whether field name is valid.
+	 * -> prevent sql injection
+	 *
+	 * @param string $field field name
+	 * @return boolean true, if column name is valid
+	 */
+	protected function validateName($field) {
+		if ($field === 'username')
+			return true;
+		
+		$res = $GLOBALS['TYPO3_DB']->sql_query('SHOW COLUMNS FROM fe_users;');
+		if ($res) {
+			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				if ($row['Field'] === $field) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Searche for users and returns usernames as result
+	 *
+	 * @param string $sword search string
+	 * @return array Array of usernames
+	 */
+	public function search($sword) {
+		$result = array();
+
+		if (!$this->is_init) {
+			$this->init();
+		}
+
+		if (!$this->validateName($this->field))
+			return $result;
+
+		$search = $GLOBALS['TYPO3_DB']->quoteStr($sword, 'fe_users');
+
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$this->field, 'fe_users',
+                'disable=0 AND deleted=0 AND ' . $this->field . ' LIKE \'' . $search . '%\'' .
+					' AND pid=' . $this->pid . ' AND FIND_IN_SET(' . $this->group_id . ', usergroup)',
+                '',						// group by
+				$this->field . ' ASC',	// order by
+				'8'						// limit
+			);
+
+		while(list($item) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
+			array_push($result, $item);
+		}
+
+		return $result;
+	}
+
+	/**
+	 * Renders search result data to json array.
+	 *
+	 * @param array $data raw data
+	 * @return string compiled json array
+	 */
+	public function render(array $data) {
+		$content = '';
+
+		if(function_exists('json_encode')) {
+			$content = json_encode($data);
+		} else {
+			$content = '{"' . implode('","', $data) . '"}';
+		}
+
+		return $content;
+	}
+}
+
+if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi3/ajax.tx_mmforum_usersearch.php']) {
+	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi3/ajax.tx_mmforum_usersearch.php']);
+}
+
+
+if (!defined('TYPO3_MODE'))
+	die();
+
+$SOBE = t3lib_div::makeInstance('tx_mmforum_userSearch');
+/* @var $SOBE tx_mmforum_userSearch */
+
+$sword = t3lib_div::_GP('userSearch');
+$data = $SOBE->search($sword);
+
 header('Content-Type: text/plain');
-
-$feUserObj = tslib_eidtools::initFeUser();
-session_start();
-
-global $TYPO3_DB;
-$pid = $_SESSION['tx_mmforum_pi3']['userPID'];
-$gid = $_SESSION['tx_mmforum_pi3']['userGID'];
-
-$search = $TYPO3_DB->quoteStr(t3lib_div::_GP('userSearch'), 'fe_users');
-
-$arr = array();
-$res = $TYPO3_DB->exec_SELECTquery( 'username', 'fe_users',
-                                    "username LIKE '$search%' AND pid=$pid AND FIND_IN_SET($gid,usergroup)",
-                                    '', 'username ASC', '8' );
-while(list($username) = $TYPO3_DB->sql_fetch_row($res)) array_push($arr, $username);
-
-if(function_exists('json_encode')) echo json_encode($arr);
-else echo '{"' . implode('","',$arr) . '"}';
+echo $SOBE->render($data);
 
 ?>
