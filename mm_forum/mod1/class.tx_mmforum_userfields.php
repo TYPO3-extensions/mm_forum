@@ -444,7 +444,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		}
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('MAX(sorting)+1','tx_mmforum_userfields','1');
-		list($sorting) = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		list($sorting) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 		$insertArray = array(
 			'tstamp'			=> time(),
