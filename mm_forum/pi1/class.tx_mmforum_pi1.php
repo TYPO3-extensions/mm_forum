@@ -3924,11 +3924,26 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			else $template = $this->cObj->substituteSubpart($template, '###SUBP_RATING###', '');
 
         // Avatar
-            if ($conf['path_avatar'] && $user->hasAvatar())  {
-                $marker['###AVATAR###']             = tx_mmforum_tools::res_img($conf['path_avatar'].$user->getAvatarFilename(),$conf['avatar_width'],$conf['avatar_height']);
-            } else {
-                $marker['###AVATAR###']             = "";
-            }
+			$marker['###AVATAR###'] = "";
+	   		if ($conf['path_avatar'] && $user->hasAvatar())
+				$marker['###AVATAR###'] = tx_mmforum_tools::res_img($conf['path_avatar'].$user->getAvatarFilename(),$conf['avatar_width'],$conf['avatar_height']);
+	   		else {
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('image','fe_users','uid = "'.$user->getUid().'"');
+				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+
+				if( $row['image'] ) {
+		    		if( strstr($row['image'],',' ) !== false ) {
+						$avatarArray = t3lib_div::trimExplode(',',$row['image']);
+						$row['image'] = $avatarArray[0];
+		    		}
+		    
+		    		if( file_exists('uploads/pics/'.$row['image']) )
+						$marker['###AVATAR###'] = tx_mmforum_tools::res_img('uploads/pics/'.$row['image'],$conf['avatar_width'],$conf['avatar_height']);
+		    		elseif( file_exists('uploads/tx_srfeuserregister/'.$row['image']) )
+						$marker['###AVATAR###'] = tx_mmforum_tools::res_img('uploads/tx_srfeuserregister/'.$row['image'],$conf['avatar_width'],$conf['avatar_height']);
+
+				}
+			}
         // E-Mail (currently deactivated)
             $marker['###MAIL###']                   = '';  #'<a href="index.php?id='.$GLOBALS["TSFE"]->id.'&tx_mmforum_pi1[action]=send_mail&tx_mmforum_pi1[uid]='.$row['uid'].'"><img src="'.$conf['path_img'].'mail.gif" border="0"></a>';
 
