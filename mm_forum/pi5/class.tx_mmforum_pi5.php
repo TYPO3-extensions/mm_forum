@@ -164,7 +164,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		}
 
 		// Some special fields
-		$marker['###CRDATE###']				= date($conf['date'], $row['crdate']);
+		$marker['###CRDATE###']				= strftime($conf['date'], $row['crdate']);
         $marker['###ACTIONLINK###']         = '';
 		$marker['###SIGNATUR_PREVIEW###']	= tx_mmforum_postparser::main($this,$conf,$row['tx_mmforum_user_sig'],'textparser');
 

@@ -69,4 +69,6 @@ plugin.tx_mmforum_pi5 {
 			fields = {$plugin.tx_mmforum.requiredFields}
 			fieldWrap = <strong>|</strong>
 		}
+
+		date = %A, %e. %B %Y
 }
