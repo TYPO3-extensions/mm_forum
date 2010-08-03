@@ -483,14 +483,24 @@ class tx_mmforum_havealook {
 
 				$subject = $forumObj->cObj->substituteMarkerArray($subject, $llMarker);
 
-				t3lib_div::plainMailEncoded (
-					$toEmail,
-					$subject,
-					$mailtext,
-					implode("\n", $mailHeaders),
-					'base64',
-					$GLOBALS['TSFE']->renderCharset
-				);
+				$do_send = true;
+				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_beforeSend'])) {
+					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_beforeSend'] as $_classRef) {
+						$_procObj = &t3lib_div::getUserObj($_classRef);
+						$do_send = $_procObj->newPostMail_beforeSend($subject, $mailtext, $toUserId, $this);
+					}
+				}
+
+				if($do_send) {
+					t3lib_div::plainMailEncoded(
+						$toEmail,
+						$subject,
+						$mailtext,
+						implode("\n", $mailHeaders),
+						'base64',
+						$GLOBALS['TSFE']->renderCharset
+					);
+				}
 			}
 		}
 	}
