@@ -78,16 +78,16 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		$this->userLib = t3lib_div::makeInstance('tx_mmforum_usermanagement');
 
 
-        if($GLOBALS['TSFE']->loginUser) {
+		if($GLOBALS['TSFE']->loginUser) {
 			$this->user = t3lib_div::makeInstance('tx_mmforum_FeUser');
 			$this->user->initFromDB($GLOBALS['TSFE']->fe_user->user['uid']);
 			$this->user->loadFromDB();
-		    $content = $this->listUserdata($content);
+			$content = $this->listUserdata($content);
 		} else {
-		    $template = $this->cObj->fileResource($this->conf['template']);
-		    $template = $this->cObj->getSubpart($template, '###ERROR###');
-            $content .= $this->cObj->substituteMarker($template, '###ERROR_MSG###', $this->pi_getLL('nologin'));
-        }
+			$template = $this->cObj->fileResource($this->conf['template']);
+			$template = $this->cObj->getSubpart($template, '###ERROR###');
+			$content .= $this->cObj->substituteMarker($template, '###ERROR_MSG###', $this->pi_getLL('nologin'));
+		}
 		
 		return $this->pi_wrapInBaseClass($content);
 	}
@@ -96,7 +96,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	 * Displays a form for editing the data of the current user.
 	 *
 	 * @author  Georg Ringer <typo3@ringerge.org>
-     * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-05-15
 	 * @param   string $content The plugin content
 	 * @return  string          The content
@@ -167,13 +167,13 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 		// Some special fields
 		$marker['###CRDATE###']				= strftime($this->conf['date'], $this->user->gD('crdate'));
-        $marker['###ACTIONLINK###']         = '';
+		$marker['###ACTIONLINK###']         = '';
 		$marker['###SIGNATUR_PREVIEW###']	= tx_mmforum_postparser::main(
 				$this, $this->conf, $this->user->gD('tx_mmforum_user_sig'), 'textparser');
 
 		// Avatar
 		$imgTSConfig = $this->conf['avatar.'];
-        $imgTSConfig['file'] = $this->user->getAvatar($this->conf['path_avatar']);
+		$imgTSConfig['file'] = $this->user->getAvatar($this->conf['path_avatar']);
 		$marker['###AVATAR###'] =  $this->cObj->IMAGE($imgTSConfig);
 
 		$marker['###AVATAR_DEL###'] = '';
@@ -187,43 +187,43 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			$marker['###' . strtoupper($llKey) . '###'] = $this->pi_getLL($llKey);
 		}
 
-        // User fields
-        $userField_template = $this->cObj->getSubpart($template, '###USERFIELDS###');
-        $userField_content  = '';
+		// User fields
+		$userField_template = $this->cObj->getSubpart($template, '###USERFIELDS###');
+		$userField_content  = '';
 
-        $userFields = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-            '*',
-            'tx_mmforum_userfields',
-            'deleted=0 AND hidden=0',	// where
-            '',							// groupby
-            'sorting DESC'				// orderby
-        );
+		$userFields = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			'*',
+			'tx_mmforum_userfields',
+			'deleted=0 AND hidden=0',	// where
+			'',							// groupby
+			'sorting DESC'				// orderby
+		);
 
-        $parser = t3lib_div::makeInstance('t3lib_TSparser');
-        foreach ($userFields as $field) {
-            if(isset($this->piVars['userfield'][$field['uid']])) {
-            	$value = $this->piVars['userfield'][$field['uid']];
-            } else {
+		$parser = t3lib_div::makeInstance('t3lib_TSparser');
+		foreach ($userFields as $field) {
+			if(isset($this->piVars['userfield'][$field['uid']])) {
+				$value = $this->piVars['userfield'][$field['uid']];
+			} else {
 				$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-	                'field_value',
-	                'tx_mmforum_userfields_contents',
-	                'field_id=' . $field['uid'] . ' AND user_id=' . $this->user->getUid()
-	            );
+					'field_value',
+					'tx_mmforum_userfields_contents',
+					'field_id=' . $field['uid'] . ' AND user_id=' . $this->user->getUid()
+				);
 
 				$value = '';
-	            if($GLOBALS['TYPO3_DB']->sql_num_rows($res2) > 0) {
+				if($GLOBALS['TYPO3_DB']->sql_num_rows($res2) > 0) {
 					list($value) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res2);
 				}
 			}
 
-            $parser->setup = array();
-            if(strlen($field['config']) > 0) {
-                $parser->parse($field['config']);
-            }
+			$parser->setup = array();
+			if(strlen($field['config']) > 0) {
+				$parser->parse($field['config']);
+			}
 			$config = $parser->setup;
 
 			$label = $field['label'];
-            if($config['label']) {
+			if($config['label']) {
 				$label = $this->cObj->cObjGetSingle($config['label'], $config['label.']);
 			}
 
@@ -231,40 +231,40 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 				$label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
 			}
 
-            if($config['datasource']) {
-            	$value = isset($this->piVars['userfield'][$field['uid']]) ? $this->piVars['userfield'][$field['uid']] : $field[$config['datasource']];
-            	$label .= '<input type="hidden" name="tx_mmforum_pi5[userfield_exists][' . $field['uid'] . ']" value="' . $config['datasource'] . '" />';
-            }
+			if($config['datasource']) {
+				$value = isset($this->piVars['userfield'][$field['uid']]) ? $this->piVars['userfield'][$field['uid']] : $this->user->gD($config['datasource']);
+				$label .= '<input type="hidden" name="tx_mmforum_pi5[userfield_exists][' . $field['uid'] . ']" value="' . $config['datasource'] . '" />';
+			}
 
-            if($config['input']) {
-                $tmpData = $this->cObj->data;
-                $this->cObj->data = array('fieldvalue' => $value);
+			if($config['input']) {
+				$tmpData = $this->cObj->data;
+				$this->cObj->data = array('fieldvalue' => $value);
 
-                $input = $this->cObj->cObjGetSingle($config['input'], $config['input.']);
+				$input = $this->cObj->cObjGetSingle($config['input'], $config['input.']);
 
-                $this->cObj->data = $tmpData;
-            } else {
+				$this->cObj->data = $tmpData;
+			} else {
 				$input = $this->cObj->getSubpart($userField_template, '###DEFUSERFIELD###');
 			}
-            $userField_thisTemplate = $this->cObj->substituteSubpart($userField_template, '###DEFUSERFIELD###', $input);
+			$userField_thisTemplate = $this->cObj->substituteSubpart($userField_template, '###DEFUSERFIELD###', $input);
 
-            $userField_marker = array(
+			$userField_marker = array(
 				'###USERFIELD_LABEL###' => $label,
 				'###USERFIELD_VALUE###' => $value,
 				'###USERFIELD_UID###'   => $field['uid'],
 				'###USERFIELD_NAME###'  => $this->prefixId . '[userfield][' . $field['uid'] . ']',
 				'###USERFIELD_ERROR###'	=> isset($this->userfield_error[$field['uid']]) ? $this->cObj->wrap($this->userfield_error[$field['uid']], $this->conf['userFields.']['wrap']) : ''
-            );
-            $userField_content .= $this->cObj->substituteMarkerArrayCached($userField_thisTemplate, $userField_marker);
-        }
-        $template = $this->cObj->substituteSubpart($template, '###USERFIELDS###', $userField_content);
+			);
+			$userField_content .= $this->cObj->substituteMarkerArrayCached($userField_thisTemplate, $userField_marker);
+		}
+		$template = $this->cObj->substituteSubpart($template, '###USERFIELDS###', $userField_content);
 
 			// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilMarkerArray'])) {
-		    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilMarkerArray'] as $classRef) {
-		        $procObj = &t3lib_div::getUserObj($classRef);
-		        $marker = $procObj->processProfilMarkerArray($marker, $this->cObj);
-		    }
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilMarkerArray'] as $classRef) {
+				$procObj = &t3lib_div::getUserObj($classRef);
+				$marker = $procObj->processProfilMarkerArray($marker, $this->cObj);
+			}
 		}
 
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
@@ -340,7 +340,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	/**
 	 * Writes the changes made by the user to the database
 	 * @author  Georg Ringer <typo3@ringerge.org>
-     * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-05-15
 	 * @param   string $content The plugin content
 	 * @return  string          The content
@@ -388,67 +388,67 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		// If no error occurred...
 		if ($error == 0) {
 
-        	// Include hooks
+			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilUpdateArray'])) {
-			    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilUpdateArray'] as $_classRef) {
-			        $_procObj = & t3lib_div::getUserObj($_classRef);
-			        $updateArr = $_procObj->processProfilUpdateArray($updateArr, $this->cObj);
-			    }
+				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilUpdateArray'] as $_classRef) {
+					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$updateArr = $_procObj->processProfilUpdateArray($updateArr, $this->cObj);
+				}
 			}
 
 			$this->user->setDataArray($updateArr);
 			$this->user->updateDatabase();
 
 			// Save user fields
-	        if(is_array($this->piVars['userfield'])) {
-	            foreach($this->piVars['userfield'] as $uid => $value) {
-	                if(strlen(trim($value)) == 0) continue;
+			if(is_array($this->piVars['userfield'])) {
+				foreach($this->piVars['userfield'] as $uid => $value) {
+					if(strlen(trim($value)) == 0) continue;
 
-	                $uid = intval($uid);
+					$uid = intval($uid);
 
-	                if($this->piVars['userfield_exists'][$uid]) {
-	                	if($this->getUserfieldUsesExistingField($uid)) {
-	                		$updateArray = array(
-	                			$this->piVars['userfield_exists'][$uid]		=> $value,
-	                			'tstamp'									=> time()
-	                		);
-	                		$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
-	                			'fe_users',
-	                			'uid=' . $this->user->getUid() . ' AND deleted=0',
-	                			$updateArray
-	                		);
-	                	}
-	                } else {
-		                $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-		                    '*',
-		                    'tx_mmforum_userfields_contents',
-		                    'user_id=' . $this->user->getUid() . ' AND field_id=' . $uid . ' AND deleted=0'
-		                );
-		                if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
-		                    $insertArray = array(
-		                        'pid'           => $this->getStoragePID(),
-		                        'tstamp'        => time(),
-		                        'crdate'        => time(),
-		                        'user_id'       => $this->user->getUid(),
-		                        'field_id'      => $uid,
-		                        'field_value'   => $value
-		                    );
-		                    $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userfields_contents', $insertArray);
-		                }
-		                else {
-		                    $updateArray = array(
-		                        'tstamp'        => time(),
-		                        'field_value'   => $value
-		                    );
-		                    $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+					if($this->piVars['userfield_exists'][$uid]) {
+						if($this->getUserfieldUsesExistingField($uid)) {
+							$updateArray = array(
+								$this->piVars['userfield_exists'][$uid]		=> $value,
+								'tstamp'									=> time()
+							);
+							$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+								'fe_users',
+								'uid=' . $this->user->getUid() . ' AND deleted=0',
+								$updateArray
+							);
+						}
+					} else {
+						$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+							'*',
+							'tx_mmforum_userfields_contents',
+							'user_id=' . $this->user->getUid() . ' AND field_id=' . $uid . ' AND deleted=0'
+						);
+						if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+							$insertArray = array(
+								'pid'           => $this->getStoragePID(),
+								'tstamp'        => time(),
+								'crdate'        => time(),
+								'user_id'       => $this->user->getUid(),
+								'field_id'      => $uid,
+								'field_value'   => $value
+							);
+							$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userfields_contents', $insertArray);
+						}
+						else {
+							$updateArray = array(
+								'tstamp'        => time(),
+								'field_value'   => $value
+							);
+							$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 								'tx_mmforum_userfields_contents',
 								'field_id=' . $uid . ' AND user_id=' . $this->user->getUid(),
 								$updateArray
 							);
-		                }
-	                }
-	            }
-	        }
+						}
+					}
+				}
+			}
 
 		// Otherwise...
 		} else {
@@ -467,7 +467,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	 * @return  string          The content
 	 */
 	function uploadAvatar($content) {
-        $avatarFile = $_FILES[$this->prefixId];
+		$avatarFile = $_FILES[$this->prefixId];
 
 		if (isset($this->piVars['del_avatar'])) {
 			$this->user->removeAvatar($this->conf['path_avatar']);
@@ -483,7 +483,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			return;
 
 		if (isset($this->piVars['upload'])) {
-            $uploaddir = $this->conf['path_avatar'];
+			$uploaddir = $this->conf['path_avatar'];
 
 			/*
 			 * Load the allowed file size for avatar image from the TCA and
