@@ -5,7 +5,7 @@
 		<link>###RSS_URL###</link>
 		<description>###RSS_DESCRIPTION###</description>
 		<language>###RSS_LANGUAGE###</language>
-		<lastbuilddate>###RSS_LASTBUILT###</lastbuilddate>
+		<lastBuildDate>###RSS_LASTBUILT###</lastBuildDate>
 		<generator>###RSS_GENERATOR###</generator>
 		<ttl>60</ttl>
 		

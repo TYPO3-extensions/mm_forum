@@ -191,12 +191,12 @@ class tx_mmforum_rss {
 			}
 
 		$marker			= array(
-			'###RSS_ENCODING###'        => $GLOBALS['TSFE']->renderCharset,
-			'###RSS_TITLE###'           => $this->getFeedTitle($mode, $param),
-			'###RSS_DESCRIPTION###'     => $this->getFeedDescription(),
-			'###RSS_URL###'             => $this->pObj->escapeURL($this->getFeedURL()),
-			'###RSS_GENERATOR###'       => 'mm_forum powered by TYPO3',
-			'###RSS_LASTBUILT###'       => date('r'),
+			'###RSS_ENCODING###'    => $GLOBALS['TSFE']->renderCharset,
+			'###RSS_TITLE###'       => '<![CDATA['.$this->getFeedTitle($mode, $param).']]>',
+			'###RSS_DESCRIPTION###' => $this->getFeedDescription(),
+			'###RSS_URL###'         => $this->pObj->escapeURL($this->getFeedURL()),
+			'###RSS_GENERATOR###'   => 'mm_forum powered by TYPO3',
+			'###RSS_LASTBUILT###'   => date('r'),
 			'###RSS_LANGUAGE###'		=> $this->pObj->LLkey == 'default' ? 'en' : $this->pObj->LLkey
 		);
 
