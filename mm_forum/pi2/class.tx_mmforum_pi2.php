@@ -282,68 +282,47 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 	 */
 	function saveData()
 	{
-		$usergroup	= $this->conf['userGroup'];
-		$pid		= $this->conf['userPID'];
-
-		$this->data['reghash'] = substr(md5(time().$this->data['username']), 1, 15);
-
-		$objPHPass = null;
-		if (t3lib_extMgm::isLoaded('t3sec_saltedpw')) {
-			require_once(t3lib_extMgm::extPath('t3sec_saltedpw').'res/staticlib/class.tx_t3secsaltedpw_div.php');
-			if (tx_t3secsaltedpw_div::isUsageEnabled()) {
-				require_once(t3lib_extMgm::extPath('t3sec_saltedpw').'res/lib/class.tx_t3secsaltedpw_phpass.php');
-				$objPHPass = t3lib_div::makeInstance('tx_t3secsaltedpw_phpass');
-			}
-		}
-		if (!$objPHPass && t3lib_extMgm::isLoaded('saltedpasswords')) {
-			if (tx_saltedpasswords_div::isUsageEnabled()) {
-				$objPHPass = t3lib_div::makeInstance(tx_saltedpasswords_div::getDefaultSaltingHashingMethod());
-			}
-		}
-
-		if ($objPHPass) {
-			$this->data['password'] = $objPHPass->getHashedPassword($this->data['password']);
-
-		} else if(t3lib_extMgm::isLoaded('kb_md5fepw')) {	//if kb_md5fepw is installed, crypt password
-			$this->data['password']=md5($this->data['password']);
-		}
+		$this->data['reghash'] = substr(md5(time() . $this->data['username']), 1, 15);
 
 		$insertArray = array(
-			'pid'				    => $pid,
-			'tstamp'			    => time(),
-			'crdate'			    => time(),
+			'pid'				    => $this->conf['userPID'],
 			'username'			    => $this->data['username'],
-			'password'			    => $this->data['password'],
-			'usergroup'			    => $usergroup,
+			'usergroup'			    => $this->conf['userGroup'],
 			'disable'			    => 1,
 			'tx_mmforum_reg_hash'   => $this->data['reghash']
 		);
 
-			# Include hooks
+		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['saveData'])) {
-		    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['saveData'] as $_classRef) {
-		        $_procObj = & t3lib_div::getUserObj($_classRef);
-		        $insertArray = $_procObj->saveRegistrationFormData($insertArray,$this->data,$this);
+		    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['saveData'] as $classRef) {
+		        $procObj = &t3lib_div::getUserObj($classRef);
+		        $insertArray = $procObj->saveRegistrationFormData($insertArray, $this->data, $this);
 		    }
 		}
 
-		$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('fe_users',$insertArray);
-        $user_id = $GLOBALS['TYPO3_DB']->sql_insert_id();
+		$user = t3lib_div::makeInstance('tx_mmforum_FeUser');
+		/* @var $user tx_mmforum_FeUser */
+		$user->setDataArray($insertArray);
+		$user->setPassword($this->data['password']);
+
+		$user->updateDatabase();
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_mmforum_userfields', 'deleted=0');
-
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
+        if($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 
 			$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
+			/* @var $userField tx_mmforum_userfield */
 			$userField->init($this->userLib, $this->cObj);
 
 			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$userField->get($arr);
+				$userField->get($arr);;
 
 				$value = trim($this->piVars['userfields'][$userField->getUID()]);
-				$userField->setForUser($user_id, $value, $this->getStoragePID());
+				$userField->setForUser($user->getUid(), $value, $this->getStoragePID());
 
-				if($userField->isUsingExistingField()) $this->data[$userField->getLinkedUserField()] = $value;
+				if($userField->isUsingExistingField()) {
+					$this->data[$userField->getLinkedUserField()] = $value;
+				}
 			}
 		}
 

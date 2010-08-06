@@ -3910,8 +3910,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             $marker['###TOTALPOSTS###']             = $user->getPostCount();
             if($user->getPostCount() >= $this->conf['user_hotposts']) {
                 // Special icon for users with more than a certain number posts defined in TypoScript
-                $llMarker = array('###HOTPOSTS###' => $this->conf['user_hotposts']);
-                $str = $this->cObj->substituteMarkerArray($this->pi_getLL('user.hot'),$llMarker);
+                $str = $this->cObj->substituteMarker($this->pi_getLL('user.hot'), '###HOTPOSTS###', $this->conf['user_hotposts']);
                 $imgInfo['src']                     = $this->conf['path_img'].$this->conf['images.']['5kstar'];
                 $imgInfo['alt']                     = $str;
                 $imgInfo['title']                   = $str;
@@ -3919,31 +3918,21 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
             }
 
 		// Rating
-			if($this->isUserRating())
-				$marker['###RATING###']					= $this->getRatingDisplay('fe_users', $user->getUid());
-			else $template = $this->cObj->substituteSubpart($template, '###SUBP_RATING###', '');
+			if($this->isUserRating()) {
+				$marker['###RATING###'] = $this->getRatingDisplay('fe_users', $user->getUid());
+			} else {
+				$template = $this->cObj->substituteSubpart($template, '###SUBP_RATING###', '');
+			}
 
         // Avatar
-			$marker['###AVATAR###'] = "";
-	   		if ($conf['path_avatar'] && $user->hasAvatar())
-				$marker['###AVATAR###'] = tx_mmforum_tools::res_img($conf['path_avatar'].$user->getAvatarFilename(),$conf['avatar_width'],$conf['avatar_height']);
-	   		else {
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('image','fe_users','uid = "'.$user->getUid().'"');
-				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+            $marker['###AVATAR###'] = '';
+			if ($user->hasAvatar())  {
+                $marker['###AVATAR###'] = tx_mmforum_tools::res_img(
+						$user->getAvatar($conf['path_avatar']),
+						$conf['avatar_width'], $conf['avatar_height']
+					);
+            }
 
-				if( $row['image'] ) {
-		    		if( strstr($row['image'],',' ) !== false ) {
-						$avatarArray = t3lib_div::trimExplode(',',$row['image']);
-						$row['image'] = $avatarArray[0];
-		    		}
-		    
-		    		if( file_exists('uploads/pics/'.$row['image']) )
-						$marker['###AVATAR###'] = tx_mmforum_tools::res_img('uploads/pics/'.$row['image'],$conf['avatar_width'],$conf['avatar_height']);
-		    		elseif( file_exists('uploads/tx_srfeuserregister/'.$row['image']) )
-						$marker['###AVATAR###'] = tx_mmforum_tools::res_img('uploads/tx_srfeuserregister/'.$row['image'],$conf['avatar_width'],$conf['avatar_height']);
-
-				}
-			}
         // E-Mail (currently deactivated)
             $marker['###MAIL###']                   = '';  #'<a href="index.php?id='.$GLOBALS["TSFE"]->id.'&tx_mmforum_pi1[action]=send_mail&tx_mmforum_pi1[uid]='.$row['uid'].'"><img src="'.$conf['path_img'].'mail.gif" border="0"></a>';
 

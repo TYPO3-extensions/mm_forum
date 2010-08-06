@@ -331,7 +331,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			t3lib_div::loadTCA('fe_users');
 
 			$fields = array_keys($TCA['fe_users']['columns']);
-			$uf_link = in_array($data['link'],$fields) ? $data['link'] : null;
+			$uf_link = in_array($data['link'], $fields) ? $data['link'] : null;
 		} else $uf_link = null;
 
 			/* Validate the type parameter. If the parameter is NOT one

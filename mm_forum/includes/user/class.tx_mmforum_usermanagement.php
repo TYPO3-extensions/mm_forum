@@ -36,35 +36,38 @@
  */
 class tx_mmforum_usermanagement {
 
-		/** An instance of the t3lib_TSparser class */
-	var $parser;
+	/**
+	 * instance of the t3lib_TSparser class
+	 *
+	 * @var t3lib_TSparser
+	 */
+	protected $parser = null;
 
-		/**
-		 * Gets an instance of the t3lib_TSparser class.
-		 *
-		 * @return &t3lib_TSparser A reference to an t3lib_TSparser object.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2009-02-16
-		 */
+	/**
+	 * Gets an instance of the t3lib_TSparser class.
+	 *
+	 * @return t3lib_TSparser A reference to an t3lib_TSparser object.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2009-02-16
+	 */
 	function &getTSParser() {
-		if($this->parser) return $this->parser;
-		else {
+		if($this->parser === null)
 			$this->parser = t3lib_div::makeInstance('t3lib_TSparser');
-			return $this->parser;
-		}
+		
+		return $this->parser;
 	}
 
-		/**
-		 * Determines if a user field uses an existing fe_user field
-		 *
-		 * @param  int $uid The UID of the userfield
-		 * @return boolean  TRUE, if the userfield uses an existing fe_user field,
-		 * 	                otherwise FALSE.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2009-02-16
-		 */
+	/**
+	 * Determines if a user field uses an existing fe_user field
+	 *
+	 * @param  int $uid The UID of the userfield
+	 * @return boolean  TRUE, if the userfield uses an existing fe_user field,
+	 * 	                otherwise FALSE.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2009-02-16
+	 */
 	function getUserfieldUsesExistingField($uid) {
 
 		$userField = $this->getUserFieldData($uid);
@@ -75,63 +78,111 @@ class tx_mmforum_usermanagement {
 
 	}
 
-		/**
-		 * Loads the record of an user field.
-		 * This function load the entire record of a custom user field. The
-		 * field's typoscript configuration is automatically parsed and the
-		 * array of metadata that is stored in the database is automatically
-		 * unserialized.
-		 *
-		 * @param  mixed $data Some data the record is to be initialized with.
-		 *                     This may be either the record's UID or the entire
-		 *                     record itself as array.
-		 * @return array       The record of the user field.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2009-02-16
-		 */
-	function getUserFieldData($data) {
+	/**
+	 * Loads the record of an user field.
+	 * This function load the entire record of a custom user field. The
+	 * field's typoscript configuration is automatically parsed and the
+	 * array of metadata that is stored in the database is automatically
+	 * unserialized.
+	 *
+	 * @param  mixed $value Some data the record is to be initialized with.
+	 *                     This may be either the record's UID or the entire
+	 *                     record itself as array.
+	 * @return array       The record of the user field.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2009-02-16
+	 */
+	function getUserFieldData($value) {
 
-		if(is_int($data) || intval($data) != 0 ) {
-				/* Load record from database */
+		if (is_array($value)) {
+			$data = $value;
+
+		} else if(t3lib_div::testInt($value) || intval($value) != 0) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-				'*', 'tx_mmforum_userfields', 'uid='.intval($data)
+				'*', 'tx_mmforum_userfields', 'uid=' . intval($value)
 			);
-			if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return null;
-			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-		} elseif (is_array($arr)) {
-			$arr = $data;
+			
+			if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0)
+				return null;
+
+			$data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		}
 
-			/* Unserialize array with meta information */
-		$arr['meta'] = unserialize($arr['meta']);
-
-			/* Parse configuration TypoScript */
+		/* Parse configuration TypoScript */
         $parser = $this->getTSParser();
-        $parser->parse($arr['config']);
-        $arr['config_parsed'] = $parser->setup;
+        $parser->parse($data['config']);
+        $data['config_parsed'] = $parser->setup;
 		$parser->setup = null;
 
-			/* Do some corrections for backwards compatibility */
-		if(!$arr['meta']['label']['default'])
-			$arr['meta']['label']['default'] = $arr['label'];
-		if(!$arr['meta']['type'])
-			$arr['meta']['type'] = 'custom';
-		if(!$arr['meta']['link'] && $arr['config_parsed']['datasource'])
-			$arr['meta']['link'] = $arr['config_parsed']['datasource'];
-		if(!isset($arr['meta']['required']) && isset($arr['config_parsed']['required']))
-			$arr['meta']['required'] = $arr['config_parsed']['required']?true:false;
-		if(!isset($arr['meta']['unique']))
-			$arr['meta']['unique'] = intval($arr['uniquefield'])===1?true:false;
-		if(!$arr['meta']['text']['validate'])
-			$arr['meta']['text']['validate'] = 'none';
-		if(!$arr['meta']['text']['length'])
-			$arr['meta']['text']['length'] = '-1';
+		$this->initializeOldMetaArray($data);
 
-		return $arr;
-
+		return $data;
 	}
 
+	/**
+	 * Do some corrections for backwards compatibility
+	 *
+	 * @param array &$data
+	 * @return array
+	 */
+	protected function initializeOldMetaArray(array &$data) {
+		if (isset($data['meta']))
+			$data['meta'] = unserialize($data['meta']);
+		else
+			$data['meta'] = array();
+
+		if(!$data['meta']['label']['default'])
+			$data['meta']['label']['default'] = $data['label'];
+
+		if(!$data['meta']['type'])
+			$data['meta']['type'] = 'custom';
+
+		if(!$data['meta']['link'] && $data['config_parsed']['datasource'])
+			$data['meta']['link'] = $data['config_parsed']['datasource'];
+
+		if(!isset($data['meta']['required']) && isset($data['config_parsed']['required']))
+			$data['meta']['required'] = $data['config_parsed']['required'] ? true : false;
+
+		if(!isset($data['meta']['unique']))
+			$data['meta']['unique'] = intval($data['uniquefield']) === 1 ? true : false;
+
+		if(!$data['meta']['text']['validate'])
+			$data['meta']['text']['validate'] = 'none';
+
+		if(!$data['meta']['text']['length'])
+			$data['meta']['text']['length'] = '-1';
+
+		return $data;
+	}
+
+	public function saveUserField($data) {
+		if (!is_array($data))
+			return;
+
+		$this->convertFromOldData($data);
+
+		
+	}
+
+	protected function convertFromOldData(array &$data) {
+		if (!isset($data['meta']))
+			return $data;
+		
+		if ($data['meta']['label']['default'])
+			$data['label'] = $data['meta']['label']['default'];
+
+		if($data['meta']['link'] && !$data['config_parsed']['datasource'])
+			$data['config_parsed']['datasource'] = $data['meta']['link'];
+
+		if(isset($data['meta']['required']) && !isset($data['config_parsed']['required']))
+			$data['config_parsed']['required'] = $data['meta']['required'] ? true : false;
+
+		if(isset($data['meta']['unique']))
+			$data['uniquefield'] = $data['meta']['unique'] === true ? 1 : 0;
+
+		return $data;
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/includes/user/class.tx_mmforum_usermanagement.php']) {
