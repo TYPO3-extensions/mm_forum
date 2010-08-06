@@ -1221,18 +1221,23 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 		$profile = '';
 
-		foreach($this->conf['list_posts.']['userbuttons.'] as $key=>$obj) {
-			if($this->conf['list_posts.']['userbuttons.'][$key.'.'] && $obj=='MMFORUM_BUTTON') {
+		foreach($this->conf['list_posts.']['userbuttons.'] as $key => $obj) {
+
+			if (!$this->conf['list_posts.']['userbuttons.'][$key.'.'] || !is_string($obj))
+				continue;
+
+			if($obj === 'MMFORUM_BUTTON') {
 				$buttonConf = $this->conf['list_posts.']['userbuttons.'][$key.'.'];
 
-				if($buttonConf['if.'] && !$this->cObj->checkIf($buttonConf['if.'])) continue;
+				if($buttonConf['if.'] && !$this->cObj->checkIf($buttonConf['if.']))
+					continue;
 
 				if($buttonConf['label.']) {
-					$label = $this->cObj->cObjGetSingle('TEXT',$buttonConf['label.']);
+					$label = $this->cObj->cObjGetSingle('TEXT', $buttonConf['label.']);
 				}
 
 				if($buttonConf['link.']) {
-					$link = $this->cObj->cObjGetSingle('TEXT',$buttonConf['link.']);
+					$link = $this->cObj->cObjGetSingle('TEXT', $buttonConf['link.']);
 				}
 
 				if($buttonConf['special']) {
