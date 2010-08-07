@@ -78,8 +78,15 @@ require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/cache/class.tx_mmforu
 	 */
 class tx_mmforum_base extends tslib_pibase {
 	var $extKey = 'mm_forum';
-	var $tools;	// instance of tx_mmforum_tools
-	var $validator;	// instance of tx_mmforum_validator
+
+	/**
+	 * @var tx_mmforum_tools
+	 */
+	var $tools;
+	/**
+	 * @var tx_mmforum_validator
+	 */
+	var $validator;
 	var $validatorObj;	// same as the above, is kept for backwards-compatibility, will be deleted at some point, use the one above
 
 

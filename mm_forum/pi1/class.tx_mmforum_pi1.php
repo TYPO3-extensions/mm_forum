@@ -4824,7 +4824,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
         return $text;
     }
 
-    /**
+	/**
      * Builds a link to a specific post by determining the topic and the post's
      * page in this topic by post UID.
      * @param  int    $post_id The post UID
@@ -4832,40 +4832,45 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      * @param  array  $conf    The plugin's configuration vars
      * @return string          The URL
      */
-    function get_pid_link ($post_id,$sword,$conf) {
-        $post_id = intval($post_id);
-        list($topic_id,$forum_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_id,forum_id','tx_mmforum_posts',"deleted=0 AND hidden=0 AND uid='$post_id'".$this->getStoragePIDQuery()));
-        $res            = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_posts',"deleted=0 AND hidden=0 AND topic_id='$topic_id'".$this->getStoragePIDQuery());
-        $i              = 1;
+	function get_pid_link ($post_id, $sword, $conf) {
+		$post_id = intval($post_id);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'topic_id,forum_id',
+				'tx_mmforum_posts',
+				'deleted=0 AND hidden=0 AND uid=\'' . $post_id . '\'' . $this->getStoragePIDQuery()
+			);
+		list($topic_id, $forum_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            $i++;
+		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+				'uid',
+				'tx_mmforum_posts',
+				'deleted=0 AND hidden=0 AND topic_id=\'' . $topic_id . '\'' . $this->getStoragePIDQuery(),
+				'',
+				'post_time'
+			);
 
-            IF($row['uid'] == $post_id) {
-                $i--;
-                $seite = ceil($i / $conf['post_limit']);
-            }
-        }
-        $seite     = intval($seite);
+		$pos = array_search(array('uid' => (string)$post_id), $rows);
+		$pos = ($pos === false ? 0 : ($pos + 1));	// pos is id -> increase by one
+		$page = (int)ceil($pos / $conf['post_limit']);
+		
+		$linkparams[$this->prefixId] = array (
+			'action'    => 'list_post',
+			'tid'       => $topic_id,
+			'page'      => $page - 1
+		);
+		if($linkparams[$this->prefixId]['page'] < 1) {
+			unset($linkparams[$this->prefixId]['page']);
+		}
+		if($this->useRealUrl()) {
+			$linkparams[$this->prefixId]['fid'] = $forum_id;
+			$linkparams[$this->prefixId]['pid'] = $this->pi_getLL('realurl.page');
+		}
 
-        $linkparams[$this->prefixId] = array (
-            'action'    => 'list_post',
-            'tid'       => $topic_id,
-            'page'      => $seite - 1
-        );
-        if($linkparams[$this->prefixId]['page'] < 1) {
-          $linkparams[$this->prefixId]['page'] = '';
-        }
-        if($this->useRealUrl()) {
-            $linkparams[$this->prefixId]['fid'] = $forum_id;
-            $linkparams[$this->prefixId]['pid'] = $this->pi_getLL('realurl.page');
-        }
+		if($sword) $linkparams[$this->prefixId]['sword'] = $sword;
 
-        if($sword) $linkparams[$this->prefixId]['sword'] = $sword;
-
-        $linkto     = $this->pi_getPageLink($this->getForumPID(),'',$linkparams).'#pid'.$post_id;
-        return $linkto;
-    }
+		$link = $this->pi_getPageLink($this->getForumPID(), '', $linkparams);
+		return $link . '#pid' . $post_id;
+	}
 
 	/**
 	 * Returns the prefix of a certain topic.
