@@ -122,8 +122,6 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 			$contenttype	= $this->conf['cron_htmlemail']?'text/html':'text/plain';
 			$header			= "Content-Type: $contenttype; charset=utf-8\n";
 			$header		   .= "From: ".$this->conf['cron_notifyPublishSender']."\n";
-			$header		   .= "X-Mailer: PHP/" . phpversion(). "\n";
-			$header		   .= "X-Sender-IP: ".getenv("REMOTE_ADDR")."\n";
 
 			if(!@mail($recipient, $subject, $mailtext, $header)) {
 				$this->debug('Could not send email to '.$recipient,$this->DEBUG_ERROR);

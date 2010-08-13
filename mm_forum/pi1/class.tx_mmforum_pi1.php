@@ -4007,8 +4007,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
                     $header .= "From: <".$GLOBALS['TSFE']->fe_user->user[$this->getUserNameField()].">".$GLOBALS['TSFE']->fe_user->user['email']."\n";
                     $header .= "Reply-To:" . $GLOBALS['TSFE']->fe_user->user['email'] . "\n";
-                    $header .= "X-Mailer: PHP/" . phpversion(). "\n";
-                    $header .= "X-Sender-IP: ".getenv("REMOTE_ADDR")."\n";
                     $header .= "Content-type: text/plain;charset=".$GLOBALS['TSFE']->renderCharset."\n";
 
                     $mailtext = $this->piVars['text'];
