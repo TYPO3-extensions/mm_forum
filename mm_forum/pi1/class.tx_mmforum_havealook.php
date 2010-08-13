@@ -418,8 +418,6 @@ class tx_mmforum_havealook {
 
 		$mailHeaders = array(
 			'From: ' . $sender,
-			'X-Mailer: PHP/' . phpversion(),
-			'X-Sender-IP: ' . t3lib_div::getIndpEnv('REMOTE_ADDR'),
 			'Content-type: text/plain;charset=' . $GLOBALS['TSFE']->renderCharset,
 		);
 
@@ -530,8 +528,6 @@ class tx_mmforum_havealook {
 
 		$mailHeaders = array(
 			'From: ' . $sender,
-			'X-Mailer: PHP/' . phpversion(),
-			'X-Sender-IP: ' . t3lib_div::getIndpEnv('REMOTE_ADDR'),
 			'Content-type: text/plain;charset=' . $GLOBALS['TSFE']->renderCharset,
 		);
 
