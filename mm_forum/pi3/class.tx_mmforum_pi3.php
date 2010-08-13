@@ -615,8 +615,6 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						$from = $this->cObj->substituteMarkerArray($this->pi_getLL('ntfmail.sender'),$llMarker);
 
 						$header .= "From: ".$from."\n";
-						$header .= "X-Mailer: PHP/" . phpversion(). "\n";
-						$header .= "X-Sender-IP: ".getenv("REMOTE_ADDR")."\n";
 			            $header .= "Content-type: text/plain;charset=".$GLOBALS['TSFE']->renderCharset."\n";
 
 						$template = $this->pi_getLL('ntfmail.content');
