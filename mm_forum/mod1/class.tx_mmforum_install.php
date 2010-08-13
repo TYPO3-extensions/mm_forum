@@ -690,6 +690,9 @@ class tx_mmforum_install {
 								'setValue' => 'prepend'
 							),
 							'script' => 'wizard_add.php',
+						),
+						'suggest' => array(
+							'type' => 'suggest'
 						)
 					):false
 				)
@@ -807,10 +810,12 @@ class tx_mmforum_install {
 					"size" => 1,
 					"minitems" => 0,
 					"maxitems" => 1,
+					'wizards' => array( 'suggest' => array('type' => 'suggest') )
 				)
 			)
 		);
-		$input = $this->p->tceforms->getSingleField_typeGroup('pages','tx_mmforum_install[conf][0][storagePID]',array(),$conf);
+		#$input = $this->p->tceforms->getSingleField_typeGroup('pages','tx_mmforum_install[conf][0][storagePID]',array(),$conf);
+		$input = $this->p->tceforms->getSingleField_typeGroup('pages','storagePID',array('uid'=>0,'pid'=>0),$conf);
 		$content .= '<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
     <tr>
         <td colspan="3" class="mm_forum-listrow_header" valign="top"><img src="img/install-general.png" style="vertical-align: middle; margin-right:8px;" />'.$this->getLL('start.title').'</td>
@@ -923,6 +928,8 @@ class tx_mmforum_install {
 			$config = $ctg=='required' ? $this->getFieldConfigByIdentifier($var) : $this->fieldConfig["$ctg."]['items.']["$var."];
 			$type = $config['type'];
 
+			t3lib_div::debug($config);
+
 			if($type == 'group')
 				$value = preg_replace('/^'.$config['type.']['table'].'_/','',preg_replace('/,$/','',$value));
             if($type == 'int') $value = intval($value);
@@ -1003,7 +1010,7 @@ class tx_mmforum_install {
 
 	function getFieldConfigByIdentifier($fieldId) {
 
-			// Most important rule againt clear code: Avoid ALL necessary
+			// Most important rule against clear code: Avoid ALL unnecessary
 			// brackets!
 		foreach($this->fieldConfig as $category => $ctgType)
 			if($ctgType === 'MMFORUM_CONF_CATEGORY')

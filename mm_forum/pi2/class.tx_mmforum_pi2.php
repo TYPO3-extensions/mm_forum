@@ -140,8 +140,6 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 	function sendEmail() {
 		$header = array(
 			'From: '.$this->conf['supportMail'],
-			'X-Mailer: PHP/' . phpversion(),
-			'X-Sender-IP: ' . t3lib_div::getIndpEnv('REMOTE_ADDR'),
 			'Content-type: text/plain; charset=' . $GLOBALS['TSFE']->renderCharset
 		);
 
