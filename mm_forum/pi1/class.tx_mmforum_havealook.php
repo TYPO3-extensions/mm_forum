@@ -428,7 +428,7 @@ class tx_mmforum_havealook {
 			'id'     => $topicId
 		);
 
-		$link = $forumObj->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
+		$link = $forumObj->pi_getPageLink($forumObj->conf['pid_forum'], '', $linkParams);
 		$link = $forumObj->tools->escapeBrackets($link);
 
 		if (strlen($forumObj->conf['notifyingMail.']['topicLinkPrefix_override']) > 0) {
