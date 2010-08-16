@@ -219,7 +219,6 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 
 			$this->tceforms = t3lib_div::makeInstance("t3lib_TCEforms");
 			$this->tceforms->backPath = $BACK_PATH;
-			$this->tceforms->initDefaultBEmode();
 
 			$this->content .= $this->tceforms->printNeededJSFunctions_top();
 
