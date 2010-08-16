@@ -374,14 +374,17 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 				$this->userfield_error[$fieldData['uid']] = $this->pi_getLL('error-userfieldEmpty');
 			}
 
-			if ((intval($userField->data['uniquefield']) === 1) &&
-				!($userField->isUnique($value, $userField->data['config_parsed']['datasource']))) {
+			if (   !$this->userfield_error[$fieldData['uid']]
+			    && intval($userField->data['uniquefield']) === 1
+				&& !($userField->isUnique($value, $userField->data['config_parsed']['datasource']))) {
 
 				$this->userfield_error[$fieldData['uid']] = $this->pi_getLL('error-userfieldNotUnique');
 				$error = 1;
 			}
 
 		}
+
+		t3lib_div::debug($this->userfield_error);
 
 		if($requiredMissing) $error = 1;
 

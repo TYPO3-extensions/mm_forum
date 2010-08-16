@@ -60,6 +60,7 @@
 			<label index="errorWWWInvalid">Please insert a correct URL for your website.</label>
 			<label index="errorRequiredMissing">Please fill out the following fields: %s</label>
 			<label index="error-userfieldEmpty">Please enter a correct value</label>
+			<label index="error-userfieldNotUnique">This value is already being used</label>
 			<label index="username">Username</label>
         </languageKey>
         <!-- GERMAN LANGUAGE DATA -->
@@ -122,6 +123,7 @@
 			<label index="errorRequiredMissing-inf">Bitte fülle die folgenden Felder aus: %s</label>
 			<label index="error-userfieldEmpty">Bitte geben Sie einen korrekten Wert an</label>
 			<label index="error-userfieldEmpty-inf">Bitte gib einen korrekten Wert an</label>
+			<label index="error-userfieldNotUnique">Dieser Wert wird bereits verwendet.</label>
 			<label index="username">Benutzername</label>
         </languageKey>
         <!-- FINNISH LANGUAGE DATA -->
