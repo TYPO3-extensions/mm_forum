@@ -1,14 +1,16 @@
 <!-- ###NEWPOST### begin-->
+<!-- ###ROOTLINE_CONTAINER### begin -->
+<div class="tx-mmforum-rootline">###FORUMPATH###</div>
+<!-- ###ROOTLINE_CONTAINER### end -->
 ###STARTJAVASCRIPT###
 
 ###POST_PREVIEW###
 
-<form action="###ACTION###" method="post" id="post" enctype="multipart/form-data">
+<form action="###ACTION###" method="post" id="post" name="post" enctype="multipart/form-data">
+	<div style="width: 100%;">
 	 <table class="tx-mmforum-table" width="100%">
 		 <tr>
-			<th colspan="2" class="tx-mmforum-th">
-				###POSTTITLE###
-			</th>
+			<th colspan="2" class="tx-mmforum-th">###POSTTITLE###</th>
 		</tr>
 		<tr align="left" valign="top">
 			<td class="tx-mmforum-pi1-newpost-left" id="smilies">
@@ -31,7 +33,7 @@
 					</tr>
 					<tr>
 						<td>
-							<textarea id="tx_mmforum_editor" name="tx_mmforum_pi1[message]" rows="15" cols="80" style="width:100%" tabindex="2" class="post">###POSTTEXT###</textarea>
+							<textarea name="tx_mmforum_pi1[message]" rows="15" cols="35" style="width:100%" tabindex="2" class="tx-mmforum-post" id="tx_mmforum_editor">###POSTTEXT###</textarea>
 						</td>
 					</tr>
 				</table>
@@ -52,9 +54,10 @@
             <td class="tx-mmforum-pi1-newpost-left">###LABEL_ATTACHMENT###</td>
             <td class="tx-mmforum-pi1-newpost-middle" style="text-align: left !important;">
                 <input type="hidden" name="MAX_FILE_SIZE" value="###MAXFILESIZE###" />
-                <!-- ###ATTACHMENT_FIELD### -->
+
+                <!-- ###ATTACHMENT_FIELD### begin -->
                 <div><input type="file" class="tx-mmforum-pi1-attachment" name="tx_mmforum_pi1_attachment_###ATTACHMENT_NO###" size="64" /></div>
-                <!-- ###ATTACHMENT_FIELD### -->
+                <!-- ###ATTACHMENT_FIELD### end -->
                 ###MAXFILESIZE_TEXT###
             </td>
         </tr>
@@ -82,15 +85,22 @@
             </td>
         </tr>
         <!-- ###POLL_SECTION### end -->
-		<tr align="left" valign="top">
+		<!-- ###HAVEALOOK_SECTION### begin -->
+			<tr>
+				<td>&nbsp;</td>
+				<td><input type="checkbox" id="tx_mmforum_pi1-havealook" name="tx_mmforum_pi1[havealook]" value="havealook" ###HAVEALOOK### /><label for="tx_mmforum_pi1-havealook"><small>###LABEL_SETHAVEALOOK###</small></label></td>
+			</tr>
+		<!-- ###HAVEALOOK_SECTION### end -->
+			<tr align="left">
 			<td class="tx-mmforum-subth"></td>
 			<td class="tx-mmforum-subth">
-				<input type="submit" class="tx-mmforum-button" name="tx_mmforum_pi1[button]" value="###LABEL_SEND###" />
+				<input type="submit" class="tx-mmforum-button" name="tx_mmforum_pi1[button]" value="###LABEL_SEND###" accesskey="s" />
 				<input type="submit" class="tx-mmforum-button" name="tx_mmforum_pi1[button]" value="###LABEL_PREVIEW###" />
-				<input type="reset" class="tx-mmforum-button" value="###LABEL_RESET###" />
+				<input type="reset"  class="tx-mmforum-button" value="###LABEL_RESET###" />
 			</td>
 		</tr>
 	</table>
+	</div>
 </form>
 
 <div style="width:100%">
