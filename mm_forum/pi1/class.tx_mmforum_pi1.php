@@ -5665,7 +5665,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Iterate through all the user's groups and compose an array of SQL conditions.
 		$queryParts = array();
 		foreach($groups as $group) {
-			$queryParts[] = sprintf('FIND_IN_SET(%c,grouprights_write)', $group);
+			$queryParts[] = sprintf('FIND_IN_SET(%s,grouprights_write)', $group);
 		}
 
 		// Compose SQL query
