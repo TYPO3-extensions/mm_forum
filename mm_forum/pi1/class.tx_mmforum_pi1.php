@@ -2556,321 +2556,327 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		return $content;
 	}
 
-    /**
+	/**
      * Displays the form for creating a new post an answer to an existing topic.
      * @param  string $content The plugin content
      * @param  array  $conf    The plugin's configuration vars
      * @return string          The content
      */
-    function new_post($content, $conf)
-    {
-        $benutzer       =   $GLOBALS['TSFE']->fe_user->user['username'];
-        $gruppe         =   $GLOBALS['TSFE']->fe_user->user['usergroup'];
-        $grouprights    =   explode(",",$GLOBALS['TSFE']->fe_user->user['usergroup']);
+	function new_post($content, $conf) {
+		$loginUser = $GLOBALS['TSFE']->loginUser;
 
 		$topicId = intval($this->piVars['tid']);
 		$topicData = $this->getTopicData($topicId);
 
 		$forumId = $topicData['forum_id'];
 
-        if (
-            (!empty($benutzer) && ($this->get_topic_is($topicId) == 0)) ||
-			(!empty($benutzer) && $this->getIsModOrAdmin($forumId))
-			)
-        {
-            if(!$this->getMayWrite_topic($topicId)) {
-                return $content.$this->errorMessage($conf, $this->pi_getLL('newTopic.noAccess'));
-            }
+		if (($loginUser && ($this->get_topic_is($topicId) == 0))
+			|| ($loginUser && $this->getIsModOrAdmin($forumId))) {
+			
+			if (!$this->getMayWrite_topic($topicId)) {
+				return $content.$this->errorMessage($conf, $this->pi_getLL('newTopic.noAccess'));
+			}
 
-            if($this->piVars['button'] == $this->pi_getLL('newPost.save')) {
-                IF (!$this->piVars['message']) {
-                    $content .= $this->errorMessage($this->conf,$this->pi_getLL('newTopic.noText'));
-                    unset($this->piVars['button']);
-                    return $this->new_post($content, $conf);
-                }
+			if ($this->piVars['button'] == $this->pi_getLL('newPost.save')) {
+				if (!$this->piVars['message']) {
+					$content .= $this->errorMessage($this->conf,$this->pi_getLL('newTopic.noText'));
+					unset($this->piVars['button']);
 
-					// Checks if the current user has already written a post in a certain interval
-					// from now on. If so, the write attempt is blocked for security reasons.
+					return $this->new_post($content, $conf);
+				}
+
+				// Checks if the current user has already written a post in a certain interval
+				// from now on. If so, the write attempt is blocked for security reasons.
 				$interval = $conf['spamblock_interval'];
 
-				$time   = time() - $interval;
-				$res    = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$time = time() - $interval;
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'*',
 					'tx_mmforum_posts',
-					'poster_id=\''.$this->getUserID().
-					'\' AND post_time >= \''.$time.'\''.
-					$this->cObj->enableFields('tx_mmforum_posts')
+					'poster_id=' . $this->getUserID() . ' AND post_time>=' . $time . $this->cObj->enableFields('tx_mmforum_posts')
 				);
 
-				$abort = ($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0)?TRUE:FALSE;
+				if (($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0)) {
 
-				if($abort) {
 					$template = $this->cObj->fileResource($conf['template.']['login_error']);
 					$template = $this->cObj->getSubpart($template, "###LOGINERROR###");
+
 					$marker = array();
 					$llMarker = array('###SPAMBLOCK###' => $interval);
 					$marker['###LOGINERROR_MESSAGE###'] = $this->cObj->substituteMarkerArray($this->pi_getLL('newPost.spamBlock'),$llMarker);
-					$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 
+					$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 					return $content;
 				}
 
-					/* Create a topic subscription if the user checked the
-					   regarding checkbox. */
-				if($this->piVars['havealook']) {
+				// Create a topic subscription if the user checked the regarding checkbox.
+				if ($this->piVars['havealook']) {
 					tx_mmforum_havealook::addSubscription($this, $topicId, $this->getUserID());
 				}
 
-					// Check file upload
-				if($_FILES['tx_mmforum_pi1_attachment_1']['size']>0) {
+				// Check file upload
+				if ($_FILES['tx_mmforum_pi1_attachment_1']['size']>0) {
+
 					$res = $this->performAttachmentUpload();
+
 					if(!is_array($res)) {
 						$content .= $res;
 						unset($this->piVars['button']);
+
 						return $this->new_post($content,$conf);
+					} else {
+						$attachment_ids = $res;
 					}
-					else $attachment_ids = $res;
-				} else $attachment_ids = 0;
+				} else {
+					$attachment_ids = 0;
+				}
 
-					// Instantiate postfactory class
+				// Instantiate postfactory class
 				$postfactory = t3lib_div::makeInstance('tx_mmforum_postfactory');
-				$postfactory->init($this->conf,$this);
+				$postfactory->init($this->conf, $this);
 
-                if($this->isModeratedForum() && !$this->getIsAdmin() && !$this->getIsMod($this->piVars['fid'])) {
+				if($this->isModeratedForum() && !$this->getIsAdmin() && !$this->getIsMod($this->piVars['fid'])) {
 
-						// Create post using postfactory
+					// Create post using postfactory
 					$postfactory->create_post_queue(
 						$topicId,
 						$this->getUserID(),
 						$this->piVars['message'],
 						time(),
-						  $this->tools->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
-						  $attachment_ids
+						$this->tools->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
+						$attachment_ids
 					);
 
 					return $this->successMessage($conf,$this->pi_getLL('postqueue-success'));
 
-                } else {
+				} else {
 
-						// Create post using postfactory
-					$post_uid = $postfactory->create_post(
+					// Create post using postfactory
+					$postId = $postfactory->create_post(
 						$topicId,
 						$this->getUserID(),
 						$this->piVars['message'],
 						time(),
 						$this->tools->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
 						$attachment_ids,
-						FALSE,
-						$this->piVars['havealook'] == 'havealook'
+						false,
+						($this->piVars['havealook'] == 'havealook')
 					);
 
-						// Redirect user to new post
+					// Redirect user to new post
 					$linkParams = array(
 						'tx_mmforum_pi1[action]'  => 'list_post',
 						'tx_mmforum_pi1[tid]'     => $topicId,
-						'tx_mmforum_pi1[pid]'     => $post_uid
+						'tx_mmforum_pi1[pid]'     => $postId
 					);
+
 					$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
 					$link = $this->tools->getAbsoluteUrl($link);
-					header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $post_uid));
+
+					header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $postId));
 					exit();
-                }
-            }
-            else {
-					// Show post preview
-                if($this->piVars['button'] == $this->pi_getLL('newPost.preview')) {
-                    $template = $this->cObj->fileResource($conf['template.']['list_post']);
-                    $template = $this->cObj->getSubpart($template, "###LIST_POSTS###");
+				}
+			} else {
 
-                    $template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_SECTION###', '');
+				// Show post preview
+				if ($this->piVars['button'] == $this->pi_getLL('newPost.preview')) {
+					$template = $this->cObj->fileResource($conf['template.']['list_post']);
+					$template = $this->cObj->getSubpart($template, '###LIST_POSTS###');
 
-                    $userSignature = tx_mmforum_postfunctions::marker_getUserSignature($GLOBALS['TSFE']->fe_user->user);
+					$template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_SECTION###', '');
 
-                    $posttext = $this->piVars['message'];
-                    $postold = $posttext;
-                    $posttext = $this->bb2text($posttext,$conf) . ($this->conf['list_posts.']['appendSignatureToPostText'] ? $userSignature : '');
+					$userSignature = tx_mmforum_postfunctions::marker_getUserSignature($GLOBALS['TSFE']->fe_user->user);
 
-                    $marker['###POSTOPTIONS###']= '';
-                    $marker['###MESSAGEMENU###']= '';
-                    $marker['###PROFILEMENU###']= '';
-                    $marker['###POSTMENU###']   = '';
-					$marker['###POSTUSER###']   = $this->ident_user($this->getUserID(),$conf);
-                    $marker['###POSTTEXT###']   = $posttext;
-                    $marker['###ANKER###']      = '';
+					$posttext = $this->piVars['message'];
+					$postold = $posttext;
+					$posttext = $this->bb2text($posttext,$conf) . ($this->conf['list_posts.']['appendSignatureToPostText'] ? $userSignature : '');
+
+					$marker['###POSTOPTIONS###']= '';
+					$marker['###MESSAGEMENU###']= '';
+					$marker['###PROFILEMENU###']= '';
+					$marker['###POSTMENU###']   = '';
+					$marker['###POSTUSER###']   = $this->ident_user($this->getUserID(), $conf);
+					$marker['###POSTTEXT###']   = $posttext;
+					$marker['###ANKER###']      = '';
 					$marker['###POSTANCHOR###']	= '';
-                    $marker['###POSTDATE###']   = $this->pi_getLL('post.writtenOn').': '.$this->formatDate(time());
+					$marker['###POSTDATE###']   = $this->pi_getLL('post.writtenOn') . ': ' . $this->formatDate(time());
 					$marker['###POSTRATING###'] = '';
 
-                    // Include hooks
-                        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_INpreview'])) {
-                            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_INpreview'] as $_classRef) {
-                                $_procObj = & t3lib_div::getUserObj($_classRef);
-                                $marker = $_procObj->newPost_INpreview($marker, $this);
-                            }
-                        }
+					// Include hooks
+					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_INpreview'])) {
+						foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_INpreview'] as $classRef) {
+							$procObj = & t3lib_div::getUserObj($classRef);
+							$marker = $procObj->newPost_INpreview($marker, $this);
+						}
+					}
 
-                    $previewTemplate    = $this->cObj->fileResource($conf['template.']['new_post']);
-                    $previewTemplate    = $this->cObj->getSubpart($previewTemplate,"###PREVIEW###");
-                    $previewMarker = array(
-                        "###LABEL_PREVIEW###"    => $this->pi_getLL('newPost.preview'),
-                        "###PREVIEW_POST###"     => $this->cObj->substituteMarkerArrayCached($template, $marker)
-                    );
+					$previewTemplate = $this->cObj->fileResource($conf['template.']['new_post']);
+					$previewTemplate = $this->cObj->getSubpart($previewTemplate,"###PREVIEW###");
+					$previewMarker = array(
+						'###LABEL_PREVIEW###'    => $this->pi_getLL('newPost.preview'),
+						'###PREVIEW_POST###'     => $this->cObj->substituteMarkerArrayCached($template, $marker)
+					);
 
-                    // Include hooks
-                        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_preview'])) {
-                            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_preview'] as $_classRef) {
-                                $_procObj = & t3lib_div::getUserObj($_classRef);
-                                $previewMarker = $_procObj->newPost_preview($previewMarker, $this);
-                            }
-                        }
+					// Include hooks
+					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_preview'])) {
+						foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_preview'] as $classRef) {
+							$procObj = & t3lib_div::getUserObj($classRef);
+							$previewMarker = $procObj->newPost_preview($previewMarker, $this);
+						}
+					}
 
-                    $previewContent = $this->cObj->substituteMarkerArrayCached($previewTemplate, $previewMarker);
-                }
+					$previewContent = $this->cObj->substituteMarkerArrayCached($previewTemplate, $previewMarker);
+				}
 
-                $template = $this->cObj->fileResource($conf['template.']['new_post']);
-                $template = $this->cObj->getSubpart($template,
+				$template = $this->cObj->fileResource($conf['template.']['new_post']);
+				$template = $this->cObj->getSubpart($template,
 					stristr($template, '###NEWTOPIC###') === false ? '###NEWPOST###' : '###NEWTOPIC###');	// compatibility: typo in template file fixed. was 'NEWTOPIC'
 
-                $marker = array(
-                    '###LABEL_SEND###'              => $this->pi_getLL('newPost.save'),
-                    '###LABEL_PREVIEW###'           => $this->pi_getLL('newPost.preview'),
-                    '###LABEL_RESET###'             => $this->pi_getLL('newPost.reset'),
-                    '###LABEL_ATTENTION###'         => $this->pi_getLL('newPost.attention'),
-                    '###LABEL_NOTECODESAMPLES###'   => $this->pi_getLL('newPost.codeSamples'),
-                    '###LABEL_ATTACHMENT###'        => $this->pi_getLL('newPost.attachment'),
+				$marker = array(
+					'###LABEL_SEND###'              => $this->pi_getLL('newPost.save'),
+					'###LABEL_PREVIEW###'           => $this->pi_getLL('newPost.preview'),
+					'###LABEL_RESET###'             => $this->pi_getLL('newPost.reset'),
+					'###LABEL_ATTENTION###'         => $this->pi_getLL('newPost.attention'),
+					'###LABEL_NOTECODESAMPLES###'   => $this->pi_getLL('newPost.codeSamples'),
+					'###LABEL_ATTACHMENT###'        => $this->pi_getLL('newPost.attachment'),
 					'###LABEL_SETHAVEALOOK###'		=> $this->pi_getLL('newTopic.setHaveALook')
-                );
+				);
 				
 				$marker['###POSTTITLE###'] = $this->escape($topicData['topic_title']);
 
-				if($previewContent) $marker['###POST_PREVIEW###'] = $previewContent;
-				else $marker['###POST_PREVIEW###'] = '';
+				$marker['###POST_PREVIEW###'] = (string)$previewContent;
 
-                // Remove file attachment section if file attachments are disabled
-                if(!$this->conf['attachments.']['enable']) $template = $this->cObj->substituteSubpart($template, "###ATTACHMENT_SECTION###", '');
+				// Remove file attachment section if file attachments are disabled
+				if(!$this->conf['attachments.']['enable']) {
+					$template = $this->cObj->substituteSubpart($template, "###ATTACHMENT_SECTION###", '');
+				}
 
-                // Remove file attachment edit section
-                $template = $this->cObj->substituteSubpart($template,'###ATTACHMENT_EDITSECTION###', '');
+				// Remove file attachment edit section
+				$template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_EDITSECTION###', '');
 
-                	// Add attachment input fields according to TypoScript setting
-                $fieldCount = $this->conf['attachments.']['maxCount']?$this->conf['attachments.']['maxCount']:1;
-                $aTemplate = $this->cObj->getSubpart($template, '###ATTACHMENT_FIELD###');
+				// Add attachment input fields according to TypoScript setting
+				$fieldCount = $this->conf['attachments.']['maxCount']?$this->conf['attachments.']['maxCount']:1;
+				$aTemplate = $this->cObj->getSubpart($template, '###ATTACHMENT_FIELD###');
 
-                for($i=1; $i <= $fieldCount; $i ++) {
-                	$aMarker = array(
-                		'###ATTACHMENT_NO###'		=> $i
-                	);
-                	$aContent .= $this->cObj->substituteMarkerArray($aTemplate, $aMarker);
-                }
-                $template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_FIELD###', $aContent);
+				for($i=1; $i <= $fieldCount; $i ++) {
+					$aMarker = array(
+						'###ATTACHMENT_NO###' => $i
+					);
+					$aContent .= $this->cObj->substituteMarkerArray($aTemplate, $aMarker);
+				}
+				$template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_FIELD###', $aContent);
 
-                // Remove poll section
-                $template = $this->cObj->substituteSubpart($template,'###POLL_SECTION###', '');
+				// Remove poll section
+				$template = $this->cObj->substituteSubpart($template,'###POLL_SECTION###', '');
 
-                // Maximum file size
-                $mFileSize = $this->conf['attachments.']['maxFileSize'].' B';
-                if($this->conf['attachments.']['maxFileSize'] >= 1024     ) $mFileSize = round($this->conf['attachments.']['maxFileSize'] / 1024,2).' KB';
-                if($this->conf['attachments.']['maxFileSize'] >= 1024*1024) $mFileSize = round($this->conf['attachments.']['maxFileSize'] / (1024*1024),2).' MB';
+				// Maximum file size
+				$mFileSize = $this->conf['attachments.']['maxFileSize'] . ' B';
+				if($this->conf['attachments.']['maxFileSize'] >= 1024) {
+					$mFileSize = round($this->conf['attachments.']['maxFileSize'] / 1024, 2) . ' KB';
+				}
+				if($this->conf['attachments.']['maxFileSize'] >= (1024 * 1024)) {
+					$mFileSize = round($this->conf['attachments.']['maxFileSize'] / (1024 * 1024), 2) . ' MB';
+				}
 
-                $marker['###MAXFILESIZE_TEXT###'] = sprintf($this->pi_getLL('newPost.maxFileSize'),$mFileSize);
-                $marker['###MAXFILESIZE_TEXT###'] = $this->cObj->stdWrap($marker['###MAXFILESIZE_TEXT###'],$this->conf['attachments.']['maxFileSize_stdWrap.']);
-                $marker['###MAXFILESIZE###'] = $this->conf['attachments.']['maxFileSize'];
+				$marker['###MAXFILESIZE_TEXT###'] = sprintf($this->pi_getLL('newPost.maxFileSize'), $mFileSize);
+				$marker['###MAXFILESIZE_TEXT###'] = $this->cObj->stdWrap($marker['###MAXFILESIZE_TEXT###'], $this->conf['attachments.']['maxFileSize_stdWrap.']);
+				$marker['###MAXFILESIZE###'] = $this->conf['attachments.']['maxFileSize'];
 
-                // Inserting predefined message
-                IF ($this->piVars['message']) {
-                	$marker['###POSTTEXT###'] = $this->escape($this->piVars['message']);
-                }
-                else {
-                    // Load post to be quoted
-                    IF ($this->piVars['quote']) {
-                        if(!$this->getMayRead_post($this->piVars['quote'])) {
-                            return $content.$this->errorMessage($conf,$this->pi_getLL('newPost.quote.error'));
-                        }
+				// Inserting predefined message
+				iF ($this->piVars['message']) {
+					$marker['###POSTTEXT###'] = $this->escape($this->piVars['message']);
+				} else {
+					// Load post to be quoted
+					if ($this->piVars['quote']) {
+						if(!$this->getMayRead_post($this->piVars['quote'])) {
+							return $content.$this->errorMessage($conf,$this->pi_getLL('newPost.quote.error'));
+						}
 
-                        // Get user UID of quoted user
-                        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                            "poster_id",
-                            "tx_mmforum_posts",
-                            "uid = '".intval($this->piVars['quote'])."'"
-                        );
-                        list($quoteuserid)  = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+						// Get user UID of quoted user
+						$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+							'poster_id',
+							'tx_mmforum_posts',
+							'uid=' . intval($this->piVars['quote'])
+						);
+						list($quoteuserid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-                        // Get user name of quoted user
-                        $quoteuser_array    = tx_mmforum_tools::get_userdata($quoteuserid);
-                        $quoteuser          = $quoteuser_array[$this->getUserNameField()];
+						// Get user name of quoted user
+						$quoteuser_array = tx_mmforum_tools::get_userdata($quoteuserid);
+						$quoteuser = $quoteuser_array[$this->getUserNameField()];
 
-                        // Get text to be quoted
-                        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                            "post_text",
-                            "tx_mmforum_posts_text",
-                            "post_id = '".intval($this->piVars['quote'])."'"
-                        );
-                        list($posttext)  = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-                        #$posttext = htmlentities($posttext);
+						// Get text to be quoted
+						$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+							'post_text',
+							'tx_mmforum_posts_text',
+							'post_id=' . intval($this->piVars['quote'])
+						);
+						list($posttext) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-                        // Insert quote into message text.
-                        $marker['###POSTTEXT###'] = "[quote=\"$quoteuser\"]\r\n$posttext\r\n[/quote]";
-                    }
-                    else {
-                        $marker['###POSTTEXT###'] = '';
-                    }
-                }
+						// Insert quote into message text.
+						$marker['###POSTTEXT###'] = '[quote="' . $quoteuser . '"]' . "\r\n" . $posttext . "\r\n" . '[/quote]';
+					} else {
+						$marker['###POSTTEXT###'] = '';
+					}
+				}
 
-                $actionParams[$this->prefixId] = array(
-                    'action'            => 'new_post',
-                    'tid'                => $this->piVars['tid']
-                );
-				if($this->useRealUrl()) $actionParams[$this->prefixId]['fid'] = $forumId;
-                $actionLink = $this->pi_getPageLink($GLOBALS['TSFE']->id,'',$actionParams);
+				$actionParams[$this->prefixId] = array(
+					'action' => 'new_post',
+					'tid' => $this->piVars['tid']
+				);
+				
+				if($this->useRealUrl()) {
+					$actionParams[$this->prefixId]['fid'] = $forumId;
+				}
 
-                $bbCodeButtons_template = $this->cObj->getSubpart($template, '###BBCODEBUTTONS###');
+				$actionLink = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $actionParams);
 
-                if (empty($conf['jQueryEditorJavaScript'])) {
-        				  $bbCodeButtons = $this->generateBBCodeButtons($bbCodeButtons_template);
-                } else {
-                  $bbCodeButtons = stristr($bbCodeButtons_template, '<td>') ? '<td></td>' : '';
-                }
+				$bbCodeButtons_template = $this->cObj->getSubpart($template, '###BBCODEBUTTONS###');
 
-                $template = $this->cObj->substituteSubpart($template,'###BBCODEBUTTONS###',$bbCodeButtons);
+				if (empty($conf['jQueryEditorJavaScript'])) {
+					$bbCodeButtons = $this->generateBBCodeButtons($bbCodeButtons_template);
+				} else {
+					$bbCodeButtons = stristr($bbCodeButtons_template, '<td>') ? '<td></td>' : '';
+				}
 
-                $marker['###SMILIES###']			= $this->show_smilie_db($conf);
-                $marker['###ACTION###']				= htmlspecialchars($this->tools->getAbsoluteUrl($actionLink));
-                $marker['###LABEL_CREATETOPIC###']	= $this->pi_getLL('newPost.title');
+				$template = $this->cObj->substituteSubpart($template,'###BBCODEBUTTONS###',$bbCodeButtons);
+
+				$marker['###SMILIES###']			= $this->show_smilie_db($conf);
+				$marker['###ACTION###']				= htmlspecialchars($this->tools->getAbsoluteUrl($actionLink));
+				$marker['###LABEL_CREATETOPIC###']	= $this->pi_getLL('newPost.title');
 
 				$conf['slimPostList'] = 1;
-                $marker['###OLDPOSTTEXT###'] = '<hr />'.tx_mmforum_postfunctions::list_post('',$conf,'DESC');
+				$marker['###OLDPOSTTEXT###'] = '<hr />' . tx_mmforum_postfunctions::list_post('', $conf, 'DESC');
 
-				if($this->conf['disableRootline'])
-					$template = $this->cObj->substituteSubpart($template, "###ROOTLINE_CONTAINER###", '');
-				else
-					$marker['###FORUMPATH###'] = $this->get_forum_path($forumId,'');
-            }
+				if($this->conf['disableRootline']) {
+					$template = $this->cObj->substituteSubpart($template, '###ROOTLINE_CONTAINER###', '');
+				} else {
+					$marker['###FORUMPATH###'] = $this->get_forum_path($forumId, '');
+				}
+			}
+		} else {
+			$template = $this->cObj->fileResource($conf['template.']['login_error']);
+			$template = $this->cObj->getSubpart($template, "###LOGINERROR###");
+			$marker = array(
+				'###LOGINERROR_MESSAGE###' => $this->pi_getLL('newPost.noLogin'),
+			);
+		}
 
-        }
-        else {
-            $template = $this->cObj->fileResource($conf['template.']['login_error']);
-            $template = $this->cObj->getSubpart($template, "###LOGINERROR###");
-            $marker = array();
-            $marker['###LOGINERROR_MESSAGE###'] = $this->pi_getLL('newPost.noLogin');
-        }
+		// Include hooks
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_formMarker'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_formMarker'] as $classRef) {
+				$procObj = & t3lib_div::getUserObj($classRef);
+				$marker = $procObj->newPost_formMarker($marker, $this);
+			}
+		}
 
-        // Include hooks
-            if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_formMarker'])) {
-                foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_formMarker'] as $_classRef) {
-                    $_procObj = & t3lib_div::getUserObj($_classRef);
-                    $marker = $_procObj->newPost_formMarker($marker, $this);
-                }
-            }
+		$marker['###HAVEALOOK###'] = ($this->piVars['havealook'] ? 'checked="checked"' : '');
+		$marker['###STARTJAVASCRIPT###'] = $this->includeEditorJavaScript();
 
-        $marker['###HAVEALOOK###'] = ($this->piVars['havealook'] ? 'checked="checked"' : '');
-        $marker['###STARTJAVASCRIPT###'] = $this->includeEditorJavaScript();
-
-        $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
-
-        return $content;
-    }
+		$content .= $this->cObj->substituteMarkerArray($template, $marker);
+		return $content;
+	}
 	
-  	function includeEditorJavaScript() {
+	function includeEditorJavaScript() {
 		$js = '';
 		if (!empty($this->conf['jQueryEditorJavaScript'])) {
 			$jsmarker = array(
@@ -3024,76 +3030,96 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      * @param  array  $conf    The plugin's configuration vars
      * @return string          The content
      */
-    function post_edit($content, $conf)
-    {
-            /* Get post UID */
+	function post_edit($content, $conf) {
 		$postId = intval($this->piVars['pid']);
 
-        // Get topic UID
-        $postlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            "*",
-            "tx_mmforum_posts",
-            "deleted = 0 AND hidden = 0 AND uid = '".intval($this->piVars['pid'])."'".$this->getStoragePIDQuery()
-        );
-        $row    = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($postlist);
-        $topic_id = $row['topic_id'];
+		// Get topic UID
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'*',
+			'tx_mmforum_posts',
+			'deleted=0 AND hidden=0 AND uid=' . $postId . $this->getStoragePIDQuery()
+		);
+		
+		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
-        // Determine, if edited post is the last post in topic
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            "MAX(post_time)",
-            "tx_mmforum_posts",
-            "deleted = 0 AND hidden = 0 AND topic_id = '".$row['topic_id']."'".$this->getStoragePIDQuery()
-        );
-        list ($lastpostdate) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$topicId = $row['topic_id'];
+		$forumId = $row['forum_id'];
 
-        // Determine if edited post is the first post in topic
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            'uid',
-            'tx_mmforum_posts',
-            'deleted=0 AND hidden=0 AND topic_id='.$topic_id.' '.$this->getStoragePIDQuery(),
-            '',
-            'post_time ASC'
-        );
-        list($firstUID) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-        $firstPost = (intval($this->piVars['pid']) == intval($firstUID));
+		// Determine, if edited post is the last post in topic
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'MAX(post_time)',
+			'tx_mmforum_posts',
+			'deleted=0 AND hidden=0 AND topic_id='. $topicId . $this->getStoragePIDQuery()
+		);
+		list($lastpostdate) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-        // Load topic data
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            '*',
-            'tx_mmforum_topics',
-            'deleted=0 AND hidden=0 AND uid='.$topic_id.' '.$this->getStoragePIDQuery()
-        );
-        $topicData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		// Determine if edited post is the first post in topic
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'uid',
+			'tx_mmforum_posts',
+			'deleted=0 AND hidden=0 AND topic_id='.$topicId.' '.$this->getStoragePIDQuery(),
+			'',
+			'post_time ASC'
+		);
+		list($firstPostId) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$firstPost = ($postId === intval($firstPostId));
 
-        IF ((($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid']) AND ($lastpostdate == $row['post_time']) && $topicData['closed_flag'] != 1) OR $this->getIsAdmin() OR $this->getIsMod($row['forum_id'])) {
-            if($this->piVars['button'] == $this->pi_getLL('newPost.save')) {
+		// Load topic data
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'*',
+			'tx_mmforum_topics',
+			'deleted=0 AND hidden=0 AND uid=' . $topicId . $this->getStoragePIDQuery()
+		);
+		$topicData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
-                // Write changes to database
-                $updateArray = array(
-                    'post_text' => $this->piVars['message'],
-                    'tstamp'    => time()
-                );
-                $res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts_text', "post_id = '".intval($this->piVars['pid'])."'", $updateArray);
+		if ((
+				($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid'])
+				&& ($lastpostdate == $row['post_time'])
+				&& $topicData['closed_flag'] != 1)
+				OR $this->getIsAdmin()
+				OR $this->getIsMod($row['forum_id']))
+				{
+
+			if($this->piVars['button'] == $this->pi_getLL('newPost.save')) {
+
+				// Write changes to database
+				$updateArray = array(
+					'post_text' => $this->piVars['message'],
+					'tstamp'    => time()
+				);
+
+				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+						'tx_mmforum_posts_text',
+						'post_id=' . $postId,
+						$updateArray
+				);
 
 				// check for attachments that should be deleted
 				if ($this->piVars['attachment_delete']) {
-					foreach ($this->piVars['attachment_delete'] as $uid => $delete) {
-						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid = ' . intval($uid), array('deleted' => 1, 'tstamp' => time()));
-						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid = ' . intval($uid), array('attachment' => 0,'tstamp' => time()));
+					foreach ($this->piVars['attachment_delete'] as $attachementId => $delete) {
+						$attachementId = intval($attachementId);
+						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid=' . $attachementId, array('deleted' => 1, 'tstamp' => time()));
+						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid=' . $attachementId, array('attachment' => 0, 'tstamp' => time()));
 						$attachments = t3lib_div::intExplode(',', $row['attachment']);
-						unset($attachments[array_search($uid, $attachments)]);
+						unset($attachments[array_search($attachementId, $attachments)]);
 						$row['attachment'] = implode(',', $attachments);
 					}
-					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid = ' . $postId, array('attachment' => $row['attachment']));
+					$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+							'tx_mmforum_posts',
+							'uid=' . $postId,
+							array('attachment' => $row['attachment'])
+					);
 				}
 
 				// Check for new file uploads / attachments
 				if ($_FILES['tx_mmforum_pi1_attachment_1']['size'] > 0) {
 					$res = $this->performAttachmentUpload();
+
 					if (!is_array($res)) {
 						$content .= $res;
 						unset($this->piVars['button']);
 						return $this->post_edit($content);
+
 					} else {
 						$attachmentIds = $res;
 						$attachments = t3lib_div::intExplode(',', $row['attachment']);
@@ -3104,278 +3130,343 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						);
 						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid = ' . $postId, $updateData);
 
-                            // Update attachment records with the post ID (as this is not set within the performAttachmentUpload)
+						// Update attachment records with the post ID (as this is not set within the performAttachmentUpload)
 						if (count($attachmentIds)) {
-							$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid IN (' . implode(',', $attachmentIds) . ')', array('post_id' => $postId));
+							$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+									'tx_mmforum_attachments',
+									'uid IN (' . implode(',', $attachmentIds) . ')',
+									array('post_id' => $postId)
+							);
 						}
 					}
 				} else {
 					$attachmentIds = null;
 				}
 
-                if($this->conf['polls.']['enable']) {
-	                if($this->piVars['enable_poll'] == '1' && $firstPost) {
-	                    $pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
-	                    if($topicData['poll_id'] > 0) {
-	                        $res = $pollObj->editPoll($topicData['poll_id'],$this->piVars['poll'],$this);
-	                        if($res) {
-	                            $content .= $this->errorMessage($this->conf, $res);
-	                            unset($this->piVars['button']);
-	                            return $this->post_edit($content,$conf);
-	                        }
-	                    }
-	                    else {
-	                        $poll_id = $pollObj->createPoll($this->piVars['poll'],$this);
-	                        if(!is_numeric($poll_id)) {
-	                            $content .= $this->errorMessage($this->conf, $poll_id);
-	                            unset($this->piVars['button']);
-	                            return $this->post_edit($content,$conf);
-	                        }
-	                        $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid='.$topic_id, array('poll_id' => $poll_id,'tstamp'=>time()));
-	                    }
-	                } elseif($firstPost && $topicData['poll_id'] > 0) {
-	                    $pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
-	                    $pollObj->deletePoll($topicData['poll_id'],$topicData['uid']);
-	                }
-                }
+				if ($this->conf['polls.']['enable']) {
+
+					if($this->piVars['enable_poll'] == '1' && $firstPost) {
+						$pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
+
+						if($topicData['poll_id'] > 0) {
+
+							$res = $pollObj->editPoll($topicData['poll_id'],$this->piVars['poll'],$this);
+
+							if($res) {
+								$content .= $this->errorMessage($this->conf, $res);
+								unset($this->piVars['button']);
+
+								return $this->post_edit($content,$conf);
+							}
+						} else {
+							
+							$pollId = $pollObj->createPoll($this->piVars['poll'],$this);
+
+							if(!is_numeric($pollId)) {
+								$content .= $this->errorMessage($this->conf, $pollId);
+								unset($this->piVars['button']);
+
+								return $this->post_edit($content,$conf);
+							}
+
+							$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+									'tx_mmforum_topics',
+									'uid=' . $topicId,
+									array('poll_id' => $pollId, 'tstamp'=>time())
+							);
+						}
+					} else if ($firstPost && $topicData['poll_id'] > 0) {
+
+						$pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
+						$pollObj->deletePoll($topicData['poll_id'],$topicData['uid']);
+					}
+				}
 
 
-                if ($this->piVars['title'] AND (($this->getIsMod($row['forum_id']) || $this->getIsAdmin()) || ($firstPost && $row['poster_id']==$GLOBALS['TSFE']->fe_user->user['uid']))) {
-                    $updateArray = array(
-                        'topic_title'   => $this->piVars['title'],
-                        'tstamp'        => time()
-                    );
-                    $res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', "uid = '".$this->get_topic_id($this->piVars['pid'])."'", $updateArray);
-                }
+				if ($this->piVars['title']
+						AND (
+								($this->getIsMod($row['forum_id']) || $this->getIsAdmin())
+								|| ($firstPost && $row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid'])
+							)
+					) {
 
-                // If the editing user is no admin or mod, the change is logged in the database
-                if (!$this->getIsMod($row['forum_id']) && !$this->getIsAdmin()) {
-                    $mysql = "UPDATE tx_mmforum_posts SET edit_count = edit_count+1,edit_time='".time()."' WHERE uid = '".intval($this->piVars['pid'])."' LIMIT 1" ;
-                    $GLOBALS['TYPO3_DB']->sql_query($mysql) or die(mysql_error());
-                }
+					$updateArray = array(
+						'topic_title'   => $this->piVars['title'],
+						'tstamp'        => time()
+					);
+					$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+							'tx_mmforum_topics',
+							'uid=' . $topicId,
+							$updateArray
+					);
+				}
 
-                // Clearing for new indexing
+				// If the editing user is no admin or mod, the change is logged in the database
+				if (!$this->getIsMod($row['forum_id']) && !$this->getIsAdmin()) {
+					$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+							'tx_mmforum_posts',
+							'uid=' . $postId,
+							array(
+								'edit_count' => intval($row['edit_count']) + 1,
+								'edit_time' => time()
+							)
+					);
+
+				}
+
+				// Clearing for new indexing
 				require_once(t3lib_extMgm::extPath('mm_forum').'pi4/class.tx_mmforum_pi4.php');
-                tx_mmforum_indexing::delete_topic_ind_date($topic_id);
+				tx_mmforum_indexing::delete_topic_ind_date($topicId);
 
-                $linkParams[$this->prefixId] = array(
-                    'action'  => 'list_post',
-                    'tid'     => $topic_id,
-                    'pid'     => $this->piVars['pid'],
-                );
-                $link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
-                $link = $this->tools->getAbsoluteUrl($link);
-                header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $this->piVars['pid']));
-                exit();
-            }
-            else {
-                // Display post preview
-                if($this->piVars['button'] == $this->pi_getLL('newPost.preview')) {
-                    if($this->piVars['enable_poll'] == '1' && $this->conf['polls.']['enable']) $content .= tx_mmforum_polls::displayPreview($this->piVars['poll'], $this);
+				$linkParams[$this->prefixId] = array(
+					'action'  => 'list_post',
+					'tid'     => $topicId,
+					'pid'     => $this->piVars['pid'],
+				);
 
-                    $template   = $this->cObj->fileResource($conf['template.']['list_post']);
-                    $template   = $this->cObj->getSubpart($template, "###LIST_POSTS###");
+				$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
+				$link = $this->tools->getAbsoluteUrl($link);
 
-                    $template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_SECTION###', '');
+				header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $postId));
+				exit();
+			
+			} else {
+				// Display post preview
+				if ($this->piVars['button'] == $this->pi_getLL('newPost.preview')) {
+					if ($this->piVars['enable_poll'] == '1' && $this->conf['polls.']['enable']) {
+						$content .= tx_mmforum_polls::displayPreview($this->piVars['poll'], $this);
+					}
+					
+					$template = $this->cObj->fileResource($conf['template.']['list_post']);
+					$template = $this->cObj->getSubpart($template, "###LIST_POSTS###");
 
-                    $posttext   = $this->piVars['message'];
-                    $postold    = $posttext;
-                    $posttext   = $this->bb2text($posttext,$conf);
+					$template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_SECTION###', '');
 
-                    $marker['###POSTOPTIONS###']    = '';
-                    $marker['###SOLVEDOPTION###']   = '';
-                    $marker['###POSTMENU###']       = '';
-                    $marker['###POSTUSER###']       = $this->ident_user($row['poster_id'],$conf);
-                    $marker['###POSTTEXT###']       = $posttext;
-                    $marker['###ANKER###']          = '';
-                    $marker['###POSTANCHOR###']	    = '';
-                    $marker['###POSTDATE###']       = $this->pi_getLL('post.writtenOn').': '.$this->formatDate($topicData['topic_time']);
-                    $marker['###POSTRATING###']     = '';
+					$posttext = $this->piVars['message'];
+					$postold = $posttext;
+					$posttext = $this->bb2text($posttext, $conf);
 
-                    // Include hooks
-                        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_INpreviewMarker'])) {
-                            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_INpreviewMarker'] as $_classRef) {
-                                $_procObj = & t3lib_div::getUserObj($_classRef);
-                                $marker = $_procObj->editPost_INpreviewMarker($marker, $this);
-                            }
-                        }
+					$marker['###POSTOPTIONS###']  = '';
+					$marker['###SOLVEDOPTION###'] = '';
+					$marker['###POSTMENU###']     = '';
+					$marker['###POSTUSER###']     = $this->ident_user($row['poster_id'],$conf);
+					$marker['###POSTTEXT###']     = $posttext;
+					$marker['###ANKER###']        = '';
+					$marker['###POSTANCHOR###']	  = '';
+					$marker['###POSTDATE###']     = $this->pi_getLL('post.writtenOn') . ': ' . $this->formatDate($topicData['topic_time']);
+					$marker['###POSTRATING###']   = '';
 
-                    $previewTemplate    = $this->cObj->fileResource($conf['template.']['new_post']);
-                    $previewTemplate    = $this->cObj->getSubpart($previewTemplate,"###PREVIEW###");
-                    $previewMarker = array(
-                        "###TOPIC_TITLE###"        => $this->escape($this->piVars['topicname']),
-                        "###LABEL_PREVIEW###"      => $this->pi_getLL('newTopic.preview'),
-                        "###PREVIEW_POST###"       => $this->cObj->substituteMarkerArrayCached($template, $marker)
-                    );
+					// Include hooks
+					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_INpreviewMarker'])) {
+						foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_INpreviewMarker'] as $classRef) {
+							$procObj = & t3lib_div::getUserObj($classRef);
+							$marker = $procObj->editPost_INpreviewMarker($marker, $this);
+						}
+					}
 
-                    // Include hooks
-                        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_previewMarker'])) {
-                            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_previewMarker'] as $_classRef) {
-                                $_procObj = & t3lib_div::getUserObj($_classRef);
-                                $previewMarker = $_procObj->editPost_previewMarker($previewMarker, $this);
-                            }
-                        }
+					$previewTemplate = $this->cObj->fileResource($conf['template.']['new_post']);
+					$previewTemplate = $this->cObj->getSubpart($previewTemplate, '###PREVIEW###');
+					$previewMarker = array(
+						"###TOPIC_TITLE###"        => $this->escape($this->piVars['topicname']),
+						"###LABEL_PREVIEW###"      => $this->pi_getLL('newTopic.preview'),
+						"###PREVIEW_POST###"       => $this->cObj->substituteMarkerArrayCached($template, $marker)
+					);
 
-                    $previewContent = $this->cObj->substituteMarkerArrayCached($previewTemplate, $previewMarker);
-                }
+					// Include hooks
+					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_previewMarker'])) {
+						foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_previewMarker'] as $classRef) {
+							$procObj = & t3lib_div::getUserObj($classRef);
+							$previewMarker = $procObj->editPost_previewMarker($previewMarker, $this);
+						}
+					}
 
-                $template    = $this->cObj->fileResource($conf['template.']['new_post']);
-                $template    = $this->cObj->getSubpart($template, 
+					$previewContent = $this->cObj->substituteMarkerArrayCached($previewTemplate, $previewMarker);
+				}
+
+				$template = $this->cObj->fileResource($conf['template.']['new_post']);
+				$template = $this->cObj->getSubpart($template,
 					stristr($template, '###NEWTOPIC###') === false ? '###NEWPOST###' : '###NEWTOPIC###');	// compatibility: typo in template file fixed. was 'NEWTOPIC'
 
-				$attachments = t3lib_div::intExplode(',',$row['attachment']);
+				$attachments = t3lib_div::intExplode(',', $row['attachment']);
 				$attachments = tx_mmforum_tools::processArray_numeric($attachments);
 				$attachCount = count($attachments);
 
-				if($attachCount == $this->conf['attachments.']['maxCount'] || !$this->conf['attachments.']['enable'])
-	                $template   = $this->cObj->substituteSubpart($template, "###ATTACHMENT_SECTION###", '');
-				else {
+				if($attachCount == $this->conf['attachments.']['maxCount'] || !$this->conf['attachments.']['enable']) {
+					$template = $this->cObj->substituteSubpart($template, "###ATTACHMENT_SECTION###", '');
+				} else {
 					$attachDiff = $this->conf['attachments.']['maxCount'] - $attachCount;
 					$aTemplate	= $this->cObj->getSubpart($template, '###ATTACHMENT_FIELD###');
 					$aContent = '';
 
-					for($i=1; $i <= $attachDiff; $i ++) {
-						$aMarker		= array(
-							'###ATTACHMENT_NO###'		=> $i
+					for($i=1; $i <= $attachDiff; $i++) {
+						$aMarker = array(
+							'###ATTACHMENT_NO###' => $i
 						);
-						$aContent	   .= $this->cObj->substituteMarkerArray($aTemplate, $aMarker);
+						$aContent .= $this->cObj->substituteMarkerArray($aTemplate, $aMarker);
 					}
 
-					$marker		= array(
-						'###LABEL_ATTACHMENT###'		=> $this->pi_getLL('newPost.attachment'),
-						'###MAXFILESIZE###'				=> $this->conf['attachments.']['maxFileSize']
+					$marker = array(
+						'###LABEL_ATTACHMENT###' => $this->pi_getLL('newPost.attachment'),
+						'###MAXFILESIZE###' => $this->conf['attachments.']['maxFileSize']
 					);
 
-						// Maximum file size
-	                $mFileSize = $this->conf['attachments.']['maxFileSize'].' B';
-	                if($this->conf['attachments.']['maxFileSize'] >= 1024     ) $mFileSize = round($this->conf['attachments.']['maxFileSize'] / 1024,2).' KB';
-	                if($this->conf['attachments.']['maxFileSize'] >= 1024*1024) $mFileSize = round($this->conf['attachments.']['maxFileSize'] / (1024*1024),2).' MB';
+					// Maximum file size
+					$mFileSize = $this->conf['attachments.']['maxFileSize'].' B';
+					if ($this->conf['attachments.']['maxFileSize'] >= 1024) {
+						$mFileSize = round($this->conf['attachments.']['maxFileSize'] / 1024, 2) . ' KB';
+					}
+					if ($this->conf['attachments.']['maxFileSize'] >= 1024*1024) {
+						$mFileSize = round($this->conf['attachments.']['maxFileSize'] / (1024 * 1024), 2) . ' MB';
+					}
 
-	                $marker['###MAXFILESIZE_TEXT###'] = sprintf($this->pi_getLL('newPost.maxFileSize'),$mFileSize);
-	                $marker['###MAXFILESIZE_TEXT###'] = $this->cObj->stdWrap($marker['###MAXFILESIZE_TEXT###'],$this->conf['attachments.']['maxFileSize_stdWrap.']);
+					$marker['###MAXFILESIZE_TEXT###'] = sprintf($this->pi_getLL('newPost.maxFileSize'), $mFileSize);
+					$marker['###MAXFILESIZE_TEXT###'] = $this->cObj->stdWrap($marker['###MAXFILESIZE_TEXT###'], $this->conf['attachments.']['maxFileSize_stdWrap.']);
 
-					$template	= $this->cObj->substituteMarkerArray($template, $marker);
-					$template	= $this->cObj->substituteSubpart($template, '###ATTACHMENT_FIELD###', $aContent);
+					$template = $this->cObj->substituteMarkerArray($template, $marker);
+					$template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_FIELD###', $aContent);
 				}
 
-                $marker        = array();
+				$marker = array();
 
-                if(strlen($row['attachment'])==0)
-                    $template = $this->cObj->substituteSubpart($template,'###ATTACHMENT_EDITSECTION###', '');
-                else {
-                    $aRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                        '*',
-                        'tx_mmforum_attachments',
-                        'uid IN ('.$row['attachment'].') AND deleted=0',
-                        '',
-                        'uid ASC'
-                    );
+				if(strlen($row['attachment']) == 0) {
+					$template = $this->cObj->substituteSubpart($template,'###ATTACHMENT_EDITSECTION###', '');
+				} else {
+					$aRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+						'*',
+						'tx_mmforum_attachments',
+						'uid IN (' .$row['attachment'] . ') AND deleted=0',
+						'',
+						'uid ASC'
+					);
 
-	                $marker['###LABEL_ATTACHMENT###'] = $this->pi_getLL('newPost.attachment');
-                    $aTemplate = $this->cObj->getSubpart($template, '###ATTACHMENT_EDITFIELD###');
-                    $aContent = '';
+					$marker['###LABEL_ATTACHMENT###'] = $this->pi_getLL('newPost.attachment');
+					$aTemplate = $this->cObj->getSubpart($template, '###ATTACHMENT_EDITFIELD###');
+					$aContent = '';
 
-                    while($attachment = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($aRes)) {
-	                    $size = $attachment['file_size'].' '.$this->pi_getLL('attachment.bytes');
-	                    if($attachment['file_size'] > 1024) $size = round($attachment['file_size']/1024,2).' '.$this->pi_getLL('attachment.kilobytes');
-	                    if($attachment['file_size'] > 1048576) $size = round($attachment['file_size']/1048576,2).' '.$this->pi_getLL('attachment.megabytes');
+					while($attachment = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($aRes)) {
+						$size = $attachment['file_size'].' '.$this->pi_getLL('attachment.bytes');
+						if ($attachment['file_size'] > 1024) $size = round($attachment['file_size']/1024,2).' '.$this->pi_getLL('attachment.kilobytes');
+						if ($attachment['file_size'] > 1048576) $size = round($attachment['file_size']/1048576,2).' '.$this->pi_getLL('attachment.megabytes');
 
-	                    $aMarker['###LABEL_DELETEATTACHMENT###'] = $this->pi_getLL('attachment.delete');
+						$aMarker['###LABEL_DELETEATTACHMENT###'] = $this->pi_getLL('attachment.delete');
 
-	                    $sAttachment = $attachment['file_name'].' ('.$this->pi_getLL('attachment.type').': '.$attachment['file_type'].', '.$this->pi_getLL('attachment.size').': '.$size.'), '.$attachment['downloads'].' '.$this->pi_getLL('attachment.downloads');
-	                    $sAttachment = $this->escape($sAttachment);
-	                    $sAttachment = $this->cObj->stdWrap($sAttachment, $this->conf['attachments.']['attachmentEditLabel_stdWrap.']);
+						$sAttachment = $attachment['file_name'] . ' (' . $this->pi_getLL('attachment.type') . ': ' . $attachment['file_type'] . ', ' . $this->pi_getLL('attachment.size') . ': ' . $size . '), ' . $attachment['downloads'] . ' ' . $this->pi_getLL('attachment.downloads');
+						$sAttachment = $this->escape($sAttachment);
+						$sAttachment = $this->cObj->stdWrap($sAttachment, $this->conf['attachments.']['attachmentEditLabel_stdWrap.']);
 
-	                    $aMarker['###ATTACHMENT_DATA###'] = $sAttachment;
-	                    $aMarker['###ATTACHMENT_UID###']  = $attachment['uid'];
-	                    $aContent .= $this->cObj->substituteMarkerArray($aTemplate, $aMarker);
-                    }
-                    $template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_EDITFIELD###', $aContent);
-                }
+						$aMarker['###ATTACHMENT_DATA###'] = $sAttachment;
+						$aMarker['###ATTACHMENT_UID###']  = $attachment['uid'];
+						$aContent .= $this->cObj->substituteMarkerArray($aTemplate, $aMarker);
+					}
+					$template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_EDITFIELD###', $aContent);
+				}
 
-                if($firstPost && $this->conf['polls.']['enable']) {
-                    $pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
-                    if($topicData['poll_id'] == 0) {
-                        $marker['###POLL###']           = $pollObj->display_createForm($this->piVars['poll']?$this->piVars['poll']:array(),$this);
-                        $marker['###ENABLE_POLL###']    = $this->piVars['enable_poll']?'checked="checked"':'';
-                        $marker['###POLLDIV_STYLE###']  = $this->piVars['enable_poll']?'':'style="display:none;"';
-                        $marker['###LABEL_POLL_CE###']  = $this->pi_getLL('poll.postattach.new');
+				if ($firstPost && $this->conf['polls.']['enable']) {
+					$pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
+					if ($topicData['poll_id'] == 0) {
+						$marker['###POLL###']           = $pollObj->display_createForm($this->piVars['poll'] ? $this->piVars['poll'] : array(), $this);
+						$marker['###ENABLE_POLL###']    = $this->piVars['enable_poll'] ? 'checked="checked"' : '';
+						$marker['###POLLDIV_STYLE###']  = $this->piVars['enable_poll'] ? '' : 'style="display:none;"';
+						$marker['###LABEL_POLL_CE###']  = $this->pi_getLL('poll.postattach.new');
 						$marker['###DISABLE_POLL###']   = '';
 						$marker['###DISABLE_POLL_VAR###'] = 0;
 						$marker['###CALLPOLLJS###'] = $this->conf['callpolljs'];
-                    } else {
+					} else {
 						$pollEnabled = $pollObj->getMayEditPoll($topicData['poll_id'],$this);
-                        $marker['###POLL###']           = $pollObj->display_editForm($topicData['poll_id'],$this->piVars['poll']?$this->piVars['poll']:array(),$this);
-                        $marker['###ENABLE_POLL###']    = 'checked="checked"';
-                        $marker['###POLLDIV_STYLE###']  = '';
-                        $marker['###LABEL_POLL_CE###']  = $this->pi_getLL('poll.postattach.edit');
+						$marker['###POLL###']           = $pollObj->display_editForm($topicData['poll_id'],$this->piVars['poll']?$this->piVars['poll']:array(),$this);
+						$marker['###ENABLE_POLL###']    = 'checked="checked"';
+						$marker['###POLLDIV_STYLE###']  = '';
+						$marker['###LABEL_POLL_CE###']  = $this->pi_getLL('poll.postattach.edit');
 						$marker['###DISABLE_POLL###']   = $pollEnabled ? '' : 'disabled="disabled"';
 						$marker['###DISABLE_POLL_VAR###'] = $pollEnabled ? 0 : 1;
 						$marker['###CALLPOLLJS###'] = $this->conf['callpolljs'];
-                    }
-                    $marker['###LABEL_POLL###']     = $this->pi_getLL('poll.postattach');
-                } else $template = $this->cObj->substituteSubpart($template, '###POLL_SECTION###', '');
+					}
+					$marker['###LABEL_POLL###']     = $this->pi_getLL('poll.postattach');
+				} else {
+					$template = $this->cObj->substituteSubpart($template, '###POLL_SECTION###', '');
+				}
 
-                $pid = $this->piVars['pid'];
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('post_text', 'tx_mmforum_posts_text', 'post_id=' . $postId);
+				list($posttext) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-                $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('post_text','tx_mmforum_posts_text','post_id="'.$pid.'"');
-                list($posttext) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-
-                $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics','uid="'.$this->get_topic_id($pid).'"');
-                list($title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid=' . $topicId);
+				list($title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 				$marker['###POSTTEXT###'] = $this->piVars['message'] ? $this->escape($this->piVars['message']) : $this->escape($posttext);
 
-                if($this->getIsMod($row['forum_id']) || $this->getIsAdmin())
-                    $marker['###POSTTITLE###']         = '<input type="text"  name="tx_mmforum_pi1[title]" size="50" value="'.$this->escape($title).'" style="width:80%;"></div>';
-                elseif($firstPost && $row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid'])
-                    $marker['###POSTTITLE###']         = '<input type="text"  name="tx_mmforum_pi1[title]" size="50" value="'.$this->escape($title).'" style="width:80%;"></div>';
-                else $marker['###POSTTITLE###'] = $this->escape($title);
+				if ($this->getIsMod($row['forum_id']) || $this->getIsAdmin()) {
+					$marker['###POSTTITLE###'] = '<input type="text"  name="tx_mmforum_pi1[title]" size="50" value="' . $this->escape($title) . '" style="width:80%;"></div>';
+				} else if($firstPost && $row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid']) {
+					$marker['###POSTTITLE###'] = '<input type="text"  name="tx_mmforum_pi1[title]" size="50" value="' . $this->escape($title) . '" style="width:80%;"></div>';
+				} else {
+					$marker['###POSTTITLE###'] = $this->escape($title);
+				}
 
-                $marker['###OLDPOSTTEXT###']           = '';
-                $marker['###SMILIES###']               = $this->show_smilie_db($conf);
-                $marker['###SOLVEDOPTION###']          = '';
-                $marker['###ACTION###']                = htmlspecialchars($this->tools->getAbsoluteUrl($this->pi_getPageLink($GLOBALS['TSFE']->id,'',array($this->prefixId=>array('action'=>'post_edit','pid'=>$this->piVars['pid'])))));
+				$marker['###OLDPOSTTEXT###'] = '';
+				$marker['###SMILIES###'] = $this->show_smilie_db($conf);
+				$marker['###SOLVEDOPTION###'] = '';
+				$marker['###ACTION###'] = htmlspecialchars(
+						$this->tools->getAbsoluteUrl(
+								$this->pi_getPageLink(
+										$GLOBALS['TSFE']->id,
+										'',
+										array($this->prefixId => array(
+											'action' => 'post_edit',
+											'pid' => $postId
+										))
+								)
+						)
+				);
 
-                $marker['###LABEL_SEND###']            = $this->pi_getLL('newPost.save');
-                $marker['###LABEL_PREVIEW###']         = $this->pi_getLL('newPost.preview');
-                $marker['###LABEL_RESET###']           = $this->pi_getLL('newPost.reset');
-                $marker['###LABEL_ATTENTION###']       = $this->pi_getLL('newPost.attention');
-                $marker['###LABEL_NOTECODESAMPLES###'] = $this->pi_getLL('newPost.codeSamples');
-		$marker['###TOPICICON###'] = $this->getTopicIcon($topicData);
-		$marker['###TOPICTITLE###'] = $this->escape($topicData['topic_title']);
+				$marker['###LABEL_SEND###']            = $this->pi_getLL('newPost.save');
+				$marker['###LABEL_PREVIEW###']         = $this->pi_getLL('newPost.preview');
+				$marker['###LABEL_RESET###']           = $this->pi_getLL('newPost.reset');
+				$marker['###LABEL_ATTENTION###']       = $this->pi_getLL('newPost.attention');
+				$marker['###LABEL_NOTECODESAMPLES###'] = $this->pi_getLL('newPost.codeSamples');
+				$marker['###TOPICICON###'] = $this->getTopicIcon($topicData);
+				$marker['###TOPICTITLE###'] = $this->escape($topicData['topic_title']);
 
-                $bbCodeButtons_template = $this->cObj->getSubpart($template, '###BBCODEBUTTONS###');
+				// no have-a-look on post edit
+				$template = $this->cObj->substituteSubpart($template, '###HAVEALOOK_SECTION###', '');
 
-                if (empty($conf['jQueryEditorJavaScript'])) {
-        				  $bbCodeButtons = $this->generateBBCodeButtons($bbCodeButtons_template);
-                } else {
-                  $bbCodeButtons = stristr($bbCodeButtons_template, '<td>') ? '<td></td>' : '';
-                }
+				$bbCodeButtons_template = $this->cObj->getSubpart($template, '###BBCODEBUTTONS###');
 
-                $template = $this->cObj->substituteSubpart($template,'###BBCODEBUTTONS###',$bbCodeButtons);
-                $template = str_replace('###POLLJAVASCRIPT###',$this->conf['polljavascript'],$template);
+				if (empty($conf['jQueryEditorJavaScript'])) {
+					$bbCodeButtons = $this->generateBBCodeButtons($bbCodeButtons_template);
+				} else {
+					$bbCodeButtons = stristr($bbCodeButtons_template, '<td>') ? '<td></td>' : '';
+				}
 
-            }
-        } else {
-            $template = $this->cObj->fileResource($conf['template.']['error']);
-            $marker = array();
-            $marker['###ERROR###'] = $this->pi_getLL('editPost.noAccess');
-        }
+				$template = $this->cObj->substituteSubpart($template, '###BBCODEBUTTONS###', $bbCodeButtons);
+				$template = str_replace('###POLLJAVASCRIPT###', $this->conf['polljavascript'], $template);
 
-        // Include hooks
-            if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_formMarker'])) {
-                foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_formMarker'] as $_classRef) {
-                    $_procObj = & t3lib_div::getUserObj($_classRef);
-                    $marker = $_procObj->editPost_formMarker($marker, $this);
-                }
-            }
+				if($this->conf['disableRootline']) {
+					$template = $this->cObj->substituteSubpart($template, '###ROOTLINE_CONTAINER###', '');
+				} else {
+					$marker['###FORUMPATH###'] = $this->get_forum_path($forumId, $topicId);
+				}
+			}
+		} else {
+			$template = $this->cObj->fileResource($conf['template.']['error']);
+			$marker = array(
+				'###ERROR###' => $this->pi_getLL('editPost.noAccess'),
+			);
+		}
 
-        $marker['###STARTJAVASCRIPT###'] = $this->includeEditorJavaScript();
-        $marker['###POST_PREVIEW###']    = $previewContent ? $previewContent : '';
-        $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
-        return $content;
-    }
+		// Include hooks
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_formMarker'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_formMarker'] as $classRef) {
+				$procObj = & t3lib_div::getUserObj($classRef);
+				$marker = $procObj->editPost_formMarker($marker, $this);
+			}
+		}
+
+		$marker['###STARTJAVASCRIPT###'] = $this->includeEditorJavaScript();
+		$marker['###POST_PREVIEW###']    = (string)$previewContent;
+		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
+
+		return $content;
+	}
 
 	/**
 	 * Favorites
@@ -4876,9 +4967,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return string           The prefix of the topic
 	 */
 	function get_topic_is($topicId) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_is','tx_mmforum_topics', 'uid = ' . intval($topicId) . $this->getStoragePIDQuery());
-		list($num) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-		return $num;
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_is', 'tx_mmforum_topics', 'uid=' . intval($topicId) . $this->getStoragePIDQuery());
+		list($row) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		return $row;
 	}
 
 
