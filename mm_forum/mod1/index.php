@@ -111,14 +111,9 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
 
 class  tx_mmforum_module1 extends t3lib_SCbase {
 
-
-	var $pageinfo;
     var $confArr;
     var $tceforms;
     var $configFile;
-
-
-
 
 
 		/**
@@ -175,79 +170,56 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
         $TBE_STYLES['stylesheet2']=t3lib_extMgm::extRelPath('mm_forum').'mod1/css/style.css';
         $this->configFile = PATH_typo3conf.'../typo3conf/tx_mmforum_config.ts';
 
-		// Access check!
-		// The page will show only if there is a valid page and if this page may be viewed by the user
+		$this->loadConfVars();
+		if(!$this->getIsConfigured()) unset($this->MOD_MENU['function']);
 
-		$this->id = 1;
-		$this->pageinfo = t3lib_BEfunc::readPageAccess($this->id,$this->perms_clause);
-		$access = is_array($this->pageinfo) ? 1 : 0;
+			// Draw the header.
+		$this->doc = t3lib_div::makeInstance('mediumDoc');
+		$this->doc->backPath = $BACK_PATH;
+		$this->doc->form='<form action="" name="editform" method="POST">';
 
-        $access = 1;
-        if ($access || $BE_USER->user['admin'])	{
+			// JavaScript
+		$this->doc->JScode = '
+			<script language="javascript" type="text/javascript">
+				script_ended = 0;
+				function jumpToUrl(URL)	{
+					document.location = URL;
+				}
+			</script>
+			<script type="text/javascript" src="../res/scripts/prototype-1.6.0.3.js"></script>
+		';
+		$this->doc->postCode='
+			<script language="javascript" type="text/javascript">
+				script_ended = 1;
+				if (top.fsMod) top.fsMod.recentIds["web"] = 0;
+			</script>
+		';
 
-            $this->loadConfVars();
-            if(!$this->getIsConfigured()) unset($this->MOD_MENU['function']);
+		$this->content .= $this->doc->header($LANG->getLL('title'));
+		$this->content .= $this->doc->spacer(5);
+		$this->content .= $this->doc->section('',$this->doc->funcMenu('', t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
+		$this->content .= $this->doc->divider(5);
 
-				// Draw the header.
-			$this->doc = t3lib_div::makeInstance('mediumDoc');
-			$this->doc->backPath = $BACK_PATH;
-			$this->doc->form='<form action="" name="editform" method="POST">';
+		$this->tceforms = t3lib_div::makeInstance("t3lib_TCEforms");
+		$this->tceforms->backPath = $BACK_PATH;
 
-				// JavaScript
-			$this->doc->JScode = '
-				<script language="javascript" type="text/javascript">
-					script_ended = 0;
-					function jumpToUrl(URL)	{
-						document.location = URL;
-					}
-				</script>
-				<script type="text/javascript" src="../res/scripts/prototype-1.6.0.3.js"></script>
-			';
-			$this->doc->postCode='
-				<script language="javascript" type="text/javascript">
-					script_ended = 1;
-					if (top.fsMod) top.fsMod.recentIds["web"] = 0;
-				</script>
-			';
+		$this->content .= $this->tceforms->printNeededJSFunctions_top();
 
-			$headerSection = $this->doc->getHeader('pages',$this->pageinfo,$this->pageinfo['_thePath']).'<br />'.$LANG->sL('LLL:EXT:lang/locallang_core.xml:labels.path').': '.t3lib_div::fixed_lgd_cs($this->pageinfo['_thePath'],50);
+		// Render content:
+		$this->moduleContent();
+		$content = $this->content;
 
-			$this->content .= $this->doc->header($LANG->getLL('title'));
-			$this->content .= $this->doc->spacer(5);
-			$this->content .= $this->doc->section('',$this->doc->funcMenu($headerSection,t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
-			$this->content .= $this->doc->divider(5);
+		$this->content .= $this->tceforms->printNeededJSFunctions();
 
-			$this->tceforms = t3lib_div::makeInstance("t3lib_TCEforms");
-			$this->tceforms->backPath = $BACK_PATH;
-
-			$this->content .= $this->tceforms->printNeededJSFunctions_top();
-
-			// Render content:
-			$this->moduleContent();
-            $content = $this->content;
-
-			$this->content .= $this->tceforms->printNeededJSFunctions();
-
-			$this->content = $this->doc->startPage($LANG->getLL('title')) . $this->content;
+		$this->content = $this->doc->startPage($LANG->getLL('title')) . $this->content;
 
 
-			// ShortCut
-			if ($BE_USER->mayMakeShortcut())	{
-				$this->content .= $this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
-			}
-
-			$this->content .= $this->doc->spacer(10);
-		} else {
-				// If no access or if ID == zero
-
-			$this->doc = t3lib_div::makeInstance('mediumDoc');
-			$this->doc->backPath = $BACK_PATH;
-
-			$this->content .= $this->doc->startPage($LANG->getLL('title'));
-			$this->content .= $this->doc->header($LANG->getLL('title'));
-			$this->content .= $this->doc->spacer(5);
-			$this->content .= $this->doc->spacer(10);
+		// ShortCut
+		if ($BE_USER->mayMakeShortcut())	{
+			$this->content .= $this->doc->spacer(20).$this->doc->section('',$this->doc->makeShortcutIcon('id',implode(',',array_keys($this->MOD_MENU)),$this->MCONF['name']));
 		}
+
+		$this->content .= $this->doc->spacer(10);
 	}
 
 

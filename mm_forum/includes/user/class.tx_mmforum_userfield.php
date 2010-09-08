@@ -163,11 +163,17 @@ class tx_mmforum_userfield {
 	function isValid($value) {
 		$value = trim($value);
 
-		if($this->conf['required'] && strlen($value) == 0) return false;
-		elseif(strlen($value) > 0) {
-			if(!$this->conf['validate']) return true;
-			else return preg_match($this->conf['validate'],$value);
-		} else return true;
+		if($this->conf['required'] && strlen($value) == 0) {
+			return false;
+		} else if(strlen($value) > 0) {
+			if(!$this->conf['validate']) {
+				return true;
+			} else {
+				return preg_match($this->conf['validate'], $value);
+			}
+		} else {
+			return true;
+		}
 	}
 
 	/**
@@ -269,10 +275,10 @@ class tx_mmforum_userfield {
 		if($this->cObj === null) return null;
 
 		$data = array(
-            'fieldvalue'        => $value
-        );
-        $this->cObj->data = $data;
-		return $this->cObj->cObjGetSingle($this->conf['input'],$this->conf['input.']);
+			'fieldvalue' => $value
+		);
+		$this->cObj->data = $data;
+		return $this->cObj->cObjGetSingle($this->conf['input'], $this->conf['input.']);
 
 	}
 
@@ -291,7 +297,7 @@ class tx_mmforum_userfield {
 		if($this->cObj === null) return null;
 
 		if($this->data['config_parsed']['label']) {
-			$content = $this->cObj->cObjGetSingle($this->data['config_parsed']['label'],$this->data['config_parsed']['label.']);
+			$content = $this->cObj->cObjGetSingle($this->data['config_parsed']['label'], $this->data['config_parsed']['label.']);
 		} else {
 			$content = $this->data['label'];
 		}

@@ -271,6 +271,10 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		return $content;
 	}
 
+	/**
+	 *
+	 * @return t3lib_TSparser
+	 */
 	function &getTSParser() {
 		if(!$this->parser) {
 			$this->parser = t3lib_div::makeInstance('t3lib_TSparser');
@@ -366,10 +370,9 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		foreach ($rows as $fieldData) {
 			$userField->get($fieldData);
 
-			$value		= $this->piVars['userfield'][$userField->getUid()];
-			$valide	= $userField->isValid($value);
+			$value  = $this->piVars['userfield'][$userField->getUid()];
 
-			if(!$valide) {
+			if(!$userField->isValid($value)) {
 				$requiredMissing = true;
 				$this->userfield_error[$fieldData['uid']] = $this->pi_getLL('error-userfieldEmpty');
 			}
