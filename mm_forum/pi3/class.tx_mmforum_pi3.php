@@ -858,19 +858,29 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 	}
 
 	/**
-	* Determines the amount of unread private messages.
-	* @author  Georg Ringer <typo3@ringerge.org>
-	* @version 11.10.2006
-	* @param   int $uid The UID of the user whose messages are to be checked.
-	*                   If empty, the UID of the current user is taken instead.
-	* @return  int      The amount of unread private messages for the user specified
-	*                   by $uid.
-	*/
+	 * Determines the amount of unread private messages.
+	 * @author  Georg Ringer <typo3@ringerge.org>
+	 * @version 11.10.2006
+	 * @param   int $uid The UID of the user whose messages are to be checked.
+	 *                   If empty, the UID of the current user is taken instead.
+	 * @return  int      The amount of unread private messages for the user specified
+	 *                   by $uid.
+	 */
 	function count_new_pm($uid) {
-		if (empty($uid)) $uid = $GLOBALS['TSFE']->fe_user->user['uid'];
-		$where = 'hidden = 0 AND deleted = 0 AND read_flg = 0 AND mess_type = 0 AND to_uid = '.$GLOBALS['TSFE']->fe_user->user['uid'].$this->getStoragePIDQuery();
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('count(uid)','tx_mmforum_pminbox',$where,'','',$limit='');
-		list($count) = $GLOBALS['TYPO3_DB']->sql_num_rows($res); return $count;
+		$uid = intval($uid);
+
+		if ($uid === 0) {
+			$uid = $GLOBALS['TSFE']->fe_user->user['uid'];
+		}
+
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'count(uid) as msg_count',
+				'tx_mmforum_pminbox',
+				'hidden=0 AND deleted=0 AND read_flg=0 AND mess_type=0 AND to_uid=' . $uid . $this->getStoragePIDQuery()
+		);
+		
+		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		return $row['msg_count'];
 	}
 
 
