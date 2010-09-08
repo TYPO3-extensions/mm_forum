@@ -5492,60 +5492,57 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      * User rights management
      */
 
-    /**
+	/**
      * Generates a MySQL-query to determine in which boards the current user may read.
      * @return string  A MySQL-WHERE-query, beginning with "AND", checking which boards the
      *                 user that is currently logged in may read in.
      * @author Martin Helmich <m.helmich@mittwald.de>
      */
-    function getMayRead_forum_query($prefix="") {
+	function getMayRead_forum_query($prefix = '') {
 
-			/* Get user UID */
 		$userId = $this->getUserID();
 
-			/* First search for query in cache. In case of a hit, just return
-			 * the result. */
-		$cacheRes = $this->cache->restore('getMayRead_forum_query_'.$userId.'_'.$prefix);
-		if($cacheRes !== null) return $cacheRes;
+		// First search for query in cache. In case of a hit, just return the result.
+		$cacheRes = $this->cache->restore('getMayRead_forum_query_' . $userId . '_' . $prefix);
+		if($cacheRes !== null) {
+			return $cacheRes;
+		}
 
-			/* If the user is an administrator, just return a dummy query. */
+		// If the user is an administrator, just return a dummy query.
 		if($this->getIsAdmin()) return ' AND 1 ';
 
-			/* If no user is logged in, select only boards where no read
-			 * access is specified. */
-		$dprefix = (strlen($prefix)>0) ? "$prefix." : "";
+		// If no user is logged in, select only boards where no read access is specified. */
+		$dprefix = (strlen($prefix) > 0) ? $prefix . '.' : '';
 		if(!$GLOBALS['TSFE']->fe_user->user) {
-			$this->cache->save('getMayRead_forum_query_'.$userId.'_'.$prefix,$query=" AND (".$dprefix."grouprights_read='')");
+			$this->cache->save('getMayRead_forum_query_' . $userId . '_' . $prefix, $query = ' AND (' . $dprefix . 'grouprights_read=\'\')');
 			return $query;
 		}
 
-			/* Get all groups the current user is a member of. */
+		// Get all groups the current user is a member of.
 		$groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
 
-			/* If the user is not in any group, build a subquery that always
-			 * returns FALSE. */
-		if(!is_array($groups) || count($groups)==0)
+		// If the user is not in any group, build a subquery that always returns FALSE.
+		if(!is_array($groups) || count($groups) == 0) {
 			$queryParts = '1=2';
+		}
 
-			/* Otherwise check the intersection between the user's groups
-			 * and the groups with read access. */
+		// Otherwise check the intersection between the user's groups and the groups with read access.
 		else {
 			foreach($groups as $group) {
-				$queryParts[] = "FIND_IN_SET($group,".$dprefix."grouprights_read)";
+				$queryParts[] = 'FIND_IN_SET(' . $group . ', ' . $dprefix . 'grouprights_read)';
 			}
 		}
 
-			/* Compose query */
-		$query = is_array($queryParts)?implode(' OR ',$queryParts):$queryParts;
-		$query = " AND (($query) OR ".$dprefix."grouprights_read='') ";
+		$query = is_array($queryParts) ? implode(' OR ', $queryParts) : $queryParts;
+		$query = ' AND ((' . $query . ') OR ' . $dprefix . 'grouprights_read=\'\') ';
 
-			/* Store query to cache and return. */
+		// Store query to cache and return.
 		$this->cache->save('getMayRead_forum_query_'.$userId.'_'.$prefix,$query);
 		return $query;
 	}
 
-    /**
+	/**
      * Determines if the current user may read in a certain board.
      * @param  mixed   $forum The board identifier. This may either be a board UID pointing to
      *                        a record in the tx_mmforum_forums table or an associative array
@@ -5554,113 +5551,123 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      *                        specified board, otherwise FALSE.
      * @author Martin Helmich <m.helmich@mittwald.de>
      */
-    function getMayRead_forum($forum) {
+	function getMayRead_forum($forum) {
 
-			/* Get the current user's uid */
 		$userId = $this->getUserID();
 
-			/* If the $forum parameter is not an array, treat it as a forum UID */
+		// If the $forum parameter is not an array, treat it as a forum UID
 		if(!is_array($forum)) {
 
-				/* Parse to integer */
 			$forum = intval($forum);
 
-				/* Try to load read access from cache. If the regarding property is
-				 * stored in the cache, return the result now, otherwise load the board
-				 * record from the database. */
-			$cacheRes = $this->cache->restore('getMayRead_forum_'.$userId.'_'.$forum);
-			if($cacheRes !== null) return $cacheRes;
-			else $forum = $this->getBoardData($forum);
+			/* Try to load read access from cache. If the regarding property is
+			 * stored in the cache, return the result now, otherwise load the board
+			 * record from the database. */
+			$cacheRes = $this->cache->restore('getMayRead_forum_' . $userId . '_' . $forum);
+			if($cacheRes !== null) {
+				return $cacheRes;
+			} else {
+				$forum = $this->getBoardData($forum);
+			}
 
 		} else {
-			$cacheRes = $this->cache->restore('getMayRead_forum_'.$userId.'_'.$forum['uid']);
-			if($cacheRes !== null) return $cacheRes;
-		}
-
-			/* If this forum has a parent category, check the access rights
-			 * for this parent category, too. */
-        if($forum['parentID']) {
-            if(!$this->getMayRead_forum(intval($forum['parentID']))) {
-				$this->cache->save('getMayRead_forum_'.$userId.'_'.$forum['uid'], false);
-            	return false;
+			$cacheRes = $this->cache->restore('getMayRead_forum_' . $userId . '_' . $forum['uid']);
+			if($cacheRes !== null) {
+				return $cacheRes;
 			}
 		}
 
-			/* Get all groups that are allowed to read in this board. */
-        $authRead = tx_mmforum_tools::getParentUserGroups($forum['grouprights_read']);
-
-			/* If no groups are specified for read access, everyone can read. */
-        if(strlen($authRead)==0) {
-			$this->cache->save('getMayRead_forum_'.$userId.'_'.$forum['uid'], true);
-        	return true;
+		// If the current user has moderation or even administration access to this board, just return TRUE in any case.
+		if ($this->getIsModOrAdmin($forum['uid'])) {
+			return true;
 		}
 
-			/* Parse allowed groups into an array */
-        $authRead = t3lib_div::trimExplode(',',$authRead);
+		// If this forum has a parent category, check the access rights for this parent category, too.
+		if($forum['parentID']) {
+			if (!$this->getMayRead_forum(intval($forum['parentID']))) {
+				$this->cache->save('getMayRead_forum_' . $userId . '_' . $forum['uid'], false);
+				return false;
+			}
+		}
 
-			/* Load the current user's groups */
-        $groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
-        $groups = tx_mmforum_tools::processArray_numeric($groups);
+		// Get all groups that are allowed to read in this board.
+		$authRead = tx_mmforum_tools::getParentUserGroups($forum['grouprights_read']);
 
-			/* Determine the intersection between the allowed groups and the
-			 * current user's groups. */
-		$intersect	= array_intersect($authRead,$groups);
+		// If no groups are specified for read access, everyone can read.
+		if (strlen($authRead) == 0) {
+			$this->cache->save('getMayRead_forum_' . $userId . '_' . $forum['uid'], true);
+			return true;
+		}
 
-			/* If the current user is in at least one group that is in the groups
-			 * with read access, then the result is TRUE. */
-		$result		= count($intersect)>0;
+		// Parse allowed groups into an array
+		$authRead = t3lib_div::trimExplode(',',$authRead);
 
-			/* Store result to cache. */
-		$this->cache->save('getMayRead_forum_'.$userId.'_'.$forum['uid'], $result);
+		// Load the current user's groups
+		$groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
+		$groups = tx_mmforum_tools::processArray_numeric($groups);
+
+		// Determine the intersection between the allowed groups and the current user's groups.
+		$intersect = array_intersect($authRead, $groups);
+
+		// If the current user is in at least one group that is in the groups with read access, then the result is TRUE.
+		$result = count($intersect)>0;
+
+		// Store result to cache.
+		$this->cache->save('getMayRead_forum_' . $userId . '_' . $forum['uid'], $result);
 
 		return $result;
-    }
+	}
 
-    /**
+	/**
      * Generates a MySQL-query to determine in which boards the current user may write.
      * @return string  A MySQL-WHERE-query, beginning with "AND", checking in which boards the
      *                 user that is currently logged in may write.
      * @author Martin Helmich <m.helmich@mittwald.de>
      */
-    function getMayWrite_forum_query() {
+	function getMayWrite_forum_query() {
 
-			/* Get user UID */
 		$userId = $this->getUserID();
 
-			/* Search for query in cache. In case of a hit, return the result
-			 * now. */
+		// Search for query in cache. In case of a hit, return the result now.
 		$cacheRes = $this->cache->restore('getMayWrite_forum_query_'.$userId);
-		if($cacheRes !== null) return $cacheRes;
+		if($cacheRes !== null) {
+			return $cacheRes;
+		}
 
-			/* Get the current user's groups */
+		// If the user is an administrator, just return a dummy query.
+		if ($this->getIsAdmin()) {
+			return ' AND 1 ';
+		}
+
+		// Get the current user's groups
 		$groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
 
-			/* Check if the user is in the base user group. If this is not the
-			 * case, the user is not allowed to write anywhere. */
+		/* Check if the user is in the base user group. If this is not the
+		 * case, the user is not allowed to write anywhere. */
 		if(!in_array($this->getBaseUserGroup(), $groups)) {
 			$query = " AND 1=0";
-			$this->cache->save('getMayWrite_forum_query_'.$userId, $query);
+			$this->cache->save('getMayWrite_forum_query_' . $userId, $query);
 			return $query;
 		}
 
-			/* Iterate through all the user's groups and compose an array
-			 * of SQL conditions. */
+		// Iterate through all the user's groups and compose an array of SQL conditions.
 		$queryParts = array();
-		foreach($groups as $group)
-			$queryParts[] = "FIND_IN_SET($group,grouprights_write)";
+		foreach($groups as $group) {
+			$queryParts[] = sprintf('FIND_IN_SET(%c,grouprights_write)', $group);
+		}
 
-			/* Compose SQL query */
-		$query = implode(' OR ',$queryParts);
-		$query = " AND (($query) OR grouprights_write='') ";
+		// Compose SQL query
+		$query = implode(' OR ', $queryParts);
+		$query = sprintf(' AND (($s) OR grouprights_write=\'\') ', $query);
 
-			/* Save generated query to cache and return */
-		$this->cache->save('getMayWrite_forum_query_'.$userId, $query);
+		// Save generated query to cache and return
+		$this->cache->save('getMayWrite_forum_query_' . $userId, $query);
 		return $query;
 
-    }
+	}
 
-    /**
+	/**
      * Determines if the current user may write in a certain board.
      * @param  mixed   $forum The board identifier. This may either be a board UID pointing to
      *                        a record in the tx_mmforum_forums table or an associative array
@@ -5669,51 +5676,49 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      *                        specified board, otherwise FALSE.
      * @author Martin Helmich <m.helmich@mittwald.de>
      */
-    function getMayWrite_forum($forum) {
+	function getMayWrite_forum($forum) {
 
-			/* Get user ID */
 		$userId = $this->getUserID();
 
-			/* If no user is logged in, return FALSE at once. */
-		if(!$userId) return false;
+		// If no user is logged in, return FALSE at once.
+		if(!$userId) {
+			return false;
+		}
 
-			/* If the $forum parameter is no array, treat the parameter as
-			 * forum UID instead */
-        if(!is_array($forum)) {
+		// If the $forum parameter is no array, treat the parameter as forum UID instead
+		if(!is_array($forum)) {
 
-				/* Parse to int for security reasons */
-            $forum = intval($forum);
+			// Parse to int for security reasons
+			$forum = intval($forum);
 
-				/* Search for result in cache. In case of a hit, return the
-				 * result at once. */
+			// Search for result in cache. In case of a hit, return the result at once.
 			$cacheRes = $this->cache->restore('getMayWrite_forum_'.$userId.'_'.$forum);
 			if($cacheRes !== null) return $cacheRes;
 
-				/* Otherwise load the complete board record. */
+			// Otherwise load the complete board record.
 			$forum = $this->getBoardData($forum);
-        }
+		}
 
-			/* If this has not been done already, look into the cache now
-			 * and return the result in the case of a hit. */
+		/* If this has not been done already, look into the cache now
+		 * and return the result in the case of a hit. */
 		if(!isset($cacheRes)) {
 			$cacheRes = $this->cache->restore('getMayWrite_forum_'.$userId.'_'.$forum['uid']);
 			if($cacheRes !== null) return $cacheRes;
 		}
 
-			/* If the current user has moderation or even administration
-			 * access to this board, just return TRUE in any case. */
+		/* If the current user has moderation or even administration
+		 * access to this board, just return TRUE in any case. */
 		if($this->getIsModOrAdmin($forum['uid'])) return true;
 
-			/* If the forum has got a parent category, check the access
-			 * rights for this category, too. */
+		// If the forum has got a parent category, check the access rights for this category, too.
 		if($forum['parentID'])
 			if(!$this->getMayWrite_forum($forum['parentID'])) return false;
 
-			/* Load all groups that have write access to this forum */
+		// Load all groups that have write access to this forum
 		$authWrite = tx_mmforum_tools::getParentUserGroups($forum['grouprights_write']);
 
-			/* If no groups with write access have been specified, everyone
-			 * can write, so just return true. */
+		/* If no groups with write access have been specified, everyone
+		 * can write, so just return true. */
 		$authWrite = t3lib_div::intExplode(',',$authWrite);
 		$authWrite = $this->tools->processArray_numeric($authWrite);
 		if(count($authWrite)==0) {
@@ -5721,30 +5726,30 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			return true;
 		}
 
-			/* Load current user's groups */
+		// Load current user's groups
 		$groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
 
-			/* Check if the user is in the base user group. If this is not the
-			 * case, the user is not allowed to write anywhere. */
+		/* Check if the user is in the base user group. If this is not the
+		 * case, the user is not allowed to write anywhere. */
 		if(!in_array($this->getBaseUserGroup(), $groups)) {
 			$this->cache->save("getMayWrite_forum_{$userId}_{$forum[uid]}", false);
 			return false;
 		}
 
-			/* Determine the intersection between the user's groups and the groups
-			 * with write access. If the intersect count is bigger than 0, this means
-			 * that the user is in at least one group that has write access, so
-			 * return TRUE in this case. */
+		/* Determine the intersection between the user's groups and the groups
+		 * with write access. If the intersect count is bigger than 0, this means
+		 * that the user is in at least one group that has write access, so
+		 * return TRUE in this case. */
 		$intersect	= array_intersect($authWrite,$groups);
 		$result		= count($intersect)>0;
 
-			/* Write result to cache and return */
+		// Write result to cache and return
 		$this->cache->save('getMayWrite_forum_'.$userId.'_'.$forum['uid'],$result);
 		return $result;
-    }
+	}
 
-    /**
+	/**
      * Determines if the current user may write in a certain topic.
      * @param  mixed   $topic The topic identifier. This may either be a topic UID pointing to
      *                        a record in the tx_mmforum_topics table or an associative array
@@ -5753,23 +5758,22 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      *                        specified topic, otherwise FALSE.
      * @author Martin Helmich <m.helmich@mittwald.de>
      */
-    function getMayWrite_topic($topic) {
+	function getMayWrite_topic($topic) {
 
-			/* Load user's UID */
 		$userId = $this->getUserID();
 
-			/* If the $topic parameter is not an array, treat this parameter
-			 * as a topic UID. */
+		// If the $topic parameter is not an array, treat this parameter as a topic UID.
 		if(!is_array($topic)) {
 
-				/* Parse to integer */
-            $topic = intval($topic);
+			$topic = intval($topic);
 
-				/* Look in the cache. In case of a hit, just return the result */
-			$cacheRes = $this->cache->restore('getMayWrite_topic_'.$topic.'_'.$userId);
-			if($cacheRes !== null) return $cacheRes;
+			// Look in the cache. In case of a hit, just return the result
+			$cacheRes = $this->cache->restore('getMayWrite_topic_' . $topic . '_' . $userId);
+			if($cacheRes !== null) {
+				return $cacheRes;
+			}
 
-				/* Load the topic's forum UID */
+			// Load the topic's forum UID
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'f.*',
 				'tx_mmforum_forums f, tx_mmforum_topics t',
@@ -5778,22 +5782,22 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 			$result = $this->getMayWrite_forum($arr);
 
-				/* Save the result to cache and return */
-			$this->cache->save('getMayWrite_topic_'.$topic.'_'.$userId,$result);
+			// Save the result to cache and return
+			$this->cache->save('getMayWrite_topic_' . $topic . '_' . $userId, $result);
 			return $result;
 
 		} else {
 
-				/* If the topic's forum UID is already known, just delegate to the
-				 * getMayWrite_forum function. Since the result of that function is
-				 * already being cached, there is no need to cache the result at this
-				 * place again. */
+			/* If the topic's forum UID is already known, just delegate to the
+			 * getMayWrite_forum function. Since the result of that function is
+			 * already being cached, there is no need to cache the result at this
+			 * place again. */
 			return $this->getMayWrite_forum($topic['forum_id']);
 
-        }
-    }
+		}
+	}
 
-    /**
+	/**
      * Determines if the current user may read a certain topic.
      * @param  mixed   $topic The topic identifier. This may either be a topic UID pointing to
      *                        a record in the tx_mmforum_topics table or an associative array
@@ -5802,22 +5806,23 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      *                        specified topic, otherwise FALSE.
      * @author Martin Helmich <m.helmich@mittwald.de>
      */
-    function getMayRead_topic($topic) {
-        if(!is_array($topic)) {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                'f.*',
-                'tx_mmforum_forums f, tx_mmforum_topics t',
-                't.uid="'.intval($topic).'" AND f.uid = t.forum_id'
-            );
-            $arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-            return $this->getMayRead_forum($arr);
-        }
-        else {
-            return $this->getMayRead_forum($topic['forum_id']);
-        }
-    }
+	function getMayRead_topic($topic) {
+		if (!is_array($topic)) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'f.*',
+				'tx_mmforum_forums f, tx_mmforum_topics t',
+				't.uid=' . intval($topic) . ' AND f.uid=t.forum_id'
+			);
+			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
-    /**
+			return $this->getMayRead_forum($arr);
+		
+		} else {
+			return $this->getMayRead_forum($topic['forum_id']);
+		}
+	}
+
+	/**
      * Determines if the current user may read a certain post.
      * @param  mixed   $topic The post identifier. This may either be a post UID pointing to
      *                        a record in the tx_mmforum_posts table or an associative array
@@ -5826,21 +5831,25 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      *                        specified post, otherwise FALSE.
      * @author Martin Helmich <m.helmich@mittwald.de>
      */
-    function getMayRead_post($post) {
-        if($post == 0) return false;
-        if(!is_array($post)) {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                'f.*',
-                'tx_mmforum_forums f, tx_mmforum_posts p',
-                'p.uid="'.intval($post).'" AND f.uid = p.forum_id'
-            );
-            $arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-            return $this->getMayRead_forum($arr);
-        }
-        else {
-            return $this->getMayRead_forum($post['forum_id']);
-        }
-    }
+	function getMayRead_post($post) {
+		if($post == 0) {
+			return false;
+		}
+
+		if(!is_array($post)) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'f.*',
+				'tx_mmforum_forums f, tx_mmforum_posts p',
+				'p.uid=' . intval($post) . ' AND f.uid=p.forum_id'
+			);
+			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+
+			return $this->getMayRead_forum($arr);
+		
+		} else {
+			return $this->getMayRead_forum($post['forum_id']);
+		}
+	}
 
 	/**
 	 * Various helper functions
