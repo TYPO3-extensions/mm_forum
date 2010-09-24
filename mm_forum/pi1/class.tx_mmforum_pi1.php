@@ -368,7 +368,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			}
 		}
 
-        // Include hooks
+		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['mainContentHook'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['mainContentHook'] as $_classRef) {
 				$_procObj = & t3lib_div::getUserObj($_classRef);
@@ -512,39 +512,39 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @param  array  $conf    The plugin's configuration vars
 	 * @return string          The content
 	 */
-    function list_unread($content, $conf)
-    {
-        $template = $this->cObj->fileResource($conf['template.']['list_topic']);
-        $template = $this->cObj->getSubpart($template, "###TOPICBEGIN3###");
-        $marker = array();
+	function list_unread($content, $conf)
+	{
+		$template = $this->cObj->fileResource($conf['template.']['list_topic']);
+		$template = $this->cObj->getSubpart($template, "###TOPICBEGIN3###");
+		$marker = array();
 
-        if ($GLOBALS['TSFE']->fe_user->user['uid']) {
-            $resunread = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                'tx_mmforum_prelogin as lastlogin',
-                'fe_users',
-                'uid = "'.$GLOBALS['TSFE']->fe_user->user['uid'].'"'
-            );
-            $rowunread = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resunread);
-            $lastlogin = $rowunread['lastlogin'];
-        }
-        else {
-            $template = $this->cObj->fileResource($conf['template.']['login_error']);
-            $template = $this->cObj->getSubpart($template, "###LOGINERROR###");
-            $marker = array();
-            $marker['###LOGINERROR_MESSAGE###'] = $this->pi_getLL('login_error');
-            $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
-            return $content;
-        }
+		if ($GLOBALS['TSFE']->fe_user->user['uid']) {
+			$resunread = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'tx_mmforum_prelogin as lastlogin',
+				'fe_users',
+				'uid = "'.$GLOBALS['TSFE']->fe_user->user['uid'].'"'
+			);
+			$rowunread = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resunread);
+			$lastlogin = $rowunread['lastlogin'];
+		}
+		else {
+			$template = $this->cObj->fileResource($conf['template.']['login_error']);
+			$template = $this->cObj->getSubpart($template, "###LOGINERROR###");
+			$marker = array();
+			$marker['###LOGINERROR_MESSAGE###'] = $this->pi_getLL('login_error');
+			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
+			return $content;
+		}
 
-        $marker['###FORUMPATH###']          = '';
-        $marker['###FORUMNAME###']          = $this->pi_getLL('board.unreadEntries');
-        $marker['###NEWTOPICLINK###']       = '';
-        $marker['###LABEL_TOPIC###']        = $this->pi_getLL('board.topic');
-        $marker['###LABEL_REPLIES_HITS###'] = $this->pi_getLL('board.replies');
-        $marker['###LABEL_AUTHOR###']       = $this->pi_getLL('board.author');
-        $marker['###LABEL_LASTPOST###']     = $this->pi_getLL('board.lastPost');
-        $marker['###LABEL_RATING###']		= $this->pi_getLL('board.rating');
-        $marker['###PAGES###']              = $this->pagecount2 ($lastlogin, $conf['topic_count']); // Anzeigen der Seiten, durch die man blÃ¯Â¿Â½ttern kann
+		$marker['###FORUMPATH###']          = '';
+		$marker['###FORUMNAME###']          = $this->pi_getLL('board.unreadEntries');
+		$marker['###NEWTOPICLINK###']       = '';
+		$marker['###LABEL_TOPIC###']        = $this->pi_getLL('board.topic');
+		$marker['###LABEL_REPLIES_HITS###'] = $this->pi_getLL('board.replies');
+		$marker['###LABEL_AUTHOR###']       = $this->pi_getLL('board.author');
+		$marker['###LABEL_LASTPOST###']     = $this->pi_getLL('board.lastPost');
+		$marker['###LABEL_RATING###']		= $this->pi_getLL('board.rating');
+		$marker['###PAGES###']              = $this->pagecount2 ($lastlogin, $conf['topic_count']); // Anzeigen der Seiten, durch die man blÃ¯Â¿Â½ttern kann
 
 		if(!$this->isTopicRating()) {
 			$template = $this->cObj->substituteSubpart($template, '###SUBP_RATING_LABEL###', '');
@@ -558,136 +558,136 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 			}
 
-        $content .= $this->getMarkAllRead_link().'<br />';
-        $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);                   // Markers write back
-        $page = intval($this->piVars['page']);
+		$content .= $this->getMarkAllRead_link().'<br />';
+		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);                   // Markers write back
+		$page = intval($this->piVars['page']);
 
-        // If page not set, then set page = 1
-            if(empty($page))
-                $page = 1;
+		// If page not set, then set page = 1
+			if(empty($page))
+				$page = 1;
 
-        $limit = ($conf['topic_count']-1)*($page-1).','.$conf['topic_count'];                       // Make MYSQL LIMIT value
-        $topiclist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            "distinct tx_mmforum_topics.topic_title,
-                      tx_mmforum_topics.closed_flag,
-                      tx_mmforum_topics.solved,
-                      tx_mmforum_topics.forum_id,
-                      tx_mmforum_topics.uid,
-                      tx_mmforum_topics.topic_poster,
-                      tx_mmforum_topics.topic_last_post_id,
-                      tx_mmforum_topics.topic_replies,
-                      tx_mmforum_topics.topic_views",
-            "tx_mmforum_topics inner join tx_mmforum_posts on tx_mmforum_topics.uid = tx_mmforum_posts.topic_id,
-             tx_mmforum_forums f, tx_mmforum_forums c",
-            "tx_mmforum_topics.deleted = 0 AND
-                tx_mmforum_posts.deleted = 0 AND
-                post_time >= ".$lastlogin." AND
-                tx_mmforum_topics.forum_id = f.uid AND
-                f.parentID = c.uid ".
-                $this->getStoragePIDQuery('f,tx_mmforum_topics').
-                $this->getMayRead_forum_query('f').
-                $this->getMayRead_forum_query('c').
-                $this->getCategoryLimit_query('c'),
-            '',
-            'tx_mmforum_topics.topic_last_post_id desc',
-            $limit
-        );
+		$limit = ($conf['topic_count']-1)*($page-1).','.$conf['topic_count'];                       // Make MYSQL LIMIT value
+		$topiclist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			"distinct tx_mmforum_topics.topic_title,
+			tx_mmforum_topics.closed_flag,
+			tx_mmforum_topics.solved,
+			tx_mmforum_topics.forum_id,
+			tx_mmforum_topics.uid,
+			tx_mmforum_topics.topic_poster,
+			tx_mmforum_topics.topic_last_post_id,
+			tx_mmforum_topics.topic_replies,
+			tx_mmforum_topics.topic_views",
+			"tx_mmforum_topics inner join tx_mmforum_posts on tx_mmforum_topics.uid = tx_mmforum_posts.topic_id,
+			tx_mmforum_forums f, tx_mmforum_forums c",
+			"tx_mmforum_topics.deleted = 0 AND
+				tx_mmforum_posts.deleted = 0 AND
+				post_time >= ".$lastlogin." AND
+				tx_mmforum_topics.forum_id = f.uid AND
+				f.parentID = c.uid ".
+				$this->getStoragePIDQuery('f,tx_mmforum_topics').
+				$this->getMayRead_forum_query('f').
+				$this->getMayRead_forum_query('c').
+				$this->getCategoryLimit_query('c'),
+			'',
+			'tx_mmforum_topics.topic_last_post_id desc',
+			$limit
+		);
 
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($topiclist)>0) {
-	        $template = $this->cObj->fileResource($conf['template.']['list_topic']);
-	        $template = $this->cObj->getSubpart($template, "###LIST_TOPIC3###");
+		if($GLOBALS['TYPO3_DB']->sql_num_rows($topiclist)>0) {
+			$template = $this->cObj->fileResource($conf['template.']['list_topic']);
+			$template = $this->cObj->getSubpart($template, "###LIST_TOPIC3###");
 		}
 		else {
-	        $template = $this->cObj->fileResource($conf['template.']['list_topic']);
-	        $template = $this->cObj->getSubpart($template, "###LIST_NOTOPIC###");
+			$template = $this->cObj->fileResource($conf['template.']['list_topic']);
+			$template = $this->cObj->getSubpart($template, "###LIST_NOTOPIC###");
 
-            $content .= $this->cObj->substituteMarker($template, "###LABEL_NOTOPICS###", $this->pi_getLL('topic.noTopicsFound'));
+			$content .= $this->cObj->substituteMarker($template, "###LABEL_NOTOPICS###", $this->pi_getLL('topic.noTopicsFound'));
 		}
 
 		if(!$this->isTopicRating()) {
 			$template = $this->cObj->substituteSubpart($template, '###SUBP_RATING###', '');
 		}
 
-        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($topiclist)) {
-            $forum = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                'forum_name,parentID',
-                'tx_mmforum_forums',
-                'uid="'.intval($row['forum_id']).'"'
-            );
-            $rowf = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forum);
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($topiclist)) {
+			$forum = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'forum_name,parentID',
+				'tx_mmforum_forums',
+				'uid="'.intval($row['forum_id']).'"'
+			);
+			$rowf = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forum);
 
-            $cat = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                'forum_name as cat_title',
-                'tx_mmforum_forums',
-                'uid="'.intval($rowf['parentID']).'"'
-            );
-            $rowc = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($cat);
+			$cat = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'forum_name as cat_title',
+				'tx_mmforum_forums',
+				'uid="'.intval($rowf['parentID']).'"'
+			);
+			$rowc = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($cat);
 
-            if($row['solved'] == 1) {
-                $imgInfo['src'] = $conf['path_img'].$conf['images.']['solved'];
-                $imgInfo['alt'] = $this->pi_getLL('topic.isSolved');
-                $imgInfo['title'] = $this->pi_getLL('topic.isSolved');
-                $solved         = $this->buildImageTag($imgInfo);
-            } else {
-                $solved = '';
-            }
-            $linkparams[$this->prefixId] = array (
-                'action'  => 'list_post',
-                'tid'     => $row['uid'],
-                'pid'     => 'last'
-            );
-            if($this->useRealUrl()) {
-                $linkparams[$this->prefixId]['fid'] = $row['forum_id'];
-            }
-            $imgInfo['src'] = $conf['path_img'].$conf['images.']['jump_to'];
-            $imgInfo['alt'] = $this->pi_getLL('topic.gotoLastPost');
-            $imgInfo['title'] = $this->pi_getLL('topic.gotoLastPost');
-            $last_post_link = $this->pi_linkToPage($this->buildImageTag($imgInfo), $GLOBALS['TSFE']->id, '', $linkparams);
+			if($row['solved'] == 1) {
+				$imgInfo['src'] = $conf['path_img'].$conf['images.']['solved'];
+				$imgInfo['alt'] = $this->pi_getLL('topic.isSolved');
+				$imgInfo['title'] = $this->pi_getLL('topic.isSolved');
+				$solved         = $this->buildImageTag($imgInfo);
+			} else {
+				$solved = '';
+			}
+			$linkparams[$this->prefixId] = array (
+				'action'  => 'list_post',
+				'tid'     => $row['uid'],
+				'pid'     => 'last'
+			);
+			if($this->useRealUrl()) {
+				$linkparams[$this->prefixId]['fid'] = $row['forum_id'];
+			}
+			$imgInfo['src'] = $conf['path_img'].$conf['images.']['jump_to'];
+			$imgInfo['alt'] = $this->pi_getLL('topic.gotoLastPost');
+			$imgInfo['title'] = $this->pi_getLL('topic.gotoLastPost');
+			$last_post_link = $this->pi_linkToPage($this->buildImageTag($imgInfo), $GLOBALS['TSFE']->id, '', $linkparams);
 
-            if($row['topic_is'])
-                $topic_is = $this->cObj->wrap($row['topic_is'],$this->conf['list_topics.']['prefix_wrap']);
-            else
-                $topic_is = '';
+			if($row['topic_is'])
+				$topic_is = $this->cObj->wrap($row['topic_is'],$this->conf['list_topics.']['prefix_wrap']);
+			else
+				$topic_is = '';
 
-            $row['topic_title'] = stripslashes($row['topic_title']);
+			$row['topic_title'] = stripslashes($row['topic_title']);
 
-            $row['topic_title'] = str_replace('<','&lt;',$row['topic_title']);
-            $row['topic_title'] = str_replace('>','&gt;',$row['topic_title']);
+			$row['topic_title'] = str_replace('<','&lt;',$row['topic_title']);
+			$row['topic_title'] = str_replace('>','&gt;',$row['topic_title']);
 
-            $linkParams[$this->prefixId] = array(
-                'action'    => 'list_post',
-                'tid'       => $row['uid']
-            );
-            $marker['###TOPICNAME###']  = $topic_is.$this->pi_linkTP($this->escape($row['topic_title']),$linkParams).$solved;
-            $marker['###UNDERLINE###']  = $this->escape($rowc['cat_title']).' &raquo; '.$this->escape($rowf['forum_name']);
-            $marker['###POSTS###']      = intval($row['topic_replies']).' ('.intval($row['topic_views']).')';
-            $marker['###AUTHOR###']		= $this->linkToUserProfile($row['topic_poster']);
-            $marker['###LAST###']       = $this->getlastpost($row['topic_last_post_id'],$conf).' '.$last_post_link;
-            $marker['###READIMAGE###'] = $this->getTopicIcon($row);
-            $marker['###RATING###']		= $this->getRatingDisplay('tx_mmforum_topic', $row['uid']);
+			$linkParams[$this->prefixId] = array(
+				'action'    => 'list_post',
+				'tid'       => $row['uid']
+			);
+			$marker['###TOPICNAME###']  = $topic_is.$this->pi_linkTP($this->escape($row['topic_title']),$linkParams).$solved;
+			$marker['###UNDERLINE###']  = $this->escape($rowc['cat_title']).' &raquo; '.$this->escape($rowf['forum_name']);
+			$marker['###POSTS###']      = intval($row['topic_replies']).' ('.intval($row['topic_views']).')';
+			$marker['###AUTHOR###']		= $this->linkToUserProfile($row['topic_poster']);
+			$marker['###LAST###']       = $this->getlastpost($row['topic_last_post_id'],$conf).' '.$last_post_link;
+			$marker['###READIMAGE###'] = $this->getTopicIcon($row);
+			$marker['###RATING###']		= $this->getRatingDisplay('tx_mmforum_topic', $row['uid']);
 
-            IF (($row['topic_replies'] + 1) > $conf['post_limit'])
-            {
-                $page_link = $this->pi_getLL('page.goto').':';
-                $menge = $row['topic_replies'];
-                $i = 0;
-                while($menge >= 0) {
-                    $i++;
-                    $linkparams[$this->prefixId] = array (
-                        'action' => 'list_post',
-                        'tid'    => $row['uid'],
-                        'page'   => $i
-                    );
-          					if ($linkparams[$this->prefixId]['page'] < 1) {
-                      $linkparams[$this->prefixId]['page'] = '';
-                    }
-                    $page_link  .= ' '.$this->pi_linkToPage($i,$GLOBALS['TSFE']->id,'',$linkparams);
-                    $menge = $menge - $conf['post_limit'];
-                }
-                $marker['###TOPICNAME###'] .= ' '.$this->cObj->wrap($page_link,$this->conf['list_topics.']['listunread_pagenav_wrap']);
-            }
+			IF (($row['topic_replies'] + 1) > $conf['post_limit'])
+			{
+				$page_link = $this->pi_getLL('page.goto').':';
+				$menge = $row['topic_replies'];
+				$i = 0;
+				while($menge >= 0) {
+					$i++;
+					$linkparams[$this->prefixId] = array (
+						'action' => 'list_post',
+						'tid'    => $row['uid'],
+						'page'   => $i
+					);
+					if ($linkparams[$this->prefixId]['page'] < 1) {
+						$linkparams[$this->prefixId]['page'] = '';
+					}
+					$page_link  .= ' '.$this->pi_linkToPage($i,$GLOBALS['TSFE']->id,'',$linkparams);
+					$menge = $menge - $conf['post_limit'];
+				}
+				$marker['###TOPICNAME###'] .= ' '.$this->cObj->wrap($page_link,$this->conf['list_topics.']['listunread_pagenav_wrap']);
+			}
 
-            // Include hooks
+			// Include hooks
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnread_listitem'])) {
 					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnread_listitem'] as $_classRef) {
 						$_procObj = & t3lib_div::getUserObj($_classRef);
@@ -695,15 +695,15 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					}
 				}
 
-            $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
-        }
+			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
+		}
 
-        $template = $this->cObj->fileResource($conf['template.']['list_topic']);
-        $template = $this->cObj->getSubpart($template, "###TOPICEND###");
+		$template = $this->cObj->fileResource($conf['template.']['list_topic']);
+		$template = $this->cObj->getSubpart($template, "###TOPICEND###");
 
-        $marker['###PAGES###'] = $this->pagecount2 ($lastlogin, $conf['topic_count']); // Anzeigen der Seiten durch die man Blättern kann
+		$marker['###PAGES###'] = $this->pagecount2 ($lastlogin, $conf['topic_count']); // Anzeigen der Seiten durch die man Blättern kann
 
-        // Include hooks
+		// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnread_footer'])) {
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnread_footer'] as $_classRef) {
 					$_procObj = & t3lib_div::getUserObj($_classRef);
@@ -711,10 +711,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 			}
 
-        $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
+		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 
-        return $content;
-    }
+		return $content;
+	}
 
 
 	/**
@@ -1012,47 +1012,45 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'uid, forum_name',
 			'tx_mmforum_forums f',
 			'deleted = 0 AND hidden = 0 AND parentID = 0 ' .
-				 $this->getStoragePIDQuery().
-				 $this->getMayRead_forum_query('f').
-				 $this->getCategoryLimit_query(),
+			$this->getStoragePIDQuery().
+			$this->getMayRead_forum_query('f').
+			$this->getCategoryLimit_query(),
 			'',
 			'sorting ASC'
 		);
 
-        //Remember the read forum data na dextract only the needed subforums
-        $parents = array();
-        $parentIds = array();
-        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($catlist)) {
-        	$parents[] = $row;
-        	$parentIds[] = $row['uid'];
-        }
-        $catIdWhere = count($parentIds) ? '(parentID='. implode(' OR parentID=', $parentIds).')' : '0=1';
-        $where ='deleted = 0 AND
-                 hidden = 0 AND
-                 '.$catIdWhere.
-                 $this->getStoragePIDQuery().
-                 $this->getMayRead_forum_query();
-        $forumlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                '*',
-                'tx_mmforum_forums',
-        		$where,
-                '',
-                'sorting ASC'
-            );
-        $parentForums = array();
-        $visibleForumKeys = array();
-        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forumlist)) {
-        	$parentForums[$row['parentID']][] = $row;
-        	$visibleForumKeys[] = $row['uid'];
-        }
+		//Remember the read forum data na dextract only the needed subforums
+		$parents = array();
+		$parentIds = array();
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($catlist)) {
+			$parents[] = $row;
+			$parentIds[] = $row['uid'];
+		}
+		$catIdWhere = count($parentIds) ? '(parentID='. implode(' OR parentID=', $parentIds).')' : '0=1';
+		$where ='deleted = 0 AND hidden = 0 AND ' . $catIdWhere.
+					$this->getStoragePIDQuery().
+					$this->getMayRead_forum_query();
+		$forumlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'*',
+				'tx_mmforum_forums',
+				$where,
+				'',
+				'sorting ASC'
+			);
+		$parentForums = array();
+		$visibleForumKeys = array();
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forumlist)) {
+			$parentForums[$row['parentID']][] = $row;
+			$visibleForumKeys[] = $row['uid'];
+		}
 
-        $filter = array(
-        	'forum_id' => $visibleForumKeys,
+		$filter = array(
+			'forum_id' => $visibleForumKeys,
 			'onlyCategories' => 1
-        );
+		);
 
 		//get ids of unread posts in these forums
-        $unreadarray  = $this->getunreadposts($content, $conf, $lastlogin, $filter);
+		$unreadarray  = $this->getunreadposts($content, $conf, $lastlogin, $filter);
 
 		$x = 0;
 		$i = 1;
@@ -1276,8 +1274,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			't.*',
 			'tx_mmforum_topics t, tx_mmforum_posts p',
 			'p.uid = t.topic_last_post_id AND ' .
-      't.deleted = 0 AND t.hidden = 0 AND t.forum_id = ' . $forumId .
-				$solvedCon . $shadowCon . $this->getStoragePIDQuery('t'),
+			't.deleted = 0 AND t.hidden = 0 AND t.forum_id = ' . $forumId .
+			$solvedCon . $shadowCon . $this->getStoragePIDQuery('t'),
 			'',
 			't.at_top_flag DESC, p.post_time DESC',
 			$limit
@@ -1378,8 +1376,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						'page'      => $i
 					);
 					if ($linkParams[$this->prefixId]['page'] < 1) {
-            $linkParams[$this->prefixId]['page'] = '';
-          }
+						$linkParams[$this->prefixId]['page'] = '';
+					}
 					$page_link .= ' ' . $this->pi_linkToPage($i+1, $GLOBALS['TSFE']->id, '', $linkParams);
 
 					if ($interval > 1) {
@@ -1732,7 +1730,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$prefixLink     = $this->pi_linkTP($prefixRootline, $prefixParams);
 
 		$marker = array(
-			'###FORUMICON###'          => $this->getForumIcon(), 
+			'###FORUMICON###'          => $this->getForumIcon(),
 			'###FORUMPATH###'          => $forumLink . ' &raquo; ' . $prefixLink,
 			'###NEWTOPICLINK###'       => '',
 			'###FORUMNAME###'          => $this->cObj->substituteMarker($this->pi_getLL('prefix.title'), '###PREFIX###', $realPrefix),
@@ -1826,8 +1824,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$i++;
 					$linkParams[$this->prefixId]['page'] = $i;
 					if ($linkParams[$this->prefixId]['page'] < 1) {
-            $linkParams[$this->prefixId]['page'] = '';
-          }
+						$linkParams[$this->prefixId]['page'] = '';
+					}
 					$page_link .= ' '.$this->pi_linkToPage($i, $GLOBALS['TSFE']->id, '', $linkParams) . ' ';
 					$topicPostsLeft -= $postLimit;
 				}
@@ -1885,19 +1883,19 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			't.topic_last_post_id as post_id, t.uid as topic_id, t.*,
-				f.uid as forum_id, f.forum_name as forum_name,
-				c.forum_name as category_name,
-				p.poster_id as author, p.post_time',
+			f.uid as forum_id, f.forum_name as forum_name,
+			c.forum_name as category_name,
+			p.poster_id as author, p.post_time',
 			'tx_mmforum_posts p, tx_mmforum_forums f, tx_mmforum_forums c, tx_mmforum_topics t',
 			't.uid = p.topic_id AND
-			  p.uid = t.topic_last_post_id AND
-				f.uid = p.forum_id AND
-				c.uid = f.parentID AND
-				p.deleted = 0 AND t.deleted = 0 AND f.deleted = 0 AND c.deleted = 0 AND
-				p.hidden  = 0 AND t.hidden  = 0 AND f.hidden  = 0 AND c.hidden  = 0 '.
-				$this->getMayRead_forum_query('f').
-				$this->getMayRead_forum_query('c').
-				$this->getCategoryLimit_query('c'),
+			p.uid = t.topic_last_post_id AND
+			f.uid = p.forum_id AND
+			c.uid = f.parentID AND
+			p.deleted = 0 AND t.deleted = 0 AND f.deleted = 0 AND c.deleted = 0 AND
+			p.hidden  = 0 AND t.hidden  = 0 AND f.hidden  = 0 AND c.hidden  = 0 '.
+			$this->getMayRead_forum_query('f').
+			$this->getMayRead_forum_query('c').
+			$this->getCategoryLimit_query('c'),
 			'p.topic_id',
 			'p.post_time DESC',
 			$limit
@@ -1964,42 +1962,42 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		return $this->cObj->substituteMarkerArray($template, $marker);
 	}
 
-    /**
-     * Displays a list of all users registered in the forum.
-     *
-     * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2007-09-29
-     * @return  string The user list
-     */
-    function list_users() {
-        $list_fields    = $this->userlist_fields;
-        $list_count     = $this->userlist_limit;
+	/**
+	 * Displays a list of all users registered in the forum.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2007-09-29
+	 * @return  string The user list
+	 */
+	function list_users() {
+		$list_fields    = $this->userlist_fields;
+		$list_count     = $this->userlist_limit;
 
-        $list_fields    = t3lib_div::trimExplode(',',$list_fields);
+		$list_fields    = t3lib_div::trimExplode(',',$list_fields);
 
-        $template       = $this->cObj->fileResource($this->conf['template.']['userlist']);
-        $template       = $this->cObj->getSubpart($template, '###USERLIST###');
+		$template       = $this->cObj->fileResource($this->conf['template.']['userlist']);
+		$template       = $this->cObj->getSubpart($template, '###USERLIST###');
 
-        $template_th    = $this->cObj->getSubpart($template, '###USERLIST_TH###');
-        $template_row   = $this->cObj->getSubpart($template, '###USERLIST_ROW###');
-        $template_cell  = $this->cObj->getSubpart($template, '###USERLIST_CELL###');
+		$template_th    = $this->cObj->getSubpart($template, '###USERLIST_TH###');
+		$template_row   = $this->cObj->getSubpart($template, '###USERLIST_ROW###');
+		$template_cell  = $this->cObj->getSubpart($template, '###USERLIST_CELL###');
 
-        $userfields     = array();
+		$userfields     = array();
 
-        $sorting        = $this->piVars['sorting'];
-        if(!$sorting)
-            $sorting    = $sorting = $this->getUserNameField();
+		$sorting        = $this->piVars['sorting'];
+		if(!$sorting)
+			$sorting    = $sorting = $this->getUserNameField();
 
-        if(!in_array($sorting,$list_fields)) $sorting = $this->getUserNameField();
-        if(!in_array($sorting,$list_fields)) $sorting = $list_fields[0];
+		if(!in_array($sorting,$list_fields)) $sorting = $this->getUserNameField();
+		if(!in_array($sorting,$list_fields)) $sorting = $list_fields[0];
 
-        $sorting_mode   = $this->piVars['sorting_mode'];
-        if(!$sorting_mode)
-            $sorting_mode = $sorting_mode = 'ASC';
+		$sorting_mode   = $this->piVars['sorting_mode'];
+		if(!$sorting_mode)
+			$sorting_mode = $sorting_mode = 'ASC';
 
-        $sorting_mode   = strtoupper($sorting_mode);
+		$sorting_mode   = strtoupper($sorting_mode);
 
-        if(!in_array($sorting_mode,array('ASC','DESC'))) $sorting_mode = 'ASC';
+		if(!in_array($sorting_mode,array('ASC','DESC'))) $sorting_mode = 'ASC';
 
 			/* Instantiate user management library */
 		$this->userLib = t3lib_div::makeInstance('tx_mmforum_usermanagement');
@@ -2007,80 +2005,80 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
 		$userField->init($this->userLib, $this->cObj);
 
-        foreach($list_fields as $field) {
+		foreach($list_fields as $field) {
 
-            if(intval($field)>0) {
-                $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                    '*',
-                    'tx_mmforum_userfields',
-                    'uid='.$field.' AND deleted=0'
-                );
+			if(intval($field)>0) {
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					'*',
+					'tx_mmforum_userfields',
+					'uid='.$field.' AND deleted=0'
+				);
 				if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) continue;
 
-                $arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+				$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 				$userField->get($arr);
 
-                /*if(strlen($arr['config'])>0) {
-                    $parser->parse($arr['config']);
-                    $config = $parser->setup;
-                } else $config = array();
+				/*if(strlen($arr['config'])>0) {
+					$parser->parse($arr['config']);
+					$config = $parser->setup;
+				} else $config = array();
 
-                if($config['label']) $label = $this->cObj->cObjGetSingle($config['label'],$config['label.']);
-                else $label = $arr['label'];
+				if($config['label']) $label = $this->cObj->cObjGetSingle($config['label'],$config['label.']);
+				else $label = $arr['label'];
 
-                if($config['output']) {
-                    $userfields[$arr['uid']]    = $arr;
-                }*/
+				if($config['output']) {
+					$userfields[$arr['uid']]    = $arr;
+				}*/
 
 				$label = $userField->getRenderedLabel();
 
 				$userfields_config[$arr['uid']] = $userField->conf;
-            }
-            else {
-                $label = $this->pi_getLL('userlist.fields.'.$field);
-                if(!$label) $label = $field;
-            }
+			}
+			else {
+				$label = $this->pi_getLL('userlist.fields.'.$field);
+				if(!$label) $label = $field;
+			}
 
-            if($sorting == $field) {
-                if($sorting_mode == 'DESC') {
-                    $label = '&#x25BC;&nbsp;'.$label;
-                    $linkParams[$this->prefixId] = array(
-                        'sorting'       => $field,
-                        'sorting_mode'  => 'ASC'
-                    );
-                }
-                if($sorting_mode == 'ASC') {
-                    $label = '&#x25B2;&nbsp;'.$label;
-                    $linkParams[$this->prefixId] = array(
-                        'sorting'       => $field,
-                        'sorting_mode'  => 'DESC'
-                    );
-                }
-            } else {
-                $linkParams[$this->prefixId] = array(
-                    'sorting'       => $field,
-                    'sorting_mode'  => 'ASC'
-                );
-            }
-            if(substr($field,0,2)!='__')
-                $label = $this->pi_linkTP($label,$linkParams);
+			if($sorting == $field) {
+				if($sorting_mode == 'DESC') {
+					$label = '&#x25BC;&nbsp;'.$label;
+					$linkParams[$this->prefixId] = array(
+						'sorting'       => $field,
+						'sorting_mode'  => 'ASC'
+					);
+				}
+				if($sorting_mode == 'ASC') {
+					$label = '&#x25B2;&nbsp;'.$label;
+					$linkParams[$this->prefixId] = array(
+						'sorting'       => $field,
+						'sorting_mode'  => 'DESC'
+					);
+				}
+			} else {
+				$linkParams[$this->prefixId] = array(
+					'sorting'       => $field,
+					'sorting_mode'  => 'ASC'
+				);
+			}
+			if(substr($field,0,2)!='__')
+				$label = $this->pi_linkTP($label,$linkParams);
 
-            $thMarker = array(
-                '###COLUMN_TITLE###'        => $label
-            );
-            $content_th     .= $this->cObj->substituteMarkerArray($template_th,$thMarker);
-        }
-        $template       = $this->cObj->substituteSubpart($template, '###USERLIST_TH###', $content_th);
+			$thMarker = array(
+				'###COLUMN_TITLE###'        => $label
+			);
+			$content_th     .= $this->cObj->substituteMarkerArray($template_th,$thMarker);
+		}
+		$template       = $this->cObj->substituteSubpart($template, '###USERLIST_TH###', $content_th);
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            'COUNT(*)',
-            'fe_users',
-            '1=1'.$this->cObj->enableFields('fe_users').$this->getUserPidQuery()
-        );
-        list($user_num) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'COUNT(*)',
+			'fe_users',
+			'1=1'.$this->cObj->enableFields('fe_users').$this->getUserPidQuery()
+		);
+		list($user_num) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-        $page_max   = ceil($user_num / $list_count);
-        $page_cur   = intval($this->piVars['page'])>0?$this->piVars['page']:0;
+		$page_max   = ceil($user_num / $list_count);
+		$page_cur   = intval($this->piVars['page'])>0?$this->piVars['page']:0;
 
 		if (intval($this->conf['doNotUsePageBrowseExtension'])===0) {
 			$page_menu = $this->getListGetPageBrowser($page_max);
@@ -2088,154 +2086,154 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$page_menu = $this->dynamicPageNav($page_max,'page',array('sorting'=>$sorting,'sorting_mode'=>$sorting_mode));
 		}
 
-        $marker		= array(
+		$marker		= array(
 			'###PAGES###'	=> $page_menu,
 			'###LLL_USERLIST_TITLE###'		=> $this->pi_getLL('userlist-title'),
 			'###USERLIST_COLUMNCOUNT###'	=> count($list_fields)
 		);
 
-        $offset     = (($page_cur)*$list_count);
-        $limit      = $offset.','.$list_count;
+		$offset     = (($page_cur)*$list_count);
+		$limit      = $offset.','.$list_count;
 
 		if(is_numeric($sorting)) {
 			if($userfields_config[$sorting]['datasource'])
 				$sorting = $userfields_config[$sorting]['datasource'];
 		}
 
-        if(!is_numeric($sorting)) {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                '*',
-                'fe_users',
-                '1=1'.$this->cObj->enableFields('fe_users').$this->getUserPidQuery(),
-                '',
-                $sorting.' '.$sorting_mode,
-                $limit
-            );
-            while($user = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
-                $userResult[] = $user;
-        } else {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                '*',
-                'fe_users',
-                '1=1'.$this->cObj->enableFields('fe_users').$this->getUserPidQuery()
-            );
-            while($user = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		if(!is_numeric($sorting)) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'*',
+				'fe_users',
+				'1=1'.$this->cObj->enableFields('fe_users').$this->getUserPidQuery(),
+				'',
+				$sorting.' '.$sorting_mode,
+				$limit
+			);
+			while($user = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
+				$userResult[] = $user;
+		} else {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'*',
+				'fe_users',
+				'1=1'.$this->cObj->enableFields('fe_users').$this->getUserPidQuery()
+			);
+			while($user = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                    'field_value',
-                    'tx_mmforum_userfields_contents',
-                    'field_id='.$sorting.' AND deleted=0 AND user_id='.$user['uid']
-                );
-                if($GLOBALS['TYPO3_DB']->sql_num_rows($res2)==0) $user['__userdef'] = '';
-                else {
-                    list($userdef) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res2);
-                    $user['__userdef'] = $userdef;
-                }
+					'field_value',
+					'tx_mmforum_userfields_contents',
+					'field_id='.$sorting.' AND deleted=0 AND user_id='.$user['uid']
+				);
+				if($GLOBALS['TYPO3_DB']->sql_num_rows($res2)==0) $user['__userdef'] = '';
+				else {
+					list($userdef) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res2);
+					$user['__userdef'] = $userdef;
+				}
 
-                $users[] = $user;
-            }
+				$users[] = $user;
+			}
 
-            function userdef_cmp($a,$b) {
-                return strcmp($a['__userdef'],$b['__userdef']);
-            }
+			function userdef_cmp($a,$b) {
+				return strcmp($a['__userdef'],$b['__userdef']);
+			}
 
-            usort($users,'userdef_cmp');
-            if($sorting_mode == 'DESC') $users = array_reverse($users);
+			usort($users,'userdef_cmp');
+			if($sorting_mode == 'DESC') $users = array_reverse($users);
 
-            $userResult = array_slice($users,$offset,$list_count);
-        }
+			$userResult = array_slice($users,$offset,$list_count);
+		}
 
-        $parser  = t3lib_div::makeInstance('t3lib_TSparser');
+		$parser  = t3lib_div::makeInstance('t3lib_TSparser');
 
-        $i = 0;
+		$i = 0;
 
-        foreach($userResult as $user) {
-            $user_row = $template_row;
-            $user_fields = '';
+		foreach($userResult as $user) {
+			$user_row = $template_row;
+			$user_fields = '';
 
-            $user_row_class = ($i%2)?$this->conf['display.']['listItem.']['oddClass']:$this->conf['display.']['listItem.']['evenClass'];
-            $user_row = $this->cObj->substituteMarker($user_row, '###USERLIST_ROW_EVENODD###', $user_row_class);
+			$user_row_class = ($i%2)?$this->conf['display.']['listItem.']['oddClass']:$this->conf['display.']['listItem.']['evenClass'];
+			$user_row = $this->cObj->substituteMarker($user_row, '###USERLIST_ROW_EVENODD###', $user_row_class);
 
 			$i ++;
 
-            foreach($list_fields as $field) {
-                if(intval($field)>0) {
-                    $res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                        'f.config,c.field_value',
-                        'tx_mmforum_userfields f LEFT JOIN tx_mmforum_userfields_contents c ON c.field_id = f.uid',
-                        'f.hidden=0 AND f.deleted=0 AND (c.deleted=0 OR c.deleted IS NULL) AND f.uid='.$field.' AND (c.user_id IS NULL OR c.user_id='.$user['uid'].')',
-                        '',
-                        'f.sorting DESC'
-                    );
-                    $arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2);
+			foreach($list_fields as $field) {
+				if(intval($field)>0) {
+					$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+						'f.config,c.field_value',
+						'tx_mmforum_userfields f LEFT JOIN tx_mmforum_userfields_contents c ON c.field_id = f.uid',
+						'f.hidden=0 AND f.deleted=0 AND (c.deleted=0 OR c.deleted IS NULL) AND f.uid='.$field.' AND (c.user_id IS NULL OR c.user_id='.$user['uid'].')',
+						'',
+						'f.sorting DESC'
+					);
+					$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2);
 
 					unset($parser->setup);
 
-                    if(strlen($arr['config'])>0) {
-                        $parser->parse($arr['config']);
-                        $config = $parser->setup;
-                    } else $config = array();
+					if(strlen($arr['config'])>0) {
+						$parser->parse($arr['config']);
+						$config = $parser->setup;
+					} else $config = array();
 
-                    if($config['datasource']) {
+					if($config['datasource']) {
 						$arr['field_value'] = $user[$config['datasource']];
-                    }
+					}
 
-                    if($config['output']) {
-                        $tmpArr = $this->cObj->data;
-                        $this->cObj->data = array(
-                            'fieldvalue'    => $arr['field_value']
-                        );
-                        $fieldcontent = $this->cObj->cObjGetSingle($config['output'],$config['output.']);
-                        $this->cObj->data = $tmpArr;
-                    }
-                    else $fieldcontent = $arr['field_value'];
-                }
-                else {
-                    $user['fieldname']  = $field;
-                    $user['fieldvalue'] = $user[$field];
-                    $tmpData = $this->cObj->data;
-                    $this->cObj->data = $user;
-                    $fieldcontent = $this->cObj->cObjGetSingle($this->conf['userlist_item'],$this->conf['userlist_item.']);
-                    $this->cObj->data = $tmpData;
-                }
+					if($config['output']) {
+						$tmpArr = $this->cObj->data;
+						$this->cObj->data = array(
+							'fieldvalue'    => $arr['field_value']
+						);
+						$fieldcontent = $this->cObj->cObjGetSingle($config['output'],$config['output.']);
+						$this->cObj->data = $tmpArr;
+					}
+					else $fieldcontent = $arr['field_value'];
+				}
+				else {
+					$user['fieldname']  = $field;
+					$user['fieldvalue'] = $user[$field];
+					$tmpData = $this->cObj->data;
+					$this->cObj->data = $user;
+					$fieldcontent = $this->cObj->cObjGetSingle($this->conf['userlist_item'],$this->conf['userlist_item.']);
+					$this->cObj->data = $tmpData;
+				}
 
-                $cellMarker = array(
-                    '###CONTENT###'     => $fieldcontent
-                );
-                // Include hooks
-                    if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_userCell'])) {
-                        foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_userCell'] as $_classRef) {
-                            $_procObj = & t3lib_div::getUserObj($_classRef);
-                            $cellMarker = $_procObj->listLatest_userCell($cellMarker, $user, $field, $this);
-                        }
-                    }
-                $user_fields .= $this->cObj->substituteMarkerArray($template_cell,$cellMarker);
-            }
+				$cellMarker = array(
+					'###CONTENT###'     => $fieldcontent
+				);
+				// Include hooks
+					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_userCell'])) {
+						foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_userCell'] as $_classRef) {
+							$_procObj = & t3lib_div::getUserObj($_classRef);
+							$cellMarker = $_procObj->listLatest_userCell($cellMarker, $user, $field, $this);
+						}
+					}
+				$user_fields .= $this->cObj->substituteMarkerArray($template_cell,$cellMarker);
+			}
 
-            // Include hooks
-                if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_preUserRow'])) {
-                    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_preUserRow'] as $_classRef) {
-                        $_procObj = & t3lib_div::getUserObj($_classRef);
-                        $user_row = $_procObj->listLatest_preUserRow($user_row, $user, $this);
-                    }
-                }
+			// Include hooks
+				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_preUserRow'])) {
+					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_preUserRow'] as $_classRef) {
+						$_procObj = & t3lib_div::getUserObj($_classRef);
+						$user_row = $_procObj->listLatest_preUserRow($user_row, $user, $this);
+					}
+				}
 
-            $user_row = $this->cObj->substituteSubpart($user_row, '###USERLIST_CELL###', $user_fields);
+			$user_row = $this->cObj->substituteSubpart($user_row, '###USERLIST_CELL###', $user_fields);
 
-            // Include hooks
-                if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_postUserRow'])) {
-                    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_postUserRow'] as $_classRef) {
-                        $_procObj = & t3lib_div::getUserObj($_classRef);
-                        $user_row .= $_procObj->listLatest_postUserRow($user_row, $user, $this);
-                    }
-                }
+			// Include hooks
+				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_postUserRow'])) {
+					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_postUserRow'] as $_classRef) {
+						$_procObj = & t3lib_div::getUserObj($_classRef);
+						$user_row .= $_procObj->listLatest_postUserRow($user_row, $user, $this);
+					}
+				}
 
-            $user_rows .= $user_row;
-        }
-        $template = $this->cObj->substituteSubpart($template, '###USERLIST_ROW###', $user_rows);
-        $template = $this->cObj->substituteMarkerArray($template, $marker);
+			$user_rows .= $user_row;
+		}
+		$template = $this->cObj->substituteSubpart($template, '###USERLIST_ROW###', $user_rows);
+		$template = $this->cObj->substituteMarkerArray($template, $marker);
 
-        return $template;
-    }
+		return $template;
+	}
 
 	/**
 	 * [Describe function...]
@@ -2406,7 +2404,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$template = $this->cObj->getSubpart($template, '###LIST_POSTS###');
 					$template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_SECTION###', '');
 
-                    $userSignature = tx_mmforum_postfunctions::marker_getUserSignature($GLOBALS['TSFE']->fe_user->user);
+					$userSignature = tx_mmforum_postfunctions::marker_getUserSignature($GLOBALS['TSFE']->fe_user->user);
 
 					$posttext = $this->piVars['message'];
 					$postold  = $posttext;
@@ -2463,7 +2461,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$bbCodeButtons_template = $this->cObj->getSubpart($template, '###BBCODEBUTTONS###');
 
 				if (empty($conf['jQueryEditorJavaScript'])) {
-				  $bbCodeButtons = $this->generateBBCodeButtons($bbCodeButtons_template);
+					$bbCodeButtons = $this->generateBBCodeButtons($bbCodeButtons_template);
 				} else {
 					$bbCodeButtons = stristr($bbCodeButtons_template, '<td>') ? '<td></td>' : '';
 				}
@@ -2557,11 +2555,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	}
 
 	/**
-     * Displays the form for creating a new post an answer to an existing topic.
-     * @param  string $content The plugin content
-     * @param  array  $conf    The plugin's configuration vars
-     * @return string          The content
-     */
+	 * Displays the form for creating a new post an answer to an existing topic.
+	 * @param  string $content The plugin content
+	 * @param  array  $conf    The plugin's configuration vars
+	 * @return string          The content
+	 */
 	function new_post($content, $conf) {
 		$loginUser = $GLOBALS['TSFE']->loginUser;
 
@@ -2572,7 +2570,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		if (($loginUser && ($this->get_topic_is($topicId) == 0))
 			|| ($loginUser && $this->getIsModOrAdmin($forumId))) {
-			
+
 			if (!$this->getMayWrite_topic($topicId)) {
 				return $content.$this->errorMessage($conf, $this->pi_getLL('newTopic.noAccess'));
 			}
@@ -2741,7 +2739,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					'###LABEL_ATTACHMENT###'        => $this->pi_getLL('newPost.attachment'),
 					'###LABEL_SETHAVEALOOK###'		=> $this->pi_getLL('newTopic.setHaveALook')
 				);
-				
+
 				$marker['###POSTTITLE###'] = $this->escape($topicData['topic_title']);
 
 				$marker['###POST_PREVIEW###'] = (string)$previewContent;
@@ -2823,7 +2821,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					'action' => 'new_post',
 					'tid' => $this->piVars['tid']
 				);
-				
+
 				if($this->useRealUrl()) {
 					$actionParams[$this->prefixId]['fid'] = $forumId;
 				}
@@ -2875,7 +2873,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$content .= $this->cObj->substituteMarkerArray($template, $marker);
 		return $content;
 	}
-	
+
 	function includeEditorJavaScript() {
 		$js = '';
 		if (!empty($this->conf['jQueryEditorJavaScript'])) {
@@ -3022,14 +3020,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	}
 
 
-    /**
-     * Displays the form for editing an existing post. Regular users can only edit their own
-     * posts if they have not been answered yet. Moderators and administrators can edit all
-     * posts, regardless if they have been answered or not.
-     * @param  string $content The plugin content
-     * @param  array  $conf    The plugin's configuration vars
-     * @return string          The content
-     */
+	/**
+	 * Displays the form for editing an existing post. Regular users can only edit their own
+	 * posts if they have not been answered yet. Moderators and administrators can edit all
+	 * posts, regardless if they have been answered or not.
+	 * @param  string $content The plugin content
+	 * @param  array  $conf    The plugin's configuration vars
+	 * @return string          The content
+	 */
 	function post_edit($content, $conf) {
 		$postId = intval($this->piVars['pid']);
 
@@ -3039,7 +3037,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'tx_mmforum_posts',
 			'deleted=0 AND hidden=0 AND uid=' . $postId . $this->getStoragePIDQuery()
 		);
-		
+
 		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
 		$topicId = $row['topic_id'];
@@ -3159,7 +3157,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 								return $this->post_edit($content,$conf);
 							}
 						} else {
-							
+
 							$pollId = $pollObj->createPoll($this->piVars['poll'],$this);
 
 							if(!is_numeric($pollId)) {
@@ -3229,14 +3227,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 				header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $postId));
 				exit();
-			
+
 			} else {
 				// Display post preview
 				if ($this->piVars['button'] == $this->pi_getLL('newPost.preview')) {
 					if ($this->piVars['enable_poll'] == '1' && $this->conf['polls.']['enable']) {
 						$content .= tx_mmforum_polls::displayPreview($this->piVars['poll'], $this);
 					}
-					
+
 					$template = $this->cObj->fileResource($conf['template.']['list_post']);
 					$template = $this->cObj->getSubpart($template, "###LIST_POSTS###");
 
@@ -3722,134 +3720,134 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	}
 
 
-    /**
-     * Forum content management helper functions
-     */
+	/**
+	 * Forum content management helper functions
+	 */
 
-    /**
-     * Generates BBCode buttons.
-     * This function generates a set of BBCode buttons that insert new BBcodes
-     * into a post text input field using javascript. The BBCodes are loaded
-     * dynamically from database.
-     *
-     * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2009-04-09
-     * @param   string $template The template that is to be used for the set of
-     *                           BBCode buttons
-     * @return  string           The BBCode buttons
-     */
-    function generateBBCodeButtons($template) {
+	/**
+	 * Generates BBCode buttons.
+	 * This function generates a set of BBCode buttons that insert new BBcodes
+	 * into a post text input field using javascript. The BBCodes are loaded
+	 * dynamically from database.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2009-04-09
+	 * @param   string $template The template that is to be used for the set of
+	 *                           BBCode buttons
+	 * @return  string           The BBCode buttons
+	 */
+	function generateBBCodeButtons($template) {
 
-        // Load regular BBCodes
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            '*',
-            'tx_mmforum_postparser',
-            'deleted=0 AND hidden=0'
-        );
-        $i = 0;
-        while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            if(substr($arr['title'],0,4)=='LLL:') $title = $this->pi_getLL(substr($arr['title'],4));
-            else $title = $arr['title'];
+		// Load regular BBCodes
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'*',
+			'tx_mmforum_postparser',
+			'deleted=0 AND hidden=0'
+		);
+		$i = 0;
+		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			if(substr($arr['title'],0,4)=='LLL:') $title = $this->pi_getLL(substr($arr['title'],4));
+			else $title = $arr['title'];
 
-            $imgpath = $this->conf['postparser.']['buttonPath'].$arr['fe_inserticon'];
-            $imgpath = str_replace('EXT:mm_forum/',t3lib_extMgm::siteRelPath('mm_forum'),$imgpath);
+			$imgpath = $this->conf['postparser.']['buttonPath'].$arr['fe_inserticon'];
+			$imgpath = str_replace('EXT:mm_forum/',t3lib_extMgm::siteRelPath('mm_forum'),$imgpath);
 
-            preg_match('/\[(.*?)\]\|\[\/(.*?)\]/',$arr['bbcode'],$items);
+			preg_match('/\[(.*?)\]\|\[\/(.*?)\]/',$arr['bbcode'],$items);
 
-            $items[1] = str_replace('|','',$items[1]);
-            $items[2] = str_replace('|','',$items[2]);
+			$items[1] = str_replace('|','',$items[1]);
+			$items[2] = str_replace('|','',$items[2]);
 
-            $marker = array(
-                '###CODE_IMAGE###'          => $imgpath,
-                '###CODE_LABEL###'          => $this->escape($title),
-                '###CODE_NUMBER###'         => $i,
+			$marker = array(
+				'###CODE_IMAGE###'          => $imgpath,
+				'###CODE_LABEL###'          => $this->escape($title),
+				'###CODE_NUMBER###'         => $i,
 				'###CODE_OPEN###'			=> '['.strtolower($items[1]).']',
 				'###CODE_CLOSE###'			=> '[/'.strtolower($items[2]).']',
-            );
+			);
 
-            $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
-        }
-        // Load syntax highlighting data
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            '*',
-            'tx_mmforum_syntaxhl',
-            'deleted=0 AND hidden=0'
-        );
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
-            while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-                if(substr($arr['lang_title'],0,4)=='LLL:') $title = $this->pi_getLL(substr($arr['lang_title'],4));
-                else $title = $arr['lang_title'];
+			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
+		}
+		// Load syntax highlighting data
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'*',
+			'tx_mmforum_syntaxhl',
+			'deleted=0 AND hidden=0'
+		);
+		if($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				if(substr($arr['lang_title'],0,4)=='LLL:') $title = $this->pi_getLL(substr($arr['lang_title'],4));
+				else $title = $arr['lang_title'];
 
-                $imgpath = $this->conf['postparser.']['buttonPath'].$arr['fe_inserticon'];
-                $imgpath = str_replace('EXT:mm_forum/',t3lib_extMgm::siteRelPath('mm_forum'),$imgpath);
+				$imgpath = $this->conf['postparser.']['buttonPath'].$arr['fe_inserticon'];
+				$imgpath = str_replace('EXT:mm_forum/',t3lib_extMgm::siteRelPath('mm_forum'),$imgpath);
 
-                $marker = array(
-                    '###CODE_IMAGE###'          => $imgpath,
-                    '###CODE_LABEL###'          => $this->escape($title),
-                    '###CODE_NUMBER###'         => $i,
+				$marker = array(
+					'###CODE_IMAGE###'          => $imgpath,
+					'###CODE_LABEL###'          => $this->escape($title),
+					'###CODE_NUMBER###'         => $i,
 					'###CODE_OPEN###'			=> '['.strtolower($arr['lang_code']).']',
 					'###CODE_CLOSE###'			=> '[/'.strtolower($arr['lang_code']).']',
-                );
+				);
 
-                $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
-            }
-        }
+				$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
+			}
+		}
 
-        return $content;
-    }
+		return $content;
+	}
 
-    /**
-     * Displays a table of all available smilies loaded from database.
-     * @param  array  $conf The plugin's configuration vars
-     * @return string       The HTML smily table.
-     */
-    function show_smilie_db($conf) {
-        $imgInfo = array('border' => $conf['img_border'], 'alt' => '', 'src' => '', 'style' => '');
-        // Load smilies from database
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            'smile_url,uid,code',
-            'tx_mmforum_smilies',
-            'deleted=0 AND hidden=0',
-            'smile_url',
-            'uid ASC'
-        );
+	/**
+	 * Displays a table of all available smilies loaded from database.
+	 * @param  array  $conf The plugin's configuration vars
+	 * @return string       The HTML smily table.
+	 */
+	function show_smilie_db($conf) {
+		$imgInfo = array('border' => $conf['img_border'], 'alt' => '', 'src' => '', 'style' => '');
+		// Load smilies from database
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'smile_url,uid,code',
+			'tx_mmforum_smilies',
+			'deleted=0 AND hidden=0',
+			'smile_url',
+			'uid ASC'
+		);
 
-        $i = 0;
+		$i = 0;
 
-        // Display smilies in table, 4 smilies a row.
-        while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
+		// Display smilies in table, 4 smilies a row.
+		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 
 			$smiliePath = 'uploads/tx_mmforum/'.$row['smile_url'];
 			If(!file_exists($smiliePath)) $smiliePath = $conf['path_smilie'].$row['smile_url'];
 
-            $imgInfo['src'] = $smiliePath;
-            $imgInfo['alt'] = $row['code'];
-            $imgInfo['title'] = $row['code'];
-            if (empty($conf['jQueryEditorJavaScript'])) {
-              $href= 'javascript:editor.insertSmilie(\''.$row['code'].'\')';
-            } else {
-              $href= '#';
-            }
-            if($this->conf['postForm.']['smiliesAsDiv']) {
-            	$content .= $this->cObj->wrap('<a href="'.$href.'" title="'.$row['code'].'">'.$this->buildImageTag($imgInfo).'</a>',$this->conf['postForm.']['smiliesAsDiv.']['itemWrap']);
-            } else {
-	            if($i >= 4){
-	                $content .= "\r\n</tr><tr>\r\n";
-	                $i = 0;
-	            }
-	            $i++;
-	            $content .='<td><a href="'.$href.'" title="'.$row['code'].'">'.$this->buildImageTag($imgInfo)."</a></td>\n";
-            }
-        }
+			$imgInfo['src'] = $smiliePath;
+			$imgInfo['alt'] = $row['code'];
+			$imgInfo['title'] = $row['code'];
+			if (empty($conf['jQueryEditorJavaScript'])) {
+				$href= 'javascript:editor.insertSmilie(\''.$row['code'].'\')';
+			} else {
+				$href= '#';
+			}
+			if($this->conf['postForm.']['smiliesAsDiv']) {
+				$content .= $this->cObj->wrap('<a href="'.$href.'" title="'.$row['code'].'">'.$this->buildImageTag($imgInfo).'</a>',$this->conf['postForm.']['smiliesAsDiv.']['itemWrap']);
+			} else {
+				if($i >= 4){
+					$content .= "\r\n</tr><tr>\r\n";
+					$i = 0;
+				}
+				$i++;
+				$content .='<td><a href="'.$href.'" title="'.$row['code'].'">'.$this->buildImageTag($imgInfo)."</a></td>\n";
+			}
+		}
 
-        if($this->conf['postForm.']['smiliesAsDiv']) {
-        	$content = $this->cObj->wrap($content, $this->conf['postForm.']['smiliesAsDiv.']['allWrap']);
-        } else {
-        	$content = '<table style="width:100%; border:0px;"><tr>'.$content.'</tr></table>';
-        }
+		if($this->conf['postForm.']['smiliesAsDiv']) {
+			$content = $this->cObj->wrap($content, $this->conf['postForm.']['smiliesAsDiv.']['allWrap']);
+		} else {
+			$content = '<table style="width:100%; border:0px;"><tr>'.$content.'</tr></table>';
+		}
 
-        return $content;
-    }
+		return $content;
+	}
 
 	/**
 	 * Determines the last post in a topic and updates the topic record.
@@ -3950,63 +3948,63 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		return tx_mmforum_user::list_user_post($conf, $this->piVars['user_id'], $this->useRealUrl() ? $this->piVars['tid'] : $this->piVars['page']);
 	}
 
-    /**
-     * Displays information about a certain user, whose UID is submitted via GP-Vars.
-     * @param  string $content The content of the plugin
-     * @param  array  $conf    The configuration vars for the plugin
-     * @return string          The new content of the plugin
-     */
-    function view_profil ($content,$conf){
-        $imgInfo = array('border' => $conf['img_border'], 'alt' => '', 'src' => '', 'style' => '');
+	/**
+	 * Displays information about a certain user, whose UID is submitted via GP-Vars.
+	 * @param  string $content The content of the plugin
+	 * @param  array  $conf    The configuration vars for the plugin
+	 * @return string          The new content of the plugin
+	 */
+	function view_profil ($content,$conf){
+		$imgInfo = array('border' => $conf['img_border'], 'alt' => '', 'src' => '', 'style' => '');
 
 		#$user_id = intval($this->piVars['user_id']);
 
-        if($this->useRealUrl() && $this->piVars['fid'])
+		if($this->useRealUrl() && $this->piVars['fid'])
 			$user = tx_mmforum_FeUser::GetByUsername($this->piVars['fid']);
-        else $user = tx_mmforum_FeUser::GetByUID($this->piVars['user_id']);
+		else $user = tx_mmforum_FeUser::GetByUID($this->piVars['user_id']);
 
-        $template = $this->cObj->fileResource($conf['template.']['userdetail']);
-        $template = $this->cObj->getSubpart($template, "###USERDETAIL###");
+		$template = $this->cObj->fileResource($conf['template.']['userdetail']);
+		$template = $this->cObj->getSubpart($template, "###USERDETAIL###");
 
 		if($user === null)
-            return $this->errorMessage($conf, $this->pi_getLL('user.error_notExist'));
+			return $this->errorMessage($conf, $this->pi_getLL('user.error_notExist'));
 
-        $marker = array();
+		$marker = array();
 
-        // Language-dependent field labels
-            $marker = array(
-                '###LABEL_ABOUT###'         => $this->pi_getLL('user.allAbout'),
-                '###LABEL_REGDATE###'       => $this->pi_getLL('user.regDate'),
-                '###LABEL_TOTALPOSTS###'    => $this->pi_getLL('user.totalPosts'),
-                '###LABEL_LOCATION###'      => $this->pi_getLL('user.location'),
-                '###LABEL_WEBSITE###'       => $this->pi_getLL('user.website'),
-                '###LABEL_PROFESSION###'    => $this->pi_getLL('user.profession'),
-                '###LABEL_INTERESTS###'     => $this->pi_getLL('user.interests'),
-                '###LABEL_CONTACT###'       => $this->pi_getLL('user.contact'),
-                '###LABEL_POSTHISTORY###'   => $this->pi_getLL('user.posthistory'),
-                '###LABEL_10TOPICS###'      => $this->pi_getLL('user.10topics'),
-                '###LABEL_AVATAR###'        => $this->pi_getLL('user.avatar'),
+		// Language-dependent field labels
+			$marker = array(
+				'###LABEL_ABOUT###'         => $this->pi_getLL('user.allAbout'),
+				'###LABEL_REGDATE###'       => $this->pi_getLL('user.regDate'),
+				'###LABEL_TOTALPOSTS###'    => $this->pi_getLL('user.totalPosts'),
+				'###LABEL_LOCATION###'      => $this->pi_getLL('user.location'),
+				'###LABEL_WEBSITE###'       => $this->pi_getLL('user.website'),
+				'###LABEL_PROFESSION###'    => $this->pi_getLL('user.profession'),
+				'###LABEL_INTERESTS###'     => $this->pi_getLL('user.interests'),
+				'###LABEL_CONTACT###'       => $this->pi_getLL('user.contact'),
+				'###LABEL_POSTHISTORY###'   => $this->pi_getLL('user.posthistory'),
+				'###LABEL_10TOPICS###'      => $this->pi_getLL('user.10topics'),
+				'###LABEL_AVATAR###'        => $this->pi_getLL('user.avatar'),
 				'###LABEL_USERNAME###'		=> $this->pi_getLL('user.username'),
 				'###LABEL_FIELD###'			=> $this->pi_getLL('user.field'),
 				'###LABEL_VALUE###'			=> $this->pi_getLL('user.value'),
 				'###LABEL_USERPROFILE###'	=> $this->pi_getLL('user.profile'),
 				'###LABEL_RATING###'		=> $this->pi_getLL('user.rating')
-            );
+			);
 
-        // Username
-            $marker['###USER###']                	= $this->escape($user->gD($this->getUserNameField()));
-        // Date of registration
-            $marker['###REGDATE###']				= $this->cObj->stdWrap($user->getCrdate(),$this->conf['user_profile.']['crdate_stdWrap.']);
-        // Number of posts
-            $marker['###TOTALPOSTS###']             = $user->getPostCount();
-            if($user->getPostCount() >= $this->conf['user_hotposts']) {
-                // Special icon for users with more than a certain number posts defined in TypoScript
-                $str = $this->cObj->substituteMarker($this->pi_getLL('user.hot'), '###HOTPOSTS###', $this->conf['user_hotposts']);
-                $imgInfo['src']                     = $this->conf['path_img'].$this->conf['images.']['5kstar'];
-                $imgInfo['alt']                     = $str;
-                $imgInfo['title']                   = $str;
-                $marker['###TOTALPOSTS###']        .= $this->buildImageTag($imgInfo);
-            }
+		// Username
+			$marker['###USER###']                	= $this->escape($user->gD($this->getUserNameField()));
+		// Date of registration
+			$marker['###REGDATE###']				= $this->cObj->stdWrap($user->getCrdate(),$this->conf['user_profile.']['crdate_stdWrap.']);
+		// Number of posts
+			$marker['###TOTALPOSTS###']             = $user->getPostCount();
+			if($user->getPostCount() >= $this->conf['user_hotposts']) {
+				// Special icon for users with more than a certain number posts defined in TypoScript
+				$str = $this->cObj->substituteMarker($this->pi_getLL('user.hot'), '###HOTPOSTS###', $this->conf['user_hotposts']);
+				$imgInfo['src']                     = $this->conf['path_img'].$this->conf['images.']['5kstar'];
+				$imgInfo['alt']                     = $str;
+				$imgInfo['title']                   = $str;
+				$marker['###TOTALPOSTS###']        .= $this->buildImageTag($imgInfo);
+			}
 
 		// Rating
 			if($this->isUserRating()) {
@@ -4015,586 +4013,586 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$template = $this->cObj->substituteSubpart($template, '###SUBP_RATING###', '');
 			}
 
-        // Avatar
-            $marker['###AVATAR###'] = '';
+		// Avatar
+			$marker['###AVATAR###'] = '';
 			if ($user->hasAvatar())  {
-                $marker['###AVATAR###'] = tx_mmforum_tools::res_img(
+				$marker['###AVATAR###'] = tx_mmforum_tools::res_img(
 						$user->getAvatar($conf['path_avatar']),
 						$conf['avatar_width'], $conf['avatar_height']
 					);
-            }
+			}
 
-        // E-Mail (currently deactivated)
-            $marker['###MAIL###']                   = '';  #'<a href="index.php?id='.$GLOBALS["TSFE"]->id.'&tx_mmforum_pi1[action]=send_mail&tx_mmforum_pi1[uid]='.$row['uid'].'"><img src="'.$conf['path_img'].'mail.gif" border="0"></a>';
+		// E-Mail (currently deactivated)
+			$marker['###MAIL###']                   = '';  #'<a href="index.php?id='.$GLOBALS["TSFE"]->id.'&tx_mmforum_pi1[action]=send_mail&tx_mmforum_pi1[uid]='.$row['uid'].'"><img src="'.$conf['path_img'].'mail.gif" border="0"></a>';
 
-        // Private Messaging
-        if ($GLOBALS['TSFE']->fe_user->user['username'] && !((isset($conf['pm_enabled']) && intval($conf['pm_enabled']) === 0))) {
-            $linkParams['tx_mmforum_pi3'] = array (
-                'action'    => 'message_write',
-                'folder'    => 'inbox',
-                'messid'    => $this->pi_getLL('realurl.pmnew'),
-                'userid'    => $user->getUID(),
-            );
-            $marker['###PM###']                     = $this->createButton('pm',$linkParams,$this->conf['pm_id'],true);
-        } else {
-          $marker['###PM###'] = '';
-        }
+		// Private Messaging
+		if ($GLOBALS['TSFE']->fe_user->user['username'] && !((isset($conf['pm_enabled']) && intval($conf['pm_enabled']) === 0))) {
+			$linkParams['tx_mmforum_pi3'] = array (
+				'action'    => 'message_write',
+				'folder'    => 'inbox',
+				'messid'    => $this->pi_getLL('realurl.pmnew'),
+				'userid'    => $user->getUID(),
+			);
+			$marker['###PM###']                     = $this->createButton('pm',$linkParams,$this->conf['pm_id'],true);
+		} else {
+			$marker['###PM###'] = '';
+		}
 
-        // A link to a page presenting the last 10 posts by this user
-            $linkparams = array();
-            $linkparams[$this->prefixId] = array (
-                'action'    => 'post_history',
-                'user_id'   => $user->getUID()
-            );
-            if($this->useRealUrl()) {
-                unset($linkparams[$this->prefixId]['user_id']);
-                $linkparams[$this->prefixId]['fid'] = $user->getUsername();
-            }
-            $marker['###10POSTS###']        = $this->pi_linkToPage($this->pi_getLL('user.lastPostsLink'),$GLOBALS['TSFE']->id,'',$linkparams).'<br />';
+		// A link to a page presenting the last 10 posts by this user
+			$linkparams = array();
+			$linkparams[$this->prefixId] = array (
+				'action'    => 'post_history',
+				'user_id'   => $user->getUID()
+			);
+			if($this->useRealUrl()) {
+				unset($linkparams[$this->prefixId]['user_id']);
+				$linkparams[$this->prefixId]['fid'] = $user->getUsername();
+			}
+			$marker['###10POSTS###']        = $this->pi_linkToPage($this->pi_getLL('user.lastPostsLink'),$GLOBALS['TSFE']->id,'',$linkparams).'<br />';
 
-        // A list of the last 10 topic created by this user
-            $marker['###10TOPICS###']        = $this->view_last_10_topics($user->getUID());
+		// A list of the last 10 topic created by this user
+			$marker['###10TOPICS###']        = $this->view_last_10_topics($user->getUID());
 
-        // The number of topics created by this user (currently not used?)
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('COUNT(uid)','tx_mmforum_topics',"topic_poster='{$user->getUID()}'".$this->getStoragePIDQuery());
-            list($topic_num) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-            $marker['###THEMEN###']         = "<strong>".$topic_num."</strong>";
+		// The number of topics created by this user (currently not used?)
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('COUNT(uid)','tx_mmforum_topics',"topic_poster='{$user->getUID()}'".$this->getStoragePIDQuery());
+			list($topic_num) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			$marker['###THEMEN###']         = "<strong>".$topic_num."</strong>";
 
-        // The last post made by this user (currently not used?)
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid,topic_id','tx_mmforum_posts',"deleted='0' AND hidden='0' AND poster_id='{$user->getUID()}'".$this->getStoragePIDQuery(),'','crdate DESC','1');
-            list($lastpost_id,$lastpost_topic_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		// The last post made by this user (currently not used?)
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid,topic_id','tx_mmforum_posts',"deleted='0' AND hidden='0' AND poster_id='{$user->getUID()}'".$this->getStoragePIDQuery(),'','crdate DESC','1');
+			list($lastpost_id,$lastpost_topic_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics',"uid='$lastpost_topic_id'".$this->getStoragePIDQuery());
-            list($lastpost_topic_name) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics',"uid='$lastpost_topic_id'".$this->getStoragePIDQuery());
+			list($lastpost_topic_name) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-            $lastpost_topic_name = str_replace('<','&lt;',$lastpost_topic_name);
-            $lastpost_topic_name = str_replace('>','&gt;',$lastpost_topic_name);
+			$lastpost_topic_name = str_replace('<','&lt;',$lastpost_topic_name);
+			$lastpost_topic_name = str_replace('>','&gt;',$lastpost_topic_name);
 
-        // User defined fields
-            $userField_template = $this->cObj->getSubpart($template, '###USERFIELDS###');
-            $userField_content = '';
+		// User defined fields
+			$userField_template = $this->cObj->getSubpart($template, '###USERFIELDS###');
+			$userField_content = '';
 
-            $userField_private = ($this->getIsAdmin() || $this->getIsMod())?'':' AND f.public=1';
+			$userField_private = ($this->getIsAdmin() || $this->getIsMod())?'':' AND f.public=1';
 
-            /*$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                'f.*,c.field_value',
-                'tx_mmforum_userfields f, tx_mmforum_userfields_contents c',
-                'f.hidden=0 AND f.deleted=0 AND c.deleted=0 AND c.field_id=f.uid AND c.user_id='.$user_id.$userField_private,
-                '',
-                'f.sorting DESC'
-            );*/
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                '*',
-                'tx_mmforum_userfields f',
-                'f.hidden=0 AND f.deleted=0'.$userField_private,
+			/*$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'f.*,c.field_value',
+				'tx_mmforum_userfields f, tx_mmforum_userfields_contents c',
+				'f.hidden=0 AND f.deleted=0 AND c.deleted=0 AND c.field_id=f.uid AND c.user_id='.$user_id.$userField_private,
+				'',
+				'f.sorting DESC'
+			);*/
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'*',
+				'tx_mmforum_userfields f',
+				'f.hidden=0 AND f.deleted=0'.$userField_private,
 				'',
 				'sorting DESC'
-            );
-            $parser  = t3lib_div::makeInstance('t3lib_TSparser');
-            while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-                $cRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                    'field_value',
-                    'tx_mmforum_userfields_contents c',
-                    'c.deleted=0 AND c.field_id='.$arr['uid'].' AND c.user_id='.$user->getUid()
-                );
-                if($GLOBALS['TYPO3_DB']->sql_num_rows($cRes)) {
-                    list($fieldContent) = $GLOBALS['TYPO3_DB']->sql_fetch_row($cRes);
-                    $arr['field_value'] = $fieldContent;
-                } else $fieldContent = '';
+			);
+			$parser  = t3lib_div::makeInstance('t3lib_TSparser');
+			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				$cRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					'field_value',
+					'tx_mmforum_userfields_contents c',
+					'c.deleted=0 AND c.field_id='.$arr['uid'].' AND c.user_id='.$user->getUid()
+				);
+				if($GLOBALS['TYPO3_DB']->sql_num_rows($cRes)) {
+					list($fieldContent) = $GLOBALS['TYPO3_DB']->sql_fetch_row($cRes);
+					$arr['field_value'] = $fieldContent;
+				} else $fieldContent = '';
 
-                $parser->setup = array();
-                if(strlen($arr['config'])>0) {
-                    $parser->parse($arr['config']);
-                    $config = $parser->setup;
-                } else $config = array();
+				$parser->setup = array();
+				if(strlen($arr['config'])>0) {
+					$parser->parse($arr['config']);
+					$config = $parser->setup;
+				} else $config = array();
 
-                if($config['label']) $label = $this->cObj->cObjGetSingle($config['label'],$config['label.']);
-                else $label = $arr['label'].':';
+				if($config['label']) $label = $this->cObj->cObjGetSingle($config['label'],$config['label.']);
+				else $label = $arr['label'].':';
 
-                if($config['datasource']) {
-                    if($config['datasource'] != 'password')
-                        $fieldContent = $user->gD($config['datasource']);
-                    else $fieldContent = $arr['field_value'];
-                }
-                else $fieldContent = $arr['field_value'];
+				if($config['datasource']) {
+					if($config['datasource'] != 'password')
+						$fieldContent = $user->gD($config['datasource']);
+					else $fieldContent = $arr['field_value'];
+				}
+				else $fieldContent = $arr['field_value'];
 
-                if($config['output']) {
-                    $tmpArr = $this->cObj->data;
-                    $this->cObj->data = array(
-                        'fieldvalue'    => $fieldContent
-                    );
-                    $output = $this->cObj->cObjGetSingle($config['output'],$config['output.']);
-                    $this->cObj->data = $tmpArr;
-                }
-                else $output = $fieldContent;
+				if($config['output']) {
+					$tmpArr = $this->cObj->data;
+					$this->cObj->data = array(
+						'fieldvalue'    => $fieldContent
+					);
+					$output = $this->cObj->cObjGetSingle($config['output'],$config['output.']);
+					$this->cObj->data = $tmpArr;
+				}
+				else $output = $fieldContent;
 
-                $userField_marker = array(
-                    '###LABEL_USERFIELD###'     => $label,
-                    '###USERFIELD###'           => $output,
-                    '###USERFIELD_VALUE###'     => $fieldContent,
-                    '###USERFIELD_UID###'       => $this->escape($arr['uid']),
-                    '###USERFIELD_LABEL###'     => $this->escape($arr['label']),
-                    '###USERFIELD_NAME###'      => ''
-                );
-                $userField_content .= $this->cObj->substituteMarkerArrayCached($userField_template,$userField_marker);
-            }
-            $template = $this->cObj->substituteSubpart($template, '###USERFIELDS###', $userField_content);
+				$userField_marker = array(
+					'###LABEL_USERFIELD###'     => $label,
+					'###USERFIELD###'           => $output,
+					'###USERFIELD_VALUE###'     => $fieldContent,
+					'###USERFIELD_UID###'       => $this->escape($arr['uid']),
+					'###USERFIELD_LABEL###'     => $this->escape($arr['label']),
+					'###USERFIELD_NAME###'      => ''
+				);
+				$userField_content .= $this->cObj->substituteMarkerArrayCached($userField_template,$userField_marker);
+			}
+			$template = $this->cObj->substituteSubpart($template, '###USERFIELDS###', $userField_content);
 
-            $marker['###ROWSPAN###'] = 15 + $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+			$marker['###ROWSPAN###'] = 15 + $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 
-        // Include hooks
-            if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['userProfile_marker'])) {
-                foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['userProfile_marker'] as $_classRef) {
-                    $_procObj = & t3lib_div::getUserObj($_classRef);
-                    $marker = $_procObj->userProfile_marker($marker, $user->data, $this);
-                }
-            }
+		// Include hooks
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['userProfile_marker'])) {
+				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['userProfile_marker'] as $_classRef) {
+					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$marker = $_procObj->userProfile_marker($marker, $user->data, $this);
+				}
+			}
 
-        $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
-        return $content;
-    }
+		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
+		return $content;
+	}
 
-    /**
-     * Lists the last 10 topics created by a specific user.
-     * @param  int    $uid The UID of the user whose topics are to be listed
-     * @return string      A HTML list of the last 10 topics created by the user
-     */
-    function view_last_10_topics($uid)
-    {
-        $uid = intval($uid);
-        $imgInfo = array('border' => $this->conf['img_border'], 'alt' => '', 'src' => '', 'style' => '');
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            't.*',
-            'tx_mmforum_topics t,tx_mmforum_forums f',
-            't.topic_poster="'.$uid.'" AND
-            t.deleted="0" AND
-            t.hidden="0" AND
-            f.uid=t.forum_id '.
-            $this->getStoragePIDQuery('t,f').
-            $this->getMayRead_forum_query('f'),
-            '',
-            't.crdate DESC',
-            '10'
-        );
-        while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            $row['topic_title'] = stripslashes($row['topic_title']);
+	/**
+	 * Lists the last 10 topics created by a specific user.
+	 * @param  int    $uid The UID of the user whose topics are to be listed
+	 * @return string      A HTML list of the last 10 topics created by the user
+	 */
+	function view_last_10_topics($uid)
+	{
+		$uid = intval($uid);
+		$imgInfo = array('border' => $this->conf['img_border'], 'alt' => '', 'src' => '', 'style' => '');
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			't.*',
+			'tx_mmforum_topics t,tx_mmforum_forums f',
+			't.topic_poster="'.$uid.'" AND
+			t.deleted="0" AND
+			t.hidden="0" AND
+			f.uid=t.forum_id '.
+			$this->getStoragePIDQuery('t,f').
+			$this->getMayRead_forum_query('f'),
+			'',
+			't.crdate DESC',
+			'10'
+		);
+		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			$row['topic_title'] = stripslashes($row['topic_title']);
 
-            $row['topic_title'] = str_replace('<','&lt;',$row['topic_title']);
-            $row['topic_title'] = str_replace('>','&gt;',$row['topic_title']);
+			$row['topic_title'] = str_replace('<','&lt;',$row['topic_title']);
+			$row['topic_title'] = str_replace('>','&gt;',$row['topic_title']);
 
-            $topic_is       = $row['topic_is']?"<span class=\"tx-mmforum-pi1-listtopic-prefix\">[{$row['topic_is']}]</span> ":'';
-            $imgInfo['src'] = $this->conf['path_img'].$this->conf['images.']['solved'];
-            $imgInfo['alt'] = $this->pi_getLL('topic.isSolved');
-            $imgInfo['title'] = $this->pi_getLL('topic.isSolved');
-            $solved         = $row['solved'] ? $this->buildImageTag($imgInfo) : '';
+			$topic_is       = $row['topic_is']?"<span class=\"tx-mmforum-pi1-listtopic-prefix\">[{$row['topic_is']}]</span> ":'';
+			$imgInfo['src'] = $this->conf['path_img'].$this->conf['images.']['solved'];
+			$imgInfo['alt'] = $this->pi_getLL('topic.isSolved');
+			$imgInfo['title'] = $this->pi_getLL('topic.isSolved');
+			$solved         = $row['solved'] ? $this->buildImageTag($imgInfo) : '';
 
-            $linkParams[$this->prefixId] = array(
-                'action'    => 'list_post',
-                'tid'       => $row['uid']
-            );
-            if($this->useRealUrl()) {
-                $linkParams[$this->prefixId]['fid'] = $row['forum_id'];
-            }
-            $content .= $this->formatDate($row['topic_time']).' - '.$this->pi_linkTP($topic_is.$row['topic_title'],$linkParams).$solved.'<br />';
-        }
-        return $content;
-    }
+			$linkParams[$this->prefixId] = array(
+				'action'    => 'list_post',
+				'tid'       => $row['uid']
+			);
+			if($this->useRealUrl()) {
+				$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
+			}
+			$content .= $this->formatDate($row['topic_time']).' - '.$this->pi_linkTP($topic_is.$row['topic_title'],$linkParams).$solved.'<br />';
+		}
+		return $content;
+	}
 
-    /**
-     * Lists the last 10 posts and their topics created by a specific user.
-     * @param  int    $uid The UID of the user whose posts are to be listed
-     * @return string      A HTML list of the last 10 posts created by the user
-     */
-    function view_last_10_posts($uid) {
-        $uid = intval($uid);
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"poster_id='$uid' AND deleted='0' AND hidden='0'".$this->getStoragePIDQuery(),'','crdate DESC','10');
-        while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            $topic_name = $this->get_topic_name($row['topic_id']);
-            $topic_name = str_replace('<','&lt;',$topic_name);
-            $topic_name = str_replace('>','&gt;',$topic_name);
+	/**
+	 * Lists the last 10 posts and their topics created by a specific user.
+	 * @param  int    $uid The UID of the user whose posts are to be listed
+	 * @return string      A HTML list of the last 10 posts created by the user
+	 */
+	function view_last_10_posts($uid) {
+		$uid = intval($uid);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"poster_id='$uid' AND deleted='0' AND hidden='0'".$this->getStoragePIDQuery(),'','crdate DESC','10');
+		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			$topic_name = $this->get_topic_name($row['topic_id']);
+			$topic_name = str_replace('<','&lt;',$topic_name);
+			$topic_name = str_replace('>','&gt;',$topic_name);
 
-            $linkParams[$this->prefixId] = array(
-                'action'      => 'list_post',
-                'tid'         => $row['topic_id'],
-                'search_pid'  => $row['uid']
-            );
-            $content .= $this->formatDate($row['post_time']).' - '.$this->pi_linkTP($topic_name,$linkParams).'<br />';
-        }
-        return $content;
-    }
-
-
-    /**
-     * Sends an email to a specific user.
-     * @param  string $content The plugin content
-     * @param  array  $conf    The plugin's configuration vars
-     * @return string          The content
-     *
-     * @deprecated Currently not used
-     */
-    function send_mail($content, $conf) {
-        $benutzer = $GLOBALS['TSFE']->fe_user->user['username'];
-        $mailtimeout    = 30;                   // Mail time Out
-
-        if (!empty($benutzer)) {
-            if ($this->piVars['send'] <> 'ok') {
-
-                $template = $this->cObj->fileResource($conf['template.']['send_email']);
-                $template = $this->cObj->getSubpart($template, "###SENDMAIL###");
-                $marker = array();
-                // Generate authencification code and insert into database
-                    $mailcode = md5(getenv("REMOTE_ADDR").time().$this->tools->generateRandomString(10));
-                    $insertArray = array(
-                        'code'          => $mailcode,
-                        'tstamp'        => time(),
-                        'crdate'        => time(),
-                        'cruser_id'     => $GLOBALS['TSFE']->fe_user->user['uid']
-                    );
-                    $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_mailkey',$insertArray);
-                    $marker['###MAILCODE###'] =  $mailcode;
-
-                // Retrieve user name from database
-                    $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField(),'fe_users',"uid = '".intval($this->piVars['uid'])."'");
-                    list($usermailname) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-                    $marker['###USERMAILNAME###'] =  $usermailname;
-            }
-            else {
-                // Check if user is authorized to send emails.
-                $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_mailkey',"code = '".$this->piVars['authcode']."' AND cruser_id = '".$GLOBALS['TSFE']->fe_user->user['uid']."'");
-                $mailok = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
-
-                if ($mailok) {
-                    // Load template
-                    $template = $this->cObj->fileResource($conf['template.']['send_email']);
-                    $template = $this->cObj->getSubpart($template, "###MAILSTATUS###");
-                    $marker = array();
-
-                    // Get recipient user data
-                    $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField().',email','fe_users',"uid = '".intval($this->piVars['uid'])."'");
-                    list($usermailname,$to) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-
-                    $header .= "From: <".$GLOBALS['TSFE']->fe_user->user[$this->getUserNameField()].">".$GLOBALS['TSFE']->fe_user->user['email']."\n";
-                    $header .= "Reply-To:" . $GLOBALS['TSFE']->fe_user->user['email'] . "\n";
-                    $header .= "Content-type: text/plain;charset=".$GLOBALS['TSFE']->renderCharset."\n";
-
-                    $mailtext = $this->piVars['text'];
-                    $mailtext = nl2br($mailtext);
-
-                    // Compose and send mail
-                    mail($to,$this->piVars['subject'],$mailtext, $header);
-
-                    // If "tome" is active, the sender gets a copy of the mail.
-                    if ($this->piVars['uid'])  {
-                        mail($GLOBALS['TSFE']->fe_user->user['email'],$this->piVars['subject'],$mailtext, $header);
-                    }
-
-                    // Remove authentification code from databse
-                    $GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_mailkey',"cruser_id = '".$GLOBALS['TSFE']->fe_user->user['uid']."'");
-
-                    // Output information
-                    $llMarker = array("###RECIPIENT###" => $usermailname);
-                    $marker['###MAIL_MESSAGE###'] = $this->cObj->substituteMarkerArray($this->pi_getLL('mail.success'),$llMarker);
-                } else {
-                    // Load template
-                    $template = $this->cObj->fileResource($conf["templateFile"]);
-                    $template = $this->cObj->getSubpart($template, "###LOGINERROR###");
-
-                    $marker = array();
-
-                    // Error message
-                    $llMarker = array("###TIMEOUT###" => $mailtimeout);
-                    $marker['###LOGINERROR_MESSAGE###'] = $this->cObj->substituteMarkerArray($this->pi_getLL('mail.timeout'),$llMarker);
-                }
-            }
-        }
-        else {
-            $template = $this->cObj->fileResource($conf['template.']['login_error']);
-            $template = $this->cObj->getSubpart($template, "###LOGINERROR###");
-            $marker = array();
-            $marker['###LOGINERROR_MESSAGE###'] = $this->pi_getLL('mail.noLogin');
-        }
-
-        $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
-        return $content;
-
-    }
-
-    /**
-     * Page navigation
-     */
-
-    /**
-     * Generates a dynamic page navigator suitable for many applications.
-     * This function can be used to generate a general page generator that can
-     * be used nearly everywhere.
-     *
-     * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2007-06-05
-     * @param   int    $maxPage        The maximum page number
-     * @param   string $linkVar_name   The name of the piVar in which the page number
-     *                                 is stored.
-     * @param   array  $def_linkParams An array of default link parameters. These are set
-     *                                 in every link generated for the page navigator.
-     * @param   int    $maxOffset      Defines over how much links the page navigator shall
-     *                                 extend itself in both directions.
-     * @return  string                 The page navigator
-     */
-    function dynamicPageNav($maxPage,$linkVar_name='page',$def_linkParams=array(),$maxOffset=4) {
-
-        $content = $this->pi_getLL('page-goto').': ';
-
-        if(!$this->piVars[$linkVar_name]) $this->piVars[$linkVar_name]=1;
-        $curPage = $this->piVars[$linkVar_name];
-
-        if($curPage > 1) {
-            $linkParams[$this->prefixId] = $def_linkParams;
-            $linkParams[$this->prefixId][$linkVar_name] = 1;
-
-            $content .= $this->pi_linkTP(''.$this->pi_getLL('page.first').'|',$linkParams);
-        }
-        if($curPage > 2) {
-            $linkParams[$this->prefixId] = $def_linkParams;
-            $linkParams[$this->prefixId][$linkVar_name] = $curPage - 1;
-
-            $content .= $this->pi_linkTP(' &laquo; '.$this->pi_getLL('').'|',$linkParams);
-        }
-
-        for($i = $curPage-$maxOffset; $i <= $curPage+$maxOffset; $i ++) {
-            if($i < 1) continue;
-            if($i > $maxPage) break;
-
-            if($curPage == $i) {
-                $content .= "|<strong> $i </strong>|";
-            } else {
-                $linkParams[$this->prefixId] = $def_linkParams;
-                $linkParams[$this->prefixId][$linkVar_name] = $i;
-
-                $content .= $this->pi_linkTP(' '.$i.' ',$linkParams);
-            }
-        }
+			$linkParams[$this->prefixId] = array(
+				'action'      => 'list_post',
+				'tid'         => $row['topic_id'],
+				'search_pid'  => $row['uid']
+			);
+			$content .= $this->formatDate($row['post_time']).' - '.$this->pi_linkTP($topic_name,$linkParams).'<br />';
+		}
+		return $content;
+	}
 
 
-        if($curPage < $maxPage-1) {
-            $linkParams[$this->prefixId] = $def_linkParams;
-            $linkParams[$this->prefixId][$linkVar_name] = $curPage + 1;
+	/**
+	 * Sends an email to a specific user.
+	 * @param  string $content The plugin content
+	 * @param  array  $conf    The plugin's configuration vars
+	 * @return string          The content
+	 *
+	 * @deprecated Currently not used
+	 */
+	function send_mail($content, $conf) {
+		$benutzer = $GLOBALS['TSFE']->fe_user->user['username'];
+		$mailtimeout    = 30;                   // Mail time Out
 
-            $content .= $this->pi_linkTP(' &raquo; '.$this->pi_getLL('').' ',$linkParams);
-        }
-        if($curPage < $maxPage) {
-            $linkParams[$this->prefixId] = $def_linkParams;
-            $linkParams[$this->prefixId][$linkVar_name] = $maxPage;
+		if (!empty($benutzer)) {
+			if ($this->piVars['send'] <> 'ok') {
 
-            $content .= '|'.$this->pi_linkTP(''.$this->pi_getLL('page.last').' ',$linkParams);
-        }
+				$template = $this->cObj->fileResource($conf['template.']['send_email']);
+				$template = $this->cObj->getSubpart($template, "###SENDMAIL###");
+				$marker = array();
+				// Generate authencification code and insert into database
+					$mailcode = md5(getenv("REMOTE_ADDR").time().$this->tools->generateRandomString(10));
+					$insertArray = array(
+						'code'          => $mailcode,
+						'tstamp'        => time(),
+						'crdate'        => time(),
+						'cruser_id'     => $GLOBALS['TSFE']->fe_user->user['uid']
+					);
+					$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_mailkey',$insertArray);
+					$marker['###MAILCODE###'] =  $mailcode;
 
-        return $content;
+				// Retrieve user name from database
+					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField(),'fe_users',"uid = '".intval($this->piVars['uid'])."'");
+					list($usermailname) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+					$marker['###USERMAILNAME###'] =  $usermailname;
+			}
+			else {
+				// Check if user is authorized to send emails.
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_mailkey',"code = '".$this->piVars['authcode']."' AND cruser_id = '".$GLOBALS['TSFE']->fe_user->user['uid']."'");
+				$mailok = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 
-    }
+				if ($mailok) {
+					// Load template
+					$template = $this->cObj->fileResource($conf['template.']['send_email']);
+					$template = $this->cObj->getSubpart($template, "###MAILSTATUS###");
+					$marker = array();
 
-    /**
-     * Generates a page navigation menu. The number of pages is determined by the amount
-     * of records in the database meeting a certain condition and the maximum number of
-     * records on one page.
-     * @param  string table      The table name, from which records are displayed
-     * @param  string column     The table column, that has to meet a certain condition
-     * @param  mixed  id         The value the table column $column has to meet
-     * @param  int    limitcount The maximum number of records on one page
-     * @param  int    count      Optional parameter. Allows to override the record count
-     *                           determined by parameters $column and $id
-     * @return string            The page navigation menu
-     */
-    function pagecount ($table,$column,$id,$limitcount,$count=FALSE) {
-        $id = intval($id);
-        $column = preg_replace("/[^A-Za-z0-9\._]/","",$column);
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            "COUNT($column)",
-            $table,
-            "deleted='0' AND hidden='0' AND $column='$id'".$this->getStoragePIDQuery()
-        );
-        list($postcount) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+					// Get recipient user data
+					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField().',email','fe_users',"uid = '".intval($this->piVars['uid'])."'");
+					list($usermailname,$to) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-        if(! ($count === FALSE)) $postcount = intval($count);
+					$header .= "From: <".$GLOBALS['TSFE']->fe_user->user[$this->getUserNameField()].">".$GLOBALS['TSFE']->fe_user->user['email']."\n";
+					$header .= "Reply-To:" . $GLOBALS['TSFE']->fe_user->user['email'] . "\n";
+					$header .= "Content-type: text/plain;charset=".$GLOBALS['TSFE']->renderCharset."\n";
 
-        $maxpage = ceil($postcount / $limitcount);
+					$mailtext = $this->piVars['text'];
+					$mailtext = nl2br($mailtext);
 
-        // should Dmitry's pagebrowse extension be used?
-        if (intval($this->conf['doNotUsePageBrowseExtension'])===0) {
+					// Compose and send mail
+					mail($to,$this->piVars['subject'],$mailtext, $header);
+
+					// If "tome" is active, the sender gets a copy of the mail.
+					if ($this->piVars['uid'])  {
+						mail($GLOBALS['TSFE']->fe_user->user['email'],$this->piVars['subject'],$mailtext, $header);
+					}
+
+					// Remove authentification code from databse
+					$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_mailkey',"cruser_id = '".$GLOBALS['TSFE']->fe_user->user['uid']."'");
+
+					// Output information
+					$llMarker = array("###RECIPIENT###" => $usermailname);
+					$marker['###MAIL_MESSAGE###'] = $this->cObj->substituteMarkerArray($this->pi_getLL('mail.success'),$llMarker);
+				} else {
+					// Load template
+					$template = $this->cObj->fileResource($conf["templateFile"]);
+					$template = $this->cObj->getSubpart($template, "###LOGINERROR###");
+
+					$marker = array();
+
+					// Error message
+					$llMarker = array("###TIMEOUT###" => $mailtimeout);
+					$marker['###LOGINERROR_MESSAGE###'] = $this->cObj->substituteMarkerArray($this->pi_getLL('mail.timeout'),$llMarker);
+				}
+			}
+		}
+		else {
+			$template = $this->cObj->fileResource($conf['template.']['login_error']);
+			$template = $this->cObj->getSubpart($template, "###LOGINERROR###");
+			$marker = array();
+			$marker['###LOGINERROR_MESSAGE###'] = $this->pi_getLL('mail.noLogin');
+		}
+
+		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
+		return $content;
+
+	}
+
+	/**
+	 * Page navigation
+	 */
+
+	/**
+	 * Generates a dynamic page navigator suitable for many applications.
+	 * This function can be used to generate a general page generator that can
+	 * be used nearly everywhere.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2007-06-05
+	 * @param   int    $maxPage        The maximum page number
+	 * @param   string $linkVar_name   The name of the piVar in which the page number
+	 *                                 is stored.
+	 * @param   array  $def_linkParams An array of default link parameters. These are set
+	 *                                 in every link generated for the page navigator.
+	 * @param   int    $maxOffset      Defines over how much links the page navigator shall
+	 *                                 extend itself in both directions.
+	 * @return  string                 The page navigator
+	 */
+	function dynamicPageNav($maxPage,$linkVar_name='page',$def_linkParams=array(),$maxOffset=4) {
+
+		$content = $this->pi_getLL('page-goto').': ';
+
+		if(!$this->piVars[$linkVar_name]) $this->piVars[$linkVar_name]=1;
+		$curPage = $this->piVars[$linkVar_name];
+
+		if($curPage > 1) {
+			$linkParams[$this->prefixId] = $def_linkParams;
+			$linkParams[$this->prefixId][$linkVar_name] = 1;
+
+			$content .= $this->pi_linkTP(''.$this->pi_getLL('page.first').'|',$linkParams);
+		}
+		if($curPage > 2) {
+			$linkParams[$this->prefixId] = $def_linkParams;
+			$linkParams[$this->prefixId][$linkVar_name] = $curPage - 1;
+
+			$content .= $this->pi_linkTP(' &laquo; '.$this->pi_getLL('').'|',$linkParams);
+		}
+
+		for($i = $curPage-$maxOffset; $i <= $curPage+$maxOffset; $i ++) {
+			if($i < 1) continue;
+			if($i > $maxPage) break;
+
+			if($curPage == $i) {
+				$content .= "|<strong> $i </strong>|";
+			} else {
+				$linkParams[$this->prefixId] = $def_linkParams;
+				$linkParams[$this->prefixId][$linkVar_name] = $i;
+
+				$content .= $this->pi_linkTP(' '.$i.' ',$linkParams);
+			}
+		}
+
+
+		if($curPage < $maxPage-1) {
+			$linkParams[$this->prefixId] = $def_linkParams;
+			$linkParams[$this->prefixId][$linkVar_name] = $curPage + 1;
+
+			$content .= $this->pi_linkTP(' &raquo; '.$this->pi_getLL('').' ',$linkParams);
+		}
+		if($curPage < $maxPage) {
+			$linkParams[$this->prefixId] = $def_linkParams;
+			$linkParams[$this->prefixId][$linkVar_name] = $maxPage;
+
+			$content .= '|'.$this->pi_linkTP(''.$this->pi_getLL('page.last').' ',$linkParams);
+		}
+
+		return $content;
+
+	}
+
+	/**
+	 * Generates a page navigation menu. The number of pages is determined by the amount
+	 * of records in the database meeting a certain condition and the maximum number of
+	 * records on one page.
+	 * @param  string table      The table name, from which records are displayed
+	 * @param  string column     The table column, that has to meet a certain condition
+	 * @param  mixed  id         The value the table column $column has to meet
+	 * @param  int    limitcount The maximum number of records on one page
+	 * @param  int    count      Optional parameter. Allows to override the record count
+	 *                           determined by parameters $column and $id
+	 * @return string            The page navigation menu
+	 */
+	function pagecount ($table,$column,$id,$limitcount,$count=FALSE) {
+		$id = intval($id);
+		$column = preg_replace("/[^A-Za-z0-9\._]/","",$column);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			"COUNT($column)",
+			$table,
+			"deleted='0' AND hidden='0' AND $column='$id'".$this->getStoragePIDQuery()
+		);
+		list($postcount) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+
+		if(! ($count === FALSE)) $postcount = intval($count);
+
+		$maxpage = ceil($postcount / $limitcount);
+
+		// should Dmitry's pagebrowse extension be used?
+		if (intval($this->conf['doNotUsePageBrowseExtension'])===0) {
 			$content = $this->getListGetPageBrowser($maxpage);
 			return $content;
-        }
+		}
 
-        if ($this->piVars['page'] == 0) $page = 1;
-        else $page = $this->piVars['page'];
+		if ($this->piVars['page'] == 0) $page = 1;
+		else $page = $this->piVars['page'];
 
-        $linkParams = array();
+		$linkParams = array();
 
-        if($table == "tx_mmforum_topics") {
-            if($column == 'topic_is') {
-                $linkParams[$this->prefixId]['action']='list_prefix';
-                if($this->piVars['list_prefix']) {
-                    $settings = $this->piVars['list_prefix'];
-                    $linkParams[$this->prefixId]['list_prefix']['show'] = $settings['show'];
-                    $linkParams[$this->prefixId]['list_prefix']['order'] = $settings['order'];
-                    $linkParams[$this->prefixId]['list_prefix']['prfx'] = $settings['prfx'];
-                }
-            } elseif($column != 'topic_replies') {
-                $linkParams[$this->prefixId]['action'] = 'list_topic';
-                $linkParams[$this->prefixId]['fid'] = $this->piVars['fid'];
+		if($table == "tx_mmforum_topics") {
+			if($column == 'topic_is') {
+				$linkParams[$this->prefixId]['action']='list_prefix';
+				if($this->piVars['list_prefix']) {
+					$settings = $this->piVars['list_prefix'];
+					$linkParams[$this->prefixId]['list_prefix']['show'] = $settings['show'];
+					$linkParams[$this->prefixId]['list_prefix']['order'] = $settings['order'];
+					$linkParams[$this->prefixId]['list_prefix']['prfx'] = $settings['prfx'];
+				}
+			} elseif($column != 'topic_replies') {
+				$linkParams[$this->prefixId]['action'] = 'list_topic';
+				$linkParams[$this->prefixId]['fid'] = $this->piVars['fid'];
 
 				if($this->useRealUrl()) {
 					$linkParams[$this->prefixId]['tid'] = 'pages';
 					$linkParams[$this->prefixId]['pid'] = 'page';
 				}
-            } else {
-                $linkParams[$this->prefixId]['action'] = 'list_unans';
-            }
-        }
-        IF($table == "tx_mmforum_posts"){
-            $linkParams[$this->prefixId]['action'] = 'list_post';
-            $linkParams[$this->prefixId]['tid'] = $this->piVars['tid'];
-        }
+			} else {
+				$linkParams[$this->prefixId]['action'] = 'list_unans';
+			}
+		}
+		IF($table == "tx_mmforum_posts"){
+			$linkParams[$this->prefixId]['action'] = 'list_post';
+			$linkParams[$this->prefixId]['tid'] = $this->piVars['tid'];
+		}
 
-        IF ($maxpage > 1) {
-            if($this->piVars['hide_solved']) $linkParams[$this->prefixId]['hide_solved']='1';
+		IF ($maxpage > 1) {
+			if($this->piVars['hide_solved']) $linkParams[$this->prefixId]['hide_solved']='1';
 
-            // First page
-                if (($page - 1) >= 1)           $content .= $this->pi_linkTP(''.$this->pi_getLL('page.first').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>1))).'|';
-            // Previous page
-                if (($page - 1) > 1)            $content .= $this->pi_linkTP(' '.$this->pi_getLL('page.previous').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';
-            // List pages from 2 pages before current page to 2 pages after current page
-                if (($page - 2) >= 1)           $content .= '|'.$this->pi_linkTP(' '.($page-2).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-2))).'|';
-                if (($page - 1) >= 1)           $content .= '|'.$this->pi_linkTP(' '.($page-1).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';
-                $content .= '|<strong> '.$page.' </strong>|';
-                if (($page + 1) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.($page+1).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+1))).'|';
-                if (($page + 2) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.($page+2).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+2))).'|';
-            // Next page
-                if (($page + 1) < $maxpage)     $content .= '|'.$this->pi_linkTP(' '.$this->pi_getLL('page.next').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+1)));
-            // Last page
-                if (($page + 1) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.$this->pi_getLL('page.last').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$maxpage)));
-        }
+			// First page
+				if (($page - 1) >= 1)           $content .= $this->pi_linkTP(''.$this->pi_getLL('page.first').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>1))).'|';
+			// Previous page
+				if (($page - 1) > 1)            $content .= $this->pi_linkTP(' '.$this->pi_getLL('page.previous').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';
+			// List pages from 2 pages before current page to 2 pages after current page
+				if (($page - 2) >= 1)           $content .= '|'.$this->pi_linkTP(' '.($page-2).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-2))).'|';
+				if (($page - 1) >= 1)           $content .= '|'.$this->pi_linkTP(' '.($page-1).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';
+				$content .= '|<strong> '.$page.' </strong>|';
+				if (($page + 1) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.($page+1).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+1))).'|';
+				if (($page + 2) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.($page+2).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+2))).'|';
+			// Next page
+				if (($page + 1) < $maxpage)     $content .= '|'.$this->pi_linkTP(' '.$this->pi_getLL('page.next').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+1)));
+			// Last page
+				if (($page + 1) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.$this->pi_getLL('page.last').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$maxpage)));
+		}
 
-        #$content = preg_replace('/\|$/','',$content);
-        $content = str_replace('||', '|', $content);
+		#$content = preg_replace('/\|$/','',$content);
+		$content = str_replace('||', '|', $content);
 
-        return $content;
+		return $content;
 
-    }
+	}
 
-    /**
-     * Displays a special page navigation menu for the listing of unread topics.
-     * @param  int    $lastlogin  The time of the current user's last login
-     * @param  int    $limitcount The maximum number of entries to be displayed on
-     *                            one page.
-     * @return string             The page navigation menu
-     */
-    function pagecount2 ($lastlogin, $limitcount) {
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            'distinct tx_mmforum_topics.topic_title,
-             tx_mmforum_topics.uid,
-             tx_mmforum_topics.topic_poster,
-             tx_mmforum_topics.topic_last_post_id,
-             tx_mmforum_topics.topic_replies',
-            'tx_mmforum_topics inner join tx_mmforum_posts on tx_mmforum_topics.uid = tx_mmforum_posts.topic_id',
-            "tx_mmforum_topics.deleted = 0 and
-             tx_mmforum_posts.deleted = 0 and
-             post_time >= '$lastlogin'".$this->getStoragePIDQuery('tx_mmforum_topics,tx_mmforum_posts')
-        );
-        $postcount = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+	/**
+	 * Displays a special page navigation menu for the listing of unread topics.
+	 * @param  int    $lastlogin  The time of the current user's last login
+	 * @param  int    $limitcount The maximum number of entries to be displayed on
+	 *                            one page.
+	 * @return string             The page navigation menu
+	 */
+	function pagecount2 ($lastlogin, $limitcount) {
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'distinct tx_mmforum_topics.topic_title,
+			tx_mmforum_topics.uid,
+			tx_mmforum_topics.topic_poster,
+			tx_mmforum_topics.topic_last_post_id,
+			tx_mmforum_topics.topic_replies',
+			'tx_mmforum_topics inner join tx_mmforum_posts on tx_mmforum_topics.uid = tx_mmforum_posts.topic_id',
+			"tx_mmforum_topics.deleted = 0 and
+			tx_mmforum_posts.deleted = 0 and
+			post_time >= '$lastlogin'".$this->getStoragePIDQuery('tx_mmforum_topics,tx_mmforum_posts')
+		);
+		$postcount = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 
-        $maxpage = intval($postcount / $limitcount)+1;
-        if ($this->piVars['page'] == 0) $page = 1;
-        else $page = $this->piVars['page'];
+		$maxpage = intval($postcount / $limitcount)+1;
+		if ($this->piVars['page'] == 0) $page = 1;
+		else $page = $this->piVars['page'];
 
-        $linkParams[$this->prefixId] = array("action"=>"list_unread");
-        // should Dmitry's pagebrowse extension be used?
-        if (intval($this->conf['doNotUsePageBrowseExtension'])===0) {
-          $content = $this->getListGetPageBrowser($maxpage);
-          return $content;
-        }
+		$linkParams[$this->prefixId] = array("action"=>"list_unread");
+		// should Dmitry's pagebrowse extension be used?
+		if (intval($this->conf['doNotUsePageBrowseExtension'])===0) {
+			$content = $this->getListGetPageBrowser($maxpage);
+			return $content;
+		}
 
-        IF ($maxpage > 1) {
-            // First page
-                if (($page - 1) >= 1)           $content .= $this->pi_linkTP(' '.$this->pi_getLL('page.first').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>1))).'|';
-            // Previous page
-                if (($page - 1) > 1)            $content .= $this->pi_linkTP(' &laquo; '.$this->pi_getLL('').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';
-            // List pages from 2 pages before current page to 2 pages after current page
-                if (($page - 2) >= 1)           $content .= '|'. $this->pi_linkTP(' '.($page-2).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-2))).'|';
-                if (($page - 1) >= 1)           $content .= '|'.$this->pi_linkTP(' '.($page-1).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';
-                $content .= '|<strong> '.$page.' </strong>|';
-                if (($page + 1) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.($page+1).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+1))).'|';
-                if (($page + 2) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.($page+2).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+2))).'|';
-            // Next page
-                if (($page + 1) < $maxpage)     $content .= '|'.$this->pi_linkTP(' '.$this->pi_getLL('').' &raquo; ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+1)));
-            // Last page
-                if (($page + 1) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.$this->pi_getLL('page.last').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$maxpage)));
-        }
+		IF ($maxpage > 1) {
+			// First page
+				if (($page - 1) >= 1)           $content .= $this->pi_linkTP(' '.$this->pi_getLL('page.first').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>1))).'|';
+			// Previous page
+				if (($page - 1) > 1)            $content .= $this->pi_linkTP(' &laquo; '.$this->pi_getLL('').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';
+			// List pages from 2 pages before current page to 2 pages after current page
+				if (($page - 2) >= 1)           $content .= '|'. $this->pi_linkTP(' '.($page-2).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-2))).'|';
+				if (($page - 1) >= 1)           $content .= '|'.$this->pi_linkTP(' '.($page-1).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page-1))).'|';
+				$content .= '|<strong> '.$page.' </strong>|';
+				if (($page + 1) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.($page+1).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+1))).'|';
+				if (($page + 2) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.($page+2).' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+2))).'|';
+			// Next page
+				if (($page + 1) < $maxpage)     $content .= '|'.$this->pi_linkTP(' '.$this->pi_getLL('').' &raquo; ',array_merge($linkParams,array($this->prefixId.'[page]'=>$page+1)));
+			// Last page
+				if (($page + 1) <= $maxpage)    $content .= '|'.$this->pi_linkTP(' '.$this->pi_getLL('page.last').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>$maxpage)));
+		}
 
-        #$content = preg_replace('/\|$/','',$content);
-        $content = str_replace('||', '|', $content);
+		#$content = preg_replace('/\|$/','',$content);
+		$content = str_replace('||', '|', $content);
 
-        return $content;
-    }
+		return $content;
+	}
 
-    /**
-     * Forum content helper functions
-     */
+	/**
+	 * Forum content helper functions
+	 */
 
-    /**
-     * Returns a string with information on a certain post. Displays author and date of creation.
-     * @param  int    $postid The UID of the post
-     * @param  array  $conf   The plugin's configuration vars
-     * @return string         A string containing information about the post
-     */
-    function getlastpost($postid,$conf,$topicTitle=false) {
-        $postid = intval($postid);
-        $postdata = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"uid='$postid'".$this->getStoragePIDQuery());
+	/**
+	 * Returns a string with information on a certain post. Displays author and date of creation.
+	 * @param  int    $postid The UID of the post
+	 * @param  array  $conf   The plugin's configuration vars
+	 * @return string         A string containing information about the post
+	 */
+	function getlastpost($postid,$conf,$topicTitle=false) {
+		$postid = intval($postid);
+		$postdata = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"uid='$postid'".$this->getStoragePIDQuery());
 
-        if ($GLOBALS['TYPO3_DB']->sql_num_rows($postdata) == 0) $content = $this->pi_getLL('no_info');
-        else {
-            $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($postdata);
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($postdata) == 0) $content = $this->pi_getLL('no_info');
+		else {
+			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($postdata);
 
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField().',deleted','fe_users','uid="'.$row['poster_id'].'"');
-            if($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0)
-                list($username,$deleted) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField().',deleted','fe_users','uid="'.$row['poster_id'].'"');
+			if($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0)
+				list($username,$deleted) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-            $link = $this->get_pid_link($postid,'',$conf);
-            $link = $this->escapeURL($link);
+			$link = $this->get_pid_link($postid,'',$conf);
+			$link = $this->escapeURL($link);
 
-            $posttime = $this->cObj->stdWrap($row['post_time'],$this->conf['list_topics.']['lastPostDate_stdWrap.']);
-            $posttime = '<a href="'.$link.'">'.$posttime.'</a>';
+			$posttime = $this->cObj->stdWrap($row['post_time'],$this->conf['list_topics.']['lastPostDate_stdWrap.']);
+			$posttime = '<a href="'.$link.'">'.$posttime.'</a>';
 
-            if(!$username)
-                $usrlink = $this->pi_getLL('user.deleted');
-            elseif(!$deleted)
-                $usrlink = $this->linkToUserProfile($row['poster_id']);
-            else $usrlink = $this->escape($username);
+			if(!$username)
+				$usrlink = $this->pi_getLL('user.deleted');
+			elseif(!$deleted)
+				$usrlink = $this->linkToUserProfile($row['poster_id']);
+			else $usrlink = $this->escape($username);
 
-            if($topicTitle && $this->conf['list_topics.']['lastPostTopicTitle']) {
-                $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics','uid='.$row['topic_id'].' AND deleted=0');
-                if($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
-                    list($topicname) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-                    $topicname = $this->escape($topicname);
-                    $topicname = $this->cObj->stdWrap($topicname,$this->conf['list_topics.']['lastPostTopicTitle_innerStdWrap.']);
-                    $title = '<a href="'.$link.'">'.$topicname.'</a>';
-                }
-                $title = $this->cObj->stdWrap($title,$this->conf['list_topics.']['lastPostTopicTitle_outerStdWrap.']);
-            } else $title = '';
+			if($topicTitle && $this->conf['list_topics.']['lastPostTopicTitle']) {
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics','uid='.$row['topic_id'].' AND deleted=0');
+				if($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
+					list($topicname) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+					$topicname = $this->escape($topicname);
+					$topicname = $this->cObj->stdWrap($topicname,$this->conf['list_topics.']['lastPostTopicTitle_innerStdWrap.']);
+					$title = '<a href="'.$link.'">'.$topicname.'</a>';
+				}
+				$title = $this->cObj->stdWrap($title,$this->conf['list_topics.']['lastPostTopicTitle_outerStdWrap.']);
+			} else $title = '';
 
-            $usrlink = $this->cObj->stdWrap($usrlink,$this->conf['list_topics.']['lastPostUserName_stdWrap.']);
+			$usrlink = $this->cObj->stdWrap($usrlink,$this->conf['list_topics.']['lastPostUserName_stdWrap.']);
 
-            $content = $title.$posttime.$usrlink;
-        }
+			$content = $title.$posttime.$usrlink;
+		}
 
-        // Include hooks
-            if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['viewLastPost_postContentHook'])) {
-                foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['viewLastPost_postContentHook'] as $_classRef) {
-                    $_procObj = & t3lib_div::getUserObj($_classRef);
-                    $content = $_procObj->viewLastPost_postContentHook($content, $row, $this);
-                }
-            }
+		// Include hooks
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['viewLastPost_postContentHook'])) {
+				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['viewLastPost_postContentHook'] as $_classRef) {
+					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$content = $_procObj->viewLastPost_postContentHook($content, $row, $this);
+				}
+			}
 
-        return $content;
-    }
+		return $content;
+	}
 
 	/**
 	 * Returns a link to a user's profile page
@@ -4739,46 +4737,46 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		return $img;
 	}
 
-    /**
-     * Creates a rootline menu for navigating over board and board category when in
-     * topic view.
-     * @param  int    $forumid The UID of the current board.
-     * @param  int    $topicid The UID of the current topic.
-     * @return string          The rootline menu
-     */
-    function get_forum_path ($forumid,$topicid) {
-        $forumpath_index        = $this->pi_linkTP($this->pi_getLL('board.rootline'));
-        $forum_id                = intval($forumid);
+	/**
+	 * Creates a rootline menu for navigating over board and board category when in
+	 * topic view.
+	 * @param  int    $forumid The UID of the current board.
+	 * @param  int    $topicid The UID of the current topic.
+	 * @return string          The rootline menu
+	 */
+	function get_forum_path ($forumid,$topicid) {
+		$forumpath_index        = $this->pi_linkTP($this->pi_getLL('board.rootline'));
+		$forum_id                = intval($forumid);
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            "parentID, forum_name",
-            "tx_mmforum_forums",
-            "uid = '".$forumid."'".$this->getStoragePIDQuery()
-        );
-        list($catid, $forumpath_forum)    = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			"parentID, forum_name",
+			"tx_mmforum_forums",
+			"uid = '".$forumid."'".$this->getStoragePIDQuery()
+		);
+		list($catid, $forumpath_forum)    = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            "forum_name",
-            "tx_mmforum_forums",
-            "uid = '".$catid."'".$this->getStoragePIDQuery()
-        );
-        list($forumpath_category)        = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			"forum_name",
+			"tx_mmforum_forums",
+			"uid = '".$catid."'".$this->getStoragePIDQuery()
+		);
+		list($forumpath_category)        = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            "topic_title",
-            "tx_mmforum_topics",
-            " uid = '".$topicid."'".$this->getStoragePIDQuery()
-        );
-        list($forumpath_topic)            = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			"topic_title",
+			"tx_mmforum_topics",
+			" uid = '".$topicid."'".$this->getStoragePIDQuery()
+		);
+		list($forumpath_topic)            = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-        if ( $forumpath_category)    $forumpath_category   = $this->conf['display.']['rootline.']['separator'].'<a href="'.$this->pi_getPageLink($GLOBALS['TSFE']->id).'#cat'.$catid.'">'.$this->escape($forumpath_category).'</a>';
-        if ( $forumpath_forum)       $forumpath_forum      = $this->conf['display.']['rootline.']['separator'].$this->pi_linkTP($this->escape($forumpath_forum),array('tx_mmforum_pi1[action]'=>'list_topic','tx_mmforum_pi1[fid]'=>$forumid));
-        if ( $forumpath_topic)       $forumpath_topic      = $this->conf['display.']['rootline.']['separator'].$this->escape($forumpath_topic);
+		if ( $forumpath_category)    $forumpath_category   = $this->conf['display.']['rootline.']['separator'].'<a href="'.$this->pi_getPageLink($GLOBALS['TSFE']->id).'#cat'.$catid.'">'.$this->escape($forumpath_category).'</a>';
+		if ( $forumpath_forum)       $forumpath_forum      = $this->conf['display.']['rootline.']['separator'].$this->pi_linkTP($this->escape($forumpath_forum),array('tx_mmforum_pi1[action]'=>'list_topic','tx_mmforum_pi1[fid]'=>$forumid));
+		if ( $forumpath_topic)       $forumpath_topic      = $this->conf['display.']['rootline.']['separator'].$this->escape($forumpath_topic);
 
-        $pathcontent = $forumpath_index.$forumpath_category.$forumpath_forum;
-        return $pathcontent;
+		$pathcontent = $forumpath_index.$forumpath_category.$forumpath_forum;
+		return $pathcontent;
 
-    }
+	}
 
 	/**
 	 * Substitutes BBCode in a text to conventional HTML.
@@ -4792,29 +4790,29 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		return tx_mmforum_postparser::main($this, $conf, $text, 'textparser');
 	}
 
-    /**
-     * Displays a list of topics not yet read by the current user.
-     * Returns the tx_mmforum_posts.topic_id or tx_mmforum_posts.forum_id of all unread posts/forums
-     * in a non-assoc array.
-     *
-     * To limit the amount of retrieved IDs, the $filter param has to be used.
-     * It supports the following settings:
-     * 	$filter['forum_id'] == array of forum IDs which are of interest.
-     * 						This is e.g. used in list_forum where the viewed at posts are
-     * 						limited to those which are actually displayed in that overview.
-     *  $filter['topic_id'] == array of topic ids to check. Useful for _all_ views which are displaying only a subset of topics
-     *  					E.g. list_topic, list_unanswered, etc. This will effectively look only at those posts in question.
-     *  $filter['onlyCategories'] == if set to 1, the result will be the forum_ids instead of topic_ids.
-     *  					Useful again for the forum list where we are not interested in unread posts but in unread forums.
-     *
-     *
-     * @param $content - unused, kept for backwards compatibility
-     * @param $conf - unused, kept for backwards compatibility
-     * @param $lastlogin - $GLOBALS['TSFE']->fe_user->user['tx_mmforum_prelogin'] == The time when a user last pressed "Mark all read"
-     * @param $filter - array used to limit the returned posts to those of interest. See method description
-     * @return array non-assoc
-     */
-    function getunreadposts ($content, $conf, $lastlogin, $filter = array()) {
+	/**
+	 * Displays a list of topics not yet read by the current user.
+	 * Returns the tx_mmforum_posts.topic_id or tx_mmforum_posts.forum_id of all unread posts/forums
+	 * in a non-assoc array.
+	 *
+	 * To limit the amount of retrieved IDs, the $filter param has to be used.
+	 * It supports the following settings:
+	 * 	$filter['forum_id'] == array of forum IDs which are of interest.
+	 * 						This is e.g. used in list_forum where the viewed at posts are
+	 * 						limited to those which are actually displayed in that overview.
+	 *  $filter['topic_id'] == array of topic ids to check. Useful for _all_ views which are displaying only a subset of topics
+	 *  					E.g. list_topic, list_unanswered, etc. This will effectively look only at those posts in question.
+	 *  $filter['onlyCategories'] == if set to 1, the result will be the forum_ids instead of topic_ids.
+	 *  					Useful again for the forum list where we are not interested in unread posts but in unread forums.
+	 *
+	 *
+	 * @param $content - unused, kept for backwards compatibility
+	 * @param $conf - unused, kept for backwards compatibility
+	 * @param $lastlogin - $GLOBALS['TSFE']->fe_user->user['tx_mmforum_prelogin'] == The time when a user last pressed "Mark all read"
+	 * @param $filter - array used to limit the returned posts to those of interest. See method description
+	 * @return array non-assoc
+	 */
+	function getunreadposts ($content, $conf, $lastlogin, $filter = array()) {
 //    	$starttime = microtime(true);
 		$uid        = $GLOBALS['TSFE']->fe_user->user['uid'];
 
@@ -4828,29 +4826,29 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$where = '';
 		}
 
-    	$where .= 'deleted = 0 AND crdate > '.intval($lastlogin).' AND a.topic_id NOT IN (SELECT topic_id FROM tx_mmforum_postsread WHERE user='.intval($uid).$this->getStoragePIDQuery(). ')';
-    	//debug ($where, 'where');
-    	if ($filter['onlyCategories']) {
-    		$select = 'distinct(forum_id)';
-    	} else {
-    		$select = 'distinct(topic_id)';
-    	}
+		$where .= 'deleted = 0 AND crdate > '.intval($lastlogin).' AND a.topic_id NOT IN (SELECT topic_id FROM tx_mmforum_postsread WHERE user='.intval($uid).$this->getStoragePIDQuery(). ')';
+		//debug ($where, 'where');
+		if ($filter['onlyCategories']) {
+			$select = 'distinct(forum_id)';
+		} else {
+			$select = 'distinct(topic_id)';
+		}
 		$unread    = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-		    $select ,
-            'tx_mmforum_posts a',
-            $where
-         );
+			$select ,
+			'tx_mmforum_posts a',
+			$where
+		);
 
-        $res = array();
-        while ($row = mysql_fetch_assoc($unread)) {
-        	if ($filter['onlyCategories']) {
-        		$res[] = $row['forum_id'];
-        	} else {
-        		$res[] = $row['topic_id'];
-        	}
-         }
-    	//t3lib_div::debug (count($res), 'number of unread posts : took ms: ' . (microtime(true) - $starttime));
-    	return $res;
+		$res = array();
+		while ($row = mysql_fetch_assoc($unread)) {
+			if ($filter['onlyCategories']) {
+				$res[] = $row['forum_id'];
+			} else {
+				$res[] = $row['topic_id'];
+			}
+		}
+		//t3lib_div::debug (count($res), 'number of unread posts : took ms: ' . (microtime(true) - $starttime));
+		return $res;
 	}
 
 	/**
@@ -4880,47 +4878,47 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		return $content;
 	}
 
-    /**
-     * Highlights certain words in a text. Highlighting is done by applying a
-     * specific wrap defined in TypoScript (plugin.tx_mmforum_pi1.list_posts.highlight_wrap).
-     * @param  string $text  The text, in which the words are to be highlighted
-     * @param  array  $words An array of words that are to be highlighted
-     * @return string        The text with highlighted words.
-     */
-    function highlight_text ($text,$words)
-    {
-        $word_array = explode(" ",$words);
-        foreach ($word_array as $needle) {
-            if(trim($needle) != "")
-            {
-                $needle      = preg_quote($needle);
-                $needle      = str_replace('/','\\/',$needle);
+	/**
+	 * Highlights certain words in a text. Highlighting is done by applying a
+	 * specific wrap defined in TypoScript (plugin.tx_mmforum_pi1.list_posts.highlight_wrap).
+	 * @param  string $text  The text, in which the words are to be highlighted
+	 * @param  array  $words An array of words that are to be highlighted
+	 * @return string        The text with highlighted words.
+	 */
+	function highlight_text ($text,$words)
+	{
+		$word_array = explode(" ",$words);
+		foreach ($word_array as $needle) {
+			if(trim($needle) != "")
+			{
+				$needle      = preg_quote($needle);
+				$needle      = str_replace('/','\\/',$needle);
 
-                $check       = preg_match_all("/<(.*?)$needle(.*?)>/i", $text, $htmltags);
-                $placemark   = chr(1).chr(1).chr(1);
-                $text        = preg_replace("/<(.*?)$needle(.*?)>/i", $placemark, $text);
+				$check       = preg_match_all("/<(.*?)$needle(.*?)>/i", $text, $htmltags);
+				$placemark   = chr(1).chr(1).chr(1);
+				$text        = preg_replace("/<(.*?)$needle(.*?)>/i", $placemark, $text);
 
-                $replace     = $this->cObj->wrap('\\0',$this->conf['list_posts.']['highlight_wrap']);
-                $text        = preg_replace("/$needle/i", $replace, $text);
+				$replace     = $this->cObj->wrap('\\0',$this->conf['list_posts.']['highlight_wrap']);
+				$text        = preg_replace("/$needle/i", $replace, $text);
 
-                if(count($htmltags[0])>0) {
-                    foreach($htmltags[0] as $htmltag) {
-                        $text = preg_replace('/'.$placemark.'/',"$htmltag", $text, 1);
-                    }
-                }
-            }
-        }
-        return $text;
-    }
+				if(count($htmltags[0])>0) {
+					foreach($htmltags[0] as $htmltag) {
+						$text = preg_replace('/'.$placemark.'/',"$htmltag", $text, 1);
+					}
+				}
+			}
+		}
+		return $text;
+	}
 
 	/**
-     * Builds a link to a specific post by determining the topic and the post's
-     * page in this topic by post UID.
-     * @param  int    $post_id The post UID
-     * @param  string $sword   The search word
-     * @param  array  $conf    The plugin's configuration vars
-     * @return string          The URL
-     */
+	 * Builds a link to a specific post by determining the topic and the post's
+	 * page in this topic by post UID.
+	 * @param  int    $post_id The post UID
+	 * @param  string $sword   The search word
+	 * @param  array  $conf    The plugin's configuration vars
+	 * @return string          The URL
+	 */
 	function get_pid_link ($post_id, $sword, $conf) {
 		$post_id = intval($post_id);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -4941,7 +4939,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$pos = array_search(array('uid' => (string)$post_id), $rows);
 		$pos = ($pos === false ? 0 : ($pos + 1));	// pos is id -> increase by one
 		$page = (int)ceil($pos / $conf['post_limit']);
-		
+
 		$linkparams[$this->prefixId] = array (
 			'action'    => 'list_post',
 			'tid'       => $topic_id,
@@ -4987,72 +4985,72 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		return $userRanksObj->displayUserRanks($userId);
 	}
 
-    /**
-     * Displays a configuration form for users.
-     * NOTE: This function is not used yet, since there are too few settings to
-     *       be set.
-     * @param  array  $conf  The plugin's configuration vars
-     * @param  array  $param The parameters for this function
-     * @return string        The configuration form
-     */
-    function user_config($conf,$param)
-    {
-        // Save changes
-            IF ($param['save']) {
-                if($param['postorder'] == 2) $post_sort = 'DESC';
-                else $post_sort = 'ASC';
+	/**
+	 * Displays a configuration form for users.
+	 * NOTE: This function is not used yet, since there are too few settings to
+	 *       be set.
+	 * @param  array  $conf  The plugin's configuration vars
+	 * @param  array  $param The parameters for this function
+	 * @return string        The configuration form
+	 */
+	function user_config($conf,$param)
+	{
+		// Save changes
+			IF ($param['save']) {
+				if($param['postorder'] == 2) $post_sort = 'DESC';
+				else $post_sort = 'ASC';
 
-                $updateArray = array(
-                    'tstamp'    => time(),
-                    'post_sort' => $post_sort,
-                    'ip'        => getenv("REMOTE_ADDR")
-                );
-                $res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userconfig', 'userid='.$GLOBALS['TSFE']->fe_user->user['uid'] , $updateArray);
-            }
+				$updateArray = array(
+					'tstamp'    => time(),
+					'post_sort' => $post_sort,
+					'ip'        => getenv("REMOTE_ADDR")
+				);
+				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userconfig', 'userid='.$GLOBALS['TSFE']->fe_user->user['uid'] , $updateArray);
+			}
 
-        $template = $this->cObj->fileResource($conf['template.']['userconf']);
-        $template = $this->cObj->getSubpart($template, "###USERCONF###");
+		$template = $this->cObj->fileResource($conf['template.']['userconf']);
+		$template = $this->cObj->getSubpart($template, "###USERCONF###");
 
-        $marker = array(
-            '###ACTIONLINK###'                => $this->pi_getPageLink($GLOBALS["TSFE"]->id),
-            '###LABEL_USERCONF###'            => $this->pi_getLL('user.userConf'),
-            '###LABEL_POSTORDER###'           => $this->pi_getLL('user.postOrder'),
-            '###LABEL_POSTFIRST###'           => $this->pi_getLL('user.postOrder.postFirst'),
-            '###LABEL_SAVE###'                => $this->pi_getLL('user.save')
-        );
+		$marker = array(
+			'###ACTIONLINK###'                => $this->pi_getPageLink($GLOBALS["TSFE"]->id),
+			'###LABEL_USERCONF###'            => $this->pi_getLL('user.userConf'),
+			'###LABEL_POSTORDER###'           => $this->pi_getLL('user.postOrder'),
+			'###LABEL_POSTFIRST###'           => $this->pi_getLL('user.postOrder.postFirst'),
+			'###LABEL_SAVE###'                => $this->pi_getLL('user.save')
+		);
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_userconfig','userid="'.$GLOBALS['TSFE']->fe_user->user['uid'].'"');
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_userconfig','userid="'.$GLOBALS['TSFE']->fe_user->user['uid'].'"');
 
-        // If there is no config record for current user, create one.
-            if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
-                $insertArray = array(
-                    'tstamp'        => time(),
-                    'crdate'        => time(),
-                    'userid'        => $GLOBALS['TSFE']->fe_user->user['uid'],
-                    'ip'            => t3lib_div::getIndpEnv("REMOTE_ADDR")
-                );
-                $res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userconfig',$insertArray);
-            } else {
-                $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-            }
+		// If there is no config record for current user, create one.
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+				$insertArray = array(
+					'tstamp'        => time(),
+					'crdate'        => time(),
+					'userid'        => $GLOBALS['TSFE']->fe_user->user['uid'],
+					'ip'            => t3lib_div::getIndpEnv("REMOTE_ADDR")
+				);
+				$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userconfig',$insertArray);
+			} else {
+				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			}
 
-        // Sorting order of posts
-            IF($row['post_sort'] == "DESC") {
-                $select1 = '';
-                $select2 = 'selected';
-            } else {
-                $select1 = 'selected';
-                $select2 = '';
-            }
-            $marker['###POSTORDER###'] .= '<select class="tx-mmforum-select" name="tx_mmforum_pi1[postorder]">';
-            $marker['###POSTORDER###'] .= '<option value="1" '.$select1.'>'.$this->pi_getLL('user.postOrder.first').'</option>';
-            $marker['###POSTORDER###'] .= '<option value="2" '.$select2.'>'.$this->pi_getLL('user.postOrder.last').'</option>';
-            $marker['###POSTORDER###'] .= '</select>';
+		// Sorting order of posts
+			IF($row['post_sort'] == "DESC") {
+				$select1 = '';
+				$select2 = 'selected';
+			} else {
+				$select1 = 'selected';
+				$select2 = '';
+			}
+			$marker['###POSTORDER###'] .= '<select class="tx-mmforum-select" name="tx_mmforum_pi1[postorder]">';
+			$marker['###POSTORDER###'] .= '<option value="1" '.$select1.'>'.$this->pi_getLL('user.postOrder.first').'</option>';
+			$marker['###POSTORDER###'] .= '<option value="2" '.$select2.'>'.$this->pi_getLL('user.postOrder.last').'</option>';
+			$marker['###POSTORDER###'] .= '</select>';
 
 
-        $content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
-        return $content;
-    }
+		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
+		return $content;
+	}
 
 	/**
 	 * Redirects to the last page of a certain topic
@@ -5113,62 +5111,62 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	}
 
 
-    /**
-     * Returns a select box with a tree view of all categories and boards. The
-     * board of the topic specified in $topic_id is selected.
-     * @param  int    $topic_id The board containing the topic specified by this UID is
-     *                          selected.
-     * @return string           The HTML select box with all categories and boards.
-     */
-    function get_forumbox($topic_id)
-    {
-        $forum_id    = $this->get_forum_id($topic_id);
+	/**
+	 * Returns a select box with a tree view of all categories and boards. The
+	 * board of the topic specified in $topic_id is selected.
+	 * @param  int    $topic_id The board containing the topic specified by this UID is
+	 *                          selected.
+	 * @return string           The HTML select box with all categories and boards.
+	 */
+	function get_forumbox($topic_id)
+	{
+		$forum_id    = $this->get_forum_id($topic_id);
 
-        $content    = '<select class="tx-mmforum-select" name="'.$this->prefixId.'[change_forum_id]" size="12">';
+		$content    = '<select class="tx-mmforum-select" name="'.$this->prefixId.'[change_forum_id]" size="12">';
 
-        // Load categories
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            '*',
-            'tx_mmforum_forums',
-            'deleted="0"
-             AND hidden="0" AND
-             parentID="0" '.
-             $this->getStoragePIDQuery().
-             $this->getCategoryLimit_query().
-             $this->getMayWrite_forum_query(),
-            '',
-            'sorting ASC'
-        );
-        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            $content .= '<optgroup label="'.$this->escape($row['forum_name']).'">';
+		// Load categories
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'*',
+			'tx_mmforum_forums',
+			'deleted="0"
+			AND hidden="0" AND
+			parentID="0" '.
+			$this->getStoragePIDQuery().
+			$this->getCategoryLimit_query().
+			$this->getMayWrite_forum_query(),
+			'',
+			'sorting ASC'
+		);
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			$content .= '<optgroup label="'.$this->escape($row['forum_name']).'">';
 
-            // Load boards
-            $res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                '*',
-                'tx_mmforum_forums',
-                'deleted="0" AND
-                 hidden="0" AND
-                 parentID="'.$row['uid'].'" '.
-                 $this->getStoragePIDQuery().
-                 $this->getMayWrite_forum_query(),
-                '',
-                'sorting ASC'
-            );
-            while ($row2 = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2)) {
-                IF ($row2['uid'] == $forum_id) {
-                    $select = 'selected="selected"';
-                } else {
-                    $select = '';
-                }
+			// Load boards
+			$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'*',
+				'tx_mmforum_forums',
+				'deleted="0" AND
+				hidden="0" AND
+				parentID="'.$row['uid'].'" '.
+				$this->getStoragePIDQuery().
+				$this->getMayWrite_forum_query(),
+				'',
+				'sorting ASC'
+			);
+			while ($row2 = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2)) {
+				IF ($row2['uid'] == $forum_id) {
+					$select = 'selected="selected"';
+				} else {
+					$select = '';
+				}
 
-                $content.= '<option value="'.$this->escape($row2['uid']).'" '.$select.'>'.$this->escape($row2['forum_name']).'</option>';
-            }
+				$content.= '<option value="'.$this->escape($row2['uid']).'" '.$select.'>'.$this->escape($row2['forum_name']).'</option>';
+			}
 
-            $content .= '</optgroup>';
-        }
-        $content .= '</select>';
-        return $content;
-    }
+			$content .= '</optgroup>';
+		}
+		$content .= '</select>';
+		return $content;
+	}
 
 	/**
 	 * Returns the UID of the last post in a topic.
@@ -5347,84 +5345,84 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 	}
 
-    /**
-     * Generates a forum icon.
-     * This function dynamically generates a forum icon.
-     *
-     * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2008-03-17
-     * @param   boolean $isClosed Defines if the forum is not writeable
-     * @param   boolean $isNew    Defines if the forum contains unread posts
-     * @return  string            The HTML code of the image
-     */
-    function getForumIcon($forum=null, $isClosed=false, $isNew=false) {
+	/**
+	 * Generates a forum icon.
+	 * This function dynamically generates a forum icon.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2008-03-17
+	 * @param   boolean $isClosed Defines if the forum is not writeable
+	 * @param   boolean $isNew    Defines if the forum contains unread posts
+	 * @return  string            The HTML code of the image
+	 */
+	function getForumIcon($forum=null, $isClosed=false, $isNew=false) {
 
-        $topicIconMode = $this->getTopicIconMode();
+		$topicIconMode = $this->getTopicIconMode();
 
 		if($forum !== null) {
 			if(!is_array($forum))
 				$forum = $this->getBoardData($forum);
 
 			if ($GLOBALS['TSFE']->fe_user->user['uid']) {
-	            if(!isset($GLOBALS['tx_mmforum_pi1']['readarray'])) {
-	                $resunread = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-	                    'tx_mmforum_prelogin as lastlogin',
-	                    'fe_users',
-	                    'uid="'.$GLOBALS['TSFE']->fe_user->user['uid'].'"'
-	                );
-	                $rowunread = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resunread);
-	                $lastlogin = $rowunread['lastlogin'];
-	                $readarray = $this->getunreadposts('', $this->conf, $lastlogin);
+				if(!isset($GLOBALS['tx_mmforum_pi1']['readarray'])) {
+					$resunread = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+						'tx_mmforum_prelogin as lastlogin',
+						'fe_users',
+						'uid="'.$GLOBALS['TSFE']->fe_user->user['uid'].'"'
+					);
+					$rowunread = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resunread);
+					$lastlogin = $rowunread['lastlogin'];
+					$readarray = $this->getunreadposts('', $this->conf, $lastlogin);
 
-	                $GLOBALS['tx_mmforum_pi1']['readarray'] = $readarray;
-	            }
-	            else $readarray = $GLOBALS['tx_mmforum_pi1']['readarray'];
-	        }
-	        else $readarray = array();
+					$GLOBALS['tx_mmforum_pi1']['readarray'] = $readarray;
+				}
+				else $readarray = $GLOBALS['tx_mmforum_pi1']['readarray'];
+			}
+			else $readarray = array();
 
-	        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_topics','forum_id="'.$forum['uid'].'"'.$this->getStoragePIDQuery());
-            $blnnew = false;
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_topics','forum_id="'.$forum['uid'].'"'.$this->getStoragePIDQuery());
+			$blnnew = false;
 
-            while($row_topic = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-                if(in_array($row_topic['uid'], $readarray)) {
-                    $blnnew = true;
-                    break;
-                }
-            }
+			while($row_topic = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				if(in_array($row_topic['uid'], $readarray)) {
+					$blnnew = true;
+					break;
+				}
+			}
 
-            $isNew = $blnnew;
-            $isClosed = !$this->getMayWrite_forum($forum);
+			$isNew = $blnnew;
+			$isClosed = !$this->getMayWrite_forum($forum);
 		}
 
-        if($topicIconMode == 'modern') {
-            $dataArray = array(
-                'unread'        => $isNew,
-                'hot'           => 0,
-                'closed'        => $isClosed,
-                'unanswered'    => 0,
-                'solved'        => 0
-            );
-            $oldData = $this->cObj->data;
-            $this->cObj->data = $dataArray;
+		if($topicIconMode == 'modern') {
+			$dataArray = array(
+				'unread'        => $isNew,
+				'hot'           => 0,
+				'closed'        => $isClosed,
+				'unanswered'    => 0,
+				'solved'        => 0
+			);
+			$oldData = $this->cObj->data;
+			$this->cObj->data = $dataArray;
 
 			If($this->conf['forumIcon'])
-            	$image = $this->cObj->cObjGetSingle($this->conf['forumIcon'],$this->conf['forumIcon.']);
-            Else $image = $this->cObj->cObjGetSingle($this->conf['topicIcon'],$this->conf['topicIcon.']);
+				$image = $this->cObj->cObjGetSingle($this->conf['forumIcon'],$this->conf['forumIcon.']);
+			Else $image = $this->cObj->cObjGetSingle($this->conf['topicIcon'],$this->conf['topicIcon.']);
 
-            $this->cObj->data = $oldData;
+			$this->cObj->data = $oldData;
 
-            return $image;
-        } elseif($topicIconMode == 'classic') {
-            $filename = ($isClosed?'closed_':'').'forum'.($isNew?'_new':'');
+			return $image;
+		} elseif($topicIconMode == 'classic') {
+			$filename = ($isClosed?'closed_':'').'forum'.($isNew?'_new':'');
 
-            $imgInfo = array(
-                'src'		=> $this->conf['path_img'].$this->conf['images.'][$filename],
-                'alt'		=> $this->pi_getLL('board.'.$filename),
-                'title'		=> $this->pi_getLL('board.'.$filename)
-            );
-            return $this->buildImageTag($imgInfo);
-        }
-    }
+			$imgInfo = array(
+				'src'		=> $this->conf['path_img'].$this->conf['images.'][$filename],
+				'alt'		=> $this->pi_getLL('board.'.$filename),
+				'title'		=> $this->pi_getLL('board.'.$filename)
+			);
+			return $this->buildImageTag($imgInfo);
+		}
+	}
 
 	/**
 	 * Generates a link to mark all topics in a board as read.
@@ -5443,61 +5441,61 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 	}
 
-    /**
-     * Outputs a file attachment.
-     * This function outputs a file attachment whose UID is submitted
-     * via parameter. For security reasons, attachment links may not point
-     * to the attachment files directly. Instead, this function checks if the
-     * user that is currently logged in is allowed to open this attachment.
-     * Only if this check is passed, the attachment file will be output
-     * directly to the browser.
-     *
-     * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2007-05-21
-     * @return  void
-     */
-    function getAttachment() {
-        if($this->useRealUrl()) {
-            $aUID = $this->piVars['fid'];
-            $aUID = str_replace($this->pi_getLL('realurl.attachment'),'',$aUID);
-        } else
-            $aUID = $this->piVars['attachment'];
-        $aUID = intval($aUID);
+	/**
+	 * Outputs a file attachment.
+	 * This function outputs a file attachment whose UID is submitted
+	 * via parameter. For security reasons, attachment links may not point
+	 * to the attachment files directly. Instead, this function checks if the
+	 * user that is currently logged in is allowed to open this attachment.
+	 * Only if this check is passed, the attachment file will be output
+	 * directly to the browser.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2007-05-21
+	 * @return  void
+	 */
+	function getAttachment() {
+		if($this->useRealUrl()) {
+			$aUID = $this->piVars['fid'];
+			$aUID = str_replace($this->pi_getLL('realurl.attachment'),'',$aUID);
+		} else
+			$aUID = $this->piVars['attachment'];
+		$aUID = intval($aUID);
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            '*',
-            'tx_mmforum_attachments',
-            'uid='.$aUID.' AND deleted=0'
-        );
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0)
-            return $this->errorMessage($this->conf,$this->pi_getLL('attachment.doesNotExist'));
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'*',
+			'tx_mmforum_attachments',
+			'uid='.$aUID.' AND deleted=0'
+		);
+		if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0)
+			return $this->errorMessage($this->conf,$this->pi_getLL('attachment.doesNotExist'));
 
-        $a = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$a = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
-        if(@file_exists($a['file_path']) /*&& $this->getMayRead_post($a['post_id'])*/) {
-            $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_attachments SET downloads = downloads + 1 WHERE uid='.$aUID);
+		if(@file_exists($a['file_path']) /*&& $this->getMayRead_post($a['post_id'])*/) {
+			$GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_attachments SET downloads = downloads + 1 WHERE uid='.$aUID);
 
-            header('Content-Type: '.$a['file_type']);
-            header('Content-Length: '.filesize($a['file_path']));
-            header('Content-Disposition: attachment; filename="'.$a['file_name'].'"');
+			header('Content-Type: '.$a['file_type']);
+			header('Content-Length: '.filesize($a['file_path']));
+			header('Content-Disposition: attachment; filename="'.$a['file_name'].'"');
 
-            readfile($a['file_path']);
-            die();
-        } else {
-            return $this->errorMessage($this->conf,$this->pi_getLL('attachment.doesNotExist'));
-        }
-    }
-
-    /**
-     * User rights management
-     */
+			readfile($a['file_path']);
+			die();
+		} else {
+			return $this->errorMessage($this->conf,$this->pi_getLL('attachment.doesNotExist'));
+		}
+	}
 
 	/**
-     * Generates a MySQL-query to determine in which boards the current user may read.
-     * @return string  A MySQL-WHERE-query, beginning with "AND", checking which boards the
-     *                 user that is currently logged in may read in.
-     * @author Martin Helmich <m.helmich@mittwald.de>
-     */
+	 * User rights management
+	 */
+
+	/**
+	 * Generates a MySQL-query to determine in which boards the current user may read.
+	 * @return string  A MySQL-WHERE-query, beginning with "AND", checking which boards the
+	 *                 user that is currently logged in may read in.
+	 * @author Martin Helmich <m.helmich@mittwald.de>
+	 */
 	function getMayRead_forum_query($prefix = '') {
 
 		$userId = $this->getUserID();
@@ -5543,14 +5541,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	}
 
 	/**
-     * Determines if the current user may read in a certain board.
-     * @param  mixed   $forum The board identifier. This may either be a board UID pointing to
-     *                        a record in the tx_mmforum_forums table or an associative array
-     *                        already containing this records.
-     * @return boolean        TRUE, if the user that is currently logged in may read in the
-     *                        specified board, otherwise FALSE.
-     * @author Martin Helmich <m.helmich@mittwald.de>
-     */
+	 * Determines if the current user may read in a certain board.
+	 * @param  mixed   $forum The board identifier. This may either be a board UID pointing to
+	 *                        a record in the tx_mmforum_forums table or an associative array
+	 *                        already containing this records.
+	 * @return boolean        TRUE, if the user that is currently logged in may read in the
+	 *                        specified board, otherwise FALSE.
+	 * @author Martin Helmich <m.helmich@mittwald.de>
+	 */
 	function getMayRead_forum($forum) {
 
 		$userId = $this->getUserID();
@@ -5619,11 +5617,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	}
 
 	/**
-     * Generates a MySQL-query to determine in which boards the current user may write.
-     * @return string  A MySQL-WHERE-query, beginning with "AND", checking in which boards the
-     *                 user that is currently logged in may write.
-     * @author Martin Helmich <m.helmich@mittwald.de>
-     */
+	 * Generates a MySQL-query to determine in which boards the current user may write.
+	 * @return string  A MySQL-WHERE-query, beginning with "AND", checking in which boards the
+	 *                 user that is currently logged in may write.
+	 * @author Martin Helmich <m.helmich@mittwald.de>
+	 */
 	function getMayWrite_forum_query() {
 
 		$userId = $this->getUserID();
@@ -5668,14 +5666,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	}
 
 	/**
-     * Determines if the current user may write in a certain board.
-     * @param  mixed   $forum The board identifier. This may either be a board UID pointing to
-     *                        a record in the tx_mmforum_forums table or an associative array
-     *                        already containing this record.
-     * @return boolean        TRUE, if the user that is currently logged in may write in the
-     *                        specified board, otherwise FALSE.
-     * @author Martin Helmich <m.helmich@mittwald.de>
-     */
+	 * Determines if the current user may write in a certain board.
+	 * @param  mixed   $forum The board identifier. This may either be a board UID pointing to
+	 *                        a record in the tx_mmforum_forums table or an associative array
+	 *                        already containing this record.
+	 * @return boolean        TRUE, if the user that is currently logged in may write in the
+	 *                        specified board, otherwise FALSE.
+	 * @author Martin Helmich <m.helmich@mittwald.de>
+	 */
 	function getMayWrite_forum($forum) {
 
 		$userId = $this->getUserID();
@@ -5750,14 +5748,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	}
 
 	/**
-     * Determines if the current user may write in a certain topic.
-     * @param  mixed   $topic The topic identifier. This may either be a topic UID pointing to
-     *                        a record in the tx_mmforum_topics table or an associative array
-     *                        already containing this record.
-     * @return boolean        TRUE, if the user that is currently logged in may write in the
-     *                        specified topic, otherwise FALSE.
-     * @author Martin Helmich <m.helmich@mittwald.de>
-     */
+	 * Determines if the current user may write in a certain topic.
+	 * @param  mixed   $topic The topic identifier. This may either be a topic UID pointing to
+	 *                        a record in the tx_mmforum_topics table or an associative array
+	 *                        already containing this record.
+	 * @return boolean        TRUE, if the user that is currently logged in may write in the
+	 *                        specified topic, otherwise FALSE.
+	 * @author Martin Helmich <m.helmich@mittwald.de>
+	 */
 	function getMayWrite_topic($topic) {
 
 		$userId = $this->getUserID();
@@ -5798,14 +5796,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	}
 
 	/**
-     * Determines if the current user may read a certain topic.
-     * @param  mixed   $topic The topic identifier. This may either be a topic UID pointing to
-     *                        a record in the tx_mmforum_topics table or an associative array
-     *                        already containing this record.
-     * @return boolean        TRUE, if the user that is currently logged in may read the
-     *                        specified topic, otherwise FALSE.
-     * @author Martin Helmich <m.helmich@mittwald.de>
-     */
+	 * Determines if the current user may read a certain topic.
+	 * @param  mixed   $topic The topic identifier. This may either be a topic UID pointing to
+	 *                        a record in the tx_mmforum_topics table or an associative array
+	 *                        already containing this record.
+	 * @return boolean        TRUE, if the user that is currently logged in may read the
+	 *                        specified topic, otherwise FALSE.
+	 * @author Martin Helmich <m.helmich@mittwald.de>
+	 */
 	function getMayRead_topic($topic) {
 		if (!is_array($topic)) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -5816,21 +5814,21 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
 			return $this->getMayRead_forum($arr);
-		
+
 		} else {
 			return $this->getMayRead_forum($topic['forum_id']);
 		}
 	}
 
 	/**
-     * Determines if the current user may read a certain post.
-     * @param  mixed   $topic The post identifier. This may either be a post UID pointing to
-     *                        a record in the tx_mmforum_posts table or an associative array
-     *                        already containing this record.
-     * @return boolean        TRUE, if the user that is currently logged in may read the
-     *                        specified post, otherwise FALSE.
-     * @author Martin Helmich <m.helmich@mittwald.de>
-     */
+	 * Determines if the current user may read a certain post.
+	 * @param  mixed   $topic The post identifier. This may either be a post UID pointing to
+	 *                        a record in the tx_mmforum_posts table or an associative array
+	 *                        already containing this record.
+	 * @return boolean        TRUE, if the user that is currently logged in may read the
+	 *                        specified post, otherwise FALSE.
+	 * @author Martin Helmich <m.helmich@mittwald.de>
+	 */
 	function getMayRead_post($post) {
 		if($post == 0) {
 			return false;
@@ -5845,7 +5843,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
 			return $this->getMayRead_forum($arr);
-		
+
 		} else {
 			return $this->getMayRead_forum($post['forum_id']);
 		}
@@ -5866,47 +5864,47 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		return ' AND ' . $table . '.pid = ' . intval($this->conf['userPID']) . ' ';
 	}
 
-    /**
-     * Retrieces a board records from database.
-     * This function retrieves a board record from the tx_mmforum_forums table in
-     * the database as an associative array.
-     *
-     * @param  int   $uid The board's uid
-     * @return array      The board record as associative array
-     */
-    function getBoardData($uid) {
-        $uid = intval($uid);
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            '*',
-            'tx_mmforum_forums',
-            "uid='$uid'"
-        );
-        return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-    }
+	/**
+	 * Retrieces a board records from database.
+	 * This function retrieves a board record from the tx_mmforum_forums table in
+	 * the database as an associative array.
+	 *
+	 * @param  int   $uid The board's uid
+	 * @return array      The board record as associative array
+	 */
+	function getBoardData($uid) {
+		$uid = intval($uid);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'*',
+			'tx_mmforum_forums',
+			"uid='$uid'"
+		);
+		return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+	}
 
-    /**
-     * Generates a MySQL-query part to select only a set of predefined categories.
-     * @param  string $tablename The table name
-     * @return string            The MySQL-query part
-     */
-    function getCategoryLimit_query($tablename="") {
-        if(!$this->limitCat) return "";
+	/**
+	 * Generates a MySQL-query part to select only a set of predefined categories.
+	 * @param  string $tablename The table name
+	 * @return string            The MySQL-query part
+	 */
+	function getCategoryLimit_query($tablename="") {
+		if(!$this->limitCat) return "";
 
-        $prefix = $tablename?"$tablename.":'';
-        $query = " AND $prefix"."uid IN (".$this->limitCat.")";
-        return $query;
-    }
-    
+		$prefix = $tablename?"$tablename.":'';
+		$query = " AND $prefix"."uid IN (".$this->limitCat.")";
+		return $query;
+	}
+
   /**
 	 * Creates the mm_forum page title.
 	 * This function generates the title of the mm_forum using the rootline
 	 * locallang names.
 	 */
 	function createPageTitle() {
-	  if ($this->conf['removeOriginalPagetitle']) {
-	    $GLOBALS['TSFE']->page['title'] = '';
-    }
-    
+		if ($this->conf['removeOriginalPagetitle']) {
+			$GLOBALS['TSFE']->page['title'] = '';
+		}
+
 		switch ($this->piVars['action']) {
 			// List post view, new post form, post alert form
 			// Sets a title like "mm_forum page -> Category -> Board -> Topic (-> New post/Report post)""
@@ -5970,10 +5968,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Sets a title like "mm_forum page -> User profile: Username"
 			case 'forum_view_profil':
 				if($this->useRealUrl() && $this->piVars['fid']) {
-          $user = tx_mmforum_FeUser::GetByUsername($this->piVars['fid']);
-        } else {
-          $user = tx_mmforum_FeUser::GetByUID($this->piVars['user_id']);
-        }
+					$user = tx_mmforum_FeUser::GetByUsername($this->piVars['fid']);
+				} else {
+					$user = tx_mmforum_FeUser::GetByUID($this->piVars['user_id']);
+				}
 
 				$pageTitle = sprintf($this->pi_getLL('rootline.userprofile'), $this->escape($user->gD($this->getUserNameField())));
 			break;
@@ -5982,78 +5980,78 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Sets a title like "mm_forum page -> List unread/unanswered topics"
 			case 'list_unread':
 			case 'list_unans':
-			  $pageTitle = $this->pi_getLL('rootline.' . $this->piVars['action']);
+				$pageTitle = $this->pi_getLL('rootline.' . $this->piVars['action']);
 			break;
 		}
 
 		if ($this->conf['pagetitleLastForumPageTitleOnly']) {
 
-  		if (isset($topicTitle)) {
-  		  if ($GLOBALS['TSFE']->page['title'] == '') {
-          $GLOBALS['TSFE']->page['title'] = $topicTitle;
-        } else {
-          $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$topicTitle;
-        }
-  		} elseif (isset($forumTitle)) {
-  		  if ($GLOBALS['TSFE']->page['title'] == '') {
-          $GLOBALS['TSFE']->page['title'] = $forumTitle;
-        } else {
-          $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$forumTitle;
-        }
-      } elseif(isset($catTitle)) {
-  		  if ($GLOBALS['TSFE']->page['title'] == '') {
-          $GLOBALS['TSFE']->page['title'] = $catTitle;
-        } else {
-          $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$catTitle;
-        }
-  		}
-      
-    } else {
+		if (isset($topicTitle)) {
+			if ($GLOBALS['TSFE']->page['title'] == '') {
+				$GLOBALS['TSFE']->page['title'] = $topicTitle;
+			} else {
+				$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$topicTitle;
+			}
+		} elseif (isset($forumTitle)) {
+			if ($GLOBALS['TSFE']->page['title'] == '') {
+				$GLOBALS['TSFE']->page['title'] = $forumTitle;
+			} else {
+				$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$forumTitle;
+			}
+		} elseif(isset($catTitle)) {
+			if ($GLOBALS['TSFE']->page['title'] == '') {
+				$GLOBALS['TSFE']->page['title'] = $catTitle;
+			} else {
+				$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$catTitle;
+			}
+		}
 
-  		if (isset($catTitle)) {
-  		  if ($GLOBALS['TSFE']->page['title'] == '') {
-          $GLOBALS['TSFE']->page['title'] = $catTitle;
-        } else {
-          $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$catTitle;
-        }
-  		}
-  
-  		if (isset($forumTitle)) {
-  		  if ($GLOBALS['TSFE']->page['title'] == '') {
-          $GLOBALS['TSFE']->page['title'] = $forumTitle;
-        } else {
-          $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$forumTitle;
-        }
-  		}
-  
-  		if (isset($topicTitle)) {
-  		  if ($GLOBALS['TSFE']->page['title'] == '') {
-          $GLOBALS['TSFE']->page['title'] = $topicTitle;
-        } else {
-          $GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$topicTitle;
-        }
-  		}
-    
-    }
+	} else {
+
+		if (isset($catTitle)) {
+			if ($GLOBALS['TSFE']->page['title'] == '') {
+				$GLOBALS['TSFE']->page['title'] = $catTitle;
+			} else {
+				$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$catTitle;
+			}
+		}
+
+		if (isset($forumTitle)) {
+			if ($GLOBALS['TSFE']->page['title'] == '') {
+				$GLOBALS['TSFE']->page['title'] = $forumTitle;
+			} else {
+				$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$forumTitle;
+			}
+		}
+
+		if (isset($topicTitle)) {
+			if ($GLOBALS['TSFE']->page['title'] == '') {
+				$GLOBALS['TSFE']->page['title'] = $topicTitle;
+			} else {
+				$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$topicTitle;
+			}
+		}
+
+	}
 
 		if (isset($pageTitle)) {
 			$GLOBALS['TSFE']->page['title'] .= $this->conf['display.']['pageTitle.']['separator'].$pageTitle;
 		}
 
-    //wrap the page title
+	//wrap the page title
 		$GLOBALS['TSFE']->page['title'] = $this->cObj->wrap($GLOBALS['TSFE']->page['title'], $this->conf['pagetitleWrap']);
 		// set page title for indexed search
 		$GLOBALS['TSFE']->indexedDocTitle = $GLOBALS['TSFE']->page['title'];
-		
+
 		//get to know if it is a USER_INT extension
 		if ($this->pi_USER_INT_obj == true) {
-		  //$GLOBALS['TSFE']->page['title'] is already written, so the change does
-		  //not have any effect
-		  $GLOBALS['TSFE']->content = preg_replace('/<title>.+<\/title>/',
-                                  '<title>'.$GLOBALS['TSFE']->page['title'].'</title>',
-                                  $GLOBALS['TSFE']->content, 1); 
-    }
-		
+			//$GLOBALS['TSFE']->page['title'] is already written, so the change does
+			//not have any effect
+			$GLOBALS['TSFE']->content = preg_replace('/<title>.+<\/title>/',
+								'<title>'.$GLOBALS['TSFE']->page['title'].'</title>',
+								$GLOBALS['TSFE']->content, 1);
+	}
+
 	}
 
 	/**
@@ -6078,51 +6076,51 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		return $menuObj->createRootline($content,$conf);
 	}
 
-    /**
-     * Creates a button.
-     * This function creates a button. The button can be configured using
-     * TypoScript.
-     *
-     * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2008-02-11
-     * @param   string  $label  The label. This will either be an image file name
-     *                          or a key for a locallang entry.
-     * @param   array   $params Link parameters
-     * @param   int     $id     The page ID to be linked to. If 0, the button will
-     *                          link to the current page.
-     * @param   boolean $small  Defines if the button is to be declared as small. Will
-     *                          only affect text buttons.
-     * @param   string  $href   A hard-coded link where this button shall link to.
-     * @return  string          The button.
-     */
-    function createButton($label,$params,$id=0,$small=false,$href='',$nolink=false,$atagparams='') {
-        if($id==0) $id = intval($this->fid) == 0 ? $GLOBALS['TSFE']->id : intval($this->fid);
+	/**
+	 * Creates a button.
+	 * This function creates a button. The button can be configured using
+	 * TypoScript.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2008-02-11
+	 * @param   string  $label  The label. This will either be an image file name
+	 *                          or a key for a locallang entry.
+	 * @param   array   $params Link parameters
+	 * @param   int     $id     The page ID to be linked to. If 0, the button will
+	 *                          link to the current page.
+	 * @param   boolean $small  Defines if the button is to be declared as small. Will
+	 *                          only affect text buttons.
+	 * @param   string  $href   A hard-coded link where this button shall link to.
+	 * @return  string          The button.
+	 */
+	function createButton($label,$params,$id=0,$small=false,$href='',$nolink=false,$atagparams='') {
+		if($id==0) $id = intval($this->fid) == 0 ? $GLOBALS['TSFE']->id : intval($this->fid);
 
-    	$prefixId = $this->prefixId_pi1?$this->prefixId_pi1:$this->prefixId;
+		$prefixId = $this->prefixId_pi1?$this->prefixId_pi1:$this->prefixId;
 
-    	$buttonObj  = $this->conf['buttons.'][$small?'small':'normal'];
-    	$buttonConf = $this->conf['buttons.'][$small?'small.':'normal.'];
+		$buttonObj  = $this->conf['buttons.'][$small?'small':'normal'];
+		$buttonConf = $this->conf['buttons.'][$small?'small.':'normal.'];
 
-    	if(!is_array($params)) {
-	    	if(preg_match('/^profileView:([0-9]+?)$/',$params,$matches)) {
-	    		$href = tx_mmforum_pi1::getUserProfileLink($matches[1]);
-	    	}
-    	}
+		if(!is_array($params)) {
+			if(preg_match('/^profileView:([0-9]+?)$/',$params,$matches)) {
+				$href = tx_mmforum_pi1::getUserProfileLink($matches[1]);
+			}
+		}
 
-    	$data		= array(
-    		'button_label'		 => $this->pi_getLL('button.'.$label,$label),
-            'button_link'        => $nolink?'':($href?$href:$this->pi_getPageLink($id,'',$params)),
-            'button_iconname'    => file_exists($this->conf['path_img'].'buttons/icons/'.$label.'.png')?$label.'.png':'',
-            'button_atagparams'  => $atagparams
-        );
-        $oldData    = $this->cObj->data;
-        $this->cObj->data = $data;
+		$data		= array(
+			'button_label'		 => $this->pi_getLL('button.'.$label,$label),
+			'button_link'        => $nolink?'':($href?$href:$this->pi_getPageLink($id,'',$params)),
+			'button_iconname'    => file_exists($this->conf['path_img'].'buttons/icons/'.$label.'.png')?$label.'.png':'',
+			'button_atagparams'  => $atagparams
+		);
+		$oldData    = $this->cObj->data;
+		$this->cObj->data = $data;
 
-        $button     = $this->cObj->cObjGetSingle($buttonObj,$buttonConf);
-        $this->cObj->data = $oldData;
+		$button     = $this->cObj->cObjGetSingle($buttonObj,$buttonConf);
+		$this->cObj->data = $oldData;
 
-        return $button;
-    }
+		return $button;
+	}
 
 	/**
 	 * Sets the solved status of a topic.
@@ -6340,7 +6338,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$content	= intval($content);
 
-		    if($content >= $todayStart)		$dateFormat = $this->pi_getLL('date-today').'&nbsp;[%H:%M]';
+			if($content >= $todayStart)		$dateFormat = $this->pi_getLL('date-today').'&nbsp;[%H:%M]';
 		elseif($content >= $yesterdayStart)	$dateFormat = $this->pi_getLL('date-yesterday').'&nbsp;[%H:%M]';
 		else								$dateFormat = $conf['defaultDateFormat'];
 
