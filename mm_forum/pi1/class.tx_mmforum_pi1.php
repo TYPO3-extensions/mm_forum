@@ -6106,34 +6106,36 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
      * @param   string  $href   A hard-coded link where this button shall link to.
      * @return  string          The button.
      */
-    function createButton($label,$params,$id=0,$small=false,$href='',$nolink=false,$atagparams='') {
-        if($id==0) $id = intval($this->fid) == 0 ? $GLOBALS['TSFE']->id : intval($this->fid);
+    function createButton($label, $params, $id=0, $small=false, $href='', $nolink=false, $atagparams='') {
+		if ($id == 0)
+			$id = intval($this->fid) == 0 ? $GLOBALS['TSFE']->id : intval($this->fid);
 
-    	$prefixId = $this->prefixId_pi1?$this->prefixId_pi1:$this->prefixId;
+		$prefixId = $this->prefixId_pi1 ? $this->prefixId_pi1 : $this->prefixId;
 
-    	$buttonObj  = $this->conf['buttons.'][$small?'small':'normal'];
-    	$buttonConf = $this->conf['buttons.'][$small?'small.':'normal.'];
+		$buttonObj = $this->conf['buttons.'][$small ? 'small' : 'normal'];
+		$buttonConf = $this->conf['buttons.'][$small ? 'small.' : 'normal.'];
 
-    	if(!is_array($params)) {
-	    	if(preg_match('/^profileView:([0-9]+?)$/',$params,$matches)) {
-	    		$href = tx_mmforum_pi1::getUserProfileLink($matches[1]);
-	    	}
-    	}
+		if (!is_array($params)) {
+			if (preg_match('/^profileView:([0-9]+?)$/', $params, $matches)) {
+				$href = tx_mmforum_pi1::getUserProfileLink($matches[1]);
+			}
+		}
 
-    	$data		= array(
-    		'button_label'		 => $this->pi_getLL('button.'.$label,$label),
-            'button_link'        => $nolink?'':($href?$href:$this->pi_getPageLink($id,'',$params)),
-            'button_iconname'    => file_exists($this->conf['path_img'].'buttons/icons/'.$label.'.png')?$label.'.png':'',
-            'button_atagparams'  => $atagparams
-        );
-        $oldData    = $this->cObj->data;
-        $this->cObj->data = $data;
+		$data = array(
+			'button_label' => $this->pi_getLL('button.' . $label, $label),
+			'button_link' => $nolink ? '' : ($href ? $href : $this->pi_getPageLink($id, '', $params)),
+			'button_iconname' => file_exists($this->conf['path_img'] . 'buttons/icons/' . $label . '.png') ? $label . '.png' : '',
+			'button_atagparams' => $atagparams
+		);
+		if ($data['button_link']{0} === '?') $data['button_link'] = '/' . $data['button_link'];
+		$oldData = $this->cObj->data;
+		$this->cObj->data = $data;
 
-        $button     = $this->cObj->cObjGetSingle($buttonObj,$buttonConf);
-        $this->cObj->data = $oldData;
+		$button = $this->cObj->cObjGetSingle($buttonObj, $buttonConf);
+		$this->cObj->data = $oldData;
 
-        return $button;
-    }
+		return $button;
+	}
 
 	/**
 	 * Sets the solved status of a topic.
