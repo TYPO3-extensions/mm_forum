@@ -6113,6 +6113,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'button_iconname'    => file_exists($this->conf['path_img'].'buttons/icons/'.$label.'.png')?$label.'.png':'',
 			'button_atagparams'  => $atagparams
 		);
+		if($data['button_link']{0} === '?') $data['button_link'] = '/'.$data['button_link'];
 		$oldData    = $this->cObj->data;
 		$this->cObj->data = $data;
 
