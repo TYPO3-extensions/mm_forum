@@ -937,6 +937,7 @@ class tx_mmforum_install {
 
         $TCE = t3lib_div::makeInstance('t3lib_tcemain');
         $TCE->admin = TRUE;
+		$TCE->BE_USER = $GLOBALS['BE_USER'];
         $TCE->clear_cacheCmd('all');
 
 		$this->conf = $this->p->config['plugin.']['tx_mmforum.'];
