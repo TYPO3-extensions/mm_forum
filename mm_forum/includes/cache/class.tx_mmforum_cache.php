@@ -121,7 +121,7 @@ class tx_mmforum_cache {
 		 *                       'apc','database','file' or 'none' (see above).
 		 * @return  void
 		 */
-	function init($mode = 'auto') {
+	function init($mode = 'auto', $configuration=Array()) {
 
 			/* If mode is set to 'auto' or 'apc', first try to set mode
 			 * to APC (if enabled) or otherwise to database. */
@@ -145,17 +145,19 @@ class tx_mmforum_cache {
 		if(isset($GLOBALS['typo3CacheManager'])) {
 			$this->useTYPO3Cache = TRUE;
 
-			if($useMode == 'database')
+			if($useMode == 'database' && TYPO3_UseCachingFramework)
 				$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('cache_hash');
 			else {
 				if($GLOBALS['typo3CacheManager']->hasCache('mm_forum'))
 					$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('mm_forum');
 				else {
 					switch($useMode) {
-						case 'apc':		$className = 't3lib_cache_backend_ApcBackend'; break;
-						case 'file':	$className = 't3lib_cache_backend_FileBackend'; break;
-						case 'none':	$className = 't3lib_cache_backend_NullBackend'; break;
-						default:		$className = 't3lib_cache_backend_GlobalsBackend'; break;
+						case 'database': $className = 't3lib_cache_backend_DbBackend'; break;
+						case 'apc':	     $className = 't3lib_cache_backend_ApcBackend'; break;
+						case 'file':     $className = 't3lib_cache_backend_FileBackend'; break;
+						case 'none':     $className = 't3lib_cache_backend_NullBackend'; break;
+						case 'globals':  $className = 't3lib_cache_backend_GlobalsBackend'; break;
+						default:         Throw New Exception("Unknown caching mode: $useMode", 1296594227);
 					}
 
 					if(!class_exists($className) && file_exists(PATH_t3lib.'cache/backend/class.'.strtolower($className).'.php'))
@@ -164,12 +166,12 @@ class tx_mmforum_cache {
 						$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('cache_hash');
 
 					if(class_exists($className)) {
-						$cacheBackend		= new $className;
-						$cacheObject		= new t3lib_cache_frontend_VariableFrontend('mm_forum', $cacheBackend);
+						$cacheBackend		= t3lib_div::makeInstance($className, $configuration);
+						$cacheObject		= t3lib_div::makeInstance('t3lib_cache_frontend_VariableFrontend', 'mm_forum', $cacheBackend);
 
 						$GLOBALS['typo3CacheManager']->registerCache( $cacheObject );
 						$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('mm_forum');
-					}
+					} else throw new Exception("Cache backend does not exist: $className", 1296594228);
 				}
 			}
 		} else {
@@ -316,7 +318,7 @@ class tx_mmforum_cache {
 		 * @version 2008-10-11
 		 * @return  tx_mmforum_cache An tx_mmforum_cache object.
 		 */
-	function getGlobalCacheObject() {
+	function getGlobalCacheObject($mode='database', $configuration=Array()) {
 
 			/* Check if object already exists and if so, just return this
 			 * object. */
@@ -326,7 +328,7 @@ class tx_mmforum_cache {
 			/* Otherwise create a new cache object */
 		else {
 			$cacheObj = t3lib_div::makeInstance('tx_mmforum_cache');
-			$cacheObj->init('database');
+			$cacheObj->init($mode, $configuration);
 
 			$GLOBALS['mm_forum']['cacheObj'] =& $cacheObj;
 

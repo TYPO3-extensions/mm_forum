@@ -136,7 +136,7 @@ CREATE TABLE tx_mmforum_syntaxhl (
 # 
 
 INSERT INTO tx_mmforum_syntaxhl (uid, pid, tstamp, crdate, deleted, hidden, lang_title, lang_pattern, lang_code, fe_inserticon) VALUES (1, 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 0, 0, 'PHP' , '/\\[php\\](.*?)\\[\\/php\\]/isS' , 'php' , 'php.gif');
-INSERT INTO tx_mmforum_syntaxhl (uid, pid, tstamp, crdate, deleted, hidden, lang_title, lang_pattern, lang_code, fe_inserticon) VALUES (2, 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 0, 0, 'Typoscript' , '/\\[ts\\](.*?)\\[\\/ts\\]/isS' , 'typoscript' , 'ts.gif');
+INSERT INTO tx_mmforum_syntaxhl (uid, pid, tstamp, crdate, deleted, hidden, lang_title, lang_pattern, lang_code, fe_inserticon) VALUES (2, 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 0, 0, 'Typoscript' , '/\\[(?<tagname>ts|typoscript)\\](.*?)\\[\\/\g{tagname}\\]/isS' , 'typoscript' , 'ts.gif');
 INSERT INTO tx_mmforum_syntaxhl (uid, pid, tstamp, crdate, deleted, hidden, lang_title, lang_pattern, lang_code, fe_inserticon) VALUES (3, 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 0, 0, 'HTML' , '/\\[html\\](.*?)\\[\\/html\\]/isS' , 'html4strict', 'html.gif');
 INSERT INTO tx_mmforum_syntaxhl (uid, pid, tstamp, crdate, deleted, hidden, lang_title, lang_pattern, lang_code, fe_inserticon) VALUES (4, 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 0, 0, 'Javascript' , '/\\[js\\](.*?)\\[\\/js\\]/isS' , 'javascript' , 'js.gif');
 INSERT INTO tx_mmforum_syntaxhl (uid, pid, tstamp, crdate, deleted, hidden, lang_title, lang_pattern, lang_code, fe_inserticon) VALUES (5, 0, UNIX_TIMESTAMP(), UNIX_TIMESTAMP(), 0, 0, 'SQL' , '/\\[sql\\](.*?)\\[\\/sql\\]/isS' , 'sql' , 'sql.gif');
