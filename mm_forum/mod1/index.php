@@ -282,13 +282,34 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 				 *                                                                 */
 			if(strpos($moduleSettings['handler'],'->') !== false) {
 				list($className, $methodName) = explode('->',$moduleSettings['handler']);
-				$obj = t3lib_div::getUserObj($className);
-				$obj->p =& $this;
+
+				if(strpos($className, 'Tx_Extbase_') === 0) {
+					$obj = t3lib_div::makeInstance($className);
+				} else {
+					$obj = t3lib_div::getUserObj($className);
+					$obj->p =& $this;
+				}
+
 				$settings = $moduleSettings['handler.']['settings.'];
 				$settings['settings.']['pids']['user'] = $this->confArr['userPID'];
 				$settings['settings.']['pids']['forum'] = $this->confArr['forumPID'];
 				$settings['settings.']['parentObject'] =& $this;
-				$content .= $obj->$methodName('', $settings);
+
+				if($className == 'Tx_Extbase_Core_Bootstrap') {
+					$oldBackPath = $GLOBALS['BACK_PATH'];
+					ob_start();
+					$obj->$methodName($settings['moduleKey']);
+
+					$GLOBALS['BACK_PATH'] = $oldBackPath;
+
+					$moduleContent = ob_get_clean();
+					$moduleContent = preg_replace(',../typo3conf,',$GLOBALS['BACK_PATH'].'../typo3conf', $moduleContent);
+					$moduleContent = preg_replace(',mod\.php,','index.php', $moduleContent);
+
+					$content .= $moduleContent;
+				} else {
+					$content .= $obj->$methodName('', $settings);
+				}
 
 				/*                                                                 *
 				 * Otherwise, just call the internal method specified by the       *

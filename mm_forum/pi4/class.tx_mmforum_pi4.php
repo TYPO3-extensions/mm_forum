@@ -302,6 +302,16 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		if($conf['debug_mode'] == 1) {
 			t3lib_div::debug ($this->piVars);
 		}
+		
+			// Include hooks
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['search']['additionalFormMarkers'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['search']['additionalFormMarkers'] as $userFunction) {
+				$params = array(
+					'marker' => $marker,
+				);
+				$marker = t3lib_div::callUserFunction($userFunction, $params, $this);
+			}
+		}
 
 		$content    = $this->cObj->substituteMarkerArrayCached($template, $marker);
 		return $content;
@@ -491,6 +501,19 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				} else {
 					$marker['###SOLVED###']    = $this->pi_getLL('search.no');
 					$marker['###SOLVEDIMAGE###']    = '';
+				}
+				
+				// Include hooks
+				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['search']['additionalPostMarkers'])) {
+					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['search']['additionalPostMarkers'] as $userFunction) {
+						$params = array(
+							'marker' => $marker,
+							'topic_info' => $topic_info,
+							'post_info' => $post_info,
+							'post_text' => $post_text,
+						);
+						$marker = t3lib_div::callUserFunction($userFunction, $params, $this);
+					}
 				}
 
 				$content .= $this->cObj->substituteMarkerArrayCached($template_sub, $marker);

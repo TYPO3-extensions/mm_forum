@@ -110,7 +110,7 @@ class tx_mmforum_base extends tslib_pibase {
 		$this->tools = t3lib_div::makeInstance('tx_mmforum_tools');
 
 			/* Initialize cache object */
-		$this->cache = &tx_mmforum_cache::getGlobalCacheObject();
+		$this->cache = &tx_mmforum_cache::getGlobalCacheObject($this->conf['caching'], $this->conf['caching.']);
 
 			/* Local cObj */
 		$this->local_cObj = t3lib_div::makeInstance('tslib_cObj');
@@ -371,9 +371,27 @@ class tx_mmforum_base extends tslib_pibase {
 		} else {
 			$imgInfo = $defaultInfo;
 		}
+
 		if ($imgInfo['src'] == '') {
 			$imgTag = '';
 		} else {
+
+				# Get width/height from image if not provided
+				# This fixes an Internet Explorer error with transparent PNGs.
+				#
+				# See http://forge.typo3.org/issues/12120
+				# Credits to Urs Weiss
+			if ($imgInfo['width'] == '' || $imgInfo['height'] == '') {
+				$imgSize = getimagesize($imgInfo['src']);
+				if ($imgSize !== false) {
+					if ($imgInfo['width'] == '')
+						$imgInfo['width'] = $imgSize[0];
+
+					if ($imgInfo['height'] == '')
+						$imgInfo['height'] = $imgSize[1];
+				}
+			}
+
 			$imgTag = '<img src="' . $imgInfo['src'] . '" ';
 			if (strlen($imgInfo['width'])) {
 				$imgTag .= 'width="' . $imgInfo['width'] . '" ';
