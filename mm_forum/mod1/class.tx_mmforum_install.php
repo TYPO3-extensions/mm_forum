@@ -674,6 +674,7 @@ class tx_mmforum_install {
 					"type" => "group",
 					"internal_type" => "db",
 					"allowed" => $table,
+					"prepend_tname" => FALSE,
 					"size" => 1,
 					"minitems" => 0,
 					"maxitems" => 1,
@@ -923,7 +924,7 @@ class tx_mmforum_install {
 			$config = $ctg=='required' ? $this->getFieldConfigByIdentifier($var) : $this->fieldConfig["$ctg."]['items.']["$var."];
 			$type = $config['type'];
 
-			if($type == 'group')
+			if($type == 'group' || $type == 'select')
 				$value = preg_replace('/^'.$config['type.']['table'].'_/','',preg_replace('/,$/','',$value));
             if($type == 'int') $value = intval($value);
             if($type == 'md5') {

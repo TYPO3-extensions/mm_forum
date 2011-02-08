@@ -1,6 +1,7 @@
 2011-02-08  Martin Helmich <m.helmich@mittwald.de>
 
 	* [+FEATURE]: Hook for dditional markers in search result (fixes issue #12435)
+	* [#BUGFIX]: Wrong value for userGroup & adminGroup with wizard (fixed issue #7539)
 	* [#BUGFIX]: Fatal Error with TYPO3 v 4.5 and Extbase v 1.3.0 (fixes issue #12588)
 
 2011-02-01  Martin Helmich <m.helmich@mittwald.de>
