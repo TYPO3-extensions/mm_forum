@@ -1,3 +1,7 @@
+2011-02-09  Martin Helmich <m.helmich@mittwald.de>
+
+	* [#BUGFIX]: Fixed a pagebrowsing bug
+
 2011-02-08  Martin Helmich <m.helmich@mittwald.de>
 
 	* [+FEATURE]: Hook for dditional markers in search result (fixes issue #12435)
