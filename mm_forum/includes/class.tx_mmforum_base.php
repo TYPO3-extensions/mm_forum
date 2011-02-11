@@ -123,6 +123,10 @@ class tx_mmforum_base extends tslib_pibase {
 		$this->conf['path_img']    = str_replace('EXT:mm_forum/', t3lib_extMgm::siteRelPath('mm_forum'), $this->conf['path_img']);
 		$this->conf['path_smilie'] = str_replace('EXT:mm_forum/', t3lib_extMgm::siteRelPath('mm_forum'), $this->conf['path_smilie']);
 
+		If(!class_exists('tx_pagebrowse_pi1')) {
+			Include_Once t3lib_extMgm::extPath('pagebrowse').'pi1/class.tx_pagebrowse_pi1.php';
+		}
+
 
 		if ($this->conf['debug']) {
 			$GLOBALS['TYPO3_DB']->debugOutput = true;
