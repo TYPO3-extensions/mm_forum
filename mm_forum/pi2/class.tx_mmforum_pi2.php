@@ -252,10 +252,9 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 			// Output message to user
 			$marker = array();
-			$marker['###VALUE_username###'] = $row['username'];
 			$template = $this->cObj->getSubpart($this->tmpl, "###TEMPLATE_VALIDATION_OK###");
 
-			$marker['###LABEL_HELLO###']     = $this->cObj->substituteMarker($this->pi_getLL('msg.hello'), '###USERNAME###', $marker['###VALUE_username###']);
+			$marker['###LABEL_HELLO###']     = $this->cObj->substituteMarker($this->pi_getLL('msg.hello'), '###USERNAME###', $row[$this->conf['userNameField']]);
 			$marker['###LABEL_ACTIVATED###'] = $this->cObj->substituteMarker($this->pi_getLL('msg.activated'), '###SITENAME###', $this->conf['siteName']);
 			$marker['###LABEL_YOURS###']     = $this->cObj->substituteMarker($this->pi_getLL('msg.yours'), '###TEAM###', $this->conf['teamName']);
 
