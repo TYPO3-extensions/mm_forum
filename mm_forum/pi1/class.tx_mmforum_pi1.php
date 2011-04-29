@@ -560,13 +560,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$content .= $this->getMarkAllRead_link().'<br />';
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);                   // Markers write back
-		$page = intval($this->piVars['page']);
 
-		// If page not set, then set page = 1
-			if(empty($page))
-				$page = 1;
+		$limitCount = $conf['topic_count'];
+		$currentPage = (intval($this->piVars['page']) > 0 ? intval($this->piVars['page']) : 0);
+		if($this->conf['doNotUsePageBrowseExtension']) $currentPage ++;
 
-		$limit = ($conf['topic_count']-1)*($page-1).','.$conf['topic_count'];                       // Make MYSQL LIMIT value
+		$limit = ($limitCount - 1) * ($currentPage) . ',' . $limitCount;
+
 		$topiclist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			"distinct tx_mmforum_topics.topic_title,
 			tx_mmforum_topics.closed_flag,
@@ -758,8 +758,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// add "TOPICBEGIN_UNANSW" to the content
 		$content .= $this->cObj->substituteMarkerArray($template, $marker);
 
-		$currentPage = max(intval($this->piVars['page']), 1);
-		$limit = ($limitCount - 1) * ($currentPage - 1) . ', ' . $limitCount;
+		$currentPage = (intval($this->piVars['page']) > 0 ? intval($this->piVars['page']) : 0);
+		if($this->conf['doNotUsePageBrowseExtension']) $currentPage ++;
+
+		$limit = ($limitCount - 1) * ($currentPage) . ',' . $limitCount;
 
 		$topiclist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			't.*,
