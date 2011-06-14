@@ -1735,6 +1735,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'###FORUMICON###'          => $this->getForumIcon(),
 			'###FORUMPATH###'          => $forumLink . ' &raquo; ' . $prefixLink,
 			'###NEWTOPICLINK###'       => '',
+			'###FORUMDESC###'          => '',
 			'###FORUMNAME###'          => $this->cObj->substituteMarker($this->pi_getLL('prefix.title'), '###PREFIX###', $realPrefix),
 			'###PAGES###'              => $pagecount,
 			'###LABEL_TOPIC###'        => $this->pi_getLL('board.topic'),
@@ -1855,6 +1856,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// render the footer part
 		$template = $this->cObj->getSubpart($templateFile, '###TOPICEND###');
 		$marker = array('###PAGES###' => $pagecount);
+		$marker['###NEWTOPICLINK###'] = '';
 
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listPrefix_footer'])) {
