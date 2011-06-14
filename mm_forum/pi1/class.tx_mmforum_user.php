@@ -161,7 +161,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$title = $this->escape($row['topic_title']);
 				if ($row['topic_is']) {
-					$title = '<span class="tx-mmforum-prefix">[{'.$row['topic_is'].'}] </span>' . $title;
+					$title = $this->cObj->wrap($row['topic_is'],$this->conf['list_topics.']['prefix_wrap']) . $title;
 				}
 				$imgInfo = array(
 					'src' => $conf['path_img'] . $conf['images.']['solved'],

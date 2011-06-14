@@ -4182,7 +4182,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$row['topic_title'] = str_replace('<','&lt;',$row['topic_title']);
 			$row['topic_title'] = str_replace('>','&gt;',$row['topic_title']);
 
-			$topic_is       = $row['topic_is']?"<span class=\"tx-mmforum-pi1-listtopic-prefix\">[{$row['topic_is']}]</span> ":'';
+			$topic_is       = $row['topic_is']?$this->cObj->wrap($row['topic_is'],$this->conf['list_topics.']['prefix_wrap']):'';
 			$imgInfo['src'] = $this->conf['path_img'].$this->conf['images.']['solved'];
 			$imgInfo['alt'] = $this->pi_getLL('topic.isSolved');
 			$imgInfo['title'] = $this->pi_getLL('topic.isSolved');
