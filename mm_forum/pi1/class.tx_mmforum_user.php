@@ -159,10 +159,6 @@ class tx_mmforum_user extends tx_mmforum_base {
 				$from . ', ' . $itemsPerPage
 			);
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$title = $this->escape($row['topic_title']);
-				if ($row['topic_is']) {
-					$title = $this->cObj->wrap($row['topic_is'],$this->conf['list_topics.']['prefix_wrap']) . $title;
-				}
 				$imgInfo = array(
 					'src' => $conf['path_img'] . $conf['images.']['solved'],
 					'alt' => $this->pi_getLL('topic.isSolved')
@@ -177,7 +173,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 					$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
 				}
 				$postMarker = array(
-					'###TOPICNAME###' => $this->pi_linkToPage($title, $conf['pid_forum'], '', $linkParams) . $solved,
+					'###TOPICNAME###' => ($row['topic_is']?$this->cObj->wrap($row['topic_is'],$this->conf['list_topics.']['prefix_wrap']):'').$this->pi_linkToPage($this->escape($row['topic_title']), $conf['pid_forum'], '', $linkParams) . $solved,
 					'###TOPICDATE###' => $this->formatDate($row['post_time']),
 					'###PREFIX###'    => $this->escape($row['topic_is']),
 					'###CATEGORY###'  => $this->escape($row['category_name']),

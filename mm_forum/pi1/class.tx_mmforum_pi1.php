@@ -569,6 +569,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$topiclist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			"distinct tx_mmforum_topics.topic_title,
+			tx_mmforum_topics.topic_is,
 			tx_mmforum_topics.closed_flag,
 			tx_mmforum_topics.solved,
 			tx_mmforum_topics.forum_id,
@@ -658,7 +659,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				'action'    => 'list_post',
 				'tid'       => $row['uid']
 			);
-			$marker['###TOPICNAME###']  = $topic_is.$this->pi_linkTP($this->escape($row['topic_title']),$linkParams).$solved;
+			$marker['###TOPICNAME###']  = ($row['topic_is']?$this->cObj->wrap($row['topic_is'],$this->conf['list_topics.']['prefix_wrap']):'').$this->pi_linkTP($this->escape($row['topic_title']),$linkParams).$solved;
 			$marker['###UNDERLINE###']  = $this->escape($rowc['cat_title']).' &raquo; '.$this->escape($rowf['forum_name']);
 			$marker['###POSTS###']      = intval($row['topic_replies']).' ('.intval($row['topic_views']).')';
 			$marker['###AUTHOR###']		= $this->linkToUserProfile($row['topic_poster']);
@@ -1923,7 +1924,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$row['topic_title'] = str_replace('>','&gt;',$row['topic_title']);
 
 			$rMarker = array(
-				'###TOPICNAME###'   => $this->pi_linkToPage($this->escape($row['topic_title']), $this->getForumPID(), '', $linkParams),
+				'###TOPICNAME###'   => ($row['topic_is']?$this->cObj->wrap($row['topic_is'],$this->conf['list_topics.']['prefix_wrap']):'').$this->pi_linkToPage($this->escape($row['topic_title']), $this->getForumPID(), '', $linkParams),
 				'###TOPICSUB###'    => $this->escape($row['category_name'] . ' / '.  $row['forum_name']),
 				'###TOPICICON###'   => $this->getTopicIcon($row),
 				'###TOPICAUTHOR###' => $this->getauthor($row['author']),
@@ -3672,7 +3673,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$row['topic_title'] = str_replace('<','&lt;',$row['topic_title']);
 					$row['topic_title'] = str_replace('>','&gt;',$row['topic_title']);
 
-					$topicLink = $this->pi_linkToPage($this->escape($row['topic_title']), $this->getForumPID(), '', $topicParams);
+					$topicLink = ($row['topic_is']?$this->cObj->wrap($row['topic_is'],$this->conf['list_topics.']['prefix_wrap']):'').$this->pi_linkToPage($this->escape($row['topic_title']), $this->getForumPID(), '', $topicParams);
 					$delParams[$this->prefixId]['fav']['deltid'] = $row['topic_id'];
 					$delLink = $this->pi_linkTP($this->pi_getLL('favorites.delete'), $delParams);
 
