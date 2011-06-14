@@ -6251,7 +6251,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		if (empty($text)) {
 			$text = $userData[tx_mmforum_pi1::getUserNameField()];
 		}
-		return '<a href="' . $this->escapeURL(tx_mmforum_pi1::getUserProfileLink($userData)) . '">' . $text . '</a>';
+		return ((bool) $userData['deleted'] === true) ? $text : '<a href="' . $this->escapeURL(tx_mmforum_pi1::getUserProfileLink($userData)) . '">' . $text . '</a>';
 	}
 
 	/**
