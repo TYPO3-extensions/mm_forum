@@ -254,6 +254,12 @@ mod.web_txmmforumM1 {
 							type = int
 							type.unit = LLL:EXT:mm_forum/mod1/locallang_install.xml:install.unit.seconds
 						}
+
+						pmUserSearchFields = MMFORUM_CONF_ITEM
+						pmUserSearchFields.type = string
+
+						pmUserSearchOrderBy = MMFORUM_CONF_ITEM
+						pmUserSearchOrderBy.type = string
 					}
 				}
 

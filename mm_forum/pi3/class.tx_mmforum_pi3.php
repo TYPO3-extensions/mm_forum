@@ -827,7 +827,9 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		$template = $this->cObj->getSubpart($template, "###USERLIST_BEGIN###");
 
 		$marker = array(
-			// Empty
+			'###LABEL_USER_LIST_PLEASE_CHOOSE###' => $this->pi_getLL('user-list-please-choose'),
+			'###LABEL_FIELD_username###' => $this->pi_getLL('user-list-field-username'),
+			'###TOP_NAVI###' => $this->top_navi('', $conf)
 		);
 
 			// Include hooks
@@ -842,9 +844,30 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 		$usersearch = $GLOBALS['TYPO3_DB']->quoteStr($this->piVars['user'],'fe_users');
 
-		$where = 'disable = 0 AND deleted = 0 AND username LIKE \'%'.$usersearch.'%\' AND pid='.$this->conf['userPID'].'';
-		$orderBy = 'username ASC';
+		$searchqueryparts = array();		
+		$searchfields = t3lib_div::trimExplode(',', $conf['userSearchFields']);
+		$searchquery = '';
+		
+		foreach($searchfields as $field) {
+			$searchqueryparts[] = $field .' LIKE \'%'.$usersearch.'%\'';
+		}
+		
+		if(count($searchqueryparts)) {
+			$searchquery = ' AND ('. implode(' OR ', $searchqueryparts) .')';	
+		}
+
+		$where = 'disable = 0 AND deleted = 0' . $searchquery . ' AND pid=' . $this->conf['userPID'];
+		$orderBy = $conf['userSearchOrderBy'];
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users',$where,$groupBy='',$orderBy,'100');
+
+		if (!$GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+			$template = $this->cObj->fileResource($conf['template.']['user_list']);
+			$template = $this->cObj->getSubpart($template, "###USERLIST_NO_RESULTS###");
+			$userMarker = array(
+				'###LABEL_USERLIST_NO_RESULTS###' => $this->pi_getLL('user-list-no-results'),
+			);
+			$content .= $this->cObj->substituteMarkerArrayCached($template, $userMarker);
+		}
 
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$template = $this->cObj->fileResource($conf['template.']['user_list']);

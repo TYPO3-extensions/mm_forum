@@ -11,6 +11,12 @@ plugin.tx_mmforum_pi3 {
 	# Minimum amount of time between two sent PMs in seconds
 		block_time  			= {$plugin.tx_mmforum.pmBlocktime}
 
+	# Fields that are searched in
+		userSearchFields		= {$plugin.tx_mmforum.pmUserSearchFields}
+
+	# How the results of the user search are ordered	
+		userSearchOrderBy		= {$plugin.tx_mmforum.pmUserSearchOrderBy}
+
 	# The email address of the PHP mailer
 		mailerEmail				= {$plugin.tx_mmforum.mailer_mail}
 		

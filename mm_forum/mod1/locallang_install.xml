@@ -89,6 +89,10 @@
 			<label index="install.field.pmPID.desc">Specified the page the &lt;strong&gt;mm_forum :: Private messaging&lt;/strong&gt; plugin is placed on.</label>
 			<label index="install.field.pmBlocktime.title">Message block time</label>
 			<label index="install.field.pmBlocktime.desc">Specifies the time in seconds a user is not allowed to write another private message after writing a message.&lt;br /&gt;Set to 0 to disable.</label>
+			<label index="install.field.pmUserSearchFields.title">User search fields</label>
+			<label index="install.field.pmUserSearchFields.desc">The user search for new private messages will search in these fields. This is a comma seperated list e.g. "username,name".</label>
+			<label index="install.field.pmUserSearchOrderBy.title">User search order by</label>
+			<label index="install.field.pmUserSearchOrderBy.desc">The ordering of the results of the user search (as an SQL ORDER BY statement e.g. username ASC).</label>
 
 			<!-- FILE PATHS -->
 			<label index="install.field.path_img.title">Image directory</label>
@@ -293,6 +297,10 @@
 			<label index="install.field.pmPID.desc">Gibt die Seite an, auf der sich das &lt;strong&gt;mm_forum :: Private Nachrichten&lt;/strong&gt;-Plugin befinden.</label>
 			<label index="install.field.pmBlocktime.title">Spamblock-Intervall</label>
 			<label index="install.field.pmBlocktime.desc">Gibt die Zeit in Sekunden an, die ein Benutzer zwischen dem Schreiben zweier Nachrichten warten muss.&lt;br /&gt;Zum Deaktivieren auf 0 setzen.</label>
+			<label index="install.field.pmUserSearchFields.title">Felder für Benutzersuche</label>
+			<label index="install.field.pmUserSearchFields.desc">Die Benutzersuche für neue privaten Nachrichten sucht in diesen Feldern nach dem Suchbegriff. Es können mehrere Felder als kommagetrennte Liste (z.B. username,name) angegeben werden.</label>
+			<label index="install.field.pmUserSearchOrderBy.title">Sortierung für Benutzersuche</label>
+			<label index="install.field.pmUserSearchOrderBy.desc">Die Sortierung für die Ergebnisse der Benutzersuche für neue private Nachrichten. Wird als SQL ORDER BY Statement angegeben (z.B. username ASC).</label>
 
 			<!-- FILE PATHS -->
 			<label index="install.field.path_img.title">Bilderverzeichnis</label>
