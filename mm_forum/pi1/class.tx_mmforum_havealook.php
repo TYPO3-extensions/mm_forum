@@ -411,16 +411,6 @@ class tx_mmforum_havealook {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . $topicId  . $forumObj->getStoragePIDQuery());
 		list($topicName) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-		$sender = $forumObj->conf['notifyingMail.']['sender'];
-		if (!preg_match('/<([^><@]*?)@([^><@]*?)>$/',$forumObj->conf['notifyingMail.']['sender'])) {
-			$sender = $forumObj->conf['notifyingMail.']['sender'] . ' <' . $forumObj->conf['notifyingMail.']['sender_address'] . '>';
-		}
-
-		$mailHeaders = array(
-			'From: ' . $sender,
-			'Content-type: text/plain;charset=' . $GLOBALS['TSFE']->renderCharset,
-		);
-
 		$template = $forumObj->pi_getLL('ntfMail.text');
 
 		$linkParams[$forumObj->prefixId] = array(
@@ -440,7 +430,8 @@ class tx_mmforum_havealook {
 		$marker = array(
 			'###LINK###'      => $link,
 			'###TOPICNAME###' => $topicName,
-			'###BOARDNAME###' => $forumObj->conf['boardName']
+			'###BOARDNAME###' => $forumObj->conf['boardName'],
+			'###TEAM###'      => $forumObj->conf['teamName']
 		);
 
 
@@ -490,14 +481,12 @@ class tx_mmforum_havealook {
 				}
 
 				if($do_send) {
-					t3lib_div::plainMailEncoded(
-						$toEmail,
-						$subject,
-						$mailtext,
-						implode("\n", $mailHeaders),
-						'base64',
-						$GLOBALS['TSFE']->renderCharset
-					);
+					$mail = t3lib_div::makeInstance('t3lib_mail_Message');
+					$mail->setFrom(array($forumObj->conf['notifyingMail.']['sender_address'] => $forumObj->conf['notifyingMail.']['sender']));
+					$mail->setTo(array($toEmail => $toUsername));
+					$mail->setSubject($subject);
+					$mail->setBody($mailtext, 'text/plain');
+					$mail->send();
 				}
 			}
 		}
@@ -521,16 +510,6 @@ class tx_mmforum_havealook {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('forum_name, parentID', 'tx_mmforum_forums', 'uid = ' . intval($forumId) . $forumObj->getStoragePIDQuery());
 		list($forumName, $categoryId) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-		$sender = $forumObj->conf['notifyingMail.']['sender'];
-		if (!preg_match('/<([^><@]*?)@([^><@]*?)>$/',$forumObj->conf['notifyingMail.']['sender'])) {
-			$sender = $forumObj->conf['notifyingMail.']['sender'] . ' <' . $forumObj->conf['notifyingMail.']['sender_address'] . '>';
-		}
-
-		$mailHeaders = array(
-			'From: ' . $sender,
-			'Content-type: text/plain;charset=' . $GLOBALS['TSFE']->renderCharset,
-		);
-
 		// prepare the template (the variables that don't change all the time need only to be set once)
 		$linkParams[$forumObj->prefixId] = array(
 			'action' => 'open_topic',
@@ -550,6 +529,7 @@ class tx_mmforum_havealook {
 			'###LINK###'      => $link,
 			'###USERNAME###'  => $toUsername,
 			'###FORUMNAME###' => $forumName,
+			'###TEAM###'      => $forumObj->conf['teamName'],
 		);
 
 		$subjectMarker = array(
@@ -576,7 +556,12 @@ class tx_mmforum_havealook {
 
 			// Compose mail and send
 			$subject = $forumObj->cObj->substituteMarkerArray($forumObj->pi_getLL('ntfMailForum.subject'), $subjectMarker);
-			mail($toEmail, $subject, $mailtext, implode("\n", $mailHeaders));
+			$mail = t3lib_div::makeInstance('t3lib_mail_Message');
+			$mail->setFrom(array($forumObj->conf['notifyingMail.']['sender_address'] => $forumObj->conf['notifyingMail.']['sender']));
+			$mail->setTo(array($toEmail => $toUsername));
+			$mail->setSubject($subject);
+			$mail->setBody($mailtext, 'text/plain');
+			$mail->send();
 		}
 	}
 }
