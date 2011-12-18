@@ -5986,7 +5986,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
           $user = tx_mmforum_FeUser::GetByUID($this->piVars['user_id']);
         }
 
-				$pageTitle = sprintf($this->pi_getLL('rootline.userprofile'), $this->escape($user->gD($this->getUserNameField())));
+				$pageTitle = sprintf($this->pi_getLL('rootline.userprofile'), ((bool) $user?$this->escape($user->gD($this->getUserNameField())):''));
 			break;
 
 			// List unread or unanswered topics
@@ -6260,7 +6260,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		if (empty($text)) {
 			$text = $userData[tx_mmforum_pi1::getUserNameField()];
 		}
-		return '<a href="' . $this->escapeURL(tx_mmforum_pi1::getUserProfileLink($userData)) . '">' . $text . '</a>';
+		return ((bool) $userData['deleted'] === true) ? $text : '<a href="' . $this->escapeURL(tx_mmforum_pi1::getUserProfileLink($userData)) . '">' . $text . '</a>';
 	}
 
 	/**
