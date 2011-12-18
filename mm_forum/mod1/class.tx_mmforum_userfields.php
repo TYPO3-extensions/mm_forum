@@ -371,7 +371,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		foreach($data['radio']['value'] as $key => $label) {
 			$label['content'] = trim($label);
 
-			if(strlen($label) == 0) continue;
+			if(strlen($label['content']) == 0) continue;
 
 			$uf_radio_values[] = $label;
 		}
@@ -381,7 +381,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		foreach($data['select']['value'] as $key => $label) {
 			$label['content'] = trim($label);
 
-			if(strlen($label) == 0) continue;
+			if(strlen($label['content']) == 0) continue;
 
 			$uf_select_values[] = $label;
 		}
