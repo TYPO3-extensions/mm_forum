@@ -5662,7 +5662,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		// Compose SQL query
 		$query = implode(' OR ', $queryParts);
-		$query = sprintf(' AND (($s) OR grouprights_write=\'\') ', $query);
+		$query = sprintf(' AND ((%s) OR grouprights_write=\'\') ', $query);
 
 		// Save generated query to cache and return
 		$this->cache->save('getMayWrite_forum_query_' . $userId, $query);
