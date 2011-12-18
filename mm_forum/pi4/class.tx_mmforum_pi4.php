@@ -431,7 +431,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				'user_groups'	=> implode(',',$userGroups),
 			);
 			$query = $GLOBALS['TYPO3_DB']->INSERTquery('tx_mmforum_searchresults',$insertArray);
-			$res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query);
+			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 			if($conf['debug_mode'] == 1) {
 				echo '<h1>Suche Indiziert</h1>';
 			}
@@ -678,7 +678,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			);
 			if($this->conf['debug_mode']) echo $query;
 
-			$res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query);
+			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 			$post_id_array = array();            // Array in denen die gefundenen Posts gespeichert werden
 		}
 
@@ -879,7 +879,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			'1'
 		);
 
-		$res = $GLOBALS['TYPO3_DB']->sql(TYPO3_db, $query);
+		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
 		$row  = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
 		$search_array = unserialize($row['array_string']);
