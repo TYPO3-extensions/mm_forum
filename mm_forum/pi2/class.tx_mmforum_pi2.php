@@ -138,11 +138,6 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 	 * @return void
 	 */
 	function sendEmail() {
-		$header = array(
-			'From: '.$this->conf['supportMail'],
-			'Content-type: text/plain; charset=' . $GLOBALS['TSFE']->renderCharset
-		);
-
 		$linkParams[$this->prefixId] = array(
 			'user_hash' => $this->data['reghash']
 		);
@@ -161,20 +156,12 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 		$subject = $this->cObj->substituteMarker($this->pi_getLL('msg.subject'), '###SITENAME###', $this->conf['siteName']);
 
-		t3lib_div::plainMailEncoded (
-
-			$this->data['email'],               /* Address                                  */
-			$subject,                           /* Subject                                  */
-			$template,                          /* Mail body                                */
-			implode("\n", $header),             /* Headers, seperated by \n                 */
-			'base64',                           /* Encoding that is to be used for headers. *
-			                                     * Allowed is "Quoted-printable" and        *
-			                                     * "base64"                                 */
-
-			$GLOBALS['TSFE']->renderCharset     /* The charset the headers are to be        *
-			                                     * encoded in.                              */
-
-		);
+		$mail = t3lib_div::makeInstance('t3lib_mail_Message');
+		$mail->setFrom(array($this->conf['supportMail'] => $this->conf['notifyingMail.']['sender']));
+		$mail->setTo(array($this->data['email'] => $this->data[$this->conf['userNameField']]));
+		$mail->setSubject($subject);
+		$mail->setBody($template, 'text/plain');
+		$mail->send();
 	}
 
 

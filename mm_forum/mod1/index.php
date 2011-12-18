@@ -295,7 +295,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 				$settings['settings.']['pids']['forum'] = $this->confArr['forumPID'];
 				$settings['settings.']['parentObject'] =& $this;
 
-				if($className == 'Tx_Extbase_Core_Bootstrap') {
+				/*if($className == 'Tx_Extbase_Core_Bootstrap') {
 					$oldBackPath = $GLOBALS['BACK_PATH'];
 					ob_start();
 					$obj->$methodName($settings['moduleKey']);
@@ -307,9 +307,9 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 					$moduleContent = preg_replace(',mod\.php,','index.php', $moduleContent);
 
 					$content .= $moduleContent;
-				} else {
+				} else {*/
 					$content .= $obj->$methodName('', $settings);
-				}
+				//}
 
 				/*                                                                 *
 				 * Otherwise, just call the internal method specified by the       *

@@ -218,7 +218,10 @@ if someone answers to a topic observed by you.
 
 To visit this topic, follow the link below:
 
-###LINK###</label>
+###LINK###
+
+Your team of
+###TEAM###</label>
             <label index="redirect-error">Unfortunately we could not return you on the last site, becaue your system suppresses the conveying of the last site.</label>
             <label index="ntfMailForum-subject">There is a new topic called '###TOPICNAME###' in the forumcategory '###FORUMNAME###' at ###BOARDNAME###</label>
 			      <label index="ntfMailForum-text">Hello ###USERNAME###,
@@ -229,6 +232,9 @@ if someone creates a new topic in the forumcategory (###FORUMNAME###) observed b
 To visit this new topic, follow the link below:
 
 ###LINK###
+
+Your team of
+###TEAM###
 			      </label>
             <label index="prefix-title">Prefix: &amp;quot;###PREFIX###&amp;quot;</label>
             <label index="prefix-all">All</label>
@@ -658,7 +664,9 @@ wenn jemand auf ein von Ihnen beobachtetes Thema antwortet.
 
 Hier der Link, mit dem Sie direkt in den Beitrag gelangen:
 
-###LINK###</label>
+###LINK###
+
+###LABEL_YOURS###</label>
             <label index="redirect-error">Leider konnten wir Sie nicht auf die letzte Seite zurückleiten, da Ihr System das Übermitteln der zuletzt aufgerufenen Seite unterdrückt.</label>
             <label index="redirect-error">Leider konnten wir dich nicht auf die letzte Seite zurückleiten, da dein System das Übermitteln der zuletzt aufgerufenen Seite unterdrückt.</label>
             <label index="prefix-title">Präfix: &amp;quot;###PREFIX###&amp;quot;</label>
@@ -836,7 +844,10 @@ wenn jemand auf ein von dir beobachtetes Thema antwortet.
 
 Hier der Link, mit dem du direkt in den Beitrag gelangst:
 
-###LINK###</label>
+###LINK###
+
+Dein Team von
+###TEAM###</label>
             <label index="board-noAccess-inf">Das von dir gewünschte Forum kann nicht angezeigt werden. Möglicherweise hast du nicht die erforderlichen Rechte.</label>
             <label index="topic-noAccess-inf">Das von dir gewünschte Thema kann nicht angezeigt werden. Möglicherweise hast du nicht die erforderlichen Rechte.</label>
             <label index="topic-noSolveRights-inf">Du hast keine Berechtigung, den Gelöst-Status zu ändern</label>
@@ -882,9 +893,23 @@ Hier der Link, mit dem du direkt in den Beitrag gelangst:
 Sie bekommen diese Mail, da Sie angegeben haben, dass Sie informiert werden möchten,
 wenn jemand ein neues Thema im Forum '###FORUMNAME###' erstellt.
 
-Hier der Link, mit dem Sie direkt in den Beitrag gelangen:
+Hier der Link, mit dem Sie direkt zu dem Thema gelangen:
 
 ###LINK###
+
+Ihr Team von
+###TEAM###
+			</label>
+			<label index="ntfMailForum-text-inf">Hallo ###USERNAME###,
+				
+du bekommst diese Mail, da du angegeben hast, informiert zu werden, wenn jemand ein neues Thema im Forum '###FORUMNAME###' erstellt.
+
+Hier der Link, mit dem du direkt zu dem neuen Thema gelangst:
+
+###LINK###
+
+Dein Team von
+###TEAM###
 			</label>
 			
 			<!-- Added in 0.1.7 -->
@@ -1164,7 +1189,10 @@ Sait tämän sähköpostin, koska olet merkinnyt tämän keskustelunaiheen seura
 
       Klikkaa allaolevaa linkkiä päästäksesi keskusteluun:
 
-###LINK###</label>
+###LINK###
+
+Ystävällisesti
+###TEAM###</label>
       			<label index="redirect-error">Emme voi valitettavasti palauttaa sinua edelliselle sivustolle.</label>
       			<label index="prefix-title">Etuliite: &amp;quot;###PREFIX###&amp;quot;</label>
       			<label index="prefix-all">Kaikki</label>
@@ -1495,7 +1523,10 @@ dat je wil volgen of er iemand een bericht plaatst.
 
 Klik op de volgende link om het onderwerp te openen:
 
-###LINK###</label>
+###LINK###
+
+Het beheerteam van
+###TEAM###</label>
             <label index="redirect-error">We kunnen u helaas niet terugsturen naar de laatste website omdat uw systeem niet laat zien wat de laaste website was.</label>
 
             <label index="prefix-title">Voorvoegsel: &amp;quot;###PREFIX###&amp;quot;</label>
@@ -1827,7 +1858,10 @@ Klik op de volgende link om het onderwerp te openen:
 
 Voici le lien vers un fil de discussion, pour lequel vous avez activé une notification par e-mail :
 
-###LINK###</label>
+###LINK###
+
+Les administrateurs de
+###TEAM###</label>
             <label index="redirect-error">Notre serveur ne peut vous afficher la page précédente, car votre browser nous en empêche.</label>
             <label index="prefix-title">Préfixe : &amp;quot;###PREFIX###&amp;quot;</label>
             <label index="prefix-all">Tous</label>
@@ -2213,7 +2247,10 @@ Voici le lien vers un fil de discussion, pour lequel vous avez activé une notif
 				
 				Чтобы просмотреть эту тему на форуме, перейдите по следующей ссылке:
 				
-				###LINK###</label>
+				###LINK###
+
+Администрация
+###TEAM###</label>
       			<label index="redirect-error">К сожалению, мы не можем вернуть Вас на последнюю просматриваемую страницу, так как ваша система не позволяет этого сделать.</label>
       			<label index="ntfMailForum-subject">Появилась новая тема с названием '###TOPICNAME###' в категории форума '###FORUMNAME###' на ###BOARDNAME###</label>
       			<label index="ntfMailForum-text">Здравствуйте ###USERNAME###,
@@ -2221,7 +2258,10 @@ Voici le lien vers un fil de discussion, pour lequel vous avez activé une notif
 		Вы получили это сообщений, так как указали, что Вы желает получать уведомления
 		про создание тем в категории форума (###FORUMNAME###) наблюдаемой вами.
 
-		Для посещения новой темы перейдите по ссылке: ###LINK###</label>
+		Для посещения новой темы перейдите по ссылке: ###LINK###
+
+Администрация
+###TEAM###</label>
       			<label index="prefix-title">Префикс: &amp;quot;###PREFIX###&amp;quot;</label>
       			<label index="prefix-all">Все</label>
       			<label index="prefix-rootline">Префикс: &amp;quot;###PREFIX###&amp;quot;</label>
@@ -2577,14 +2617,20 @@ Voici le lien vers un fil de discussion, pour lequel vous avez activé une notif
 
 		Щоб переглянути цю тему на форумі, перейдіть по посиланню:
 
-		###LINK###</label>
+		###LINK###
+
+Адміністрація
+###TEAM###</label>
 			<label index="redirect-error">На жаль, ми не можемо повернути Вас на останню переглянуту сторінку, так як ваша система не дозволяє цього зробити.</label>
 			<label index="ntfMailForum-text">Вітаю ###USERNAME###,
 
 		Ви отримали це повідомлення, так як вказали, що бажаєте отримувати повідомлення
 		про створення тем у категорії форуму (###FORUMNAME###), яка вами спостерігається.
 
-		Для того щоб навідатися до нової теми перейдіть за посиланням: ###LINK###</label>
+		Для того щоб навідатися до нової теми перейдіть за посиланням: ###LINK###
+
+Адміністрація
+###TEAM###</label>
 
 			<label index="prefix-title">Префікс: &amp;quot;###PREFIX###&amp;quot;</label>
 			<label index="prefix-all">Все</label>
