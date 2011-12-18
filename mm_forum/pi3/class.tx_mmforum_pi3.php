@@ -623,16 +623,6 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 					// Notification to the recipient via email
 					if($recipient['tx_mmforum_pmnotifymode'] == 0 && t3lib_div::validEmail($recipient['email'])) {
-						$llMarker = array(
-							'###SITENAME###' => $conf['siteName'],
-							'###EMAIL###' => $conf['mailerEmail']
-						);
-						$from = $this->cObj->substituteMarkerArray($this->pi_getLL('ntfmail.sender'),$llMarker);
-
-						$header = array(
-							'From: ' . $from,
-							'Content-type: text/plain;charset=' . $GLOBALS['TSFE']->renderCharset,
-						);
 
 						$template = $this->pi_getLL('ntfmail.content');
 
@@ -658,14 +648,12 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						$mailtext = $this->cObj->substituteMarkerArrayCached($template, $marker);
 
 						// Compose mail and send
-						t3lib_div::plainMailEncoded (
-							$recipient['email'],
-							$this->pi_getLL('ntfmail.subject'),
-							$mailtext,
-							implode(chr(10), (array)$header),
-							'base64',
-							$GLOBALS['TSFE']->renderCharset
-						);
+						$mail = t3lib_div::makeInstance('t3lib_mail_Message');
+						$mail->setFrom(array($forumObj->conf['mailerEmail'] => $forumObj->conf['siteName']));
+						$mail->setTo(array($recipient['email'] => $recipient['username']));
+						$mail->setSubject($this->pi_getLL('ntfmail.subject'));
+						$mail->setBody($mailtext, 'text/plain');
+						$mail->send();
 
 						$updateArray = array(
 							'notified' => 1,
