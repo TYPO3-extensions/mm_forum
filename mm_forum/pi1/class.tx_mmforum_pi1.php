@@ -1476,6 +1476,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				// if($this->useRealUrl()) $linkParams[$this->prefixId]['fid'] = $postforum;
 				//TODO: This does not work yet
 				$link = $this->pi_linkTP($this->pi_getLL('on'), $linkParams).' / <strong>' . $this->pi_getLL('off') . '</strong>';
+				$image = $this->pi_linkTP($this->buildImageTag($imgInfo),$linkParams);
 			} else {
 				$imgInfo['alt']		= $this->pi_getLL('topic.emailSubscr.on');
 				$imgInfo['title']	= $this->pi_getLL('topic.emailSubscr.on');
@@ -1487,9 +1488,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				// if($this->useRealUrl()) $linkParams[$this->prefixId]['fid'] = $postforum;
 				//TODO: This does not work yet
 				$link = '<strong>' . $this->pi_getLL('on') . '</strong> / ' . $this->pi_linkTP($this->pi_getLL('off'), $linkParams);
+				$image = $this->pi_linkTP($this->buildImageTag($imgInfo),$linkParams);
 			}
 
-			$image = $this->buildImageTag($imgInfo);
+// 			$image = $this->buildImageTag($imgInfo);
 
 			$image = $this->cObj->stdWrap($image, $this->conf['list_posts.']['optImgWrap.']);
 			$link  = $this->cObj->stdWrap($link, $this->conf['list_posts.']['optLinkWrap.']);
