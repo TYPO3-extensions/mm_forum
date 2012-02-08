@@ -667,8 +667,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$marker['###READIMAGE###'] = $this->getTopicIcon($row);
 			$marker['###RATING###']		= $this->getRatingDisplay('tx_mmforum_topic', $row['uid']);
 
-			IF (($row['topic_replies'] + 1) > $conf['post_limit'])
-			{
+			if (($row['topic_replies'] + 1) > $conf['post_limit']) {
 				$page_link = $this->pi_getLL('page.goto').':';
 				$menge = $row['topic_replies'];
 				$i = 0;
@@ -1917,8 +1916,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
 			}
 
-			If($this->conf['listLatest.']['linkToLatestPost'])
+			if ($this->conf['listLatest.']['linkToLatestPost']) {
 				$linkParams[$this->prefixId]['pid'] = 'last';
+			}
 
 			$row['topic_title'] = stripslashes($row['topic_title']);
 
@@ -2262,40 +2262,31 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		return $rss->main($this->conf, $this);
 	}
 
-		/**
-		 *
-		 * Displays a frontend administration form.
-		 *
-		 * @author Martin Helmich <m.helmich@mittwald.de>
-		 * @since  2010-04-06
-		 * @return string HTML content
-		 *
-		 */
-
-	Function frontendAdministration() {
-		Require_Once(t3lib_extMgm::extPath('mm_forum').'pi1/feadmin/class.tx_mmforum_frontendadministration.php');
+	/**
+	 *
+	 * Displays a frontend administration form.
+	 *
+	 * @author Martin Helmich <m.helmich@mittwald.de>
+	 * @since  2010-04-06
+	 * @return string HTML content
+	 */
+	function frontendAdministration() {
+		require_once(t3lib_extMgm::extPath('mm_forum').'pi1/feadmin/class.tx_mmforum_frontendadministration.php');
 		$frontendAdministration = t3lib_div::makeInstance('tx_mmforum_FrontendAdministration');
-		Return $frontendAdministration->main($this->conf, $this);
+		return $frontendAdministration->main($this->conf, $this);
 	}
 
 
+	/*
+	 * Forum content management functions
+	 */
 
-
-
-		/*
-		 * Forum content management functions
-		 */
-
-
-
-
-
-		/**
-		 * Displays the form for creating a new topic.
-		 * @param  string $content The plugin content
-		 * @param  array  $conf    The plugin's configuration vars
-		 * @return string          The content
-		 */
+	/**
+	 * Displays the form for creating a new topic.
+	 * @param  string $content The plugin content
+	 * @param  array  $conf    The plugin's configuration vars
+	 * @return string          The content
+	 */
 	function new_topic($content, $conf) {
 
 		// Check if there is a user logged in
@@ -2788,7 +2779,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$marker['###MAXFILESIZE###'] = $this->conf['attachments.']['maxFileSize'];
 
 				// Inserting predefined message
-				iF ($this->piVars['message']) {
+				if ($this->piVars['message']) {
 					$marker['###POSTTEXT###'] = $this->escape($this->piVars['message']);
 				} else {
 					// Load post to be quoted
@@ -4164,8 +4155,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @param  int    $uid The UID of the user whose topics are to be listed
 	 * @return string      A HTML list of the last 10 topics created by the user
 	 */
-	function view_last_10_topics($uid)
-	{
+	function view_last_10_topics($uid) {
 		$uid = intval($uid);
 		$imgInfo = array('border' => $this->conf['img_border'], 'alt' => '', 'src' => '', 'style' => '');
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -4454,12 +4444,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$linkParams[$this->prefixId]['action'] = 'list_unans';
 			}
 		}
-		IF($table == "tx_mmforum_posts"){
+		if ($table == "tx_mmforum_posts"){
 			$linkParams[$this->prefixId]['action'] = 'list_post';
 			$linkParams[$this->prefixId]['tid'] = $this->piVars['tid'];
 		}
 
-		IF ($maxpage > 1) {
+		if ($maxpage > 1) {
 			if($this->piVars['hide_solved']) $linkParams[$this->prefixId]['hide_solved']='1';
 
 			// First page
@@ -4482,7 +4472,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$content = str_replace('||', '|', $content);
 
 		return $content;
-
 	}
 
 	/**
@@ -4517,7 +4506,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			return $content;
 		}
 
-		IF ($maxpage > 1) {
+		if ($maxpage > 1) {
 			// First page
 				if (($page - 1) >= 1)           $content .= $this->pi_linkTP(' '.$this->pi_getLL('page.first').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>1))).'|';
 			// Previous page
@@ -4591,12 +4580,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 
 		// Include hooks
-			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['viewLastPost_postContentHook'])) {
-				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['viewLastPost_postContentHook'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-					$content = $_procObj->viewLastPost_postContentHook($content, $row, $this);
-				}
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['viewLastPost_postContentHook'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['viewLastPost_postContentHook'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$content = $_procObj->viewLastPost_postContentHook($content, $row, $this);
 			}
+		}
 
 		return $content;
 	}
@@ -4736,7 +4725,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$imgConf['file'] = 'uploads/pics/' . $feuserImg;
 				} else if (file_exists('uploads/tx_srfeuserregister/' . $feuserImg)) {
 					$imgConf['file'] = 'uploads/tx_srfeuserregister/' . $feuserImg;
-
 				}
 			}
 			$img = $this->cObj->cObjGetSingle($this->conf['list_posts.']['userinfo.']['avatar_cObj'], $imgConf);
@@ -4892,12 +4880,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @param  array  $words An array of words that are to be highlighted
 	 * @return string        The text with highlighted words.
 	 */
-	function highlight_text ($text,$words)
-	{
+	function highlight_text ($text,$words) {
 		$word_array = explode(" ",$words);
 		foreach ($word_array as $needle) {
-			if(trim($needle) != "")
-			{
+			if(trim($needle) != "") {
 				$needle      = preg_quote($needle);
 				$needle      = str_replace('/','\\/',$needle);
 
@@ -5000,10 +4986,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @param  array  $param The parameters for this function
 	 * @return string        The configuration form
 	 */
-	function user_config($conf,$param)
-	{
+	function user_config($conf,$param) {
 		// Save changes
-			IF ($param['save']) {
+			if ($param['save']) {
 				if($param['postorder'] == 2) $post_sort = 'DESC';
 				else $post_sort = 'ASC';
 
@@ -5042,7 +5027,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			}
 
 		// Sorting order of posts
-			IF($row['post_sort'] == "DESC") {
+			if ($row['post_sort'] == "DESC") {
 				$select1 = '';
 				$select2 = 'selected';
 			} else {
@@ -5125,8 +5110,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 *                          selected.
 	 * @return string           The HTML select box with all categories and boards.
 	 */
-	function get_forumbox($topic_id)
-	{
+	function get_forumbox($topic_id) {
 		$forum_id    = $this->get_forum_id($topic_id);
 
 		$content    = '<select class="tx-mmforum-select" name="'.$this->prefixId.'[change_forum_id]" size="12">';
@@ -5160,7 +5144,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				'sorting ASC'
 			);
 			while ($row2 = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2)) {
-				IF ($row2['uid'] == $forum_id) {
+				if ($row2['uid'] == $forum_id) {
 					$select = 'selected="selected"';
 				} else {
 					$select = '';
@@ -5200,7 +5184,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @param  string $username The username, whose user UID is to be determined.
 	 * @return int              The user UID of $username.
 	 */
-	function get_userid($username) { return tx_mmforum_tools::get_userid($username); }
+	function get_userid($username) {
+		return tx_mmforum_tools::get_userid($username);
+	}
 
 	/**
 	 * Generates an error message.
@@ -6278,65 +6264,70 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		return ($this->conf['topicIconMode'] ? $this->conf['topicIconMode'] : 'modern');
 	}
 
-		/**
-		 * Determines if rating is enabled for a specific data type.
-		 * This can be configured using the plugin.tx_mmforum_pi1.enableRating
-		 * array. Furthermore, the 'ratings' extension is required to be installed.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 0.1.8-090410
-		 * @param   string $table The data type that is to be checked. At the moment,
-		 *                        this may either be 'topics', 'posts' or 'users'.
-		 * @return  boolean       TRUE, if rating is enabled, FALSE if rating disabled
-		 *                        or the 'ratings' extension is not installed.
-		 */
+	/**
+	 * Determines if rating is enabled for a specific data type.
+	 * This can be configured using the plugin.tx_mmforum_pi1.enableRating
+	 * array. Furthermore, the 'ratings' extension is required to be installed.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 0.1.8-090410
+	 * @param   string $table The data type that is to be checked. At the moment,
+	 *                        this may either be 'topics', 'posts' or 'users'.
+	 * @return  boolean       TRUE, if rating is enabled, FALSE if rating disabled
+	 *                        or the 'ratings' extension is not installed.
+	 */
 	function isRating($table) {
 		if(!t3lib_extMgm::isLoaded('ratings')) return false;
 		return $this->conf['enableRating.'][$table] ? true : false;
 	}
 
-		/**
-		 * Determines if topic rating is enabled.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 0.1.8-090410
-		 * @return  boolean TRUE if topic rating is enabled, FALSE is topic rating
-		 *                  is disabled or the 'ratings' extension is not installed.
-		 */
-	function isTopicRating() { return $this->isRating('topics'); }
+	/**
+	 * Determines if topic rating is enabled.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 0.1.8-090410
+	 * @return  boolean TRUE if topic rating is enabled, FALSE is topic rating
+	 *                  is disabled or the 'ratings' extension is not installed.
+	 */
+	function isTopicRating() {
+		return $this->isRating('topics');
+	}
 
-		/**
-		 * Determines if post rating is enabled.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 0.1.8-090410
-		 * @return  boolean TRUE if post rating is enabled, FALSE is post rating
-		 *                  is disabled or the 'ratings' extension is not installed.
-		 */
-	function isPostRating() { return $this->isRating('posts'); }
-
-		/**
-		 * Determines if user rating is enabled.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 0.1.8-090410
-		 * @return  boolean TRUE if user rating is enabled, FALSE is user rating
-		 *                  is disabled or the 'ratings' extension is not installed.
-		 */
-	function isUserRating() { return $this->isRating('users'); }
+	/**
+	 * Determines if post rating is enabled.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 0.1.8-090410
+	 * @return  boolean TRUE if post rating is enabled, FALSE is post rating
+	 *                  is disabled or the 'ratings' extension is not installed.
+	 */
+	function isPostRating() {
+		return $this->isRating('posts');
+	}
 
 
+	/**
+	 * Determines if user rating is enabled.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 0.1.8-090410
+	 * @return  boolean TRUE if user rating is enabled, FALSE is user rating
+	 *                  is disabled or the 'ratings' extension is not installed.
+	 */
+	function isUserRating() {
+		return $this->isRating('users');
+	}
 
-		/**
-		 * Formats a timestamp in human readable form. If the timestamp is from the
-		 * current day or the day before, there is no date displayed, but rather a string
-		 * saying "today" or "yesterday".
-		 *
-		 * @param  string $content The timestamp that is to be formatted
-		 * @param  array  $conf    Configuration options
-		 * @return string          The formatted timestamp
-		 */
 
+	/**
+	 * Formats a timestamp in human readable form. If the timestamp is from the
+	 * current day or the day before, there is no date displayed, but rather a string
+	 * saying "today" or "yesterday".
+	 *
+	 * @param  string $content The timestamp that is to be formatted
+	 * @param  array  $conf    Configuration options
+	 * @return string          The formatted timestamp
+	 */
 	function formatLastPostDate($content, $conf) {
 
 		$this->pi_loadLL();
