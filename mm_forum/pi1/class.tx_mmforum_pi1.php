@@ -1899,6 +1899,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$limit
 		);
 
+		$rowContent = '';
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$linkParams[$this->prefixId] = array(
 				'action' => 'list_post',
@@ -2004,6 +2005,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
 		$userField->init($this->userLib, $this->cObj);
 
+		$content_th = '';
 		foreach($list_fields as $field) {
 
 			if(intval($field)>0) {
@@ -2145,6 +2147,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$i = 0;
 
+		$user_rows = '';
 		foreach($userResult as $user) {
 			$user_row = $template_row;
 			$user_fields = '';
@@ -2293,6 +2296,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			if ($this->piVars['button'] == $this->pi_getLL('newTopic.save')) {
 				$errorFound = false;
+				$errorMessage = '';
 				if (!$this->piVars['topicname']) {
 					$errorFound = true;
 					$errorMessage .= '<div>' . $this->pi_getLL('newTopic.noTitle') . '</div>';
@@ -2309,12 +2313,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 
 				// Create postfactory object
-				$postfactory = t3lib_div::makeInstance('tx_mmforum_postfactory');
+				$postfactory = t3lib_div::makeInstance('tx_mmforum_postfactory'); /* @var $postfactory tx_mmforum_postfactory */
 				$postfactory->init($this->conf,$this);
 
 				// Create poll
 				if ($this->piVars['enable_poll'] == '1') {
-					$pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
+					$pollObj = t3lib_div::makeInstance('tx_mmforum_polls'); /* @var $pollObj tx_mmforum_polls */
 					$poll_id = $pollObj->createPoll($this->piVars['poll'], $this);
 					if (!is_numeric($poll_id)) {
 						$content .= $this->errorMessage($this->conf, $poll_id);
@@ -2380,6 +2384,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					}
 					$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
 					$link = $this->tools->getAbsoluteUrl($link);
+					// TODO: undefined variable $postid
 					header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $postid));
 					exit();
 				}
@@ -2397,7 +2402,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$userSignature = tx_mmforum_postfunctions::marker_getUserSignature($GLOBALS['TSFE']->fe_user->user);
 
 					$posttext = $this->piVars['message'];
-					$postold  = $posttext;
 					$posttext = $this->bb2text($posttext, $conf) . ($this->conf['list_posts.']['appendSignatureToPostText'] ? $userSignature : '');
 
 					$marker['###POSTOPTIONS###'] = '';
@@ -2496,6 +2500,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$fieldCount = ($this->conf['attachments.']['maxCount'] ? $this->conf['attachments.']['maxCount'] : 1);
 				$aTemplate  = $this->cObj->getSubpart($template, '###ATTACHMENT_FIELD###');
 
+				$aContent = '';
 				for ($i = 1; $i <= $fieldCount; $i ++) {
 					$aMarker = array(
 						'###ATTACHMENT_NO###' => $i
@@ -2676,7 +2681,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$userSignature = tx_mmforum_postfunctions::marker_getUserSignature($GLOBALS['TSFE']->fe_user->user);
 
 					$posttext = $this->piVars['message'];
-					$postold = $posttext;
 					$posttext = $this->bb2text($posttext,$conf) . ($this->conf['list_posts.']['appendSignatureToPostText'] ? $userSignature : '');
 
 					$marker['###POSTOPTIONS###']= '';
@@ -2746,6 +2750,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$fieldCount = $this->conf['attachments.']['maxCount']?$this->conf['attachments.']['maxCount']:1;
 				$aTemplate = $this->cObj->getSubpart($template, '###ATTACHMENT_FIELD###');
 
+				$aContent = '';
 				for($i=1; $i <= $fieldCount; $i ++) {
 					$aMarker = array(
 						'###ATTACHMENT_NO###' => $i
@@ -2962,7 +2967,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			}
 
 			$dirname = $this->conf['attachments.']['attachmentDir'];
-			if (substr($newpath, -1, 1) != '/') {
+			if (substr($dirname, -1, 1) != '/') {
 				$dirname .= '/';
 			}
 
@@ -2981,7 +2986,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			 *
 			 * Credits go to Loek Hilgersom
 			 */
-			if(in_array($file['type'],array('binary/octet-stream','application/octet-stream','x-application/octet-stream')) && substr_compare($file['name'],'.pdf',-4,4,true)==0)
+			if(in_array($file['type'], array(
+				'binary/octet-stream',
+				'application/octet-stream',
+				'x-application/octet-stream')) && substr_compare($file['name'],'.pdf',-4,4,true)==0)
 				$file['type'] = 'application/pdf';
 
 			$insertArray = array(
@@ -3106,8 +3114,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					if (!is_array($res)) {
 						$content .= $res;
 						unset($this->piVars['button']);
-						return $this->post_edit($content);
-
+						return $this->post_edit($content, $conf);
 					} else {
 						$attachmentIds = $res;
 						$attachments = t3lib_div::intExplode(',', $row['attachment']);
@@ -3134,7 +3141,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				if ($this->conf['polls.']['enable']) {
 
 					if($this->piVars['enable_poll'] == '1' && $firstPost) {
-						$pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
+						$pollObj = t3lib_div::makeInstance('tx_mmforum_polls'); /* @var $pollObj tx_mmforum_polls */
 
 						if($topicData['poll_id'] > 0) {
 
@@ -3229,7 +3236,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_SECTION###', '');
 
 					$posttext = $this->piVars['message'];
-					$postold = $posttext;
 					$posttext = $this->bb2text($posttext, $conf);
 
 					$marker['###POSTOPTIONS###']  = '';
@@ -3733,6 +3739,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'deleted=0 AND hidden=0'
 		);
 		$i = 0;
+		$content = '';
 		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			if(substr($arr['title'],0,4)=='LLL:') $title = $this->pi_getLL(substr($arr['title'],4));
 			else $title = $arr['title'];
@@ -3761,6 +3768,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'tx_mmforum_syntaxhl',
 			'deleted=0 AND hidden=0'
 		);
+
+		$content = '';
 		if($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				if(substr($arr['lang_title'],0,4)=='LLL:') $title = $this->pi_getLL(substr($arr['lang_title'],4));
@@ -3803,10 +3812,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$i = 0;
 
 		// Display smilies in table, 4 smilies a row.
+		$content = '';
 		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
 
 			$smiliePath = 'uploads/tx_mmforum/'.$row['smile_url'];
-			If(!file_exists($smiliePath)) $smiliePath = $conf['path_smilie'].$row['smile_url'];
+			if(!file_exists($smiliePath)) $smiliePath = $conf['path_smilie'].$row['smile_url'];
 
 			$imgInfo['src'] = $smiliePath;
 			$imgInfo['alt'] = $row['code'];
@@ -4161,6 +4171,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			't.crdate DESC',
 			'10'
 		);
+
+		$content = '';
 		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$row['topic_title'] = stripslashes($row['topic_title']);
 
@@ -4193,6 +4205,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function view_last_10_posts($uid) {
 		$uid = intval($uid);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"poster_id='$uid' AND deleted='0' AND hidden='0'".$this->getStoragePIDQuery(),'','crdate DESC','10');
+
+		$content = '';
 		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$topic_name = $this->get_topic_name($row['topic_id']);
 			$topic_name = str_replace('<','&lt;',$topic_name);
@@ -4228,20 +4242,20 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$template = $this->cObj->getSubpart($template, "###SENDMAIL###");
 				$marker = array();
 				// Generate authencification code and insert into database
-					$mailcode = md5(getenv("REMOTE_ADDR").time().$this->tools->generateRandomString(10));
-					$insertArray = array(
-						'code'          => $mailcode,
-						'tstamp'        => time(),
-						'crdate'        => time(),
-						'cruser_id'     => $GLOBALS['TSFE']->fe_user->user['uid']
-					);
-					$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_mailkey',$insertArray);
-					$marker['###MAILCODE###'] =  $mailcode;
+				$mailcode = md5(getenv("REMOTE_ADDR").time().$this->tools->generateRandomString(10));
+				$insertArray = array(
+					'code'          => $mailcode,
+					'tstamp'        => time(),
+					'crdate'        => time(),
+					'cruser_id'     => $GLOBALS['TSFE']->fe_user->user['uid']
+				);
+				$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_mailkey',$insertArray);
+				$marker['###MAILCODE###'] =  $mailcode;
 
 				// Retrieve user name from database
-					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField(),'fe_users',"uid = '".intval($this->piVars['uid'])."'");
-					list($usermailname) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-					$marker['###USERMAILNAME###'] =  $usermailname;
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField(),'fe_users',"uid = '".intval($this->piVars['uid'])."'");
+				list($usermailname) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				$marker['###USERMAILNAME###'] =  $usermailname;
 			}
 			else {
 				// Check if user is authorized to send emails.
@@ -4258,7 +4272,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField().',email','fe_users',"uid = '".intval($this->piVars['uid'])."'");
 					list($usermailname,$to) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-					$header .= "From: <".$GLOBALS['TSFE']->fe_user->user[$this->getUserNameField()].">".$GLOBALS['TSFE']->fe_user->user['email']."\n";
+					$header = "From: <".$GLOBALS['TSFE']->fe_user->user[$this->getUserNameField()].">".$GLOBALS['TSFE']->fe_user->user['email']."\n";
 					$header .= "Reply-To:" . $GLOBALS['TSFE']->fe_user->user['email'] . "\n";
 					$header .= "Content-type: text/plain;charset=".$GLOBALS['TSFE']->renderCharset."\n";
 
@@ -4301,7 +4315,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 		return $content;
-
 	}
 
 	/**
@@ -4439,6 +4452,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$linkParams[$this->prefixId]['tid'] = $this->piVars['tid'];
 		}
 
+		$content = '';
 		if ($maxpage > 1) {
 			if($this->piVars['hide_solved']) $linkParams[$this->prefixId]['hide_solved']='1';
 
@@ -4496,6 +4510,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			return $content;
 		}
 
+		$content = '';
 		if ($maxpage > 1) {
 			// First page
 				if (($page - 1) >= 1)           $content .= $this->pi_linkTP(' '.$this->pi_getLL('page.first').' ',array_merge($linkParams,array($this->prefixId.'[page]'=>1))).'|';
@@ -4663,7 +4678,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 			}
 
-			$content .= $this->cObj->substituteMarkerArray($template, $marker);
+			$content = $this->cObj->substituteMarkerArray($template, $marker);
 		} else {
 			if ($userData === false) {
 				return '<strong>' . $this->pi_getLL('user.deleted') . '</strong>';
@@ -4978,17 +4993,17 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 */
 	function user_config($conf,$param) {
 		// Save changes
-			if ($param['save']) {
-				if($param['postorder'] == 2) $post_sort = 'DESC';
-				else $post_sort = 'ASC';
+		if ($param['save']) {
+			if($param['postorder'] == 2) $post_sort = 'DESC';
+			else $post_sort = 'ASC';
 
-				$updateArray = array(
-					'tstamp'    => time(),
-					'post_sort' => $post_sort,
-					'ip'        => getenv("REMOTE_ADDR")
-				);
-				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userconfig', 'userid='.$GLOBALS['TSFE']->fe_user->user['uid'] , $updateArray);
-			}
+			$updateArray = array(
+				'tstamp'    => time(),
+				'post_sort' => $post_sort,
+				'ip'        => getenv("REMOTE_ADDR")
+			);
+			$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userconfig', 'userid='.$GLOBALS['TSFE']->fe_user->user['uid'] , $updateArray);
+		}
 
 		$template = $this->cObj->fileResource($conf['template.']['userconf']);
 		$template = $this->cObj->getSubpart($template, "###USERCONF###");
@@ -5004,33 +5019,32 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_userconfig','userid="'.$GLOBALS['TSFE']->fe_user->user['uid'].'"');
 
 		// If there is no config record for current user, create one.
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
-				$insertArray = array(
-					'tstamp'        => time(),
-					'crdate'        => time(),
-					'userid'        => $GLOBALS['TSFE']->fe_user->user['uid'],
-					'ip'            => t3lib_div::getIndpEnv("REMOTE_ADDR")
-				);
-				$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userconfig',$insertArray);
-			} else {
-				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-			}
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+			$insertArray = array(
+				'tstamp'        => time(),
+				'crdate'        => time(),
+				'userid'        => $GLOBALS['TSFE']->fe_user->user['uid'],
+				'ip'            => t3lib_div::getIndpEnv("REMOTE_ADDR")
+			);
+			$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userconfig',$insertArray);
+		} else {
+			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		}
 
 		// Sorting order of posts
-			if ($row['post_sort'] == "DESC") {
-				$select1 = '';
-				$select2 = 'selected';
-			} else {
-				$select1 = 'selected';
-				$select2 = '';
-			}
-			$marker['###POSTORDER###'] .= '<select class="tx-mmforum-select" name="tx_mmforum_pi1[postorder]">';
-			$marker['###POSTORDER###'] .= '<option value="1" '.$select1.'>'.$this->pi_getLL('user.postOrder.first').'</option>';
-			$marker['###POSTORDER###'] .= '<option value="2" '.$select2.'>'.$this->pi_getLL('user.postOrder.last').'</option>';
-			$marker['###POSTORDER###'] .= '</select>';
+		if ($row['post_sort'] == "DESC") {
+			$select1 = '';
+			$select2 = 'selected';
+		} else {
+			$select1 = 'selected';
+			$select2 = '';
+		}
+		$marker['###POSTORDER###'] .= '<select class="tx-mmforum-select" name="tx_mmforum_pi1[postorder]">';
+		$marker['###POSTORDER###'] .= '<option value="1" '.$select1.'>'.$this->pi_getLL('user.postOrder.first').'</option>';
+		$marker['###POSTORDER###'] .= '<option value="2" '.$select2.'>'.$this->pi_getLL('user.postOrder.last').'</option>';
+		$marker['###POSTORDER###'] .= '</select>';
 
-
-		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
+		$content = $this->cObj->substituteMarkerArrayCached($template, $marker);
 		return $content;
 	}
 
