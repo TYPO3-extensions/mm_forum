@@ -385,7 +385,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
     			$link = '<strong>'.$this->pi_getLL('topic-solvedshort-off').'</strong> / '.$this->pi_linkTP($this->pi_getLL('topic-solvedshort-on'),$linkParams);
     		}
     	} else {
-		$image = $this->pi_linkTP($this->buildImageTag($imgInfo),$linkParams);
+    		$image = $this->pi_linkTP($this->buildImageTag($imgInfo),$linkParams); //TODO: FIXME undefined variable $linkParams
     		$link = $topic_data['solved']?$this->pi_getLL('topic-solvedshort-on'):$this->pi_getLL('topic-solvedshort-off');
     	}
 

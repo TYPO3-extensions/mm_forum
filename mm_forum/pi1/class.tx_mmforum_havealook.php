@@ -460,6 +460,7 @@ class tx_mmforum_havealook {
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_contentMarker'])) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_contentMarker'] as $_classRef) {
 						$_procObj = &t3lib_div::getUserObj($_classRef);
+						//TODO: FIXME undefined variable $row
 						$llMarker = $_procObj->newPostMail_contentMarker($llMarker, $row, $forumObj);
 					}
 				}
@@ -527,7 +528,7 @@ class tx_mmforum_havealook {
 
 		$marker = array(
 			'###LINK###'      => $link,
-			'###USERNAME###'  => $toUsername,
+			'###USERNAME###'  => $toUsername, //TODO: FIXME undefined variable $toUsername
 			'###FORUMNAME###' => $forumName,
 			'###TEAM###'      => $forumObj->conf['teamName'],
 		);

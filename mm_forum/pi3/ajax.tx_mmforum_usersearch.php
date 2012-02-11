@@ -168,7 +168,7 @@ $SOBE = t3lib_div::makeInstance('tx_mmforum_userSearch');
 $sword = t3lib_div::_GP('userSearch');
 $data = $SOBE->search($sword);
 
-header('Content-Type: text/plain');
+header('Content-Type: text/plain'); //TODO: json?
 echo $SOBE->render($data);
 
 ?>

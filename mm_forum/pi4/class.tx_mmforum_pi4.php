@@ -720,7 +720,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * @return array        An numeric array of word UIDs
 	 */
 	function word_id($word) {
-		$word = mysql_escape_string($word);
+		$word = mysql_escape_string($word); //TODO: use api
 		$word = str_replace('*','%',$word);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_wordlist',"word LIKE '$word'".$this->getPidQuery());
 

@@ -189,7 +189,7 @@ class tx_mmforum_rss {
 				$marker = $_procObj->rss_posts($posts, $this);
 			}
 		}
-
+		// TODO: FIXME undefined variables $mode, $param
 		$marker = array(
 			'###RSS_ENCODING###'    => $GLOBALS['TSFE']->renderCharset,
 			'###RSS_TITLE###'       => '<![CDATA['.$this->getFeedTitle($mode, $param).']]>',

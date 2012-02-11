@@ -295,7 +295,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 					}
 					$marker['###PM###']	= tx_mmforum_pi1::createButton('pmreply', $linkParams, 0, true);
 				} else {
-					$marker['###PM###'] = tx_mmforum_pi1::createButton('pmreply', $linkParams, 0, true, '', true);
+					$marker['###PM###'] = tx_mmforum_pi1::createButton('pmreply', $linkParams, 0, true, '', true); //TODO: undefined variable $linkParams
 				}
 
 				// Generate PM deletion link
@@ -648,7 +648,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 						// Compose mail and send
 						$mail = t3lib_div::makeInstance('t3lib_mail_Message');
-						$mail->setFrom(array($forumObj->conf['mailerEmail'] => $forumObj->conf['siteName']));
+						$mail->setFrom(array($forumObj->conf['mailerEmail'] => $forumObj->conf['siteName'])); //TODO undefined variable $forumObj. use $this->conf here?
 						$mail->setTo(array($recipient['email'] => $recipient['username']));
 						$mail->setSubject($this->pi_getLL('ntfmail.subject'));
 						$mail->setBody($mailtext, 'text/plain');
@@ -771,7 +771,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 	* @return  string          The plugin content
 	*/
 	function top_navi ($content,$conf) {
-        $imgInfo  = array('border' => intval($conf['img_border']), 'alt' => '', 'src' => '' );
+        $imgInfo  = array('border' => intval($conf['img_border']), 'alt' => '', 'src' => '' ); //TODO: unused variable $imgInfo
         $template = $this->cObj->fileResource($conf['template.']['navi_top']);
 		$count    = $this->count_new_pm($GLOBALS['TSFE']->fe_user->user['uid']);
 
@@ -867,7 +867,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 	        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['pm']['listUser_userMarkers'])) {
 	            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['pm']['listUser_userMarkers'] as $_classRef) {
 	                $_procObj = & t3lib_div::getUserObj($_classRef);
-	                $marker = $_procObj->listUser_userMarkers($userMarker, $row, $this);
+	                $marker = $_procObj->listUser_userMarkers($userMarker, $row, $this); //TODO: unused variable $marker
 	            }
 	        }
 

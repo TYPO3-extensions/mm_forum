@@ -205,7 +205,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		}
 
 			/* Load user record from database */
-		$hash = mysql_escape_string($hash);
+		$hash = mysql_escape_string($hash); //TODO use api here
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users','tx_mmforum_reg_hash="'.$hash.'"');
 
 			/* If user records exists exactly once, continue... */
@@ -234,6 +234,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 					'###LABEL_ERRORGENERAL###'		=> $this->pi_getLL('error.generalError'),
 					'###LABEL_PLEASECONTACT###'		=> $this->cObj->substituteMarker($this->pi_getLL('error.support'),'###SUPPORTMAIL###',str_replace('@',' [at] ',$this->conf['supportMail'])),
 				);
+				//TODO: what happens with the marker array?
 				return $template;
 			}
 
@@ -360,7 +361,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		}
 
 		$fields = 'username,name,tx_mmforum_occ,city,tx_mmforum_interests,www,email';
-		$fields = explode(',',$fields);
+		$fields = explode(',',$fields); //TODO: unused variable
 
 		$requiredFields = t3lib_div::trimExplode(',',$this->conf['required.']['fields']);
 		$requiredFields[] = 'username';

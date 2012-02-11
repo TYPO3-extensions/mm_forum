@@ -458,7 +458,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 		// Otherwise...
 		} else {
-			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
+			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker); //TODO: FIXME undefined variable $marker
 		}
 
 		return $content;
