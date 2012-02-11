@@ -115,8 +115,8 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 						$content = $this->showRegForm($marker, $conf);
 					} else {
 						// Sava data
-						$ok = $this->saveData();
-						$ok = $this->sendEmail();
+						$this->saveData();
+						$this->sendEmail();
 						$content = $this->showEmailSent();
 					}
 					break;
@@ -218,7 +218,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 				'tx_mmforum_reg_hash'   => ''
 			);
 
-			$res2 = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users',"tx_mmforum_reg_hash='$hash'",$updateArray);
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users',"tx_mmforum_reg_hash='$hash'",$updateArray);
 
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['activateUser'])) {
 			    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['activateUser'] as $_classRef) {
@@ -422,27 +422,27 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 				$userField->get($arr);
 
 				if (($this->conf['showOnlyRequiredUserfields'] == 1 && $userField->isRequired()) || ($this->conf['showOnlyRequiredUserfields'] != 1)) {
-  				$label = $userField->getRenderedLabel();
+  					$label = $userField->getRenderedLabel();
 
-                  if($userField->isRequired())
-                      $label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
+					if($userField->isRequired())
+						  $label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
 
-  				$input = $userField->getRenderedInput($this->piVars['userfields'][$userField->getUID()]);
-  				if($input === null) $input = $this->cObj->getSubpart($userField_template, '###DEFUSERFIELD###');
-  				$userField_thisTemplate = $this->cObj->substituteSubpart($userField_template, '###DEFUSERFIELD###', $input);
+					$input = $userField->getRenderedInput($this->piVars['userfields'][$userField->getUID()]);
+					if($input === null) $input = $this->cObj->getSubpart($userField_template, '###DEFUSERFIELD###');
+					$userField_thisTemplate = $this->cObj->substituteSubpart($userField_template, '###DEFUSERFIELD###', $input);
 
-  				$userFields_marker = array(
-                      '###USERFIELD_LABEL###'     => $label,
-                      '###USERFIELD_UID###'       => $userField->getUID(),
-                      '###USERFIELD_NAME###'      => 'tx_mmforum_pi2[userfields]['.$userField->getUID().']',
-                      '###USERFIELD_VALUE###'     => $this->piVars['userfields'][$userField->getUID()]?$this->piVars['userfields'][$arr['uid']]:'',
-  					          '###USERFIELD_ERROR###'		=> $marker['userfield_error'][$userField->getUID()]
-                  );
-          if ($userFields_marker['###USERFIELD_ERROR###']) {
-            $userFields_marker['###USERFIELD_ERROR###'] = $this->cObj->wrap($userFields_marker['###USERFIELD_ERROR###'], $this->conf['errorwrap']);
-          }
-          $userFields_content .= $this->cObj->substituteMarkerArrayCached($userField_thisTemplate, $userFields_marker);
-			  }
+					$userFields_marker = array(
+						'###USERFIELD_LABEL###'     => $label,
+						'###USERFIELD_UID###'       => $userField->getUID(),
+						'###USERFIELD_NAME###'      => 'tx_mmforum_pi2[userfields]['.$userField->getUID().']',
+						'###USERFIELD_VALUE###'     => $this->piVars['userfields'][$userField->getUID()]?$this->piVars['userfields'][$arr['uid']]:'',
+						'###USERFIELD_ERROR###'		=> $marker['userfield_error'][$userField->getUID()]
+					);
+					if ($userFields_marker['###USERFIELD_ERROR###']) {
+						$userFields_marker['###USERFIELD_ERROR###'] = $this->cObj->wrap($userFields_marker['###USERFIELD_ERROR###'], $this->conf['errorwrap']);
+					}
+					$userFields_content .= $this->cObj->substituteMarkerArrayCached($userField_thisTemplate, $userFields_marker);
+				}
 			}
 
 			/*
@@ -505,8 +505,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 	 * @return array          The marker array already submitted as parameter, if necessary filled
 	 *                        with adequate error messages.
 	 */
-	function validate($marker)
-	{
+	function validate($marker) {
 		$marker["fehler"] = 0;
 
 		$this->data['username'] = trim($this->data['username']);
@@ -649,8 +648,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 	 * array of already made user input data.
 	 * @return array  The marker array for the general registration form.
 	 */
-	function makeMarker()
-	{
+	function makeMarker() {
 		$marker = array();
 
 		$marker["###ERROR_username###"]			= "";

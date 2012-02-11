@@ -67,8 +67,7 @@ class tx_mmforum_indexing {
 	 * @param  array  $conf     The calling plugin's configuration vars. Not actually used.
 	 * @return string           If an error occurred, an error message is returned
 	 */
-	function ind_topic($topic_id,$conf)
-	{
+	function ind_topic($topic_id,$conf) {
 			// Delete old index records regarding this topic
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_wordmatch',"topic_id='$topic_id'");
 
@@ -169,8 +168,9 @@ class tx_mmforum_indexing {
 
 	/**
 	 * Indexes a specific post.
-	 * @param  array $conf    The calling plugin's configuration vars. Not actually used.
-	 * @param  int   $post_id The UID of the post to be indexed.
+	 * @param  array $conf	The calling plugin's configuration vars. Not actually used.
+	 * @param  $post_array
+	 * @internal param int $post_id The UID of the post to be indexed.
 	 * @return void
 	 */
 	function ind_post($conf,$post_array) {
@@ -328,10 +328,7 @@ class tx_mmforum_indexing {
 		);
 		// Execute query
 		$query = $GLOBALS['TYPO3_DB']->INSERTquery('tx_mmforum_wordmatch', $insertArray);
-        $GLOBALS['TYPO3_DB']->sql_query($query);
-
-        #if(!$res) echo "AAARGH!";
-        #echo $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery.'<br />';
+		$GLOBALS['TYPO3_DB']->sql_query($query);
 	}
 
 	/**

@@ -183,14 +183,14 @@ class tx_mmforum_rss {
 		$rowTemplate	= $this->cObj->getSubpart($template, '###RSS_POST_ITEM###');
 
 		// Include hooks
-			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_posts'])) {
-				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_posts'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-					$marker = $_procObj->rss_posts($posts, $this);
-				}
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_posts'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_posts'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$marker = $_procObj->rss_posts($posts, $this);
 			}
+		}
 
-		$marker			= array(
+		$marker = array(
 			'###RSS_ENCODING###'    => $GLOBALS['TSFE']->renderCharset,
 			'###RSS_TITLE###'       => '<![CDATA['.$this->getFeedTitle($mode, $param).']]>',
 			'###RSS_DESCRIPTION###' => $this->getFeedDescription(),
@@ -201,14 +201,14 @@ class tx_mmforum_rss {
 		);
 
 		// Include hooks
-			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_globalMarkers'])) {
-				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_globalMarkers'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-					$marker = $_procObj->rss_globalMarkers($marker, $posts, $this);
-				}
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_globalMarkers'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_globalMarkers'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$marker = $_procObj->rss_globalMarkers($marker, $posts, $this);
 			}
+		}
 
-		$template		= $this->cObj->substituteMarkerArray($template, $marker);
+		$template = $this->cObj->substituteMarkerArray($template, $marker);
 
 		$rowContent = '';
 		foreach($posts as $post) {
@@ -224,14 +224,14 @@ class tx_mmforum_rss {
 			$rowContent .= $this->cObj->substituteMarkerArray($rowTemplate, $rowMarker);
 
 			// Include hooks
-				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_itemMarkers'])) {
-					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_itemMarkers'] as $_classRef) {
-						$_procObj = & t3lib_div::getUserObj($_classRef);
-						$rowMarker = $_procObj->rss_itemMarkers($marker, $post, $this);
-					}
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_itemMarkers'])) {
+				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_itemMarkers'] as $_classRef) {
+					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$rowMarker = $_procObj->rss_itemMarkers($marker, $post, $this);
 				}
+			}
 		}
-		$template		= $this->cObj->substituteSubpart($template, '###RSS_POST_ITEM###', $rowContent);
+		$template = $this->cObj->substituteSubpart($template, '###RSS_POST_ITEM###', $rowContent);
 
 		return $template;
 	}

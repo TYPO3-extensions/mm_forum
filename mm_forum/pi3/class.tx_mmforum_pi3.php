@@ -87,7 +87,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		 */
 
 	function main($content, $conf) {
-    $this->init($conf);
+		$this->init($conf);
 		$this->pi_USER_INT_obj = 1;
 
 		$this->config["code"] = $this->cObj->stdWrap($this->conf["code"],$this->conf["code."]);
@@ -96,20 +96,19 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		$codes=t3lib_div::trimExplode(",", $this->config["code"]?$this->config["code"]:$this->conf["defaultCode"],1);
 		if (!count($codes))  $codes=array("");
 
-        $conf = $this->conf;
+		$conf = $this->conf;
 
 		if ((isset($conf['pm_enabled']) && intval($conf['pm_enabled']) === 0)) {
 			$template = $this->cObj->fileResource($conf['template.']['error_message']);
 			if ($GLOBALS['TSFE']->fe_user->user['username']) {
-			  $marker['###ERROR###'] = $this->pi_getLL('msgErrorDeactivated');
-      } else {
-        $marker['###ERROR###'] = $this->pi_getLL('msgError');
-      }
-      $marker['###BACKLINK###'] = '<a href="javascript:history.back()">' . $this->pi_getLL('back') . '</a>';
+				$marker['###ERROR###'] = $this->pi_getLL('msgErrorDeactivated');
+			} else {
+				$marker['###ERROR###'] = $this->pi_getLL('msgError');
+			}
+			$marker['###BACKLINK###'] = '<a href="javascript:history.back()">' . $this->pi_getLL('back') . '</a>';
 			$content = $this->cObj->substituteMarkerArrayCached($template, $marker);
-
-      return $this->pi_wrapInBaseClass($content);
-    }
+			return $this->pi_wrapInBaseClass($content);
+		}
 
 		if(!$conf['pm_id']) $conf['pm_id'] = $GLOBALS['TSFE']->id;
 
@@ -340,7 +339,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		$marker['###OPTION###']   .= '	<option value="del">'.$this->pi_getLL('selectedDelete').'</option>';
 
 		if ($this->piVars['folder'] <> "archiv") {
-		$marker['###OPTION###'] .= '	<option value="archiv">'.$this->pi_getLL('selectedToArchive').'</option>';
+			$marker['###OPTION###'] .= '	<option value="archiv">'.$this->pi_getLL('selectedToArchive').'</option>';
 		}
 		$marker['###OPTION###'] .= '</select>';
 		$marker['###OPTION###'] .= '<input type="hidden" name="'.$this->prefixId.'[folder]" value="'.$this->escape($this->piVars['folder']).'" />';
@@ -771,8 +770,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 	* @param   array  $conf    The plugin's configuration vars
 	* @return  string          The plugin content
 	*/
-	function top_navi ($content,$conf)
-	{
+	function top_navi ($content,$conf) {
         $imgInfo  = array('border' => intval($conf['img_border']), 'alt' => '', 'src' => '' );
         $template = $this->cObj->fileResource($conf['template.']['navi_top']);
 		$count    = $this->count_new_pm($GLOBALS['TSFE']->fe_user->user['uid']);

@@ -385,7 +385,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
     			$link = '<strong>'.$this->pi_getLL('topic-solvedshort-off').'</strong> / '.$this->pi_linkTP($this->pi_getLL('topic-solvedshort-on'),$linkParams);
     		}
     	} else {
-    	$image = $this->pi_linkTP($this->buildImageTag($imgInfo),$linkParams);
+		$image = $this->pi_linkTP($this->buildImageTag($imgInfo),$linkParams);
     		$link = $topic_data['solved']?$this->pi_getLL('topic-solvedshort-on'):$this->pi_getLL('topic-solvedshort-off');
     	}
 
@@ -414,7 +414,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
             	'tid'			=> $this->piVars['tid']
             );
             if($this->useRealUrl()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
-$image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
+		$image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
             $link = $this->pi_linkTP($this->pi_getLL('on'),$favlinkParams).' / <strong>'.$this->pi_getLL('off').'</strong>';
         } else {
             $imgInfo['alt'] = $this->pi_getLL('topic.favorite.on');

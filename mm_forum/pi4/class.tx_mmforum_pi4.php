@@ -485,9 +485,9 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				$marker['###TITLE###']      = $this->pi_linkToPage($this->escape($topic_info['topic_title']),$conf['pid_forum'],'',$linkparams);
 				$marker['###SHORTTEXT###']  = $post_text;
 				$dummylinkParams['tx_mmforum_pi1'] = array('action'=>'list_post','tid'=>$topic_id);
-                if(tx_mmforum_pi1::getIsRealURL()) $dummylinkParams['tx_mmforum_pi1']['fid'] = $topic_info['forum_id'];
+				if(tx_mmforum_pi1::getIsRealURL()) $dummylinkParams['tx_mmforum_pi1']['fid'] = $topic_info['forum_id'];
 				#$link = t3lib_div::getIndpEnv("HTTP_HOST").'/'.$this->pi_getPageLink($conf['pid_forum'],'',$dummylinkParams);
-        $link = tx_mmforum_pi1::getAbsUrl($this->pi_getPageLink($conf['pid_forum'],'',$dummylinkParams));
+				$link = tx_mmforum_pi1::getAbsUrl($this->pi_getPageLink($conf['pid_forum'],'',$dummylinkParams));
 				$link = $this->cObj->stdWrap($link,$conf['postPath.']);
 				$marker['###POSTPATH###']   = $this->pi_linkToPage($link,$conf['pid_forum'],'_self',$linkparams);
 				$marker['###VIEWS###']      = intval($topic_info['topic_views']);
@@ -601,8 +601,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * @return array                A numeric array of all posts, one of the words specified
 	 *                              in $word_id_list was found in.
 	 */
-	function find_posts($word_id_list,$param,$words = 0,$username = '')
-	{
+	function find_posts($word_id_list,$param,$words = 0,$username = '') {
 		$word_id_list = implode(',',$word_id_list);
 		IF(!empty($word_id_list)) {
 			$mysql_option  = ' AND word_id IN ('.$word_id_list.') ';
@@ -684,10 +683,10 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		}
 
 		if(isset($res)) {
-			$topic_tmp_array    = array();
+			$post_id_array = array();
 
-			while($row  = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				array_push($post_id_array,$row['post_id']);
+			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				array_push($post_id_array, $row['post_id']);
 			}
 		}
 
