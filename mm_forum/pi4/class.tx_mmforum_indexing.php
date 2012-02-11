@@ -307,6 +307,7 @@ class tx_mmforum_indexing {
 	 * which posts contains which words.
 	 * @param  int   $word_id     The UID of the word for the word match
 	 * @param  array $matchparams The other parameters for the word match
+	 * @param  bool  $debug
 	 * @return void
 	 */
 	function wortMatchAdd ($word_id,$matchparams,$debug=false) {
