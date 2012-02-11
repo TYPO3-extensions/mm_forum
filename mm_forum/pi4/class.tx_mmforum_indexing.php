@@ -241,7 +241,7 @@ class tx_mmforum_indexing {
 			' tx_mmforumsearch_index_write' => time(),
 		);
 		$query = $GLOBALS['TYPO3_DB']->UPDATEquery('tx_mmforum_posts', 'uid = '.$post_id, $updateArray);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		$GLOBALS['TYPO3_DB']->sql_query($query);
 	}
 
 	/**
@@ -253,7 +253,7 @@ class tx_mmforum_indexing {
 			' tx_mmforumsearch_index_write' => time(),
 		);
 		$query = $GLOBALS['TYPO3_DB']->UPDATEquery('tx_mmforum_topics', "uid = ".$topic_id, $updateArray);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		$GLOBALS['TYPO3_DB']->sql_query($query);
 	}
 
 	/**
@@ -266,14 +266,14 @@ class tx_mmforum_indexing {
 			' tx_mmforumsearch_index_write' => 0,
 		);
 		$query = $GLOBALS['TYPO3_DB']->UPDATEquery('tx_mmforum_topics', "uid = ".$topic_id, $updateArray);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		$GLOBALS['TYPO3_DB']->sql_query($query);
 	}
 
 	/**
 	 * Inserts a new word into the search index table and returns it's UID.
 	 * If the word already exists in the search index, just the UID is returned.
 	 * @param string $word The word to be inserted
-	 * @param int          The word's UID
+	 * @return int         The word's UID
 	 */
 	function wordAdd($word) {
 		// Attempt to load word from database

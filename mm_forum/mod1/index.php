@@ -404,7 +404,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 			if($records < $this->confArr['recordsPerPage']) $mDisp = $records; else $mDisp = ($offset*$this->confArr['recordsPerPage']+$this->confArr['recordsPerPage']);
             $userString = sprintf($LANG->getLL('useradmin.usercount'),($offset*$this->confArr['recordsPerPage']+1),$mDisp,$records);
 
-			$out .= '<table width="733"><tr>';
+			$out = '<table width="733"><tr>';
 			$out .= '<td width="420">'.$pb.'</td>';
 			$out .= '<td width="120" align="center"><b>'.$userString.'</b></td>';
 			$out .= '<td align="right">'.$LANG->getLL('useradmin.searchfor').': <input type="text" id="sword" size="20" name="mmforum[sword]" /></td>';

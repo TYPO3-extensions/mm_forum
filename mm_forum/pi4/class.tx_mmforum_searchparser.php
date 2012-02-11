@@ -15,6 +15,7 @@ class tx_mmforum_searchparser {
 		$curSWord = array();
 		$sWords = array();
 		$sWord_open = false;
+		$bracket = '';
 		for($i=0; $i < count($rawData2); $i ++) {
 			$r=$rawData2[$i];
 			$r = strtolower($r);

@@ -439,7 +439,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 
 
 		$treffer = count($post_id_array);
-
+		$content = '';
 		IF($treffer > 0) {
 			$find_array_split   = array_chunk($post_id_array, $conf['show_items'], true);     // Array in Pages Aufteilen
 			IF(empty($param['page'])) $param['page'] = 0;
@@ -556,7 +556,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			return $this->getListGetPageBrowser($pages, $linkparams);
 		}
 
-		$content .= ' '.$this->pi_linkToPage(' &laquo; ',$GLOBALS["TSFE"]->id,$target='_self',$linkparams).' ';
+		$content = ' '.$this->pi_linkToPage(' &laquo; ',$GLOBALS["TSFE"]->id,$target='_self',$linkparams).' ';
 
 		while ($i <= $pages) {
 
@@ -605,10 +605,10 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	{
 		$word_id_list = implode(',',$word_id_list);
 		IF(!empty($word_id_list)) {
-			$mysql_option  .= ' AND word_id IN ('.$word_id_list.') ';
+			$mysql_option  = ' AND word_id IN ('.$word_id_list.') ';
 		}
 
-
+		$mysql_group_option = '';
 		IF ($words > 0) {
 			IF($param['groupPost']) {
 				$mysql_group_option   .= ' topic_id HAVING count(post_id) >= '.$words.' ';
@@ -632,7 +632,8 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 
 		if($GLOBALS['TSFE']->fe_user->user) {
 			$userGroups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
-			$grouprights_query = "";
+			$fgrouprights_queries = array();
+			$cgrouprights_queries = array();
 			foreach($userGroups as $userGroup) {
 				$fgrouprights_queries[] = ' FIND_IN_SET('.$userGroup.',reqUserGroups_f) ';
 				$cgrouprights_queries[] = ' FIND_IN_SET('.$userGroup.',reqUserGroups_c) ';

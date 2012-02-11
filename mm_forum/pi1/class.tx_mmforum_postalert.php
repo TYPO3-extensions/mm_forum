@@ -192,6 +192,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			'',
 			$order_by.' '.$order);
 
+		$content_sub = '';
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$marker['###STATUS###'] = '';
 

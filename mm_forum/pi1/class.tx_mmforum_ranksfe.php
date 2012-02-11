@@ -99,6 +99,7 @@ class tx_mmforum_ranksFE {
 
         if(count($ranks)==0) return '';
 
+		$content = '';
         foreach($ranks as $rank) {
             if($rank['color'])
                 $title = '<span style="color: '.$rank['color'].'">'.$rank['title'].'</span>';

@@ -87,7 +87,7 @@ class ext_update {
      */
     function renameTables() {
         $sql = $this->renameTables_getQuery();
-        $content .= 'Executing the following MySQL queries:<br /><br />'.implode('<br />',$sql);
+        $content = 'Executing the following MySQL queries:<br /><br />'.implode('<br />',$sql);
         $content .= '<br /><br />';
 
         foreach($sql as $singleQuery)

@@ -713,7 +713,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 				'',
 				'uid ASC'
 			);
-
+			$sAttachment = '';
 			while ($attachment = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				if (!@file_exists($attachment['file_path'])) {
 					continue;

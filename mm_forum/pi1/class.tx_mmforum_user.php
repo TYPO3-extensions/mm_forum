@@ -112,7 +112,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 
 			// find the page links, but if ($page -3) is less than 1, set it to at least "1"
 			$i = max(($page - 3), 1);
-
+			$pages = '';
 			for ($j = 1; $j <= 7; $j++) {
 				$pagelink = tx_mmforum_user::listpost_pagelink($i, $i, $userId);
 
@@ -158,6 +158,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 				'p.crdate DESC',
 				$from . ', ' . $itemsPerPage
 			);
+			$content = '';
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$imgInfo = array(
 					'src' => $conf['path_img'] . $conf['images.']['solved'],

@@ -404,7 +404,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		$marker = array_merge($marker,$llMarker);
 
         $userField_template = $this->cObj->getSubpart($template, '###USERFIELDS###');
-        $userField_content  = '';
+		$userFields_content  = '';
 
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             '*',

@@ -181,7 +181,7 @@ class tx_mmforum_havealook {
 					$marker   = $_procObj->havealook_listsettings($marker, $forumObj);
 				}
 			}
-			$content .= $forumObj->cObj->substituteMarkerArray($template, $marker);
+			$content = $forumObj->cObj->substituteMarkerArray($template, $marker);
 
 
 			// rendering the head part

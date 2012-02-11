@@ -149,7 +149,7 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 			'###LABEL_PNOTIFY_POSTCONTENT###'	=> $this->getLL('reportedcontent'),
 		);
 		$template			= t3lib_parsehtml::substituteMarkerArray($template, $marker);
-
+		$itemContent = '';
 		foreach($this->postalertItems as $postalertItem) {
 			$itemMarker = array(
 				'###PNOTIFY_TOPICTITLE###'		=> $this->getTopicTitle($postalertItem['topic_id']),

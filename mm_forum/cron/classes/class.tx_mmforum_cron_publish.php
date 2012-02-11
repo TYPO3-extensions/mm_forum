@@ -159,7 +159,7 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 			'###LABEL_PNOTIFY_TOPICFORUM###'	=> $this->getLL('topicforum'),
 		);
 		$template			= t3lib_parsehtml::substituteMarkerArray($template, $marker);
-
+		$itemContent = '';
 		foreach($this->postqueueItems as $postqueueItem) {
 			$itemMarker = array(
 				'###PNOTIFY_TOPICTITLE###'		=> $this->getTopicTitle($postqueueItem),

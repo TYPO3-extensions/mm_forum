@@ -210,6 +210,7 @@ class tx_mmforum_rss {
 
 		$template		= $this->cObj->substituteMarkerArray($template, $marker);
 
+		$rowContent = '';
 		foreach($posts as $post) {
 			$rowMarker	= array(
 				'###RSS_TOPIC_NAME###'      => $this->pObj->escape($post['topic_title']),

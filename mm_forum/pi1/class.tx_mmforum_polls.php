@@ -143,6 +143,7 @@ class tx_mmforum_polls {
         } else $expDate = 0;
 
         $i = 0;
+		$aContent = '';
         foreach($answers as $answer) {
             if($pObj->conf['polls.']['pollBar_colorMap.'][$i]) {
                 $color = $pObj->conf['polls.']['pollBar_colorMap.'][$i];
@@ -244,6 +245,7 @@ class tx_mmforum_polls {
             'poll_id='.intval($this->data['uid']).' AND deleted=0'
         );
         $i = 1;
+		$aContent = '';
         while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
             $pAnswers = ($arr['votes']>0)?round($arr['votes'] / $this->data['votes'] * 100):0;
 
@@ -502,8 +504,6 @@ class tx_mmforum_polls {
      * @version 2007-05-25
      */
     function display_editForm($uid, $override=array(),$pObj=NULL) {
-		global $TYPO3_DB;
-
         if(!$pObj->conf['polls.']['enable']) return "";
         $defACount = $pObj->conf['polls.']['minAnswers'];
 
@@ -556,7 +556,9 @@ class tx_mmforum_polls {
             '*',
             'tx_mmforum_polls_answers',
             'poll_id='.$poll['uid'].' AND deleted=0'
-        ); $i = 0;
+        );
+		$i = 0;
+		$answers = '';
         while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
             $answer = $override['answer']['edit'][$arr['uid']]?$override['answer']['edit'][$arr['uid']]:$arr['answer'];
             if(is_array($override['answer']['delete'])) {
@@ -640,7 +642,7 @@ class tx_mmforum_polls {
 			      '###DISABLED_VAR###'		    => $this->getMayCreatePoll($pObj) ? 0 : 1
         );
         $template = $pObj->cObj->substituteMarkerArrayCached($template, $marker);
-
+		$answers = '';
         for($i = 0; $i < $defACount; $i ++) {
             $marker = array(
                 '###ANSWER###'      => $pObj->escape($piVars?$piVars['answer']['new'][$i]:''),

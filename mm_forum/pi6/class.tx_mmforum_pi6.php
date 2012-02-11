@@ -143,8 +143,6 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 		$subpart = !$small?"###PORTALINFO###":"###PORTALINFO_SMALL###";
 		$template = $this->cObj->getSubpart($template, $subpart);
 
-		$marker = Array();
-
 		// Determine amount of registered users
 		$onlineUsers = $this->getOnlineUsers();
 		$todayUsers = $this->getTodayUsers();
