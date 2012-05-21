@@ -2344,7 +2344,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$attachment_ids = array();
 				}
 
-				if ($this->isModeratedForum() && !$this->getIsAdmin() && !$this->getIsMod($forumId)) {
+				if ($this->isModeratedTopic() && !$this->getIsAdmin() && !$this->getIsMod($forumId)) {
 
 					// Create topic using postfactory
 					$postfactory->create_topic_queue(

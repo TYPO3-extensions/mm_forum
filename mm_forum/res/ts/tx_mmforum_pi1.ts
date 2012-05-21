@@ -8,15 +8,18 @@ plugin.tx_mmforum_pi1 {
 		includeLibs				= EXT:mm_forum/pi1/class.tx_mmforum_pi1.php
 		userFunc				= tx_mmforum_pi1->main
 
-    # RSS feed PID
-        rssPID              = {$plugin.tx_mmforum.rssPID}
+	# RSS feed PID
+		rssPID			= {$plugin.tx_mmforum.rssPID}
 
-	# Moderated board
-		moderated			= {$plugin.tx_mmforum.moderatedBoard}
+	# Moderated posts
+		moderated		= {$plugin.tx_mmforum.moderatedBoard}
+
+	# Moderated topic
+		moderatedTopic		= {$plugin.tx_mmforum.moderatedTopic}
     
-    # Avatar image dimensions
-	    avatar_height       = 100
-	    avatar_width        = 100
+	# Avatar image dimensions
+		avatar_height       = 100
+		avatar_width        = 100
 
 	# Number of posts to make a topic as a hot topic 
 		hotposts       	    = {$plugin.tx_mmforum.topic_hotPosts}

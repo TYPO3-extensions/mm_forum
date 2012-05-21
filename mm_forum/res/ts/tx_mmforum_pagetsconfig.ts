@@ -139,6 +139,9 @@ mod.web_txmmforumM1 {
 							type.table = pages
 						}
 
+						moderatedTopic = MMFORUM_CONF_ITEM
+						moderatedTopic.type = checkbox
+
 						moderatedBoard = MMFORUM_CONF_ITEM
 						moderatedBoard.type = checkbox
 

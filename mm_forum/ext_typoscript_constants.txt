@@ -151,8 +151,11 @@ plugin.tx_mmforum {
     # cat=plugin.mm_forum - message board//; type=boolean; label=Enable user ranks
     enableRanks = 1
     
-    # cat=plugin.mm_forum - message board//; type=boolean; label=Moderated forum: If set, new entries and topics have to be approved by a moderator before being displayed in the forum.
+    # cat=plugin.mm_forum - message board//; type=boolean; label=Moderated posts: If set, new entries have to be approved by a moderator before being displayed in the forum.
     moderatedBoard = 0
+
+    # cat=plugin.mm_forum - message board//; type=boolean; label=Moderated topic: If set, new topics have to be approved by a moderator before being displayed in the forum.
+    moderatedTopic = 0
     
     # cat=plugin.mm_forum - general//; type=boolean; label=Informal: Use informal language. Affects only german language set (different use of Sie and Du).
     informal = 0

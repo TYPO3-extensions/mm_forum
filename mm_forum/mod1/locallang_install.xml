@@ -153,8 +153,8 @@
             <!-- ADDED IN 0.1.2 -->
             <label index="install.field.enableRanks.title">Enable user ranks</label>
             <label index="install.field.enableRanks.desc">This options enables user ranks. A user's rank depends on his/her post count.</label>
-            <label index="install.field.moderatedBoard.title">Moderated board</label>
-			<label index="install.field.moderatedBoard.desc">This option makes mm_forum moderated. New posts and topics have to be approved by a moderator before becoming public.</label>
+            <label index="install.field.moderatedBoard.title">Moderated topics</label>
+	    <label index="install.field.moderatedBoard.desc">This option makes mm_forum moderated. New posts have to be approved by a moderator before becoming public.</label>
             
             <!-- ADDED IN 0.1.4 -->
             <label index="install.field.informal.title">Informal language</label>
@@ -212,6 +212,10 @@
 			<label index="install.sampleData.desc">Check this input field if you want some sample data to be inserted into your new forum.</label>
 			<label index="install.firstAdmin.title">First admin user</label>
 			<label index="install.firstAdmin.desc">Here you can select a user that will automatically be made an administrator user for the forum. Can be left empty.</label>
+
+			<!-- ADDED IN x.x.x -->
+			<label index="install.field.moderatedTopic.title">Moderated topic</label>
+			<label index="install.field.moderatedTopic.desc">This option makes mm_forum topics moderated. New topics have to be approved by a moderator before becoming public.</label>
 		</languageKey>
         <!-- GERMAN LANGUAGE DATA -->
 		<languageKey index="de" type="array">
