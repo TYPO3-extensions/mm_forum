@@ -217,14 +217,24 @@ class tx_mmforum_base extends tslib_pibase {
 	}
 
 	/**
-	* Determines if this instance of the mm_forum is a moderated forum.
-	*
-	* @author  Martin Helmich <m.helmich@mittwald.de>
-	* @version 2007-07-19
-	* @return  boolean	true if the forum is moderated, otherwise false.
-	*/
+	 * Determines if posts are moderated
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2007-07-19
+	 * @return  boolean	true if posts are moderated, otherwise false.
+	 */
 	function isModeratedForum() {
 		return ($this->conf['moderated'] ? true : false);
+	}
+
+	/**
+	 * Determines if this instance of the mm_forum is a moderated forum.
+	 *
+	 * @author  Simon Schaufelberger
+	 * @return  boolean	true if topics are moderated, otherwise false.
+	 */
+	function isModeratedTopic() {
+		return ($this->conf['moderatedTopic'] ? true : false);
 	}
 
 	/**
