@@ -279,7 +279,7 @@ class tx_mmforum_indexing {
 		// Attempt to load word from database
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_wordlist',"word=".$GLOBALS['TYPO3_DB']->fullQuoteStr($word, 'tx_mmforum_wordlist')." ".$this->getPidQuery($this->conf));
 		//TODO use API
-		IF(mysql_error()) echo mysql_error().'<hr>';
+		if (mysql_error()) echo mysql_error().'<hr>';
 
 		// If words already exists, just return the UID
 		if($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
