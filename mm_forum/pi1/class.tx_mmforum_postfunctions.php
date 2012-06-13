@@ -444,7 +444,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
             "tx_mmforum_topicmail",
             "user_id = ".$GLOBALS['TSFE']->fe_user->user['uid']." AND topic_id = ".intval($this->piVars['tid']).$this->getPidQuery()
         );
-        IF ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1) {
+        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1) {
             $imgInfo['alt'] = $this->pi_getLL('topic.emailSubscr.off');
             $imgInfo['title'] = $this->pi_getLL('topic.emailSubscr.off');
             $imgInfo['src'] = $this->conf['path_img'].$this->conf['images.']['info_mail_off'];
@@ -659,7 +659,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
     function marker_getPostoptionsMarker($row,$topic) {
     	$lastpostdate = $topic['_v_last_post_date'];
 
-		IF ((($row['poster_id'] == $this->getUserID()) AND ($lastpostdate == $row['post_time']) AND $topic['closed_flag']!=1) OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
+		if ((($row['poster_id'] == $this->getUserID()) AND ($lastpostdate == $row['post_time']) AND $topic['closed_flag']!=1) OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
 
             $linkParams[$this->prefixId] = array(
                 'action'        => 'post_edit',
@@ -872,7 +872,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('MAX(post_time)','tx_mmforum_posts','deleted="0" AND hidden="0" AND topic_id="'.$row['topic_id'].'"'.$this->getPidQuery());
         list ($lastpostdate) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
         $grouprights = explode(",",$GLOBALS['TSFE']->fe_user->user['usergroup']);
-        IF ((($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid']) AND ($lastpostdate == $row['post_time'])) OR $this->getIsAdmin() OR $this->getIsMod($row['forum_id'])) {
+        if ((($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid']) AND ($lastpostdate == $row['post_time'])) OR $this->getIsAdmin() OR $this->getIsMod($row['forum_id'])) {
             // Retrieve post data
                 $res        = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"uid = '".intval($this->piVars['pid'])."'".$this->getPidQuery());
                 $row        = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
@@ -922,7 +922,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 
             // Determine, if deleted post was last remaining post in topic. If so, topic is deleted, too
                 $postmenge = $GLOBALS['TYPO3_DB']->sql_num_rows($GLOBALS['TYPO3_DB']->exec_SELECTquery('poster_id,topic_id,post_time','tx_mmforum_posts',"deleted = 0 AND hidden = 0 AND topic_id = '$topic_id'".$this->getPidQuery()));
-                IF ($postmenge == 0) {
+                if ($postmenge == 0) {
                     // Mark topic as deleted
                     $updArray = array("deleted"=>1);
                     $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics',"uid='$topic_id'",$updArray);
