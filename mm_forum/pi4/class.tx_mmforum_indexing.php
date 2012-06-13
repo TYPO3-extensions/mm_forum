@@ -99,7 +99,7 @@ class tx_mmforum_indexing {
 		list($date) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 		// If last indexing process happened less than 10 seconds ago, return TRUE
-		IF($date < (time()-10)) {
+		if($date < ($GLOBALS['EXEC_TIME']-10)) {
 			return 0;
 		}
 		// Otherwise, return FALSE.
@@ -311,7 +311,6 @@ class tx_mmforum_indexing {
 	 * @return void
 	 */
 	function wortMatchAdd ($word_id,$matchparams,$debug=false) {
-		// Compost insert array
 		$insertArray = array(
 			'pid'				=> $this->getFirstPid($this->conf),
 			'word_id'			=> $word_id,
@@ -325,9 +324,9 @@ class tx_mmforum_indexing {
 			'post_crdate'		=> $matchparams['post_crdate'],
 			'post_cruser'		=> $matchparams['post_cruser'],
 			'reqUserGroups_f'	=> $matchparams['reqUserGroups_f'],
-            'reqUserGroups_c'   => $matchparams['reqUserGroups_c'],
-			'crdate'            => time(),
-			'tstamp'			=> time()
+			'reqUserGroups_c'   => $matchparams['reqUserGroups_c'],
+			'crdate'            => $GLOBALS['EXEC_TIME'],
+			'tstamp'			=> $GLOBALS['EXEC_TIME']
 		);
 		// Execute query
 		$query = $GLOBALS['TYPO3_DB']->INSERTquery('tx_mmforum_wordmatch', $insertArray);

@@ -264,7 +264,7 @@ Class tx_mmforum_FrontendAdministration {
 				? '' : implode(',',array_filter($acls['write'],'intval'));
 		$modString   = implode(',',array_filter($acls['moderate'],'intval'));
 
-		$updateArray = Array ( 'tstamp'            => time(),
+		$updateArray = Array ( 'tstamp'            => $GLOBALS['EXEC_TIME'],
 		                       'grouprights_read'  => $readString,
 		                       'grouprights_write' => $writeString,
 		                       'grouprights_mod'   => $modString );
@@ -432,14 +432,14 @@ Class tx_mmforum_FrontendAdministration {
 		If($validationResult['error']) Return Array ( 'success'        => FALSE,
 		                                              'errors'         => $validationResult['errors'],
 		                                              'overrideValues' => $forum );
-		$saveArray = Array ( 'tstamp'      => time(),
+		$saveArray = Array ( 'tstamp'      => $GLOBALS['EXEC_TIME'],
 		                     'forum_name'  => $forum['name'],
 		                     'forum_desc'  => $forum['description'],
 		                     'parentID'    => $forum['parent'],
 		                     'hidden'      => $forum['hidden'] ? 1 : 0 );
 		If($forumUid == -1) {
 			$saveArray['pid']     = $this->p->getStoragePID();
-			$saveArray['crdate']  = time();
+			$saveArray['crdate']  = $GLOBALS['EXEC_TIME'];
 			$saveArray['sorting'] = $this->getSortingForNewForum($forum['parent']);
 			$TYPO3_DB->exec_INSERTquery('tx_mmforum_forums', $saveArray);
 		} Else $TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.intval($forumUid), $saveArray);
@@ -571,7 +571,7 @@ Class tx_mmforum_FrontendAdministration {
 		$forumData = $this->p->getBoardData($forumUid);
 		If(!$this->checkActionAllowance($forumData['parentID']==0?'category':'forum', 'remove'))
 			{ $this->flashmessage = $this->l('access-error'); Return FALSE; }
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', "uid=$forumUid OR parentID=$forumUid", Array('deleted'=>1, 'tstamp'=>time()));
+		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', "uid=$forumUid OR parentID=$forumUid", Array('deleted'=>1, 'tstamp'=>$GLOBALS['EXEC_TIME']));
 		$this->flashmessage = sprintf($this->l('delete-success'), $forumData['forum_name']);
 	}
 
@@ -599,8 +599,8 @@ Class tx_mmforum_FrontendAdministration {
 		If($TYPO3_DB->sql_num_rows($res) == 0) Return;
 		List($upperUid, $upperSorting) = $TYPO3_DB->sql_fetch_row($res);
 
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumData['uid'], Array('sorting' => $upperSorting, 'tstamp' => time()));
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$upperUid, Array('sorting' => $forumData['sorting'], 'tstamp' => time()));
+		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumData['uid'], Array('sorting' => $upperSorting, 'tstamp' => $GLOBALS['EXEC_TIME']));
+		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$upperUid, Array('sorting' => $forumData['sorting'], 'tstamp' => $GLOBALS['EXEC_TIME']));
 	}
 
 
@@ -627,8 +627,8 @@ Class tx_mmforum_FrontendAdministration {
 		If($TYPO3_DB->sql_num_rows($res) == 0) Return;
 		List($lowerUid, $lowerSorting) = $TYPO3_DB->sql_fetch_row($res);
 
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumData['uid'], Array('sorting' => $lowerSorting, 'tstamp' => time()));
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$lowerUid, Array('sorting' => $forumData['sorting'], 'tstamp' => time()));
+		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumData['uid'], Array('sorting' => $lowerSorting, 'tstamp' => $GLOBALS['EXEC_TIME']));
+		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$lowerUid, Array('sorting' => $forumData['sorting'], 'tstamp' => $GLOBALS['EXEC_TIME']));
 	}
 
 

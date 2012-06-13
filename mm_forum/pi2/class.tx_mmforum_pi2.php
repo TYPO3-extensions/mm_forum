@@ -267,7 +267,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 	 */
 	function saveData()
 	{
-		$this->data['reghash'] = substr(md5(time() . $this->data['username']), 1, 15);
+		$this->data['reghash'] = substr(md5($GLOBALS['EXEC_TIME'] . $this->data['username']), 1, 15);
 
 		$insertArray = array(
 			'pid'				    => $this->conf['userPID'],
@@ -319,7 +319,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
                 if($this->piVars['userfields_exist'][$uid]) {
                     if($this->userLib->getUserfieldUsesExistingField($uid)) {
                         $updateArray = array(
-                            'tstamp'                                    => time(),
+                            'tstamp'                                    => $GLOBALS['EXEC_TIME'],
                             $this->piVars['userfields_exist'][$uid]    => $value
                         );
                         $GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$user_id,$updateArray);
@@ -330,8 +330,8 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
                         'field_id'      => $uid,
                         'field_value'   => $value,
                         'pid'           => $this->conf['storagePID'],
-                        'tstamp'        => time(),
-                        'crdate'        => time(),
+                        'tstamp'        => $GLOBALS['EXEC_TIME'],
+                        'crdate'        => $GLOBALS['EXEC_TIME'],
                     );
                     $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userfields_contents',$insertArray);
                 }

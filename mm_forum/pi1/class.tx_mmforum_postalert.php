@@ -72,7 +72,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 				$key = str_replace('status_','',$key);
 				if(is_numeric($key)){
 					$value = mysql_escape_string($value);
-					$updateArray = array('status'=>$value,'tstamp'=>time());
+					$updateArray = array('status'=>$value,'tstamp'=>$GLOBALS['EXEC_TIME']);
 					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_post_alert',"uid='$key' AND status <> '$value'",$updateArray);
 				}
 			}
@@ -277,8 +277,8 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 					$marker['###ERRORMESSAGE###'] = '<div class="tx-mmforum-pi1-postalert-error">'.$this->pi_getLL('postalert.errorNoReason').'</div>';
 				} else {
 					$insertArray = array(
-						'tstamp'		=> time(),
-						'crdate'		=> time(),
+						'tstamp'		=> $GLOBALS['EXEC_TIME'],
+						'crdate'		=> $GLOBALS['EXEC_TIME'],
 						'cruser_id'		=> $GLOBALS['TSFE']->fe_user->user['uid'],
 						'alert_text'	=> $param['alert_text'],
 						'post_id'		=> $post_id,

@@ -564,8 +564,8 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 			$key = key($mmforum['save']);
 			if($key==0) {
 				$insertArr = array(
-					'crdate'		=> time(),
-					'tstamp'		=> time(),
+					'crdate'		=> $GLOBALS['EXEC_TIME'],
+					'tstamp'		=> $GLOBALS['EXEC_TIME'],
 					'bbcode'		=> $mmforum['bbcode'][0],
 					'pattern'		=> $mmforum['pattern'][0],
 					'replacement'	=> $mmforum['replacement'][0],
@@ -658,8 +658,8 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 			$key=key($mmforum['save']);
 			if($key==0) {
 				$insertArr = array(
-					'crdate' => time(),
-					'tstamp' => time(),
+					'crdate' => $GLOBALS['EXEC_TIME'],
+					'tstamp' => $GLOBALS['EXEC_TIME'],
 					'smile_url' => $mmforum['new']['smile_url'],
 					'code' => $mmforum['new']['code'],
 				);
@@ -762,8 +762,8 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 			$key=key($mmforum['save']);
 			if($key==0) {
 				$insertArr = array(
-					'crdate' 		=>	time(),
-					'tstamp' 		=>	time(),
+					'crdate' 		=>	$GLOBALS['EXEC_TIME'],
+					'tstamp' 		=>	$GLOBALS['EXEC_TIME'],
 					'lang_title' 	=>	$mmforum['new']['lang_title'],
 					'lang_pattern' 	=>	$mmforum['new']['lang_pattern'],
 					'lang_code'		=>	$mmforum['new']['lang_code'],

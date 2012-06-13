@@ -420,7 +420,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			sort($userGroups);
 			$insertArray = array(
 				'pid'			=> $this->getStoragePID(),
-				'tstamp'        => time(),
+				'tstamp'        => $GLOBALS['EXEC_TIME'],
 				'cruser_id'     => $GLOBALS['TSFE']->fe_user->user['uid'],
 				'search_string' => $searchstring,
 				'array_string'  => serialize($post_id_array),
@@ -833,7 +833,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * @return array                The result record
 	 */
 	function get_search_results($searchstring,$param) {
-		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_searchresults','tstamp < '.(time() - (3600 * 2)));
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_searchresults','tstamp < '.($GLOBALS['EXEC_TIME'] - (3600 * 2)));
 
 		$searchstring = str_replace('*','\*',$searchstring);
 

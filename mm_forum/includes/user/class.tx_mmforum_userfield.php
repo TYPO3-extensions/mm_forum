@@ -94,7 +94,7 @@ class tx_mmforum_userfield {
 		 * table, generate an UPDATE query to edit the fe_user record. */
 		if($this->isUsingExistingField()) {
 			$updateArray = array(
-				'tstamp'						=> time(),
+				'tstamp'						=> $GLOBALS['EXEC_TIME'],
 				$this->getLinkedUserField()		=> trim($value)
 			);
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.intval($userId),$updateArray);
@@ -104,7 +104,7 @@ class tx_mmforum_userfield {
 		 * table, overwrite this value now. */
 		} elseif ( $this->isSetForUser($userId) ) {
 			$updateArray = array(
-				'tstamp'						=> time(),
+				'tstamp'						=> $GLOBALS['EXEC_TIME'],
 				'field_value'					=> $value
 			);
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields_contents', 'user_id='.intval($userId).' AND field_id='.intval($this->getUID()).' AND deleted=0', $updateArray);
@@ -114,8 +114,8 @@ class tx_mmforum_userfield {
 		} else {
 			$insertArray = array(
 				'pid'				=> $pid,
-				'tstamp'			=> time(),
-				'crdate'			=> time(),
+				'tstamp'			=> $GLOBALS['EXEC_TIME'],
+				'crdate'			=> $GLOBALS['EXEC_TIME'],
 				'user_id'			=> $userId,
 				'field_id'			=> $this->getUID(),
 				'field_value'		=> $value

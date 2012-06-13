@@ -926,8 +926,8 @@ class tx_mmforum_phpbbimport {
 		while($arr = $this->dbObj->sql_fetch_assoc($res)) {
 			$insertArray = array(
 				'pid'			=> $this->data['step3.']['import0.']['pid'],
-				'tstamp'		=> time(),
-				'crdate'		=> time(),
+				'tstamp'		=> $GLOBALS['EXEC_TIME'],
+				'crdate'		=> $GLOBALS['EXEC_TIME'],
 				'forum_name'	=> $arr['cat_title'],
 				'forum_order'	=> $arr['cat_order'],
                 'sorting'       => $arr['cat_order'],
@@ -1014,8 +1014,8 @@ class tx_mmforum_phpbbimport {
 
 			$insertArray = array(
 				'pid'			        => $this->data['step3.']['import0.']['pid'],
-				'tstamp'		        => time(),
-				'crdate'		        => time(),
+				'tstamp'		        => $GLOBALS['EXEC_TIME'],
+				'crdate'		        => $GLOBALS['EXEC_TIME'],
 				'deleted'		        => 0,
 				'hidden'		        => 0,
 				'forum_name'	        => $arr['forum_name'],
@@ -1093,7 +1093,7 @@ class tx_mmforum_phpbbimport {
 
 			$insertArray = array(
 				'pid'			=> $this->data['step3.']['import1.']['pid'],
-				'tstamp'		=> time(),
+				'tstamp'		=> $GLOBALS['EXEC_TIME'],
 				'title'			=> $arr['group_name'],
 				'hidden'		=> 0,
 				'description'	=> $arr['group_description']
@@ -1122,7 +1122,7 @@ class tx_mmforum_phpbbimport {
 			if($this->data['step3.']['import1.']['admins'] == 'create') {
 				$insertArray = array(
 					'pid'			=> $this->data['step3.']['import1.']['pid'],
-					'tstamp'		=> time(),
+					'tstamp'		=> $GLOBALS['EXEC_TIME'],
 					'title'			=> $LANG->getLL('phpbb.step4.new_adminGroup')
 				);
 				$iRes = @$GLOBALS['TYPO3_DB']->exec_INSERTquery('fe_groups',$insertArray);
@@ -1143,7 +1143,7 @@ class tx_mmforum_phpbbimport {
 			if($this->data['step3.']['import1.']['mods'] == 'create') {
 				$insertArray = array(
 					'pid'			=> $this->data['step3.']['import1.']['pid'],
-					'tstamp'		=> time(),
+					'tstamp'		=> $GLOBALS['EXEC_TIME'],
 					'title'			=> $LANG->getLL('phpbb.step4.new_modGroup')
 				);
 				$iRes = @$GLOBALS['TYPO3_DB']->exec_INSERTquery('fe_groups',$insertArray);
@@ -1164,7 +1164,7 @@ class tx_mmforum_phpbbimport {
 			if($this->data['step3.']['import1.']['users'] == 'create') {
 				$insertArray = array(
 					'pid'			=> $this->data['step3.']['import1.']['pid'],
-					'tstamp'		=> time(),
+					'tstamp'		=> $GLOBALS['EXEC_TIME'],
 					'title'			=> $LANG->getLL('phpbb.step4.new_userGroup')
 				);
 				$iRes = @$GLOBALS['TYPO3_DB']->exec_INSERTquery('fe_groups',$insertArray);
@@ -1224,7 +1224,7 @@ class tx_mmforum_phpbbimport {
 
 				$insertArray = array(
 					'pid'				=> $this->data['step3.']['import1.']['pid'],
-					'tstamp'			=> time(),
+					'tstamp'			=> $GLOBALS['EXEC_TIME'],
 					'username'			=> $arr['username'],
 					'password'			=> $arr['user_password'],
 					'disable'			=> $arr['user_active']?'0':'1',
@@ -1333,8 +1333,8 @@ class tx_mmforum_phpbbimport {
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import2.']['pid'],
 				'cruser_id'				=> $this->userID_mapping[$arr['topic_poster']],
-				'tstamp'				=> time(),
-				'crdate'				=> time(),
+				'tstamp'				=> $GLOBALS['EXEC_TIME'],
+				'crdate'				=> $GLOBALS['EXEC_TIME'],
 				'deleted'				=> 0,
 				'hidden'				=> 0,
 				'topic_title'			=> $arr['topic_title'],
@@ -1374,8 +1374,8 @@ class tx_mmforum_phpbbimport {
 		while($arr = $this->dbObj->sql_fetch_assoc($res)) {
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import2.']['pid'],
-				'tstamp'				=> time(),
-				'crdate'				=> time(),
+				'tstamp'				=> $GLOBALS['EXEC_TIME'],
+				'crdate'				=> $GLOBALS['EXEC_TIME'],
 				'cruser_id'				=> $this->userID_mapping[$arr['poster_id']],
 				'topic_id'				=> $this->topicID_mapping[$arr['topic_id']],
 				'forum_id'				=> $this->boardID_mapping[$arr['forum_id']],
@@ -1420,8 +1420,8 @@ class tx_mmforum_phpbbimport {
 		while($arr = $this->dbObj->sql_fetch_assoc($res)) {
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import2.']['pid'],
-				'tstamp'				=> time(),
-				'crdate'				=> time(),
+				'tstamp'				=> $GLOBALS['EXEC_TIME'],
+				'crdate'				=> $GLOBALS['EXEC_TIME'],
 				'post_id'				=> $this->postID_mapping[$arr['post_id']],
 				'post_text'				=> $this->step4_importPosts_convBB($arr['post_text']),
 			);
@@ -1500,8 +1500,8 @@ class tx_mmforum_phpbbimport {
 			}
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import3.']['pid'],
-				'tstamp'				=> time(),
-				'crdate'				=> time(),
+				'tstamp'				=> $GLOBALS['EXEC_TIME'],
+				'crdate'				=> $GLOBALS['EXEC_TIME'],
 				'deleted'				=> 0,
 				'hidden'				=> 0,
 				'cruser_id'				=> $this->userID_mapping[$arr['privmsgs_from_userid']],
@@ -1566,8 +1566,8 @@ class tx_mmforum_phpbbimport {
 
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import4.']['pid'],
-				'tstamp'				=> time(),
-				'crdate'				=> time(),
+				'tstamp'				=> $GLOBALS['EXEC_TIME'],
+				'crdate'				=> $GLOBALS['EXEC_TIME'],
 				'cruser_id'				=> '',
 				'deleted'				=> 0,
 				'hidden'				=> 0,
@@ -1591,8 +1591,8 @@ class tx_mmforum_phpbbimport {
 		while($arr = $this->dbObj->sql_fetch_assoc($res)) {
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import4.']['pid'],
-				'tstamp'				=> time(),
-				'crdate'				=> time(),
+				'tstamp'				=> $GLOBALS['EXEC_TIME'],
+				'crdate'				=> $GLOBALS['EXEC_TIME'],
 				'cruser_id'				=> '',
 				'deleted'				=> 0,
 				'hidden'				=> 0,
@@ -1629,8 +1629,8 @@ class tx_mmforum_phpbbimport {
 
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import4.']['pid'],
-				'tstamp'				=> time(),
-				'crdate'				=> time(),
+				'tstamp'				=> $GLOBALS['EXEC_TIME'],
+				'crdate'				=> $GLOBALS['EXEC_TIME'],
 				'cruser_id'				=> '',
 				'deleted'				=> 0,
 				'hidden'				=> 0,
@@ -1693,8 +1693,8 @@ class tx_mmforum_phpbbimport {
 		while($arr = $this->dbObj->sql_fetch_assoc($res)) {
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import5.']['pid'],
-				'tstamp'				=> time(),
-				'crdate'				=> time(),
+				'tstamp'				=> $GLOBALS['EXEC_TIME'],
+				'crdate'				=> $GLOBALS['EXEC_TIME'],
 				'cruser_id'				=> '',
 				'deleted'				=> 0,
 				'hidden'				=> 0,
@@ -1739,8 +1739,8 @@ class tx_mmforum_phpbbimport {
 		while($arr = $this->dbObj->sql_fetch_assoc($res)) {
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import6.']['pid'],
-				'tstamp'				=> time(),
-				'crdate'				=> time(),
+				'tstamp'				=> $GLOBALS['EXEC_TIME'],
+				'crdate'				=> $GLOBALS['EXEC_TIME'],
 				'cruser_id'				=> '',
 				'deleted'				=> 0,
 				'hidden'				=> 0,
@@ -1781,8 +1781,8 @@ class tx_mmforum_phpbbimport {
         while($poll = $this->dbObj->sql_fetch_assoc($res)) {
             $insertArray = array(
                 'pid'                   => $this->data['step3.']['polls.']['pid'],
-                'tstamp'                => time(),
-                'crdate'                => time(),
+                'tstamp'                => $GLOBALS['EXEC_TIME'],
+                'crdate'                => $GLOBALS['EXEC_TIME'],
                 'cruser_id'             => $GLOBALS['BE_USER']->user['uid'],
                 'deleted'               => 0,
                 'hidden'                => 0,
@@ -1803,8 +1803,8 @@ class tx_mmforum_phpbbimport {
             while($answer = $this->dbObj->sql_fetch_assoc($res2)) {
                 $insertArray = array(
                     'pid'               => $this->data['step3.']['polls.']['pid'],
-                    'tstamp'            => time(),
-                    'crdate'            => time(),
+                    'tstamp'            => $GLOBALS['EXEC_TIME'],
+                    'crdate'            => $GLOBALS['EXEC_TIME'],
                     'deleted'           => 0,
                     'hidden'            => 0,
                     'answer'            => $answer['vote_option_text'],
@@ -1826,8 +1826,8 @@ class tx_mmforum_phpbbimport {
             while($voter = $this->dbObj->sql_fetch_assoc($res3)) {
                 $insertArray = array(
                     'pid'               => $this->data['step3.']['polls.']['pid'],
-                    'tstamp'            => time(),
-                    'crdate'            => time(),
+                    'tstamp'            => $GLOBALS['EXEC_TIME'],
+                    'crdate'            => $GLOBALS['EXEC_TIME'],
                     'deleted'           => 0,
                     'hidden'            => 0,
                     'poll_id'           => $poll_id,

@@ -462,7 +462,7 @@ class tx_mmforum_tools extends tslib_pibase {
 			if ($forceOverwrite) {
 				$updateArray = array(
 					'cache_value' => serialize($value),
-					'tstamp'      => time()
+					'tstamp'      => $GLOBALS['EXEC_TIME']
 				);
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 					'tx_mmforum_cache',
@@ -474,7 +474,7 @@ class tx_mmforum_tools extends tslib_pibase {
 			$insertArray = array(
 				'cache_key'   => $key,
 				'cache_value' => serialize($value),
-				'tstamp'      => time()
+				'tstamp'      => $GLOBALS['EXEC_TIME']
 			);
 			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_cache', $insertArray);
 		}

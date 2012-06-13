@@ -2352,7 +2352,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$GLOBALS['TSFE']->fe_user->user['uid'],
 						$this->piVars['topicname'],
 						$this->piVars['message'],
-						time(),
+						$GLOBALS['EXEC_TIME'],
 						$this->tools->ip2hex(t3lib_div::getIndpEnv('REMOTE_ADDR')),
 						$attachment_ids,
 						$poll_id
@@ -2367,7 +2367,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$GLOBALS['TSFE']->fe_user->user['uid'],
 						$this->piVars['topicname'],
 						$this->piVars['message'],
-						time(),
+						$GLOBALS['EXEC_TIME'],
 						$this->tools->ip2hex(t3lib_div::getIndpEnv('REMOTE_ADDR')),
 						$attachment_ids,
 						$poll_id,
@@ -2412,7 +2412,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$marker['###POSTTEXT###']    = $posttext;
 					$marker['###ANKER###']       = '';
 					$marker['###POSTANCHOR###']	 = '';
-					$marker['###POSTDATE###']    = $this->pi_getLL('post.writtenOn') . ': ' . $this->formatDate(time());
+					$marker['###POSTDATE###']    = $this->pi_getLL('post.writtenOn') . ': ' . $this->formatDate($GLOBALS['EXEC_TIME']);
 					$marker['###POSTRATING###']  = '';
 
 					// Include hooks
@@ -2582,7 +2582,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				// from now on. If so, the write attempt is blocked for security reasons.
 				$interval = $conf['spamblock_interval'];
 
-				$time = time() - $interval;
+				$time = $GLOBALS['EXEC_TIME'] - $interval;
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'*',
 					'tx_mmforum_posts',
@@ -2635,7 +2635,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$topicId,
 						$this->getUserID(),
 						$this->piVars['message'],
-						time(),
+						$GLOBALS['EXEC_TIME'],
 						$this->tools->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
 						$attachment_ids
 					);
@@ -2649,7 +2649,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$topicId,
 						$this->getUserID(),
 						$this->piVars['message'],
-						time(),
+						$GLOBALS['EXEC_TIME'],
 						$this->tools->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
 						$attachment_ids,
 						false,
@@ -2691,7 +2691,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$marker['###POSTTEXT###']   = $posttext;
 					$marker['###ANKER###']      = '';
 					$marker['###POSTANCHOR###']	= '';
-					$marker['###POSTDATE###']   = $this->pi_getLL('post.writtenOn') . ': ' . $this->formatDate(time());
+					$marker['###POSTDATE###']   = $this->pi_getLL('post.writtenOn') . ': ' . $this->formatDate($GLOBALS['EXEC_TIME']);
 					$marker['###POSTRATING###'] = '';
 
 					// Include hooks
@@ -2994,8 +2994,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			$insertArray = array(
 				'pid'       => $this->getStoragePID(),
-				'tstamp'    => time(),
-				'crdate'    => time(),
+				'tstamp'    => $GLOBALS['EXEC_TIME'],
+				'crdate'    => $GLOBALS['EXEC_TIME'],
 				'file_type' => $file['type'],
 				'file_name' => $file['name'],
 				'file_size' => $file['size'],
@@ -3081,7 +3081,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				// Write changes to database
 				$updateArray = array(
 					'post_text' => $this->piVars['message'],
-					'tstamp'    => time()
+					'tstamp'    => $GLOBALS['EXEC_TIME']
 				);
 
 				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
@@ -3094,8 +3094,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				if ($this->piVars['attachment_delete']) {
 					foreach ($this->piVars['attachment_delete'] as $attachementId => $delete) {
 						$attachementId = intval($attachementId);
-						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid=' . $attachementId, array('deleted' => 1, 'tstamp' => time()));
-						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid=' . $attachementId, array('attachment' => 0, 'tstamp' => time()));
+						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid=' . $attachementId, array('deleted' => 1, 'tstamp' => $GLOBALS['EXEC_TIME']));
+						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid=' . $attachementId, array('attachment' => 0, 'tstamp' => $GLOBALS['EXEC_TIME']));
 						$attachments = t3lib_div::intExplode(',', $row['attachment']);
 						unset($attachments[array_search($attachementId, $attachments)]);
 						$row['attachment'] = implode(',', $attachments);
@@ -3167,7 +3167,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 							$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 								'tx_mmforum_topics',
 								'uid=' . $topicId,
-								array('poll_id' => $pollId, 'tstamp'=>time())
+								array('poll_id' => $pollId, 'tstamp'=>$GLOBALS['EXEC_TIME'])
 							);
 						}
 					} else if ($firstPost && $topicData['poll_id'] > 0) {
@@ -3186,7 +3186,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 					$updateArray = array(
 						'topic_title'   => $this->piVars['title'],
-						'tstamp'        => time()
+						'tstamp'        => $GLOBALS['EXEC_TIME']
 					);
 					$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 						'tx_mmforum_topics',
@@ -3202,7 +3202,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						'uid=' . $postId,
 						array(
 							'edit_count' => intval($row['edit_count']) + 1,
-							'edit_time' => time()
+							'edit_time' => $GLOBALS['EXEC_TIME']
 						)
 					);
 				}
@@ -3482,8 +3482,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1 && $userId > 0) {
 			$insertArray = array(
 				'pid'       => $this->getStoragePID(),
-				'tstamp'    => time(),
-				'crdate'    => time(),
+				'tstamp'    => $GLOBALS['EXEC_TIME'],
+				'crdate'    => $GLOBALS['EXEC_TIME'],
 				'topic_id'  => $topicId,
 				'user_id'   => $userId
 			);
@@ -3855,7 +3855,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function update_lastpost_topic($topicId) {
 		$updateArray = array(
 			'topic_last_post_id' => $this->get_last_post($topicId),
-			'tstamp'             => time()
+			'tstamp'             => $GLOBALS['EXEC_TIME']
 		);
 		$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . intval($topicId), $updateArray);
 	}
@@ -3879,7 +3879,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$updateArray = array(
 			'forum_last_post_id' => $row['uid'],
-			'tstamp'             => time()
+			'tstamp'             => $GLOBALS['EXEC_TIME']
 		);
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'uid = ' . $forumId, $updateArray);
 	}
@@ -3893,7 +3893,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function set_solved($topicId, $solved) {
 		$updateArray = array(
 			'solved'    => intval($solved),
-			'tstamp'    => time()
+			'tstamp'    => $GLOBALS['EXEC_TIME']
 		);
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . intval($topicId), $updateArray);
 	}
@@ -4242,11 +4242,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$template = $this->cObj->getSubpart($template, "###SENDMAIL###");
 				$marker = array();
 				// Generate authencification code and insert into database
-				$mailcode = md5(getenv("REMOTE_ADDR").time().$this->tools->generateRandomString(10));
+				$mailcode = md5(getenv("REMOTE_ADDR").$GLOBALS['EXEC_TIME'].$this->tools->generateRandomString(10));
 				$insertArray = array(
 					'code'          => $mailcode,
-					'tstamp'        => time(),
-					'crdate'        => time(),
+					'tstamp'        => $GLOBALS['EXEC_TIME'],
+					'crdate'        => $GLOBALS['EXEC_TIME'],
 					'cruser_id'     => $GLOBALS['TSFE']->fe_user->user['uid']
 				);
 				$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_mailkey',$insertArray);
@@ -4861,9 +4861,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function reset_unreadpost($content, $conf) {
 		// Executing database operations
 		$updateArray = array(
-			'lastlogin'           => time(),
-			'tx_mmforum_prelogin' => time(),
-			'tstamp'              => time()
+			'lastlogin'           => $GLOBALS['EXEC_TIME'],
+			'tx_mmforum_prelogin' => $GLOBALS['EXEC_TIME'],
+			'tstamp'              => $GLOBALS['EXEC_TIME']
 		);
 		$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users', 'uid = ' . $GLOBALS['TSFE']->fe_user->user['uid'], $updateArray);
 
@@ -4998,7 +4998,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			else $post_sort = 'ASC';
 
 			$updateArray = array(
-				'tstamp'    => time(),
+				'tstamp'    => $GLOBALS['EXEC_TIME'],
 				'post_sort' => $post_sort,
 				'ip'        => getenv("REMOTE_ADDR")
 			);
@@ -5021,8 +5021,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// If there is no config record for current user, create one.
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
 			$insertArray = array(
-				'tstamp'        => time(),
-				'crdate'        => time(),
+				'tstamp'        => $GLOBALS['EXEC_TIME'],
+				'crdate'        => $GLOBALS['EXEC_TIME'],
 				'userid'        => $GLOBALS['TSFE']->fe_user->user['uid'],
 				'ip'            => t3lib_div::getIndpEnv("REMOTE_ADDR")
 			);
@@ -6138,7 +6138,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		if($topicData['topic_poster'] == $GLOBALS['TSFE']->fe_user->user['uid'] || $this->getIsModOrAdmin($topicData['forum_id'])) {
 			$updateArray = array(
 				'solved' => $status,
-				'tstamp' => time()
+				'tstamp' => $GLOBALS['EXEC_TIME']
 			);
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, $updateArray);
 

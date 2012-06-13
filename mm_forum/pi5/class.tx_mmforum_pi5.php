@@ -416,7 +416,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 						if($this->getUserfieldUsesExistingField($uid)) {
 							$updateArray = array(
 								$this->piVars['userfield_exists'][$uid]		=> $value,
-								'tstamp'									=> time()
+								'tstamp'									=> $GLOBALS['EXEC_TIME']
 							);
 							$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 								'fe_users',
@@ -433,8 +433,8 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 						if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
 							$insertArray = array(
 								'pid'           => $this->getStoragePID(),
-								'tstamp'        => time(),
-								'crdate'        => time(),
+								'tstamp'        => $GLOBALS['EXEC_TIME'],
+								'crdate'        => $GLOBALS['EXEC_TIME'],
 								'user_id'       => $this->user->getUid(),
 								'field_id'      => $uid,
 								'field_value'   => $value
@@ -443,7 +443,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 						}
 						else {
 							$updateArray = array(
-								'tstamp'        => time(),
+								'tstamp'        => $GLOBALS['EXEC_TIME'],
 								'field_value'   => $value
 							);
 							$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
@@ -501,7 +501,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			if(filesize($avatarFile['tmp_name']['file']) > $TCA['fe_users']['columns']['tx_mmforum_avatar']['config']['max_size']*1024)
 				return;
 
-			$file = $this->user->getUid() . '_' . time() . '.' . $fileExt;
+			$file = $this->user->getUid() . '_' . $GLOBALS['EXEC_TIME'] . '.' . $fileExt;
 			$uploadfile = $uploaddir . $file;
 
 			if (move_uploaded_file($avatarFile['tmp_name']['file'], $uploadfile)) {

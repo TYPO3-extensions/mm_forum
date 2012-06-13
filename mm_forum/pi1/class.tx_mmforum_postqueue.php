@@ -163,14 +163,14 @@ class tx_mmforum_postqueue {
 		foreach($this->piVars['items'] as $item_uid => $action) {
 			if($action == 'ignore') {
 				$updateArray = array(
-					'tstamp'			=> time(),
+					'tstamp'			=> $GLOBALS['EXEC_TIME'],
 					'hidden'			=> 1
 				);
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,$updateArray);
 			}
 			elseif($action == 'delete') {
 				$updateArray = array(
-					'tstamp'			=> time(),
+					'tstamp'			=> $GLOBALS['EXEC_TIME'],
 					'deleted'			=> 1
 				);
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,$updateArray);
@@ -233,8 +233,7 @@ class tx_mmforum_postqueue {
 			);
 		}
 
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,array('tstamp'=>time(),'deleted'=>1));
-
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,array('tstamp'=>$GLOBALS['EXEC_TIME'],'deleted'=>1));
 	}
 
 	/**

@@ -547,7 +547,7 @@ class tx_mmforum_forumAdmin {
      */
     function delete_forum() {
         $updateArray = array(
-            'tstamp'        => time(),
+            'tstamp'        => $GLOBALS['EXEC_TIME'],
             'deleted'       => 1
         );
         $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
@@ -572,7 +572,7 @@ class tx_mmforum_forumAdmin {
      */
     function delete_forumContents($fid) {
         $updateArray = array(
-            'tstamp'        => time(),
+            'tstamp'        => $GLOBALS['EXEC_TIME'],
             'deleted'       => 1
         );
         $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
@@ -633,7 +633,7 @@ class tx_mmforum_forumAdmin {
 
             if($posts == $nPosts) continue;
             $updateArray = array(
-                'tstamp'            => time(),
+                'tstamp'            => $GLOBALS['EXEC_TIME'],
                 'tx_mmforum_posts'  => $nPosts
             );
             $GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$user_id,$updateArray);
@@ -651,8 +651,8 @@ class tx_mmforum_forumAdmin {
         $insertArray = array(
             'pid'               => $this->pid,
             'hidden'            => $this->param['forum']['hidden'],
-            'tstamp'            => time(),
-            'crdate'            => time(),
+            'tstamp'            => $GLOBALS['EXEC_TIME'],
+            'crdate'            => $GLOBALS['EXEC_TIME'],
             'cruser_id'         => $GLOBALS['BE_USER']->user['uid'],
             'forum_name'        => trim($this->param['forum']['title']),
             'forum_desc'        => trim($this->param['forum']['desc']),
@@ -694,8 +694,8 @@ class tx_mmforum_forumAdmin {
         $insertArray = array(
             'pid'               => $this->pid,
             'hidden'            => $this->param['ctg']['hidden'],
-            'tstamp'            => time(),
-            'crdate'            => time(),
+            'tstamp'            => $GLOBALS['EXEC_TIME'],
+            'crdate'            => $GLOBALS['EXEC_TIME'],
             'cruser_id'         => $GLOBALS['BE_USER']->user['uid'],
             'forum_name'        => trim($this->param['ctg']['title']),
             'grouprights_read'  => $this->param['ctg']['authRead'],
@@ -740,7 +740,7 @@ class tx_mmforum_forumAdmin {
         $ctg = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
         $updateArray = array(
-            'tstamp'            => time(),
+            'tstamp'            => $GLOBALS['EXEC_TIME'],
             'forum_name'        => trim($this->param['ctg']['title']),
             'grouprights_read'  => $this->param['ctg']['authRead'],
             'grouprights_write' => $this->param['ctg']['authWrite'],
@@ -797,7 +797,7 @@ class tx_mmforum_forumAdmin {
         $ctg = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
         $updateArray = array(
-            'tstamp'            => time(),
+            'tstamp'            => $GLOBALS['EXEC_TIME'],
             'hidden'            => $this->param['forum']['hidden'],
             'forum_name'        => trim($this->param['forum']['title']),
             'forum_desc'        => trim($this->param['forum']['desc']),

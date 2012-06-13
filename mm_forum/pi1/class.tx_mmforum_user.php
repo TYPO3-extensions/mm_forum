@@ -199,7 +199,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 		list($ucrdate) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 		$marker['###STAT###'] .= '<strong>' . $count . '</strong> ' . $this->pi_getLL('user.totalPosts') . ', <strong>' . $topics . '</strong> ' . $this->pi_getLL('user.topicsTotal') . '<br />';
-		$marker['###STAT###'] .= $this->cObj->substituteMarker($this->pi_getLL('user.postsPerDay'), '###POSTS###', '<strong>' . round($count / ceil(((time() - $ucrdate) / 86400)), 2) . '</strong>');
+		$marker['###STAT###'] .= $this->cObj->substituteMarker($this->pi_getLL('user.postsPerDay'), '###POSTS###', '<strong>' . round($count / ceil((($GLOBALS['EXEC_TIME'] - $ucrdate) / 86400)), 2) . '</strong>');
 
 		$template = $this->cObj->substituteMarkerArray($template, $marker);
 		$content = $this->cObj->substituteSubpart($template, '###LIST###', $content);

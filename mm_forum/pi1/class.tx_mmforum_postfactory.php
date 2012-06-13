@@ -99,8 +99,8 @@ class tx_mmforum_postfactory {
 	function create_topic_queue($forum_uid, $author, $subject, $text, $date, $ip, $attachments = array(), $poll = 0, $subscribe = false, $noUpdate = false) {
 		$insertArray = array(
 			'pid'				=> $this->getFirstPid(),
-			'tstamp'			=> time(),
-			'crdate'			=> time(),
+			'tstamp'			=> $GLOBALS['EXEC_TIME'],
+			'crdate'			=> $GLOBALS['EXEC_TIME'],
 			'topic'				=> 1,
 			'topic_forum'		=> $forum_uid,
 			'topic_poll'		=> $poll,
@@ -161,8 +161,8 @@ class tx_mmforum_postfactory {
 		// Generate topic record
 		$insertArray = array(
 			'pid'          => $this->getFirstPid(),
-			'tstamp'       => time(),
-			'crdate'       => time(),
+			'tstamp'       => $GLOBALS['EXEC_TIME'],
+			'crdate'       => $GLOBALS['EXEC_TIME'],
 			'topic_title'  => $subject,
 			'topic_poster' => $author,
 			'topic_time'   => $date,
@@ -244,8 +244,8 @@ class tx_mmforum_postfactory {
 		// Insert post into post queue
 		$insertArray = array(
 			'pid'             => $this->getFirstPid(),
-			'tstamp'          => time(),
-			'crdate'          => time(),
+			'tstamp'          => $GLOBALS['EXEC_TIME'],
+			'crdate'          => $GLOBALS['EXEC_TIME'],
 			'topic'           => 0,
 			'topic_forum'     => $forumId,
 			'post_parent'     => $topicId,
@@ -305,8 +305,8 @@ class tx_mmforum_postfactory {
 		// Generate post record
 		$insertArray = array(
 			'pid'        => $this->getFirstPid(),
-			'tstamp'     => time(),
-			'crdate'     => time(),
+			'tstamp'     => $GLOBALS['EXEC_TIME'],
+			'crdate'     => $GLOBALS['EXEC_TIME'],
 			'topic_id'   => $topicId,
 			'forum_id'   => $forumId,
 			'poster_id'  => $author,
@@ -339,8 +339,8 @@ class tx_mmforum_postfactory {
 		// Generate post text record
 		$insertArray = array(
 			'pid'       => $this->getFirstPid(),
-			'tstamp'    => time(),
-			'crdate'    => time(),
+			'tstamp'    => $GLOBALS['EXEC_TIME'],
+			'crdate'    => $GLOBALS['EXEC_TIME'],
 			'post_id'   => $postId,
 			'post_text' => $text
 		);
@@ -417,7 +417,7 @@ class tx_mmforum_postfactory {
 		 */
 
 		$arr = $TYPO3_DB->sql_fetch_assoc($TYPO3_DB->exec_SELECTquery('*','tx_mmforum_topics','uid='.intval($topicId)));
-		$uA = array('deleted'=>1, 'tstamp'=>time());
+		$uA = array('deleted'=>1, 'tstamp'=>$GLOBALS['EXEC_TIME']);
 
 		/*
 		 * Load all posts of this topic and delete them all.
@@ -471,7 +471,7 @@ class tx_mmforum_postfactory {
 		global $TYPO3_DB;
 
 		$arr = $TYPO3_DB->sql_fetch_assoc($TYPO3_DB->exec_SELECTquery('*','tx_mmforum_posts','uid='.intval($postId)));
-		$uA = array('deleted'=>1, 'tstamp'=>time());
+		$uA = array('deleted'=>1, 'tstamp'=>$GLOBALS['EXEC_TIME']);
 
 		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_posts', $uA, 'uid='.intval($postId));
 		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_posts_text', $uA, 'post_id='.intval($postId));
@@ -591,7 +591,7 @@ class tx_mmforum_postfactory {
 		list($postcount) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 		$updateArray = array(
-			'tstamp'			=> time(),
+			'tstamp'			=> $GLOBALS['EXEC_TIME'],
 			'tx_mmforum_posts'	=> $postcount
 		);
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$user_uid,$updateArray);
@@ -633,7 +633,7 @@ class tx_mmforum_postfactory {
 		list($topiccount) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 		$updateArray = array(
-			'tstamp'				=> time(),
+			'tstamp'				=> $GLOBALS['EXEC_TIME'],
 			'forum_last_post_id'	=> $last_post_id,
 			'forum_posts'			=> $postcount,
 			'forum_topics'			=> $topiccount
@@ -670,7 +670,7 @@ class tx_mmforum_postfactory {
 		$postcount = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 
 		$updateArray = array(
-			'tstamp'				=> time(),
+			'tstamp'				=> $GLOBALS['EXEC_TIME'],
 			'topic_last_post_id'	=> $last_post_id,
 			'topic_replies'			=> $postcount - 1
 		);

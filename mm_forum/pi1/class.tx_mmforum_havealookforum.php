@@ -75,8 +75,8 @@ class tx_mmforum_havealookforum {
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1) {
 			$insertArray = array(
 				'pid'      => $forumObj->getStoragePID(),
-				'tstamp'   => time(),
-				'crdate'   => time(),
+				'tstamp'   => $GLOBALS['EXEC_TIME'],
+				'crdate'   => $GLOBALS['EXEC_TIME'],
 				'forum_id' => $forumId,
 				'user_id'  => $feUserId
 			);

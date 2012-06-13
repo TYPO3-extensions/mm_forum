@@ -150,8 +150,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 					'pid'		=> $this->getStoragePID(),
 					'topic_id'  => $topicId,
 					'user'      => $feUserId,
-					'tstamp'    => time(),
-					'crdate'    => time(),
+					'tstamp'    => $GLOBALS['EXEC_TIME'],
+					'crdate'    => $GLOBALS['EXEC_TIME'],
 				);
 				$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_postsread', $insertArray);
 			}
@@ -539,7 +539,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 		if ($tstamp > $cache_tstamp || $cache_tstamp == 0) {
 			$posttext = $this->bb2text($posttext,$this->conf);
 			$updateArray = array(
-				'cache_tstamp' => time(),
+				'cache_tstamp' => $GLOBALS['EXEC_TIME'],
 				'cache_text'   => $posttext
 			);
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts_text','uid=' . $text_uid, $updateArray);
@@ -802,7 +802,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 			'forum_posts'        => $countPosts,
 			'forum_topics'       => $countTopics,
 			'forum_last_post_id' => $lastPostId,
-			'tstamp'             => time()
+			'tstamp'             => $GLOBALS['EXEC_TIME']
 		);
 		$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'uid = ' . $forumId, $updateArray);
 	}
@@ -941,7 +941,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 
                     // Remove shadow topics pointing to this topic
                     $updateArray = array(
-                    	'tstamp'			=> time(),
+                    	'tstamp'			=> $GLOBALS['EXEC_TIME'],
                     	'deleted'			=> 1
                     );
                     $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics',"shadow_tid='$topic_id'",$updateArray);
@@ -1000,8 +1000,8 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 				if ($this->conf['enableShadows']) {
 					$shadow_insertArray = array(
 						'pid'                 => $topicData['pid'],
-						'tstamp'              => time(),
-						'crdate'              => time(),
+						'tstamp'              => $GLOBALS['EXEC_TIME'],
+						'crdate'              => $GLOBALS['EXEC_TIME'],
 						'topic_title'         => $topicData['topic_title'],
 						'topic_poster'        => $topicData['topic_poster'],
 						'topic_time'          => $topicData['topic_time'],
@@ -1070,7 +1070,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 				// delete all posts
 				$updateArray = array(
 					'deleted'                      => 1,
-					'tstamp'                       => time(),
+					'tstamp'                       => $GLOBALS['EXEC_TIME'],
 					'tx_mmforumsearch_index_write' => 0,
 				);
 				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'topic_id = ' . $topicData['uid'], $updateArray);

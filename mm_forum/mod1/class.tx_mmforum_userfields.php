@@ -182,7 +182,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
             if(intval($uid)>0) {
             	if(strlen($data['delete']) > 0) {
                     $updateArr = array(
-                        'tstamp'        => time(),
+                        'tstamp'        => $GLOBALS['EXEC_TIME'],
                         'deleted'       => 1
                     );
                     $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields','uid='.$uid,$updateArr);
@@ -421,7 +421,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		}
 
 		$updateArray = array(
-			'tstamp'            => time(),
+			'tstamp'            => $GLOBALS['EXEC_TIME'],
 			'public'            => $meta['private']?'0':'1',
 			'uniquefield'       => $meta['unique']?'1':'0',
 			'label'             => $meta['label']['default'],
@@ -447,8 +447,8 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		list($sorting) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 		$insertArray = array(
-			'tstamp'			=> time(),
-			'crdate'			=> time(),
+			'tstamp'			=> $GLOBALS['EXEC_TIME'],
+			'crdate'			=> $GLOBALS['EXEC_TIME'],
 			'cruser_id'			=> $GLOBALS['BE_USER']->user['uid'],
 			'sorting'			=> $sorting,
 			'public'			=> $meta['private']?'0':'1',

@@ -223,7 +223,7 @@ class tx_mmforum_statistics {
      * @version 2007-05-31
      */
     function getDateTitleLink($start, $stop, $colspan=3,$padding=2) {
-        $sStop = ($stop==time())?$this->getLL('now'):date("d. m. Y, H:i:s",$stop);
+        $sStop = ($stop==$GLOBALS['EXEC_TIME'])?$this->getLL('now'):date("d. m. Y, H:i:s",$stop);
         return '<br /><table cellspacing="0" cellpadding="'.$padding.'" style="width:100%" class="mm_forum-list">
     <tr>
         <td class="mm_forum-listrow_header" colspan="'.$colspan.'">'.date("d. m. Y, H:i:s",$start).' &mdash; '.$sStop.'</td>
@@ -405,7 +405,7 @@ class tx_mmforum_statistics {
                 $dayCount = date('t',mktime(12,0,0,$i,1,$this->param['year']));
                 for($d=1; $d <= $dayCount; $d ++) {
                     $tTstamp_Stop += 86400;
-                    if($tTstamp_Stop > time()) { $results[$i][$d] = 0; continue; }
+                    if($tTstamp_Stop > $GLOBALS['EXEC_TIME']) { $results[$i][$d] = 0; continue; }
                     $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                         'COUNT(*)',
                         $table,
@@ -496,7 +496,7 @@ class tx_mmforum_statistics {
             $maxValue       = 0;
             for($i=0;$i<=12;$i++) {
                 $tTstamp_Stop += 86400 * date("t",mktime(0,0,0,$i,1,$this->param['year']));
-                if($tTstamp_Stop > time()) { $results[$i] = 0; continue; }
+                if($tTstamp_Stop > $GLOBALS['EXEC_TIME']) { $results[$i] = 0; continue; }
                 $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                     'COUNT(*)',
                     $table,
@@ -569,7 +569,7 @@ class tx_mmforum_statistics {
             $maxValue       = 0;
             for($i=0;$i<24;$i++) {
                 $tTstamp_Stop += 3600*$i;
-                if($tTstamp_Stop > time()) { $results[$i] = 0; continue; }
+                if($tTstamp_Stop > $GLOBALS['EXEC_TIME']) { $results[$i] = 0; continue; }
                 $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                     'COUNT(*)',
                     $table,
@@ -622,7 +622,7 @@ class tx_mmforum_statistics {
      */
     function additionalStats() {
         $startTime  = $this->getStartTime();
-        $span       = time() - $startTime;
+        $span       = $GLOBALS['EXEC_TIME'] - $startTime;
         $days       = round($span / 86400);
 
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -708,7 +708,7 @@ class tx_mmforum_statistics {
 
         if($this->param['year'] == 'all') {
             $start = $this->getStartTime();
-            $stop  = time();
+            $stop  = $GLOBALS['EXEC_TIME'];
         }
         else {
             if($this->param['month'] == 'all') {

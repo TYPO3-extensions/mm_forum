@@ -558,7 +558,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			$GLOBALS['TYPO3_DB']->sql_free_result($res);
 
 			// Compare with current time and spam block interval
-			if((time() - $conf['block_time']) <= $lastMessage['crdate']) {
+			if(($GLOBALS['EXEC_TIME'] - $conf['block_time']) <= $lastMessage['crdate']) {
 				$error = 1;
 				$errormessage = sprintf($this->pi_getLL('errorBlockinTime'), $conf['block_time']);
 			}
@@ -586,10 +586,10 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 					// Save the private message for the recipient
 					$val = Array(
 						'pid'			=> $this->getStoragePID(),
-						'tstamp'		=> time(),
-						'crdate'		=> time(),
+						'tstamp'		=> $GLOBALS['EXEC_TIME'],
+						'crdate'		=> $GLOBALS['EXEC_TIME'],
 						'cruser_id'		=> $GLOBALS['TSFE']->fe_user->user['uid'],
-						'sendtime'		=> time(),
+						'sendtime'		=> $GLOBALS['EXEC_TIME'],
 						'from_uid'		=> $GLOBALS['TSFE']->fe_user->user['uid'],
 						'from_name'		=> $GLOBALS['TSFE']->fe_user->user['username'],
 						'to_uid'		=> $recipientId,
@@ -603,10 +603,10 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 					// Save as sent private message
 					$val = Array(
 						'pid'			=> $this->getStoragePID(),
-						'tstamp'		=> time(),
-						'crdate'		=> time(),
+						'tstamp'		=> $GLOBALS['EXEC_TIME'],
+						'crdate'		=> $GLOBALS['EXEC_TIME'],
 						'cruser_id'		=> $GLOBALS['TSFE']->fe_user->user['uid'],
-						'sendtime'		=> time(),
+						'sendtime'		=> $GLOBALS['EXEC_TIME'],
 						'to_uid'		=> $GLOBALS['TSFE']->fe_user->user['uid'],
 						'to_name'		=> $GLOBALS['TSFE']->fe_user->user['username'],
 						'from_uid'		=> $recipientId,
@@ -656,7 +656,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 						$updateArray = array(
 							'notified' => 1,
-							'tstamp' => time(),
+							'tstamp' => $GLOBALS['EXEC_TIME'],
 						);
 						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_pminbox', 'uid=' . $mess_id, $updateArray);
 

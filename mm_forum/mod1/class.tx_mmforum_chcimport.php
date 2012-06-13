@@ -208,7 +208,7 @@ class tx_mmforum_chcimport {
 	    	);
 	    	list($user, $posts) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 	    	$updateArray = array(
-	    		'tstamp'			=> time(),
+	    		'tstamp'			=> $GLOBALS['EXEC_TIME'],
 	    		'tx_mmforum_posts'	=> $posts
 	    	);
 	    	$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$user.' AND pid='.$this->p->confArr['userPID'],$updateArray);
@@ -237,8 +237,8 @@ class tx_mmforum_chcimport {
     		$insertArray = array(
     			'pid'				=> $this->pid,
     			'hidden'			=> $ctg['hidden'],
-    			'tstamp'			=> time(),
-    			'crdate'			=> time(),
+    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
+    			'crdate'			=> $GLOBALS['EXEC_TIME'],
     			'forum_name'		=> $ctg['cat_title'],
     			'forum_desc'		=> $ctg['cat_description'],
     			'sorting'			=> $ctg['sorting'],
@@ -288,8 +288,8 @@ class tx_mmforum_chcimport {
     			'pid'				=> $this->pid,
     			'hidden'			=> $conf['hidden'],
     			'sorting'			=> $conf['sorting'],
-    			'tstamp'			=> time(),
-    			'crdate'			=> time(),
+    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
+    			'crdate'			=> $GLOBALS['EXEC_TIME'],
     			'forum_name'		=> $conf['conference_name'],
     			'forum_desc'		=> $conf['desc'],
     			'grouprights_read'	=> $conf['conference_public_r']?'':$this->convertGroups($conf['auth_forumgroup_r']),
@@ -337,8 +337,8 @@ class tx_mmforum_chcimport {
     		$insertArray = array(
     			'pid'				=> $this->pid,
     			'hidden'			=> $topic['hidden'],
-    			'tstamp'			=> time(),
-    			'crdate'			=> time(),
+    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
+    			'crdate'			=> $GLOBALS['EXEC_TIME'],
     			'topic_title'		=> $topic['thread_subject'],
     			'topic_poster'		=> $this->convertUser($topic['thread_author']),
     			'topic_time'		=> $topic['thread_datetime'],
@@ -388,8 +388,8 @@ class tx_mmforum_chcimport {
 
     		$insertArray = array(
     			'pid'				=> $this->pid,
-    			'tstamp'			=> time(),
-    			'crdate'			=> time(),
+    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
+    			'crdate'			=> $GLOBALS['EXEC_TIME'],
     			'hidden'			=> $post['hidden'],
     			'topic_id'			=> $this->topicMapping[$post['thread_id']],
     			'forum_id'			=> $this->forumMapping[$post['conference_id']],
@@ -406,8 +406,8 @@ class tx_mmforum_chcimport {
 
     		$insertArray = array(
     			'pid'				=> $this->pid,
-    			'tstamp'			=> time(),
-    			'crdate'			=> time(),
+    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
+    			'crdate'			=> $GLOBALS['EXEC_TIME'],
     			'post_id'			=> $postUid,
     			'post_text'			=> $post['post_text']
     		);

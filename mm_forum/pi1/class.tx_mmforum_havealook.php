@@ -382,8 +382,8 @@ class tx_mmforum_havealook {
 			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1) {
 				$insertData = array(
 					'pid'      => $forumObj->getStoragePID(),
-					'tstamp'   => time(),
-					'crdate'   => time(),
+					'tstamp'   => $GLOBALS['EXEC_TIME'],
+					'crdate'   => $GLOBALS['EXEC_TIME'],
 					'topic_id' => $topicId,
 					'user_id'  => $feUserId
 				);

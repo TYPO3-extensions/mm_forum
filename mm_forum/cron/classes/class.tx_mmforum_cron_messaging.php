@@ -67,7 +67,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 		$user_res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*',
 			'fe_users',
-			'tx_mmforum_pmnotifymode = 1 AND deleted=0 AND disable=0 AND starttime < '.time().' AND (endtime = 0 OR endtime <= '.time().')'
+			'tx_mmforum_pmnotifymode = 1 AND deleted=0 AND disable=0 AND starttime < '.$GLOBALS['EXEC_TIME'].' AND (endtime = 0 OR endtime <= '.$GLOBALS['EXEC_TIME'].')'
 		);
 
 		$template			= $this->loadTemplateFile('notifyPM');
@@ -139,7 +139,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 
 		}
 
-		$updateArray = array('notified' => 1, 'tstamp' => time());
+		$updateArray = array('notified' => 1, 'tstamp' => $GLOBALS['EXEC_TIME']);
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_pminbox', 'notified=0', $updateArray);
 
 		$this->content = $content;

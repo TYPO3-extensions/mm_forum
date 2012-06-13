@@ -64,7 +64,7 @@ class tx_mmforum_data {
 		}
 		
 		if (!empty($diff)) {
-			$this->data['tstamp'] = $diff['tstamp'] = time();
+			$this->data['tstamp'] = $diff['tstamp'] = $GLOBALS['EXEC_TIME'];
 
 			if (intVal($this->data['uid']) > 0) {
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
@@ -74,7 +74,7 @@ class tx_mmforum_data {
 				);
 				
 			} else {
-				$this->data['crdate'] = $diff['crdate'] = time();
+				$this->data['crdate'] = $diff['crdate'] = $GLOBALS['EXEC_TIME'];
 
 				$GLOBALS['TYPO3_DB']->exec_INSERTquery(
 					$this->getTableName(),

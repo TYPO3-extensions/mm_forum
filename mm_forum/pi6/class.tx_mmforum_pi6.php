@@ -377,7 +377,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @see getOnlineUsers
 	 */
 	function getOnlineTotal() {
-		return $this->getTotalFromTime(time()-$this->conf['onlineTime']);
+		return $this->getTotalFromTime($GLOBALS['EXEC_TIME']-$this->conf['onlineTime']);
 	}
 
 	/**
@@ -387,7 +387,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @uses getGuestsFromTime
 	 */
 	function getOnlineGuests() {
-		return $this->getGuestsFromTime(time()-$this->conf['onlineTime']);
+		return $this->getGuestsFromTime($GLOBALS['EXEC_TIME']-$this->conf['onlineTime']);
 	}
 
 	/**
@@ -476,7 +476,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @uses getUsersFromTime
 	 */
 	function getOnlineUsers() {
-		return $this->getUsersFromTime(time()-$this->conf['onlineTime'],TRUE,FALSE);
+		return $this->getUsersFromTime($GLOBALS['EXEC_TIME']-$this->conf['onlineTime'],TRUE,FALSE);
 	}
 
 	/**

@@ -203,8 +203,8 @@ class tx_mmforum_polls {
 
 		$insertArray = array(
 			'pid'           => $this->p->getFirstPid(),
-			'tstamp'        => time(),
-			'crdate'        => time(),
+			'tstamp'        => $GLOBALS['EXEC_TIME'],
+			'crdate'        => $GLOBALS['EXEC_TIME'],
 			'poll_id'       => $poll_id,
 			'answer_id'     => $answer_id,
 			'user_id'       => $user_id
@@ -336,7 +336,7 @@ class tx_mmforum_polls {
 			$expDate = mktime($data['expires']['hour'],$data['expires']['minute'],0,$data['expires']['month'],$data['expires']['day'],$data['expires']['year']);
 		} else $expDate = 0;
 		$pollUpdateData = array(
-			'tstamp'        => time(),
+			'tstamp'        => $GLOBALS['EXEC_TIME'],
 			'question'      => $data['question'],
 			'endtime'       => $expDate
 		);
@@ -352,7 +352,7 @@ class tx_mmforum_polls {
 					continue;
 				}
 				$answerUpdateArray = array(
-					'tstamp'        => time(),
+					'tstamp'        => $GLOBALS['EXEC_TIME'],
 					'answer'        => $value
 				);
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_answers', 'uid='.intval($uid), $answerUpdateArray);
@@ -363,8 +363,8 @@ class tx_mmforum_polls {
 			foreach($data['answer']['new'] as $answer) {
 				$answerInsertData = array(
 					'pid'           => $pObj->getFirstPid(),
-					'tstamp'        => time(),
-					'crdate'        => time(),
+					'tstamp'        => $GLOBALS['EXEC_TIME'],
+					'crdate'        => $GLOBALS['EXEC_TIME'],
 					'poll_id'       => $poll_id,
 					'votes'         => 0,
 					'answer'        => $answer
@@ -381,7 +381,7 @@ class tx_mmforum_polls {
 				list($votes) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 				$GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_polls SET votes = votes - '.$votes.' WHERE uid='.$poll_id);
 				$answerUpdateArray = array(
-					'tstamp'        => time(),
+					'tstamp'        => $GLOBALS['EXEC_TIME'],
 					'deleted'       => 1
 				);
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_answers', 'uid='.$delUid, $answerUpdateArray);
@@ -420,8 +420,8 @@ class tx_mmforum_polls {
 		} else $expDate = 0;
 		$pollInsertData = array(
 			'pid'           => $pObj->getFirstPid(),
-			'tstamp'        => time(),
-			'crdate'        => time(),
+			'tstamp'        => $GLOBALS['EXEC_TIME'],
+			'crdate'        => $GLOBALS['EXEC_TIME'],
 			'crfeuser_id'   => $GLOBALS['TSFE']->fe_user->user['uid'],
 			'votes'         => 0,
 			'question'      => trim($data['question']),
@@ -435,8 +435,8 @@ class tx_mmforum_polls {
 			if(strlen($answer) == 0) continue;
 			$answerInsertData = array(
 				'pid'           => $pObj->getFirstPid(),
-				'tstamp'        => time(),
-				'crdate'        => time(),
+				'tstamp'        => $GLOBALS['EXEC_TIME'],
+				'crdate'        => $GLOBALS['EXEC_TIME'],
 				'poll_id'       => $poll_id,
 				'votes'         => 0,
 				'answer'        => $answer
@@ -485,9 +485,9 @@ class tx_mmforum_polls {
 		}
 
 		if($poll_id > 0) {
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls'        ,    'uid='.$poll_id,array('deleted'=>1,'tstamp'=>time()));
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_answers','poll_id='.$poll_id,array('deleted'=>1,'tstamp'=>time()));
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_votes'  ,'poll_id='.$poll_id,array('deleted'=>1,'tstamp'=>time()));
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls'        ,    'uid='.$poll_id,array('deleted'=>1,'tstamp'=>$GLOBALS['EXEC_TIME']));
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_answers','poll_id='.$poll_id,array('deleted'=>1,'tstamp'=>$GLOBALS['EXEC_TIME']));
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_votes'  ,'poll_id='.$poll_id,array('deleted'=>1,'tstamp'=>$GLOBALS['EXEC_TIME']));
 		}
 		if($topic_id > 0)
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics'       ,    'uid='.$topic_id,array('poll_id'=>0));
@@ -681,7 +681,7 @@ class tx_mmforum_polls {
 	 * @return boolean TRUE, if the current user may vote, otherwise false.
 	 */
 	function getMayVote() {
-		if($this->data['endtime']>0 && $this->data['endtime']<time()) return false;
+		if($this->data['endtime']>0 && $this->data['endtime']<$GLOBALS['EXEC_TIME']) return false;
 		if(!$GLOBALS['TSFE']->fe_user->user['uid']) return false;
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
