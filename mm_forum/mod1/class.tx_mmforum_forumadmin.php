@@ -488,7 +488,7 @@ class tx_mmforum_forumAdmin {
      * @return  void
      */
     function globalIncSorting($start,$amount=1,$parentId=0) {
-        $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_forums SET sorting = sorting + '.$amount.' WHERE sorting >= '.$start.' AND pid='.$this->pid.' AND deleted=0 AND parentID='.$parentId);
+        $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'sorting >= '.$start.' AND pid='.$this->pid.' AND deleted=0 AND parentID='.$parentId, array('sorting' => 'sorting + '.$amount));
     }
 
     /**

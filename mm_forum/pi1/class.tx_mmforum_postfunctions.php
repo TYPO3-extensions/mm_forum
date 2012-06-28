@@ -158,7 +158,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		}
 
 		// Increase hit counter
-		$GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_topics SET topic_views = topic_views+1 WHERE uid = ' . $topicId);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, array('topic_views' => 'topic_views+1'));
 
 		// Generate page navigation
 		$limitCount = $this->conf['post_limit'];
@@ -894,15 +894,18 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
                     $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments','post_id='.$row['uid'],$updArray);
 
             // Decrease user's post coutner
-                $GLOBALS['TYPO3_DB']->sql_query("UPDATE fe_users SET  tx_mmforum_posts = tx_mmforum_posts - 1 WHERE uid = '".$cr_user."'");
+                $GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users', 'uid = '.intval($cr_user), array('tx_mmforum_posts' => 'tx_mmforum_posts - 1'));
 
             // Get last active post in topic
                 $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_posts','deleted="0" AND hidden="0" AND topic_id="'.$topic_id.'"'.$this->getPidQuery(),'','post_time ASC');
                 list($lastpostid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
             // Decrease topic reply counter
-                $mysql = "UPDATE tx_mmforum_topics SET tx_mmforumsearch_index_write=0, topic_replies = topic_replies-1,topic_last_post_id = '".$lastpostid."' WHERE uid = '".$topic_id."'";
-                $GLOBALS['TYPO3_DB']->sql_query($mysql);
+                $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'WHERE uid = '.$topic_id, array(
+			'tx_mmforumsearch_index_write' => 0,
+			'topic_replies' => 'topic_replies-1',
+			'topic_last_post_id' => $lastpostid
+		));
 
 
             // Refresh last post in board view
@@ -917,8 +920,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
                 $last_forum_post_id = $row['uid'];
 
             // Decrease board post counter.
-                $mysql = "UPDATE tx_mmforum_forums SET forum_posts = forum_posts-1 WHERE uid = '".$forum_id."'";
-                $GLOBALS['TYPO3_DB']->sql_query($mysql);
+                $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'uid = '.intval($forum_id), array('forum_posts' => 'forum_posts-1'));
 
             // Determine, if deleted post was last remaining post in topic. If so, topic is deleted, too
                 $postmenge = $GLOBALS['TYPO3_DB']->sql_num_rows($GLOBALS['TYPO3_DB']->exec_SELECTquery('poster_id,topic_id,post_time','tx_mmforum_posts',"deleted = 0 AND hidden = 0 AND topic_id = '$topic_id'".$this->getPidQuery()));
@@ -937,7 +939,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
                     $last_forum_post_id = $row['uid'];
 
                     // Decrease board topic counter
-                    $GLOBALS['TYPO3_DB']->sql_query("UPDATE tx_mmforum_forums SET forum_topics = forum_topics-1 WHERE uid = '".$forum_id."'");
+                    $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'uid = '.intval($forum_id), array('forum_topics' => 'forum_topics-1'));
 
                     // Remove shadow topics pointing to this topic
                     $updateArray = array(

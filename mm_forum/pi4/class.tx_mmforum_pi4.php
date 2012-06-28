@@ -430,8 +430,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				'groupPost'     => $param['groupPost'],
 				'user_groups'	=> implode(',',$userGroups),
 			);
-			$query = $GLOBALS['TYPO3_DB']->INSERTquery('tx_mmforum_searchresults',$insertArray);
-			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_searchresults',$insertArray);
 			if($conf['debug_mode'] == 1) {
 				echo '<h1>Suche Indiziert</h1>';
 			}
@@ -666,26 +665,22 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			$count_option = '';
 		}
 
+		$post_id_array = array();            // Array in denen die gefundenen Posts gespeichert werden
+
 		if(!empty($mysql_option)) {
-			// SELECT:
-			$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'post_id, topic_id'.$count_option,
 				'tx_mmforum_wordmatch',
 				'1=1 '.$mysql_option.$this->getPidQuery(),
-				$mysql_group_option ,
+				$mysql_group_option,
 				$order_option,
 				''
 			);
-			if($this->conf['debug_mode']) echo $query;
+			if ($this->conf['debug_mode']) {
+				t3lib_div::devLog('find_posts', 'mm_forum', 0, $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery);
+			}
 
-			$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-			$post_id_array = array();            // Array in denen die gefundenen Posts gespeichert werden
-		}
-
-		if(isset($res)) {
-			$post_id_array = array();
-
-			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				array_push($post_id_array, $row['post_id']);
 			}
 		}
@@ -870,7 +865,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			#}
 			#$grouprights_query = " AND (".implode(' AND ',$grouprights_queries).")";
 		}
-		$query = $GLOBALS['TYPO3_DB']->SELECTquery(
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*',
 			'tx_mmforum_searchresults',
 			'search_string LIKE "'.$searchstring.'" AND search_place = '.$param['search_place'].' AND solved = '.$solved.' AND search_order = '.$search_order.' AND groupPost = '.$groupPost.$this->getPidQuery().$grouprights_query,
@@ -879,13 +874,11 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			'1'
 		);
 
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
-		$row  = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
 		$search_array = unserialize($row['array_string']);
 
 		return $search_array;
-
 	}
 
 	/**

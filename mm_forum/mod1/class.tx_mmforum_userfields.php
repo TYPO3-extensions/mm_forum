@@ -154,8 +154,8 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
             );
             list($uid_2,$sorting_2) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-            $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_userfields SET sorting='.$sorting_1.' WHERE uid='.$uid_2);
-            $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_userfields SET sorting='.$sorting_2.' WHERE uid='.$uid_1);
+            $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_2, array('sorting' => $sorting_1));
+            $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_1, array('sorting' => $sorting_2));
         }
         if($this->ufVars['moveDown']) {
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -174,22 +174,20 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
             );
             list($uid_2,$sorting_2) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-            $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_userfields SET sorting='.$sorting_1.' WHERE uid='.$uid_2);
-            $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_userfields SET sorting='.$sorting_2.' WHERE uid='.$uid_1);
-        }
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_2, array('sorting' => $sorting_1));
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_1, array('sorting' => $sorting_2));
+		}
         foreach((array)$this->ufVars['field'] as $uid => $data) {
-
             if(intval($uid)>0) {
             	if(strlen($data['delete']) > 0) {
                     $updateArr = array(
                         'tstamp'        => $GLOBALS['EXEC_TIME'],
                         'deleted'       => 1
                     );
-                    $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields','uid='.$uid,$updateArr);
+                    $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid, $updateArr);
                 }
             }
         }
-        return $content;
     }
 
 	function generateTSConfig($meta) {

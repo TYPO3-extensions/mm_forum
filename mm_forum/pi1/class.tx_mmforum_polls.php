@@ -198,8 +198,8 @@ class tx_mmforum_polls {
 
 		if(!$answer_id) return;
 
-		$GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_polls SET votes = votes + 1 WHERE uid='.$poll_id.' AND deleted=0');
-		$GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_polls_answers SET votes = votes + 1 WHERE uid='.$answer_id.' AND deleted=0');
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls', 'uid='.$poll_id.' AND deleted=0', array('votes' => 'votes + 1'));
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_answers', 'uid='.$answer_id.' AND deleted=0', array('votes' => 'votes + 1'));
 
 		$insertArray = array(
 			'pid'           => $this->p->getFirstPid(),
@@ -379,7 +379,7 @@ class tx_mmforum_polls {
 
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('votes','tx_mmforum_polls_answers','uid='.$delUid);
 				list($votes) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-				$GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_polls SET votes = votes - '.$votes.' WHERE uid='.$poll_id);
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls', 'uid='.$poll_id, array('votes' => 'votes - '.$votes));
 				$answerUpdateArray = array(
 					'tstamp'        => $GLOBALS['EXEC_TIME'],
 					'deleted'       => 1

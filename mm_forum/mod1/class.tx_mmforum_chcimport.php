@@ -486,10 +486,10 @@ class tx_mmforum_chcimport {
      * @return  void
      */
     function clearDB() {
-    	$clearTables_array = t3lib_div::trimExplode(',',$this->chc_clearTables);
+    	$clearTables_array = t3lib_div::trimExplode(',', $this->chc_clearTables);
 
     	foreach($clearTables_array as $clearTable) {
-    		$GLOBALS['TYPO3_DB']->sql_query("TRUNCATE TABLE tx_mmforum_$clearTable");
+    		$GLOBALS['TYPO3_DB']->exec_TRUNCATEquery('tx_mmforum_' . $clearTable);
     	}
 
     	$updateArray = array(
@@ -507,11 +507,11 @@ class tx_mmforum_chcimport {
      * @deprecated Was replaced by a better import procedure in version 0.1.4
      */
     function import_chc_deprecated() {
-        mysql_query('TRUNCATE TABLE tx_mmforum_forums');
-	    mysql_query('TRUNCATE TABLE tx_mmforum_posts');
-	    mysql_query('TRUNCATE TABLE tx_mmforum_postread');
-	    mysql_query('TRUNCATE TABLE tx_mmforum_posts_text');
-	    mysql_query('TRUNCATE TABLE tx_mmforum_topics');
+		$GLOBALS['TYPO3_DB']->exec_TRUNCATEquery('tx_mmforum_forums');
+		$GLOBALS['TYPO3_DB']->exec_TRUNCATEquery('tx_mmforum_posts');
+		$GLOBALS['TYPO3_DB']->exec_TRUNCATEquery('tx_mmforum_postread');
+		$GLOBALS['TYPO3_DB']->exec_TRUNCATEquery('tx_mmforum_posts_text');
+		$GLOBALS['TYPO3_DB']->exec_TRUNCATEquery('tx_mmforum_topics');
 
 	    $anz_cat = $anz_forum = $anz_threads = $anz_posts = 0;
 

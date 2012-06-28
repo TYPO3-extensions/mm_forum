@@ -91,7 +91,7 @@ class tx_mmforum_userSearch {
 		if ($field === 'username')
 			return true;
 		
-		$res = $GLOBALS['TYPO3_DB']->sql_query('SHOW COLUMNS FROM fe_users;');
+		$res = $GLOBALS['TYPO3_DB']->admin_get_fields('fe_users');
 		if ($res) {
 			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				if ($row['Field'] === $field) {

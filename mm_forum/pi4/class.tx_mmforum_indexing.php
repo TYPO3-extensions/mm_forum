@@ -237,11 +237,9 @@ class tx_mmforum_indexing {
 	 * @param int $post_id The post UID
 	 */
 	function write_post_ind_date($post_id) {
-		$updateArray = array(
-			' tx_mmforumsearch_index_write' => time(),
-		);
-		$query = $GLOBALS['TYPO3_DB']->UPDATEquery('tx_mmforum_posts', 'uid = '.$post_id, $updateArray);
-		$GLOBALS['TYPO3_DB']->sql_query($query);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid = '.intval($post_id), array(
+			'tx_mmforumsearch_index_write' => $GLOBALS['EXEC_TIME'],
+		));
 	}
 
 	/**
@@ -249,11 +247,9 @@ class tx_mmforum_indexing {
 	 * @param int $topic_id The topic UID
 	 */
 	function write_topic_ind_date($topic_id) {
-		$updateArray = array(
-			' tx_mmforumsearch_index_write' => time(),
-		);
-		$query = $GLOBALS['TYPO3_DB']->UPDATEquery('tx_mmforum_topics', "uid = ".$topic_id, $updateArray);
-		$GLOBALS['TYPO3_DB']->sql_query($query);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = '.intval($topic_id), array(
+			'tx_mmforumsearch_index_write' => $GLOBALS['EXEC_TIME'],
+		));
 	}
 
 	/**
@@ -262,11 +258,9 @@ class tx_mmforum_indexing {
 	 *                      indexed.
 	 */
 	function delete_topic_ind_date($topic_id) {
-		$updateArray = array(
-			' tx_mmforumsearch_index_write' => 0,
-		);
-		$query = $GLOBALS['TYPO3_DB']->UPDATEquery('tx_mmforum_topics', "uid = ".$topic_id, $updateArray);
-		$GLOBALS['TYPO3_DB']->sql_query($query);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = '.intval($topic_id), array(
+			'tx_mmforumsearch_index_write' => 0,
+		));
 	}
 
 	/**
@@ -328,9 +322,7 @@ class tx_mmforum_indexing {
 			'crdate'            => $GLOBALS['EXEC_TIME'],
 			'tstamp'			=> $GLOBALS['EXEC_TIME']
 		);
-		// Execute query
-		$query = $GLOBALS['TYPO3_DB']->INSERTquery('tx_mmforum_wordmatch', $insertArray);
-		$GLOBALS['TYPO3_DB']->sql_query($query);
+		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_wordmatch', $insertArray);
 	}
 
 	/**
