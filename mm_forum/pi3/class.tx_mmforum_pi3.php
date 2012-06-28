@@ -121,7 +121,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				// Output a cObj telling whether there are new messages or not
 				case "CHECKNEW":
 					$new_messages = $this->count_new_pm($GLOBALS['TSFE']->fe_user->user['uid']);
-					if ($new_messages > 0){
+					IF ($new_messages > 0){
 						if($new_messages == 1){
 							$content = $this->pi_linkToPage($new_messages.$this->pi_getLL('newmessage'),$conf['pm_id'],$target='_self',array());
 						}
@@ -139,11 +139,11 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 					if ($GLOBALS['TSFE']->fe_user->user['username']) {
 						$action = $this->piVars['action']?$this->piVars['action']:'';
 
-                        if ($action == "")               $content = $this->list_inbox($content,$conf);
-						if ($action == "message_read")   $content = $this->message_read($content,$conf);
-						if ($action == "message_write")  $content = $this->message_write($content,$conf);
-						if ($action == "message_del")    $content = $this->message_del($content,$conf);
-						if ($action == "import")   		 $content = $this->import($content,$conf);
+						IF ($action == "")               $content = $this->list_inbox($content,$conf);
+						IF ($action == "message_read")   $content = $this->message_read($content,$conf);
+						IF ($action == "message_write")  $content = $this->message_write($content,$conf);
+						IF ($action == "message_del")    $content = $this->message_del($content,$conf);
+						IF ($action == "import")   		 $content = $this->import($content,$conf);
 					} else {
 						$template = $this->cObj->fileResource($conf['template.']['error_message']);
 						$marker['###ERROR###'] = $this->pi_getLL('msgError');

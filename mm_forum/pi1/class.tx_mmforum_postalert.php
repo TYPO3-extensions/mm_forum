@@ -254,7 +254,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 	 */
 	function post_alert($conf) {
 		// Check login
-		if ($GLOBALS['TSFE']->fe_user->user['uid']) {
+		IF ($GLOBALS['TSFE']->fe_user->user['uid']) {
 			$template		= $this->cObj->fileResource($conf['template.']['post_alert']);
 			$template		= $this->cObj->getSubpart($template, "###POST_ALERT###");
 
