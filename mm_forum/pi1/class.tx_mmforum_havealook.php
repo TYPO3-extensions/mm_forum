@@ -437,10 +437,10 @@ class tx_mmforum_havealook {
 
 		// get all users on this topic
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'DISTINCT m.user_id, u.email, u.' . $forumObj->getUserNameField(),
-			'tx_mmforum_topicmail m, fe_users u',
-			'm.user_id = u.uid AND m.topic_id = ' . $topicId .
-			' AND u.deleted = 0 AND u.email != "" AND u.disable = 0 AND m.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('m')
+			'DISTINCT tx_mmforum_topicmail.user_id, fe_users.email, fe_users.' . $forumObj->getUserNameField(),
+			'tx_mmforum_topicmail, fe_users',
+			'tx_mmforum_topicmail.user_id = fe_users.uid AND tx_mmforum_topicmail.topic_id = ' . $topicId .
+			' AND fe_users.deleted = 0 AND fe_users.email != "" AND fe_users.disable = 0 AND tx_mmforum_topicmail.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('tx_mmforum_topicmail')
 		);
 
 		// loop through each user who subscribed
@@ -541,14 +541,14 @@ class tx_mmforum_havealook {
 
 		// loop through each user who subscribed
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'DISTINCT m.user_id, u.email, u.' . $forumObj->getUserNameField(),
-			'tx_mmforum_forummail m, fe_users u',
-			'm.user_id = u.uid AND
-			 (m.forum_id = ' . intval($forumId) . ($categoryId > 0 ? ' OR m.forum_id = ' . $categoryId : '') . ') AND
-			 u.deleted = 0 AND
-			 u.disable = 0 AND
-			 u.email != "" AND
-			 m.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('m')
+			'DISTINCT tx_mmforum_forummail.user_id, fe_users.email, fe_users.' . $forumObj->getUserNameField(),
+			'tx_mmforum_forummail, fe_users',
+			'tx_mmforum_forummail.user_id = fe_users.uid AND
+			 (tx_mmforum_forummail.forum_id = ' . intval($forumId) . ($categoryId > 0 ? ' OR tx_mmforum_forummail.forum_id = ' . $categoryId : '') . ') AND
+			 fe_users.deleted = 0 AND
+			 fe_users.disable = 0 AND
+			 fe_users.email != "" AND
+			 tx_mmforum_forummail.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('tx_mmforum_forummail')
 		);
 
 		while (list($toUserId, $toEmail, $toUsername) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
