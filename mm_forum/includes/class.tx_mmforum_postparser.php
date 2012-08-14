@@ -201,12 +201,17 @@ class tx_mmforum_postparser {
 		}
 		$mailToUrl = 'mailto:' . $mailAddress;
 		if ($GLOBALS['TSFE']->spamProtectEmailAddresses) {
-			$email_substr = $parent->config['email_subst'] = $GLOBALS['TSFE']->tmpl->setup['config.']['spamProtectEmailAddresses_atSubst'];
-			$mailToUrl = "javascript:linkTo_UnCryptMailto('" . $GLOBALS['TSFE']->encryptEmail($mailToUrl) . "');";
-			$mailToUrl = str_replace('<', '&lt;', $mailToUrl);
-			$linktxt = str_replace('@', $email_substr, $linktxt);
-			$lastDotLabel = $lastDotLabel ? $lastDotLabel : '[dot]';
-			$linktxt = preg_replace('/\.([^\.]+)$/', $lastDotLabel . '$1', $linktxt);
+		  $email_substr = $parent->config['email_subst'] = $GLOBALS['TSFE']->tmpl->setup['config.']['spamProtectEmailAddresses_atSubst'];
+            $lastDotLabel = $GLOBALS['TSFE']->tmpl->setup['config.']['spamProtectEmailAddresses_lastDotSubst'];
+            if($GLOBALS['TSFE']->tmpl->setup['config.']['spamProtectEmailAddresses'] != 'ascii') {
+                $mailToUrl = "javascript:linkTo_UnCryptMailto('" . $GLOBALS['TSFE']->encryptEmail($mailToUrl) . "');";
+            } else {
+                $mailToUrl = $GLOBALS['TSFE']->encryptEmail($mailToUrl);
+            }
+            $mailToUrl = str_replace('<', '&lt;', $mailToUrl);
+            $linktxt = str_replace('@', $email_substr, $linktxt);
+            $lastDotLabel = $lastDotLabel ? $lastDotLabel : '[dot]';
+            $linktxt = preg_replace('/\.([^\.]+)$/', $lastDotLabel . '$1', $linktxt);
 		}
 		return array($mailToUrl, $linktxt);
 	}
