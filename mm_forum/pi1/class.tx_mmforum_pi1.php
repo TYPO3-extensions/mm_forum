@@ -3908,6 +3908,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @deprecated since 0.1.8, please use the direct call to the static function
 	 */
 	function send_newpost_mail($content, $conf, $topicId) {
+		t3lib_div::logDeprecatedFunction();
+
 		tx_mmforum_havealook::notifyTopicSubscribers($topicId, $this);
 	}
 
@@ -3923,6 +3925,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @deprecated since 0.1.8, please use the direct call to the static function
 	 */
 	function send_newpost_mail_forum($content, $conf, $topicId, $forumId) {
+		t3lib_div::logDeprecatedFunction();
+
 		tx_mmforum_havealook::notifyForumSubscribers($topicId, $forumId, $this);
 	}
 
@@ -4201,8 +4205,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * Lists the last 10 posts and their topics created by a specific user.
 	 * @param  int    $uid The UID of the user whose posts are to be listed
 	 * @return string      A HTML list of the last 10 posts created by the user
+	 * @deprecated - not in use, will be removed in version 1.11. please use post_history instead
 	 */
 	function view_last_10_posts($uid) {
+		t3lib_div::logDeprecatedFunction();
+
 		$uid = intval($uid);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"poster_id='$uid' AND deleted='0' AND hidden='0'".$this->getStoragePIDQuery(),'','crdate DESC','10');
 
@@ -4232,6 +4239,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @deprecated Currently not used
 	 */
 	function send_mail($content, $conf) {
+		t3lib_div::logDeprecatedFunction();
+
 		$benutzer = $GLOBALS['TSFE']->fe_user->user['username'];
 		$mailtimeout    = 30;                   // Mail time Out
 
@@ -4787,6 +4796,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 *             delegates the task to class postparser.
 	 */
 	function bb2text($text, $conf) {
+		t3lib_div::logDeprecatedFunction();
+
 		return tx_mmforum_postparser::main($this, $conf, $text, 'textparser');
 	}
 
@@ -5189,6 +5200,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return int              The user UID of $username.
 	 */
 	function get_userid($username) {
+		t3lib_div::logDeprecatedFunction();
+
 		return tx_mmforum_tools::get_userid($username);
 	}
 
@@ -6067,6 +6080,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 *             method in the tx_mmforum_menu class.
 	 */
 	function createRootline($content, $conf) {
+		t3lib_div::logDeprecatedFunction();
+
 		include_once(t3lib_extMgm::extPath('mm_forum') . '/includes/class.tx_mmforum_menus.php');
 
 		$menuObj = t3lib_div::makeInstance('tx_mmforum_menus');
