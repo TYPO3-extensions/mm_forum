@@ -2863,6 +2863,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 
 		$marker['###HAVEALOOK###'] = ($this->piVars['havealook'] ? 'checked="checked"' : '');
+		// TODO: include this via TYPO3 API
 		$marker['###STARTJAVASCRIPT###'] = $this->includeEditorJavaScript();
 
 		$content .= $this->cObj->substituteMarkerArray($template, $marker);

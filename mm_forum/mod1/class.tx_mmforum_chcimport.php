@@ -114,7 +114,7 @@ class tx_mmforum_chcimport {
         $chc_enabled = t3lib_extMgm::isLoaded('chc_forum')?'checked="checked"':'disabled="disabled"';
         $cwt_enabled = t3lib_extMgm::isLoaded('cwt_community')?'checked="checked"':'disabled="disabled"';
 
-        $content .= '<fieldset><legend>'.$LANG->getLL('chc.step3').'</legend>';
+        $content = '<fieldset><legend>'.$LANG->getLL('chc.step3').'</legend>';
         $content .= '<table cellspacing="0" cellpadding="2" border="0">
     <tr>
         <td style="width:32px"><input type="checkbox" name="tx_mmforum_chc[import][]" value="chc" '.$chc_enabled.' /></td>
@@ -673,7 +673,7 @@ class tx_mmforum_chcimport {
 		    mysql_query($sql,$this->loc_db);
 	    }
 
-	    $content.= '<strong>'.$GLOBALS['LANG']->getLL('chc.success').'</strong><br/>';
+	    $content= '<strong>'.$GLOBALS['LANG']->getLL('chc.success').'</strong><br/>';
 	    $content.= '<br />'.$GLOBALS['LANG']->getLL('chc.categories').': '.$anz_cat;
 	    $content.= '<br />'.$GLOBALS['LANG']->getLL('chc.boards').': '.$anz_forum;
 	    $content.= '<br />'.$GLOBALS['LANG']->getLL('chc.topics').': '.$anz_threads;
@@ -746,7 +746,7 @@ class tx_mmforum_chcimport {
 		    $anz_pm++;
 	    }
 
-	    $content.= '<strong>'.$GLOBALS['LANG']->getLL('cwt.success').'</strong><br/>';
+	    $content= '<strong>'.$GLOBALS['LANG']->getLL('cwt.success').'</strong><br/>';
 	    $content.= '<br />'.$GLOBALS['LANG']->getLL('cwt.pms').': '.$anz_pm.'<br />';
 
         return $content;
