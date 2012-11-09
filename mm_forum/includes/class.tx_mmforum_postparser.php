@@ -113,7 +113,7 @@ class tx_mmforum_postparser {
 	 */
 	function parse_text($text, $parent, $conf) {
 		$content = $text;
-		#if($conf['config.']['plugin.']['tx_mmforum_pi1.']['postparser.']['links'] ==1)				$content = postparser::links($text, $myConf);
+		#if ($conf['config.']['plugin.']['tx_mmforum_pi1.']['postparser.']['links'] ==1)				$content = postparser::links($text, $myConf);
 		if ($conf['postparser.']['bb_code_parser'] == 1)
 			$content = $this->bbcode2html($content, $parent, $conf);
 		if ($conf['postparser.']['smilie_generator'] == 1)
@@ -203,7 +203,7 @@ class tx_mmforum_postparser {
 		if ($GLOBALS['TSFE']->spamProtectEmailAddresses) {
 			$email_substr = $parent->config['email_subst'] = $GLOBALS['TSFE']->tmpl->setup['config.']['spamProtectEmailAddresses_atSubst'];
 			$lastDotLabel = $GLOBALS['TSFE']->tmpl->setup['config.']['spamProtectEmailAddresses_lastDotSubst'];
-			if($GLOBALS['TSFE']->tmpl->setup['config.']['spamProtectEmailAddresses'] != 'ascii') {
+			if ($GLOBALS['TSFE']->tmpl->setup['config.']['spamProtectEmailAddresses'] != 'ascii') {
 				$mailToUrl = "javascript:linkTo_UnCryptMailto('" . $GLOBALS['TSFE']->encryptEmail($mailToUrl) . "');";
 			} else {
 				$mailToUrl = $GLOBALS['TSFE']->encryptEmail($mailToUrl);
@@ -256,9 +256,9 @@ class tx_mmforum_postparser {
 		$text = $this->linkgenerator($text, $conf, 'cryptmail');
 		$text = $this->typolinks($text, $parent);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-						'pattern,replacement',
-						'tx_mmforum_postparser',
-						'deleted=0'
+			'pattern,replacement',
+			'tx_mmforum_postparser',
+			'deleted=0'
 		);
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 			while ($data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
@@ -353,22 +353,22 @@ class tx_mmforum_postparser {
 	 */
 	function generate_smilies($text, $parent, $conf) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-						'code,smile_url',
-						'tx_mmforum_smilies',
-						'deleted=0',
-						'',
-						'LENGTH(code) DESC'
+			'code,smile_url',
+			'tx_mmforum_smilies',
+			'deleted=0',
+			'',
+			'LENGTH(code) DESC'
 		);
 		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 
 			$uploadPath = 'uploads/tx_mmforum/' . $row['smile_url'];
 
-			If (!file_exists($uploadPath)) {
+			if (!file_exists($uploadPath)) {
 				if (substr($conf['postparser.']['bb_code_path_smilie'], 0, 4) == 'EXT:')
 					$smiliepath = tx_mmforum_tools::generateSiteRelExtPath($conf['postparser.']['bb_code_path_smilie'] . $row['smile_url']);
 				else
 					$smiliepath = $conf['postparser.']['bb_code_path_smilie'] . $row['smile_url'];
-			} Else
+			} else
 				$smiliepath = $uploadPath;
 
 			$smilieimage = '<img src="' . $smiliepath . '" alt="' . $row['smile_url'] . '" />';
@@ -407,9 +407,9 @@ class tx_mmforum_postparser {
 		($conf['postparser.']['tsrefUrl']) ? define('GESHI_TS_REF', $conf['postparser.']['tsrefUrl']) : define('GESHI_TS_REF', 'www.typo3.net');
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-						'lang_title,lang_pattern,lang_code',
-						'tx_mmforum_syntaxhl',
-						'deleted=0'
+			'lang_title,lang_pattern,lang_code',
+			'tx_mmforum_syntaxhl',
+			'deleted=0'
 		);
 		while ($data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			preg_match_all($data['lang_pattern'], $content, $source_arr);
@@ -572,7 +572,6 @@ class tx_mmforum_postparser {
 				unset($lconf['select'], $lconf['sorting']);
 				return $SERVER_NAME . '/' . $localcObj->typoLink_URL($lconf);
 			}
-
 			return $id;
 		} else {
 			return $SERVER_NAME . '/' . $localcObj->typoLink_URL(array('parameter' => str_replace('record:page:', '', $id)));

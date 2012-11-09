@@ -67,10 +67,10 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 	function list_alerts($conf)
 	{
 		$param = t3lib_div::_GP('tx_mmforum_pi1');
-		if($param['update'] == 'update_status') {
+		if ($param['update'] == 'update_status') {
 			foreach($param as $key => $value) {
 				$key = str_replace('status_','',$key);
-				if(is_numeric($key)){
+				if (is_numeric($key)){
 					$value = mysql_escape_string($value);
 					$updateArray = array('status'=>$value,'tstamp'=>$GLOBALS['EXEC_TIME']);
 					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_post_alert',"uid='$key' AND status <> '$value'",$updateArray);
@@ -148,23 +148,23 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 		}
 
 		// Determine filtering mode
-		if($param['view_open'] == 1) {
+		if ($param['view_open'] == 1) {
 			$marker['###VIEW_OPEN###']		= 'checked';
 			#$where .= 'OR status = -1 ';
 			$allowedStatus[] = -1;
 		}
-		if($param['view_work'] == 1) {
+		if ($param['view_work'] == 1) {
 			$marker['###VIEW_WORK###']		= 'checked';
 			#$where .= 'OR status = 0 ';= -1 ';
 			$allowedStatus[] = 0;
 		}
-		if($param['view_close'] == 1) {
+		if ($param['view_close'] == 1) {
 			$marker['###VIEW_CLOSE###']		= 'checked';
 			#$where .= 'OR status = 1 ';= -1 ';
 			$allowedStatus[] = 1;
 		}
 
-		if($param['view_close'] == '' AND $param['view_work'] == '' AND $param['view_open'] == '' AND empty($param) ) {
+		if ($param['view_close'] == '' AND $param['view_work'] == '' AND $param['view_open'] == '' AND empty($param) ) {
 			$marker['###VIEW_OPEN###']		= 'checked';
 			$marker['###VIEW_WORK###']		= 'checked';
 			$marker['###VIEW_CLOSE###']		= '';
@@ -176,9 +176,9 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 
 		$boards = tx_mmforum_postalert::getModeratorBoards();
 
-		if($boards === false)
+		if ($boards === false)
 			$accessWhere = ' AND 0=1 ';
-		elseif($boards === true)
+		elseif ($boards === true)
 			$accessWhere = ' AND 1=1 ';
 		else {
 			$accessWhere = ' AND t.forum_id IN ('.implode(',',$boards).') ';
@@ -272,8 +272,8 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			$marker['###ERRORMESSAGE###'] = '';
 
 			// Create alert record
-			if($param['submit'] == $this->pi_getLL('postalert.alert')) {
-				if(empty($param['alert_text'])) {
+			if ($param['submit'] == $this->pi_getLL('postalert.alert')) {
+				if (empty($param['alert_text'])) {
 					$marker['###ERRORMESSAGE###'] = '<div class="tx-mmforum-pi1-postalert-error">'.$this->pi_getLL('postalert.errorNoReason').'</div>';
 				} else {
 					$insertArray = array(

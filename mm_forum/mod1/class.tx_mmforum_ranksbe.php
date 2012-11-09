@@ -90,15 +90,15 @@ class tx_mmforum_ranksBE {
 
         while($rank = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 
-            if($rank['color'])
+            if ($rank['color'])
                 $title = '<span style="color: '.$rank['color'].'">'.htmlentities($rank['title']).'</span>';
             else $title = htmlentities($rank['title']);
 
-            if($rank['icon'])
+            if ($rank['icon'])
                 $icon = '<img src="'.$GLOBALS['BACK_PATH'].'../uploads/tx_mmforum/'.$rank['icon'].'" />';
             else $icon = $this->getLL('noicon');
 
-            if($rank['special'])
+            if ($rank['special'])
                 $posts = $this->getLL('special');
             else
                 $posts = $rank['minPosts'];

@@ -23,7 +23,7 @@ class tx_mmforum_data {
 			'uid=' . $this->getUid() . ' AND deleted=0 ' . $andWhere
 		);
 
-		if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
 			$this->data = null;
 			$this->origData = array();
 		}
@@ -39,7 +39,7 @@ class tx_mmforum_data {
 	}
 
 	function initFromArray($arr) {
-		if(is_array($arr)) {
+		if (is_array($arr)) {
 			$this->data = $this->origData = $arr;
 			$this->setUid($arr['uid']);
 			$this->loaded = true;
@@ -125,7 +125,7 @@ class tx_mmforum_data {
 		 */
 
 	function gD($key) {
-		if(!$this->loaded) $this->loadFromDB();
+		if (!$this->loaded) $this->loadFromDB();
 		return $this->data[$key];
 	}
 

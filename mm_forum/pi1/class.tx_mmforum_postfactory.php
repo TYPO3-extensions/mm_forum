@@ -367,7 +367,7 @@ class tx_mmforum_postfactory {
 		// Send notification email to users who have subscribed this topic
 		if ($this->parent != null) {
 			// Subscribe to the topic
-			If($subscribe) tx_mmforum_havealook::addSubscription($this->parent, $topicId, $author);
+			if ($subscribe) tx_mmforum_havealook::addSubscription($this->parent, $topicId, $author);
 			tx_mmforum_havealook::notifyTopicSubscribers($topicId, $this->parent);
 		}
 
@@ -434,7 +434,7 @@ class tx_mmforum_postfactory {
 		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_favorites', $uA, 'topic_id='.intval($postId));
 		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_havealook', $uA, 'topic_id='.intval($postId));
 		$TYPO3_DB->exec_DELETEquery('tx_mmforum_wordmatch', 'topic_id='.intval($topicId).'');
-		if(t3lib_extMgm::extLoaded('ratings'))
+		if (t3lib_extMgm::extLoaded('ratings'))
 			$TYPO3_DB->exec_DELETEquery('tx_ratings_data', $uA, 'reference="tx_mmforum_topics_'.intval($postId).'"');
 
 		/*
@@ -479,10 +479,10 @@ class tx_mmforum_postfactory {
 		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_attachments', $uA, 'post_id='.intval($postId));
 		$TYPO3_DB->exec_DELETEquery('tx_mmforum_wordmatch', 'post_id='.intval($postId).'');
 
-		if(t3lib_extMgm::extLoaded('ratings'))
+		if (t3lib_extMgm::extLoaded('ratings'))
 			$TYPO3_DB->exec_DELETEquery('tx_ratings_data', $uA, 'reference="tx_mmforum_posts_'.intval($postId).'"');
 
-		if(!$noUpdate) {
+		if (!$noUpdate) {
 			$this->updateTopicPostCount($arr['topic_id']);
 			$this->updateForumPostCount($arr['forum_id']);
 			$this->updateUserPostCount($arr['poster_id']);
@@ -699,7 +699,7 @@ class tx_mmforum_postfactory {
 			'tx_mmforum_topics',
 			'uid='.$topic_uid.' AND deleted=0'
 		);
-		if($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
 			list($forum_uid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 			return $forum_uid;
 		} else {
@@ -717,8 +717,8 @@ class tx_mmforum_postfactory {
 	 * @version 2007-04-02
 	 */
 	function getFirstPid() {
-		if($this->conf['storagePID'] == -1) return 0;
-		if(!$this->conf['storagePID']) return 0;
+		if ($this->conf['storagePID'] == -1) return 0;
+		if (!$this->conf['storagePID']) return 0;
 		return intval($this->conf['storagePID']);
 	}
 
@@ -736,10 +736,10 @@ class tx_mmforum_postfactory {
 	 * @version 2007-04-03
 	 */
 	function getPidQuery($tables="") {
-		if($this->conf['storagePID']==-1) return "";
-		if($this->conf['storagePID']=="") return "";
+		if ($this->conf['storagePID']==-1) return "";
+		if ($this->conf['storagePID']=="") return "";
 		else {
-			if($tables == "")
+			if ($tables == "")
 				return " AND pid='".$this->conf['storagePID']."'";
 
 			$tables = t3lib_div::trimExplode(',',$tables);

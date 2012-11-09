@@ -82,7 +82,7 @@ class tx_mmforum_chcimport {
         $this->ext_db = $this->dbObj->link;
         $this->loc_db = $GLOBALS['TYPO3_DB']->link;
 
-        if(is_array($this->importVars['import'])) {
+        if (is_array($this->importVars['import'])) {
 
             foreach($this->importVars['import'] as $import) {
 
@@ -91,8 +91,8 @@ class tx_mmforum_chcimport {
                 $conf        = $this->p->confArr;
                 $this->pid   = $conf['forumPID'];
 
-                if($import == 'chc')        $content .= $this->import_chc();
-                if($import == 'cwt')        $content .= $this->import_cwt();
+                if ($import == 'chc')        $content .= $this->import_chc();
+                if ($import == 'cwt')        $content .= $this->import_cwt();
 
                 $content .= '</fieldset>';
             }
@@ -379,7 +379,7 @@ class tx_mmforum_chcimport {
      */
     function chc_importPosts() {
 
-    	$res		= $this->dbObj->exec_SELECTquery(
+    	$res = $this->dbObj->exec_SELECTquery(
     		'*',
     		'tx_chcforum_post',
     		'deleted=0'
@@ -417,9 +417,7 @@ class tx_mmforum_chcimport {
     		);
 
     		$this->postMapping[$post['uid']] = $postUid;
-
     	}
-
     }
 
     /**
@@ -450,7 +448,7 @@ class tx_mmforum_chcimport {
     			'tx_chcforum_forumgroup',
     			'uid='.$groups.' AND deleted=0'
     		);
-    		if(!$res || !$this->dbObj->sql_num_rows($res)) continue;
+    		if (!$res || !$this->dbObj->sql_num_rows($res)) continue;
 
     		list($feGroups) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
@@ -701,7 +699,7 @@ class tx_mmforum_chcimport {
 	    $query=mysql_query($sql,$this->ext_db);
 	    while($res=mysql_fetch_array($query)) {
 
-		    if($res['status']>0)
+		    if ($res['status']>0)
 			    $read = 'read_flg = 1,';
 		    else
 			    $read = '';

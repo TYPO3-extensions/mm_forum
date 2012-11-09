@@ -144,7 +144,7 @@ class tx_mmforum_userSearch {
 	 * @return string compiled json array
 	 */
 	public function render(array $data) {
-		if(function_exists('json_encode')) {
+		if (function_exists('json_encode')) {
 			$content = json_encode($data);
 		} else {
 			$content = '{"' . implode('","', $data) . '"}';

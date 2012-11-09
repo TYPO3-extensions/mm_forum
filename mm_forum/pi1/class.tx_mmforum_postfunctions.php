@@ -85,7 +85,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		$orderingMode = $this->conf['list_posts.']['postOrdering'] ? strtoupper($this->conf['list_posts.']['postOrdering']) : 'ASC';
 		$order = strtoupper($order);
 		if (in_array($order, array('ASC','DESC'))) $orderingMode = $order;
-		if(!in_array($orderingMode, array('ASC','DESC'))) $orderingMode = 'ASC';
+		if (!in_array($orderingMode, array('ASC','DESC'))) $orderingMode = 'ASC';
 
 		// load the topic data again, to make sure we get the latest additions from the admin changes
 		$topicData = $this->getTopicData($topicId);
@@ -118,9 +118,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			tx_mmforum_postfunctions::redirectToReply($topicId, $this->piVars['pid']);
 		}
 
-
 		// generate the marker for the admin panel
-		If(!$conf['slimPostList'])
+		if (!$conf['slimPostList'])
 			$adminPanel = tx_mmforum_postfunctions::getAdminPanel($topicData);
 		Else $adminPanel = '';
 
@@ -132,7 +131,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			'###LABEL_MESSAGE###' => $this->pi_getLL('post.message'),
 			'###ADMIN_PANEL###'   => $adminPanel,
 		);
-		If($conf['slimPostList']) {
+		if ($conf['slimPostList']) {
 			$template = $this->cObj->substituteSubpart($template, '###HEADER_SUBPART###', '');
 			$template = $this->cObj->substituteSubpart($template, '###ROOTLINE_CONTAINER###', '');
 		}	
@@ -181,7 +180,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		// Determine page number
 		if ($this->piVars['page']) {
 			$pageNum = $this->piVars['page'];
-			if($this->conf['doNotUsePageBrowseExtension']) $pageNum ++;
+			if ($this->conf['doNotUsePageBrowseExtension']) $pageNum ++;
 		} elseif ($this->piVars['search_pid']) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid',
@@ -226,7 +225,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			/* Display the topic rating if the 'ratings' extension is installed
 			 * and topic rating is enabled. */
 		$isTopicRating = $this->isTopicRating();
-		if($isTopicRating)
+		if ($isTopicRating)
 			$marker['###TOPIC_RATING###'] = $isTopicRating ? $this->getRatingDisplay('tx_mmforum_topic', $topicData['uid']) : '';
 		else $template = $this->cObj->substituteSubpart($template, '###SUBP_TOPIC_RATING###', '');
 
@@ -370,8 +369,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
     		'title'		=> $topic_data['solved']?$this->pi_getLL('topic-solved-on'):$this->pi_getLL('topic-solved-off'),
     	);
 
-    	if($topic_data['topic_poster'] == $GLOBALS['TSFE']->fe_user->user['uid'] || $this->getIsModOrAdmin($topic_data['forum_id'])) {
-    		if($topic_data['solved']) {
+    	if ($topic_data['topic_poster'] == $GLOBALS['TSFE']->fe_user->user['uid'] || $this->getIsModOrAdmin($topic_data['forum_id'])) {
+    		if ($topic_data['solved']) {
     			$linkParams[$this->prefixId] = array(
     				'unsolve'			=> $topic_id
     			);
@@ -412,7 +411,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
             	'action'		=> 'set_favorite',
             	'tid'			=> $this->piVars['tid']
             );
-            if($this->useRealUrl()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+            if ($this->useRealUrl()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
 		$image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
             $link = $this->pi_linkTP($this->pi_getLL('on'),$favlinkParams).' / <strong>'.$this->pi_getLL('off').'</strong>';
         } else {
@@ -423,7 +422,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
             	'action'		=> 'del_favorite',
             	'tid'			=> $this->piVars['tid']
             );
-            if($this->useRealUrl()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+            if ($this->useRealUrl()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
 $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
             $link = '<strong>'.$this->pi_getLL('on').'</strong> / '.$this->pi_linkTP($this->pi_getLL('off'),$favlinkParams);
         }
@@ -451,7 +450,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
                 'action'        => 'set_havealook',
                 'tid'           => $this->piVars['tid']
             );
-            if($this->useRealUrl()) $linkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+            if ($this->useRealUrl()) $linkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
             $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$linkParams);
             $link = $this->pi_linkTP($this->pi_getLL('on'),$linkParams).' / <strong>'.$this->pi_getLL('off').'</strong>';
         } else {
@@ -462,7 +461,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
                 'action'        => 'del_havealook',
                 'tid'           => $this->piVars['tid']
             );
-            if($this->useRealUrl()) $linkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+            if ($this->useRealUrl()) $linkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
             $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$linkParams);
             $link = '<strong>'.$this->pi_getLL('on').'</strong> / '.$this->pi_linkTP($this->pi_getLL('off'),$linkParams);
         }
@@ -598,19 +597,19 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 
     	$poster = $row['poster_id'];
         $user_res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users',"uid='$poster'");
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($user_res))
+        if ($GLOBALS['TYPO3_DB']->sql_num_rows($user_res))
             $user = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($user_res);
         else $user = false;
 
         $menu = $profile = '';
-        if($this->getMayWrite_topic($this->piVars['tid'])) {
+        if ($this->getMayWrite_topic($this->piVars['tid'])) {
             if ((($read_flag == 0) AND ($closed_flag == 0)) OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
                 $quoteParams[$this->prefixId] = array(
                     'action'        => 'new_post',
                     'tid'           => $this->piVars['tid'],
                     'quote'         => $row['uid']
                 );
-	            if($this->useRealUrl()) {
+	            if ($this->useRealUrl()) {
 	            	$quoteParams[$this->prefixId]['fid'] = $row['forum_id'];
                     $quoteParams[$this->prefixId]['pid'] = $this->pi_getLL('realurl.quote');
 	            }
@@ -618,7 +617,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
             }
         }
 
-        if($user && $user['deleted']=='0') {
+        if ($user && $user['deleted']=='0') {
 
 				/* Generate profile button */
 			$profile .= $this->createButton('profile','profileView:'.$user['uid'],0,true);
@@ -628,12 +627,12 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
         }
 
         if ($GLOBALS['TSFE']->fe_user->user['username'] && $user['uid']!=$GLOBALS['TSFE']->fe_user->user['uid'] && !(isset($this->conf['pm_enabled']) && intval($this->conf['pm_enabled']) === 0)){
-        	if(intval($this->conf['pm_id']) > 0 && $user && $user['deleted']=='0' && !((isset($conf['pm_enabled']) && intval($conf['pm_enabled']) === 0))) {
+        	if (intval($this->conf['pm_id']) > 0 && $user && $user['deleted']=='0' && !((isset($conf['pm_enabled']) && intval($conf['pm_enabled']) === 0))) {
                 $pmParams = array(
                     'tx_mmforum_pi3[action]'        => 'message_write',
                     'tx_mmforum_pi3[userid]'        => $user['uid']
                 );
-                if($this->useRealUrl()) {
+                if ($this->useRealUrl()) {
                     $pmParams['tx_mmforum_pi3']['folder'] = 'inbox';
                     $pmParams['tx_mmforum_pi3']['messid'] = $this->pi_getLL('realurl.pmnew');
                 }
@@ -644,7 +643,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
                 'action'        => 'post_alert',
                 'pid'     		=> $row['uid'],
             );
-            if($this->useRealUrl()) {
+            if ($this->useRealUrl()) {
                 $alertParams[$this->prefixId]['tid'] = $this->piVars['tid'];
                 $alertParams[$this->prefixId]['fid'] = $row['forum_id'];
             }
@@ -664,7 +663,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
                 'action'        => 'post_edit',
                 'pid'           => $row['uid']
             );
-            if($this->useRealUrl()) {
+            if ($this->useRealUrl()) {
             	$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
             	$linkParams[$this->prefixId]['tid'] = $row['topic_id'];
             }
@@ -674,7 +673,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
                 'action'        => 'post_del',
                 'pid'           => $row['uid']
             );
-            if($this->useRealUrl()) {
+            if ($this->useRealUrl()) {
             	$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
             	$linkParams[$this->prefixId]['tid'] = $row['topic_id'];
             }
@@ -889,7 +888,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
                 $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts_text','post_id = "'.intval($this->piVars['pid']).'"',$updArray);
 
             // Delete file attachment
-                if($row['attachment'] > 0)
+                if ($row['attachment'] > 0)
                     $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments','post_id='.$row['uid'],$updArray);
 
             // Decrease user's post coutner
@@ -1232,25 +1231,25 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 			if (!$this->conf['list_posts.']['userbuttons.'][$key.'.'] || !is_string($obj))
 				continue;
 
-			if($obj === 'MMFORUM_BUTTON') {
+			if ($obj === 'MMFORUM_BUTTON') {
 				$buttonConf = $this->conf['list_posts.']['userbuttons.'][$key.'.'];
 
-				if($buttonConf['if.'] && !$this->cObj->checkIf($buttonConf['if.']))
+				if ($buttonConf['if.'] && !$this->cObj->checkif ($buttonConf['if.']))
 					continue;
 
-				if($buttonConf['label.']) {
+				if ($buttonConf['label.']) {
 					$label = $this->cObj->cObjGetSingle('TEXT', $buttonConf['label.']);
 				}
 
-				if($buttonConf['link.']) {
+				if ($buttonConf['link.']) {
 					$link = $this->cObj->cObjGetSingle('TEXT', $buttonConf['link.']);
 				}
 
-				if($buttonConf['special']) {
+				if ($buttonConf['special']) {
 					switch($buttonConf['special']) {
 						case 'www':
 							$res = @parse_url($link);
-							if(count($res)==0 || strlen(trim($link))==0) continue 2;
+							if (count($res)==0 || strlen(trim($link))==0) continue 2;
 						break;
 					}
 				}

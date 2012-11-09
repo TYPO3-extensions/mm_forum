@@ -67,7 +67,7 @@ class tx_mmforum_updater {
 
 		$newestRevision		= $this->getNewestRevision();
 
-		if($newestRevision === false) return $this->getLL('noURLfopen');
+		if ($newestRevision === false) return $this->getLL('noURLfopen');
 
 		$content  = '<table style="width:100%;" cellspacing="0" cellpadding="0">' .
 				'<tr>' .
@@ -77,7 +77,7 @@ class tx_mmforum_updater {
 		$content .= sprintf($this->getLL('currentRevision'),$this->thisRevision).'<br />';
 		$content .= sprintf($this->getLL('newestRevision'),$newestRevision).'<br /><br />';
 
-		if(t3lib_div::_GP('update_result')) {
+		if (t3lib_div::_GP('update_result')) {
 			unlink('../../tx_mmforum_update.php');
 			unlink('../../mm_forum_update.tar.gz');
 
@@ -85,16 +85,16 @@ class tx_mmforum_updater {
 	        $TCE->admin = TRUE;
 	        $TCE->clear_cacheCmd('all');
 
-			if(t3lib_div::_GP('update_result') == 'error')
+			if (t3lib_div::_GP('update_result') == 'error')
 				return '<strong>'.$this->getLL('error').'</strong>';
-			if(t3lib_div::_GP('update_result') == 'success')
+			if (t3lib_div::_GP('update_result') == 'success')
 				return '<strong>'.$this->getLL('success').'</strong>';
 		}
 
-		if($this->thisRevision >= $newestRevision)
+		if ($this->thisRevision >= $newestRevision)
 			$content .= '<strong>'.$this->getLL('noUpdate').'</strong>';
 		else {
-			if(t3lib_div::_GP('confirmUpdate')=='1') {
+			if (t3lib_div::_GP('confirmUpdate')=='1') {
 				$content .= $this->performUpdate();
 			} else {
 				$content .= '<strong>'.$this->getLL('updatePossible').'</strong>';
@@ -131,30 +131,30 @@ class tx_mmforum_updater {
 	function performUpdate() {
 		$c		= $this->getLL('progress.loadTarball');
 
-		if(file_exists('../../tx_mmforum_update.php'))
+		if (file_exists('../../tx_mmforum_update.php'))
 			unlink('../../tx_mmforum_update.php');
 
 		// Load Tarball
 			$tarball = @file_get_contents($this->url_download, false);
-			if(!$tarball) return $c.$this->getLL('progress.failure');
+			if (!$tarball) return $c.$this->getLL('progress.failure');
 			else $c .= $this->getLL('progress.success').'<br />';
 
 		// Validate Tarball
-			if(strlen($tarball) == 0 || stristr($tarball, 'Unable to open file mm_forum.tar.gz'))
+			if (strlen($tarball) == 0 || stristr($tarball, 'Unable to open file mm_forum.tar.gz'))
 				return $c.$this->getLL('progress.failure');
 
 		$c		.= $this->getLL('progress.storeToHD');
 
 		// Store Tarball to disc
 			$tarballFile = fopen('../../mm_forum_update.tar.gz','w');
-			if(fwrite($tarballFile, $tarball)===false)
+			if (fwrite($tarballFile, $tarball)===false)
 				return $c.$this->getLL('progress.failure');
 			else $c .= $this->getLL('progress.success').'<br />';
 
 		$c		.= $this->getLL('progress.moveInstaller');
 
 		// Move install script into ext/ directory
-			if(system('cp tx_mmforum_update.php ../../tx_mmforum_update.php')===false)
+			if (system('cp tx_mmforum_update.php ../../tx_mmforum_update.php')===false)
 				return $c.$this->getLL('progress.failure');
 			else $c .= $this->getLL('progress.success');
 
@@ -199,7 +199,7 @@ class tx_mmforum_updater {
 	 */
 	function getNewestRevision() {
 		$repPage = @file_get_contents($this->url_rep,false);
-		if(!$repPage) return false;
+		if (!$repPage) return false;
 		else {
 			preg_match('/Revision ([0-9]+)/',$repPage,$matches);
 			return $matches[1];

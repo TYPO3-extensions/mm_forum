@@ -78,7 +78,7 @@ class tx_mmforum_polls {
 	 * @version 2007-05-21
 	 */
 	function load($uid) {
-		if(!is_array($uid)) {
+		if (!is_array($uid)) {
 			$uid = intval($uid);
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'*',
@@ -103,7 +103,7 @@ class tx_mmforum_polls {
 	 * @version 2007-05-22
 	 */
 	function display($poll_id) {
-		if($this->conf['polls.']['enable']) {
+		if ($this->conf['polls.']['enable']) {
 			$poll = t3lib_div::makeInstance('tx_mmforum_polls');
 			$poll->load($poll_id);
 			$poll->conf = $this->conf;
@@ -139,14 +139,14 @@ class tx_mmforum_polls {
 
 		$answers    = array_merge(array_values($edit),array_values($new));
 
-		if($data['expires']['act']) {
+		if ($data['expires']['act']) {
 			$expDate = mktime($data['expires']['hour'],$data['expires']['minute'],0,$data['expires']['month'],$data['expires']['day'],$data['expires']['year']);
 		} else $expDate = 0;
 
 		$i = 0;
 		$aContent = '';
 		foreach($answers as $answer) {
-			if($pObj->conf['polls.']['pollBar_colorMap.'][$i]) {
+			if ($pObj->conf['polls.']['pollBar_colorMap.'][$i]) {
 				$color = $pObj->conf['polls.']['pollBar_colorMap.'][$i];
 			}
 			else $color = $pObj->conf['polls.']['pollBar_colorMap.']['default'];
@@ -191,12 +191,12 @@ class tx_mmforum_polls {
 		$poll_id = $this->data['uid'];
 		$user_id = $GLOBALS['TSFE']->fe_user->user['uid'];
 
-		if(!$this->getMayVote()) return;
+		if (!$this->getMayVote()) return;
 
 		$answer_id  = intval($answer_id);
 		$poll_id	= intval($poll_id);
 
-		if(!$answer_id) return;
+		if (!$answer_id) return;
 
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls', 'uid='.$poll_id.' AND deleted=0', array('votes' => 'votes + 1'));
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_answers', 'uid='.$answer_id.' AND deleted=0', array('votes' => 'votes + 1'));
@@ -228,14 +228,14 @@ class tx_mmforum_polls {
 	 * @version 2007-05-22
 	 */
 	function objDisplay() {
-		if($this->piVars['poll']['vote'] == '1') $this->objVote();
+		if ($this->piVars['poll']['vote'] == '1') $this->objVote();
 
 		$template = $this->cObj->fileResource($this->conf['template.']['polls']);
 		$template = $this->cObj->getSubpart($template, '###POLL_DISPLAY###');
 
 		$vote = $this->getMayVote();
 
-		if(!$vote) {
+		if (!$vote) {
 			$template = $this->cObj->substituteSubpart($template, '###POLL_SUBMIT###', '');
 			$row_template = $this->cObj->getSubpart($template, '###POLL_ANSWER_2###');
 		} else $row_template = $this->cObj->getSubpart($template, '###POLL_ANSWER_1###');
@@ -250,7 +250,7 @@ class tx_mmforum_polls {
 		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$pAnswers = ($arr['votes']>0)?round($arr['votes'] / $this->data['votes'] * 100):0;
 
-			if($this->conf['polls.']['pollBar_colorMap.'][$i]) {
+			if ($this->conf['polls.']['pollBar_colorMap.'][$i]) {
 				$color = $this->conf['polls.']['pollBar_colorMap.'][$i];
 			}
 			else $color = $this->conf['polls.']['pollBar_colorMap.']['default'];
@@ -312,27 +312,27 @@ class tx_mmforum_polls {
 		$poll_id = intval($poll_id);
 		$mayEdit = $this->getMayEditPoll($poll_id, $pObj);
 
-		if(!$pObj->conf['polls.']['enable']) return $pObj->pi_getLL('poll.disabled');
-		if(!tx_mmforum_polls::getMayCreatePoll($pObj) || !$mayEdit) return $pObj->pi_getLL('poll.restricted');
+		if (!$pObj->conf['polls.']['enable']) return $pObj->pi_getLL('poll.disabled');
+		if (!tx_mmforum_polls::getMayCreatePoll($pObj) || !$mayEdit) return $pObj->pi_getLL('poll.restricted');
 
-		if(strlen(trim($data['question']))==0) return $pObj->pi_getLL('poll.noQuestion');
+		if (strlen(trim($data['question']))==0) return $pObj->pi_getLL('poll.noQuestion');
 
 		$defACount = $pObj->conf['polls.']['minAnswers'];
 		$answerCount = 0;
 
-		if(is_array($data['answer']['new'])) {
+		if (is_array($data['answer']['new'])) {
 			foreach($data['answer']['new'] as $answer) {
-				if(strlen(trim($answer))>0) $answerCount ++;
+				if (strlen(trim($answer))>0) $answerCount ++;
 			}
 		}
-		if(is_array($data['answer']['edit'])) {
+		if (is_array($data['answer']['edit'])) {
 			foreach($data['answer']['edit'] as $answer) {
-				if(strlen(trim($answer))>0) $answerCount ++;
+				if (strlen(trim($answer))>0) $answerCount ++;
 			}
 		}
-		if($answerCount < $defACount) return sprintf($pObj->pi_getLL('poll.noAnswers'),$defACount);
+		if ($answerCount < $defACount) return sprintf($pObj->pi_getLL('poll.noAnswers'),$defACount);
 
-		if($data['expires']['act']) {
+		if ($data['expires']['act']) {
 			$expDate = mktime($data['expires']['hour'],$data['expires']['minute'],0,$data['expires']['month'],$data['expires']['day'],$data['expires']['year']);
 		} else $expDate = 0;
 		$pollUpdateData = array(
@@ -344,10 +344,10 @@ class tx_mmforum_polls {
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls', 'uid='.$poll_id, $pollUpdateData);
 
 		// Edit answering possibilities
-		if(is_array($data['answer']['edit'])) {
+		if (is_array($data['answer']['edit'])) {
 			foreach($data['answer']['edit'] as $uid => $value) {
 				$answer = trim($value);
-				if(strlen($value) == 0) {
+				if (strlen($value) == 0) {
 					$data['answer']['delete'][] = $uid;
 					continue;
 				}
@@ -359,7 +359,7 @@ class tx_mmforum_polls {
 			}
 		}
 		// Add answers
-		if(is_array($data['answer']['new'])) {
+		if (is_array($data['answer']['new'])) {
 			foreach($data['answer']['new'] as $answer) {
 				$answerInsertData = array(
 					'pid'           => $pObj->getFirstPid(),
@@ -373,7 +373,7 @@ class tx_mmforum_polls {
 			}
 		}
 		// Remove answers
-		if(is_array($data['answer']['delete'])) {
+		if (is_array($data['answer']['delete'])) {
 			foreach($data['answer']['delete'] as $delUid) {
 				$delUid = intval($delUid);
 
@@ -404,18 +404,18 @@ class tx_mmforum_polls {
 
 		$defACount = $pObj->conf['polls.']['minAnswers'];
 
-		if(!$pObj->conf['polls.']['enable']) return $pObj->pi_getLL('poll.disabled');
-		if(!tx_mmforum_polls::getMayCreatePoll($pObj)) return $pObj->pi_getLL('poll.restricted');
+		if (!$pObj->conf['polls.']['enable']) return $pObj->pi_getLL('poll.disabled');
+		if (!tx_mmforum_polls::getMayCreatePoll($pObj)) return $pObj->pi_getLL('poll.restricted');
 
-		if(strlen(trim($data['question']))==0) return $pObj->pi_getLL('poll.noQuestion');
+		if (strlen(trim($data['question']))==0) return $pObj->pi_getLL('poll.noQuestion');
 
 		$answerCount = 0;
 		foreach($data['answer']['new'] as $answer) {
-			if(strlen(trim($answer))>0) $answerCount ++;
+			if (strlen(trim($answer))>0) $answerCount ++;
 		}
-		if($answerCount < $defACount) return sprintf($pObj->pi_getLL('poll.noAnswers'),$defACount);
+		if ($answerCount < $defACount) return sprintf($pObj->pi_getLL('poll.noAnswers'),$defACount);
 
-		if($data['expires']['act']) {
+		if ($data['expires']['act']) {
 			$expDate = mktime($data['expires']['hour'],$data['expires']['minute'],0,$data['expires']['month'],$data['expires']['day'],$data['expires']['year']);
 		} else $expDate = 0;
 		$pollInsertData = array(
@@ -432,7 +432,7 @@ class tx_mmforum_polls {
 
 		foreach($data['answer']['new'] as $answer) {
 			$answer = trim($answer);
-			if(strlen($answer) == 0) continue;
+			if (strlen($answer) == 0) continue;
 			$answerInsertData = array(
 				'pid'           => $pObj->getFirstPid(),
 				'tstamp'        => $GLOBALS['EXEC_TIME'],
@@ -459,24 +459,24 @@ class tx_mmforum_polls {
 	 * @return void
 	 */
 	function deletePoll($uid,$topic=0) {
-		if($topic == 0) {
+		if ($topic == 0) {
 			$poll_id   = intval($uid);
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid',
 				'tx_mmforum_topics',
 				'poll_id='.$poll_id
 			);
-			if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) $topic_id=0;
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) $topic_id=0;
 			else list($topic_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 		}
-		elseif($uid == 0) {
+		elseif ($uid == 0) {
 			$topic_id = intval($topic);
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'poll_id',
 				'tx_mmforum_topics',
 				'uid='.$topic
 			);
-			if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) $poll_id=0;
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) $poll_id=0;
 			else list($poll_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 		}
 		else {
@@ -484,12 +484,12 @@ class tx_mmforum_polls {
 			$topic_id   = intval($topic);
 		}
 
-		if($poll_id > 0) {
+		if ($poll_id > 0) {
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls'        ,    'uid='.$poll_id,array('deleted'=>1,'tstamp'=>$GLOBALS['EXEC_TIME']));
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_answers','poll_id='.$poll_id,array('deleted'=>1,'tstamp'=>$GLOBALS['EXEC_TIME']));
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_votes'  ,'poll_id='.$poll_id,array('deleted'=>1,'tstamp'=>$GLOBALS['EXEC_TIME']));
 		}
-		if($topic_id > 0)
+		if ($topic_id > 0)
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics'       ,    'uid='.$topic_id,array('poll_id'=>0));
 	}
 
@@ -509,7 +509,7 @@ class tx_mmforum_polls {
 	 * @version 2007-05-25
 	 */
 	function display_editForm($uid, $override=array(),$pObj=NULL) {
-		if(!$pObj->conf['polls.']['enable']) return "";
+		if (!$pObj->conf['polls.']['enable']) return "";
 		$defACount = $pObj->conf['polls.']['minAnswers'];
 
 		$uid = intval($uid);
@@ -528,8 +528,8 @@ class tx_mmforum_polls {
 
 		$answerTemplate = $pObj->cObj->getSubpart($template, '###ANSWERSECTION###');
 
-		if(strlen($override['expires']['act'])>0) {
-			if($override['expires']['act'])
+		if (strlen($override['expires']['act'])>0) {
+			if ($override['expires']['act'])
 				$expDate = mktime($override['expires']['hour'],$override['expires']['minute'],0,$override['expires']['month'],$override['expires']['day'],$override['expires']['year']);
 			else $expDate = 0;
 		} else $expDate = $poll['endtime'];
@@ -566,8 +566,8 @@ class tx_mmforum_polls {
 		$answers = '';
 		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$answer = $override['answer']['edit'][$arr['uid']]?$override['answer']['edit'][$arr['uid']]:$arr['answer'];
-			if(is_array($override['answer']['delete'])) {
-				if(in_array($arr['uid'],$override['answer']['delete'])) {
+			if (is_array($override['answer']['delete'])) {
+				if (in_array($arr['uid'],$override['answer']['delete'])) {
 					$marker['###DELETEFIELDS###'] .= '<input type="hidden" name="tx_mmforum_pi1[poll][answer][delete][]" value="'.$arr['uid'].'" />';
 					continue;
 				}
@@ -577,13 +577,13 @@ class tx_mmforum_polls {
 				'###ANSWER_UID###'  => $arr['uid'],
 				'###ANSWER_MODE###' => 'edit'
 			);
-			if($i < $defACount)
+			if ($i < $defACount)
 				$tAnswTmpl = $pObj->cObj->substituteSubpart($answerTemplate, '###DELLINK###', '');
 			else $tAnswTmpl = $answerTemplate;
 			$answers .= $pObj->cObj->substituteMarkerArrayCached($tAnswTmpl, $aMarker);
 			$i ++;
 		}
-		if(is_array($override['answer']['new'])) {
+		if (is_array($override['answer']['new'])) {
 			foreach($override['answer']['new'] as $nAnswer) {
 				$aMarker = array(
 					'###ANSWER###'      => $pObj->escape($nAnswer),
@@ -611,12 +611,12 @@ class tx_mmforum_polls {
 	 * @return  string The form content
 	 * @version 2007-05-25
 	 */
-	function display_createForm($piVars = array(),$pObj=NULL) {
-		if(!$pObj->conf['polls.']['enable']) return "";
+	function display_createForm($piVars = array(), $pObj = NULL) {
+		if (!$pObj->conf['polls.']['enable']) return "";
 
 		$defACount = $pObj->conf['polls.']['minAnswers'];
 		$rDefACount = $defACount;
-		if($piVars) {
+		if ($piVars) {
 			$defACount = (count($piVars['answer']['new'])>$defACount)?count($piVars['answer']['new']):$defACount;
 		}
 
@@ -656,7 +656,7 @@ class tx_mmforum_polls {
 				'###DELETE###'      => $pObj->pi_getLL('poll.deleteAnswer'),
 					'###DISABLED###'		=> '',
 			);
-			if($i < $rDefACount)
+			if ($i < $rDefACount)
 				$tAnswTmpl = $pObj->cObj->substituteSubpart($answerTemplate, '###DELLINK###', '');
 			else $tAnswTmpl = $answerTemplate;
 			$answers .= $pObj->cObj->substituteMarkerArrayCached($tAnswTmpl, $marker);
@@ -681,8 +681,8 @@ class tx_mmforum_polls {
 	 * @return boolean TRUE, if the current user may vote, otherwise false.
 	 */
 	function getMayVote() {
-		if($this->data['endtime']>0 && $this->data['endtime']<$GLOBALS['EXEC_TIME']) return false;
-		if(!$GLOBALS['TSFE']->fe_user->user['uid']) return false;
+		if ($this->data['endtime']>0 && $this->data['endtime']<$GLOBALS['EXEC_TIME']) return false;
+		if (!$GLOBALS['TSFE']->fe_user->user['uid']) return false;
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*',
@@ -702,15 +702,15 @@ class tx_mmforum_polls {
 	 * @version 2007-05-22
 	 */
 	function getMayCreatePoll($pObj) {
-		if(!$pObj->conf['polls.']['enable']) return false;
-		if($pObj->conf['polls.']['restrictToGroups']) {
+		if (!$pObj->conf['polls.']['enable']) return false;
+		if ($pObj->conf['polls.']['restrictToGroups']) {
 			$authPolls  = t3lib_div::intExplode(',',$pObj->conf['polls.']['restrictToGroups']);
 			$groups     = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 
 			$authPolls  = tx_mmforum_tools::processArray_numeric($authPolls);
 			$groups     = tx_mmforum_tools::processArray_numeric($groups);
 
-			if(count($authPolls)==0) return true;
+			if (count($authPolls)==0) return true;
 
 			$i = array_intersect($authPolls, $groups);
 			return (count($i)>0);
@@ -740,7 +740,7 @@ class tx_mmforum_polls {
 
 	function getMayEditPoll($pollId, $pObj) {
 		global $TYPO3_DB;
-		if(!$this->getMayCreatePoll($pObj)) return false;
+		if (!$this->getMayCreatePoll($pObj)) return false;
 		list($voteCount) = $TYPO3_DB->sql_fetch_row($TYPO3_DB->exec_SELECTquery('COUNT(*)', 'tx_mmforum_polls_votes', 'poll_id='.intval($pollId).' AND deleted=0'));
 		return $voteCount == 0 || $pObj->getIsAdmin();
 	}

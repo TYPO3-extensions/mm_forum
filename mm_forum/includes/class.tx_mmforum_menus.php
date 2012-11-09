@@ -255,7 +255,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 			// Displays a rootline like "mm_forum page -> User profile: Username"
 			case 'forum_view_profil':
 
-				if($this->piVars['fid']) {
+				if ($this->piVars['fid']) {
 		            $user_id = tx_mmforum_tools::get_userid($this->piVars['fid']);
 		        } else $user_id = $this->piVars['user_id'];
 
@@ -332,10 +332,10 @@ class tx_mmforum_menus extends tx_mmforum_base {
 			$pageRootline = $GLOBALS['TSFE']->config['rootLine'];
 		}
 
-		if(!$conf['includeNotInMenu']) {
+		if (!$conf['includeNotInMenu']) {
 			$pageRootline_final = array();
 			foreach($pageRootline as $pageRootline_element) {
-				if($pageRootline_element['nav_hide'] != 1)
+				if ($pageRootline_element['nav_hide'] != 1)
 					$pageRootline_final[] = $pageRootline_element;
 			}
 		} else $pageRootline_final = $pageRootline;

@@ -83,31 +83,31 @@ class tx_mmforum_ranksFE {
         #$userRanksObj = t3lib_div::makeInstance('tx_mmforum_ranksFE');
         #$userRanksObj->setContentObject($this->cObj);
 
-        if($this->conf['ranks.']['enable']) {
-            if($user_id == -1) $user_id = $GLOBALS['TSFE']->fe_user->user['uid'];
+        if ($this->conf['ranks.']['enable']) {
+            if ($user_id == -1) $user_id = $GLOBALS['TSFE']->fe_user->user['uid'];
 
             $post_count         = $this->getUserPostCount($user_id);
             $post_count_rank    = $this->getRankByPostCount($post_count);
-            if($post_count_rank != 'error') $ranks[] = $post_count_rank;
+            if ($post_count_rank != 'error') $ranks[] = $post_count_rank;
         }
 
         $usergroups         = $this->getUserGroupList($user_id);
         $usergroups_ranks   = $this->getRankByGroup($usergroups);
 
-        if($usergroups_ranks[0]['excl']) $ranks = $usergroups_ranks;
+        if ($usergroups_ranks[0]['excl']) $ranks = $usergroups_ranks;
         else $ranks = array_merge((array)$ranks, (array)$usergroups_ranks);
 
-        if(count($ranks)==0) return '';
+        if (count($ranks)==0) return '';
 
 		$content = '';
         foreach($ranks as $rank) {
-            if($rank['color'])
+            if ($rank['color'])
                 $title = '<span style="color: '.$rank['color'].'">'.$rank['title'].'</span>';
             else $title = $rank['title'];
 
             $title = $this->cObj->stdWrap($title,$this->conf['ranks.']['title_stdWrap.']);
 
-            if($rank['icon']) {
+            if ($rank['icon']) {
                 #$icon = '<img src="uploads/tx_mmforum/'.$rank['icon'].'" style="vertical-align:middle;" />';
 				$icon = $this->cObj->IMAGE(array('file' => 'uploads/tx_mmforum/'.$rank['icon'], 'file.' => array('params' => '-verbose')));
                 $icon = $this->cObj->stdWrap($icon,$this->conf['ranks.']['icon_stdWrap.']).' ';
@@ -130,7 +130,7 @@ class tx_mmforum_ranksFE {
      * @return  int          The user's post count.
      */
     function getUserPostCount($user_id) {
-        if($user_id == $GLOBALS['TSFE']->fe_user->user['uid'])
+        if ($user_id == $GLOBALS['TSFE']->fe_user->user['uid'])
             return $GLOBALS['TSFE']->fe_user->user['tx_mmforum_posts'];
         else {
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -138,7 +138,7 @@ class tx_mmforum_ranksFE {
                 'fe_users',
                 'uid='.intval($user_id)
             );
-            if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return 0;
+            if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return 0;
             else {
                 list($post_count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
                 return $post_count;
@@ -157,7 +157,7 @@ class tx_mmforum_ranksFE {
      *                         member of.
      */
     function getUserGroupList($user_id) {
-        if($user_id == $GLOBALS['TSFE']->fe_user->user['uid'])
+        if ($user_id == $GLOBALS['TSFE']->fe_user->user['uid'])
             $groups = $GLOBALS['TSFE']->fe_user->user['usergroup'];
         else {
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -165,7 +165,7 @@ class tx_mmforum_ranksFE {
                 'fe_users',
                 'uid='.intval($user_id)
             );
-            if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return 0;
+            if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return 0;
             else {
                 list($groups) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
             }
@@ -192,10 +192,10 @@ class tx_mmforum_ranksFE {
     function getRankByGroup($user_groups) {
 
         $ranks = array();
-        if(!is_array($user_groups)) return array();
+        if (!is_array($user_groups)) return array();
 
         foreach($user_groups as $group) {
-            if($GLOBALS['tx_mmforum_ranksFE']['groupCache'][$group])
+            if ($GLOBALS['tx_mmforum_ranksFE']['groupCache'][$group])
                 $groupData = $GLOBALS['tx_mmforum_ranksFE']['groupCache'][$group];
             else {
                 $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -207,15 +207,15 @@ class tx_mmforum_ranksFE {
                 $GLOBALS['tx_mmforum_ranksFE']['groupCache'][$group] = $groupData;
             }
 
-            if($groupData['tx_mmforum_rank']) {
+            if ($groupData['tx_mmforum_rank']) {
                 $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                     '*',
                     'tx_mmforum_ranks',
                     'uid='.$groupData['tx_mmforum_rank'].' AND deleted=0 AND hidden=0'
                 );
-                if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) continue;
+                if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) continue;
                 $rank = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-                if($groupData['tx_mmforum_rank_excl']) {
+                if ($groupData['tx_mmforum_rank_excl']) {
                     $rank['excl'] = 1;
                     return array($rank);
                 }
@@ -243,7 +243,7 @@ class tx_mmforum_ranksFE {
             '',
             'minPosts DESC'
         );
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return 'error';
+        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return 'error';
         else return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
     }
 

@@ -71,7 +71,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 		);
 
 		$template			= $this->loadTemplateFile('notifyPM');
-		if($this->conf['cron_htmlemail'])
+		if ($this->conf['cron_htmlemail'])
 			$template		= t3lib_parsehtml::getSubpart($template, '###NOTIFY_HTML###');
 		else $template		= t3lib_parsehtml::getSubpart($template, '###NOTIFY_PLAINTEXT###');
 
@@ -86,7 +86,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 			);
 			$pm_content	= '';
 
-			if($GLOBALS['TYPO3_DB']->sql_num_rows($pm_res) == 0) {
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($pm_res) == 0) {
 				$this->debug('No new messages for user '.$user_arr['username'].'. Continue with next user.');
 				continue;
 			} else $this->debug($GLOBALS['TYPO3_DB']->sql_num_rows($pm_res).' new messages for user '.$user_arr['username'].'. Creating email.');
@@ -95,7 +95,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 				$link = sprintf($this->conf['cron_pm_readlink'],$pm_arr['uid']);
 
 				$cache_link = $this->getCacheValue_remove('pm.urlCache.'.$pm_arr['uid']);
-				if($cache_link !== false)
+				if ($cache_link !== false)
 					$link = $cache_link;
 
 				$pm_marker = array(
@@ -133,7 +133,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 
 			$content .= "Try to send mail($recipient, $subject, ...)\n";
 
-			if(!@mail($recipient, $subject, $user_content, $header)) {
+			if (!@mail($recipient, $subject, $user_content, $header)) {
 				$this->debug('Could not send email to '.$recipient,$this->DEBUG_ERROR);
 			} else $this->debug('Email to user '.$user_arr['username'].' was successfully sent.');
 
@@ -154,7 +154,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 	function getUsername($user_uid) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->conf['userNameField']?$this->conf['userNameField']:'username', 'fe_users', 'uid='.intval($user_uid).' AND deleted=0');
 
-		if($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 			list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res); return $username;
 		} else return $this->getLL('deletedUser');
 	}

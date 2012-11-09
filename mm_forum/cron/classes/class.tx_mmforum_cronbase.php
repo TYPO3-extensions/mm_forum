@@ -197,7 +197,7 @@ class tx_mmforum_cronbase {
 
 			// Load user settings file
 		$localSettings_filename = dirname(PATH_thisScript).'/../../../tx_mmforum_config.ts';
-		if(file_exists($localSettings_filename))
+		if (file_exists($localSettings_filename))
 		    $conf   .= "\n#LOCAL SETTINGS\n".file_get_contents( $localSettings_filename );
 
 		    // Parse setup
@@ -210,7 +210,6 @@ class tx_mmforum_cronbase {
 
 			// Validate configuration
 		$this->validateConfig();
-
 	}
 
 
@@ -227,9 +226,9 @@ class tx_mmforum_cronbase {
 		 */
 
 	function validateConfig() {
-		if(!intval($this->conf['userPID'])) 	$this->debug("Constant \"userPID\" is not set.",$this->DEBUG_FATAL);
-		if(!intval($this->conf['storagePID'])) 	$this->debug("Constant \"storagePID\" is not set.",$this->DEBUG_FATAL);
-		if(!$this->conf['cron_pathTmpl']) 		$this->debug("Constant \"cron_pathTmpl\" is not set.",$this->DEBUG_FATAL);
+		if (!intval($this->conf['userPID'])) 	$this->debug("Constant \"userPID\" is not set.",$this->DEBUG_FATAL);
+		if (!intval($this->conf['storagePID'])) 	$this->debug("Constant \"storagePID\" is not set.",$this->DEBUG_FATAL);
+		if (!$this->conf['cron_pathTmpl']) 		$this->debug("Constant \"cron_pathTmpl\" is not set.",$this->DEBUG_FATAL);
 	}
 
 
@@ -247,13 +246,13 @@ class tx_mmforum_cronbase {
 		 */
 
 	function loadLanguageFile($langFile='') {
-		if(empty($langFile)) $langFile = 'lang.'.$this->cron_name.'.php';
+		if (empty($langFile)) $langFile = 'lang.'.$this->cron_name.'.php';
 
 		$this->langFile = dirname(PATH_thisScript).'/lang/'.$langFile;
-		if(file_exists($this->langFile)) require_once($this->langFile);
+		if (file_exists($this->langFile)) require_once($this->langFile);
 		else $this->debug("Language file not found.", $this->DEBUG_FATAL);
 
-		if(isset($LANG)) $this->lang = $LANG;
+		if (isset($LANG)) $this->lang = $LANG;
 		else $this->debug("Language file could not be read.", $this->DEBUG_FATAL);
 	}
 
@@ -281,7 +280,7 @@ class tx_mmforum_cronbase {
 		 */
 
 	function getLL($lKey) {
-		if($this->lang[$this->conf['cron_lang']][$lKey])
+		if ($this->lang[$this->conf['cron_lang']][$lKey])
 			return $this->lang[$this->conf['cron_lang']][$lKey];
 		else return $this->debug('Language label not found: '.$lKey,$this->DEBUG_NOTICE);
 	}
@@ -318,7 +317,7 @@ class tx_mmforum_cronbase {
 	function loadTemplateFile($filename) {
 		$absFileName = dirname(PATH_thisScript).'/'.dirname($GLOBALS['BACK_PATH']).'/'.$this->conf['cron_pathTmpl'].$filename.'.html';
 		$absFileName = realpath($absFileName);
-		if(file_exists($absFileName)) return file_get_contents($absFileName);
+		if (file_exists($absFileName)) return file_get_contents($absFileName);
 		else return $this->debug('Template file not found: '.$absFileName,$this->DEBUG_ERROR);
 	}
 
@@ -341,7 +340,7 @@ class tx_mmforum_cronbase {
 	function formatDate($tstamp) {
     	$df = $this->conf['dateFormat'];
 
-    	if(strpos($df,'%')===false) return date($df,$tstamp);
+    	if (strpos($df,'%')===false) return date($df,$tstamp);
     	else return strftime($df,$tstamp);
     }
 
@@ -385,7 +384,7 @@ class tx_mmforum_cronbase {
     	$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
     		'cache_value', 'tx_mmforum_cache', 'cache_key='.$GLOBALS['TYPO3_DB']->fullQuoteStr($key,'tx_mmforum_cache')
     	);
-    	if($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+    	if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 	    	list($value) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 	    	return unserialize($value);
     	} return null;
@@ -434,13 +433,13 @@ class tx_mmforum_cronbase {
 		 */
 
 	function debug($message, $mode=0) {
-		if($this->conf['cron_verbose'] == $this->DEBUGMODE_QUIET || strlen($message)==0) return;
+		if ($this->conf['cron_verbose'] == $this->DEBUGMODE_QUIET || strlen($message)==0) return;
 		switch($mode) {
 			case $this->DEBUG_FATAL: fwrite(STDERR,'FATAL ERROR - '.$message.chr(10)); die(); break;
 			case $this->DEBUG_ERROR: fwrite(STDERR,'ERROR - '.$message.chr(10)); break;
 			case $this->DEBUG_WARNING: $this->debug('Warning - '.$message); break;
 			case $this->DEBUG_NOTICE: $this->debug('Note - '.$message); break;
-			default: if($this->conf['cron_verbose'] == $this->DEBUGMODE_ALL) echo $message.chr(10); break;
+			default: if ($this->conf['cron_verbose'] == $this->DEBUGMODE_ALL) echo $message.chr(10); break;
 		}
 	}
 }

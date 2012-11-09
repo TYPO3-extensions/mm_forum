@@ -57,11 +57,11 @@ class tx_mmforum_cache_file {
 		 * @return  bool             TRUE on success, otherwise FALSE.
 		 */
 	function save($key, $object, $override=false) {
-		if(!is_dir($this->path)) mkdir($this->path);
+		if (!is_dir($this->path)) mkdir($this->path);
 
 		$filename = $this->getFilename($key);
 
-		if($override === false && file_exists($filename)) return false;
+		if ($override === false && file_exists($filename)) return false;
 		else {
 			$file = fopen($filename,"w");
 			$res = fwrite($file, serialize($object));
@@ -83,7 +83,7 @@ class tx_mmforum_cache_file {
 	function restore($key) {
 		$filename = $this->getFilename($key);
 
-		if(!file_exists($filename)) return null;
+		if (!file_exists($filename)) return null;
 		else return unserialize(file_get_contents($filename));
 	}
 
@@ -99,7 +99,7 @@ class tx_mmforum_cache_file {
 	function delete($key) {
 		$filename = $this->getFilename($key);
 
-		if(!file_exists($filename)) return false;
+		if (!file_exists($filename)) return false;
 		else return unlink($filename);
 	}
 
@@ -138,7 +138,7 @@ class tx_mmforum_cache_file {
 
 		$files = glob($fullPath.'/*.mmforum_cache');
 
-		foreach((array)$files as $file) if($file && file_exists($file)) unlink($file);
+		foreach((array)$files as $file) if ($file && file_exists($file)) unlink($file);
 	}
 
 }

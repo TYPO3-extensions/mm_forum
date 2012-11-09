@@ -66,7 +66,7 @@ class tx_mmforum_userfield {
 	function init(&$userLib, &$cObj=null) {
 		$this->userLib =& $userLib;
 
-		if($cObj === null)
+		if ($cObj === null)
 			$this->cObj = t3lib_div::makeInstance('tslib_cObj');
 		else $this->cObj =& $cObj;
 	}
@@ -92,7 +92,7 @@ class tx_mmforum_userfield {
 
 		/* If the userfield uses an existing field from the fe_users
 		 * table, generate an UPDATE query to edit the fe_user record. */
-		if($this->isUsingExistingField()) {
+		if ($this->isUsingExistingField()) {
 			$updateArray = array(
 				'tstamp'						=> $GLOBALS['EXEC_TIME'],
 				$this->getLinkedUserField()		=> trim($value)
@@ -163,10 +163,10 @@ class tx_mmforum_userfield {
 	function isValid($value) {
 		$value = trim($value);
 
-		if($this->conf['required'] && strlen($value) == 0) {
+		if ($this->conf['required'] && strlen($value) == 0) {
 			return false;
-		} else if(strlen($value) > 0) {
-			if(!$this->conf['validate']) {
+		} else if (strlen($value) > 0) {
+			if (!$this->conf['validate']) {
 				return true;
 			} else {
 				return preg_match($this->conf['validate'], $value);
@@ -271,8 +271,8 @@ class tx_mmforum_userfield {
 	 */
 	function getRenderedInput($value) {
 
-		if(!$this->conf['input']) return null;
-		if($this->cObj === null) return null;
+		if (!$this->conf['input']) return null;
+		if ($this->cObj === null) return null;
 
 		$data = array(
 			'fieldvalue' => $value
@@ -294,15 +294,15 @@ class tx_mmforum_userfield {
 	 */
 	function getRenderedLabel() {
 
-		if($this->cObj === null) return null;
+		if ($this->cObj === null) return null;
 
-		if($this->data['config_parsed']['label']) {
+		if ($this->data['config_parsed']['label']) {
 			$content = $this->cObj->cObjGetSingle($this->data['config_parsed']['label'], $this->data['config_parsed']['label.']);
 		} else {
 			$content = $this->data['label'];
 		}
 
-		if($this->isUsingExistingField())
+		if ($this->isUsingExistingField())
 			$content .= '<input type="hidden" name="'.$this->prefixId.'[userfields_exist]['.$this->data['uid'].']" value="'.$this->conf['datasource'].'" />';
 
 		return $content;
@@ -317,12 +317,12 @@ class tx_mmforum_userfield {
 
 	function get($data) {
 
-		if(is_int($data)) {
+		if (is_int($data)) {
 			/* Load record from database */
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'*', 'tx_mmforum_userfields', 'uid='.intval($data)
 			);
-			if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return null;
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return null;
 			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 		} else {
 			$arr = $data;
@@ -338,17 +338,17 @@ class tx_mmforum_userfield {
         $arr['config_parsed'] = $parser->setup;
 
 			/* Do some corrections for backwards compatibility */
-		if(!$arr['meta']['label']['default'])
+		if (!$arr['meta']['label']['default'])
 			$arr['meta']['label']['default'] = $arr['label'];
-		if(!$arr['meta']['type'])
+		if (!$arr['meta']['type'])
 			$arr['meta']['type'] = 'custom';
-		if(!$arr['meta']['link'] && $arr['config_parsed']['datasource'])
+		if (!$arr['meta']['link'] && $arr['config_parsed']['datasource'])
 			$arr['meta']['link'] = $arr['config_parsed']['datasource'];
-		if(!isset($arr['meta']['required']) && isset($arr['config_parsed']['required']))
+		if (!isset($arr['meta']['required']) && isset($arr['config_parsed']['required']))
 			$arr['meta']['required'] = $arr['config_parsed']['required']?true:false;
-		if(!$arr['meta']['text']['validate'])
+		if (!$arr['meta']['text']['validate'])
 			$arr['meta']['text']['validate'] = 'none';
-		if(!$arr['meta']['text']['length'])
+		if (!$arr['meta']['text']['length'])
 			$arr['meta']['text']['length'] = '-1';
 
 		$this->data =  $arr;

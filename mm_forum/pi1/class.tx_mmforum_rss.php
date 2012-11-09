@@ -83,11 +83,11 @@ class tx_mmforum_rss {
 		$this->selectFields .= $this->conf['userNameField'] ? $this->conf['userNameField'] : 'username';
 
 			// Load post array
-		if($this->piVars['tid']) {
+		if ($this->piVars['tid']) {
 			$posts = $this->getPosts_topic($this->piVars['tid']);
 			$this->mode = 'topic';
 			$this->param = $this->piVars['tid'];
-		} elseif($this->piVars['fid']) {
+		} elseif ($this->piVars['fid']) {
 			$posts = $this->getPosts_forum($this->piVars['fid']);
 			$this->mode = 'forum';
 			$this->param = $this->piVars['fid'];
@@ -129,9 +129,9 @@ class tx_mmforum_rss {
 
 	function setHTMLHeadData($mode, $param=null) {
 			// If method is called statically, instantiate class
-		#if(!$this instanceof tx_mmforum_rss) {
+		#if (!$this instanceof tx_mmforum_rss) {
 			// Workaround. "instanceof" does not work with old PHP versions.
-		if(isset($this->extKey)) {
+		if (isset($this->extKey)) {
 			$rssObj = t3lib_div::makeInstance('tx_mmforum_rss');
 			$rssObj->initialize($this->conf, $this);
 			$rssObj->setHTMLHeadData($mode, $param);
@@ -144,7 +144,7 @@ class tx_mmforum_rss {
 			}
 
 				/* Set HTML head data only if a RSS page is specified */
-			if($this->conf['rssPID']) {
+			if ($this->conf['rssPID']) {
 					// Compose RSS URL
 				$rssLink = $this->pObj->pi_getPageLink($this->conf['rssPID'], null, $linkParams);
 				$rssLink = $this->pObj->tools->getAbsoluteUrl($rssLink);
@@ -346,7 +346,7 @@ class tx_mmforum_rss {
 		 */
 
     function getFeedDescription() {
-        if($this->piVars['tid']) {
+        if ($this->piVars['tid']) {
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'topic_title',
 				'tx_mmforum_topics t
@@ -356,7 +356,7 @@ class tx_mmforum_rss {
 				 $this->pObj->getMayRead_forum_query('f').
 				 $this->pObj->getMayRead_forum_query('c')
 			);
-        } elseif($this->piVars['fid']) {
+        } elseif ($this->piVars['fid']) {
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'f.forum_name',
 				'tx_mmforum_forums f
@@ -384,12 +384,12 @@ class tx_mmforum_rss {
 		 */
 
 	function getFeedURL() {
-		if($this->piVars['tid']) {
+		if ($this->piVars['tid']) {
 			$linkParams[$this->pObj->prefixId]		= array(
 				'action'		=> 'list_post',
 				'tid'			=> $this->piVars['tid']
 			);
-		} elseif($this->piVars['fid']) {
+		} elseif ($this->piVars['fid']) {
 			$linkParams[$this->pObj->prefixId]		= array(
 				'action'		=> 'list_topic',
 				'fid'			=> $this->piVars['fid']

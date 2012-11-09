@@ -287,7 +287,6 @@ class tx_mmforum_tools extends tslib_pibase {
 			/* Save groups to cache and return */
 		$cache->save('pgrpCache_'.$group, $groupString);
 		return $groupString;
-
 	}
 
 	/**
@@ -355,7 +354,6 @@ class tx_mmforum_tools extends tslib_pibase {
 			/* Save to cache and return */
 		$cache->save('sgrpCache_'.$group,$groupString);
 		return $groupString;
-
 	}
 
 	/**

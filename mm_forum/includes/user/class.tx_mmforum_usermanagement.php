@@ -52,7 +52,7 @@ class tx_mmforum_usermanagement {
 	 * @version 2009-02-16
 	 */
 	function &getTSParser() {
-		if($this->parser === null)
+		if ($this->parser === null)
 			$this->parser = t3lib_div::makeInstance('t3lib_TSparser');
 		
 		return $this->parser;
@@ -98,12 +98,12 @@ class tx_mmforum_usermanagement {
 		if (is_array($value)) {
 			$data = $value;
 
-		} else if(t3lib_div::testInt($value) || intval($value) != 0) {
+		} else if (t3lib_div::testInt($value) || intval($value) != 0) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'*', 'tx_mmforum_userfields', 'uid=' . intval($value)
 			);
 			
-			if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0)
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0)
 				return null;
 
 			$data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
@@ -132,25 +132,25 @@ class tx_mmforum_usermanagement {
 		else
 			$data['meta'] = array();
 
-		if(!$data['meta']['label']['default'])
+		if (!$data['meta']['label']['default'])
 			$data['meta']['label']['default'] = $data['label'];
 
-		if(!$data['meta']['type'])
+		if (!$data['meta']['type'])
 			$data['meta']['type'] = 'custom';
 
-		if(!$data['meta']['link'] && $data['config_parsed']['datasource'])
+		if (!$data['meta']['link'] && $data['config_parsed']['datasource'])
 			$data['meta']['link'] = $data['config_parsed']['datasource'];
 
-		if(!isset($data['meta']['required']) && isset($data['config_parsed']['required']))
+		if (!isset($data['meta']['required']) && isset($data['config_parsed']['required']))
 			$data['meta']['required'] = $data['config_parsed']['required'] ? true : false;
 
-		if(!isset($data['meta']['unique']))
+		if (!isset($data['meta']['unique']))
 			$data['meta']['unique'] = intval($data['uniquefield']) === 1 ? true : false;
 
-		if(!$data['meta']['text']['validate'])
+		if (!$data['meta']['text']['validate'])
 			$data['meta']['text']['validate'] = 'none';
 
-		if(!$data['meta']['text']['length'])
+		if (!$data['meta']['text']['length'])
 			$data['meta']['text']['length'] = '-1';
 
 		return $data;
@@ -172,13 +172,13 @@ class tx_mmforum_usermanagement {
 		if ($data['meta']['label']['default'])
 			$data['label'] = $data['meta']['label']['default'];
 
-		if($data['meta']['link'] && !$data['config_parsed']['datasource'])
+		if ($data['meta']['link'] && !$data['config_parsed']['datasource'])
 			$data['config_parsed']['datasource'] = $data['meta']['link'];
 
-		if(isset($data['meta']['required']) && !isset($data['config_parsed']['required']))
+		if (isset($data['meta']['required']) && !isset($data['config_parsed']['required']))
 			$data['config_parsed']['required'] = $data['meta']['required'] ? true : false;
 
-		if(isset($data['meta']['unique']))
+		if (isset($data['meta']['unique']))
 			$data['uniquefield'] = $data['meta']['unique'] === true ? 1 : 0;
 
 		return $data;

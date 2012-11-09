@@ -125,30 +125,30 @@ class tx_mmforum_cache {
 
 			/* If mode is set to 'auto' or 'apc', first try to set mode
 			 * to APC (if enabled) or otherwise to database. */
-		if($mode == 'auto' || $mode == 'apc') {
-			if($this->getAPCEnabled())
+		if ($mode == 'auto' || $mode == 'apc') {
+			if ($this->getAPCEnabled())
 				$useMode = 'apc';
 			else $useMode = 'database';
 
 			/* If mode is set to 'file',... */
-		} elseif($mode == 'file')
+		} elseif ($mode == 'file')
 			$useMode = 'file';
 
 			/* If mode is set to 'none',... */
-		elseif($mode == 'none')
+		elseif ($mode == 'none')
 			$useMode = 'none';
 
 			/* In all other cases, set mode to 'database'. */
 		else $useMode = 'database';
 
 			/* Compose class name and instantiate */
-		if(isset($GLOBALS['typo3CacheManager'])) {
+		if (isset($GLOBALS['typo3CacheManager'])) {
 			$this->useTYPO3Cache = TRUE;
 
-			if($useMode == 'database' && TYPO3_UseCachingFramework)
+			if ($useMode == 'database' && TYPO3_UseCachingFramework)
 				$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('cache_hash');
 			else {
-				if($GLOBALS['typo3CacheManager']->hasCache('mm_forum'))
+				if ($GLOBALS['typo3CacheManager']->hasCache('mm_forum'))
 					$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('mm_forum');
 				else {
 					switch($useMode) {
@@ -160,12 +160,12 @@ class tx_mmforum_cache {
 						default:         Throw New Exception("Unknown caching mode: $useMode", 1296594227);
 					}
 
-					if(!class_exists($className) && file_exists(PATH_t3lib.'cache/backend/class.'.strtolower($className).'.php'))
+					if (!class_exists($className) && file_exists(PATH_t3lib.'cache/backend/class.'.strtolower($className).'.php'))
 						include_once PATH_t3lib.'cache/backend/class.'.strtolower($className).'.php';
-					elseif(!class_exists($className))
+					elseif (!class_exists($className))
 						$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('cache_hash');
 
-					if(class_exists($className)) {
+					if (class_exists($className)) {
 						$cacheBackend		= t3lib_div::makeInstance($className, $configuration);
 						$cacheObject		= t3lib_div::makeInstance('t3lib_cache_frontend_VariableFrontend', 'mm_forum', $cacheBackend);
 
@@ -216,13 +216,13 @@ class tx_mmforum_cache {
 	function save($key, $object, $override=false) {
 
 			/* Insert object into direct cache */
-		if(!$this->directCache[$key] || $override)
+		if (!$this->directCache[$key] || $override)
 			$this->directCache[$key] = $object;
 
-		if($this->useTYPO3Cache) {
+		if ($this->useTYPO3Cache) {
 			return $this->cacheObj->set(str_replace(',','&',$key), $object);
 		} else {
-			if($object === false) $object = 'boolean:false';
+			if ($object === false) $object = 'boolean:false';
 
 				/* Insert object into real cache and return result */
 			return $this->cacheObj->save($key, $object, $override);
@@ -249,14 +249,14 @@ class tx_mmforum_cache {
 
 			/* If key is found in direct cache, return object from
 			 * direct cache, otherwise load from real cache. */
-		if($this->useTYPO3Cache) {
-			if(!$this->cacheObj->has(str_replace(',','&',$key))) return null;
+		if ($this->useTYPO3Cache) {
+			if (!$this->cacheObj->has(str_replace(',','&',$key))) return null;
 			$restore = $this->directCache[$key] ? $this->directCache[$key] : $this->cacheObj->get(str_replace(',','&',$key));
 		}
 		else $restore = $this->directCache[$key] ? $this->directCache[$key] : $this->cacheObj->restore($key);
 
 			/* If key is not in direct cache, store it there now. */
-		if(!$this->directCache[$key]) $this->directCache[$key] = $restore;
+		if (!$this->directCache[$key]) $this->directCache[$key] = $restore;
 
 			/* Return. */
 		return $restore === 'boolean:false' ? false : $restore;
@@ -277,7 +277,7 @@ class tx_mmforum_cache {
 		unset($this->directCache[$key]);
 
 			/* Delete from real cache and return result */
-		if($this->useTYPO3Cache)
+		if ($this->useTYPO3Cache)
 			return $this->cacheObj->remove(str_replace(',','&',$key));
 		else return $this->cacheObj->delete($key);
 
@@ -298,7 +298,7 @@ class tx_mmforum_cache {
 	function clearAllCaches() {
 
 			/* Clear APC cache */
-		if(function_exists('apc_clear_cache')) {
+		if (function_exists('apc_clear_cache')) {
 			apc_clear_cache('user');
 		}
 
@@ -322,7 +322,7 @@ class tx_mmforum_cache {
 
 			/* Check if object already exists and if so, just return this
 			 * object. */
-		if(isset($GLOBALS['mm_forum']['cacheObj']))
+		if (isset($GLOBALS['mm_forum']['cacheObj']))
 			return $GLOBALS['mm_forum']['cacheObj'];
 
 			/* Otherwise create a new cache object */

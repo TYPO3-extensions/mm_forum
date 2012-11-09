@@ -68,7 +68,7 @@ ini_set('html_errors','0');
 	// Define path constants
 define('TYPO3_cliMode', true);
 define('PATH_thisScript', $_SERVER['SCRIPT_FILENAME']);
-if(!defined("STDERR")) define("STDERR", fopen("php://stderr","w"));
+if (!defined("STDERR")) define("STDERR", fopen("php://stderr","w"));
 
 	// Load configuration file
 require(dirname(PATH_thisScript).'/conf.php');
@@ -77,7 +77,7 @@ require(dirname(PATH_thisScript).'/conf.php');
 require(dirname(PATH_thisScript).'/'.$BACK_PATH.'init.php');
 
 	// Die with error if no parameter was submitted
-if($_SERVER['argc'] < 2) die("FATAL ERROR - No parameter submitted. Don't know what to do.\n");
+if ($_SERVER['argc'] < 2) die("FATAL ERROR - No parameter submitted. Don't know what to do.\n");
 
 	// Get cronjob mode
 $cronMode	= $_SERVER['argv'][1];
@@ -86,7 +86,7 @@ $cronMode	= $_SERVER['argv'][1];
 $cronClassName		= 'tx_mmforum_cron_'.$cronMode;
 $cronFileName		= dirname(PATH_thisScript).'/classes/class.'.$cronClassName.'.php';
 
-if(!file_exists($cronFileName)) die("FATAL ERROR - Cronjob mode $cronMode is not known.\n");
+if (!file_exists($cronFileName)) die("FATAL ERROR - Cronjob mode $cronMode is not known.\n");
 else require_once($cronFileName);
 
 	// Instantiate cronjob object and execute

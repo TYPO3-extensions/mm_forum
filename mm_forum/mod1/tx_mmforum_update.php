@@ -44,7 +44,7 @@
  * @return  void
  */
 function dieError($revertBackup) {
-	if($revertBackup) {
+	if ($revertBackup) {
 		system('rm -rf ./mm_forum');
 		system('mv ./mm_forum-backup ./mm_forum');
 	}
@@ -67,15 +67,15 @@ function dieSuccess() {
 }
 
 // Make a backup copy of the extension directory
-	if(system('cp -r ./mm_forum ./mm_forum-backup') === false)
+	if (system('cp -r ./mm_forum ./mm_forum-backup') === false)
 		dieError(false);
 
 // Remove the mm_forum directory
-	if(system('rm -rf ./mm_forum/') === false)
+	if (system('rm -rf ./mm_forum/') === false)
 		dieError(true);
 
 // Unzip the tarball archive
-	if(system('tar -xzf mm_forum_update.tar.gz') === false)
+	if (system('tar -xzf mm_forum_update.tar.gz') === false)
 		dieError(true);
 
 // Set access rights

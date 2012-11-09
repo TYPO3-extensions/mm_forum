@@ -56,7 +56,7 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 
 		$this->loadPostAlertItems();
 
-		if(count($this->postalertItems)>0) {
+		if (count($this->postalertItems)>0) {
 			$this->content .= $this->generateOutput();
 			$this->content .= $this->sendEmailToModerators();
 		}
@@ -72,7 +72,7 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 	function validateConfig() {
 
 		parent::validateConfig();
-		if(intval($this->conf['cron_notifyPublish_group'])==0) $this->debug('Constant "cron_notifyPublish_group" is not set.',$this->DEBUG_FATAL);
+		if (intval($this->conf['cron_notifyPublish_group'])==0) $this->debug('Constant "cron_notifyPublish_group" is not set.',$this->DEBUG_FATAL);
 
 	}
 
@@ -107,7 +107,7 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 			$header			= "Content-Type: $contenttype; charset=utf-8\n";
 			$header		   .= "From: ".$this->conf['cron_notifyPublishSender']."\n";
 
-			if(!@mail($recipient, $subject, $mailtext, $header)) {
+			if (!@mail($recipient, $subject, $mailtext, $header)) {
 				$this->debug('Could not send email to '.$recipient,$this->DEBUG_ERROR);
 			} else $this->debug('Successfully sent email to '.$recipient);
 		}
@@ -127,7 +127,7 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 	function generateOutput() {
 
 		$template			= $this->loadTemplateFile('notifyReported');
-		if($this->conf['cron_htmlemail'])
+		if ($this->conf['cron_htmlemail'])
 			$template		= t3lib_parsehtml::getSubpart($template, '###PNOTIFY_HTML###');
 		else $template		= t3lib_parsehtml::getSubpart($template, '###PNOTIFY_PLAINTEXT###');
 
@@ -203,7 +203,7 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 	function getUsername($user_uid) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->conf['userNameField'], 'fe_users', 'uid='.$user_uid.' AND deleted=0');
 
-		if($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 			list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res); return $username;
 		} else return $this->getLL('deletedUser');
 	}

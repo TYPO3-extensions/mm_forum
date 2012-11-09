@@ -151,7 +151,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 
 		$items = array();
 		foreach($this->modTSconfig['properties']['sections.'] as $k => $v) {
-			if($v === 'MMFORUM_SECTION_ITEM') {
+			if ($v === 'MMFORUM_SECTION_ITEM') {
 				$c = $this->modTSconfig['properties']['sections.'][$k.'.'];
 				$items["$k"] = $c['name'] ? $LANG->sL($c['name'],1) : $LANG->get('menu.'.$c['id']);
 			}
@@ -171,7 +171,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
         $this->configFile = PATH_typo3conf.'../typo3conf/tx_mmforum_config.ts';
 
 		$this->loadConfVars();
-		if(!$this->getIsConfigured()) unset($this->MOD_MENU['function']);
+		if (!$this->getIsConfigured()) unset($this->MOD_MENU['function']);
 
 			// Draw the header.
 		$this->doc = t3lib_div::makeInstance('mediumDoc');
@@ -246,7 +246,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		global $LANG;
         $content = '';
 
-        if(!$this->getIsConfigured()) $this->MOD_SETTINGS['function'] = 70;
+        if (!$this->getIsConfigured()) $this->MOD_SETTINGS['function'] = 70;
 
 
 			/*
@@ -256,8 +256,8 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 
 		$moduleIndex = $moduleSettings = null;
 		foreach($this->modTSconfig['properties']['sections.'] as $k => $v) {
-			if($v === 'MMFORUM_SECTION_ITEM') {
-				if($this->MOD_SETTINGS['function'] == $k) {
+			if ($v === 'MMFORUM_SECTION_ITEM') {
+				if ($this->MOD_SETTINGS['function'] == $k) {
 					$moduleIndex = $k;
 					$moduleSettings = $this->modTSconfig['properties']['sections.'][$k.'.'];
 					break; // No need to go on.
@@ -273,17 +273,17 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 			 * or an external class reference.                                     *
 			 *                                                                     */
 
-		if($moduleIndex) {
+		if ($moduleIndex) {
 
 				/*                                                                 *
 				 * If the handler contains a class reference, include the source   *
 				 * file, instantiate the regarding class and call the specified    *
 				 * method in this class.                                           *
 				 *                                                                 */
-			if(strpos($moduleSettings['handler'],'->') !== false) {
+			if (strpos($moduleSettings['handler'],'->') !== false) {
 				list($className, $methodName) = explode('->',$moduleSettings['handler']);
 
-				if(strpos($className, 'Tx_Extbase_') === 0) {
+				if (strpos($className, 'Tx_Extbase_') === 0) {
 					$obj = t3lib_div::makeInstance($className);
 				} else {
 					$obj = t3lib_div::getUserObj($className);
@@ -295,7 +295,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 				$settings['settings.']['pids']['forum'] = $this->confArr['forumPID'];
 				$settings['settings.']['parentObject'] =& $this;
 
-				if($className == 'Tx_Extbase_Core_Bootstrap') {
+				if ($className == 'Tx_Extbase_Core_Bootstrap') {
 					$oldBackPath = $GLOBALS['BACK_PATH'];
 					ob_start();
 					$obj->$methodName($settings['moduleKey']);
@@ -359,18 +359,18 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		// Generate SQL query
 			$ug=$this->feGroups2Array();
 			$mmforum=t3lib_div::_GP('mmforum');
-			if($mmforum['no_filter']) {unset($mmforum['sword']);unset($mmforum['old_sword']);}
-			if($mmforum['old_sword'] && !$mmforum['sword']) $mmforum['sword']=$mmforum['old_sword']  ;
-			if($mmforum['sword']) $gp='&mmforum[sword]='.$mmforum['sword'];
+			if ($mmforum['no_filter']) {unset($mmforum['sword']);unset($mmforum['old_sword']);}
+			if ($mmforum['old_sword'] && !$mmforum['sword']) $mmforum['sword']=$mmforum['old_sword']  ;
+			if ($mmforum['sword']) $gp='&mmforum[sword]='.$mmforum['sword'];
 
 			$groups	= implode(',',array(intval($this->confArr['userGroup']),intval($this->confArr['modGroup']),intval($this->confArr['adminGroup'])));
 			$filter	= $mmforum['sword']?"username like '".mysql_escape_string($mmforum['sword'])."%'":'1';
 			$orderBy = t3lib_div::_GP('mmforum_style') ? strtoupper(mysql_escape_string(t3lib_div::_GP('mmforum_style'))) : 'ASC';
-            if(t3lib_div::_GP('mmforum_sort') == 'username'){
+            if (t3lib_div::_GP('mmforum_sort') == 'username'){
                 $order		= 'username '.$orderBy.'';
 				$uOrder     = $orderBy == 'ASC' ? 'DESC' : 'ASC';
 				$aOrder     = 'ASC';
-            } elseif(t3lib_div::_GP('mmforum_sort') == 'age'){
+            } elseif (t3lib_div::_GP('mmforum_sort') == 'age'){
                 $order		= 'crdate '.$orderBy.'';
 				$aOrder     = $orderBy == 'ASC' ? 'DESC' : 'ASC';
 				$uOrder     = 'ASC';
@@ -393,15 +393,15 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 			$pb		= $LANG->getLL('page.page').' <a href="index.php?mmforum[offset]=0'.$gp.'">['.$LANG->getLL('page.first').']</a> ';
 			$end	= $offset+6>=$pages ?$pages:$offset+6;
 			$start	= $offset-5;
-			if($start<0) $start=0;
-			if($start>0)$pb.='... ';
+			if ($start<0) $start=0;
+			if ($start>0)$pb.='... ';
 			for($i=$start; $i<$end; $i++) {
 				$pb	.= '<a href="index.php?mmforum[offset]='.$i.$gp.'">'.($i==$offset ? '<b>'.($i+1).'</b>':($i+1)).'</a> ';
 			}
-			if($offset+11<$pages) $pb.=' ... <a href="index.php?mmforum[offset]='.($pages-1).$gp.'">['.$LANG->getLL('page.last').']</a> ';
+			if ($offset+11<$pages) $pb.=' ... <a href="index.php?mmforum[offset]='.($pages-1).$gp.'">['.$LANG->getLL('page.last').']</a> ';
 
 		// Generate header table
-			if($records < $this->confArr['recordsPerPage']) $mDisp = $records; else $mDisp = ($offset*$this->confArr['recordsPerPage']+$this->confArr['recordsPerPage']);
+			if ($records < $this->confArr['recordsPerPage']) $mDisp = $records; else $mDisp = ($offset*$this->confArr['recordsPerPage']+$this->confArr['recordsPerPage']);
             $userString = sprintf($LANG->getLL('useradmin.usercount'),($offset*$this->confArr['recordsPerPage']+1),$mDisp,$records);
 
 			$out = '<table width="733"><tr>';
@@ -410,7 +410,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 			$out .= '<td align="right">'.$LANG->getLL('useradmin.searchfor').': <input type="text" id="sword" size="20" name="mmforum[sword]" /></td>';
 			$out .= '</tr></table>';
 
-			if($mmforum['sword'] || $mmforum['old_sword']) {
+			if ($mmforum['sword'] || $mmforum['old_sword']) {
 				$out .= '<p>'.$LANG->getLL('useradmin.filter').': '.$mmforum['sword'].'*               <a href="index.php?mmforum[no_filter]=1&'.$this->linkParams($mmforum).'">'.$LANG->getLL('useradmin.filter.clear').'</a></p>';
 				$out .= '<input type="hidden" name="mmforum[old_sword]" value="'.$mmforum['sword'].'" />';
 			}
@@ -418,7 +418,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		// Display userdata table
 			// Execute database query
 			$res=$GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users',"$filter and pid='".$this->confArr['userPID']."' and deleted=0 AND ".$userGroup_query,'',$order,($offset*$this->confArr['recordsPerPage']).",".$this->confArr['recordsPerPage']);
-			if($res) {
+			if ($res) {
 
 				$marker = array(
 					'###USERS_LLL_TITLE###'				=> $LANG->getLL('users.title'),
@@ -548,21 +548,21 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		$mmforum=t3lib_div::_GP('mmforum');
 
 		// Process submitted data
-		if(isset($mmforum['delete'])) {
+		if (isset($mmforum['delete'])) {
 			$key = key($mmforum['delete']);
 			$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postparser','uid='.$key,array('deleted'=>1));
 		}
-		if(isset($mmforum['hide'])) {
+		if (isset($mmforum['hide'])) {
 			$key = key($mmforum['hide']);
 			$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postparser','uid='.$key,array('hidden'=>1));
 		}
-		if(isset($mmforum['unhide'])) {
+		if (isset($mmforum['unhide'])) {
 			$key = key($mmforum['unhide']);
 			$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postparser','uid='.$key,array('hidden'=>0));
 		}
-		if(isset($mmforum['save'])) {
+		if (isset($mmforum['save'])) {
 			$key = key($mmforum['save']);
-			if($key==0) {
+			if ($key==0) {
 				$insertArr = array(
 					'crdate'		=> $GLOBALS['EXEC_TIME'],
 					'tstamp'		=> $GLOBALS['EXEC_TIME'],
@@ -642,21 +642,21 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		$mmforum=t3lib_div::_GP('mmforum');
 
 		// Process submitted data
-		if(isset($mmforum['delete'])) {
+		if (isset($mmforum['delete'])) {
 			$key=key($mmforum['delete']);
 			$res=$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_smilies','uid='.$key,array('deleted'=>1));
 		}
-		if(isset($mmforum['hide'])) {
+		if (isset($mmforum['hide'])) {
 			$key=key($mmforum['hide']);
 			$res=$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_smilies','uid='.$key,array('hidden'=>1));
 		}
-		if(isset($mmforum['unhide'])) {
+		if (isset($mmforum['unhide'])) {
 			$key=key($mmforum['unhide']);
 			$res=$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_smilies','uid='.$key,array('hidden'=>0));
 		}
-		if(isset($mmforum['save'])) {
+		if (isset($mmforum['save'])) {
 			$key=key($mmforum['save']);
-			if($key==0) {
+			if ($key==0) {
 				$insertArr = array(
 					'crdate' => $GLOBALS['EXEC_TIME'],
 					'tstamp' => $GLOBALS['EXEC_TIME'],
@@ -679,15 +679,15 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		$files	= t3lib_div::getFilesInDir($path,'gif');
 		$firstFile='';
 
-		if(count($files)>0) {
+		if (count($files)>0) {
 			foreach($files as $k=>$f) {
-				if($firstFile=='')$firstFile=$f;
+				if ($firstFile=='')$firstFile=$f;
 				$surlOptions.='<option value="'.$f.'"'.($mmforum['new']['smile_url']==$f?'selected="selected"':'').'>'.$f.'</option>';
 			}
 		}
 
 		$i=0;
-		if(!isset($mmforum['new']['smile_url']))  $mmforum['new']['smile_url']=$firstFile;
+		if (!isset($mmforum['new']['smile_url']))  $mmforum['new']['smile_url']=$firstFile;
 
 		$content .= '<table cellpadding="2" cellspacing="0" width="100%" class="mm_forum-list">';
 		$content .= '<tr>
@@ -746,21 +746,21 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		$mmforum=t3lib_div::_GP('mmforum');
 
 		// Process submitted data
-		if(isset($mmforum['delete'])) {
+		if (isset($mmforum['delete'])) {
 			$key=key($mmforum['delete']);
 			$res=$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_syntaxhl','uid='.$key,array('deleted'=>1));
 		}
-		if(isset($mmforum['hide'])) {
+		if (isset($mmforum['hide'])) {
 			$key=key($mmforum['hide']);
 			$res=$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_syntaxhl','uid='.$key,array('hidden'=>1));
 		}
-		if(isset($mmforum['unhide'])) {
+		if (isset($mmforum['unhide'])) {
 			$key=key($mmforum['unhide']);
 			$res=$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_syntaxhl','uid='.$key,array('hidden'=>0));
 		}
-		if(isset($mmforum['save'])) {
+		if (isset($mmforum['save'])) {
 			$key=key($mmforum['save']);
-			if($key==0) {
+			if ($key==0) {
 				$insertArr = array(
 					'crdate' 		=>	$GLOBALS['EXEC_TIME'],
 					'tstamp' 		=>	$GLOBALS['EXEC_TIME'],
@@ -789,15 +789,15 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		$path=t3lib_extMgm::extPath('mm_forum').'/res/img/default/editor_icons/';
 		$files=t3lib_div::getFilesInDir($path,'gif');
 		$firstFile='';
-		if(count($files)>0) {
+		if (count($files)>0) {
 			foreach($files as $k=>$f) {
-				if($firstFile=='')$firstFile=$f;
+				if ($firstFile=='')$firstFile=$f;
 				$surlOptions.='<option value="'.$f.'"'.($mmforum['new']['fe_inserticon']==$f?'selected="selected"':'').'>'.$f.'</option>';
 			}
 		}
 
 		$i=0;
-		if(!isset($mmforum['new']['fe_inserticon']))  $mmforum['new']['fe_inserticon']=$firstFile;
+		if (!isset($mmforum['new']['fe_inserticon']))  $mmforum['new']['fe_inserticon']=$firstFile;
 
 
 		/*$content .= '<table cellpadding="2" cellspacing="0" class="mm_forum-list" width="100%">';
@@ -871,7 +871,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
     function getFileOptionFields($path,$fileExt,$opVar = '',$noDel=false){
 		$files=t3lib_div::getFilesInDir($path,$fileExt);
 		$Options = '';
-		if(count($files)>0) {
+		if (count($files)>0) {
 			foreach($files as $k=>$f) {
 				$name = ($noDel === FALSE)?  str_replace('.'.$fileExt,'',$f): $f;
 				$Options.='<option value="'.$name.'"'.($opVar==$name?'selected="selected"':'').'>'.$name.'</option>';
@@ -980,15 +980,15 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 
 	function convertToTCEList($list,$table,$fieldname) {
 		$items = t3lib_div::trimExplode(',',$list);
-		if(count($items)==0) return '';
+		if (count($items)==0) return '';
 
 		foreach($items as $item) {
-			if($item=='') continue;
+			if ($item=='') continue;
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fieldname,$table,'uid="'.$item.'"');
 			list($title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 			$resultItems[] = "$item|$title";
 		}
-		if(count($resultItems)==0) return '';
+		if (count($resultItems)==0) return '';
 		return implode(',',$resultItems);
 	}
 
@@ -1028,7 +1028,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		foreach($this->modTSconfig['properties']['defaultConfigFiles.'] as $configFile)
 			$conf .= file_get_contents(t3lib_div::getFileAbsFileName($configFile))."\n";
 
-        if(file_exists($this->configFile))
+        if (file_exists($this->configFile))
             $conf   .= file_get_contents($this->configFile);
 
         $parser  = t3lib_div::makeInstance('t3lib_TSparser');
@@ -1061,7 +1061,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		 */
 
     function setConfVar($elem,$value) {
-        if($this->config['plugin.']['tx_mmforum.'][$elem]!=$value) {
+        if ($this->config['plugin.']['tx_mmforum.'][$elem]!=$value) {
             $this->config['plugin.']['tx_mmforum.'][$elem] = $value;
 
             $confFile = fopen($this->configFile,'w');
@@ -1096,11 +1096,11 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 		 */
 
     function parseConf($conf=FALSE,$ind=0) {
-        if($conf === FALSE) $conf = $this->config;
+        if ($conf === FALSE) $conf = $this->config;
 
         foreach($conf as $k => $v) {
             $result .= $this->getInd($ind);
-            if(is_array($v)) {
+            if (is_array($v)) {
                 $k = substr($k,0,strlen($k)-1);
 					// Recursion rulez! :P
                 $result .= $k.' {'."\r\n".$this->parseConf($v,$ind+1).$this->getInd($ind)."}\r\n";
@@ -1126,7 +1126,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 
     function getIsConfigured() {
 		foreach($this->modTSconfig['properties']['essentialConfiguration.'] as $prop => $e)
-			if(!$this->config['plugin.']['tx_mmforum.'][$prop]) return false;
+			if (!$this->config['plugin.']['tx_mmforum.'][$prop]) return false;
         return true;
     }
 

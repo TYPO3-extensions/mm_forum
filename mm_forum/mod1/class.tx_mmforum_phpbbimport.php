@@ -147,7 +147,7 @@ class tx_mmforum_phpbbimport {
 			is_array(t3lib_div::_POST('tx_mmforum_phpbb'))?t3lib_div::_POST('tx_mmforum_phpbb'):array()
 		);
 
-        if(!$this->dbObj) $this->dbObj = $GLOBALS['TYPO3_DB'];
+        if (!$this->dbObj) $this->dbObj = $GLOBALS['TYPO3_DB'];
 
         $content  = '<form action="" method="post">';
 
@@ -194,8 +194,8 @@ class tx_mmforum_phpbbimport {
 		global $LANG;
 
 		// Continue to next step, if everything is alright
-			if($this->data['step1.']['submit'] == $LANG->getLL('phpbb.general.continue') && $this->data['step1.']['ignore'] != $LANG->getLL('phpbb.general.no')) {
-				if(($this->data['step1.']['found'] == count($this->phpbbTables)) || ($this->data['step1.']['ignore']==$LANG->getLL('phpbb.general.yes'))) {
+			if ($this->data['step1.']['submit'] == $LANG->getLL('phpbb.general.continue') && $this->data['step1.']['ignore'] != $LANG->getLL('phpbb.general.no')) {
+				if (($this->data['step1.']['found'] == count($this->phpbbTables)) || ($this->data['step1.']['ignore']==$LANG->getLL('phpbb.general.yes'))) {
 					$content = $this->step2($content);
 					return $content;
 				}
@@ -205,10 +205,10 @@ class tx_mmforum_phpbbimport {
 		$content .= '<legend>'.sprintf($LANG->getLL('phpbb.general.stepXofY'),1+$this->stepOffset,$this->steps+$this->stepOffset).': '.$LANG->getLL('phpbb.step1').'</legend>';
 
 		// Display warning message
-			if($this->data['step1.']['submit'] == $LANG->getLL('phpbb.general.continue') && $this->data['step1.']['ignore'] != $LANG->getLL('phpbb.general.no')) {
+			if ($this->data['step1.']['submit'] == $LANG->getLL('phpbb.general.continue') && $this->data['step1.']['ignore'] != $LANG->getLL('phpbb.general.no')) {
 				unset($this->data['step1.']['submit']);
 
-				if(($this->data['step1.']['found'] < count($this->phpbbTables)) && ($this->data['step1.']['ignore']!=$LANG->getLL('phpbb.general.yes'))) {
+				if (($this->data['step1.']['found'] < count($this->phpbbTables)) && ($this->data['step1.']['ignore']!=$LANG->getLL('phpbb.general.yes'))) {
 					$content .= $LANG->getLL('phpbb.step1.warning').'<br /><br />';
 					$content .= '<input type="submit" value="'.$LANG->getLL('phpbb.general.yes').'" name="tx_mmforum_phpbb[step1.][ignore]" /> ';
 					$content .= '<input type="submit" value="'.$LANG->getLL('phpbb.general.no').'" name="tx_mmforum_phpbb[step1.][ignore]" /> ';
@@ -227,20 +227,20 @@ class tx_mmforum_phpbbimport {
 			$content .= '<input type="submit" value="'.$LANG->getLL('phpbb.general.update').'" name="tx_mmforum_phpbb[step1.][submit]" />';
 
 		// Display MySQL table test
-			if(strlen($this->data['prefix'])>0) {
+			if (strlen($this->data['prefix'])>0) {
 				$content .= '<br /><br /><strong>'.$LANG->getLL('phpbb.step1.checking').'</strong><br />';
 				$found = 0;
 				foreach($this->phpbbTables as $table) {
 					$tablename = $this->data['prefix'].'_'.$table;
-					if(!$this->checkTable($tablename)) $content .= sprintf($LANG->getLL('phpbb.step1.notfound'),$tablename).'<br />';
+					if (!$this->checkTable($tablename)) $content .= sprintf($LANG->getLL('phpbb.step1.notfound'),$tablename).'<br />';
 					else $found++;
 				}
 
-				if($found == 0) 							$content .= '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step1.fatalError').'</div>';
-				elseif($found < count($this->phpbbTables))	$content .= '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step1.error').'</div>';
+				if ($found == 0) 							$content .= '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step1.fatalError').'</div>';
+				elseif ($found < count($this->phpbbTables))	$content .= '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step1.error').'</div>';
 				else 										$content .= '<div class="mm_forum-ok">'.$LANG->getLL('phpbb.step1.ok').'</div>';
 
-				if($found > 0)
+				if ($found > 0)
 					$content .= '<br /><input type="submit" value="'.$LANG->getLL('phpbb.general.continue').'" name="tx_mmforum_phpbb[step1.][submit]" />';
 
 				$content .= '<input type="hidden" name="tx_mmforum_phpbb[step1.][found]" value="'.$found.'" />';
@@ -282,9 +282,9 @@ class tx_mmforum_phpbbimport {
 		$this->data['step'] = 2;
 		$noSelectNote = "";
 
-		if($this->data['step2.']['submit'] == $LANG->getLL('phpbb.general.continue')) {
-			if(count($this->data['step2.']['importdata'])==0) $noSelectNote = '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step2.noSelectNote').'</div>';
-			elseif(!$this->step2_checkDependencies()) $noSelectNote = '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step2.dependencyError').'</div>';
+		if ($this->data['step2.']['submit'] == $LANG->getLL('phpbb.general.continue')) {
+			if (count($this->data['step2.']['importdata'])==0) $noSelectNote = '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step2.noSelectNote').'</div>';
+			elseif (!$this->step2_checkDependencies()) $noSelectNote = '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step2.dependencyError').'</div>';
 			else {
 				$content = $this->step3($content);
 				return $content;
@@ -307,7 +307,7 @@ class tx_mmforum_phpbbimport {
 			$error = false;
 			foreach($dTables as $key=>$table) {
 				$table = $this->data['prefix'].'_'.$table;
-				if(!$this->checkTable($table)) {
+				if (!$this->checkTable($table)) {
 					$dTables[$key] = '<span style="color:red;">'.$table.'</span>';
 					$error = true;
 					$errorGlobal = true;
@@ -316,12 +316,12 @@ class tx_mmforum_phpbbimport {
 			}
 
 			$checkboxChecked = 'checked="checked"';
-			if($this->getImported($data)) $checkboxChecked = '';
-			if($error) {
+			if ($this->getImported($data)) $checkboxChecked = '';
+			if ($error) {
 				$checkboxChecked = 'disabled="disabled"';
 			}
 
-			if(isset($this->data['step2.']['importdata'])) {
+			if (isset($this->data['step2.']['importdata'])) {
 				$checkboxChecked = in_array($data,$this->data['step2.']['importdata'])?'checked="checked"':'';
 			}
 
@@ -335,7 +335,7 @@ class tx_mmforum_phpbbimport {
 
 		$content .= '</table>';
 
-		if($errorGlobal) $content .= '<br />'.$LANG->getLL('phpbb.step2.note');
+		if ($errorGlobal) $content .= '<br />'.$LANG->getLL('phpbb.step2.note');
 		$content .= '<br /><input type="submit" value="'.$LANG->getLL('phpbb.general.continue').'" name="tx_mmforum_phpbb[step2.][submit]" />';
 
 		$content .= '</fieldset>';
@@ -359,10 +359,10 @@ class tx_mmforum_phpbbimport {
 			$data = explode(':',$dependency);
 			$names = array_keys($this->reqTables);
 
-			if($data[0] == $field) {
-				if(isset($this->data['step2.']['importdata'])) {
-					if(!in_array($names[$data[1]],$this->data['step2.']['importdata'])) {
-						if(!$this->getImported($names[$data[1]]))
+			if ($data[0] == $field) {
+				if (isset($this->data['step2.']['importdata'])) {
+					if (!in_array($names[$data[1]],$this->data['step2.']['importdata'])) {
+						if (!$this->getImported($names[$data[1]]))
 							$dep[] = '<span class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step2.'.$names[$data[1]]).'</span>';
 					}
 					else $dep[] = $LANG->getLL('phpbb.step2.'.$names[$data[1]]);
@@ -370,7 +370,7 @@ class tx_mmforum_phpbbimport {
 				else $dep[] = $LANG->getLL('phpbb.step2.'.$names[$data[1]]);
 			}
 		}
-		if(count($dep)==0) return "&mdash;";
+		if (count($dep)==0) return "&mdash;";
 		return implode(', ',$dep);
 	}
 
@@ -389,8 +389,8 @@ class tx_mmforum_phpbbimport {
 		foreach($this->dependencies as $dependency) {
 			$data = explode(':',$dependency);
 
-			if(in_array($names[$data[0]],$selected) && !in_array($names[$data[1]],$selected)) {
-				if(!$this->getImported($names[$data[1]]))
+			if (in_array($names[$data[0]],$selected) && !in_array($names[$data[1]],$selected)) {
+				if (!$this->getImported($names[$data[1]]))
 					return false;
 			}
 		}
@@ -424,7 +424,7 @@ class tx_mmforum_phpbbimport {
 		$error = 0;
 
 		// Define default data
-		if(!isset($this->data['step3.'])) {
+		if (!isset($this->data['step3.'])) {
 			$this->data['step3.']['import0.']['pid'] = $this->confArr['forumPID'];
 			$this->data['step3.']['import1.']['pid'] = $this->confArr['userPID'];
 			$this->data['step3.']['import2.']['pid'] = $this->confArr['forumPID'];
@@ -445,111 +445,111 @@ class tx_mmforum_phpbbimport {
 			$this->data['step3.']['import5.']['mmforum_smilie_url'] = t3lib_extMgm::siteRelPath('mm_forum').'res/smilies/';
 		}
 
-		if($this->data['step3.']['submit'] == $LANG->getLL('phpbb.general.continue')) {
-			if(in_array('boards/categories',$dataFields)) {
+		if ($this->data['step3.']['submit'] == $LANG->getLL('phpbb.general.continue')) {
+			if (in_array('boards/categories',$dataFields)) {
 				// Check if board and category PID was specified
-				if(strlen($this->data['step3.']['import0.']['pid'])==0 || !is_numeric($this->data['step3.']['import0.']['pid'])) {
+				if (strlen($this->data['step3.']['import0.']['pid'])==0 || !is_numeric($this->data['step3.']['import0.']['pid'])) {
 					$warning ++;
 					$warnings['import0.pid'] = '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step3.import0.pid.warning').'</div>';
 					$this->data['step3.']['import0.']['pid'] = 0;
 				}
 			}
-			if(in_array('users/usergroups',$dataFields)) {
+			if (in_array('users/usergroups',$dataFields)) {
 				// Check if user and user group PID was specified
-				if(strlen($this->data['step3.']['import1.']['pid'])==0 || !is_numeric($this->data['step3.']['import1.']['pid'])) {
+				if (strlen($this->data['step3.']['import1.']['pid'])==0 || !is_numeric($this->data['step3.']['import1.']['pid'])) {
 					$warning ++;
 					$warnings['import1.pid'] = '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step3.import0.pid.warning').'</div>';
 					$this->data['step3.']['import1.']['pid'] = 0;
 				}
 				// Check if user group was correctly specified
-				if(($this->data['step3.']['import1.']['users']=='import') && (intval($this->data['step3.']['import1.']['usergroup'])==0)) {
+				if (($this->data['step3.']['import1.']['users']=='import') && (intval($this->data['step3.']['import1.']['usergroup'])==0)) {
 					$error ++;
 					$warnings['import1.users'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step3.import1.mods.emptyError').'</div>';
 				}
-				elseif($this->data['step3.']['import1.']['users']=='import') {
+				elseif ($this->data['step3.']['import1.']['users']=='import') {
 					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_groups','uid="'.intval($this->data['step3.']['import1.']['usergroup']).'"');
-					if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) {
+					if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) {
 						$error ++;
 						$warnings['import1.users'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step3.import1.mods.neError').'</div>';
 					}
 				}
 				// Check if moderator group was correctly specified
-				if(($this->data['step3.']['import1.']['mods']=='import') && (intval($this->data['step3.']['import1.']['modgroup'])==0)) {
+				if (($this->data['step3.']['import1.']['mods']=='import') && (intval($this->data['step3.']['import1.']['modgroup'])==0)) {
 					$error ++;
 					$warnings['import1.mods'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step3.import1.mods.emptyError').'</div>';
 				}
-				elseif($this->data['step3.']['import1.']['mods']=='import') {
+				elseif ($this->data['step3.']['import1.']['mods']=='import') {
 					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_groups','uid="'.intval($this->data['step3.']['import1.']['modgroup']).'"');
-					if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) {
+					if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) {
 						$error ++;
 						$warnings['import1.mods'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step3.import1.mods.neError').'</div>';
 					}
 				}
 				// Check if admin group was correctly specified
-				if($this->data['step3.']['import1.']['admins']=='import' && intval($this->data['step3.']['import1.']['admingroup'])==0) {
+				if ($this->data['step3.']['import1.']['admins']=='import' && intval($this->data['step3.']['import1.']['admingroup'])==0) {
 					$error ++;
 					$warnings['import1.admins'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step3.import1.mods.emptyError').'</div>';
 				}
-				elseif($this->data['step3.']['import1.']['admins']=='import') {
+				elseif ($this->data['step3.']['import1.']['admins']=='import') {
 					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_groups','uid="'.intval($this->data['step3.']['import1.']['admingroup']).'"');
-					if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) {
+					if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) {
 						$error ++;
 						$warnings['import1.admins'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step3.import1.mods.neError').'</div>';
 					}
 				}
 				// Check if avatar path was correctly specified
-				if(strlen($this->data['step3.']['import1.']['avatarpath'])==0) {
+				if (strlen($this->data['step3.']['import1.']['avatarpath'])==0) {
 					$warning ++;
 					$warnings['import1.avatarpath'] = '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step3.import1.avatarpath.emptyWarning').'</div>';
 
 					$this->data['step3.']['import1.']['avatarpath'] = 'uploads/tx_mmforum/';
 				}
 			}
-			if(in_array('topics/posts',$dataFields)) {
-				if(strlen($this->data['step3.']['import2.']['pid'])==0 || !is_numeric($this->data['step3.']['import2.']['pid'])) {
+			if (in_array('topics/posts',$dataFields)) {
+				if (strlen($this->data['step3.']['import2.']['pid'])==0 || !is_numeric($this->data['step3.']['import2.']['pid'])) {
 					$warning ++;
 					$warnings['import2.pid'] = '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step3.import0.pid.warning').'</div>';
 					$this->data['step3.']['import2.']['pid'] = 0;
 				}
 			}
-			if(in_array('pms',$dataFields)) {
-				if(strlen($this->data['step3.']['import3.']['pid'])==0 || !is_numeric($this->data['step3.']['import3.']['pid'])) {
+			if (in_array('pms',$dataFields)) {
+				if (strlen($this->data['step3.']['import3.']['pid'])==0 || !is_numeric($this->data['step3.']['import3.']['pid'])) {
 					$warning ++;
 					$warnings['import3.pid'] = '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step3.import0.pid.warning').'</div>';
 					$this->data['step3.']['import3.']['pid'] = 0;
 				}
 			}
-			if(in_array('search',$dataFields)) {
-				if(strlen($this->data['step3.']['import4.']['pid'])==0 || !is_numeric($this->data['step3.']['import4.']['pid'])) {
+			if (in_array('search',$dataFields)) {
+				if (strlen($this->data['step3.']['import4.']['pid'])==0 || !is_numeric($this->data['step3.']['import4.']['pid'])) {
 					$warning ++;
 					$warnings['import4.pid'] = '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step3.import0.pid.warning').'</div>';
 					$this->data['step3.']['import4.']['pid'] = 0;
 				}
 			}
-			if(in_array('smilies',$dataFields)) {
-				if(strlen($this->data['step3.']['import5.']['pid'])==0 || !is_numeric($this->data['step3.']['import5.']['pid'])) {
+			if (in_array('smilies',$dataFields)) {
+				if (strlen($this->data['step3.']['import5.']['pid'])==0 || !is_numeric($this->data['step3.']['import5.']['pid'])) {
 					$warning ++;
 					$warnings['import5.pid'] = '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step3.import0.pid.warning').'</div>';
 					$this->data['step3.']['import5.']['pid'] = 0;
 				}
-				if(strlen($this->data['step3.']['import5.']['phpbb_smilie_url']) == 0) {
+				if (strlen($this->data['step3.']['import5.']['phpbb_smilie_url']) == 0) {
 					$error ++;
 					$warnings['import5.phpbb_smilie_url'] .= '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step3.import5.phpbbSmilie_url.emptyError').'</div>';
 				}
-				if(strlen($this->data['step3.']['import5.']['mmforum_smilie_url']) == 0) {
+				if (strlen($this->data['step3.']['import5.']['mmforum_smilie_url']) == 0) {
 					$error ++;
 					$warnings['import5.mmforum_smilie_url'] .= '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step3.import5.mmforumSmilie_url.emptyError').'</div>';
 				}
 			}
-			if(in_array('subscr',$dataFields)) {
-				if(strlen($this->data['step3.']['import6.']['pid'])==0 || !is_numeric($this->data['step3.']['import6.']['pid'])) {
+			if (in_array('subscr',$dataFields)) {
+				if (strlen($this->data['step3.']['import6.']['pid'])==0 || !is_numeric($this->data['step3.']['import6.']['pid'])) {
 					$warning ++;
 					$warnings['import6.pid'] = '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step3.import0.pid.warning').'</div>';
 					$this->data['step3.']['import6.']['pid'] = 0;
 				}
 			}
 
-			if($error+$warning == 0) {
+			if ($error+$warning == 0) {
 				$content = $this->step4($content);
 				return $content;
 			}
@@ -566,11 +566,11 @@ class tx_mmforum_phpbbimport {
 		$checked = ($this->data['step3.']['clearReallyAll'])?'checked="checked"':'';
 		$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.clearReallyAll').'</td><td><input type="checkbox" name="tx_mmforum_phpbb[step3.][clearReallyAll] value="1" '.$checked.' /></td></tr>';
 
-		if(in_array('boards/categories',$dataFields)) {
+		if (in_array('boards/categories',$dataFields)) {
 			$content .= '<tr><td style="width:1px; color:#ff8000;">&raquo;</td><td colspan="2"><strong>'.$LANG->getLL('phpbb.step2.boards/categories').'</strong></td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import0.pid').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import0.][pid]" size="4" value="'.$this->data['step3.']['import0.']['pid'].'" />'.$warnings['import0.pid'].'</td></tr>';
 		}
-		if(in_array('users/usergroups',$dataFields)) {
+		if (in_array('users/usergroups',$dataFields)) {
 			$content .= '<tr><td style="width:1px; color:#ff8000;">&raquo;</td><td colspan="2"><strong>'.$LANG->getLL('phpbb.step2.users/usergroups').'</strong></td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import1.pid').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import1.][pid]" size="4" value="'.$this->data['step3.']['import1.']['pid'].'" />'.$warnings['import1.pid'].'</td></tr>';
 
@@ -607,32 +607,32 @@ class tx_mmforum_phpbbimport {
 			$isugChecked = ($this->data['step3.']['import1.']['importSingleUserGroups'])?'checked="checked"':'';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import1.createSingleUserGroups').'</td><td width="67%"><input type="checkbox" name="tx_mmforum_phpbb[step3.][import1.][importSingleUserGroups]" value="1" '.$isugChecked.' /></td></tr>';
 		}
-		if(in_array('topics/posts',$dataFields)) {
+		if (in_array('topics/posts',$dataFields)) {
 			$content .= '<tr><td style="width:1px; color:#ff8000;">&raquo;</td><td colspan="2"><strong>'.$LANG->getLL('phpbb.step2.topics/posts').'</strong></td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import2.pid').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import2.][pid]" size="4" value="'.$this->data['step3.']['import2.']['pid'].'" />'.$warnings['import2.pid'].'</td></tr>';
 		}
-		if(in_array('pms',$dataFields)) {
+		if (in_array('pms',$dataFields)) {
 			$content .= '<tr><td style="width:1px; color:#ff8000;">&raquo;</td><td colspan="2"><strong>'.$LANG->getLL('phpbb.step2.pms').'</strong></td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import3.pid').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import3.][pid]" size="4" value="'.$this->data['step3.']['import3.']['pid'].'" />'.$warnings['import3.pid'].'</td></tr>';
 		}
-        if(in_array('polls',$dataFields)) {
+        if (in_array('polls',$dataFields)) {
             $content .= '<tr><td style="width:1px; color:#ff8000;">&raquo;</td><td colspan="2"><strong>'.$LANG->getLL('phpbb.step2.polls').'</strong></td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.polls.pid').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][polls.][pid]" size="4" value="'.$this->data['step3.']['polls.']['pid'].'" />'.$warnings['polls.pid'].'</td></tr>';
         }
-		if(in_array('search',$dataFields)) {
+		if (in_array('search',$dataFields)) {
 			$checked = $this->data['step3.']['import4.']['group_post']?'checked="checked"':'';
 
 			$content .= '<tr><td style="width:1px; color:#ff8000;">&raquo;</td><td colspan="2"><strong>'.$LANG->getLL('phpbb.step2.search').'</strong></td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import4.pid').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import4.][pid]" size="4" value="'.$this->data['step3.']['import4.']['pid'].'" />'.$warnings['import4.pid'].'</td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import4.group_post').'</td><td width="67%"><input type="hidden" name="tx_mmforum_phpbb[step3.][import4.][group_post]" value="0" /><input type="checkbox" name="tx_mmforum_phpbb[step3.][import4.][group_post]" value="1" '.$checked.' /></td></tr>';
 		}
-		if(in_array('smilies',$dataFields)) {
+		if (in_array('smilies',$dataFields)) {
 			$content .= '<tr><td style="width:1px; color:#ff8000;">&raquo;</td><td colspan="2"><strong>'.$LANG->getLL('phpbb.step2.smilies').'</strong></td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import5.pid').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import5.][pid]" size="4" value="'.$this->data['step3.']['import5.']['pid'].'" />'.$warnings['import5.pid'].'</td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import5.phpbb_smilie_url').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import5.][phpbb_smilie_url]" value="'.$this->data['step3.']['import5.']['phpbb_smilie_url'].'" />'.$warnings['import5.phpbb_smilie_url'].'</td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import5.mmforum_smilie_url').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import5.][mmforum_smilie_url]" value="'.$this->data['step3.']['import5.']['mmforum_smilie_url'].'" />'.$warnings['import5.mmforum_smilie_url'].'</td></tr>';
 		}
-		if(in_array('subscr',$dataFields)) {
+		if (in_array('subscr',$dataFields)) {
 			$content .= '<tr><td style="width:1px; color:#ff8000;">&raquo;</td><td colspan="2"><strong>'.$LANG->getLL('phpbb.step2.subscr').'</strong></td></tr>';
 			$content .= '<tr><td></td><td width="33%">'.$LANG->getLL('phpbb.step3.import6.pid').'</td><td width="67%"><input type="text" name="tx_mmforum_phpbb[step3.][import6.][pid]" size="4" value="'.$this->data['step3.']['import6.']['pid'].'" />'.$warnings['import6.pid'].'</td></tr>';
 		}
@@ -641,9 +641,9 @@ class tx_mmforum_phpbbimport {
 
 		$content .= '</table>';
 
-		if($warning > 0) $content .= '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step3.warning').'</div><input type="hidden" name="tx_mmforum_phpbb[step3.][ignore]" value="1" />';
-		if($error == 1) $content .= '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step3.error1').'</div>';
-		elseif($error > 1) $content .= '<div class="mm_forum-fatalerror">'.sprintf($LANG->getLL('phpbb.step3.errors'),$error).'</div>';
+		if ($warning > 0) $content .= '<div class="mm_forum-warning">'.$LANG->getLL('phpbb.step3.warning').'</div><input type="hidden" name="tx_mmforum_phpbb[step3.][ignore]" value="1" />';
+		if ($error == 1) $content .= '<div class="mm_forum-fatalerror">'.$LANG->getLL('phpbb.step3.error1').'</div>';
+		elseif ($error > 1) $content .= '<div class="mm_forum-fatalerror">'.sprintf($LANG->getLL('phpbb.step3.errors'),$error).'</div>';
 
 		$content .= '<br /><input type="submit" value="'.$LANG->getLL('phpbb.general.continue').'" name="tx_mmforum_phpbb[step3.][submit]" />';
 
@@ -682,12 +682,12 @@ class tx_mmforum_phpbbimport {
 		$content .= '<fieldset>';
 		$content .= '<legend>'.sprintf($LANG->getLL('phpbb.general.stepXofY'),4+$this->stepOffset,$this->steps+$this->stepOffset).': '.$LANG->getLL('phpbb.step4').'</legend>';
 
-		if($this->data['step4.']['submit']==$LANG->getLL('phpbb.step4.startButton')) {
+		if ($this->data['step4.']['submit']==$LANG->getLL('phpbb.step4.startButton')) {
 			$dataFields = $this->data['step2.']['importdata'];
 
-			if($this->data['step3.']['clearAll']) {
+			if ($this->data['step3.']['clearAll']) {
 				$sql = "";
-				if(in_array('users/usergroups',$dataFields)) {
+				if (in_array('users/usergroups',$dataFields)) {
 					$userWhere = $this->data['step4.']['clearAll']['userWHERE']?$this->data['step4.']['clearAll']['userWHERE']:($this->data['step4.']['clearAll']['userUID']?"WHERE uid NOT IN (".$this->data['step4.']['clearAll']['userUID'].")":'');
 					$usergroupWhere = $this->data['step4.']['clearAll']['usergroupWHERE']?$this->data['step4.']['clearAll']['usergroupWHERE']:($this->data['step4.']['clearAll']['usergroupUID']?"WHERE uid NOT IN (".$this->data['step4.']['clearAll']['usergroupUID'].")":'');
 
@@ -697,13 +697,13 @@ class tx_mmforum_phpbbimport {
 					$this->deleteMappingArray('usergroupID_mapping');
 					$this->deleteMappingArray('userID_mapping');
 				}
-				if(in_array('boards/categories',$dataFields)) {
+				if (in_array('boards/categories',$dataFields)) {
 					mysql_query("DELETE FROM tx_mmforum_forums");
 					$this->unsetImported('boards/categories');
 					$this->deleteMappingArray('boardID_mapping');
 					$this->deleteMappingArray('categoryID_mapping');
 				}
-				if(in_array('topics/posts',$dataFields)) {
+				if (in_array('topics/posts',$dataFields)) {
 					mysql_query("DELETE FROM tx_mmforum_posts;");
                     mysql_query("DELETE FROM tx_mmforum_topics;");
                     mysql_query("DELETE FROM tx_mmforum_posts_text;");
@@ -712,32 +712,32 @@ class tx_mmforum_phpbbimport {
 					$this->deleteMappingArray('postID_mapping');
 					$this->deleteMappingArray('topicID_mapping');
 				}
-				if(in_array('pms',$dataFields)) {
+				if (in_array('pms',$dataFields)) {
 					mysql_query("DELETE FROM tx_mmforum_pminbox");
 					$this->unsetImported('pms');
 				}
-				if(in_array('polls',$dataFields)) {
+				if (in_array('polls',$dataFields)) {
 					mysql_query("DELETE FROM tx_mmforum_polls;");
                     mysql_query("DELETE FROM tx_mmforum_polls_answers;");
                     mysql_query("DELETE FROM tx_mmforum_polls_votes;");
 					$this->unsetImported('polls');
 				}
-				if(in_array('search',$dataFields)) {
+				if (in_array('search',$dataFields)) {
 					mysql_query("DELETE FROM tx_mmforum_searchresults;");
                     mysql_query("DELETE FROM tx_mmforum_wordlist;");
                     mysql_query("DELETE FROM tx_mmforum_wordmatch;");
 					$this->unsetImported('search');
 				}
-				if(in_array('smilies',$dataFields)) {
+				if (in_array('smilies',$dataFields)) {
 					mysql_query("DELETE FROM tx_mmforum_smilies");
 					$this->unsetImported('smilies');
 				}
-				if(in_array('substr',$dataFields)) {
+				if (in_array('substr',$dataFields)) {
 					mysql_query("DELETE FROM tx_mmforum_topicmail");
 					$this->unsetImported('subscr');
 				}
 			}
-			elseif($this->data['step3.']['clearReallyAll']) {
+			elseif ($this->data['step3.']['clearReallyAll']) {
 				$userWhere = $this->data['step4.']['clearAll']['userWHERE']?$this->data['step4.']['clearAll']['userWHERE']:($this->data['step4.']['clearAll']['userUID']?"WHERE uid NOT IN (".$this->data['step4.']['clearAll']['userUID'].")":'');
 				$usergroupWhere = $this->data['step4.']['clearAll']['usergroupWHERE']?$this->data['step4.']['clearAll']['usergroupWHERE']:($this->data['step4.']['clearAll']['usergroupUID']?"WHERE uid NOT IN (".$this->data['step4.']['clearAll']['usergroupUID'].")":'');
 
@@ -782,7 +782,7 @@ class tx_mmforum_phpbbimport {
 			$this->retrieveMappingArray($this->usergroupID_mapping,'usergroupID_mapping');
 			$this->retrieveMappingArray($this->userID_mapping,'userID_mapping');
 
-			if(in_array('users/usergroups',$dataFields)) {
+			if (in_array('users/usergroups',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.users/usergroups').'</div>';
 
 				$res = $this->step4_importUsers();
@@ -790,7 +790,7 @@ class tx_mmforum_phpbbimport {
 				$content .= $this->step4_outputErrors($res['err']);
 			}
 
-			if(in_array('boards/categories',$dataFields)) {
+			if (in_array('boards/categories',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.boards/categories').'</div>';
 
 				$res = $this->step4_importBoards();
@@ -798,7 +798,7 @@ class tx_mmforum_phpbbimport {
 				$content .= $this->step4_outputErrors($res['err']);
 			}
 
-			if(in_array('topics/posts',$dataFields)) {
+			if (in_array('topics/posts',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.topics/posts').'</div>';
 
 				$res = $this->step4_importPosts();
@@ -806,7 +806,7 @@ class tx_mmforum_phpbbimport {
 				$content .= $this->step4_outputErrors($res['err']);
 			}
 
-			if(in_array('pms',$dataFields)) {
+			if (in_array('pms',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.pms').'</div>';
 
 				$res = $this->step4_importPMs();
@@ -814,7 +814,7 @@ class tx_mmforum_phpbbimport {
 				$content .= $this->step4_outputErrors($res['err']);
 			}
 
-            if(in_array('polls',$dataFields)) {
+            if (in_array('polls',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.polls').'</div>';
 
 				$res = $this->step4_importPolls();
@@ -822,7 +822,7 @@ class tx_mmforum_phpbbimport {
 				$content .= $this->step4_outputErrors($res['err']);
             }
 
-			if(in_array('search',$dataFields)) {
+			if (in_array('search',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.search').'</div>';
 
 				$res = $this->step4_importSearch();
@@ -830,7 +830,7 @@ class tx_mmforum_phpbbimport {
 				$content .= $this->step4_outputErrors($res['err']);
 			}
 
-			if(in_array('smilies',$dataFields)) {
+			if (in_array('smilies',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.smilies').'</div>';
 
 				$res = $this->step4_importSmilies();
@@ -838,7 +838,7 @@ class tx_mmforum_phpbbimport {
 				$content .= $this->step4_outputErrors($res['err']);
 			}
 
-			if(in_array('subscr',$dataFields)) {
+			if (in_array('subscr',$dataFields)) {
 				$content .= '<div style="font-weight: bold;">'.$LANG->getLL('phpbb.step2.subscr').'</div>';
 
 				$res = $this->step4_importSubscriptions();
@@ -848,7 +848,7 @@ class tx_mmforum_phpbbimport {
 		}
 		else {
 
-			if($this->data['step3.']['clearReallyAll'] || ($this->data['step3.']['clearReallyAll'] && in_array('users/usergroups',$this->data['step2.']['importdata']))) {
+			if ($this->data['step3.']['clearReallyAll'] || ($this->data['step3.']['clearReallyAll'] && in_array('users/usergroups',$this->data['step2.']['importdata']))) {
 				$content .= '<div>'.$LANG->getLL('phpbb.step4.clearAllNote').'</div>';
 				$content .= '<table><tr><td>'.$LANG->getLL('phpbb.step4.clear.userUID').'</td><td><input type="text" name="tx_mmforum_phpbb[step4.][clearAll][userUID]" value="" /> '.$LANG->getLL('phpbb.step4.clear.uidEx').'</td></tr>';
 				$content .= '<tr><td>'.$LANG->getLL('phpbb.step4.clear.userWHERE').'</td><td><input type="text" name="tx_mmforum_phpbb[step4.][clearAll][userWHERE]" /> '.$LANG->getLL('phpbb.step4.clear.whereEx').'</td></tr>';
@@ -874,7 +874,7 @@ class tx_mmforum_phpbbimport {
 	 */
 	function step4_outputReport($report) {
 		$content = "";
-		if(!is_array($report)) return "";
+		if (!is_array($report)) return "";
 		foreach($report as $sReport) {
 		 	$content .= '<div>'.$sReport.'</div>';
 		}
@@ -891,7 +891,7 @@ class tx_mmforum_phpbbimport {
 	 */
 	function step4_outputErrors($errors) {
 		$content = "";
-		if(!is_array($errors)) return "";
+		if (!is_array($errors)) return "";
 		foreach($errors as $error) {
 		 	$content .= '<div class="mm_forum-fatalerror">'.$error.'</div>';
 		}
@@ -933,7 +933,7 @@ class tx_mmforum_phpbbimport {
                 'sorting'       => $arr['cat_order'],
 			);
 			$iRes = @$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_forums',$insertArray);
-			if(!$iRes) {
+			if (!$iRes) {
 				$err[] = sprintf($LANG->getLL('phpbb.step4.errorCategoryImport'),$arr['cat_title']);
 				continue;
 			}
@@ -956,20 +956,20 @@ class tx_mmforum_phpbbimport {
             $r_write = array();
 
             // Determine read rights
-                if($arr['auth_read'] == 0) $r_read[] = '';
-            elseif($arr['auth_read'] == 1) {
+                if ($arr['auth_read'] == 0) $r_read[] = '';
+            elseif ($arr['auth_read'] == 1) {
                 $r_read[] = '{$usergroup}';
                 $this->updateMapping['groups'][] = 'forum:{$usergroup}:grouprights_read/list';
             }
-            elseif($arr['auth_read'] == 3) {
+            elseif ($arr['auth_read'] == 3) {
                 $r_read[] = '{$modgroup}';
                 $this->updateMapping['groups'][] = 'forum:{$modgroup}:grouprights_read/list';
             }
-            elseif($arr['auth_read'] == 4) {
+            elseif ($arr['auth_read'] == 4) {
                 $r_read[] = '{$admingroup}';
                 $this->updateMapping['groups'][] = 'forum:{$admingroup}:grouprights_read/list';
             }
-            elseif($arr['auth_read'] == 3) {
+            elseif ($arr['auth_read'] == 3) {
                 $res = $this->dbObj->exec_SELECTquery(
                     '*',
                     $this->data['prefix'].'_auth_access',
@@ -982,20 +982,20 @@ class tx_mmforum_phpbbimport {
             }
 
             // Determine write rights
-                if($arr['auth_reply'] == 0) $r_write[] = '';
-            elseif($arr['auth_reply'] == 1) {
+                if ($arr['auth_reply'] == 0) $r_write[] = '';
+            elseif ($arr['auth_reply'] == 1) {
                 $r_write[] = '{$usergroup}';
                 $this->updateMapping['groups'][] = 'forum:{$usergroup}:grouprights_write/list';
             }
-            elseif($arr['auth_read'] == 3) {
+            elseif ($arr['auth_read'] == 3) {
                 $r_write[] = '{$modgroup}';
                 $this->updateMapping['groups'][] = 'forum:{$modgroup}:grouprights_write/list';
             }
-            elseif($arr['auth_read'] == 4) {
+            elseif ($arr['auth_read'] == 4) {
                 $r_write[] = '{$admingroup}';
                 $this->updateMapping['groups'][] = 'forum:{$admingroup}:grouprights_write/list';
             }
-            elseif($arr['auth_read'] == 3) {
+            elseif ($arr['auth_read'] == 3) {
                 $res = $this->dbObj->exec_SELECTquery(
                     '*',
                     $this->data['prefix'].'_auth_access',
@@ -1008,9 +1008,9 @@ class tx_mmforum_phpbbimport {
             }
 
             foreach($r_write as $wGroup)
-                if(intval($wGroup)>0) $rWGroup[] = $wGroup;
+                if (intval($wGroup)>0) $rWGroup[] = $wGroup;
             foreach($r_read as $rGroup)
-                if(intval($rGroup)>0) $rRGroup[] = $rGroup;
+                if (intval($rGroup)>0) $rRGroup[] = $rGroup;
 
 			$insertArray = array(
 				'pid'			        => $this->data['step3.']['import0.']['pid'],
@@ -1031,7 +1031,7 @@ class tx_mmforum_phpbbimport {
                 'grouprights_write'     => count($rWGroup)?implode(',',$rWGroup):''
 			);
 			$iRes = @$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_forums',$insertArray);
-			if(!$iRes) {
+			if (!$iRes) {
 				$err[] = sprintf($LANG->getLL('phpbb.step4.errorBoardImport'),$arr['forum_name']);
 				continue;
 			}
@@ -1089,7 +1089,7 @@ class tx_mmforum_phpbbimport {
 			'1'
 		);
 		while($arr = $this->dbObj->sql_fetch_assoc($res)) {
-			if(!$this->data['step3.']['import1.']['importSingleUserGroups'] && $arr['group_single_user']) continue;
+			if (!$this->data['step3.']['import1.']['importSingleUserGroups'] && $arr['group_single_user']) continue;
 
 			$insertArray = array(
 				'pid'			=> $this->data['step3.']['import1.']['pid'],
@@ -1099,7 +1099,7 @@ class tx_mmforum_phpbbimport {
 				'description'	=> $arr['group_description']
 			);
 			$iRes = @$GLOBALS['TYPO3_DB']->exec_INSERTquery('fe_groups',$insertArray);
-			if(!$iRes) {
+			if (!$iRes) {
 				$err[] = sprintf($LANG->getLL('phpbb.step4.errorUsergroupImport'),$arr['group_name']);
 				continue;
 			}
@@ -1119,14 +1119,14 @@ class tx_mmforum_phpbbimport {
 			$admingroup_uid     = 0;
 			$moderatorgroup_uid = 0;
 
-			if($this->data['step3.']['import1.']['admins'] == 'create') {
+			if ($this->data['step3.']['import1.']['admins'] == 'create') {
 				$insertArray = array(
 					'pid'			=> $this->data['step3.']['import1.']['pid'],
 					'tstamp'		=> $GLOBALS['EXEC_TIME'],
 					'title'			=> $LANG->getLL('phpbb.step4.new_adminGroup')
 				);
 				$iRes = @$GLOBALS['TYPO3_DB']->exec_INSERTquery('fe_groups',$insertArray);
-				if(!$iRes) {
+				if (!$iRes) {
 					$err[] = $LANG->getLL('phpbb.step4.errorAdmingroupCreate');
 					return array('err'=>$err,'rep'=>$rep);
 				}
@@ -1134,20 +1134,20 @@ class tx_mmforum_phpbbimport {
 				$admingroup_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
                 $this->usergroupID_mapping['{$admingroup}'] = $admingroup_uid;
 			}
-			elseif($this->data['step3.']['import1.']['admins'] == 'import') {
+			elseif ($this->data['step3.']['import1.']['admins'] == 'import') {
 				$admingroup_uid = $this->data['step3.']['import1.']['admingroup'];
                 $this->usergroupID_mapping['{$admingroup}'] = $admingroup_uid;
 			}
             else $this->usergroupID_mapping['{$admingroup}'] = '';
 
-			if($this->data['step3.']['import1.']['mods'] == 'create') {
+			if ($this->data['step3.']['import1.']['mods'] == 'create') {
 				$insertArray = array(
 					'pid'			=> $this->data['step3.']['import1.']['pid'],
 					'tstamp'		=> $GLOBALS['EXEC_TIME'],
 					'title'			=> $LANG->getLL('phpbb.step4.new_modGroup')
 				);
 				$iRes = @$GLOBALS['TYPO3_DB']->exec_INSERTquery('fe_groups',$insertArray);
-				if(!$iRes) {
+				if (!$iRes) {
 					$err[] = $LANG->getLL('phpbb.step4.errorModgroupCreate');
 					return array('err'=>$err,'rep'=>$rep);
 				}
@@ -1155,20 +1155,20 @@ class tx_mmforum_phpbbimport {
 				$moderatorgroup_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
                 $this->usergroupID_mapping['{$modgroup}'] = $moderatorgroup_uid;
 			}
-			elseif($this->data['step3.']['import1.']['mods'] == 'import') {
+			elseif ($this->data['step3.']['import1.']['mods'] == 'import') {
 				$moderatorgroup_uid = $this->data['step3.']['import1.']['modgroup'];
                 $this->usergroupID_mapping['{$modgroup}'] = $moderatorgroup_uid;
 			}
             else $this->usergroupID_mapping['{$modgroup}'] = '';
 
-			if($this->data['step3.']['import1.']['users'] == 'create') {
+			if ($this->data['step3.']['import1.']['users'] == 'create') {
 				$insertArray = array(
 					'pid'			=> $this->data['step3.']['import1.']['pid'],
 					'tstamp'		=> $GLOBALS['EXEC_TIME'],
 					'title'			=> $LANG->getLL('phpbb.step4.new_userGroup')
 				);
 				$iRes = @$GLOBALS['TYPO3_DB']->exec_INSERTquery('fe_groups',$insertArray);
-				if(!$iRes) {
+				if (!$iRes) {
 					$err[] = $LANG->getLL('phpbb.step4.errorUsergroupCreate');
 					return array('err'=>$err,'rep'=>$rep);
 				}
@@ -1176,7 +1176,7 @@ class tx_mmforum_phpbbimport {
 				$usergroup_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
                 $this->usergroupID_mapping['{$usergroup}'] = $usergroup_uid;
 			}
-			elseif($this->data['step3.']['import1.']['users'] == 'import') {
+			elseif ($this->data['step3.']['import1.']['users'] == 'import') {
 				$usergroup_uid = $this->data['step3.']['import1.']['usergroup'];
                 $this->usergroupID_mapping['{$usergroup}'] = $usergroup_uid;
 			}
@@ -1192,11 +1192,11 @@ class tx_mmforum_phpbbimport {
 				$groups = array();
 
 				// Determine user groups
-					if(($arr['user_level'] == 2) && ($this->data['step3.']['import1.']['mods'] != 'nothing'))
+					if (($arr['user_level'] == 2) && ($this->data['step3.']['import1.']['mods'] != 'nothing'))
 						$groups[] = $moderatorgroup_uid;
-					if(($arr['user_level'] == 1) && ($this->data['step3.']['import1.']['mods'] != 'nothing'))
+					if (($arr['user_level'] == 1) && ($this->data['step3.']['import1.']['mods'] != 'nothing'))
 						$groups[] = $admingroup_uid;
-					if($this->data['step3.']['import1.']['mods'] != 'nothing')
+					if ($this->data['step3.']['import1.']['mods'] != 'nothing')
 						$groups[] = $usergroup_uid;
 
 					$res2 = $this->dbObj->exec_SELECTquery(
@@ -1205,18 +1205,18 @@ class tx_mmforum_phpbbimport {
 						'user_id="'.$arr['user_id'].'" AND user_pending=0'
 					);
 					while($user_group = $this->dbObj->sql_fetch_assoc($res2)) {
-						if($this->usergroupID_mapping[$user_group['group_id']])
+						if ($this->usergroupID_mapping[$user_group['group_id']])
 							$groups[] = $this->usergroupID_mapping[$user_group['group_id']];
 					}
 					$usergroup_string = implode(',',$groups);
 
 				// Determine avatar
-					if($arr['user_avatar_type']=='1') {
+					if ($arr['user_avatar_type']=='1') {
 						$filename_total = $arr['user_avatar'];
 						$filename_base  = basename($filename_total);
 						$filename_new	= $this->data['step3.']['import1.']['avatarpath'].$filename_base;
 
-						if(file_exists($filename_total)) {
+						if (file_exists($filename_total)) {
 							copy($filename_total,$filename_new);
 							$avatar = $filename_base;
 						}
@@ -1251,7 +1251,7 @@ class tx_mmforum_phpbbimport {
 					'tx_mmforum_skype'	=> ''
 				);
 				$iRes = $GLOBALS['TYPO3_DB']->exec_INSERTquery('fe_users',$insertArray);
-				if(!$iRes) {
+				if (!$iRes) {
 					$err[] = sprintf($LANG->getLL('phpbb.step4.errorUserImport'),$arr['username']);
 					continue;
 				}
@@ -1261,12 +1261,12 @@ class tx_mmforum_phpbbimport {
 			}
 			$rep[] = sprintf($LANG->getLL('phpbb.step4.userimport_report'),$successUsers);
 
-        if(is_array($this->updateMapping['groups'])) {
+        if (is_array($this->updateMapping['groups'])) {
             foreach($this->updateMapping['groups'] as $updateMapping_groups) {
 			    $data = t3lib_div::trimExplode(':',$updateMapping_groups);
 
-			    if($data[0] == 'forum') {
-                    if(substr($data[2],-5,5)=='/list') {
+			    if ($data[0] == 'forum') {
+                    if (substr($data[2],-5,5)=='/list') {
                         $data[2] = substr($data[2],0,strlen($data[2])-5);
                         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                             $data[2].', uid',
@@ -1279,7 +1279,7 @@ class tx_mmforum_phpbbimport {
                             $list = t3lib_div::trimExplode($sList);
 
                             foreach($list as $listItem) {
-                                if($listItem == $data[1]) {
+                                if ($listItem == $data[1]) {
                                     $updatedList[] = $this->usergroupID_mapping[$data[1]]; continue;
                                 }
                                 $updatedList[] = $listItem;
@@ -1329,7 +1329,7 @@ class tx_mmforum_phpbbimport {
 			'1'
 		);
 		while($arr = $this->dbObj->sql_fetch_assoc($res)) {
-			if($arr['topic_status']==2) continue;
+			if ($arr['topic_status']==2) continue;
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import2.']['pid'],
 				'cruser_id'				=> $this->userID_mapping[$arr['topic_poster']],
@@ -1351,7 +1351,7 @@ class tx_mmforum_phpbbimport {
 				'closed_flag'			=> ($arr['topic_status']>0)?1:0
 			);
 			$iRes = @$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_topics',$insertArray);
-			if(!$iRes) {
+			if (!$iRes) {
 				$err[] = sprintf($LANG->getLL('phpbb.step4.errorTopicImport'),$arr['topic_title']);
 				continue;
 			}
@@ -1387,7 +1387,7 @@ class tx_mmforum_phpbbimport {
 			);
 			$iRes = @$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_posts',$insertArray);
             $post_id = $GLOBALS['TYPO3_DB']->sql_insert_id();
-			if(!$iRes) {
+			if (!$iRes) {
 				$err[] = sprintf($LANG->getLL('phpbb.step4.errorPostImport'),$arr['post_id']);
 				continue;
 			}
@@ -1402,11 +1402,11 @@ class tx_mmforum_phpbbimport {
 		foreach($this->updateMapping['posts'] as $updateMapping_post) {
 			$data = t3lib_div::trimExplode(':',$updateMapping_post);
 
-			if($data[0] == 'forum') {
+			if ($data[0] == 'forum') {
 				$updateArray = array($data[2] => $this->postID_mapping[$data[1]]);
 				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums',$data[2].'="'.$data[1].'"',$updateArray);
 			}
-			elseif($data[0] == 'topic') {
+			elseif ($data[0] == 'topic') {
 				$updateArray = array($data[2] => $this->postID_mapping[$data[1]]);
 				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics',$data[2].'="'.$data[1].'"',$updateArray);
 			}
@@ -1516,7 +1516,7 @@ class tx_mmforum_phpbbimport {
 				'mess_type'				=> $messType
 			);
 			$iRes = @$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_pminbox',$insertArray);
-			if(!$iRes) {
+			if (!$iRes) {
 				$err[] = sprintf($LANG->getLL('phpbb.step4.errorPMImport'),$arr['privmsgs_id']);
 				continue;
 			}
@@ -1558,11 +1558,11 @@ class tx_mmforum_phpbbimport {
 		while($arr = $this->dbObj->sql_fetch_assoc($res)) {
 			$searchData = unserialize($arr['search_array']);
 
-			if($arr['sort_dir'] == 'DESC') $searchOrder = 2;
+			if ($arr['sort_dir'] == 'DESC') $searchOrder = 2;
 			else $searchOrder = 1;
 
-			if(!is_array($searchData['split_search'])) $searchData['split_search'] = array($searchData['split_search']);
-			if(!is_array($searchData['search_results'])) $searchData['search_results'] = t3lib_div::trimExplode(',',$searchData['search_results']);
+			if (!is_array($searchData['split_search'])) $searchData['split_search'] = array($searchData['split_search']);
+			if (!is_array($searchData['search_results'])) $searchData['search_results'] = t3lib_div::trimExplode(',',$searchData['search_results']);
 
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import4.']['pid'],
@@ -1579,7 +1579,7 @@ class tx_mmforum_phpbbimport {
 				'groupPost'				=> $this->data['step3.']['import4.']['group_post']
 			);
 			$iRes = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_searchresults',$insertArray);
-			if($iRes) $resultsSuccess ++;
+			if ($iRes) $resultsSuccess ++;
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.searchresultsimport_report'),$resultsSuccess);
 
@@ -1600,7 +1600,7 @@ class tx_mmforum_phpbbimport {
 				'metaphone'				=> metaphone($arr['word_text'])
 			);
 			$iRes = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_wordlist',$insertArray);
-			if($iRes) $wordsSuccess ++;
+			if ($iRes) $wordsSuccess ++;
 			$newId = $GLOBALS['TYPO3_DB']->sql_insert_id();
 
 			$this->searchword_mapping[$arr['word_id']] = $newId;
@@ -1647,7 +1647,7 @@ class tx_mmforum_phpbbimport {
 				'post_cruser'			=> $postData['poster_id']
 			);
 			$iRes = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_wordmatch',$insertArray);
-			if($iRes) $matchesSuccess ++;
+			if ($iRes) $matchesSuccess ++;
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.matchesimport_report'),$matchesSuccess);
 		$this->setImported("search");
@@ -1682,8 +1682,8 @@ class tx_mmforum_phpbbimport {
 
 		$smilieImport_count = 0;
 
-		if($phpbb_smiliedir{strlen($phpbb_smiliedir)-1} != "/") $phpbb_smiliedir = "$phpbb_smiliedir/";
-		if($mmforum_smiliedir{strlen($mmforum_smiliedir)-1} != "/") $mmforum_smiliedir = "$mmforum_smiliedir/";
+		if ($phpbb_smiliedir{strlen($phpbb_smiliedir)-1} != "/") $phpbb_smiliedir = "$phpbb_smiliedir/";
+		if ($mmforum_smiliedir{strlen($mmforum_smiliedir)-1} != "/") $mmforum_smiliedir = "$mmforum_smiliedir/";
 
 		$res = $this->dbObj->exec_SELECTquery(
 			'*',
@@ -1705,7 +1705,7 @@ class tx_mmforum_phpbbimport {
 			copy($phpbb_smiliedir.$arr['smile_url'],$mmforum_smiliedir.$arr['smile_url']);
 			$iRes = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_smilies',$insertArray);
 
-			if($iRes) $smilieImport_count ++;
+			if ($iRes) $smilieImport_count ++;
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.smilieimport_report'),$smilieImport_count);
 		$this->setImported("smilies");
@@ -1748,7 +1748,7 @@ class tx_mmforum_phpbbimport {
 				'topic_id'				=> $this->topicID_mapping[$arr['topic_id']]
 			);
 			$iRes = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_topicmail',$insertArray);
-			if($iRes) $subscrImport_count ++;
+			if ($iRes) $subscrImport_count ++;
 		}
 		$rep[] = sprintf($LANG->getLL('phpbb.step4.subscrimport_report'),$subscrImport_count);
 		$this->setImported("subscr");
@@ -1859,7 +1859,7 @@ class tx_mmforum_phpbbimport {
 	 * @param string $filename The filename from which the array is to be loaded.
 	 */
 	function retrieveMappingArray(&$array, $filename) {
-		if(!file_exists("tmp.$filename")) return;
+		if (!file_exists("tmp.$filename")) return;
 
 		$string = file_get_contents("tmp.$filename");
 		$array = unserialize($string);
@@ -1895,7 +1895,7 @@ class tx_mmforum_phpbbimport {
 	 * @param string $filename The filename in which the array is stored.
 	 */
 	function deleteMappingArray($filename) {
-		if(file_exists("tmp.$filename"))
+		if (file_exists("tmp.$filename"))
 			unlink("tmp.$filename");
 	}
 
@@ -1927,7 +1927,7 @@ class tx_mmforum_phpbbimport {
 	 */
 	function unsetImported($field) {
 		$field = str_replace("/","_",$field);
-		if(file_exists("tmp.$field"))
+		if (file_exists("tmp.$field"))
 			unlink("tmp.$field");
 	}
 
@@ -1950,7 +1950,7 @@ class tx_mmforum_phpbbimport {
 	 * @uses    getAllTables
 	 */
 	function checkTable($tablename) {
-		if(!isset($this->allTables)) $this->getAllTables();
+		if (!isset($this->allTables)) $this->getAllTables();
 		return in_array($tablename,$this->allTables);
 	}
 
@@ -2001,9 +2001,9 @@ class tx_mmforum_phpbbimport {
 	 * @version 2007-03-08
 	 */
 	function outputData_recursiveArray($arr,$path) {
-		if(count($arr)==0) return "";
+		if (count($arr)==0) return "";
 		foreach($arr as $key=>$value) {
-			if(!is_array($value)) {
+			if (!is_array($value)) {
 				$content .= '<input type="hidden" value="'.$value.'" name="tx_mmforum_phpbb'.$path.'['.$key.']" />'."\r\n";
 			}
 			else $content .= $this->outputData_recursiveArray($value,$path.'['.$key.']');

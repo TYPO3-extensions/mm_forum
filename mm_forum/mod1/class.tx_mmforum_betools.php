@@ -58,7 +58,7 @@ Class tx_mmforum_BeTools {
 	
 	Function substituteMarkerArray($template, $marker) {
 		
-		If(TYPO3_branch === '4.1' || TYPO3_branch === '4.0')
+		if (TYPO3_branch === '4.1' || TYPO3_branch === '4.0')
 			Return str_replace(array_keys($marker), array_values($marker), $template);
 		Else Return t3lib_parsehtml::substituteMarkerArray($template, $marker);
 		

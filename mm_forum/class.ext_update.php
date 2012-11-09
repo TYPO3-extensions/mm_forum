@@ -68,7 +68,7 @@ class ext_update {
         $content = '';
 
         foreach($this->action as $action) {
-            if($action == 'rename_tables') $content .= $this->renameTables();
+            if ($action == 'rename_tables') $content .= $this->renameTables();
         }
 
 		if ($this->hasHtaccessFile()) {
@@ -129,7 +129,7 @@ class ext_update {
 		$res = $GLOBALS['TYPO3_DB']->sql_query('SHOW TABLES');
 		$tbl = array_keys($this->obsTableNames);
 		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
-			if(in_array($arr[0],$tbl)) {
+			if (in_array($arr[0],$tbl)) {
 				$this->action[] = 'rename_tables';
 				return true;
 			}

@@ -115,7 +115,7 @@ class tx_mmforum_install {
 
 		$this->save();
 
-		if($this->getIsConfigured()) 	$content = $this->display_allConfigForm();
+		if ($this->getIsConfigured()) 	$content = $this->display_allConfigForm();
 		else							$content = $this->display_installation();
 
 		return $content;
@@ -204,11 +204,11 @@ class tx_mmforum_install {
 
 	function display_categoryLinks() {
 		foreach($this->fieldConfig as $category => $v) {
-			if($v === 'MMFORUM_CONF_CATEGORY') {
+			if ($v === 'MMFORUM_CONF_CATEGORY') {
 				$conf = $this->fieldConfig["$category."];
 				$label = $conf['name'] ? $GLOBALS['LANG']->sL($conf['name'],1) : $this->getLL('cat.'.$category);
 				$icon = $GLOBALS['BACK_PATH'].preg_replace_callback("/^EXT:([a-z0-9_-]+)\//",array('tx_mmforum_install','replaceRelativeExtReference'), $conf['icon']);
-				if($this->instVars['ctg'] == $category) {
+				if ($this->instVars['ctg'] == $category) {
 					$items[] = '<div class="mm_forum-button-hover"><img src="'.$icon.'" />'.$label.'</div>';
 				} else {
 					$set = $this->p->MOD_SETTINGS['function'];
@@ -289,9 +289,9 @@ class tx_mmforum_install {
 
 		$defaultVars = $this->loadDefaultConfiguration();
 
-		if($this->getIsConfigured()) {
+		if ($this->getIsConfigured()) {
 			$content = $this->display_categoryLinks();
-			if(!$this->instVars['ctg']) return $content.$this->display_helpForm();
+			if (!$this->instVars['ctg']) return $content.$this->display_helpForm();
 			$categoryData = $this->fieldConfig[$this->instVars['ctg'].'.'];
 			$fieldData = $categoryData['items.'];
 		} else {
@@ -302,7 +302,7 @@ class tx_mmforum_install {
 			$categoryData = $this->fieldConfig[$categoryData['category'].'.'];
 		}
 
-		if(count($fieldData)==0) return $content;
+		if (count($fieldData)==0) return $content;
 
 		$label = $categoryData['name'] ? $GLOBALS['LANG']->sL($categoryData['title'],1) : $this->getLL('title.'.$this->instVars['ctg']);
 		$icon = $GLOBALS['BACK_PATH'].preg_replace_callback("/^EXT:([a-z0-9_-]+)\//",array('tx_mmforum_install','replaceRelativeExtReference'), $categoryData['icon']);
@@ -315,7 +315,7 @@ class tx_mmforum_install {
 
 		foreach($fieldData as $field => $config) {
 
-			if($config !== 'MMFORUM_CONF_ITEM') continue;
+			if ($config !== 'MMFORUM_CONF_ITEM') continue;
 
 			$config = $fieldData["$field."];
 
@@ -323,7 +323,7 @@ class tx_mmforum_install {
 			$description = $config['description'] ? $GLOBALS['LANG']->sL($config['description']) : $this->getLL('field.'.$field.'.desc');
 
             $bigField = false;
-            if($config['type'] == 'div') {
+            if ($config['type'] == 'div') {
 				$icon = $config['type.']['icon']
 					? $GLOBALS['BACK_PATH'].preg_replace_callback("/^EXT:([a-z0-9_-]+)\//",array('tx_mmforum_install','replaceRelativeExtReference'), $config['type.']['icon'])
 					: 'img/install-'.$field.'.png';
@@ -339,35 +339,35 @@ class tx_mmforum_install {
 
 			$unit = $config['type.']['unit'] ? $GLOBALS['LANG']->sL($config['type.']['unit']) : '';
 
-				if($config['type'] == 'string')	            $input = $this->getTextField($field,$this->conf[$field]);
-			elseif($config['type'] == 'int')                $input = $this->getTextField($field,$this->conf[$field],12);
-            elseif($config['type'] == 'md5')                $input = $this->getMD5Field($field,$this->conf[$field]);
-			elseif($config['type'] == 'checkbox')           $input = $this->getCheckField($field,$this->conf[$field]=='1');
-			elseif($config['type'] == 'group')              $input = $this->getGroupField($config['type.']['table'],$this->conf[$field],$field);
-			elseif($config['type'] == 'select') {
-				if($config['type.']['handler']) {
-					if(strpos($config['type.']['handler'],'->') !== false) {
+				if ($config['type'] == 'string')	            $input = $this->getTextField($field,$this->conf[$field]);
+			elseif ($config['type'] == 'int')                $input = $this->getTextField($field,$this->conf[$field],12);
+            elseif ($config['type'] == 'md5')                $input = $this->getMD5Field($field,$this->conf[$field]);
+			elseif ($config['type'] == 'checkbox')           $input = $this->getCheckField($field,$this->conf[$field]=='1');
+			elseif ($config['type'] == 'group')              $input = $this->getGroupField($config['type.']['table'],$this->conf[$field],$field);
+			elseif ($config['type'] == 'select') {
+				if ($config['type.']['handler']) {
+					if (strpos($config['type.']['handler'],'->') !== false) {
 						list($className, $methodName) = explode('->', $config['type.']['handler']);
 						$obj = t3lib_div::getUserObj($className);
 						$options = $obj->$methodName($this->conf[$field], $field, $config);
 					} else $options = $this->$config['type.']['handler']($this->conf[$field], $field, $config);
 					$input = $this->getLSelectField($field,$this->conf[$field],$options);
-				} elseif($config['type.']['table']) {
-						if($config['type.']['table'] == 'fe_groups') $pid = $this->conf['userPID'];
-					elseif($config['type.']['table'] == 'fe_users')  $pid = $this->conf['userPID'];
+				} elseif ($config['type.']['table']) {
+						if ($config['type.']['table'] == 'fe_groups') $pid = $this->conf['userPID'];
+					elseif ($config['type.']['table'] == 'fe_users')  $pid = $this->conf['userPID'];
 					else                                             $pid = $this->conf['storagePID'];
 
 					$limit = $config['type.']['limit']?$config['type.']['limit']:100;
 					$bigField = ($limit>1);
 					$input = $this->getSelectField($field,$this->conf[$field],$config['type.']['table'],$pid,$limit);
-				} elseif($config['type.']['options.']) {
+				} elseif ($config['type.']['options.']) {
 					$options = array();
 					foreach($config['type.']['options.'] as $k => $v)
 						$options[$k] = $GLOBALS['LANG']->sL($v);
 					$input = $this->getLSelectField($field,$this->conf[$field],$options);
 				}
-			} elseif($config['type'] == 'special') {
-				if(strpos($config['type.']['handler'],'->') !== false) {
+			} elseif ($config['type'] == 'special') {
+				if (strpos($config['type.']['handler'],'->') !== false) {
 					list($className, $methodName) = explode('->', $config['type.']['handler']);
 					$obj = t3lib_div::getUserObj($className);
 					$obj->p = $this;
@@ -380,16 +380,16 @@ class tx_mmforum_install {
 
 			$input .= ' ' . $unit;
 
-			if(isset($defaultVars[$field]) && strlen($defaultVars[$field])>0) {
+			if (isset($defaultVars[$field]) && strlen($defaultVars[$field])>0) {
 				$defValue = $defaultVars[$field];
 
-				if($config['type'] == 'checkbox') $defValue=($defValue=='1')?$this->getLL('yes'):$this->getLL('no');
-				elseif($config['type.']['options.']) $defValue = $GLOBALS['LANG']->sL($config['type.']['options.'][$defValue]);
+				if ($config['type'] == 'checkbox') $defValue=($defValue=='1')?$this->getLL('yes'):$this->getLL('no');
+				elseif ($config['type.']['options.']) $defValue = $GLOBALS['LANG']->sL($config['type.']['options.'][$defValue]);
 
 				$default = '<br />'.$this->getLL('default').': '.htmlentities($defValue).' '.$unit;
 			} else $default = '';
 
-            if(!$bigField)
+            if (!$bigField)
 			    $content .= '<tr class="mm_forum-listrow">
 	    <td valign="top"><span style="color: #1555a0;">&#8718;</span></td>
 	    <td valign="top" style="width:50%;">
@@ -513,7 +513,7 @@ class tx_mmforum_install {
             default:            $titlefield = 'title';
         }
 
-        if($limit > 1)
+        if ($limit > 1)
             $value = $this->p->convertToTCEList($value,$table,$titlefield);
         $conf = array(
 			'itemFormElName' => 'tx_mmforum_install[conf][0]['.$fieldname.']',
@@ -572,13 +572,13 @@ class tx_mmforum_install {
 
 			/* Iterate through all fields and retrieve labels. */
 		foreach($TCA['fe_users']['columns'] as $field => $fConfig) {
-			if(in_array($field, $excludeFields)) continue;
+			if (in_array($field, $excludeFields)) continue;
 
 			$label = $GLOBALS['LANG']->sL($fConfig['label'],$fConfig['label']);
 			$label = preg_replace('/:$/','',$label);
 			$arr[] = array($label,$field);
 
-			if(in_array($field, $selFields))
+			if (in_array($field, $selFields))
 				$selFieldsLabels[] = $field.'|'.$label;
 		}
 
@@ -722,13 +722,13 @@ class tx_mmforum_install {
 		 */
 
 	function display_installation() {
-		if(!$this->p->config['plugin.']['tx_mmforum.']['storagePID'])
+		if (!$this->p->config['plugin.']['tx_mmforum.']['storagePID'])
 			$content .= $this->display_install_storagePid();
-		elseif(!$this->p->config['plugin.']['tx_mmforum.']['userPID'])
+		elseif (!$this->p->config['plugin.']['tx_mmforum.']['userPID'])
 			$content .= $this->display_install_userPid();
-		elseif(!$this->getUserGroupsConfigured())
+		elseif (!$this->getUserGroupsConfigured())
 			$content .= $this->display_install_userGroups();
-		elseif(!$this->getIsConfigured())
+		elseif (!$this->getIsConfigured())
 			$content .= $this->display_allConfigForm();
 
 		return $content;
@@ -918,21 +918,21 @@ class tx_mmforum_install {
 	function save() {
         $conf = $this->instVars['conf'][0];
         $ctg = $this->instVars['ctg']?$this->instVars['ctg']:'general';
-		if(count($conf)==0) return;
+		if (count($conf)==0) return;
 
 		foreach($conf as $var=>$value) {
 			$config = $ctg=='required' ? $this->getFieldConfigByIdentifier($var) : $this->fieldConfig["$ctg."]['items.']["$var."];
 			$type = $config['type'];
 
-			if($type == 'group' || $type == 'select')
+			if ($type == 'group' || $type == 'select')
 				$value = preg_replace('/^'.$config['type.']['table'].'_/','',preg_replace('/,$/','',$value));
-            if($type == 'int') $value = intval($value);
-            if($type == 'md5') {
-                if(strlen(trim($value))==0) continue;
+            if ($type == 'int') $value = intval($value);
+            if ($type == 'md5') {
+                if (strlen(trim($value))==0) continue;
                 else $value = md5($value);
             }
 
-			if($value != $this->p->config['plugin.']['tx_mmforum.'][$var])
+			if ($value != $this->p->config['plugin.']['tx_mmforum.'][$var])
 				$this->p->setConfVar($var,$value);
 		}
 
@@ -969,8 +969,8 @@ class tx_mmforum_install {
 	function getUserGroupsConfigured() {
 		$c = $this->p->config['plugin.']['tx_mmforum.'];
 
-		if(!$c['userGroup']) return false;
-		if(!$c['adminGroup']) return false;
+		if (!$c['userGroup']) return false;
+		if (!$c['adminGroup']) return false;
 
 		return true;
 	}
@@ -991,7 +991,7 @@ class tx_mmforum_install {
 		$c = $this->p->config['plugin.']['tx_mmforum.'];
 
 		foreach($this->p->modTSconfig['properties']['essentialConfiguration.'] as $prop => $e)
-			if(!$c[$prop]) return false;
+			if (!$c[$prop]) return false;
 
 		return true;
 	}
@@ -999,7 +999,7 @@ class tx_mmforum_install {
 	function getRemainingEssentialProperties() {
 		$result = array();
 		foreach($this->p->modTSconfig['properties']['essentialConfiguration.'] as $prop => $e)
-			if(!$this->p->config['plugin.']['tx_mmforum.'][$prop]) array_push($result, $prop);
+			if (!$this->p->config['plugin.']['tx_mmforum.'][$prop]) array_push($result, $prop);
 		return $result;
 	}
 
@@ -1008,9 +1008,9 @@ class tx_mmforum_install {
 			// Most important rule against clear code: Avoid ALL unnecessary
 			// brackets!
 		foreach($this->fieldConfig as $category => $ctgType)
-			if($ctgType === 'MMFORUM_CONF_CATEGORY')
+			if ($ctgType === 'MMFORUM_CONF_CATEGORY')
 				foreach($this->fieldConfig["$category."]["items."] as $prop => $config)
-					if($config == 'MMFORUM_CONF_ITEM' && $prop == $fieldId)
+					if ($config == 'MMFORUM_CONF_ITEM' && $prop == $fieldId)
 						return $this->fieldConfig["$category."]["items."]["$prop."];
 	}
 
@@ -1019,15 +1019,15 @@ class tx_mmforum_install {
 		$propConfig = Array();
 		foreach($this->fieldConfig as $category => $ctgType) {
 			$ctgProps = array();
-			if($ctgType === 'MMFORUM_CONF_CATEGORY') {
+			if ($ctgType === 'MMFORUM_CONF_CATEGORY') {
 				$ctgConf = $this->fieldConfig["$category."];
 				foreach($this->fieldConfig["$category."]["items."] as $prop => $config) {
-					if($config == 'MMFORUM_CONF_ITEM' && in_array($prop, $props)) {
+					if ($config == 'MMFORUM_CONF_ITEM' && in_array($prop, $props)) {
 						$ctgProps["$prop"]  = 'MMFORUM_CONF_ITEM';
 						$ctgProps["$prop."] = $this->fieldConfig["$category."]["items."]["$prop."];
 					}
 				}
-				if(count($ctgProps)>0) {
+				if (count($ctgProps)>0) {
 					$propConfig["{$category}_div"]  = 'MMFORUM_CONF_ITEM';
 					$propConfig["{$category}_div."] = array(
 						'type' => 'div',

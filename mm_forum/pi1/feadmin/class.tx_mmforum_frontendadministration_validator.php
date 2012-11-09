@@ -29,10 +29,10 @@ Class tx_mmforum_FrontendAdministration_Validator {
 		Global $TYPO3_DB;
 
 			# Always validate for new forums.
-		If($uid == -1) Return;
+		if ($uid == -1) Return;
 
 		$res = $TYPO3_DB->exec_SELECTquery('*', 'tx_mmforum_forums', 'parentID='.intval($uid).' AND deleted=0 '.$this->parent->getStoragePIDQuery());
-		If($TYPO3_DB->sql_num_rows($res) > 0 && $parentUid != 0)
+		if ($TYPO3_DB->sql_num_rows($res) > 0 && $parentUid != 0)
 			$this->addErrorForField('parent', 'no-nested-forums', Array($TYPO3_DB->sql_num_rows($res)));
 
 	}
@@ -40,24 +40,24 @@ Class tx_mmforum_FrontendAdministration_Validator {
 	Function validateForumDescription($forumDescription, $parentId) {
 
 			# Categories do not need a description. Subforums do.
-		If($parentId == 0) Return;
+		if ($parentId == 0) Return;
 
-		If(!IsSet($forumDescription) || strlen($forumDescription) === 0)
+		if (!IsSet($forumDescription) || strlen($forumDescription) === 0)
 			$this->addErrorForField('description', 'empty');
-		ElseIf(strlen($forumDescription) < $this->conf['validation.']['description.']['minLength'])
+		Elseif (strlen($forumDescription) < $this->conf['validation.']['description.']['minLength'])
 			$this->addErrorForField('description', 'tooshort', Array($this->conf['validation.']['description.']['minLength']));
-		ElseIf(strlen($forumDescription) > $this->conf['validation.']['description.']['maxLength'])
+		Elseif (strlen($forumDescription) > $this->conf['validation.']['description.']['maxLength'])
 			$this->addErrorForField('description', 'toolong', Array($this->conf['validation.']['description.']['maxLength']));
 		
 	}
 
 	Function validateForumName($forumName) {
 
-		If(!IsSet($forumName) || strlen($forumName) === 0)
+		if (!IsSet($forumName) || strlen($forumName) === 0)
 			$this->addErrorForField('name', 'empty');
-		ElseIf(strlen($forumName) < $this->conf['validation.']['name.']['minLength'])
+		Elseif (strlen($forumName) < $this->conf['validation.']['name.']['minLength'])
 			$this->addErrorForField('name', 'tooshort', Array($this->conf['validation.']['name.']['minLength']));
-		ElseIf(strlen($forumName) > $this->conf['validation.']['name.']['maxLength'])
+		Elseif (strlen($forumName) > $this->conf['validation.']['name.']['maxLength'])
 			$this->addErrorForField('name', 'toolong', Array($this->conf['validation.']['name.']['maxLength']));
 
 	}

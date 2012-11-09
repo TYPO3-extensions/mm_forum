@@ -30,7 +30,7 @@ $TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostP
 	 * that are loaded into the current page's rootline. This allows hidden
 	 * pages to be excluded from the dynamic rootline.
 	 */
-if($GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'])
+if ($GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'])
 	$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] .= ',nav_hide';
 else $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = 'nav_hide';
 

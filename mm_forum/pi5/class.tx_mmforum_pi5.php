@@ -78,7 +78,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		$this->userLib = t3lib_div::makeInstance('tx_mmforum_usermanagement');
 
 
-		if($GLOBALS['TSFE']->loginUser) {
+		if ($GLOBALS['TSFE']->loginUser) {
 			$this->user = t3lib_div::makeInstance('tx_mmforum_FeUser');
 			$this->user->initFromDB($GLOBALS['TSFE']->fe_user->user['uid']);
 			$this->user->loadFromDB();
@@ -159,7 +159,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 		foreach ($fields as $fieldName) {
 			$label = $this->pi_getLL($fieldName);
-			if(in_array($fieldName, $required)) $label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
+			if (in_array($fieldName, $required)) $label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
 			
 			$marker['###DESCR_' . strtoupper($fieldName) . '###'] = $label;
 			$marker['###' . strtoupper($fieldName) . '###'] = isset($this->piVars[$fieldName]) ? $this->piVars[$fieldName] : $this->user->gD($fieldName);
@@ -201,7 +201,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 		$parser = t3lib_div::makeInstance('t3lib_TSparser');
 		foreach ($userFields as $field) {
-			if(isset($this->piVars['userfield'][$field['uid']])) {
+			if (isset($this->piVars['userfield'][$field['uid']])) {
 				$value = $this->piVars['userfield'][$field['uid']];
 			} else {
 				$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -211,32 +211,32 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 				);
 
 				$value = '';
-				if($GLOBALS['TYPO3_DB']->sql_num_rows($res2) > 0) {
+				if ($GLOBALS['TYPO3_DB']->sql_num_rows($res2) > 0) {
 					list($value) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res2);
 				}
 			}
 
 			$parser->setup = array();
-			if(strlen($field['config']) > 0) {
+			if (strlen($field['config']) > 0) {
 				$parser->parse($field['config']);
 			}
 			$config = $parser->setup;
 
 			$label = $field['label'];
-			if($config['label']) {
+			if ($config['label']) {
 				$label = $this->cObj->cObjGetSingle($config['label'], $config['label.']);
 			}
 
-			if($config['required']) {
+			if ($config['required']) {
 				$label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
 			}
 
-			if($config['datasource']) {
+			if ($config['datasource']) {
 				$value = isset($this->piVars['userfield'][$field['uid']]) ? $this->piVars['userfield'][$field['uid']] : $this->user->gD($config['datasource']);
 				$label .= '<input type="hidden" name="tx_mmforum_pi5[userfield_exists][' . $field['uid'] . ']" value="' . $config['datasource'] . '" />';
 			}
 
-			if($config['input']) {
+			if ($config['input']) {
 				$tmpData = $this->cObj->data;
 				$this->cObj->data = array('fieldvalue' => $value);
 
@@ -276,7 +276,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	 * @return t3lib_TSparser
 	 */
 	function &getTSParser() {
-		if(!$this->parser) {
+		if (!$this->parser) {
 			$this->parser = t3lib_div::makeInstance('t3lib_TSparser');
 		}
 
@@ -332,7 +332,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			'uid=' . intval($uid) . ' AND deleted=0 AND hidden=0'
 		);
 
-		if($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 			return $arr;
 
@@ -372,7 +372,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 			$value  = $this->piVars['userfield'][$userField->getUid()];
 
-			if(!$userField->isValid($value)) {
+			if (!$userField->isValid($value)) {
 				$requiredMissing = true;
 				$this->userfield_error[$fieldData['uid']] = $this->pi_getLL('error-userfieldEmpty');
 			}
@@ -389,7 +389,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 		t3lib_div::debug($this->userfield_error);
 
-		if($requiredMissing) $error = 1;
+		if ($requiredMissing) $error = 1;
 
 		// If no error occurred...
 		if ($error == 0) {
@@ -406,14 +406,14 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			$this->user->updateDatabase();
 
 			// Save user fields
-			if(is_array($this->piVars['userfield'])) {
+			if (is_array($this->piVars['userfield'])) {
 				foreach($this->piVars['userfield'] as $uid => $value) {
-					if(strlen(trim($value)) == 0) continue;
+					if (strlen(trim($value)) == 0) continue;
 
 					$uid = intval($uid);
 
-					if($this->piVars['userfield_exists'][$uid]) {
-						if($this->getUserfieldUsesExistingField($uid)) {
+					if ($this->piVars['userfield_exists'][$uid]) {
+						if ($this->getUserfieldUsesExistingField($uid)) {
 							$updateArray = array(
 								$this->piVars['userfield_exists'][$uid]		=> $value,
 								'tstamp'									=> $GLOBALS['EXEC_TIME']
@@ -430,7 +430,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 							'tx_mmforum_userfields_contents',
 							'user_id=' . $this->user->getUid() . ' AND field_id=' . $uid . ' AND deleted=0'
 						);
-						if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+						if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
 							$insertArray = array(
 								'pid'           => $this->getStoragePID(),
 								'tstamp'        => $GLOBALS['EXEC_TIME'],
@@ -498,7 +498,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			global $TCA;
 			$GLOBALS['TSFE']->includeTCA();
 			t3lib_div::loadTCA('fe_users');
-			if(filesize($avatarFile['tmp_name']['file']) > $TCA['fe_users']['columns']['tx_mmforum_avatar']['config']['max_size']*1024)
+			if (filesize($avatarFile['tmp_name']['file']) > $TCA['fe_users']['columns']['tx_mmforum_avatar']['config']['max_size']*1024)
 				return;
 
 			$file = $this->user->getUid() . '_' . $GLOBALS['EXEC_TIME'] . '.' . $fileExt;

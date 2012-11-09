@@ -73,7 +73,7 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 	function main() {
 		$this->loadPostQueueItems();
 
-		if(count($this->postqueueItems)>0) {
+		if (count($this->postqueueItems)>0) {
 			$this->content .= $this->generateOutput();
 			$this->content .= $this->sendEmailToModerators();
 		}
@@ -86,7 +86,6 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 	 * @return  void
 	 */
 	function validateConfig() {
-
 		parent::validateConfig();
 		if(intval($this->conf['cron_notifyPublish_group'])==0) $this->debug('Constant "cron_notifyPublish_group" is not set.',$this->DEBUG_FATAL);
 
@@ -113,7 +112,7 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 
 		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$marker			= array(
-				'###PNOTIFY_ADDRESS###'			=> sprintf($this->getLL('address'),$arr['username'])
+				'###PNOTIFY_ADDRESS###' => sprintf($this->getLL('address'),$arr['username'])
 			);
 			$mailtext		= t3lib_parsehtml::substituteMarkerArray($this->postqueueMail, $marker);
 			$subject		= sprintf($this->getLL('subject'), count($this->postqueueItems));
@@ -123,12 +122,11 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 			$header			= "Content-Type: $contenttype; charset=utf-8\n";
 			$header		   .= "From: ".$this->conf['cron_notifyPublishSender']."\n";
 
-			if(!@mail($recipient, $subject, $mailtext, $header)) {
+			if (!@mail($recipient, $subject, $mailtext, $header)) {
 				$this->debug('Could not send email to '.$recipient,$this->DEBUG_ERROR);
 			} else $this->debug('Successfully sent email to '.$recipient);
 		}
 		return $content;
-
 	}
 
 	/**
@@ -142,14 +140,14 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 	 */
 	function generateOutput() {
 
-		$template			= $this->loadTemplateFile('notifyPublish');
+		$template = $this->loadTemplateFile('notifyPublish');
 		if($this->conf['cron_htmlemail'])
-			$template		= t3lib_parsehtml::getSubpart($template, '###PNOTIFY_HTML###');
+			$template = t3lib_parsehtml::getSubpart($template, '###PNOTIFY_HTML###');
 		else $template		= t3lib_parsehtml::getSubpart($template, '###PNOTIFY_PLAINTEXT###');
 
-		$itemTemplate		= t3lib_parsehtml::getSubpart($template, '###PNOTIFY_LISTITEM###');
+		$itemTemplate = t3lib_parsehtml::getSubpart($template, '###PNOTIFY_LISTITEM###');
 
-		$marker				= array(
+		$marker = array(
 			'###PNOTIFY_SUBJECT###'				=> sprintf($this->getLL('subject'), count($this->postqueueItems)),
 			'###PNOTIFY_TEXT###'				=> sprintf($this->getLL('text'), $this->conf['cron_sitetitle'], count($this->postqueueItems)),
 			'###PNOTIFY_LINK###'				=> $this->conf['cron_postqueue_link'],
@@ -158,7 +156,7 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 			'###LABEL_PNOTIFY_TOPICAUTHOR###'	=> $this->getLL('topicauthor'),
 			'###LABEL_PNOTIFY_TOPICFORUM###'	=> $this->getLL('topicforum'),
 		);
-		$template			= t3lib_parsehtml::substituteMarkerArray($template, $marker);
+		$template = t3lib_parsehtml::substituteMarkerArray($template, $marker);
 		$itemContent = '';
 		foreach($this->postqueueItems as $postqueueItem) {
 			$itemMarker = array(
@@ -170,7 +168,7 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 			$itemContent .= t3lib_parsehtml::substituteMarkerArray($itemTemplate, $itemMarker);
 		}
 
-		$template			= t3lib_parsehtml::substituteSubpart($template, '###PNOTIFY_LISTITEM###', $itemContent);
+		$template = t3lib_parsehtml::substituteSubpart($template, '###PNOTIFY_LISTITEM###', $itemContent);
 		$this->postqueueMail = $template;
 	}
 
@@ -182,7 +180,7 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 	 * @return  string        The name of the forum this topic is contained in
 	 */
 	function getTopicForum($record) {
-		if($record['topic_forum']) {
+		if ($record['topic_forum']) {
 			$forum_uid = $record['topic_forum'];
 		} else {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('forum_id','tx_mmforum_topics','uid='.$record['post_parent'].' AND deleted=0');
@@ -205,7 +203,7 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 	function getTopicAuthor($user_uid) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->conf['userNameField'], 'fe_users', 'uid='.$user_uid.' AND deleted=0');
 
-		if($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 			list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res); return $username;
 		} else return $this->getLL('deletedUser');
 	}

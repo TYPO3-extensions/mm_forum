@@ -481,7 +481,7 @@ class tx_mmforum_havealook {
 					}
 				}
 
-				if($do_send) {
+				if ($do_send) {
 					$mail = t3lib_div::makeInstance('t3lib_mail_Message');
 					$mail->setFrom(array($forumObj->conf['notifyingMail.']['sender_address'] => $forumObj->conf['notifyingMail.']['sender']));
 					$mail->setTo(array($toEmail => $toUsername));

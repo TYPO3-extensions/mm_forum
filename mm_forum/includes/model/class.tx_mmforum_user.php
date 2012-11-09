@@ -31,7 +31,7 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 			'username=' . $username . ' AND deleted=0 ' . $andWhere
 		);
 
-		if($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 			$user = t3lib_div::makeInstance('tx_mmforum_FeUser');
 			/* @var $user tx_mmforum_FeUser */
 			$user->initFromArray($GLOBALS['TYPO3_DB']->sql_fetch_assoc($res));
@@ -81,7 +81,7 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 				return false;
 			}
 		} else {
-			if(t3lib_extMgm::isLoaded('kb_md5fepw')) {
+			if (t3lib_extMgm::isLoaded('kb_md5fepw')) {
 				$password = md5($password);
 			}
 
@@ -116,26 +116,26 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 		if ($objPHPass) {
 			$this->data['password'] = $objPHPass->getHashedPassword($password);
 
-		} else if(t3lib_extMgm::isLoaded('kb_md5fepw')) {	//if kb_md5fepw is installed, crypt password
+		} else if (t3lib_extMgm::isLoaded('kb_md5fepw')) {	//if kb_md5fepw is installed, crypt password
 			$this->data['password'] = md5($password);
 		}
 	}
 
 	function getAvatar($avatarPath) {
-		if($this->data['tx_mmforum_avatar']) {
+		if ($this->data['tx_mmforum_avatar']) {
             return $avatarPath . $this->data['tx_mmforum_avatar'];
 			
-		} else if($this->data['image']) {
-            if(strstr($this->data['image'],',') !== false) {
+		} else if ($this->data['image']) {
+            if (strstr($this->data['image'],',') !== false) {
             	list($image_field) = t3lib_div::trimExplode(',', $this->data['image']);
             } else {
 				$image_field = $this->data['image'];
 			}
 
-            if(file_exists('uploads/pics/' . $image_field)) {
+            if (file_exists('uploads/pics/' . $image_field)) {
             	return 'uploads/pics/' . $image_field;
 
-			} else if(file_exists('uploads/tx_srfeuserregister/' . $image_field)) {
+			} else if (file_exists('uploads/tx_srfeuserregister/' . $image_field)) {
             	return 'uploads/tx_srfeuserregister/' . $image_field;
 			}
         }
@@ -160,17 +160,17 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 		$avatar = $this->data['tx_mmforum_avatar'];
 		$image = $this->data['image'];
 
-		if($avatar || $image) {
+		if ($avatar || $image) {
 
 			// Delete avatar file
-			if($avatar && !$keepFile) {
+			if ($avatar && !$keepFile) {
 				$absPath = t3lib_div::getFileAbsFileName($avatarPath . $avatar);
 				if (@file_exists($absPath))
 					@unlink($absPath);
 			}
 
 			// Delete user image file
-			if($image && !$keepFile) {
+			if ($image && !$keepFile) {
 				$absPath = t3lib_div::getFileAbsFileName('uploads/pics/' . $image);
 				if (@file_exists($absPath))
 					@unlink($absPath);

@@ -199,7 +199,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 	function check_hash($hash) {
 
 			/* Check hash on validity */
-		if(!preg_match('/^[a-f0-9]{15}$/', $hash)) {
+		if (!preg_match('/^[a-f0-9]{15}$/', $hash)) {
 			$template = $this->cObj->getSubpart($this->tmpl, "###FEHLER###");
 			return $template;
 		}
@@ -293,7 +293,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		$user->updateDatabase();
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_mmforum_userfields', 'deleted=0');
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 
 			$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
 			/* @var $userField tx_mmforum_userfield */
@@ -305,19 +305,19 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 				$value = trim($this->piVars['userfields'][$userField->getUID()]);
 				$userField->setForUser($user->getUid(), $value, $this->getStoragePID());
 
-				if($userField->isUsingExistingField()) {
+				if ($userField->isUsingExistingField()) {
 					$this->data[$userField->getLinkedUserField()] = $value;
 				}
 			}
 		}
 
 		/*
-        if(is_array($this->piVars['userfields'])) {
+        if (is_array($this->piVars['userfields'])) {
             foreach($this->piVars['userfields'] as $uid => $value) {
-                if(strlen(trim($value))==0) continue;
+                if (strlen(trim($value))==0) continue;
 
-                if($this->piVars['userfields_exist'][$uid]) {
-                    if($this->userLib->getUserfieldUsesExistingField($uid)) {
+                if ($this->piVars['userfields_exist'][$uid]) {
+                    if ($this->userLib->getUserfieldUsesExistingField($uid)) {
                         $updateArray = array(
                             'tstamp'                                    => $GLOBALS['EXEC_TIME'],
                             $this->piVars['userfields_exist'][$uid]    => $value
@@ -354,7 +354,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 		$marker["###FORM_NAME###"]=$this->extKey."[reg]";
 
-		if(t3lib_extMgm::isLoaded('captcha') && $this->conf['useCaptcha']) {
+		if (t3lib_extMgm::isLoaded('captcha') && $this->conf['useCaptcha']) {
 			$marker['###CAPTCHA_IMAGE###'] = '<img src="'.t3lib_extMgm::siteRelPath('captcha').'captcha/captcha.php" alt="" />';
 		} else {
 			$template = $this->cObj->substituteSubpart($template, '###CAPTCHA###', '');
@@ -414,7 +414,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
             '','sorting DESC'
         );
 
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
+        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
 
 			$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
 			$userField->init($this->userLib, $this->cObj);
@@ -425,11 +425,11 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 				if (($this->conf['showOnlyRequiredUserfields'] == 1 && $userField->isRequired()) || ($this->conf['showOnlyRequiredUserfields'] != 1)) {
   					$label = $userField->getRenderedLabel();
 
-					if($userField->isRequired())
+					if ($userField->isRequired())
 						  $label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
 
 					$input = $userField->getRenderedInput($this->piVars['userfields'][$userField->getUID()]);
-					if($input === null) $input = $this->cObj->getSubpart($userField_template, '###DEFUSERFIELD###');
+					if ($input === null) $input = $this->cObj->getSubpart($userField_template, '###DEFUSERFIELD###');
 					$userField_thisTemplate = $this->cObj->substituteSubpart($userField_template, '###DEFUSERFIELD###', $input);
 
 					$userFields_marker = array(
@@ -450,18 +450,18 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			$parser = t3lib_div::makeInstance('t3lib_TSparser');
             while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
                 $parser->setup = array();
-                if(strlen($arr['config'])>0) {
+                if (strlen($arr['config'])>0) {
                     $parser->parse($arr['config']);
                     $config = $parser->setup;
                 } else $config = array();
 
-                if($config['label']) $label = $this->cObj->cObjGetSingle($config['label'],$config['label.']);
+                if ($config['label']) $label = $this->cObj->cObjGetSingle($config['label'],$config['label.']);
                 else $label = $arr['label'];
 
-				if($config['required'])
+				if ($config['required'])
 					$label = $this->cObj->wrap($label, $this->conf['required.']['fieldWrap']);
 
-                if($config['input']) {
+                if ($config['input']) {
                     $data = array(
                         'fieldvalue'        => $value
                     );
@@ -474,7 +474,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
                 } else $input = $this->cObj->getSubpart($userField_template, '###DEFUSERFIELD###');
                 $userField_thisTemplate = $this->cObj->substituteSubpart($userField_template, '###DEFUSERFIELD###', $input);
 
-                if($config['datasource']) {
+                if ($config['datasource']) {
                     $label .= '<input type="hidden" name="tx_mmforum_pi2[userfields_exist]['.$arr['uid'].']" value="'.$config['datasource'].'" />';
                 }
 
@@ -514,13 +514,13 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 			/* Check some deprecated field names for reasons of backwards
 			 * compatibility. */
-		if($this->data['beruf']) {
+		if ($this->data['beruf']) {
 			$this->data['tx_mmforum_occ'] = $this->data['beruf'];
 			unset($this->data['beruf']);
-		} if($this->data['address']) {
+		} if ($this->data['address']) {
 			$this->data['city'] = $this->data['address'];
 			unset($this->data['address']);
-		} if($this->data['interessen']) {
+		} if ($this->data['interessen']) {
 			$this->data['tx_mmforum_interests'] = $this->data['interessen'];
 			unset($this->data['interessen']);
 		}
@@ -546,9 +546,9 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			/*
 			 * Check captcha
 			 */
-		if(t3lib_extMgm::isLoaded('captcha') && $this->conf['useCaptcha']) {
+		if (t3lib_extMgm::isLoaded('captcha') && $this->conf['useCaptcha']) {
 			session_start();
-			if($this->data['captcha'] != $_SESSION['tx_captcha_string']) {
+			if ($this->data['captcha'] != $_SESSION['tx_captcha_string']) {
 				$marker['###ERROR_captcha###'] = $this->cObj->wrap($this->pi_getLL('error.captcha'), $this->conf['errorwrap']);
 				$marker['fehler'] = 1;
 			}
@@ -565,7 +565,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			$marker["fehler"] = 1;
 		}
 
-		if($this->conf['username_pattern']) {
+		if ($this->conf['username_pattern']) {
 			$username_pattern			= $this->conf['username_pattern'];
 			$username_useMatchPattern	= true;
 		} else {
@@ -620,7 +620,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			$value		= $this->piVars['userfields'][$userField->getUID()];
 			$validate	= $userField->isValid($value);
 
-			if(!$validate) {
+			if (!$validate) {
 				$marker['fehler'] = 1;
 				$marker['userfield_error'][$arr['uid']] = $this->pi_getLL('error-userfieldEmpty');
 			}
