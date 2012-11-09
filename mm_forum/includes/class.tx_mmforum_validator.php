@@ -124,9 +124,11 @@ class tx_mmforum_validator {
 	 * @return  void
 	 */
 	function init($conf = null) {
-		if($conf === null AND isset($GLOBALS['TSFE'])) {
+		if ($conf === null && isset($GLOBALS['TSFE'])) {
 			$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_mmforum_pi1.']['validatorSettings.'];
-		} else $this->conf = $conf;
+		} else {
+			$this->conf = $conf;
+		}
 	}
 
 	/**
@@ -136,7 +138,7 @@ class tx_mmforum_validator {
 	 * @return  tx_mmforum_validator A validator object
 	 */
 	function getValidatorObject() {
-		$validatorObj		= t3lib_div::makeInstance('tx_mmforum_validator');
+		$validatorObj = t3lib_div::makeInstance('tx_mmforum_validator'); /* @var $validatorObj tx_mmforum_validator */
 		$validatorObj->init();
 		return $validatorObj;
 	}

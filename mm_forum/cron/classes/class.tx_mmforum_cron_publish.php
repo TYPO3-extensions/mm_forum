@@ -87,8 +87,9 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 	 */
 	function validateConfig() {
 		parent::validateConfig();
-		if(intval($this->conf['cron_notifyPublish_group'])==0) $this->debug('Constant "cron_notifyPublish_group" is not set.',$this->DEBUG_FATAL);
-
+		if (intval($this->conf['cron_notifyPublish_group'])==0) {
+			$this->debug('Constant "cron_notifyPublish_group" is not set.',$this->DEBUG_FATAL);
+		}
 	}
 
 	/**
@@ -100,7 +101,6 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-01-08
-	 * @return  string Status and error reports
 	 */
 	function sendEmailToModerators() {
 
@@ -124,9 +124,10 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 
 			if (!@mail($recipient, $subject, $mailtext, $header)) {
 				$this->debug('Could not send email to '.$recipient,$this->DEBUG_ERROR);
-			} else $this->debug('Successfully sent email to '.$recipient);
+			} else {
+				$this->debug('Successfully sent email to '.$recipient);
+			}
 		}
-		return $content;
 	}
 
 	/**
@@ -141,9 +142,12 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 	function generateOutput() {
 
 		$template = $this->loadTemplateFile('notifyPublish');
-		if($this->conf['cron_htmlemail'])
+		if ($this->conf['cron_htmlemail']) {
 			$template = t3lib_parsehtml::getSubpart($template, '###PNOTIFY_HTML###');
-		else $template		= t3lib_parsehtml::getSubpart($template, '###PNOTIFY_PLAINTEXT###');
+		}
+		else {
+			$template = t3lib_parsehtml::getSubpart($template, '###PNOTIFY_PLAINTEXT###');
+		}
 
 		$itemTemplate = t3lib_parsehtml::getSubpart($template, '###PNOTIFY_LISTITEM###');
 
@@ -205,7 +209,9 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 			list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res); return $username;
-		} else return $this->getLL('deletedUser');
+		} else {
+			return $this->getLL('deletedUser');
+		}
 	}
 
 	/**
@@ -217,7 +223,9 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 	 * @return  string        The topic title of the postqueue item
 	 */
 	function getTopicTitle($record) {
-		if($record['topic_title']) return $record['topic_title'];
+		if ($record['topic_title']) {
+			return $record['topic_title'];
+		}
 		else {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics','uid='.$record['post_parent']);
 			list($title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);

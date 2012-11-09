@@ -115,8 +115,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @author Martin Helmich <m.helmich@mittwald.de>
 	 * @return float The current unix timestamp in milliseconds.
 	 */
-	function microtime_float()
-	{
+	function microtime_float() {
 		list($usec, $sec) = explode(" ", microtime());
 		return ((float)$usec + (float)$sec);
 	}

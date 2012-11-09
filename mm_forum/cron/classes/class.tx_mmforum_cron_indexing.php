@@ -71,13 +71,13 @@ class tx_mmforum_cron_indexing extends tx_mmforum_cronbase {
 		$this->debug('Starting indexing');
 
 			// Initialize indexing class
-		$indexing = t3lib_div::makeInstance('tx_mmforum_indexing');
+		$indexing = t3lib_div::makeInstance('tx_mmforum_indexing'); /* @var $indexing tx_mmforum_indexing */
 		$indexing->objectMode = true;
 		$indexing->conf = $this->conf;
 
 			// Load topics that are to be indexed
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'*',
+			'uid',
 			'tx_mmforum_topics',
 			'pid='.$this->getPid(),		// Deleted posts have to be selected too in order to remove deleted posts from index
 			'',

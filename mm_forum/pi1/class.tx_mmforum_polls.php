@@ -590,9 +590,12 @@ class tx_mmforum_polls {
 					'###ANSWER_UID###'  => '',
 					'###ANSWER_MODE###' => 'new'
 				);
-				if($i < $defACount)
+				if ($i < $defACount) {
 					$tAnswTmpl = $pObj->cObj->substituteSubpart($answerTemplate, '###DELLINK###', '');
-				else $tAnswTmpl = $answerTemplate;
+				}
+				else {
+					$tAnswTmpl = $answerTemplate;
+				}
 				$answers .= $pObj->cObj->substituteMarkerArrayCached($tAnswTmpl, $aMarker);
 				$i ++;
 			}
@@ -608,6 +611,8 @@ class tx_mmforum_polls {
 	 * Displays a poll creation form.
 	 * This function displays a form allowing the user to create a new post.
 	 *
+	 * @param array $piVars
+	 * @param tx_mmforum_pi1 $pObj
 	 * @return  string The form content
 	 * @version 2007-05-25
 	 */

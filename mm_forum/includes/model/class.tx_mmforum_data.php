@@ -2,12 +2,12 @@
 
 class tx_mmforum_data {
 
-	var $table;
+	protected $table;
 
-	var $data;
-	var $origData = array();
-	var $uid;
-	var $loaded = false;
+	protected $data;
+	protected $origData = array();
+	protected $uid;
+	protected $loaded = false;
 
 		/*
 		 * INITIALISATION METHODS

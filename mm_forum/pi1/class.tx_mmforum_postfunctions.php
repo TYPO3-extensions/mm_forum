@@ -119,10 +119,12 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		}
 
 		// generate the marker for the admin panel
-		if (!$conf['slimPostList'])
+		if (!$conf['slimPostList']) {
 			$adminPanel = tx_mmforum_postfunctions::getAdminPanel($topicData);
-		Else $adminPanel = '';
-
+		}
+		else {
+			$adminPanel = '';
+		}
 
 		// Output post listing START
 		$template = $this->cObj->getSubpart($templateFile, empty($this->conf['LIST_POSTS_BEGIN']) ? '###LIST_POSTS_BEGIN###' : $this->conf['LIST_POSTS_BEGIN']);

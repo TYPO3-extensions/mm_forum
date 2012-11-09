@@ -77,6 +77,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 
 		$itemTemplate		= t3lib_parsehtml::getSubpart($template, '###NOTIFY_LISTITEM###');
 
+		$content = '';
 		while($user_arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($user_res)) {
 
 			$pm_res		= $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -135,8 +136,9 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 
 			if (!@mail($recipient, $subject, $user_content, $header)) {
 				$this->debug('Could not send email to '.$recipient,$this->DEBUG_ERROR);
-			} else $this->debug('Email to user '.$user_arr['username'].' was successfully sent.');
-
+			} else {
+				$this->debug('Email to user '.$user_arr['username'].' was successfully sent.');
+			}
 		}
 
 		$updateArray = array('notified' => 1, 'tstamp' => $GLOBALS['EXEC_TIME']);
@@ -156,7 +158,9 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 			list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res); return $username;
-		} else return $this->getLL('deletedUser');
+		} else {
+			return $this->getLL('deletedUser');
+		}
 	}
 }
 

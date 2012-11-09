@@ -273,7 +273,9 @@ class tx_mmforum_tools extends tslib_pibase {
 		$cacheRes = $cache->restore('pgrpCache_'.$group);
 
 			/* Is result was found in cache, return */
-		if($cacheRes !== null) return $cacheRes;
+		if ($cacheRes !== null) {
+			return $cacheRes;
+		}
 
 			/* Otherwise get groups */
 		$groups = tx_mmforum_tools::getParentUserGroupsR($group);
@@ -340,7 +342,9 @@ class tx_mmforum_tools extends tslib_pibase {
 		$cacheRes = $cache->restore('sgrpCache_'.$group);
 
 			/* If value was found in cache, return */
-		if($cacheRes !== null) return $cacheRes;
+		if ($cacheRes !== null) {
+			return $cacheRes;
+		}
 
 			/* Otherwise load all subgroups now */
 		$groups = tx_mmforum_tools::getSubUserGroupsR($group);
