@@ -22,7 +22,9 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once ( dirname(PATH_thisScript).'/classes/class.tx_mmforum_cronbase.php' );
+if (t3lib_extMgm::isLoaded('mm_forum')) {
+	require_once(t3lib_extMgm::extPath('mm_forum') . 'cron/classes/class.tx_mmforum_cronbase.php');
+}
 require_once ( PATH_t3lib.'class.t3lib_parsehtml.php' );
 
 /**
@@ -53,9 +55,7 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 	 * @return  string  The output of this script.
 	 */
 	function main() {
-
 		$this->loadPostAlertItems();
-
 		if (count($this->postalertItems)>0) {
 			$this->content .= $this->generateOutput();
 			$this->content .= $this->sendEmailToModerators();
@@ -70,10 +70,10 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 	 * @return  void
 	 */
 	function validateConfig() {
-
 		parent::validateConfig();
-		if (intval($this->conf['cron_notifyPublish_group'])==0) $this->debug('Constant "cron_notifyPublish_group" is not set.',$this->DEBUG_FATAL);
-
+		if (intval($this->conf['cron_notifyPublish_group'])==0) {
+			$this->debug('Constant "cron_notifyPublish_group" is not set.',$this->DEBUG_FATAL);
+		}
 	}
 
 	/**
@@ -109,10 +109,11 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 
 			if (!@mail($recipient, $subject, $mailtext, $header)) {
 				$this->debug('Could not send email to '.$recipient,$this->DEBUG_ERROR);
-			} else $this->debug('Successfully sent email to '.$recipient);
+			} else {
+				$this->debug('Successfully sent email to '.$recipient);
+			}
 		}
-		return $content;
-
+		return '';
 	}
 
 	/**
@@ -221,7 +222,6 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics','uid='.intval($topic_id));
 		list($title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 		return $title;
-
 	}
 
 
@@ -263,17 +263,14 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 	 * @return  void
 	 */
 	function loadPostAlertItems() {
-
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_post_alert','deleted=0 AND hidden=0 AND status <> 1');
 		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$this->postalertItems[] = $arr;
 		}
-
 	}
 
 }
 
-	// XClass inclusion
 if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/cron/classes/class.tx_mmforum_cron_reported.php"])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/cron/classes/class.tx_mmforum_cron_reported.php"]);
 }

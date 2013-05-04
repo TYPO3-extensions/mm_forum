@@ -35,7 +35,9 @@
  *
  */
 
-require(dirname(PATH_thisScript).'/classes/class.tx_mmforum_cronbase.php');
+if (t3lib_extMgm::isLoaded('mm_forum')) {
+	require_once(t3lib_extMgm::extPath('mm_forum') . 'cron/classes/class.tx_mmforum_cronbase.php');
+}
 require_once(PATH_t3lib.'class.t3lib_parsehtml.php');
 
 /**

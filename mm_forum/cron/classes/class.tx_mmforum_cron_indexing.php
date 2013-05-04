@@ -35,8 +35,10 @@
  *
  */
 
-require(dirname(PATH_thisScript).'/classes/class.tx_mmforum_cronbase.php');
-require(dirname(PATH_thisScript).'/../pi4/class.tx_mmforum_indexing.php');
+if (t3lib_extMgm::isLoaded('mm_forum')) {
+	require_once(t3lib_extMgm::extPath('mm_forum') . 'cron/classes/class.tx_mmforum_cronbase.php');
+	require_once(t3lib_extMgm::extPath('mm_forum') . 'pi4/class.tx_mmforum_indexing.php');
+}
 
 /**
  * This cronjob script handles the automatic indexing of the mm_forum
@@ -102,7 +104,7 @@ class tx_mmforum_cron_indexing extends tx_mmforum_cronbase {
 	 * @return  int The number of topics to be indexed at a time.
 	 */
 	function getIndexCount() {
-		return $this->conf['cron_index_count']?intval($this->conf['cron_index_count']):'';
+		return $this->conf['cron_index_count'] ? intval($this->conf['cron_index_count']) : '';
 	}
 
 }

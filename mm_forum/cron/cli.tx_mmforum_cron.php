@@ -23,10 +23,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
-
-
-
-
 /**
  *
  *  This script handles the mm_forum cronjob handling. It is NOT intented to
@@ -56,10 +52,6 @@
  * @subpackage Cronjobs
  *
  */
-
-
-
-
 
 	// Set content type to plain text and disable HTML errors
 header('Content-Type: text/plain');
