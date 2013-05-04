@@ -593,6 +593,8 @@ class tx_mmforum_tools extends tslib_pibase {
 			$useSSL = (t3lib_div::getIndpEnv('SERVER_PORT') == 443);
 
 			$dirname = dirname(t3lib_div::getIndpEnv('SCRIPT_NAME'));
+			// on windows, dirname returns a backslash for the root directory, replace it with a forward slash
+			$dirname = ($dirname == '\\') ? '/' : $dirname;
 			$dirname = tx_mmforum_tools::appendTrailingSlash($dirname);
 			$dirname = tx_mmforum_tools::removeLeadingSlash($dirname);
 			if ($dirname == '/') {
