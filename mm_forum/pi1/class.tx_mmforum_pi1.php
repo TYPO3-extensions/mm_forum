@@ -2384,8 +2384,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					}
 					$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
 					$link = $this->tools->getAbsoluteUrl($link);
-					// TODO: undefined variable $postid
-					header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $postid));
+					header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $topic_uid));
 					exit();
 				}
 			} else {

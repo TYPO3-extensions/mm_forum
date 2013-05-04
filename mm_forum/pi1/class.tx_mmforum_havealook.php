@@ -493,18 +493,15 @@ class tx_mmforum_havealook {
 		}
 	}
 
-
 	/**
 	 * Sends an e-mail to users who have subscribed to certain forumcategory
-	 * @param  string $content The plugin content
-	 * @param  array  $conf    The configuration vars
-	 * @param  int    $topic_id   The UID of the new topic that was created
-	 * @param  int    $forum_id   The UID of the forum about which the users are
-	 *                        to be alerted.
+	 * @param $topicId int The UID of the new topic that was created
+	 * @param $forumId int The UID of the forum about which the users are to be alerted.
+	 * @param $forumObj tx_mmforum_pi1
 	 * @return void
 	 * @author Cyrill Helg
 	 */
-	function notifyForumSubscribers($topicId, $forumId, $forumObj) {
+	static function notifyForumSubscribers($topicId, $forumId, $forumObj) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . intval($topicId) . $forumObj->getStoragePIDQuery());
 		list($topicName) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 

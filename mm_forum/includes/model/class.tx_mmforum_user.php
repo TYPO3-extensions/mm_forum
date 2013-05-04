@@ -6,11 +6,12 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 
 	var $table = 'fe_users';
 
-		/*
-		 * FINDER METHODS
-		 */
-
-	function GetByUID($uid, $pid=-1) {
+	/**
+	 * @param $uid
+	 * @param $pid
+	 * @return null|tx_mmforum_FeUser
+	 */
+	static function GetByUID($uid, $pid=-1) {
 		$user = t3lib_div::makeInstance('tx_mmforum_FeUser');
 		/* @var $user tx_mmforum_FeUser */
 		$user->setUid($uid);
@@ -19,7 +20,12 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 		return $user->isNull() ? null : $user;
 	}
 
-	function GetByUsername($username, $pid=-1) {
+	/**
+	 * @param $username
+	 * @param $pid
+	 * @return null|tx_mmforum_FeUser
+	 */
+	static function GetByUsername($username, $pid=-1) {
 		$andWhere = '';
 		if ($pid+1) $andWhere = ' AND pid=' . $pid;
 

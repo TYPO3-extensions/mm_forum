@@ -4,19 +4,22 @@ class tx_mmforum_data {
 
 	protected $table;
 
-	protected $data;
+	/**
+	 * @var array
+	 */
+	public $data;
 	protected $origData = array();
 	protected $uid;
 	protected $loaded = false;
 
-		/*
-		 * INITIALISATION METHODS
-		 */
+	/*
+	 * INITIALISATION METHODS
+	 */
 
 	function loadFromDB($pid=-1) {
 		$andWhere = '';
 		if ($pid+1) $andWhere = ' AND pid=' . $pid;
-		
+
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*',
 			$this->getTableName(),
@@ -62,7 +65,7 @@ class tx_mmforum_data {
 		foreach($diff as $key => $value) {
 			if (!isset($this->data[$key])) unset($diff[$key]);
 		}
-		
+
 		if (!empty($diff)) {
 			$this->data['tstamp'] = $diff['tstamp'] = $GLOBALS['EXEC_TIME'];
 
@@ -72,7 +75,7 @@ class tx_mmforum_data {
 					'uid=' . $this->getUid(),
 					$diff
 				);
-				
+
 			} else {
 				$this->data['crdate'] = $diff['crdate'] = $GLOBALS['EXEC_TIME'];
 
@@ -80,7 +83,7 @@ class tx_mmforum_data {
 					$this->getTableName(),
 					$diff
 				);
-				
+
 				$this->setUid($GLOBALS['TYPO3_DB']->sql_insert_id());
 				$this->data['uid'] = $this->getUid();
 			}
@@ -91,7 +94,7 @@ class tx_mmforum_data {
 
 	public function setDataArray($data) {
 		if (!is_array($data)) return;
-		
+
 		if (!is_array($this->data)) {
 			$this->data = $data;
 		} else {
@@ -101,7 +104,7 @@ class tx_mmforum_data {
 
 	protected function setArrayRecursive(&$arr, $newArr) {
 		if (is_array($arr) && is_array($newArr)) {
-			
+
 			foreach($newArr as $key => $value) {
 				if (is_array($value) && is_array($arr[$key])) {
 					$this->setArrayData($arr[$key], $value);
@@ -120,9 +123,9 @@ class tx_mmforum_data {
 		return $this->table;
 	}
 
-		/*
-		 * GETTER FUNCTIONS
-		 */
+	/*
+	 * GETTER FUNCTIONS
+	 */
 
 	function gD($key) {
 		if (!$this->loaded) $this->loadFromDB();
@@ -141,9 +144,9 @@ class tx_mmforum_data {
 		return $this->data == null;
 	}
 
-		/*
-		 * SETTER FUNCTIONS
-		 */
+	/*
+	 * SETTER FUNCTIONS
+	 */
 
 	function setUid($uid) {
 		$this->uid = intval($uid);
