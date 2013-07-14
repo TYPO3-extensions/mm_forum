@@ -473,10 +473,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			}
 		}
 
-		$content  = $this->cObj->substituteMarkerArrayCached($template, $marker);
-		$content .= '<!-- mm_forum Version '.$EM_CONF['mm_forum']['version'].' //-->';
-
-		return $content;
+		return $this->cObj->substituteMarkerArrayCached($template, $marker);
 	}
 
 	/**
