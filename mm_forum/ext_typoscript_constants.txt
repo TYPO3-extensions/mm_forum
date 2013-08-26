@@ -128,7 +128,7 @@ plugin.tx_mmforum {
     attachment_enable = 1
     
     # cat=plugin.mm_forum - message board//; type=string; label=Allowed file extensions for attachments: Set to "*" to allow all.
-    attachment_allow = *
+    attachment_allow = bmp,gif,png,jpg,jpeg,tiff,psd
     
     # cat=plugin.mm_forum - message board//; type=string; label=Denied file extensions for attachment: Overrides allowed extension list
     attachment_deny = php,php3,php4,php5

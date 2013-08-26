@@ -14,7 +14,7 @@ plugin.tx_mmforum.polljavascript (
 )
 #[globalVar = GP:tx_mmforum_pi1|action = new_topic,GP:tx_mmforum_pi1|action = new_post,GP:tx_mmforum_pi1|action = post_edit]
   page.includeJS {
-  	mm_forum_jquery = EXT:mm_forum/res/scripts/jquery-1.3.2.min.js
+  	mm_forum_jquery = EXT:mm_forum/res/scripts/jquery-1.7.2.min.js
   	mm_forum_editor = EXT:mm_forum/res/markitup/jquery.markitup.pack.js
   }
   page.includeCSS {

@@ -658,7 +658,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
             $linkParams[$this->prefixId] = array(
                 'action'        => 'post_edit',
-                'pid'           => $row['uid']
+                'pid'           => $row['uid'],
+				'token'         => $GLOBALS["TSFE"]->fe_user->getKey('ses', "token"),
             );
             if($this->useRealUrl()) {
             	$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
@@ -867,7 +868,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('MAX(post_time)','tx_mmforum_posts','deleted="0" AND hidden="0" AND topic_id="'.$row['topic_id'].'"'.$this->getPidQuery());
         list ($lastpostdate) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
         $grouprights = explode(",",$GLOBALS['TSFE']->fe_user->user['usergroup']);
-        IF ((($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid']) AND ($lastpostdate == $row['post_time'])) OR $this->getIsAdmin() OR $this->getIsMod($row['forum_id'])) {
+        IF (((($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid']) AND ($lastpostdate == $row['post_time'])) OR $this->getIsAdmin() OR $this->getIsMod($row['forum_id'])) && $GLOBALS["TSFE"]->fe_user->getKey('ses', "token") == $this->piVars['token'] && $this->piVars['token'] != false) {
             // Retrieve post data
                 $res        = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"uid = '".intval($this->piVars['pid'])."'".$this->getPidQuery());
                 $row        = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
