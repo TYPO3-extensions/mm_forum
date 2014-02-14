@@ -2303,6 +2303,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$errorMessage .= '<div>' . $this->pi_getLL('newTopic.noText') . '</div>';
 				}
 
+				//Check CSRF Attacks
+				if ($GLOBALS["TSFE"]->fe_user->getKey('ses', "token") != $this->piVars['token'] || $this->piVars['token'] == false) {
+					$errorFound = true;
+					$errorMessage .= '<div>' . $this->pi_getLL('newPost.quote.error') . '</div>';
+				}
+
 				if ($errorFound) {
 					$content .= $this->errorMessage($conf, $errorMessage);
 					unset($this->piVars['button']);
@@ -2385,6 +2391,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					exit();
 				}
 			} else {
+				$this->generateToken();
 				if ($this->piVars['button'] == $this->pi_getLL('newTopic.preview')) {
 					if ($this->piVars['enable_poll'] == '1') {
 						$pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
@@ -2425,6 +2432,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$previewMarker = array(
 						'###TOPIC_TITLE###'   => $this->escape($this->piVars['topicname']),
 						'###LABEL_PREVIEW###' => $this->pi_getLL('newTopic.preview'),
+						'###TOKEN###' => $GLOBALS["TSFE"]->fe_user->getKey('ses', "token"),
 						'###PREVIEW_POST###'  => $this->cObj->substituteMarkerArrayCached($template, $marker)
 					);
 
@@ -2484,7 +2492,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					'###CALLPOLLJS###'          => $this->conf['callpolljs'],
 					'###POST_PREVIEW###'        => $previewContent ? $previewContent : '',
 					'###TOPICICON###'           => $this->getTopicIcon(Array()),
-					'###TOPICTITLE###'          => $this->pi_getLL('newTopic.create')
+					'###TOPICTITLE###'          => $this->pi_getLL('newTopic.create'),
+					'###TOKEN###'               => $GLOBALS["TSFE"]->fe_user->getKey('ses', "token"),
 				);
 
 				// Remove file attachment section if file attachments are disabled
@@ -2569,6 +2578,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			if ($this->piVars['button'] == $this->pi_getLL('newPost.save')) {
 				if (!$this->piVars['message']) {
 					$content .= $this->errorMessage($this->conf,$this->pi_getLL('newTopic.noText'));
+					unset($this->piVars['button']);
+
+					return $this->new_post($content, $conf);
+				}
+
+				//Check CSRF Attacks 
+				if ($GLOBALS["TSFE"]->fe_user->getKey('ses', "token") != $this->piVars['token'] || $this->piVars['token'] == false) {
+					$content .= $this->errorMessage($this->conf,$this->pi_getLL('newPost.quote.error'));
 					unset($this->piVars['button']);
 
 					return $this->new_post($content, $conf);
@@ -2666,6 +2683,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					exit();
 				}
 			} else {
+				$this->generateToken();
 
 				// Show post preview
 				if ($this->piVars['button'] == $this->pi_getLL('newPost.preview')) {
@@ -2727,7 +2745,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					'###LABEL_ATTENTION###'         => $this->pi_getLL('newPost.attention'),
 					'###LABEL_NOTECODESAMPLES###'   => $this->pi_getLL('newPost.codeSamples'),
 					'###LABEL_ATTACHMENT###'        => $this->pi_getLL('newPost.attachment'),
-					'###LABEL_SETHAVEALOOK###'		=> $this->pi_getLL('newTopic.setHaveALook')
+					'###LABEL_SETHAVEALOOK###'		=> $this->pi_getLL('newTopic.setHaveALook'),
+					'###TOKEN###'                   => $GLOBALS["TSFE"]->fe_user->getKey('ses', "token"),
 				);
 
 				$marker['###POSTTITLE###'] = $this->escape($topicData['topic_title']);
@@ -2832,6 +2851,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$marker['###SMILIES###']			= $this->show_smilie_db($conf);
 				$marker['###ACTION###']				= htmlspecialchars($this->tools->getAbsoluteUrl($actionLink));
 				$marker['###LABEL_CREATETOPIC###']	= $this->pi_getLL('newPost.title');
+				$marker['###TOKEN###']                  = $GLOBALS["TSFE"]->fe_user->getKey('ses', "token");
 
 				$conf['slimPostList'] = 1;
 				$marker['###OLDPOSTTEXT###'] = '<hr />' . tx_mmforum_postfunctions::list_post('', $conf, 'DESC');
@@ -2941,7 +2961,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$fileSize = t3lib_div::formatSize($file['size']) . 'B';
 				return $this->errorMessage($this->conf, sprintf($this->pi_getLL('attachment.toobig'), $fileSize));
 			}
-			if ($allow[0] == '*' || strlen($allow) == 0) {
+			if($GLOBALS['TYPO3_CONF_VARS']['BE']['fileDenyPattern'] != '') {
+				if(preg_match('/'.$GLOBALS['TYPO3_CONF_VARS']['BE']['fileDenyPattern'].'/i',$file['name'])) {
+					return $this->errorMessage($this->conf, $this->pi_getLL('attachment.denyed'));
+				}
+			}
+			if ($allow[0] == '*' || strlen($allow) === 0) {
 				if (count($deny) > 0) {
 					foreach ($deny as $denyItem) {
 						if (preg_match('/\.' . $denyItem . '$/i', $file['name'])) {
@@ -3026,6 +3051,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function post_edit($content, $conf) {
 		$postId = intval($this->piVars['pid']);
 
+		$this->generateToken();
+
 		// Get topic UID
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*',
@@ -3072,6 +3099,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				OR $this->getIsAdmin()
 				OR $this->getIsMod($row['forum_id']))
 				{
+
+				//Check CSRF Attacks
+				if ($GLOBALS["TSFE"]->fe_user->getKey('ses', "token") == $this->piVars['token'] || $this->piVars['token'] == false) {
+					$content .= $this->errorMessage($this->conf,$this->pi_getLL('newPost.quote.error'));
+					return $this->new_post($content, $conf);
+				}
 
 			if ($this->piVars['button'] == $this->pi_getLL('newPost.save')) {
 
@@ -3310,6 +3343,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 					$marker['###MAXFILESIZE_TEXT###'] = sprintf($this->pi_getLL('newPost.maxFileSize'), $mFileSize);
 					$marker['###MAXFILESIZE_TEXT###'] = $this->cObj->stdWrap($marker['###MAXFILESIZE_TEXT###'], $this->conf['attachments.']['maxFileSize_stdWrap.']);
+					$marker['###TOKEN###']            = $GLOBALS["TSFE"]->fe_user->getKey('ses', "token");
 
 					$template = $this->cObj->substituteMarkerArray($template, $marker);
 					$template = $this->cObj->substituteSubpart($template, '###ATTACHMENT_FIELD###', $aContent);
@@ -4123,7 +4157,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$output = $this->cObj->cObjGetSingle($config['output'],$config['output.']);
 				$this->cObj->data = $tmpArr;
 			}
-			else $output = $fieldContent;
+			else $output = $this->escape($fieldContent);
 
 			$userField_marker = array(
 				'###LABEL_USERFIELD###'     => $label,
@@ -6358,6 +6392,16 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		else								$dateFormat = $conf['defaultDateFormat'];
 
 		return strftime($dateFormat, $content);
+	}
+
+	/**
+	 * Generate a token to prevent CSRF attacks on delete, create and edit.
+	 *
+	 * @return void
+	 */
+	function generateToken() {
+		$token = sha1(mt_rand().$GLOBALS['TYPO3_CONF_VARS']['SYS']['encryptionKey'].mt_rand());
+		$GLOBALS["TSFE"]->fe_user->setKey('ses', "token", $token);
 	}
 }
 

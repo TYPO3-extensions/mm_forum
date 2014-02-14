@@ -662,8 +662,9 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 		if ((($row['poster_id'] == $this->getUserID()) AND ($lastpostdate == $row['post_time']) AND $topic['closed_flag']!=1) OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
 
             $linkParams[$this->prefixId] = array(
-                'action'        => 'post_edit',
-                'pid'           => $row['uid']
+		'action'        => 'post_edit',
+		'pid'           => $row['uid'],
+		'token'         => $GLOBALS["TSFE"]->fe_user->getKey('ses', "token"),
             );
             if ($this->useRealUrl()) {
             	$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
@@ -672,8 +673,9 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
             $editLink = $this->createButton('edit',$linkParams,0,true);
 
             $linkParams[$this->prefixId] = array(
-                'action'        => 'post_del',
-                'pid'           => $row['uid']
+		'action'        => 'post_del',
+		'pid'           => $row['uid'],
+		'token'         => $GLOBALS["TSFE"]->fe_user->getKey('ses', "token"),
             );
             if ($this->useRealUrl()) {
             	$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
@@ -872,7 +874,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('MAX(post_time)','tx_mmforum_posts','deleted="0" AND hidden="0" AND topic_id="'.$row['topic_id'].'"'.$this->getPidQuery());
         list ($lastpostdate) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
         $grouprights = explode(",",$GLOBALS['TSFE']->fe_user->user['usergroup']);
-        if ((($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid']) AND ($lastpostdate == $row['post_time'])) OR $this->getIsAdmin() OR $this->getIsMod($row['forum_id'])) {
+        if (((($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid']) AND ($lastpostdate == $row['post_time'])) OR $this->getIsAdmin() OR $this->getIsMod($row['forum_id'])) && $GLOBALS["TSFE"]->fe_user->getKey('ses', "token") == $this->piVars['token'] && $this->piVars['token'] != false) {
             // Retrieve post data
                 $res        = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"uid = '".intval($this->piVars['pid'])."'".$this->getPidQuery());
                 $row        = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
