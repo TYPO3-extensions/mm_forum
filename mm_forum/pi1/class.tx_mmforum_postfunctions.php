@@ -657,8 +657,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		IF ((($row['poster_id'] == $this->getUserID()) AND ($lastpostdate == $row['post_time']) AND $topic['closed_flag']!=1) OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
 
             $linkParams[$this->prefixId] = array(
-                'action'        => 'post_edit',
-                'pid'           => $row['uid'],
+				'action'        => 'post_edit',
+				'pid'           => $row['uid'],
 				'token'         => $GLOBALS["TSFE"]->fe_user->getKey('ses', "token"),
             );
             if($this->useRealUrl()) {
@@ -668,8 +668,9 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
             $editLink = $this->createButton('edit',$linkParams,0,true);
 
             $linkParams[$this->prefixId] = array(
-                'action'        => 'post_del',
-                'pid'           => $row['uid']
+				'action'        => 'post_del',
+				'pid'           => $row['uid'],
+				'token'         => $GLOBALS["TSFE"]->fe_user->getKey('ses', "token"),
             );
             if($this->useRealUrl()) {
             	$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
