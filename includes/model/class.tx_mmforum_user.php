@@ -1,6 +1,5 @@
 <?php
 
-require_once(t3lib_extMgm::extPath('mm_forum').'includes/model/class.tx_mmforum_data.php');
 
 class tx_mmforum_FeUser extends tx_mmforum_data {
 

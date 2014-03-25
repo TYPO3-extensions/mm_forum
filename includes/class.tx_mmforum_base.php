@@ -62,10 +62,6 @@
  *
  */
 
-require_once(PATH_tslib . 'class.tslib_pibase.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_tools.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_validator.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/cache/class.tx_mmforum_cache.php');
 
 	/**
 	 * Provides basic functionalities for all mm_forum plugins.

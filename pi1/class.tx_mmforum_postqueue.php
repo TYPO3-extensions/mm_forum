@@ -26,11 +26,6 @@
  */
 
 /**
- * Require post factory class
- */
-require_once ( t3lib_extMgm::extPath('mm_forum').'pi1/class.tx_mmforum_postfactory.php' );
-
-/**
  * This class handles the administration of the moderated version of the
  * mm_forum extension. It displayes a list of all posts queued for being
  * published and uses the postfactory class to eventually create the posts

@@ -35,8 +35,6 @@
  *
  */
 
-require(dirname(PATH_thisScript).'/classes/class.tx_mmforum_cronbase.php');
-require(dirname(PATH_thisScript).'/../pi4/class.tx_mmforum_indexing.php');
 
 /**
  * This cronjob script handles the automatic indexing of the mm_forum

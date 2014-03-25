@@ -22,7 +22,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_base.php');
 
 class tx_mmforum_menus extends tx_mmforum_base {
 	var $prefixId = 'tx_mmforum_pi1';

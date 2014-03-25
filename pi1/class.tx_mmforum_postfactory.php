@@ -65,8 +65,6 @@ class tx_mmforum_postfactory {
 	 */
 
 	function init($conf, $parent = null) {
-		require_once(t3lib_extMgm::extPath('mm_forum').'pi1/class.tx_mmforum_havealook.php');
-
 		$this->conf = $conf;
 		$this->parent = $parent;
 	}

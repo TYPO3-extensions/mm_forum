@@ -35,8 +35,6 @@
  *
  */
 
-require(dirname(PATH_thisScript).'/classes/class.tx_mmforum_cronbase.php');
-require_once(PATH_t3lib.'class.t3lib_parsehtml.php');
 
 /**
  * This class handles the automatic notification of users about
