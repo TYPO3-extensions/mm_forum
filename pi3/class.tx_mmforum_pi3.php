@@ -649,7 +649,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 						// Compose mail and send
 						$mail = t3lib_div::makeInstance('t3lib_mail_Message');
-						$mail->setFrom(array($forumObj->conf['mailerEmail'] => $forumObj->conf['siteName']));
+						$mail->setFrom(array($this->conf['mailerEmail'] => $this->conf['siteName']));
 						$mail->setTo(array($recipient['email'] => $recipient['username']));
 						$mail->setSubject($this->pi_getLL('ntfmail.subject'));
 						$mail->setBody($mailtext, 'text/plain');
