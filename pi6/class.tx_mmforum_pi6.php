@@ -60,8 +60,6 @@
  *
  */
 
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_base.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_pi1.php');
 
 /**
  * The plugin "Portal information" for the extension "mm_forum" displays

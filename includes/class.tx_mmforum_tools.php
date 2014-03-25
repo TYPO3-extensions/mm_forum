@@ -58,7 +58,6 @@
  *
  */
 
-require_once(PATH_tslib . 'class.tslib_pibase.php');
 
 /**
  * The class 'tx_mmforum_tools' contains a collection of useful

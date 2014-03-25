@@ -35,10 +35,6 @@
  *
  */
 
-if (t3lib_extMgm::isLoaded('mm_forum')) {
-	require_once(t3lib_extMgm::extPath('mm_forum') . 'cron/classes/class.tx_mmforum_cronbase.php');
-	require_once(t3lib_extMgm::extPath('mm_forum') . 'pi4/class.tx_mmforum_indexing.php');
-}
 
 /**
  * This cronjob script handles the automatic indexing of the mm_forum

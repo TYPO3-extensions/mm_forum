@@ -36,7 +36,6 @@
  *
  */
 
-require_once(PATH_tslib."class.tslib_pibase.php");
 
 /**
  * The class 'tx_mmforum_postalert' is a subclass for the 'Forum'

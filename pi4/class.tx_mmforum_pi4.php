@@ -54,9 +54,6 @@
  *
  */
 
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_base.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'pi4/class.tx_mmforum_indexing.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_pi1.php');
 
 /**
  * Plugin 'Forum Search' for the 'mm_forum_search' extension.

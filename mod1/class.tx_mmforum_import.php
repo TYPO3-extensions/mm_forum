@@ -253,7 +253,6 @@ class tx_mmforum_import {
      * @return  string       The result of the CHC Forum import
      */
     function import_chc($dbObj) {
-        require_once(t3lib_extMgm::extPath('mm_forum', 'mod1/class.tx_mmforum_chcimport.php'));
         $import_chc = t3lib_div::makeInstance('tx_mmforum_chcimport');
         $import_chc->dbObj = $dbObj;
         $import_chc->p     = $this->p;
@@ -272,7 +271,6 @@ class tx_mmforum_import {
      * @return  string       The result of the phpBB import
      */
     function import_phpbb($dbObj) {
-        require_once(t3lib_extMgm::extPath('mm_forum', 'mod1/class.tx_mmforum_phpbbimport.php'));
         $import_phpbb = t3lib_div::makeInstance('tx_mmforum_phpbbimport');
         $import_phpbb->dbObj = $dbObj;
         $import_phpbb->p     = $this->p;

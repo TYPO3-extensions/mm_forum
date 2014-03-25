@@ -22,10 +22,6 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-if (t3lib_extMgm::isLoaded('mm_forum')) {
-	require_once(t3lib_extMgm::extPath('mm_forum') . 'cron/classes/class.tx_mmforum_cronbase.php');
-}
-require_once ( PATH_t3lib.'class.t3lib_parsehtml.php' );
 
 /**
  * Handles automatic reminders for posts that still have to be

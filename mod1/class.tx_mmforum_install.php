@@ -65,7 +65,6 @@
  *
  */
 
-require_once(PATH_t3lib.'class.t3lib_tcemain.php');
 
 /**
  * This class handles the backend mm_forum configuration. If offers

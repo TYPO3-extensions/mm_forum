@@ -36,8 +36,6 @@
  *
  */
 
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_base.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_postparser.php');
 
 /**
  * Plugin 'class.tx_mmforum_user.php' for the 'mm_forum' extension.

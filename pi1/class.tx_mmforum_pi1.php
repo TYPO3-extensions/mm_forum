@@ -143,21 +143,8 @@
  */
 
 
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/class.tx_mmforum_base.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_postalert.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_havealook.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_havealookforum.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_postfunctions.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_user.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_polls.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_ranksfe.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_postqueue.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'pi1/class.tx_mmforum_rss.php');
 
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/user/class.tx_mmforum_usermanagement.php');
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/user/class.tx_mmforum_userfield.php');
 
-require_once(t3lib_extMgm::extPath('mm_forum') . 'includes/model/class.tx_mmforum_user.php');
 
 if (t3lib_extMgm::isLoaded('ratings'))
 	require_once(t3lib_extMgm::extPath('ratings') . 'class.tx_ratings_api.php');
@@ -3238,7 +3225,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 
 				// Clearing for new indexing
-				require_once(t3lib_extMgm::extPath('mm_forum').'pi4/class.tx_mmforum_pi4.php');
 				tx_mmforum_indexing::delete_topic_ind_date($topicId);
 
 				$linkParams[$this->prefixId] = array(
