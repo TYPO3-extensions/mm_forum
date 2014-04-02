@@ -291,6 +291,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 							$content = $this->list_topic($content, $conf);
 							break;
 						case 'list_post':
+							// As "list_post" uses tokens for the admin delete/edit links the tokens have
+							// to get initialized.
+							$this->generateToken();
 							$content = tx_mmforum_postfunctions::list_post($content, $conf, '');
 							break;
 						case 'new_topic':
