@@ -71,22 +71,18 @@
 
 	// DEFAULT initialization of a module [BEGIN]
 
+
 unset($MCONF);
 require_once('conf.php');
-require_once($BACK_PATH.'init.php');
-require_once($BACK_PATH.'template.php');
+require_once($GLOBALS['BACK_PATH'].'init.php');
 
-define("BACK_PATH",$BACK_PATH);
+define("BACK_PATH",$GLOBALS['BACK_PATH']);
 
-$LANG->includeLLFile('EXT:mm_forum/mod1/locallang.xml');
-
-require_once(PATH_t3lib.'class.t3lib_scbase.php');
-require_once(PATH_t3lib.'class.t3lib_tceforms.php');
-require_once(PATH_t3lib.'class.t3lib_tsparser.php');
+$GLOBALS['LANG']->includeLLFile('EXT:mm_forum/mod1/locallang.xml');
 
 Require_Once ( 'class.tx_mmforum_betools.php' );
 
-$BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
+$GLOBALS['BE_USER']->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
 	// DEFAULT initialization of a module [END]
 
 
@@ -197,7 +193,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 
 		$this->content .= $this->doc->header($LANG->getLL('title'));
 		$this->content .= $this->doc->spacer(5);
-		$this->content .= $this->doc->section('',$this->doc->funcMenu('', t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
+		$this->content .= $this->doc->section('',$this->doc->funcMenu('', t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'],'index.php')));
 		$this->content .= $this->doc->divider(5);
 
 		$this->tceforms = t3lib_div::makeInstance("t3lib_TCEforms");

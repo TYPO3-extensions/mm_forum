@@ -75,7 +75,6 @@
  *
  */
 
-require_once(PATH_t3lib.'class.t3lib_tceforms.php');
 
 /**
  * This class manages data import from existing phpBB boards.
