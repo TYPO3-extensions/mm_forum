@@ -275,6 +275,7 @@ class tx_mmforum_userfield {
 			'fieldvalue' => $value
 		);
 		$this->cObj->data = $data;
+        if ($this->conf['input'] == 'HTML') $this->conf['input'] = 'TEXT';
 		return $this->cObj->cObjGetSingle($this->conf['input'], $this->conf['input.']);
 
 	}
@@ -330,7 +331,7 @@ class tx_mmforum_userfield {
 
 			/* Parse configuration TypoScript */
         $parser =& $this->userLib->getTSParser();
-		$parser->setup = null;
+		$parser->setup = Array();
         $parser->parse($arr['config']);
         $arr['config_parsed'] = $parser->setup;
 

@@ -39,8 +39,6 @@
  *
  */
 
-require_once(PATH_tslib."class.tslib_pibase.php");
-
 /**
  * The class 'tx_mmforum_postfunctions' is a subclass for the 'Forum'
  * plugin (tx_mmforum_pi1) of the 'mm_forum' extension.

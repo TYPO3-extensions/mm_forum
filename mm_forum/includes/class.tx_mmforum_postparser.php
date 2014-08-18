@@ -257,6 +257,7 @@ class tx_mmforum_postparser {
 		);
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 			while ($data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+                $data['pattern'] = str_replace('\\\/-','',$data['pattern']);
 				$text = preg_replace($data['pattern'], $data['replacement'], $text);
 			}
 		}
