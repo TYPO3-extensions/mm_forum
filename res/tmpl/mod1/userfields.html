@@ -1,0 +1,239 @@
+<!-- ###USERFIELD_FORM### begin -->
+<script type="text/javascript" language="JavaScript" src="../res/scripts/class.userfields_langlabels.js"></script>
+<script type="text/javascript" language="JavaScript" src="../res/scripts/class.userfields_typecontroller.js"></script>
+<script type="text/javascript" language="JavaScript" src="../res/scripts/class.userfields_typetext.js"></script>
+<script type="text/javascript" language="JavaScript" src="../res/scripts/class.userfields_typeradio.js"></script>
+<script type="text/javascript" language="JavaScript" src="../res/scripts/class.userfields_typeselect.js"></script>
+<script type="text/javascript" language="JavaScript" src="../res/scripts/class.validator.js"></script>
+
+<div class="mm_forum-buttons">
+	<div class="mm_forum-button" onmouseover="this.className='mm_forum-button-hover';" onmouseout="this.className='mm_forum-button';" onclick="document.forms['editform'].submit();">
+		<img src="img/save.png">
+		###UF_LLL_SAVE###
+	</div>
+	<div class="mm_forum-button" onmouseover="this.className='mm_forum-button-hover';" onmouseout="this.className='mm_forum-button';" onclick="document.location.href='###UF_BACKLINK###';">
+		<img src="img/back.png">
+		###UF_LLL_BACK###
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <td class="mm_forum-listrow_header" colspan="3" valign="top"><img src="img/userfields.png" style="vertical-align: middle; margin-right:8px;" />###UF_LLL_TITLE###</td>
+    </tr>
+	<tr class="mm_forum-listrow">
+        <td style="width:25%;">###UF_LLL_LABEL###</td>
+		<td style="width:1px;"><img src="img/uf-label.png" /></td>
+        <td>
+        	<div id="userfield-labels">
+        		<div style="float: right" onclick="userfields.addLanguage();"> ###UF_IMG_LANG###</div>
+				<div id="uf-label-0"><input type="text" name="tx_mmforum_userfields[label][0][content]" value="" size="32" /> <em>[default]</em><input type="hidden" name="tx_mmforum_userfields[label][0][lang]" value="default" />
+				</div>
+			</div>
+        </td>
+    </tr>
+	<tr class="mm_forum-listrow">
+        <td style="width:25%;">###UF_LLL_REQUIRED###</td>
+		<td style="width:1px;"><img src="img/uf-required.png" /></td>
+        <td>
+        	<input type="hidden" name="tx_mmforum_userfields[required]" value="0" />
+        	<input id="uf-required" type="checkbox" name="tx_mmforum_userfields[required]" value="1" />
+        </td>
+    </tr>
+	<tr class="mm_forum-listrow">
+        <td style="width:25%;">###UF_LLL_PRIVATE###</td>
+		<td style="width:1px;"><img src="img/uf-private.png" /></td>
+        <td>
+        	<input type="hidden" name="tx_mmforum_userfields[private]" value="0" />
+        	<input id="uf-private" type="checkbox" name="tx_mmforum_userfields[private]" value="1" />
+        </td>
+    </tr>
+	<tr class="mm_forum-listrow">
+        <td style="width:25%;">###UF_LLL_UNIQUE###</td>
+		<td style="width:1px;"><img src="img/uf-unique.png" /></td>
+        <td>
+        	<input type="hidden" name="tx_mmforum_userfields[unique]" value="0" />
+        	<input id="uf-unique" type="checkbox" name="tx_mmforum_userfields[unique]" value="1" />
+        </td>
+    </tr>
+	<tr class="mm_forum-listrow">
+        <td style="width:25%;">###UF_LLL_LINKTOFEUSER###</td>
+		<td style="width:1px;"><img src="img/uf-link.png" style="vertical-align: middle;" /></td>
+        <td>
+        	<select id="uf-required" name="tx_mmforum_userfields[link]">
+        		###UF_FEUSER_FIELDS###
+			</select>
+        </td>
+    </tr>
+	<tr class="mm_forum-listrow">
+        <td style="width:25%;" rowspan="5">###UF_LLL_TYPE###</td>
+		<td style="width:1px;"><img src="img/uf-text.png" style="vertical-align: middle;" /></td>
+        <td>
+			<div><input onchange="typeController.setType('text');" id="userfield-type-text" type="radio" name="tx_mmforum_userfields[type]" value="text" /> ###UF_LLL_TYPE_TEXT###</div>
+		</td>
+	</tr>
+	<tr class="mm_forum-listrow">
+		<td style="width:1px;"><img src="img/uf-radio.png" style="vertical-align: middle;" /></td>
+        <td>
+			<div><input onchange="typeController.setType('radio');" id="userfield-type-radio" type="radio" name="tx_mmforum_userfields[type]" value="radio" /> ###UF_LLL_TYPE_RADIO###</div>
+		</td>
+	</tr>
+	<tr class="mm_forum-listrow">
+		<td style="width:1px;"><img src="img/uf-checkbox.png" style="vertical-align: middle;" /></td>
+        <td>
+			<div><input onchange="typeController.setType('checkbox');" id="userfield-type-checkbox" type="radio" name="tx_mmforum_userfields[type]" value="checkbox" /> ###UF_LLL_TYPE_CHECKBOX###</div>
+		</td>
+	</tr>
+	<tr class="mm_forum-listrow">
+		<td style="width:1px;"><img src="img/uf-select.png" style="vertical-align: middle;" /></td>
+        <td>
+			<div><input onchange="typeController.setType('select');" id="userfield-type-select" type="radio" name="tx_mmforum_userfields[type]" value="select" /> ###UF_LLL_TYPE_SELECT###</div>
+		</td>
+	</tr>
+	<tr class="mm_forum-listrow">
+		<td style="width:1px;"><img src="img/uf-custom.png" style="vertical-align: middle;" /></td>
+        <td>
+			<div><input onchange="typeController.setType('custom');" id="userfield-type-custom" type="radio" name="tx_mmforum_userfields[type]" value="custom" /> ###UF_LLL_TYPE_CUSTOM###</div>
+        </td>
+    </tr>
+</table>
+
+<div id="userfield-typediv-text">
+	<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+	    <tr>
+	        <td class="mm_forum-listrow_header" colspan="2" valign="top"><img src="img/uf-text2.png" style="vertical-align: middle; margin-right:8px;" />###UF_LLL_TEXT_TITLE###</td>
+	    </tr>
+		<tr class="mm_forum-listrow">
+	        <td style="width:25%;">###UF_LLL_TEXT_LENGTH###</td>
+	        <td>
+	            <input id="uf-text-length" onkeyup="validator.parseNumber(this);" onchange="typeText.setLength(this.getValue());" type="text" name="tx_mmforum_userfields[text][length]" value="###UF_TEXT_SIZE###" size="6" />
+				<input id="uf-text-length-unlim" onclick="typeText.unlimitedSwitch();" name="tx_mmforum_userfields[text][length]" type="checkbox" value="-1" /> ###UF_LLL_TEXT_LENGTH_UNLIMITED###
+	        </td>
+	    </tr>
+		<tr class="mm_forum-listrow">
+	        <td style="width:25%;">###UF_LLL_TEXT_VALIDATE###</td>
+	        <td>
+	            <div><input onchange="typeText.setValidate('none');" id="uf-text-vld-none" type="radio" name="tx_mmforum_userfields[text][validate]" value="none" /> ###UF_LLL_TEXT_VALIDATE_NONE###</div>
+	            <div><input onchange="typeText.setValidate('num');" id="uf-text-vld-num" type="radio" name="tx_mmforum_userfields[text][validate]" value="num" /> ###UF_LLL_TEXT_VALIDATE_NUM###</div>
+	            <div><input onchange="typeText.setValidate('alnum');" id="uf-text-vld-alnum" type="radio" name="tx_mmforum_userfields[text][validate]" value="alnum" /> ###UF_LLL_TEXT_VALIDATE_ALNUM###</div>
+	            <div><input onchange="typeText.setValidate('email');" id="uf-text-vld-email" type="radio" name="tx_mmforum_userfields[text][validate]" value="email" /> ###UF_LLL_TEXT_VALIDATE_EMAIL###</div>
+	            <div><input onchange="typeText.setValidate('url');" id="uf-text-vld-url" type="radio" name="tx_mmforum_userfields[text][validate]" value="url" /> ###UF_LLL_TEXT_VALIDATE_URL###</div>
+	            <div><input onchange="typeText.setValidate('date');" id="uf-text-vld-date" type="radio" name="tx_mmforum_userfields[text][validate]" value="date" /> ###UF_LLL_TEXT_VALIDATE_DATE###</div>
+	        </td>
+	    </tr>
+	</table>
+</div>
+<div id="userfield-typediv-radio">
+	<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+	    <tr>
+	        <td class="mm_forum-listrow_header" colspan="2" valign="top"><img src="img/uf-radio.png" style="vertical-align: middle; margin-right:8px;" />###UF_LLL_RADIO_TITLE###</td>
+	    </tr>
+		<tr class="mm_forum-listrow">
+	        <td style="width:25%;">###UF_LLL_RADIO_VALUES###</td>
+	        <td>
+	        	<div style="float: right" onclick="typeRadio.addValue();"> ###UF_IMG_RADIOVALUE###</div>
+	        	<div id="uf-radio-values">
+		            <div id="uf-radio-value-0"><input onchange="this.style.border='';" type="text" name="tx_mmforum_userfields[radio][value][0]" value="" size="32"></div>
+				</div>
+	        </td>
+	    </tr>
+	</table>
+</div>
+<div id="userfield-typediv-checkbox"></div>
+<div id="userfield-typediv-select">
+	<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+	    <tr>
+	        <td class="mm_forum-listrow_header" colspan="2" valign="top"><img src="img/uf-select.png" style="vertical-align: middle; margin-right:8px;" />###UF_LLL_SELECT_TITLE###</td>
+	    </tr>
+		<tr class="mm_forum-listrow">
+	        <td style="width:25%;">###UF_LLL_SELECT_VALUES###</td>
+	        <td>
+	        	<div style="float: right" onclick="typeSelect.addValue();"> ###UF_IMG_RADIOVALUE###</div>
+	        	<div id="uf-select-values">
+		            <div id="uf-select-value-0"><input onchange="this.style.border='';" type="text" name="tx_mmforum_userfields[select][value][0]" value="" size="32"></div>
+				</div>
+	        </td>
+	    </tr>
+	</table>
+</div>
+<div id="userfield-typediv-custom">
+	<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+	    <tr>
+	        <td class="mm_forum-listrow_header" colspan="2" valign="top"><img src="img/uf-custom.png" style="vertical-align: middle; margin-right:8px;" />###UF_LLL_CUSTOM_TITLE###</td>
+	    </tr>
+		<tr class="mm_forum-listrow">
+	        <td><textarea name="tx_mmforum_userfields[custom][config]" style="width:100%; height:200px; font-family: mono;">###UF_CONFIG###</textarea></td>
+	    </tr>
+	</table>
+</div>
+
+<input type="hidden" name="tx_mmforum_userfields[uid]" value="###UF_UID###" />
+<input type="hidden" name="tx_mmforum_userfields[edit]" value="###UF_UID###" />
+<input type="hidden" name="tx_mmforum_userfields[action]" value="save" />
+
+<div style="clear:both;"></div>
+
+<script type="text/javascript" language="JavaScript">
+	var userfields = new Userfields_GeneralSettings();
+	userfields.delPath = '###UF_IMG_DEL###';
+	userfields.setRequired(###UF_REQUIRED###);
+	userfields.setPrivate(###UF_PRIVATE###);
+	userfields.setUnique(###UF_UNIQUE###);
+	<!-- ###USERFIELD_FORM_LABEL### -->
+	userfields.addLanguage('###UF_LANG_CONTENT###', '###UF_LANG_LABEL###');
+	<!-- ###USERFIELD_FORM_LABEL### -->
+
+	var typeController = new Userfields_TypeController();
+	typeController.setType('###UF_TYPE###');
+	
+	var typeText = new Userfields_TypeText();
+	typeText.setLength(###UF_TEXT_LENGTH###);
+	typeText.setValidate('###UF_TEXT_VALIDATE###');
+	
+	var typeRadio = new Userfields_TypeRadio();
+	typeRadio.delPath = '###UF_IMG_DEL###';
+	<!-- ###USERFIELD_FORM_RADIOVALUE### -->
+	typeRadio.addValue('###UF_RADIO_VALUE###');
+	<!-- ###USERFIELD_FORM_RADIOVALUE### -->
+	
+	var typeSelect = new Userfields_TypeSelect();
+	typeSelect.delPath = '###UF_IMG_DEL###';
+	<!-- ###USERFIELD_FORM_SELECTVALUE### -->
+	typeSelect.addValue('###UF_SELECT_VALUE###');
+	<!-- ###USERFIELD_FORM_SELECTVALUE### -->
+</script>
+<!-- ###USERFIELD_FORM### end -->
+
+<!-- ###USERFIELD_LIST### begin -->
+<div class="mm_forum-buttons">
+	<div class="mm_forum-button" onmouseover="this.className='mm_forum-button-hover';" onmouseout="this.className='mm_forum-button';" onclick="document.location.href='###UF_LINK_NEW###';">
+		<img src="img/userfields.png">
+		###UF_LLL_NEW###
+	</div>
+	<div class="mm_forum-button" onmouseover="this.className='mm_forum-button-hover';" onmouseout="this.className='mm_forum-button';" onclick="window.open('http://forge.typo3.org/wiki/extension-mm_forum/38_Extending_the_user_profile');">
+		<img src="img/help.png">
+		###UF_LLL_HELP###
+	</div>
+	<div style="clear:both;"></div>
+</div>
+<table class="mm_forum-list" width="100%" cellpadding="2" cellspacing="0">
+    <tr>
+        <td class="mm_forum-listrow_header" valign="top" style="width:1px;"><img src="img/uf-2.png" style="vertical-align: middle; margin-right:8px;" /></td>
+        <td class="mm_forum-listrow_header" colspan="3" valign="top">###UF_LLL_TITLE###</td>
+    </tr>
+	<tr>
+		<td class="mm_forum-listrow_label">&nbsp;</td>
+		<td class="mm_forum-listrow_label">###UF_LLL_HEAD_NAME###</td>
+		<td class="mm_forum-listrow_label">###UF_LLL_HEAD_TYPE###</td>
+		<td class="mm_forum-listrow_label" style="width:72px;">###UF_LLL_HEAD_EDIT###</td>
+	</tr>
+	<!-- ###USERFIELD_LIST_ITEM### -->
+	<tr>
+		<td class="mm_forum-listrow"><img src="img/uf.png" /></td>
+		<td class="mm_forum-listrow">###UF_NAME###</td>
+		<td class="mm_forum-listrow">###UF_TYPE###</td>
+		<td class="mm_forum-listrow" style="white-space: nowrap;">###UF_EDIT###</td>
+	</tr>
+	<!-- ###USERFIELD_LIST_ITEM### -->
+</table>
+<!-- ###USERFIELD_LIST### end -->

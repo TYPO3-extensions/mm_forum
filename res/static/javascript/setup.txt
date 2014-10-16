@@ -1,0 +1,37 @@
+#[globalVar = GP:tx_mmforum_pi1|action = new_topic,GP:tx_mmforum_pi1|action = new_post,GP:tx_mmforum_pi1|action = post_edit]
+  page.includeJS {
+  	mm_forum_prototype = EXT:mm_forum/res/scripts/prototype-1.6.0.3.js
+  	mm_forum_editor = EXT:mm_forum/res/scripts/class.forum_editor.js
+  }
+plugin.tx_mmforum.editorJavaScript = var editor = new tx_mmforum_Editor();
+plugin.tx_mmforum.callpolljs = onchange="changePoll(this);"
+plugin.tx_mmforum.polljavascript (
+  <script type="text/javascript">
+  <!--
+    function changePoll(caller) {
+      if('###DISABLE_POLL_VAR###' == '0') {
+        if(caller.checked)
+          document.getElementById('poll').style.display='block';
+        else document.getElementById('poll').style.display='none';
+      }
+    }
+  //-->
+  </script>
+)
+#[global]
+
+[globalVar = GP:tx_mmforum_pi3|action = message_write]
+  page.includeJS {
+  	mm_forum_prototype_usersearch = EXT:mm_forum/res/scripts/usersearch.js
+  }
+  plugin.tx_mmforum {
+  	pm_refreshUserSearch = onkeyup="userSearch.refreshUserSearch(this, event);"
+  	pm_hideUserSearch = onfocus="userSearch.hideUserSearch();"
+  	pm_UserSearch (
+      <script type="text/javascript">
+      	userSearch.ajaxURL		= '###AJAX_URL###';
+      	$('username').setAttribute('autocomplete','off');
+      </script>
+    )
+  }
+[global]

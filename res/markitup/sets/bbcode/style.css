@@ -1,0 +1,43 @@
+/* -------------------------------------------------------------------
+// markItUp!
+// By Jay Salvat - http://markitup.jaysalvat.com/
+// ------------------------------------------------------------------*/
+.markItUp a{background:url(images/sprite.png) no-repeat top left;}
+.markItUp .markItUpButton1 a{background-position:0 0;} 
+.markItUp .markItUpButton2 a{background-position:-85px 0;}
+.markItUp .markItUpButton3 a{background-position:-221px 0;}
+
+.markItUp .markItUpButton4 a{background-position:-170px 0;}
+.markItUp .markItUpButton5 a{background-position:-102px 0;}
+
+.markItUp .markItUpButton6 a{background-position:-51px 0;}
+.markItUp .markItUpButton7 a{background-position:-238px 0;}
+.markItUp .markItUpButton8 a{background-position:-119px 0;}
+.markItUp .markItUpButton9 a{background-position:-153px 0;}
+.markItUp .markItUpButton10 a{background-position:-136px 0;}
+
+.markItUp .markItUpButton11 a{background-position:-204px 0;}
+.markItUp .markItUpButton12 a{background-position:-34px 0;}
+
+.markItUp .markItUpButton13 a{background-position:-17px 0;}
+.markItUp .markItUpButton14 a{background-position:-187px 0;}
+.markItUp .colors ul{width:81px;padding:1px;}
+.markItUp .colors li{border:1px solid white;width:25px;height:25px;overflow:hidden;padding:0px; margin:0px;float:left;}
+.markItUp .colors ul a{width:25px;height:25px;}
+
+.markItUp .markItUpHeader ul .colors ul .col1-1 a{background:yellow;}
+.markItUp .markItUpHeader ul .colors ul .col1-2 a{background:orange;}
+.markItUp .markItUpHeader ul .colors ul .col1-3 a{background:red;}
+
+.markItUp .markItUpHeader ul .colors ul .col2-1 a{background:blue;}
+.markItUp .markItUpHeader ul .colors ul .col2-2 a{background:purple;}
+.markItUp .markItUpHeader ul .colors ul .col2-3 a{background:green;}
+
+.markItUp .markItUpHeader ul .colors ul .col3-1 a{background:white;}
+.markItUp .markItUpHeader ul .colors ul .col3-2 a{background:gray;}
+.markItUp .markItUpHeader ul .colors ul .col3-3 a{background:black;}
+/*Bild:stroke{background-position:-68px 0;}*/
+.markItUpHeader ul a{padding:0;margin:3px;}
+.markItUpHeader ul ul a{margin:0;}
+.markItUpHeader ul .markItUpDropMenu{background-position:125% 80%;}
+.markItUpButton9{display:none;}

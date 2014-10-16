@@ -1,0 +1,88 @@
+plugin.tx_mmforum.polljavascript (
+<script type="text/javascript">
+  $(document).ready(function() {
+    $("#tx_mmforum_pi1-poll").click(function(){
+      if($(this).attr('checked')){
+        $("#poll").slideDown('fast');
+      }
+      else{
+        $("#poll").slideUp('fast');
+      }
+    });
+  });      
+</script>
+)
+#[globalVar = GP:tx_mmforum_pi1|action = new_topic,GP:tx_mmforum_pi1|action = new_post,GP:tx_mmforum_pi1|action = post_edit]
+  page.includeJS {
+  	mm_forum_jquery = EXT:mm_forum/res/scripts/jquery-1.7.2.min.js
+  	mm_forum_editor = EXT:mm_forum/res/markitup/jquery.markitup.pack.js
+  }
+  page.includeCSS {
+    mm_forum_markItUpSkin = EXT:mm_forum/res/markitup/skins/simple/style.css
+    mm_forum_markItUpSet = EXT:mm_forum/res/markitup/sets/bbcode/style.css
+  }
+  plugin.tx_mmforum.jQueryEditorJavaScript (
+    mySettings = {
+    	previewParserPath:	'', // path to your BBCode parser
+    	markupSet: [
+    		{name:'###BOLD###', key:'B', openWith:'[b]', closeWith:'[/b]'},
+    		{name:'###ITALIC###', key:'I', openWith:'[i]', closeWith:'[/i]'},
+    		{name:'###UNDERLINE###', key:'U', openWith:'[u]', closeWith:'[/u]'},
+    		{separator:'---------------' },
+    		{name:'###PICTURE###', key:'P', replaceWith:'[img][![###BBIMAGEURL###]!][/img]'},
+    		{name:'###LINK###', key:'L', openWith:'[url=[![###BBLINKURL###]!]]', closeWith:'[/url]'},
+    		{separator:'---------------' },
+    		{name:'###COLOR###', 
+    			openWith:'[color=[![###BBCOLOR###]!]]',
+    			closeWith:'[/color]',
+    			className:'colors',
+    				dropMenu: [
+    					{name:'###YELLOW###',	openWith:'[color=yellow]', 	closeWith:'[/color]', className:"col1-1" },
+    					{name:'###ORANGE###',	openWith:'[color=orange]', 	closeWith:'[/color]', className:"col1-2" },
+    					{name:'###RED###', 	openWith:'[color=red]', 	closeWith:'[/color]', className:"col1-3" },
+    					
+    					{name:'###BLUE###', 	openWith:'[color=blue]', 	closeWith:'[/color]', className:"col2-1" },
+    					{name:'###PURPLE###', openWith:'[color=purple]', 	closeWith:'[/color]', className:"col2-2" },
+    					{name:'###GREEN###', 	openWith:'[color=green]', 	closeWith:'[/color]', className:"col2-3" },
+    					
+    					{name:'###WHITE###', 	openWith:'[color=white]', 	closeWith:'[/color]', className:"col3-1" },
+    					{name:'###GRAY###', 	openWith:'[color=gray]', 	closeWith:'[/color]', className:"col3-2" },
+    					{name:'###BLACK###',	openWith:'[color=black]', 	closeWith:'[/color]', className:"col3-3" }
+    				]
+    		},
+    		{name:'###SIZE###', key:'S', openWith:'[size=[![###BBSIZE###]!]]', closeWith:'[/size]',
+    		dropMenu :[
+    			{name:'###SIZEBIG###', openWith:'[size=2]', closeWith:'[/size]' },
+    			{name:'###SIZENORMAL###', openWith:'[size=1]', closeWith:'[/size]' }/*,
+    			{name:'###SIZESMALL###', openWith:'[size=0.5]', closeWith:'[/size]' }*/
+    		]},
+    		{separator:'---------------' },
+    		{name:'###BLIST###', openWith:'[list]\n', closeWith:'\n[/list]'},
+    		{name:'###NLIST###', openWith:'[list=[![###BBLISTNR###]!]]\n', closeWith:'\n[/list]'}, 
+    		{name:'###LITEM###', openWith:'[*] '},
+    		{separator:'---------------' },
+    		{name:'###QUOTES###', openWith:'[quote]', closeWith:'[/quote]'},
+    		{name:'###CODE###', openWith:'[code]', closeWith:'[/code]'}, 
+    		{separator:'---------------' },
+    		{name:'###CLEAN###', replaceWith:function(markitup) { return markitup.selection.replace(/\[(.*?)\]/g, "") } }
+    	]
+    }
+  )
+
+  plugin.tx_mmforum.editorJavaScript (
+    $(document).ready(function()	{
+      var ta = $('#tx_mmforum_editor');
+      ta.markItUp(mySettings);
+  
+      $('#smilies a').click(function() {
+    		emoticon = $(this).attr("title");
+    		if ($.markItUp.focused == null) {
+          ta.append(emoticon);
+        } else {
+          $.markItUp( { replaceWith:emoticon } );
+    		}
+    		return false;
+    	});
+    });
+  )
+#[global]
