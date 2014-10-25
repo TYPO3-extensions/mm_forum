@@ -429,7 +429,8 @@ class tx_mmforum_rss {
 			 LEFT JOIN tx_mmforum_posts_text x ON x.post_id = p.uid
 			 LEFT JOIN fe_users u ON u.uid = p.poster_id
 			 LEFT JOIN tx_mmforum_topics t ON t.uid = p.topic_id
-			 LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid',
+			 LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid
+			 LEFT JOIN tx_mmforum_forums c ON f.parentID = c.uid',
 			'p.deleted=0 AND
 			 t.deleted=0 AND
 			 f.deleted=0 AND
