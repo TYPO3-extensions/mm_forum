@@ -70,9 +70,10 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			foreach($param as $key => $value) {
 				$key = str_replace('status_','',$key);
 				if (is_numeric($key)){
-					$value = mysql_escape_string($value);
+					$key = $GLOBALS['TYPO3_DB']->fullQuoteStr($key, 'tx_mmforum_post_alert');
+					$value = $GLOBALS['TYPO3_DB']->fullQuoteStr($value, 'tx_mmforum_post_alert');
 					$updateArray = array('status'=>$value,'tstamp'=>$GLOBALS['EXEC_TIME']);
-					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_post_alert',"uid='$key' AND status <> '$value'",$updateArray);
+					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_post_alert', 'uid='.$key.' AND status <> '.$value, $updateArray);
 				}
 			}
 		}

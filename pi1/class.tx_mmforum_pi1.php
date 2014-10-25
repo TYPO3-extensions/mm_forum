@@ -4868,7 +4868,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		);
 
 		$res = array();
-		while ($row = mysql_fetch_assoc($unread)) {
+		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($unread)) {
 			if ($filter['onlyCategories']) {
 				$res[] = $row['forum_id'];
 			} else {

@@ -685,54 +685,53 @@ class tx_mmforum_phpbbimport {
 			$dataFields = $this->data['step2.']['importdata'];
 
 			if ($this->data['step3.']['clearAll']) {
-				$sql = "";
 				if (in_array('users/usergroups',$dataFields)) {
 					$userWhere = $this->data['step4.']['clearAll']['userWHERE']?$this->data['step4.']['clearAll']['userWHERE']:($this->data['step4.']['clearAll']['userUID']?"WHERE uid NOT IN (".$this->data['step4.']['clearAll']['userUID'].")":'');
 					$usergroupWhere = $this->data['step4.']['clearAll']['usergroupWHERE']?$this->data['step4.']['clearAll']['usergroupWHERE']:($this->data['step4.']['clearAll']['usergroupUID']?"WHERE uid NOT IN (".$this->data['step4.']['clearAll']['usergroupUID'].")":'');
 
-					mysql_query("DELETE FROM fe_users $userWhere;");
-                    #mysql_query("DELETE FROM fe_groups $usergroupWhere;");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM fe_users $userWhere");
+                    #$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM fe_groups $usergroupWhere");
 					$this->unsetImported('users/usergroups');
 					$this->deleteMappingArray('usergroupID_mapping');
 					$this->deleteMappingArray('userID_mapping');
 				}
 				if (in_array('boards/categories',$dataFields)) {
-					mysql_query("DELETE FROM tx_mmforum_forums");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_forums");
 					$this->unsetImported('boards/categories');
 					$this->deleteMappingArray('boardID_mapping');
 					$this->deleteMappingArray('categoryID_mapping');
 				}
 				if (in_array('topics/posts',$dataFields)) {
-					mysql_query("DELETE FROM tx_mmforum_posts;");
-                    mysql_query("DELETE FROM tx_mmforum_topics;");
-                    mysql_query("DELETE FROM tx_mmforum_posts_text;");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_posts");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_topics");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_posts_text");
 
 					$this->unsetImported('topics/posts');
 					$this->deleteMappingArray('postID_mapping');
 					$this->deleteMappingArray('topicID_mapping');
 				}
 				if (in_array('pms',$dataFields)) {
-					mysql_query("DELETE FROM tx_mmforum_pminbox");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_pminbox");
 					$this->unsetImported('pms');
 				}
 				if (in_array('polls',$dataFields)) {
-					mysql_query("DELETE FROM tx_mmforum_polls;");
-                    mysql_query("DELETE FROM tx_mmforum_polls_answers;");
-                    mysql_query("DELETE FROM tx_mmforum_polls_votes;");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_polls");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_polls_answers");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_polls_votes");
 					$this->unsetImported('polls');
 				}
 				if (in_array('search',$dataFields)) {
-					mysql_query("DELETE FROM tx_mmforum_searchresults;");
-                    mysql_query("DELETE FROM tx_mmforum_wordlist;");
-                    mysql_query("DELETE FROM tx_mmforum_wordmatch;");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_searchresults");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_wordlist");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_wordmatch");
 					$this->unsetImported('search');
 				}
 				if (in_array('smilies',$dataFields)) {
-					mysql_query("DELETE FROM tx_mmforum_smilies");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_smilies");
 					$this->unsetImported('smilies');
 				}
 				if (in_array('substr',$dataFields)) {
-					mysql_query("DELETE FROM tx_mmforum_topicmail");
+					$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_topicmail");
 					$this->unsetImported('subscr');
 				}
 			}
@@ -740,21 +739,21 @@ class tx_mmforum_phpbbimport {
 				$userWhere = $this->data['step4.']['clearAll']['userWHERE']?$this->data['step4.']['clearAll']['userWHERE']:($this->data['step4.']['clearAll']['userUID']?"WHERE uid NOT IN (".$this->data['step4.']['clearAll']['userUID'].")":'');
 				$usergroupWhere = $this->data['step4.']['clearAll']['usergroupWHERE']?$this->data['step4.']['clearAll']['usergroupWHERE']:($this->data['step4.']['clearAll']['usergroupUID']?"WHERE uid NOT IN (".$this->data['step4.']['clearAll']['usergroupUID'].")":'');
 
-				mysql_query("DELETE FROM fe_users $userWhere");
-				#mysql_query("DELETE FROM fe_groups $usergroupWhere");
-				mysql_query("DELETE FROM tx_mmforum_forums");
-				mysql_query("DELETE FROM tx_mmforum_posts");
-				mysql_query("DELETE FROM tx_mmforum_topics");
-				mysql_query("DELETE FROM tx_mmforum_posts_text");
-				mysql_query("DELETE FROM tx_mmforum_pminbox");
-				mysql_query("DELETE FROM tx_mmforum_searchresults");
-				mysql_query("DELETE FROM tx_mmforum_wordlist");
-				mysql_query("DELETE FROM tx_mmforum_wordmatch");
-				mysql_query("DELETE FROM tx_mmforum_smilies");
-				mysql_query("DELETE FROM tx_mmforum_topicmail;");
-				mysql_query("DELETE FROM tx_mmforum_polls;");
-				mysql_query("DELETE FROM tx_mmforum_polls_votes;");
-				mysql_query("DELETE FROM tx_mmforum_polls_answers;");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM fe_users $userWhere");
+				#$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM fe_groups $usergroupWhere");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_forums");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_posts");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_topics");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_posts_text");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_pminbox");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_searchresults");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_wordlist");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_wordmatch");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_smilies");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_topicmail");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_polls");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_polls_votes");
+				$GLOBALS['TYPO3_DB']->sql_query("DELETE FROM tx_mmforum_polls_answers");
 
 				$this->unsetImported('users/usergroups');
 				$this->unsetImported('boards/categories');

@@ -157,8 +157,8 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 					'tx_mmforum_forums',
 					'forum_internal = 1'
 				);
-				while ($row = mysql_fetch_assoc($res)) {
-					array_push($intern_forums,$row[uid]);
+				while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+					array_push($intern_forums,$row['uid']);
 				}
 
 				$intern_forums_list = implode(',',$intern_forums);
@@ -623,7 +623,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		}
 
 		if (is_numeric($param['search_place']) && ($param['search_place'] > 0))
-			$mysql_option   .= ' AND forum_id = '.mysql_escape_string($param['search_place']);
+			$mysql_option   .= ' AND forum_id = '.$GLOBALS['TYPO3_DB']->fullQuoteStr($param['search_place'], '');
 
 		if ($param['solved'] == 1)
 			$mysql_option   .= ' AND solved = 1 ';
@@ -721,9 +721,9 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * @return array        An numeric array of word UIDs
 	 */
 	function word_id($word) {
-		$word = mysql_escape_string($word); //TODO: use api
+		$word = $GLOBALS['TYPO3_DB']->fullQuoteStr($word, 'tx_mmforum_wordlist');
 		$word = str_replace('*','%',$word);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_wordlist',"word LIKE '$word'".$this->getPidQuery());
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_wordlist', 'word LIKE '.$word.$this->getPidQuery());
 
 		$word_id_array = array();
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
