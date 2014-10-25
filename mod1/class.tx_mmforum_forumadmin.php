@@ -82,10 +82,10 @@ class tx_mmforum_forumAdmin {
 
         $this->init();
 
-            if($this->param['fid']=='new')  $rcontent = $this->display_newForum();
-        elseif($this->param['cid']=='new')  $rcontent = $this->display_newCategory();
-        elseif($this->param['fid'])         $rcontent = $this->display_editForum();
-        elseif($this->param['cid'])         $rcontent = $this->display_editCategory();
+            if ($this->param['fid']=='new')  $rcontent = $this->display_newForum();
+        elseif ($this->param['cid']=='new')  $rcontent = $this->display_newCategory();
+        elseif ($this->param['fid'])         $rcontent = $this->display_editForum();
+        elseif ($this->param['cid'])         $rcontent = $this->display_editCategory();
 
         $content = '<table width="100%" cellspacing="0" cellpadding="0">
     <tr>
@@ -108,17 +108,17 @@ class tx_mmforum_forumAdmin {
      */
     function display_newForum() {
 
-        if($this->param['forum']) {
-            if($this->param['forum']['save'] || $this->param['forum']['saveReturn']) {
+        if ($this->param['forum']) {
+            if ($this->param['forum']['save'] || $this->param['forum']['saveReturn']) {
                 $errors = $this->save_newForum();
-                if($this->param['forum']['saveReturn']) {
+                if ($this->param['forum']['saveReturn']) {
                     $this->param['cid'] = $this->param['forum']['parentID'];
                     unset($this->param['forum']);
                 }
-                elseif(!$errors)
+                elseif (!$errors)
                     return;
             }
-            elseif($this->param['forum']['back']) {
+            elseif ($this->param['forum']['back']) {
                 unset($this->param);
                 return;
             }
@@ -202,13 +202,13 @@ class tx_mmforum_forumAdmin {
      */
     function display_newCategory() {
 
-        if($this->param['ctg']) {
-            if($this->param['ctg']['save']) {
+        if ($this->param['ctg']) {
+            if ($this->param['ctg']['save']) {
                 $errors = $this->save_newCategory();
-                if(!$errors)
+                if (!$errors)
                     return;
             }
-            elseif($this->param['ctg']['back']) {
+            elseif ($this->param['ctg']['back']) {
                 unset($this->param);
                 return;
             }
@@ -286,14 +286,14 @@ class tx_mmforum_forumAdmin {
      * @todo    Combine all form creation functions into a single method?
      */
     function display_editForum() {
-        if($this->param['forum']) {
-            if($this->param['forum']['save'])
+        if ($this->param['forum']) {
+            if ($this->param['forum']['save'])
                 $errors = $this->save_editForum();
-            elseif($this->param['forum']['back']) {
+            elseif ($this->param['forum']['back']) {
                 unset($this->param);
                 return;
             }
-            elseif($this->param['forum']['delete']) {
+            elseif ($this->param['forum']['delete']) {
                 $this->delete_forum();
                 return;
             }
@@ -304,7 +304,7 @@ class tx_mmforum_forumAdmin {
             'tx_mmforum_forums',
             'uid='.intval($this->param['fid']).' AND deleted=0'
         );
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return $this->display_tree();
+        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return $this->display_tree();
         else $forum = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
         $orderOptions = $this->getForumOrderField($forum,$forum['parentID']);
@@ -387,14 +387,14 @@ class tx_mmforum_forumAdmin {
      */
     function display_editCategory() {
 
-        if($this->param['ctg']) {
-            if($this->param['ctg']['save'])
+        if ($this->param['ctg']) {
+            if ($this->param['ctg']['save'])
                 $errors = $this->save_editCategory();
-            elseif($this->param['ctg']['back']) {
+            elseif ($this->param['ctg']['back']) {
                 unset($this->param);
                 return;
             }
-            elseif($this->param['ctg']['delete']) {
+            elseif ($this->param['ctg']['delete']) {
                 $this->delete_category();
                 return;
             }
@@ -405,7 +405,7 @@ class tx_mmforum_forumAdmin {
             'tx_mmforum_forums',
             'uid='.intval($this->param['cid']).' AND deleted=0'
         );
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return $this->display_tree();
+        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return $this->display_tree();
         else $ctg = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
         $orderOptions = $this->getForumOrderField($ctg,0);
@@ -488,7 +488,7 @@ class tx_mmforum_forumAdmin {
      * @return  void
      */
     function globalIncSorting($start,$amount=1,$parentId=0) {
-        $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_forums SET sorting = sorting + '.$amount.' WHERE sorting >= '.$start.' AND pid='.$this->pid.' AND deleted=0 AND parentID='.$parentId);
+        $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'sorting >= '.$start.' AND pid='.$this->pid.' AND deleted=0 AND parentID='.$parentId, array('sorting' => 'sorting + '.$amount));
     }
 
     /**
@@ -547,7 +547,7 @@ class tx_mmforum_forumAdmin {
      */
     function delete_forum() {
         $updateArray = array(
-            'tstamp'        => time(),
+            'tstamp'        => $GLOBALS['EXEC_TIME'],
             'deleted'       => 1
         );
         $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
@@ -572,7 +572,7 @@ class tx_mmforum_forumAdmin {
      */
     function delete_forumContents($fid) {
         $updateArray = array(
-            'tstamp'        => time(),
+            'tstamp'        => $GLOBALS['EXEC_TIME'],
             'deleted'       => 1
         );
         $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
@@ -631,9 +631,9 @@ class tx_mmforum_forumAdmin {
             );
             list($nPosts) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res2);
 
-            if($posts == $nPosts) continue;
+            if ($posts == $nPosts) continue;
             $updateArray = array(
-                'tstamp'            => time(),
+                'tstamp'            => $GLOBALS['EXEC_TIME'],
                 'tx_mmforum_posts'  => $nPosts
             );
             $GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$user_id,$updateArray);
@@ -651,8 +651,8 @@ class tx_mmforum_forumAdmin {
         $insertArray = array(
             'pid'               => $this->pid,
             'hidden'            => $this->param['forum']['hidden'],
-            'tstamp'            => time(),
-            'crdate'            => time(),
+            'tstamp'            => $GLOBALS['EXEC_TIME'],
+            'crdate'            => $GLOBALS['EXEC_TIME'],
             'cruser_id'         => $GLOBALS['BE_USER']->user['uid'],
             'forum_name'        => trim($this->param['forum']['title']),
             'forum_desc'        => trim($this->param['forum']['desc']),
@@ -664,13 +664,13 @@ class tx_mmforum_forumAdmin {
             'forum_topics'      => '0'
         );
 
-        if(strlen($insertArray['forum_name'])==0) return array('title' => '<div class="mm_forum-fatalerror">'.$this->getLL('error.noTitle').'</div>');
+        if (strlen($insertArray['forum_name'])==0) return array('title' => '<div class="mm_forum-fatalerror">'.$this->getLL('error.noTitle').'</div>');
 
-        if($this->param['forum']['order'] == 'first') {
+        if ($this->param['forum']['order'] == 'first') {
             $insertArray['sorting'] = 0;
             $this->globalIncSorting(0,1,$this->param['forum']['parentID']);
         }
-        elseif($this->param['forum']['order'] == 'last')
+        elseif ($this->param['forum']['order'] == 'last')
             $insertArray['sorting'] = $this->getMaxSorting() + 1;
         else {
             $this->globalIncSorting($this->param['forum']['order'],2,$this->param['forum']['parentID']);
@@ -694,8 +694,8 @@ class tx_mmforum_forumAdmin {
         $insertArray = array(
             'pid'               => $this->pid,
             'hidden'            => $this->param['ctg']['hidden'],
-            'tstamp'            => time(),
-            'crdate'            => time(),
+            'tstamp'            => $GLOBALS['EXEC_TIME'],
+            'crdate'            => $GLOBALS['EXEC_TIME'],
             'cruser_id'         => $GLOBALS['BE_USER']->user['uid'],
             'forum_name'        => trim($this->param['ctg']['title']),
             'grouprights_read'  => $this->param['ctg']['authRead'],
@@ -704,14 +704,14 @@ class tx_mmforum_forumAdmin {
             'parentID'          => 0
         );
 
-        if(strlen($insertArray['forum_name'])==0) return array('title' => '<div class="mm_forum-fatalerror">'.$this->getLL('error.noTitle').'</div>');
+        if (strlen($insertArray['forum_name'])==0) return array('title' => '<div class="mm_forum-fatalerror">'.$this->getLL('error.noTitle').'</div>');
 
-        if($this->param['ctg']['order'] == 'first') {
+        if ($this->param['ctg']['order'] == 'first') {
             $insertArray['sorting'] = 0;
-            if($this->param['ctg']['sorting'] != 0)
+            if ($this->param['ctg']['sorting'] != 0)
                 $this->globalIncSorting(0,1,$this->param['ctg']['parentID']);
         }
-        elseif($this->param['ctg']['order'] == 'last')
+        elseif ($this->param['ctg']['order'] == 'last')
             $insertArray['sorting'] = $this->getMaxSorting() + 1;
         else {
             $this->globalIncSorting($this->param['ctg']['order'],2,$this->param['ctg']['parentID']);
@@ -740,7 +740,7 @@ class tx_mmforum_forumAdmin {
         $ctg = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
         $updateArray = array(
-            'tstamp'            => time(),
+            'tstamp'            => $GLOBALS['EXEC_TIME'],
             'forum_name'        => trim($this->param['ctg']['title']),
             'grouprights_read'  => $this->param['ctg']['authRead'],
             'grouprights_write' => $this->param['ctg']['authWrite'],
@@ -748,17 +748,17 @@ class tx_mmforum_forumAdmin {
             'hidden'            => $this->param['ctg']['hidden']
         );
 
-        if(strlen($updateArray['forum_name'])==0) return array('title' => '<div class="mm_forum-fatalerror">'.$this->getLL('error.noTitle').'</div>');
+        if (strlen($updateArray['forum_name'])==0) return array('title' => '<div class="mm_forum-fatalerror">'.$this->getLL('error.noTitle').'</div>');
 
-        if($this->param['ctg']['order'] == 'first') {
+        if ($this->param['ctg']['order'] == 'first') {
             $updateArray['sorting'] = 0;
-            if($ctg['sorting'] != 0)
+            if ($ctg['sorting'] != 0)
                 $this->globalIncSorting(0,1,$this->param['ctg']['parentID']);
         }
-        elseif($this->param['ctg']['order'] == 'last')
+        elseif ($this->param['ctg']['order'] == 'last')
             $updateArray['sorting'] = $this->getMaxSorting() + 1;
         else {
-            if($this->param['ctg']['order'] != $ctg['sorting'])
+            if ($this->param['ctg']['order'] != $ctg['sorting'])
                 $this->globalIncSorting($this->param['ctg']['order'],2,$this->param['ctg']['parentID']);
             $updateArray['sorting'] = $this->param['ctg']['order'];
         }
@@ -769,7 +769,7 @@ class tx_mmforum_forumAdmin {
             $updateArray
         );
 
-        if($updateArray['grouprights_read'] != $ctg['grouprights_read']) {
+        if ($updateArray['grouprights_read'] != $ctg['grouprights_read']) {
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                 'uid',
                 'tx_mmforum_forums',
@@ -797,7 +797,7 @@ class tx_mmforum_forumAdmin {
         $ctg = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
         $updateArray = array(
-            'tstamp'            => time(),
+            'tstamp'            => $GLOBALS['EXEC_TIME'],
             'hidden'            => $this->param['forum']['hidden'],
             'forum_name'        => trim($this->param['forum']['title']),
             'forum_desc'        => trim($this->param['forum']['desc']),
@@ -806,17 +806,17 @@ class tx_mmforum_forumAdmin {
             'grouprights_mod'   => $this->param['forum']['authMod'],
         );
 
-        if(strlen($updateArray['forum_name'])==0) return array('title' => '<div class="mm_forum-fatalerror">'.$this->getLL('error.noTitle').'</div>');
+        if (strlen($updateArray['forum_name'])==0) return array('title' => '<div class="mm_forum-fatalerror">'.$this->getLL('error.noTitle').'</div>');
 
-        if($this->param['forum']['order'] == 'first') {
+        if ($this->param['forum']['order'] == 'first') {
             $updateArray['sorting'] = 0;
-            if($ctg['sorting'] != 0)
+            if ($ctg['sorting'] != 0)
                 $this->globalIncSorting(0,1,$this->param['forum']['parentID']);
         }
-        elseif($this->param['forum']['order'] == 'last')
+        elseif ($this->param['forum']['order'] == 'last')
             $updateArray['sorting'] = $this->getMaxSorting() + 1;
         else {
-            if($this->param['forum']['order'] != $ctg['sorting'])
+            if ($this->param['forum']['order'] != $ctg['sorting'])
                 $this->globalIncSorting($this->param['forum']['order'],2,$this->param['forum']['parentID']);
             $updateArray['sorting'] = $this->param['forum']['order'];
         }
@@ -827,7 +827,7 @@ class tx_mmforum_forumAdmin {
             $updateArray
         );
 
-        if($updateArray['grouprights_read'] != $ctg['grouprights_read']) $this->delete_forumIndex($ctg['uid']);
+        if ($updateArray['grouprights_read'] != $ctg['grouprights_read']) $this->delete_forumIndex($ctg['uid']);
     }
 
     /**
@@ -863,7 +863,7 @@ class tx_mmforum_forumAdmin {
         while($ctg = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
             $class_suffix = ($i++ % 2==0 ? '2' : '');
 
-            if($this->param['cid'] == $ctg['uid'] && !$this->param['fid']) $class_suffix = '_active';
+            if ($this->param['cid'] == $ctg['uid'] && !$this->param['fid']) $class_suffix = '_active';
 
             $editOnClick = "location.href='index.php?SET[function]=".$this->func."&tx_mmforum_fadm[cid]=".$ctg['uid']."';";
 			$js = 'onmouseover="this.className=\'mm_forum-listrow_active\'; this.style.cursor=\'pointer\';" onmouseout="this.className=\'mm_forum-listrow\'" onclick="'.htmlspecialchars($editOnClick).'"';
@@ -886,7 +886,7 @@ class tx_mmforum_forumAdmin {
             while($forum = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2)) {
                 $class_suffix = ($i++ % 2==0 ? '2' : '');
 
-                if($this->param['fid'] == $forum['uid']) $class_suffix = '_active';
+                if ($this->param['fid'] == $forum['uid']) $class_suffix = '_active';
 
 			    $editOnClick = "location.href='index.php?SET[function]=".$this->func."&tx_mmforum_fadm[fid]=".$forum['uid']."';";
 			    $js = 'onmouseover="this.className=\'mm_forum-listrow_active\'; this.style.cursor=\'pointer\';" onmouseout="this.className=\'mm_forum-listrow\'" onclick="'.htmlspecialchars($editOnClick).'"';
@@ -899,7 +899,7 @@ class tx_mmforum_forumAdmin {
             }
             $class_suffix = ($i++ % 2==0 ? '2' : '');
 
-            if($this->param['cid'] == $ctg['uid'] && $this->param['fid']=='new') $class_suffix = '_active';
+            if ($this->param['cid'] == $ctg['uid'] && $this->param['fid']=='new') $class_suffix = '_active';
 
             $editOnClick = "location.href='index.php?SET[function]=".$this->func."&tx_mmforum_fadm[fid]=new&tx_mmforum_fadm[cid]=".$ctg['uid']."';";
 			$js = 'onmouseover="this.className=\'mm_forum-listrow_active\'; this.style.cursor=\'pointer\';" onmouseout="this.className=\'mm_forum-listrow\'" onclick="'.htmlspecialchars($editOnClick).'"';
@@ -910,7 +910,7 @@ class tx_mmforum_forumAdmin {
         }
         $class_suffix = ($i++ % 2==0 ? '2' : '');
 
-        if($this->param['cid'] == 'new') $class_suffix = '_active';
+        if ($this->param['cid'] == 'new') $class_suffix = '_active';
 
         $editOnClick = "location.href='index.php?SET[function]=".$this->func."&tx_mmforum_fadm[cid]=new';";
 		$js = 'onmouseover="this.className=\'mm_forum-listrow_active\'; this.style.cursor=\'pointer\';" onmouseout="this.className=\'mm_forum-listrow'.$class_suffix.'\'" onclick="'.htmlspecialchars($editOnClick).'"';
@@ -992,21 +992,21 @@ class tx_mmforum_forumAdmin {
 
         while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
             $ctgs[] = $arr;
-            if($row['sorting'] > $arr['sorting']) $pos = $arr['uid'];
+            if ($row['sorting'] > $arr['sorting']) $pos = $arr['uid'];
         }
 
         $first_sel = ($row['sorting'] < $ctgs[0]['sorting'])?'selected="selected"':'';
         $last_sel = ($row['sorting'] >= $ctgs[count($ctgs)-1]['sorting'])?'selected="selected"':'';
 
-        if($new) {
+        if ($new) {
             $first_sel = '';
             $last_sel = 'selected="selected"';
         }
 
-        if($this->param[$sec]['order'] == 'first') {
+        if ($this->param[$sec]['order'] == 'first') {
             $first_sel = 'selected="selected"';
             $last_sel = '';
-        } elseif($this->param[$sec]['order'] == 'last') {
+        } elseif ($this->param[$sec]['order'] == 'last') {
             $last_sel = 'selected="selected"';
             $first_sel = '';
         }
@@ -1014,10 +1014,10 @@ class tx_mmforum_forumAdmin {
         $content = '<option value="first" '.$first_sel.'>'.$this->getLL('order.beginning').'</option>';
         $content .= '<option value="last" '.$last_sel.'>'.$this->getLL('order.ending').'</option>';
 
-        if(count($ctgs)>0) {
+        if (count($ctgs)>0) {
             foreach($ctgs as $ctg) {
                 $sel = ($pos == $ctg['uid'])?'selected="selected"':'';
-                if($this->param[$sec]['order'])
+                if ($this->param[$sec]['order'])
                     $sel = ($this->param[$sec]['order']==($ctg['sorting']+1))?'selected="selected"':'';
                 $content .= '<option value="'.($ctg['sorting']+1).'" '.$sel.'>'.$this->getLL('order.after').' '.$ctg['forum_name'].' '.$ctg['sorting'].'</option>';
             }

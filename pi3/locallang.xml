@@ -74,6 +74,12 @@ To read the message please follow this link:
             <label index="button-newpm">New message</label>
             <label index="button-pmreply">Reply</label>
             <label index="button-pmdelete">Delete</label>
+
+			<!-- Added in 1.10.0 -->
+			<label index="user-list-please-choose">Bitte wählen Sie den Empfänger für Ihre Nachricht</label>
+			<label index="user-list-no-results">Es konnte leider kein passender Benutzer gefunden werden.</label>
+			<label index="user-list-field-username">Benutzername</label>
+			<label index="button.user-list-back">Zurück zur Nachricht</label>
         </languageKey>
         <!-- GERMAN LANGUAGE DATA -->
         <languageKey index="de" type="array">
@@ -158,6 +164,12 @@ Das Forum-Team</label>
             <label index="button-newpm">Neue Nachricht</label>
             <label index="button-pmreply">Antworten</label>
             <label index="button-pmdelete">Löschen</label>
+
+			<!-- Added in 1.10.0 -->
+			<label index="user-list-please-choose">Please choose the receipient for your message</label>
+			<label index="user-list-no-results">Sorry, no matching users where found.</label>
+			<label index="user-list-field-username">Username</label>
+			<label index="button.user-list-back">Back to message</label>
         </languageKey>
         <!-- FINNISH LANGUAGE DATA -->
         <languageKey index="fi" type="array">

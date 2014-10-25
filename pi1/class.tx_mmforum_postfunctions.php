@@ -84,7 +84,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		$orderingMode = $this->conf['list_posts.']['postOrdering'] ? strtoupper($this->conf['list_posts.']['postOrdering']) : 'ASC';
 		$order = strtoupper($order);
 		if (in_array($order, array('ASC','DESC'))) $orderingMode = $order;
-		if(!in_array($orderingMode, array('ASC','DESC'))) $orderingMode = 'ASC';
+		if (!in_array($orderingMode, array('ASC','DESC'))) $orderingMode = 'ASC';
 
 		// load the topic data again, to make sure we get the latest additions from the admin changes
 		$topicData = $this->getTopicData($topicId);
@@ -117,12 +117,13 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			tx_mmforum_postfunctions::redirectToReply($topicId, $this->piVars['pid']);
 		}
 
-
 		// generate the marker for the admin panel
-		If(!$conf['slimPostList'])
+		if (!$conf['slimPostList']) {
 			$adminPanel = tx_mmforum_postfunctions::getAdminPanel($topicData);
-		Else $adminPanel = '';
-
+		}
+		else {
+			$adminPanel = '';
+		}
 
 		// Output post listing START
 		$template = $this->cObj->getSubpart($templateFile, empty($this->conf['LIST_POSTS_BEGIN']) ? '###LIST_POSTS_BEGIN###' : $this->conf['LIST_POSTS_BEGIN']);
@@ -131,7 +132,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			'###LABEL_MESSAGE###' => $this->pi_getLL('post.message'),
 			'###ADMIN_PANEL###'   => $adminPanel,
 		);
-		If($conf['slimPostList']) {
+		if ($conf['slimPostList']) {
 			$template = $this->cObj->substituteSubpart($template, '###HEADER_SUBPART###', '');
 			$template = $this->cObj->substituteSubpart($template, '###ROOTLINE_CONTAINER###', '');
 		}	
@@ -149,15 +150,15 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 					'pid'		=> $this->getStoragePID(),
 					'topic_id'  => $topicId,
 					'user'      => $feUserId,
-					'tstamp'    => time(),
-					'crdate'    => time(),
+					'tstamp'    => $GLOBALS['EXEC_TIME'],
+					'crdate'    => $GLOBALS['EXEC_TIME'],
 				);
 				$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_postsread', $insertArray);
 			}
 		}
 
 		// Increase hit counter
-		$GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_topics SET topic_views = topic_views+1 WHERE uid = ' . $topicId);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, array('topic_views' => 'topic_views+1'));
 
 		// Generate page navigation
 		$limitCount = $this->conf['post_limit'];
@@ -180,7 +181,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		// Determine page number
 		if ($this->piVars['page']) {
 			$pageNum = $this->piVars['page'];
-			if($this->conf['doNotUsePageBrowseExtension']) $pageNum ++;
+			if ($this->conf['doNotUsePageBrowseExtension']) $pageNum ++;
 		} elseif ($this->piVars['search_pid']) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'uid',
@@ -225,7 +226,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			/* Display the topic rating if the 'ratings' extension is installed
 			 * and topic rating is enabled. */
 		$isTopicRating = $this->isTopicRating();
-		if($isTopicRating)
+		if ($isTopicRating)
 			$marker['###TOPIC_RATING###'] = $isTopicRating ? $this->getRatingDisplay('tx_mmforum_topic', $topicData['uid']) : '';
 		else $template = $this->cObj->substituteSubpart($template, '###SUBP_TOPIC_RATING###', '');
 
@@ -369,23 +370,25 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
     		'title'		=> $topic_data['solved']?$this->pi_getLL('topic-solved-on'):$this->pi_getLL('topic-solved-off'),
     	);
 
-    	if($topic_data['topic_poster'] == $GLOBALS['TSFE']->fe_user->user['uid'] || $this->getIsModOrAdmin($topic_data['forum_id'])) {
-    		if($topic_data['solved']) {
+    	if ($topic_data['topic_poster'] == $GLOBALS['TSFE']->fe_user->user['uid'] || $this->getIsModOrAdmin($topic_data['forum_id'])) {
+    		if ($topic_data['solved']) {
     			$linkParams[$this->prefixId] = array(
     				'unsolve'			=> $topic_id
     			);
+    			$image = $this->pi_linkTP($this->buildImageTag($imgInfo),$linkParams);
     			$link = $this->pi_linkTP($this->pi_getLL('topic-solvedshort-off'),$linkParams).' / <strong>'.$this->pi_getLL('topic-solvedshort-on').'</strong>';
     		} else {
     			$linkParams[$this->prefixId] = array(
     				'solve'				=> $topic_id
     			);
+    			$image = $this->pi_linkTP($this->buildImageTag($imgInfo),$linkParams);
     			$link = '<strong>'.$this->pi_getLL('topic-solvedshort-off').'</strong> / '.$this->pi_linkTP($this->pi_getLL('topic-solvedshort-on'),$linkParams);
     		}
     	} else {
-    		$link = $topic_data['solved']?$this->pi_getLL('topic-solvedshort-on'):$this->pi_getLL('topic-solvedshort-off');
+    		$image = $this->buildImageTag($imgInfo);
+    		$link = $topic_data['solved'] ? $this->pi_getLL('topic-solvedshort-on') : $this->pi_getLL('topic-solvedshort-off');
     	}
 
-        $image = $this->buildImageTag($imgInfo);
         $image = $this->cObj->stdWrap($image,$this->conf['list_posts.']['optImgWrap.']);
         $link  = $this->cObj->stdWrap($link,$this->conf['list_posts.']['optLinkWrap.']);
 
@@ -409,8 +412,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
             	'action'		=> 'set_favorite',
             	'tid'			=> $this->piVars['tid']
             );
-            if($this->useRealUrl()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
-
+            if ($this->useRealUrl()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+		$image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
             $link = $this->pi_linkTP($this->pi_getLL('on'),$favlinkParams).' / <strong>'.$this->pi_getLL('off').'</strong>';
         } else {
             $imgInfo['alt'] = $this->pi_getLL('topic.favorite.on');
@@ -420,12 +423,12 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
             	'action'		=> 'del_favorite',
             	'tid'			=> $this->piVars['tid']
             );
-            if($this->useRealUrl()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
-
+            if ($this->useRealUrl()) $favlinkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+$image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
             $link = '<strong>'.$this->pi_getLL('on').'</strong> / '.$this->pi_linkTP($this->pi_getLL('off'),$favlinkParams);
         }
 
-        $image = $this->buildImageTag($imgInfo);
+//         $image = $this->buildImageTag($imgInfo);
         $image = $this->cObj->stdWrap($image,$this->conf['list_posts.']['optImgWrap.']);
         $link  = $this->cObj->stdWrap($link,$this->conf['list_posts.']['optLinkWrap.']);
 
@@ -440,7 +443,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
             "tx_mmforum_topicmail",
             "user_id = ".$GLOBALS['TSFE']->fe_user->user['uid']." AND topic_id = ".intval($this->piVars['tid']).$this->getPidQuery()
         );
-        IF ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1) {
+        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1) {
             $imgInfo['alt'] = $this->pi_getLL('topic.emailSubscr.off');
             $imgInfo['title'] = $this->pi_getLL('topic.emailSubscr.off');
             $imgInfo['src'] = $this->conf['path_img'].$this->conf['images.']['info_mail_off'];
@@ -448,7 +451,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                 'action'        => 'set_havealook',
                 'tid'           => $this->piVars['tid']
             );
-            if($this->useRealUrl()) $linkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+            if ($this->useRealUrl()) $linkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+            $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$linkParams);
             $link = $this->pi_linkTP($this->pi_getLL('on'),$linkParams).' / <strong>'.$this->pi_getLL('off').'</strong>';
         } else {
             $imgInfo['alt'] = $this->pi_getLL('topic.emailSubscr.on');
@@ -458,11 +462,12 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                 'action'        => 'del_havealook',
                 'tid'           => $this->piVars['tid']
             );
-            if($this->useRealUrl()) $linkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+            if ($this->useRealUrl()) $linkParams[$this->prefixId]['fid'] = $topic_data['forum_id'];
+            $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$linkParams);
             $link = '<strong>'.$this->pi_getLL('on').'</strong> / '.$this->pi_linkTP($this->pi_getLL('off'),$linkParams);
         }
 
-        $image = $this->buildImageTag($imgInfo);
+//         $image = $this->buildImageTag($imgInfo);
         $image = $this->cObj->stdWrap($image,$this->conf['list_posts.']['optImgWrap.']);
         $link  = $this->cObj->stdWrap($link,$this->conf['list_posts.']['optLinkWrap.']);
 
@@ -533,7 +538,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		if ($tstamp > $cache_tstamp || $cache_tstamp == 0) {
 			$posttext = $this->bb2text($posttext,$this->conf);
 			$updateArray = array(
-				'cache_tstamp' => time(),
+				'cache_tstamp' => $GLOBALS['EXEC_TIME'],
 				'cache_text'   => $posttext
 			);
 			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts_text','uid=' . $text_uid, $updateArray);
@@ -593,19 +598,19 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
     	$poster = $row['poster_id'];
         $user_res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users',"uid='$poster'");
-        if($GLOBALS['TYPO3_DB']->sql_num_rows($user_res))
+        if ($GLOBALS['TYPO3_DB']->sql_num_rows($user_res))
             $user = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($user_res);
         else $user = false;
 
         $menu = $profile = '';
-        if($this->getMayWrite_topic($this->piVars['tid'])) {
+        if ($this->getMayWrite_topic($this->piVars['tid'])) {
             if ((($read_flag == 0) AND ($closed_flag == 0)) OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
                 $quoteParams[$this->prefixId] = array(
                     'action'        => 'new_post',
                     'tid'           => $this->piVars['tid'],
                     'quote'         => $row['uid']
                 );
-	            if($this->useRealUrl()) {
+	            if ($this->useRealUrl()) {
 	            	$quoteParams[$this->prefixId]['fid'] = $row['forum_id'];
                     $quoteParams[$this->prefixId]['pid'] = $this->pi_getLL('realurl.quote');
 	            }
@@ -613,7 +618,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
             }
         }
 
-        if($user && $user['deleted']=='0') {
+        if ($user && $user['deleted']=='0') {
 
 				/* Generate profile button */
 			$profile .= $this->createButton('profile','profileView:'.$user['uid'],0,true);
@@ -623,12 +628,12 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
         }
 
         if ($GLOBALS['TSFE']->fe_user->user['username'] && $user['uid']!=$GLOBALS['TSFE']->fe_user->user['uid'] && !(isset($this->conf['pm_enabled']) && intval($this->conf['pm_enabled']) === 0)){
-        	if(intval($this->conf['pm_id']) > 0 && $user && $user['deleted']=='0' && !((isset($conf['pm_enabled']) && intval($conf['pm_enabled']) === 0))) {
+        	if (intval($this->conf['pm_id']) > 0 && $user && $user['deleted']=='0' && !((isset($conf['pm_enabled']) && intval($conf['pm_enabled']) === 0))) {
                 $pmParams = array(
                     'tx_mmforum_pi3[action]'        => 'message_write',
                     'tx_mmforum_pi3[userid]'        => $user['uid']
                 );
-                if($this->useRealUrl()) {
+                if ($this->useRealUrl()) {
                     $pmParams['tx_mmforum_pi3']['folder'] = 'inbox';
                     $pmParams['tx_mmforum_pi3']['messid'] = $this->pi_getLL('realurl.pmnew');
                 }
@@ -639,7 +644,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                 'action'        => 'post_alert',
                 'pid'     		=> $row['uid'],
             );
-            if($this->useRealUrl()) {
+            if ($this->useRealUrl()) {
                 $alertParams[$this->prefixId]['tid'] = $this->piVars['tid'];
                 $alertParams[$this->prefixId]['fid'] = $row['forum_id'];
             }
@@ -653,25 +658,25 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
     function marker_getPostoptionsMarker($row,$topic) {
     	$lastpostdate = $topic['_v_last_post_date'];
 
-		IF ((($row['poster_id'] == $this->getUserID()) AND ($lastpostdate == $row['post_time']) AND $topic['closed_flag']!=1) OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
+		if ((($row['poster_id'] == $this->getUserID()) AND ($lastpostdate == $row['post_time']) AND $topic['closed_flag']!=1) OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
 
             $linkParams[$this->prefixId] = array(
-				'action'        => 'post_edit',
-				'pid'           => $row['uid'],
-				'token'         => $GLOBALS["TSFE"]->fe_user->getKey('ses', "token"),
+		'action'        => 'post_edit',
+		'pid'           => $row['uid'],
+		'token'         => $GLOBALS["TSFE"]->fe_user->getKey('ses', "token"),
             );
-            if($this->useRealUrl()) {
+            if ($this->useRealUrl()) {
             	$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
             	$linkParams[$this->prefixId]['tid'] = $row['topic_id'];
             }
             $editLink = $this->createButton('edit',$linkParams,0,true);
 
             $linkParams[$this->prefixId] = array(
-				'action'        => 'post_del',
-				'pid'           => $row['uid'],
-				'token'         => $GLOBALS["TSFE"]->fe_user->getKey('ses', "token"),
+		'action'        => 'post_del',
+		'pid'           => $row['uid'],
+		'token'         => $GLOBALS["TSFE"]->fe_user->getKey('ses', "token"),
             );
-            if($this->useRealUrl()) {
+            if ($this->useRealUrl()) {
             	$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
             	$linkParams[$this->prefixId]['tid'] = $row['topic_id'];
             }
@@ -709,7 +714,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				'',
 				'uid ASC'
 			);
-
+			$sAttachment = '';
 			while ($attachment = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				if (!@file_exists($attachment['file_path'])) {
 					continue;
@@ -798,7 +803,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			'forum_posts'        => $countPosts,
 			'forum_topics'       => $countTopics,
 			'forum_last_post_id' => $lastPostId,
-			'tstamp'             => time()
+			'tstamp'             => $GLOBALS['EXEC_TIME']
 		);
 		$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'uid = ' . $forumId, $updateArray);
 	}
@@ -868,7 +873,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('MAX(post_time)','tx_mmforum_posts','deleted="0" AND hidden="0" AND topic_id="'.$row['topic_id'].'"'.$this->getPidQuery());
         list ($lastpostdate) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
         $grouprights = explode(",",$GLOBALS['TSFE']->fe_user->user['usergroup']);
-        IF (((($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid']) AND ($lastpostdate == $row['post_time'])) OR $this->getIsAdmin() OR $this->getIsMod($row['forum_id'])) && $GLOBALS["TSFE"]->fe_user->getKey('ses', "token") == $this->piVars['token'] && $this->piVars['token'] != false) {
+        if (((($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid']) AND ($lastpostdate == $row['post_time'])) OR $this->getIsAdmin() OR $this->getIsMod($row['forum_id'])) && $GLOBALS["TSFE"]->fe_user->getKey('ses', "token") == $this->piVars['token'] && $this->piVars['token'] != false) {
             // Retrieve post data
                 $res        = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"uid = '".intval($this->piVars['pid'])."'".$this->getPidQuery());
                 $row        = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
@@ -886,19 +891,22 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                 $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts_text','post_id = "'.intval($this->piVars['pid']).'"',$updArray);
 
             // Delete file attachment
-                if($row['attachment'] > 0)
+                if ($row['attachment'] > 0)
                     $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments','post_id='.$row['uid'],$updArray);
 
             // Decrease user's post coutner
-                $GLOBALS['TYPO3_DB']->sql_query("UPDATE fe_users SET  tx_mmforum_posts = tx_mmforum_posts - 1 WHERE uid = '".$cr_user."'");
+                $GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users', 'uid = '.intval($cr_user), array('tx_mmforum_posts' => 'tx_mmforum_posts - 1'));
 
             // Get last active post in topic
                 $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_posts','deleted="0" AND hidden="0" AND topic_id="'.$topic_id.'"'.$this->getPidQuery(),'','post_time ASC');
                 list($lastpostid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
             // Decrease topic reply counter
-                $mysql = "UPDATE tx_mmforum_topics SET tx_mmforumsearch_index_write=0, topic_replies = topic_replies-1,topic_last_post_id = '".$lastpostid."' WHERE uid = '".$topic_id."'";
-                $GLOBALS['TYPO3_DB']->sql_query($mysql);
+                $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'WHERE uid = '.$topic_id, array(
+			'tx_mmforumsearch_index_write' => 0,
+			'topic_replies' => 'topic_replies-1',
+			'topic_last_post_id' => $lastpostid
+		));
 
 
             // Refresh last post in board view
@@ -913,12 +921,11 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                 $last_forum_post_id = $row['uid'];
 
             // Decrease board post counter.
-                $mysql = "UPDATE tx_mmforum_forums SET forum_posts = forum_posts-1 WHERE uid = '".$forum_id."'";
-                $GLOBALS['TYPO3_DB']->sql_query($mysql);
+                $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'uid = '.intval($forum_id), array('forum_posts' => 'forum_posts-1'));
 
             // Determine, if deleted post was last remaining post in topic. If so, topic is deleted, too
                 $postmenge = $GLOBALS['TYPO3_DB']->sql_num_rows($GLOBALS['TYPO3_DB']->exec_SELECTquery('poster_id,topic_id,post_time','tx_mmforum_posts',"deleted = 0 AND hidden = 0 AND topic_id = '$topic_id'".$this->getPidQuery()));
-                IF ($postmenge == 0) {
+                if ($postmenge == 0) {
                     // Mark topic as deleted
                     $updArray = array("deleted"=>1);
                     $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics',"uid='$topic_id'",$updArray);
@@ -933,11 +940,11 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
                     $last_forum_post_id = $row['uid'];
 
                     // Decrease board topic counter
-                    $GLOBALS['TYPO3_DB']->sql_query("UPDATE tx_mmforum_forums SET forum_topics = forum_topics-1 WHERE uid = '".$forum_id."'");
+                    $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'uid = '.intval($forum_id), array('forum_topics' => 'forum_topics-1'));
 
                     // Remove shadow topics pointing to this topic
                     $updateArray = array(
-                    	'tstamp'			=> time(),
+                    	'tstamp'			=> $GLOBALS['EXEC_TIME'],
                     	'deleted'			=> 1
                     );
                     $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics',"shadow_tid='$topic_id'",$updateArray);
@@ -996,8 +1003,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				if ($this->conf['enableShadows']) {
 					$shadow_insertArray = array(
 						'pid'                 => $topicData['pid'],
-						'tstamp'              => time(),
-						'crdate'              => time(),
+						'tstamp'              => $GLOBALS['EXEC_TIME'],
+						'crdate'              => $GLOBALS['EXEC_TIME'],
 						'topic_title'         => $topicData['topic_title'],
 						'topic_poster'        => $topicData['topic_poster'],
 						'topic_time'          => $topicData['topic_time'],
@@ -1065,7 +1072,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				// delete all posts
 				$updateArray = array(
 					'deleted'                      => 1,
-					'tstamp'                       => time(),
+					'tstamp'                       => $GLOBALS['EXEC_TIME'],
 					'tx_mmforumsearch_index_write' => 0,
 				);
 				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'topic_id = ' . $topicData['uid'], $updateArray);
@@ -1226,25 +1233,25 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			if (!$this->conf['list_posts.']['userbuttons.'][$key.'.'] || !is_string($obj))
 				continue;
 
-			if($obj === 'MMFORUM_BUTTON') {
+			if ($obj === 'MMFORUM_BUTTON') {
 				$buttonConf = $this->conf['list_posts.']['userbuttons.'][$key.'.'];
 
-				if($buttonConf['if.'] && !$this->cObj->checkIf($buttonConf['if.']))
+				if ($buttonConf['if.'] && !$this->cObj->checkif ($buttonConf['if.']))
 					continue;
 
-				if($buttonConf['label.']) {
+				if ($buttonConf['label.']) {
 					$label = $this->cObj->cObjGetSingle('TEXT', $buttonConf['label.']);
 				}
 
-				if($buttonConf['link.']) {
+				if ($buttonConf['link.']) {
 					$link = $this->cObj->cObjGetSingle('TEXT', $buttonConf['link.']);
 				}
 
-				if($buttonConf['special']) {
+				if ($buttonConf['special']) {
 					switch($buttonConf['special']) {
 						case 'www':
 							$res = @parse_url($link);
-							if(count($res)==0 || strlen(trim($link))==0) continue 2;
+							if (count($res)==0 || strlen(trim($link))==0) continue 2;
 						break;
 					}
 				}

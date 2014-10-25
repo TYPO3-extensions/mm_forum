@@ -67,7 +67,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
     function main($content='') {
         $this->init();
 
-        if($this->ufVars['edit']) $content .= $this->displayExtForm($this->ufVars['edit']);
+        if ($this->ufVars['edit']) $content .= $this->displayExtForm($this->ufVars['edit']);
         else                      $content .= $this->displayFieldTable();
 
         return $content;
@@ -137,7 +137,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
      * @return void
      */
     function saveData() {
-        if($this->ufVars['moveUp']) {
+        if ($this->ufVars['moveUp']) {
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                 'uid,sorting',
                 'tx_mmforum_userfields',
@@ -154,10 +154,10 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
             );
             list($uid_2,$sorting_2) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-            $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_userfields SET sorting='.$sorting_1.' WHERE uid='.$uid_2);
-            $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_userfields SET sorting='.$sorting_2.' WHERE uid='.$uid_1);
+            $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_2, array('sorting' => $sorting_1));
+            $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_1, array('sorting' => $sorting_2));
         }
-        if($this->ufVars['moveDown']) {
+        if ($this->ufVars['moveDown']) {
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                 'uid,sorting',
                 'tx_mmforum_userfields',
@@ -174,33 +174,31 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
             );
             list($uid_2,$sorting_2) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-            $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_userfields SET sorting='.$sorting_1.' WHERE uid='.$uid_2);
-            $GLOBALS['TYPO3_DB']->sql_query('UPDATE tx_mmforum_userfields SET sorting='.$sorting_2.' WHERE uid='.$uid_1);
-        }
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_2, array('sorting' => $sorting_1));
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_1, array('sorting' => $sorting_2));
+		}
         foreach((array)$this->ufVars['field'] as $uid => $data) {
-
-            if(intval($uid)>0) {
-            	if(strlen($data['delete']) > 0) {
+            if (intval($uid)>0) {
+            	if (strlen($data['delete']) > 0) {
                     $updateArr = array(
-                        'tstamp'        => time(),
+                        'tstamp'        => $GLOBALS['EXEC_TIME'],
                         'deleted'       => 1
                     );
-                    $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields','uid='.$uid,$updateArr);
+                    $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid, $updateArr);
                 }
             }
         }
-        return $content;
     }
 
 	function generateTSConfig($meta) {
 
 		$config = array();
 
-		if($meta['link']) {
+		if ($meta['link']) {
 			$config['datasource'] = $meta['link'];
 		}
 
-		if($meta['required']) {
+		if ($meta['required']) {
 			$config['required'] = '1';
 		}
 
@@ -210,7 +208,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		);
 
 		foreach($meta['label'] as $key => $content) {
-			if($key == 'default') continue;
+			if ($key == 'default') continue;
 			$config['label.']['lang.'][$key] = $content;
 		}
 
@@ -326,32 +324,32 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			/* Validate the link parameter. Check if the regarding
 			 * link field is defined in the TCA. If this is not the
 			 * case, replace this link with an empty value. */
-		if($data['link']) {
+		if ($data['link']) {
 			global $TCA;
 			t3lib_div::loadTCA('fe_users');
 
 			$fields = array_keys($TCA['fe_users']['columns']);
-			$uf_link = in_array($data['link'],$fields) ? $data['link'] : null;
+			$uf_link = in_array($data['link'], $fields) ? $data['link'] : null;
 		} else $uf_link = null;
 
 			/* Validate the type parameter. If the parameter is NOT one
 			 * of the five allowed parameters, set parameter to 'custom'. */
 		$params = array('text','radio','checkbox','custom','select');
-		if(!in_array($data['type'],$params))
+		if (!in_array($data['type'],$params))
 			$uf_type = 'custom';
 		else $uf_type = $data['type'];
 
 			/* Validate the text length parameter. If the parameter is no
 			 * valid positive integer (or -1 for unlimited length), the
 			 * parameter is set to -1. */
-		if(intval($data['text']['length'] != 0))
+		if (intval($data['text']['length'] != 0))
 			$uf_text_length = intval($data['text']['length']);
 		else $uf_text_length = -1;
 
 			/* Validate the validation parameter. If the parameter is NOT one
 			 * of the six allowed parameters, set parameter to 'none'. */
 		$params = array('none','num','alnum','email','url','date');
-		if(!in_array($data['text']['validate'],$params))
+		if (!in_array($data['text']['validate'],$params))
 			$uf_text_validate = 'none';
 		else $uf_text_validate = $data['text']['validate'];
 
@@ -361,7 +359,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			$label['content'] = trim($label['content']);
 			$label['lang'] = trim($label['lang']);
 
-			if(strlen($label['content']) * strlen($label['lang']) == 0) continue;
+			if (strlen($label['content']) * strlen($label['lang']) == 0) continue;
 
 			$uf_labels[$label['lang']] = $label['content'];
 		}
@@ -371,7 +369,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		foreach($data['radio']['value'] as $key => $label) {
 			$label['content'] = trim($label);
 
-			if(strlen($label['content']) == 0) continue;
+			if (strlen($label['content']) == 0) continue;
 
 			$uf_radio_values[] = $label;
 		}
@@ -381,7 +379,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		foreach($data['select']['value'] as $key => $label) {
 			$label['content'] = trim($label);
 
-			if(strlen($label['content']) == 0) continue;
+			if (strlen($label['content']) == 0) continue;
 
 			$uf_select_values[] = $label;
 		}
@@ -413,7 +411,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 
 		$meta = $this->generateMetaArray($data);
 
-		if($meta['type'] == 'custom') {
+		if ($meta['type'] == 'custom') {
 			$config	= $data['custom']['config'];
 		} else {
 			$confArr = $this->generateTSConfig($meta);
@@ -421,7 +419,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		}
 
 		$updateArray = array(
-			'tstamp'            => time(),
+			'tstamp'            => $GLOBALS['EXEC_TIME'],
 			'public'            => $meta['private']?'0':'1',
 			'uniquefield'       => $meta['unique']?'1':'0',
 			'label'             => $meta['label']['default'],
@@ -436,7 +434,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 
 		$meta = $this->generateMetaArray($data);
 
-		if($meta['type'] == 'custom') {
+		if ($meta['type'] == 'custom') {
 			$config	= $data['custom']['config'];
 		} else {
 			$confArr = $this->generateTSConfig($meta);
@@ -447,8 +445,8 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		list($sorting) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 		$insertArray = array(
-			'tstamp'			=> time(),
-			'crdate'			=> time(),
+			'tstamp'			=> $GLOBALS['EXEC_TIME'],
+			'crdate'			=> $GLOBALS['EXEC_TIME'],
 			'cruser_id'			=> $GLOBALS['BE_USER']->user['uid'],
 			'sorting'			=> $sorting,
 			'public'			=> $meta['private']?'0':'1',
@@ -464,13 +462,13 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 
 	function displayExtForm($uid=-1) {
 
-		if($this->ufVars['action'] == 'save') {
-			if($uid == -1)
+		if ($this->ufVars['action'] == 'save') {
+			if ($uid == -1)
 				$uid = $this->saveNewField($this->ufVars);
 			else $this->editField($uid,$this->ufVars);
 		}
 
-		if($uid != -1) $userfield = $this->getuserFieldData($uid);
+		if ($uid != -1) $userfield = $this->getuserFieldData($uid);
 
 		$template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/userfields.html'));
 		$template = tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_FORM###');
@@ -518,7 +516,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		);
 		$template = tx_mmforum_BeTools::substituteMarkerArray($template, $llMarker);
 
-		if($uid == -1) {
+		if ($uid == -1) {
 			$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_FORM_LABEL###', '');
 			$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_FORM_RADIOVALUE###', '');
 			$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_FORM_SELECTVALUE###', '');

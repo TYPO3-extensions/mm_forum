@@ -119,7 +119,7 @@ class tx_mmforum_base extends tslib_pibase {
 		$this->conf['path_img']    = str_replace('EXT:mm_forum/', t3lib_extMgm::siteRelPath('mm_forum'), $this->conf['path_img']);
 		$this->conf['path_smilie'] = str_replace('EXT:mm_forum/', t3lib_extMgm::siteRelPath('mm_forum'), $this->conf['path_smilie']);
 
-		If(!class_exists('tx_pagebrowse_pi1')) {
+		if (!class_exists('tx_pagebrowse_pi1')) {
 			Include_Once t3lib_extMgm::extPath('pagebrowse').'pi1/class.tx_pagebrowse_pi1.php';
 		}
 
@@ -186,7 +186,7 @@ class tx_mmforum_base extends tslib_pibase {
 
 		if (!$pid) {
 			$cacheRes = $this->cache->restore('forum_pid');
-			if($cacheRes !== null) return $cacheRes;
+			if ($cacheRes !== null) return $cacheRes;
 
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'pid',
@@ -438,7 +438,7 @@ class tx_mmforum_base extends tslib_pibase {
 	function getModeratorGroups() {
 		$cacheRes = $this->cache->restore('moderator_groups');
 
-		if($cacheRes === null) {
+		if ($cacheRes === null) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'GROUP_CONCAT(grouprights_mod)',
 				'tx_mmforum_forums',
@@ -484,19 +484,19 @@ class tx_mmforum_base extends tslib_pibase {
 	 * @return boolean  TRUE, if the user that is currently logged in is an moderator.
 	 */
 	function getIsMod($forum=0) {
-		if($GLOBALS['TSFE']->fe_user->user['username']=="") return false;
+		if ($GLOBALS['TSFE']->fe_user->user['username']=="") return false;
 
 		$userId = $this->getUserID();
 		$cacheRes = $this->cache->restore("userIsMod_{$userId}_{$forum}");
 
-		if($cacheRes !== null) return $cacheRes;
+		if ($cacheRes !== null) return $cacheRes;
 
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             'c.grouprights_mod as category_auth, f.grouprights_mod as forum_auth',
             'tx_mmforum_forums f LEFT JOIN tx_mmforum_forums c ON f.parentID=c.uid',
             'f.uid='.intval($forum).' AND f.deleted=0'
         );
-		if(!$res || $GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return false;
+		if (!$res || $GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return false;
 
         list($category_auth, $forum_auth) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
@@ -566,9 +566,9 @@ class tx_mmforum_base extends tslib_pibase {
 		 *                         NULL if the ratings extension is not installed.
 		 */
 	function getRatingInstance() {
-		if(!t3lib_extMgm::isLoaded('ratings')) return null;
+		if (!t3lib_extMgm::isLoaded('ratings')) return null;
 
-		if(isset($this->rating)) return $this->rating;
+		if (isset($this->rating)) return $this->rating;
 		else {
 			$this->rating = t3lib_div::makeInstance('tx_ratings_api');
 			$this->ratingConf = $this->rating->getDefaultConfig();
@@ -605,7 +605,7 @@ class tx_mmforum_base extends tslib_pibase {
 		$conf['pageParameterName'] = $this->prefixId . '|page';
 		$conf['numberOfPages'] = $numberOfPages;
 
-		if(count($additionalParameters)>0) {
+		if (count($additionalParameters)>0) {
 			$conf['extraQueryString'] = t3lib_div::implodeArrayForUrl(null, $additionalParameters);
 		}
 

@@ -64,7 +64,7 @@ class tx_mmforum_cache_apc {
 		 * @return  bool             TRUE on success, otherwise FALSE.
 		 */
 	function save($key, $object, $override=false) {
-		if($override)
+		if ($override)
 			return apc_store($this->getCacheKey($key),$object);
 		else return apc_add($this->getCacheKey($key),$object);
 	}

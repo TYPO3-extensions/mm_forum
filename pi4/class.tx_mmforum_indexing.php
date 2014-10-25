@@ -67,14 +67,13 @@ class tx_mmforum_indexing {
 	 * @param  array  $conf     The calling plugin's configuration vars. Not actually used.
 	 * @return string           If an error occurred, an error message is returned
 	 */
-	function ind_topic($topic_id,$conf)
-	{
+	function ind_topic($topic_id,$conf) {
 			// Delete old index records regarding this topic
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_wordmatch',"topic_id='$topic_id'");
 
 			// Retrieve post data
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"topic_id='$topic_id' AND hidden='0'".$this->getPidQuery($conf));
-		if($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 			// Index each post in the topic
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$this->ind_post($conf,$row);
@@ -100,7 +99,7 @@ class tx_mmforum_indexing {
 		list($date) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 		// If last indexing process happened less than 10 seconds ago, return TRUE
-		IF($date < (time()-10)) {
+		if ($date < ($GLOBALS['EXEC_TIME']-10)) {
 			return 0;
 		}
 		// Otherwise, return FALSE.
@@ -119,7 +118,7 @@ class tx_mmforum_indexing {
         );
         $topicData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
-		if($topicData['deleted'] == 0) {
+		if ($topicData['deleted'] == 0) {
 	        $words = $this->wordArray($conf, $topicData['topic_title']);
 
 	        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -133,13 +132,13 @@ class tx_mmforum_indexing {
 
 			$rFGroups = array();
 			foreach($f_groups as $group) {
-				if($group > 0) $rFGroups[] = $group;
+				if ($group > 0) $rFGroups[] = $group;
 			}
 			$sFGroups = implode(',',$rFGroups);
 
 			$rCGroups = array();
 			foreach($c_groups as $group) {
-				if($group > 0) $rCGroups[] = $group;
+				if ($group > 0) $rCGroups[] = $group;
 			}
 			$sCGroups = implode(',',$rCGroups);
 
@@ -169,8 +168,9 @@ class tx_mmforum_indexing {
 
 	/**
 	 * Indexes a specific post.
-	 * @param  array $conf    The calling plugin's configuration vars. Not actually used.
-	 * @param  int   $post_id The UID of the post to be indexed.
+	 * @param  array $conf	The calling plugin's configuration vars. Not actually used.
+	 * @param  $post_array
+	 * @internal param int $post_id The UID of the post to be indexed.
 	 * @return void
 	 */
 	function ind_post($conf,$post_array) {
@@ -178,7 +178,7 @@ class tx_mmforum_indexing {
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_wordmatch',"post_id='".$post_array['uid']."'");
 
 			// If post is deleted, do not index again...
-		if($post_array['deleted'] == 0) {
+		if ($post_array['deleted'] == 0) {
 				// Get post content
 			$content		= $this->get_posttext($post_array['uid']);
 				// Retrieve all words in the post content as array
@@ -199,13 +199,13 @@ class tx_mmforum_indexing {
 			#$groups = array_merge($f_groups,$c_groups);
 			$rFGroups = array();
 			foreach($f_groups as $group) {
-				if($group > 0) $rFGroups[] = $group;
+				if ($group > 0) $rFGroups[] = $group;
 			}
 			$sFGroups = implode(',',$rFGroups);
 
 			$rCGroups = array();
 			foreach($c_groups as $group) {
-				if($group > 0) $rCGroups[] = $group;
+				if ($group > 0) $rCGroups[] = $group;
 			}
 			$sCGroups = implode(',',$rCGroups);
 
@@ -237,11 +237,9 @@ class tx_mmforum_indexing {
 	 * @param int $post_id The post UID
 	 */
 	function write_post_ind_date($post_id) {
-		$updateArray = array(
-			' tx_mmforumsearch_index_write' => time(),
-		);
-		$query = $GLOBALS['TYPO3_DB']->UPDATEquery('tx_mmforum_posts', 'uid = '.$post_id, $updateArray);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid = '.intval($post_id), array(
+			'tx_mmforumsearch_index_write' => $GLOBALS['EXEC_TIME'],
+		));
 	}
 
 	/**
@@ -249,11 +247,9 @@ class tx_mmforum_indexing {
 	 * @param int $topic_id The topic UID
 	 */
 	function write_topic_ind_date($topic_id) {
-		$updateArray = array(
-			' tx_mmforumsearch_index_write' => time(),
-		);
-		$query = $GLOBALS['TYPO3_DB']->UPDATEquery('tx_mmforum_topics', "uid = ".$topic_id, $updateArray);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = '.intval($topic_id), array(
+			'tx_mmforumsearch_index_write' => $GLOBALS['EXEC_TIME'],
+		));
 	}
 
 	/**
@@ -262,26 +258,25 @@ class tx_mmforum_indexing {
 	 *                      indexed.
 	 */
 	function delete_topic_ind_date($topic_id) {
-		$updateArray = array(
-			' tx_mmforumsearch_index_write' => 0,
-		);
-		$query = $GLOBALS['TYPO3_DB']->UPDATEquery('tx_mmforum_topics', "uid = ".$topic_id, $updateArray);
-		$res = $GLOBALS['TYPO3_DB']->sql_query($query);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = '.intval($topic_id), array(
+			'tx_mmforumsearch_index_write' => 0,
+		));
 	}
 
 	/**
 	 * Inserts a new word into the search index table and returns it's UID.
 	 * If the word already exists in the search index, just the UID is returned.
 	 * @param string $word The word to be inserted
-	 * @param int          The word's UID
+	 * @return int         The word's UID
 	 */
 	function wordAdd($word) {
 		// Attempt to load word from database
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_wordlist',"word=".$GLOBALS['TYPO3_DB']->fullQuoteStr($word, 'tx_mmforum_wordlist')." ".$this->getPidQuery($this->conf));
-		IF(mysql_error()) echo mysql_error().'<hr>';
+		//TODO use API
+		if (mysql_error()) echo mysql_error().'<hr>';
 
 		// If words already exists, just return the UID
-		if($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 			list($uid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 		}
 		// Otherwise, create new record and return the UID
@@ -295,6 +290,7 @@ class tx_mmforum_indexing {
 
 			// Execute insert query
 			$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_wordlist', $insertArray);
+			//TODO use API
 			$uid = mysql_insert_id();
 		}
 		return $uid;
@@ -305,10 +301,10 @@ class tx_mmforum_indexing {
 	 * which posts contains which words.
 	 * @param  int   $word_id     The UID of the word for the word match
 	 * @param  array $matchparams The other parameters for the word match
+	 * @param  bool  $debug
 	 * @return void
 	 */
 	function wortMatchAdd ($word_id,$matchparams,$debug=false) {
-		// Compost insert array
 		$insertArray = array(
 			'pid'				=> $this->getFirstPid($this->conf),
 			'word_id'			=> $word_id,
@@ -322,16 +318,11 @@ class tx_mmforum_indexing {
 			'post_crdate'		=> $matchparams['post_crdate'],
 			'post_cruser'		=> $matchparams['post_cruser'],
 			'reqUserGroups_f'	=> $matchparams['reqUserGroups_f'],
-            'reqUserGroups_c'   => $matchparams['reqUserGroups_c'],
-			'crdate'            => time(),
-			'tstamp'			=> time()
+			'reqUserGroups_c'   => $matchparams['reqUserGroups_c'],
+			'crdate'            => $GLOBALS['EXEC_TIME'],
+			'tstamp'			=> $GLOBALS['EXEC_TIME']
 		);
-		// Execute query
-		$query = $GLOBALS['TYPO3_DB']->INSERTquery('tx_mmforum_wordmatch', $insertArray);
-        $GLOBALS['TYPO3_DB']->sql_query($query);
-
-        #if(!$res) echo "AAARGH!";
-        #echo $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery.'<br />';
+		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_wordmatch', $insertArray);
 	}
 
 	/**
@@ -346,9 +337,9 @@ class tx_mmforum_indexing {
 	 */
 	function getPidQuery($conf,$tables="") {
 
-		if(strlen(trim($conf['pidList']))==0) return "";
-		if($tables == "") {
-			if($conf['storagePID'])
+		if (strlen(trim($conf['pidList']))==0) return "";
+		if ($tables == "") {
+			if ($conf['storagePID'])
 				return ' AND pid = '.$conf['storagePID'].' ';
 			else return ' AND pid IN ('.$conf['pidList'].')';
 		}
@@ -357,7 +348,7 @@ class tx_mmforum_indexing {
 		$query = "";
 
 		foreach($tables as $table) {
-			if($conf['storagePID'])
+			if ($conf['storagePID'])
 				$query .= " AND $table.pid = ".$conf['storagePID']." ";
 			else $query .= " AND $table.pid IN (".$conf['pidList'].")";
 		}
@@ -366,10 +357,10 @@ class tx_mmforum_indexing {
 
 	function getFirstPid($conf) {
 			// If conf['storagePID'] is set, indexing is called in cronjob mode
-		if($conf['storagePID']) return $conf['storagePID'];
+		if ($conf['storagePID']) return $conf['storagePID'];
 			// Otherwise it is called from browser
 		else {
-			if(strlen(trim($conf['pidList']))==0) return 0;
+			if (strlen(trim($conf['pidList']))==0) return 0;
 			$pids = t3lib_div::trimExplode(',',$conf['pidList']);
 			return $pids[0];
 		}
@@ -445,7 +436,7 @@ class tx_mmforum_indexing {
 
 			$minLength = $conf['sword_minLength']?$conf['sword_minLength']:$conf['min_length'];
 
-			if(strlen($val) >= $minLength) {
+			if (strlen($val) >= $minLength) {
 				$val = strtoupper($val);
 				array_push($clearWordArray,$val);
 			}

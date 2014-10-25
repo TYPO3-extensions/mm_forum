@@ -171,7 +171,13 @@ plugin.tx_mmforum {
 
     # cat=plugin.mm_forum - private messaging//; type=boolean; label=Enable private messageing
     pmEnabled = 1
-    
+
+    # cat=plugin.mm_forum - private messaging//; type=string; label=User search fields
+    pmUserSearchFields = username
+
+    # cat=plugin.mm_forum - private messaging//; type=string; label=User search order by
+    pmUserSearchOrderBy = username ASC
+
     cron_htmlemail					= 0
     cron_notifyPublish_group		= 
     cron_lang						= en

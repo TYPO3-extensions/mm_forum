@@ -57,7 +57,7 @@ class tx_mmforum_postqueue {
 		$this->cObj		= $parent->cObj;
 		$this->piVars	= $parent->piVars['postqueue'];
 
-		if($this->piVars['action'] == 'commit') {
+		if ($this->piVars['action'] == 'commit') {
 			$this->commit_changes();
 		}
 
@@ -156,16 +156,16 @@ class tx_mmforum_postqueue {
 		$postfactory->init($this->conf,$this->parent);
 
 		foreach($this->piVars['items'] as $item_uid => $action) {
-			if($action == 'ignore') {
+			if ($action == 'ignore') {
 				$updateArray = array(
-					'tstamp'			=> time(),
+					'tstamp'			=> $GLOBALS['EXEC_TIME'],
 					'hidden'			=> 1
 				);
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,$updateArray);
 			}
-			elseif($action == 'delete') {
+			elseif ($action == 'delete') {
 				$updateArray = array(
-					'tstamp'			=> time(),
+					'tstamp'			=> $GLOBALS['EXEC_TIME'],
 					'deleted'			=> 1
 				);
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,$updateArray);
@@ -199,11 +199,11 @@ class tx_mmforum_postqueue {
 			'tx_mmforum_postqueue',
 			'uid='.$item_uid.' AND deleted=0'
 		);
-		if($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return false;
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return false;
 
 		$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
-		if($arr['topic']) {
+		if ($arr['topic']) {
 			$postfactory->create_topic(
 				$arr['topic_forum'],
 				$arr['post_user'],
@@ -228,8 +228,7 @@ class tx_mmforum_postqueue {
 			);
 		}
 
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,array('tstamp'=>time(),'deleted'=>1));
-
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,array('tstamp'=>$GLOBALS['EXEC_TIME'],'deleted'=>1));
 	}
 
 	/**
@@ -262,7 +261,7 @@ class tx_mmforum_postqueue {
 
         $boards = $this->getModeratorBoards();
 
-        if(is_array($boards)) {
+        if (is_array($boards)) {
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery (
                 'q.*',
                 'tx_mmforum_postqueue q LEFT JOIN tx_mmforum_topics t ON q.post_parent = t.uid',
@@ -270,7 +269,7 @@ class tx_mmforum_postqueue {
                 '',
                 'q.crdate DESC'
             );
-        } elseif($boards === true) {
+        } elseif ($boards === true) {
 		    $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			    '*',
 			    'tx_mmforum_postqueue',
@@ -280,8 +279,8 @@ class tx_mmforum_postqueue {
 		    );
         }
 
-		if($boards !== false) {
-			if($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
+		if ($boards !== false) {
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
 				$template		= $this->cObj->substituteSubpart($template, '###POSTQUEUE_NOITEMS###', '');
 			} else {
 				$template		= $this->cObj->substituteSubpart($template, '###POSTQUEUE_ITEMLIST###', '');
@@ -299,7 +298,7 @@ class tx_mmforum_postqueue {
 					'###CHECK_PUBLISH###'	=> $arr['hidden']?'':'checked="checked"',
 					'###FORUMPATH###'		=> $this->getForumLink($arr['topic_forum']),
 				);
-				if($arr['topic']) {
+				if ($arr['topic']) {
 					$rMarker['###TOPIC_LINK###'] = $this->parent->escape($arr['topic_title']).' ['.$this->pi_getLL('postqueue.newTopic').']';
 				} else {
 					$tData = $this->parent->getTopicData($arr['post_parent']);
@@ -307,7 +306,7 @@ class tx_mmforum_postqueue {
 						'action'		=> 'list_post',
 						'tid'			=> $tData['uid']
 					);
-					if($this->parent->getIsRealURL()) $linkParams[$this->parent->prefixId]['fid'] = $tData['forum_id'];
+					if ($this->parent->getIsRealURL()) $linkParams[$this->parent->prefixId]['fid'] = $tData['forum_id'];
 
 					$rMarker['###TOPIC_LINK###'] = $this->parent->pi_linkToPage($this->parent->escape($tData['topic_title']),$this->conf['pid_forum'],'',$linkParams);
 				}
@@ -326,11 +325,11 @@ class tx_mmforum_postqueue {
 
     function getModeratorBoards() {
 
-		if($this->parent->getIsAdmin()) return true;
+		if ($this->parent->getIsAdmin()) return true;
 
         $groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 
-		if(count($groups) == 0) return false;
+		if (count($groups) == 0) return false;
 
         foreach($groups as $group) {
             $queryParts[] = 'FIND_IN_SET('.$group.',c.grouprights_mod)';

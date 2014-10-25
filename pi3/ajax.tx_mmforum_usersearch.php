@@ -91,7 +91,7 @@ class tx_mmforum_userSearch {
 		if ($field === 'username')
 			return true;
 		
-		$res = $GLOBALS['TYPO3_DB']->sql_query('SHOW COLUMNS FROM fe_users;');
+		$res = $GLOBALS['TYPO3_DB']->admin_get_fields('fe_users');
 		if ($res) {
 			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				if ($row['Field'] === $field) {
@@ -144,9 +144,7 @@ class tx_mmforum_userSearch {
 	 * @return string compiled json array
 	 */
 	public function render(array $data) {
-		$content = '';
-
-		if(function_exists('json_encode')) {
+		if (function_exists('json_encode')) {
 			$content = json_encode($data);
 		} else {
 			$content = '{"' . implode('","', $data) . '"}';
@@ -170,7 +168,7 @@ $SOBE = t3lib_div::makeInstance('tx_mmforum_userSearch');
 $sword = t3lib_div::_GP('userSearch');
 $data = $SOBE->search($sword);
 
-header('Content-Type: text/plain');
+header('Content-Type: text/plain'); //TODO: json?
 echo $SOBE->render($data);
 
 ?>

@@ -75,12 +75,12 @@ class tx_mmforum_havealookforum {
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1) {
 			$insertArray = array(
 				'pid'      => $forumObj->getStoragePID(),
-				'tstamp'   => time(),
-				'crdate'   => time(),
+				'tstamp'   => $GLOBALS['EXEC_TIME'],
+				'crdate'   => $GLOBALS['EXEC_TIME'],
 				'forum_id' => $forumId,
 				'user_id'  => $feUserId
 			);
-			$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_forummail', $insertArray);
+			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_forummail', $insertArray);
 		}
 
 		// Redirecting visitor back to previous page
@@ -100,7 +100,7 @@ class tx_mmforum_havealookforum {
 		$forumId  = intval($forumObj->piVars['fid']);
 
 		// Executing database operations
-		$res = $GLOBALS['TYPO3_DB']->exec_DELETEquery(
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery(
 			'tx_mmforum_forummail',
 			'user_id = ' . $feUserId . ' AND forum_id = ' . $forumId . $forumObj->getStoragePIDQuery()
 		);

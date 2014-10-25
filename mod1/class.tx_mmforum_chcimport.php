@@ -82,7 +82,7 @@ class tx_mmforum_chcimport {
         $this->ext_db = $this->dbObj->link;
         $this->loc_db = $GLOBALS['TYPO3_DB']->link;
 
-        if(is_array($this->importVars['import'])) {
+        if (is_array($this->importVars['import'])) {
 
             foreach($this->importVars['import'] as $import) {
 
@@ -91,8 +91,8 @@ class tx_mmforum_chcimport {
                 $conf        = $this->p->confArr;
                 $this->pid   = $conf['forumPID'];
 
-                if($import == 'chc')        $content .= $this->import_chc();
-                if($import == 'cwt')        $content .= $this->import_cwt();
+                if ($import == 'chc')        $content .= $this->import_chc();
+                if ($import == 'cwt')        $content .= $this->import_cwt();
 
                 $content .= '</fieldset>';
             }
@@ -114,7 +114,7 @@ class tx_mmforum_chcimport {
         $chc_enabled = t3lib_extMgm::isLoaded('chc_forum')?'checked="checked"':'disabled="disabled"';
         $cwt_enabled = t3lib_extMgm::isLoaded('cwt_community')?'checked="checked"':'disabled="disabled"';
 
-        $content .= '<fieldset><legend>'.$LANG->getLL('chc.step3').'</legend>';
+        $content = '<fieldset><legend>'.$LANG->getLL('chc.step3').'</legend>';
         $content .= '<table cellspacing="0" cellpadding="2" border="0">
     <tr>
         <td style="width:32px"><input type="checkbox" name="tx_mmforum_chc[import][]" value="chc" '.$chc_enabled.' /></td>
@@ -208,7 +208,7 @@ class tx_mmforum_chcimport {
 	    	);
 	    	list($user, $posts) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 	    	$updateArray = array(
-	    		'tstamp'			=> time(),
+	    		'tstamp'			=> $GLOBALS['EXEC_TIME'],
 	    		'tx_mmforum_posts'	=> $posts
 	    	);
 	    	$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$user.' AND pid='.$this->p->confArr['userPID'],$updateArray);
@@ -237,8 +237,8 @@ class tx_mmforum_chcimport {
     		$insertArray = array(
     			'pid'				=> $this->pid,
     			'hidden'			=> $ctg['hidden'],
-    			'tstamp'			=> time(),
-    			'crdate'			=> time(),
+    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
+    			'crdate'			=> $GLOBALS['EXEC_TIME'],
     			'forum_name'		=> $ctg['cat_title'],
     			'forum_desc'		=> $ctg['cat_description'],
     			'sorting'			=> $ctg['sorting'],
@@ -288,8 +288,8 @@ class tx_mmforum_chcimport {
     			'pid'				=> $this->pid,
     			'hidden'			=> $conf['hidden'],
     			'sorting'			=> $conf['sorting'],
-    			'tstamp'			=> time(),
-    			'crdate'			=> time(),
+    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
+    			'crdate'			=> $GLOBALS['EXEC_TIME'],
     			'forum_name'		=> $conf['conference_name'],
     			'forum_desc'		=> $conf['desc'],
     			'grouprights_read'	=> $conf['conference_public_r']?'':$this->convertGroups($conf['auth_forumgroup_r']),
@@ -337,8 +337,8 @@ class tx_mmforum_chcimport {
     		$insertArray = array(
     			'pid'				=> $this->pid,
     			'hidden'			=> $topic['hidden'],
-    			'tstamp'			=> time(),
-    			'crdate'			=> time(),
+    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
+    			'crdate'			=> $GLOBALS['EXEC_TIME'],
     			'topic_title'		=> $topic['thread_subject'],
     			'topic_poster'		=> $this->convertUser($topic['thread_author']),
     			'topic_time'		=> $topic['thread_datetime'],
@@ -379,7 +379,7 @@ class tx_mmforum_chcimport {
      */
     function chc_importPosts() {
 
-    	$res		= $this->dbObj->exec_SELECTquery(
+    	$res = $this->dbObj->exec_SELECTquery(
     		'*',
     		'tx_chcforum_post',
     		'deleted=0'
@@ -388,8 +388,8 @@ class tx_mmforum_chcimport {
 
     		$insertArray = array(
     			'pid'				=> $this->pid,
-    			'tstamp'			=> time(),
-    			'crdate'			=> time(),
+    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
+    			'crdate'			=> $GLOBALS['EXEC_TIME'],
     			'hidden'			=> $post['hidden'],
     			'topic_id'			=> $this->topicMapping[$post['thread_id']],
     			'forum_id'			=> $this->forumMapping[$post['conference_id']],
@@ -406,8 +406,8 @@ class tx_mmforum_chcimport {
 
     		$insertArray = array(
     			'pid'				=> $this->pid,
-    			'tstamp'			=> time(),
-    			'crdate'			=> time(),
+    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
+    			'crdate'			=> $GLOBALS['EXEC_TIME'],
     			'post_id'			=> $postUid,
     			'post_text'			=> $post['post_text']
     		);
@@ -417,9 +417,7 @@ class tx_mmforum_chcimport {
     		);
 
     		$this->postMapping[$post['uid']] = $postUid;
-
     	}
-
     }
 
     /**
@@ -450,7 +448,7 @@ class tx_mmforum_chcimport {
     			'tx_chcforum_forumgroup',
     			'uid='.$groups.' AND deleted=0'
     		);
-    		if(!$res || !$this->dbObj->sql_num_rows($res)) continue;
+    		if (!$res || !$this->dbObj->sql_num_rows($res)) continue;
 
     		list($feGroups) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
@@ -486,10 +484,10 @@ class tx_mmforum_chcimport {
      * @return  void
      */
     function clearDB() {
-    	$clearTables_array = t3lib_div::trimExplode(',',$this->chc_clearTables);
+    	$clearTables_array = t3lib_div::trimExplode(',', $this->chc_clearTables);
 
     	foreach($clearTables_array as $clearTable) {
-    		$GLOBALS['TYPO3_DB']->sql_query("TRUNCATE TABLE tx_mmforum_$clearTable");
+    		$GLOBALS['TYPO3_DB']->exec_TRUNCATEquery('tx_mmforum_' . $clearTable);
     	}
 
     	$updateArray = array(
@@ -507,11 +505,11 @@ class tx_mmforum_chcimport {
      * @deprecated Was replaced by a better import procedure in version 0.1.4
      */
     function import_chc_deprecated() {
-        mysql_query('TRUNCATE TABLE tx_mmforum_forums');
-	    mysql_query('TRUNCATE TABLE tx_mmforum_posts');
-	    mysql_query('TRUNCATE TABLE tx_mmforum_postread');
-	    mysql_query('TRUNCATE TABLE tx_mmforum_posts_text');
-	    mysql_query('TRUNCATE TABLE tx_mmforum_topics');
+		$GLOBALS['TYPO3_DB']->exec_TRUNCATEquery('tx_mmforum_forums');
+		$GLOBALS['TYPO3_DB']->exec_TRUNCATEquery('tx_mmforum_posts');
+		$GLOBALS['TYPO3_DB']->exec_TRUNCATEquery('tx_mmforum_postread');
+		$GLOBALS['TYPO3_DB']->exec_TRUNCATEquery('tx_mmforum_posts_text');
+		$GLOBALS['TYPO3_DB']->exec_TRUNCATEquery('tx_mmforum_topics');
 
 	    $anz_cat = $anz_forum = $anz_threads = $anz_posts = 0;
 
@@ -673,7 +671,7 @@ class tx_mmforum_chcimport {
 		    mysql_query($sql,$this->loc_db);
 	    }
 
-	    $content.= '<strong>'.$GLOBALS['LANG']->getLL('chc.success').'</strong><br/>';
+	    $content= '<strong>'.$GLOBALS['LANG']->getLL('chc.success').'</strong><br/>';
 	    $content.= '<br />'.$GLOBALS['LANG']->getLL('chc.categories').': '.$anz_cat;
 	    $content.= '<br />'.$GLOBALS['LANG']->getLL('chc.boards').': '.$anz_forum;
 	    $content.= '<br />'.$GLOBALS['LANG']->getLL('chc.topics').': '.$anz_threads;
@@ -701,7 +699,7 @@ class tx_mmforum_chcimport {
 	    $query=mysql_query($sql,$this->ext_db);
 	    while($res=mysql_fetch_array($query)) {
 
-		    if($res['status']>0)
+		    if ($res['status']>0)
 			    $read = 'read_flg = 1,';
 		    else
 			    $read = '';
@@ -746,7 +744,7 @@ class tx_mmforum_chcimport {
 		    $anz_pm++;
 	    }
 
-	    $content.= '<strong>'.$GLOBALS['LANG']->getLL('cwt.success').'</strong><br/>';
+	    $content= '<strong>'.$GLOBALS['LANG']->getLL('cwt.success').'</strong><br/>';
 	    $content.= '<br />'.$GLOBALS['LANG']->getLL('cwt.pms').': '.$anz_pm.'<br />';
 
         return $content;

@@ -75,10 +75,10 @@ class tx_mmforum_templates {
 
         $this->updateVars();
 
-        if($this->tmpVars['newtheme']) $content .= $this->displayCreateTheme();
+        if ($this->tmpVars['newtheme']) $content .= $this->displayCreateTheme();
         else $content .= $this->displayTemplateSelector();
 
-        if($this->tmpVars['template'] && $this->tmpVars['theme']) $content .= $this->displayTemplateEditor();
+        if ($this->tmpVars['template'] && $this->tmpVars['theme']) $content .= $this->displayTemplateEditor();
 
         return $content;
     }
@@ -89,20 +89,20 @@ class tx_mmforum_templates {
     function updateVars() {
         $this->conf = $this->p->config['plugin.']['tx_mmforum.'];
 
-        if(strlen($this->conf['path_template'])==0) $this->conf['path_template'] = 'EXT:mm_forum/res/tmpl/';
+        if (strlen($this->conf['path_template'])==0) $this->conf['path_template'] = 'EXT:mm_forum/res/tmpl/';
         $path = str_replace('EXT:mm_forum/',t3lib_extMgm::extPath('mm_forum'),$this->conf['path_template']);
-        if(substr($path,-1,1)!='/') $path = $path.'/';
+        if (substr($path,-1,1)!='/') $path = $path.'/';
 
         $this->templatePath = $path;
 
-        if(strlen($this->conf['path_altTemplate'])==0) $this->conf['path_altTemplate'] = 'fileadmin/ext/mm_forum/tmpl/';
-        if(preg_match('/^EXT:/',$this->conf['path_altTemplate']))
+        if (strlen($this->conf['path_altTemplate'])==0) $this->conf['path_altTemplate'] = 'fileadmin/ext/mm_forum/tmpl/';
+        if (preg_match('/^EXT:/',$this->conf['path_altTemplate']))
             $altPath = str_replace('EXT:mm_forum/',t3lib_extMgm::siteRelPath('mm_forum'),$this->conf['path_altTemplate']);
         else $altPath = PATH_site.$this->conf['path_altTemplate'];
-        if(substr($altPath,-1,1)!='/') $altPath = $altPath.'/';
+        if (substr($altPath,-1,1)!='/') $altPath = $altPath.'/';
 
         $this->altTemplatePath = $altPath;
-        if(!is_dir($this->altTemplatePath)) $this->generateAltTemplatePath();
+        if (!is_dir($this->altTemplatePath)) $this->generateAltTemplatePath();
     }
 
     /**
@@ -119,25 +119,25 @@ class tx_mmforum_templates {
      * @return  array        An array containing information on all themes and templates.
      */
     function getTemplates($path=FALSE) {
-        if($path === FALSE) $path = $this->templatePath;
-        if(!is_dir($path)) return array();
+        if ($path === FALSE) $path = $this->templatePath;
+        if (!is_dir($path)) return array();
 
-        if(substr($path,-1,1)=='/') $path = substr($path,0,strlen($path)-1);
+        if (substr($path,-1,1)=='/') $path = substr($path,0,strlen($path)-1);
 
         $dirs = t3lib_div::get_dirs($path);
 
-        if(count($dirs)>0) {
+        if (count($dirs)>0) {
             foreach($dirs as $dir) {
-				if(in_array($dir,$this->metaThemes)) continue;
+				if (in_array($dir,$this->metaThemes)) continue;
                 $result[$dir] = $this->getTemplates($path.'/'.$dir);
             }
         }
 
         $files = t3lib_div::getFilesInDir($path,'',0,$order='1');
 
-        if(count($files)==0) return $result;
+        if (count($files)==0) return $result;
         foreach($files as $file) {
-			if($file{0}==='.') continue; # Don't display hidden files
+			if ($file{0}==='.') continue; # Don't display hidden files
             $result[$file] = $file;
         }
 
@@ -155,7 +155,7 @@ class tx_mmforum_templates {
      * @return  boolean            TRUE, if the theme creation was successfull, otherwise false.
      */
     function createTheme($themename) {
-        if(file_exists($this->altTemplatePath.'/'.$themename)) return false;
+        if (file_exists($this->altTemplatePath.'/'.$themename)) return false;
 
         $this->copy_recursive($this->templatePath.'default',$this->altTemplatePath.''.$themename);
         $this->tmpVars['theme'] = $themename;
@@ -171,9 +171,9 @@ class tx_mmforum_templates {
      * @return  string The content
      */
     function displayCreateTheme() {
-        if(is_array($this->tmpVars['newtheme'])) {
+        if (is_array($this->tmpVars['newtheme'])) {
             $newtheme = $this->createTheme($this->tmpVars['newtheme']['name']);
-            if(!$newtheme) $newtheme_error = '<div class="mm_forum-fatalerror">'.$GLOBALS['LANG']->getLL('tmpl_createTheme_error').'</div>';
+            if (!$newtheme) $newtheme_error = '<div class="mm_forum-fatalerror">'.$GLOBALS['LANG']->getLL('tmpl_createTheme_error').'</div>';
             else return $this->displayTemplateSelector();
         }
 
@@ -203,14 +203,14 @@ class tx_mmforum_templates {
 
         $themeOptions = '<option value=""></option>';
 
-        if($this->tmpVars['activate']) {
+        if ($this->tmpVars['activate']) {
             $this->p->setConfVar('style',$this->tmpVars['theme']);
 
-            if($this->tmpVars['theme'] == 'default')
+            if ($this->tmpVars['theme'] == 'default')
                 $this->p->setConfVar('style_path',$this->conf['path_template'].$this->tmpVars['theme']);
             else {
                 $path = PATH_site.$this->conf['path_altTemplate'].$this->tmpVars['theme'];
-                if(is_dir($path))
+                if (is_dir($path))
                     $this->p->setConfVar('style_path',$this->conf['path_altTemplate'].$this->tmpVars['theme']);
                 else
                     $this->p->setConfVar('style_path',$this->conf['path_template'].$this->tmpVars['theme']);
@@ -224,13 +224,13 @@ class tx_mmforum_templates {
             $themeOptions .= '<option value="'.$theme.'" '.$sel.'>'.$theme.'</option>';
         }
 
-        if($this->tmpVars['theme']) {
+        if ($this->tmpVars['theme']) {
             $templateOptions .= '<option value=""></option>';
             $themeData = $vars[$this->tmpVars['theme']];
 
             foreach($themeData as $key => $template) {
 
-                if(is_array($template)) {
+                if (is_array($template)) {
                     $templateOptions .= '<optgroup label="'.$key.'">';
 
                     foreach($template as $sTemplate) {
@@ -251,8 +251,8 @@ class tx_mmforum_templates {
 
         $newThemeLink = '<a href="index.php?SET[function]='.$this->p->MOD_SETTINGS['function'].'&tx_mmforum_template[newtheme]=1" title="'.$GLOBALS['LANG']->getLL('tmpl_createTheme').'"><img src="img/forum-new.png" style="vertical-align:middle;" border="0" /></a>';
         
-        if($this->tmpVars['theme']) {
-            if($this->p->config['plugin.']['tx_mmforum.']['style']==$this->tmpVars['theme'])
+        if ($this->tmpVars['theme']) {
+            if ($this->p->config['plugin.']['tx_mmforum.']['style']==$this->tmpVars['theme'])
                 $activeLink = $GLOBALS['LANG']->getLL('tmpl_themeActive');
             else $activeLink = $GLOBALS['LANG']->getLL('tmpl_themeInactive').' <input type="submit" name="tx_mmforum_template[activate]" value="'.$GLOBALS['LANG']->getLL('tmpl_themeActivate').'" />';
         }
@@ -291,7 +291,7 @@ class tx_mmforum_templates {
         $template = $this->tmpVars['template'];
         $theme    = $this->tmpVars['theme'];
 
-        if($theme == 'default')
+        if ($theme == 'default')
             $filename = $this->templatePath.$theme.'/'.$template;
         else $filename = $this->altTemplatePath.$theme.'/'.$template;
         $tContent = file_get_contents($filename);
@@ -342,12 +342,12 @@ function replaceSelection (input, replaceString) {
 
 // We are going to catch the TAB key so that we can use it, Hooray!
 function catchTab(item,e){
-	if(navigator.userAgent.match("Gecko")){
+	if (navigator.userAgent.match("Gecko")){
 		c=e.which;
 	}else{
 		c=e.keyCode;
 	}
-	if(c==9){
+	if (c==9){
 		replaceSelection(item,String.fromCharCode(9));
 		setTimeout("document.getElementById(\'"+item.id+"\').focus();",0);
 		return false;
@@ -356,8 +356,8 @@ function catchTab(item,e){
 }
 </script>';
 
-        if($this->tmpVars['template_edit'][$template]['submit']) {
-            if($this->tmpVars['template_edit'][$template]['submit'] == $GLOBALS['LANG']->getLL('tmpl_editTemplate_toDefault'))
+        if ($this->tmpVars['template_edit'][$template]['submit']) {
+            if ($this->tmpVars['template_edit'][$template]['submit'] == $GLOBALS['LANG']->getLL('tmpl_editTemplate_toDefault'))
                 $this->tmpVars['template_edit'][$template]['text'] = file_get_contents($this->templatePath.'default/'.$template);
 
             $file = fopen($filename,'w');
@@ -372,7 +372,7 @@ function catchTab(item,e){
         $content .= '<fieldset><legend>'.sprintf($LANG->getLL('tmpl_editTemplate_title'),$template).'</legend>';
         $content .= '<textarea '.(($theme=='default')?'readonly="readonly"':'').' name="tx_mmforum_template[template_edit]['.$template.'][text]" style="width:100%; height:350px; font-family:Courier New; font-size:11px;" wrap="off" onkeydown="return catchTab(this,event);">'.$tContent.'</textarea>';
 
-        if($theme != 'default')
+        if ($theme != 'default')
             $content .= '<br /><br />
                             <input name="tx_mmforum_template[template_edit]['.$template.'][submit]" type="submit" value="'.$GLOBALS['LANG']->getLL('tmpl_editTemplate_submit').'" />
                             <input type="reset" value="'.$GLOBALS['LANG']->getLL('tmpl_editTemplate_reset').'" />
@@ -396,25 +396,25 @@ function catchTab(item,e){
      * @return  void
      */
     function copy_recursive($srcdir,$dstdir) {
-        if(substr($dstdir,-1,1)=='/') $dstdir = substr($dstdir,0,strlen($dstdir)-1);
-        if(substr($srcdir,-1,1)=='/') $srcdir = substr($srcdir,0,strlen($srcdir)-1);
+        if (substr($dstdir,-1,1)=='/') $dstdir = substr($dstdir,0,strlen($dstdir)-1);
+        if (substr($srcdir,-1,1)=='/') $srcdir = substr($srcdir,0,strlen($srcdir)-1);
 
         $dirs = t3lib_div::get_dirs($srcdir);
 
-        if(!is_dir($dstdir)) {
+        if (!is_dir($dstdir)) {
 			mkdir($dstdir);
 			t3lib_div::fixPermissions($dstdir);
 		}
 
-        if(count($dirs)>0) {
+        if (count($dirs)>0) {
             foreach($dirs as $dir) {
-                if(!is_dir($dstdir.'/'.$dir)) mkdir($dstdir.'/'.$dir);
+                if (!is_dir($dstdir.'/'.$dir)) mkdir($dstdir.'/'.$dir);
                 $this->copy_recursive($srcdir.'/'.$dir,$dstdir.'/'.$dir);
             }
         }
 
         $files = t3lib_div::getFilesInDir($srcdir);
-        if(count($files)>0) {
+        if (count($files)>0) {
             foreach($files as $file) {
                 copy($srcdir.'/'.$file,$dstdir.'/'.$file);
 				t3lib_div::fixPermissions($dstdir.'/'.$file);
@@ -440,12 +440,12 @@ function catchTab(item,e){
 
         foreach($segments as $seg) {
 
-            if(!is_dir($path)) mkdir($path);
+            if (!is_dir($path)) mkdir($path);
             chdir($path);
 
-            if(strlen(trim($seg))==0) continue;
+            if (strlen(trim($seg))==0) continue;
 
-            if($path == '/') $path = '/'.$seg;
+            if ($path == '/') $path = '/'.$seg;
             else $path .= '/'.$seg;
         }
     }

@@ -80,18 +80,18 @@ class tx_mmforum_validator {
     	}
 
     		// Get charset
-    	if($this->conf['charset'] AND $this->conf['charset'] != 'auto')
+    	if ($this->conf['charset'] AND $this->conf['charset'] != 'auto')
     		$charset = $this->conf['charset'];
-    	elseif($GLOBALS['TSFE']->renderCharset)
+    	elseif ($GLOBALS['TSFE']->renderCharset)
     		$charset = $GLOBALS['TSFE']->renderCharset;
     	else $charset = 'UTF-8';
 
 			// Remove tags
-		if($this->conf['stripTags'])
+		if ($this->conf['stripTags'])
 			$text = strip_tags($text);
 
 			// Replace all specialchars with HTML entities if configured
-		if($this->conf['replace'] == 'all')
+		if ($this->conf['replace'] == 'all')
 			return htmlentities($text, $quotes, $charset);
 	    else return htmlspecialchars($text, $quotes, $charset);
     }
@@ -124,9 +124,11 @@ class tx_mmforum_validator {
 	 * @return  void
 	 */
 	function init($conf = null) {
-		if($conf === null AND isset($GLOBALS['TSFE'])) {
+		if ($conf === null && isset($GLOBALS['TSFE'])) {
 			$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_mmforum_pi1.']['validatorSettings.'];
-		} else $this->conf = $conf;
+		} else {
+			$this->conf = $conf;
+		}
 	}
 
 	/**
@@ -136,7 +138,7 @@ class tx_mmforum_validator {
 	 * @return  tx_mmforum_validator A validator object
 	 */
 	function getValidatorObject() {
-		$validatorObj		= t3lib_div::makeInstance('tx_mmforum_validator');
+		$validatorObj = t3lib_div::makeInstance('tx_mmforum_validator'); /* @var $validatorObj tx_mmforum_validator */
 		$validatorObj->init();
 		return $validatorObj;
 	}

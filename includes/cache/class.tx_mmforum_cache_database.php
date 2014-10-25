@@ -52,18 +52,26 @@ class tx_mmforum_cache_database {
 		 * @return  bool             TRUE on success, otherwise FALSE.
 		 */
 	function save($key, $object, $override=false) {
-
-			/* Prepare INSERT statement */
-		$sql = "INSERT INTO cache_hash SET hash=MD5('".$key."'), content=".$GLOBALS['TYPO3_DB']->fullQuoteStr(serialize($object), 'cache_hash').", ident='tx_mmforum_cache'";
-
-			/* If $override flag is set, append an 'ON DUPLICATE KEY UPDATE' statement
-			 * to the INSERT statement. */
-		if($override)
-			$sql .= " ON DUPLICATE KEY UPDATE content = '".serialize($object)."'";
-
-			/* Execute and return result. */
-		return $GLOBALS['TYPO3_DB']->sql_query($sql) ? true : false;
-
+		if ($override) {
+			$GLOBALS['TYPO3_DB']->exec_DELETEquery('cache_hash', 'hash=MD5(' . $GLOBALS['TYPO3_DB']->fullQuoteStr($key, 'cache_hash') . ')');
+			return $GLOBALS['TYPO3_DB']->exec_INSERTquery('cache_hash',
+				array(
+					'hash' => md5($key),
+					'content' => $GLOBALS['TYPO3_DB']->fullQuoteStr(serialize($object), 'cache_hash'),
+					'tstamp' => $GLOBALS['EXEC_TIME'],
+					'ident' => 'tx_mmforum_cache'
+				)
+			) ? true : false;
+		} else {
+			return $GLOBALS['TYPO3_DB']->exec_INSERTquery('cache_hash',
+				array(
+					'hash' => md5($key),
+					'content' => $GLOBALS['TYPO3_DB']->fullQuoteStr(serialize($object), 'cache_hash'),
+					'tstamp' => $GLOBALS['EXEC_TIME'],
+					'ident' => 'tx_mmforum_cache'
+				)
+			) ? true : false;
+		}
 	}
 
 		/**
@@ -81,14 +89,13 @@ class tx_mmforum_cache_database {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('content','cache_hash','hash=MD5("'.$key.'") AND ident="tx_mmforum_cache"');
 
 			/* If no results were found, return FALSE */
-		if($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return null;
-
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+			return null;
+		} else {
 			/* Otherwise, load result, unserialize and return */
-		else {
 			list($content) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 			return unserialize($content);
 		}
-
 	}
 
 		/**

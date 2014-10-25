@@ -43,13 +43,12 @@ class tx_mmforum_topic extends tx_mmforum_data {
 	}
 
 	protected function setSolveStatus($status=1) {
-
 	}
 
 	static function getTopicByID($uid) {
-		if(intval($uid) === 0) return null;
+		if (intval($uid) === 0) return null;
 
-		$topic = t3lib_div::makeInstance('tx_mmforum_topic');
+		$topic = t3lib_div::makeInstance('tx_mmforum_topic'); /* @var $topic tx_mmforum_topic */
 		$topic->initFromDB($uid);
 
 		return $topic;

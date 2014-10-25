@@ -51,10 +51,8 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 	 * @return  string  The output of this script.
 	 */
 	function main() {
-
 		$this->loadPostAlertItems();
-
-		if(count($this->postalertItems)>0) {
+		if (count($this->postalertItems)>0) {
 			$this->content .= $this->generateOutput();
 			$this->content .= $this->sendEmailToModerators();
 		}
@@ -68,10 +66,10 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 	 * @return  void
 	 */
 	function validateConfig() {
-
 		parent::validateConfig();
-		if(intval($this->conf['cron_notifyPublish_group'])==0) $this->debug('Constant "cron_notifyPublish_group" is not set.',$this->DEBUG_FATAL);
-
+		if (intval($this->conf['cron_notifyPublish_group'])==0) {
+			$this->debug('Constant "cron_notifyPublish_group" is not set.',$this->DEBUG_FATAL);
+		}
 	}
 
 	/**
@@ -105,12 +103,13 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 			$header			= "Content-Type: $contenttype; charset=utf-8\n";
 			$header		   .= "From: ".$this->conf['cron_notifyPublishSender']."\n";
 
-			if(!@mail($recipient, $subject, $mailtext, $header)) {
+			if (!@mail($recipient, $subject, $mailtext, $header)) {
 				$this->debug('Could not send email to '.$recipient,$this->DEBUG_ERROR);
-			} else $this->debug('Successfully sent email to '.$recipient);
+			} else {
+				$this->debug('Successfully sent email to '.$recipient);
+			}
 		}
-		return $content;
-
+		return '';
 	}
 
 	/**
@@ -125,7 +124,7 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 	function generateOutput() {
 
 		$template			= $this->loadTemplateFile('notifyReported');
-		if($this->conf['cron_htmlemail'])
+		if ($this->conf['cron_htmlemail'])
 			$template		= t3lib_parsehtml::getSubpart($template, '###PNOTIFY_HTML###');
 		else $template		= t3lib_parsehtml::getSubpart($template, '###PNOTIFY_PLAINTEXT###');
 
@@ -147,7 +146,7 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 			'###LABEL_PNOTIFY_POSTCONTENT###'	=> $this->getLL('reportedcontent'),
 		);
 		$template			= t3lib_parsehtml::substituteMarkerArray($template, $marker);
-
+		$itemContent = '';
 		foreach($this->postalertItems as $postalertItem) {
 			$itemMarker = array(
 				'###PNOTIFY_TOPICTITLE###'		=> $this->getTopicTitle($postalertItem['topic_id']),
@@ -201,7 +200,7 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 	function getUsername($user_uid) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->conf['userNameField'], 'fe_users', 'uid='.$user_uid.' AND deleted=0');
 
-		if($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
 			list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res); return $username;
 		} else return $this->getLL('deletedUser');
 	}
@@ -219,7 +218,6 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics','uid='.intval($topic_id));
 		list($title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 		return $title;
-
 	}
 
 
@@ -261,17 +259,14 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 	 * @return  void
 	 */
 	function loadPostAlertItems() {
-
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_post_alert','deleted=0 AND hidden=0 AND status <> 1');
 		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$this->postalertItems[] = $arr;
 		}
-
 	}
 
 }
 
-	// XClass inclusion
 if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/cron/classes/class.tx_mmforum_cron_reported.php"])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/cron/classes/class.tx_mmforum_cron_reported.php"]);
 }

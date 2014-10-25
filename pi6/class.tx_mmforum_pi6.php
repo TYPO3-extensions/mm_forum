@@ -102,7 +102,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 		$content = $this->display($content);
 		$time = $this->microtime_float() - $time;
 
-		if($this->conf['debug']) $content .= $this->cObj->substituteMarker($this->pi_getLL('debug'),'###EXECUTIONTIME###',round($time,4));
+		if ($this->conf['debug']) $content .= $this->cObj->substituteMarker($this->pi_getLL('debug'),'###EXECUTIONTIME###',round($time,4));
 
 		return $this->pi_wrapInBaseClass($content);
 	}
@@ -113,8 +113,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @author Martin Helmich <m.helmich@mittwald.de>
 	 * @return float The current unix timestamp in milliseconds.
 	 */
-	function microtime_float()
-	{
+	function microtime_float() {
 		list($usec, $sec) = explode(" ", microtime());
 		return ((float)$usec + (float)$sec);
 	}
@@ -141,14 +140,12 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 		$subpart = !$small?"###PORTALINFO###":"###PORTALINFO_SMALL###";
 		$template = $this->cObj->getSubpart($template, $subpart);
 
-		$marker = Array();
-
 		// Determine amount of registered users
 		$onlineUsers = $this->getOnlineUsers();
 		$todayUsers = $this->getTodayUsers();
 
 		// Determine amount of guests
-		if(t3lib_extMgm::isLoaded('sys_stat')) {
+		if (t3lib_extMgm::isLoaded('sys_stat')) {
 			$onlineGuests = $this->getOnlineGuests();
 			$todayGuests = $this->getTodayGuests();
 		} else {
@@ -231,7 +228,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @return string          The regarding word, either in plural or singular version.
 	 */
 	function getSgPl($key,$number) {
-		if($number == 1) return $this->pi_getLL($key.'.sg');
+		if ($number == 1) return $this->pi_getLL($key.'.sg');
 		else return $this->pi_getLL($key.'.pl');
 	}
 
@@ -248,20 +245,20 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 		$result = "";
 
 		// Output regular user list
-		if(count($userData['users'])>0) {
-			if($seperate)   $users = $this->cObj->wrap($this->pi_getLL('list.users').':',$this->conf['userList.']['groupTitle_wrap']).' '.$this->getPartUserList($userData['users'],'tx-mmforum-pi6-user');
+		if (count($userData['users'])>0) {
+			if ($seperate)   $users = $this->cObj->wrap($this->pi_getLL('list.users').':',$this->conf['userList.']['groupTitle_wrap']).' '.$this->getPartUserList($userData['users'],'tx-mmforum-pi6-user');
 			else            $users = $this->getPartUserList($userData['users'],'tx-mmforum-pi6-user');
 			$result .= ((strlen($result)>0)?$seperate?$sepChar:', ':'').$users;
 		}
 		// Output moderator list
-		if(count($userData['mods'])>0) {
-			if($seperate)   $mods = $this->cObj->wrap($this->pi_getLL('list.moderators').':',$this->conf['userList.']['groupTitle_wrap']).' '.$this->getPartUserList($userData['mods'],'tx-mmforum-pi6-mod');
+		if (count($userData['mods'])>0) {
+			if ($seperate)   $mods = $this->cObj->wrap($this->pi_getLL('list.moderators').':',$this->conf['userList.']['groupTitle_wrap']).' '.$this->getPartUserList($userData['mods'],'tx-mmforum-pi6-mod');
 			else            $mods = $this->getPartUserList($userData['mods'],'tx-mmforum-pi6-mod');
 			$result .= ((strlen($result)>0)?$seperate?$sepChar:', ':'').$mods;
 		}
 		// Output administrator list
-		if(count($userData['admins'])>0) {
-			if($seperate)   $admins = $this->cObj->wrap($this->pi_getLL('list.administrators').':',$this->conf['userList.']['groupTitle_wrap']).' '.$this->getPartUserList($userData['admins'],'tx-mmforum-pi6-admin');
+		if (count($userData['admins'])>0) {
+			if ($seperate)   $admins = $this->cObj->wrap($this->pi_getLL('list.administrators').':',$this->conf['userList.']['groupTitle_wrap']).' '.$this->getPartUserList($userData['admins'],'tx-mmforum-pi6-admin');
 			else            $admins = $this->getPartUserList($userData['admins'],'tx-mmforum-pi6-admin');
 			$result .= ((strlen($result)>0)?$seperate?$sepChar:', ':'').$admins;
 		}
@@ -377,7 +374,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @see getOnlineUsers
 	 */
 	function getOnlineTotal() {
-		return $this->getTotalFromTime(time()-$this->conf['onlineTime']);
+		return $this->getTotalFromTime($GLOBALS['EXEC_TIME']-$this->conf['onlineTime']);
 	}
 
 	/**
@@ -387,7 +384,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @uses getGuestsFromTime
 	 */
 	function getOnlineGuests() {
-		return $this->getGuestsFromTime(time()-$this->conf['onlineTime']);
+		return $this->getGuestsFromTime($GLOBALS['EXEC_TIME']-$this->conf['onlineTime']);
 	}
 
 	/**
@@ -476,7 +473,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @uses getUsersFromTime
 	 */
 	function getOnlineUsers() {
-		return $this->getUsersFromTime(time()-$this->conf['onlineTime'],TRUE,FALSE);
+		return $this->getUsersFromTime($GLOBALS['EXEC_TIME']-$this->conf['onlineTime'],TRUE,FALSE);
 	}
 
 	/**
@@ -493,12 +490,12 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 			'users','mods',"admins",'count'
 		);
 
-		if(!t3lib_extMgm::isLoaded('sys_stat')) $sesBackcheck = TRUE;
+		if (!t3lib_extMgm::isLoaded('sys_stat')) $sesBackcheck = TRUE;
 
 		$grp_admin		= array($this->getAdministratorGroup());
 		$grp_mod		= $this->getModeratorGroups();
 
-		if($sesBackcheck) {
+		if ($sesBackcheck) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'u.usergroup, u.'.tx_mmforum_pi1::getUserNameField().', u.uid',
 				'fe_users u, fe_sessions s',
@@ -516,7 +513,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 			);
 		}
 		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			if($postCount) {
+			if ($postCount) {
 				$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'COUNT(*)',
 					'tx_mmforum_posts',
@@ -528,8 +525,8 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 
 			$user_groups = t3lib_div::intExplode(',',$arr['usergroup']);
 
-			    if(count(array_intersect($user_groups, $grp_mod))   > 0) $result['mods'][]   = $arr;
-			elseif(count(array_intersect($user_groups, $grp_admin)) > 0) $result['admins'][] = $arr;
+			    if (count(array_intersect($user_groups, $grp_mod))   > 0) $result['mods'][]   = $arr;
+			elseif (count(array_intersect($user_groups, $grp_admin)) > 0) $result['admins'][] = $arr;
 			else $result['users'][] = $arr;
 		}
 		$result['count'] = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
@@ -559,8 +556,8 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @version 2007-04-16
 	 */
 	function getUserPidQuery($table="fe_users") {
-		if($this->conf['userPID']==-1) return "";
-		if($this->conf['userPID']=="") return "";
+		if ($this->conf['userPID']==-1) return "";
+		if ($this->conf['userPID']=="") return "";
 		else return " AND $table.pid='".$this->conf['userPID']."'";
 	}
 }

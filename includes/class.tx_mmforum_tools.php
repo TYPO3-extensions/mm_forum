@@ -272,7 +272,9 @@ class tx_mmforum_tools extends tslib_pibase {
 		$cacheRes = $cache->restore('pgrpCache_'.$group);
 
 			/* Is result was found in cache, return */
-		if($cacheRes !== null) return $cacheRes;
+		if ($cacheRes !== null) {
+			return $cacheRes;
+		}
 
 			/* Otherwise get groups */
 		$groups = tx_mmforum_tools::getParentUserGroupsR($group);
@@ -286,7 +288,6 @@ class tx_mmforum_tools extends tslib_pibase {
 			/* Save groups to cache and return */
 		$cache->save('pgrpCache_'.$group, $groupString);
 		return $groupString;
-
 	}
 
 	/**
@@ -340,7 +341,9 @@ class tx_mmforum_tools extends tslib_pibase {
 		$cacheRes = $cache->restore('sgrpCache_'.$group);
 
 			/* If value was found in cache, return */
-		if($cacheRes !== null) return $cacheRes;
+		if ($cacheRes !== null) {
+			return $cacheRes;
+		}
 
 			/* Otherwise load all subgroups now */
 		$groups = tx_mmforum_tools::getSubUserGroupsR($group);
@@ -354,7 +357,6 @@ class tx_mmforum_tools extends tslib_pibase {
 			/* Save to cache and return */
 		$cache->save('sgrpCache_'.$group,$groupString);
 		return $groupString;
-
 	}
 
 	/**
@@ -461,7 +463,7 @@ class tx_mmforum_tools extends tslib_pibase {
 			if ($forceOverwrite) {
 				$updateArray = array(
 					'cache_value' => serialize($value),
-					'tstamp'      => time()
+					'tstamp'      => $GLOBALS['EXEC_TIME']
 				);
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 					'tx_mmforum_cache',
@@ -473,7 +475,7 @@ class tx_mmforum_tools extends tslib_pibase {
 			$insertArray = array(
 				'cache_key'   => $key,
 				'cache_value' => serialize($value),
-				'tstamp'      => time()
+				'tstamp'      => $GLOBALS['EXEC_TIME']
 			);
 			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_cache', $insertArray);
 		}
@@ -590,6 +592,8 @@ class tx_mmforum_tools extends tslib_pibase {
 			$useSSL = (t3lib_div::getIndpEnv('SERVER_PORT') == 443);
 
 			$dirname = dirname(t3lib_div::getIndpEnv('SCRIPT_NAME'));
+			// on windows, dirname returns a backslash for the root directory, replace it with a forward slash
+			$dirname = ($dirname == '\\') ? '/' : $dirname;
 			$dirname = tx_mmforum_tools::appendTrailingSlash($dirname);
 			$dirname = tx_mmforum_tools::removeLeadingSlash($dirname);
 			if ($dirname == '/') {

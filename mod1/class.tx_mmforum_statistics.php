@@ -223,7 +223,7 @@ class tx_mmforum_statistics {
      * @version 2007-05-31
      */
     function getDateTitleLink($start, $stop, $colspan=3,$padding=2) {
-        $sStop = ($stop==time())?$this->getLL('now'):date("d. m. Y, H:i:s",$stop);
+        $sStop = ($stop==$GLOBALS['EXEC_TIME'])?$this->getLL('now'):date("d. m. Y, H:i:s",$stop);
         return '<br /><table cellspacing="0" cellpadding="'.$padding.'" style="width:100%" class="mm_forum-list">
     <tr>
         <td class="mm_forum-listrow_header" colspan="'.$colspan.'">'.date("d. m. Y, H:i:s",$start).' &mdash; '.$sStop.'</td>
@@ -245,7 +245,7 @@ class tx_mmforum_statistics {
         $table          = $this->param['table'];
         $timeField      = $this->timeFields[$table];
 
-        if(!in_array($table,array('tx_mmforum_posts','tx_mmforum_topics'))) return "<br />The selected display mode is not supported.";
+        if (!in_array($table,array('tx_mmforum_posts','tx_mmforum_topics'))) return "<br />The selected display mode is not supported.";
 
         $content .= $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,3,0);
 
@@ -328,10 +328,10 @@ class tx_mmforum_statistics {
 
         $dayCount = intval(date('t',$tstamp_Start));
 
-        if($this->param['mode']=='total') {
+        if ($this->param['mode']=='total') {
 
-            if($this->param['month']=='all') return '<br /><br />'.$this->getLL('error.noMonth').'<br /><br />';
-            if($this->param['year']=='all') return '<br /><br />'.$this->getLL('error.noYear').'<br /><br />';
+            if ($this->param['month']=='all') return '<br /><br />'.$this->getLL('error.noMonth').'<br /><br />';
+            if ($this->param['year']=='all') return '<br /><br />'.$this->getLL('error.noYear').'<br /><br />';
 
             $tTstamp_Stop = $tstamp_Start;
             $maxValue       = 0;
@@ -344,7 +344,7 @@ class tx_mmforum_statistics {
                 );
                 list($num) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
                 $results[$i] = $num;
-                if($num > $maxValue) $maxValue = $num;
+                if ($num > $maxValue) $maxValue = $num;
             }
         }
         else {
@@ -359,7 +359,7 @@ class tx_mmforum_statistics {
                 $day = intval(date("j",$arr[$timeField]));
                 $results[$day] ++;
 
-                if($results[$day] > $maxValue) $maxValue = $results[$day];
+                if ($results[$day] > $maxValue) $maxValue = $results[$day];
             }
         }
 
@@ -395,9 +395,9 @@ class tx_mmforum_statistics {
 
         $results = array();
 
-        if($this->param['mode']=='total') {
+        if ($this->param['mode']=='total') {
 
-            if($this->param['year']=='all') return '<br /><br />'.$this->getLL('error.noYear').'<br /><br />';
+            if ($this->param['year']=='all') return '<br /><br />'.$this->getLL('error.noYear').'<br /><br />';
 
             $tTstamp_Stop = $tstamp_Start;
             $maxValue       = 0;
@@ -405,7 +405,7 @@ class tx_mmforum_statistics {
                 $dayCount = date('t',mktime(12,0,0,$i,1,$this->param['year']));
                 for($d=1; $d <= $dayCount; $d ++) {
                     $tTstamp_Stop += 86400;
-                    if($tTstamp_Stop > time()) { $results[$i][$d] = 0; continue; }
+                    if ($tTstamp_Stop > $GLOBALS['EXEC_TIME']) { $results[$i][$d] = 0; continue; }
                     $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                         'COUNT(*)',
                         $table,
@@ -413,7 +413,7 @@ class tx_mmforum_statistics {
                     );
                     list($num) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
                     $results[$i][$d] = $num;
-                    if($num > $maxValue) $maxValue = $num;
+                    if ($num > $maxValue) $maxValue = $num;
                 }
 
             }
@@ -430,7 +430,7 @@ class tx_mmforum_statistics {
                 $day   = intval(date("d",$arr[$timeField]));
                 $results[$month][$day] ++;
 
-                if($results[$month][$day] > $maxValue) $maxValue = $results[$month][$day];
+                if ($results[$month][$day] > $maxValue) $maxValue = $results[$month][$day];
             }
             ksort($results);
         }
@@ -452,13 +452,13 @@ class tx_mmforum_statistics {
 
                 $tColor = $color;
                 $bWidth = 1;
-                if($width >= 1) {
-                    if($day == 1) $tColor = '#ff6666';
-                    if($day == $dayCount) $tColor = '#660000';
+                if ($width >= 1) {
+                    if ($day == 1) $tColor = '#ff6666';
+                    if ($day == $dayCount) $tColor = '#660000';
                 } else $bWidth = 0;
 
                 $content  .= '<div style="background-color: '.$tColor.'; width:'.$width.'%; height:1px; border-right: '.$bWidth.'px solid #660000;"></div>'."\r\n";
-                if($result == $maxValue && $this->param['mode']!='total') $content .= '<div style="float:right">'.$maxValue.'</div>';
+                if ($result == $maxValue && $this->param['mode']!='total') $content .= '<div style="float:right">'.$maxValue.'</div>';
             }
 
             $content .= '
@@ -467,7 +467,7 @@ class tx_mmforum_statistics {
             $i ++;
         }
 
-        if($this->param['mode']=='total') $content .= '<tr><td colspan="2"><div style="float:right">'.$maxValue.'</div></td></tr>';
+        if ($this->param['mode']=='total') $content .= '<tr><td colspan="2"><div style="float:right">'.$maxValue.'</div></td></tr>';
 
         $content .= '</table>';
 
@@ -488,15 +488,15 @@ class tx_mmforum_statistics {
         $timeField      = $this->timeFields[$table];
 
         $results = array();
-        if($this->param['mode']=='total') {
+        if ($this->param['mode']=='total') {
             $tTstamp_Stop = $tstamp_Start;
 
-            if($this->param['year']=='all') return '<br /><br />'.$this->getLL('error.noYear').'<br /><br />';
+            if ($this->param['year']=='all') return '<br /><br />'.$this->getLL('error.noYear').'<br /><br />';
 
             $maxValue       = 0;
             for($i=0;$i<=12;$i++) {
                 $tTstamp_Stop += 86400 * date("t",mktime(0,0,0,$i,1,$this->param['year']));
-                if($tTstamp_Stop > time()) { $results[$i] = 0; continue; }
+                if ($tTstamp_Stop > $GLOBALS['EXEC_TIME']) { $results[$i] = 0; continue; }
                 $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                     'COUNT(*)',
                     $table,
@@ -504,7 +504,7 @@ class tx_mmforum_statistics {
                 );
                 list($num) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
                 $results[$i] = $num;
-                if($num > $maxValue) $maxValue = $num;
+                if ($num > $maxValue) $maxValue = $num;
             }
         }
         else {
@@ -518,7 +518,7 @@ class tx_mmforum_statistics {
                 $month = intval(date("m",$arr[$timeField]));
                 $results[$month] ++;
 
-                if($results[$month] > $maxValue) $maxValue = $results[$month];
+                if ($results[$month] > $maxValue) $maxValue = $results[$month];
             }
         }
 
@@ -559,17 +559,17 @@ class tx_mmforum_statistics {
 
         $results = array();
 
-        if($this->param['mode']=='total') {
+        if ($this->param['mode']=='total') {
             $tTstamp_Stop = $tstamp_Start;
 
-            if($this->param['month']=='all') return '<br /><br />'.$this->getLL('error.noMonth').'<br /><br />';
-            if($this->param['day']=='all') return '<br /><br />'.$this->getLL('error.noDay').'<br /><br />';
-            if($this->param['year']=='all') return '<br /><br />'.$this->getLL('error.noYear').'<br /><br />';
+            if ($this->param['month']=='all') return '<br /><br />'.$this->getLL('error.noMonth').'<br /><br />';
+            if ($this->param['day']=='all') return '<br /><br />'.$this->getLL('error.noDay').'<br /><br />';
+            if ($this->param['year']=='all') return '<br /><br />'.$this->getLL('error.noYear').'<br /><br />';
 
             $maxValue       = 0;
             for($i=0;$i<24;$i++) {
                 $tTstamp_Stop += 3600*$i;
-                if($tTstamp_Stop > time()) { $results[$i] = 0; continue; }
+                if ($tTstamp_Stop > $GLOBALS['EXEC_TIME']) { $results[$i] = 0; continue; }
                 $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
                     'COUNT(*)',
                     $table,
@@ -577,7 +577,7 @@ class tx_mmforum_statistics {
                 );
                 list($num) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
                 $results[$i] = $num;
-                if($num > $maxValue) $maxValue = $num;
+                if ($num > $maxValue) $maxValue = $num;
             }
         }
         else {
@@ -591,7 +591,7 @@ class tx_mmforum_statistics {
                 $hour = intval(date("H",$arr[$timeField]));
                 $results[$hour] ++;
 
-                if($results[$hour] > $maxValue) $maxValue = $results[$hour];
+                if ($results[$hour] > $maxValue) $maxValue = $results[$hour];
             }
         }
 
@@ -622,7 +622,7 @@ class tx_mmforum_statistics {
      */
     function additionalStats() {
         $startTime  = $this->getStartTime();
-        $span       = time() - $startTime;
+        $span       = $GLOBALS['EXEC_TIME'] - $startTime;
         $days       = round($span / 86400);
 
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -686,7 +686,7 @@ class tx_mmforum_statistics {
      * Generates the default parameters for displaying the statistics table correctly.
      */
     function defaultData() {
-        if(!$this->param) {
+        if (!$this->param) {
             $this->param = array(
                 'groupBy'       => 'doy',
                 'table'         => 'tx_mmforum_posts',
@@ -695,28 +695,28 @@ class tx_mmforum_statistics {
             );
         }
 
-        if($this->param['groupBy'] == 'doy') {
+        if ($this->param['groupBy'] == 'doy') {
             $this->param['month'] = 'all';
             $this->param['day']   = 'all';
         }
-        if($this->param['groupBy'] == 'dom') {
+        if ($this->param['groupBy'] == 'dom') {
             $this->param['day']   = 'all';
         }
-        if($this->param['groupBy'] == 'moy') {
+        if ($this->param['groupBy'] == 'moy') {
             $this->param['day']   = 'all';
         }
 
-        if($this->param['year'] == 'all') {
+        if ($this->param['year'] == 'all') {
             $start = $this->getStartTime();
-            $stop  = time();
+            $stop  = $GLOBALS['EXEC_TIME'];
         }
         else {
-            if($this->param['month'] == 'all') {
+            if ($this->param['month'] == 'all') {
                 $start      = mktime(0,0,0,1,1,$this->param['year']);
                 $stop       = mktime(23,59,59,12,31,$this->param['year']);
             }
             else {
-                if($this->param['day'] == 'all') {
+                if ($this->param['day'] == 'all') {
                     $start      = mktime(0,0,0,$this->param['month'],1,$this->param['year']);
                     $stop       = mktime(0,0,0,$this->param['month']+1,1,$this->param['year'])-1;
                 }

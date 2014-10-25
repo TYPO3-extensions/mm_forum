@@ -147,6 +147,7 @@ $TCA['tx_mmforum_forums'] = array(
 		'crdate'            => 'crdate',
 		'cruser_id'         => 'cruser_id',
 		'default_sortby'    => 'ORDER BY sorting ASC',
+		'sortby'            => 'sorting',
 		'delete'            => 'deleted',
 		'dividers2tabs'     => true,
 		'enablecolumns'     => array( 'disabled' => 'hidden' ),

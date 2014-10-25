@@ -103,11 +103,11 @@ Class tx_mmforum_FrontendAdministration {
 
 		$this->initFromParent($conf, $parent);
 
-		If($this->v['flashmessage']) $this->flashmessage = base64_decode($this->v['flashmessage']);
+		if ($this->v['flashmessage']) $this->flashmessage = base64_decode($this->v['flashmessage']);
 
-		    If($this->v['editForum'])   $actionMethod = 'edit';
-		ElseIf($this->v['newForum'])    $actionMethod = 'edit';
-		ElseIf($this->v['setACLs'])     $actionMethod = 'acl';
+		    if ($this->v['editForum'])   $actionMethod = 'edit';
+		Elseif ($this->v['newForum'])    $actionMethod = 'edit';
+		Elseif ($this->v['setACLs'])     $actionMethod = 'acl';
 		Else                            $actionMethod = 'list';
 
 		$actionMethod = "{$actionMethod}Action";
@@ -184,7 +184,7 @@ Class tx_mmforum_FrontendAdministration {
 		$marker = Array( '###NEW_CATEGORY_OPTIONS###' => $this->getOptionImage('newctg', !$this->checkActionAllowance('category','create')) );
 
 			# Display a flashmessage if one was set.
-		If($this->flashmessage) $marker['###FLASHMESSAGE###'] = htmlspecialchars($this->flashmessage);
+		if ($this->flashmessage) $marker['###FLASHMESSAGE###'] = htmlspecialchars($this->flashmessage);
 		Else $template = $this->cObj->substituteSubpart($template, '###FLASHMESSAGE_BOX###', '');
 
 		$template = $this->cObj->substituteMarkerArray($template, $marker);
@@ -212,7 +212,7 @@ Class tx_mmforum_FrontendAdministration {
 		$forumUid  = intval($this->v['setACLs']);
 		$forumData = $this->p->getBoardData($forumUid);
 
-		If(!$this->checkActionAllowance($forumData['parentID'] == 0 ? 'category' : 'forum', 'acl'))
+		if (!$this->checkActionAllowance($forumData['parentID'] == 0 ? 'category' : 'forum', 'acl'))
 			Return $this->displayNoAccessError();
 
 		    If ( $this->v['acl_save'] )    $this->saveAclAction();
@@ -264,7 +264,7 @@ Class tx_mmforum_FrontendAdministration {
 				? '' : implode(',',array_filter($acls['write'],'intval'));
 		$modString   = implode(',',array_filter($acls['moderate'],'intval'));
 
-		$updateArray = Array ( 'tstamp'            => time(),
+		$updateArray = Array ( 'tstamp'            => $GLOBALS['EXEC_TIME'],
 		                       'grouprights_read'  => $readString,
 		                       'grouprights_write' => $writeString,
 		                       'grouprights_mod'   => $modString );
@@ -311,7 +311,7 @@ Class tx_mmforum_FrontendAdministration {
 				'###GROUP_ONUNCHECK_MOD###'   => ''
 			);
 
-			If($this->p->getAdminGroup() == $arr['uid']) {
+			if ($this->p->getAdminGroup() == $arr['uid']) {
 				$groupMarker['###GROUP_READ_CHECKED###']  = 'checked="checked" disabled="disabled"';
 				$groupMarker['###GROUP_WRITE_CHECKED###'] = 'checked="checked" disabled="disabled"';
 				$groupMarker['###GROUP_MOD_CHECKED###']   = 'checked="checked" disabled="disabled"';
@@ -356,10 +356,10 @@ Class tx_mmforum_FrontendAdministration {
 
 		If ( $this->v['forum']['save'] ) {
 			$result = $this->saveEditAction();
-			If($result['success'] === TRUE)
+			if ($result['success'] === TRUE)
 				$this->redirectToAction(Array('flashmessage' => base64_encode(sprintf($this->l('edit-success'),$this->v['forum']['name']))));
 			Else $errors = $result['errors'];
-		} ElseIf($this->v['forum']['cancel']) $this->redirectToAction(Array());
+		} Elseif ($this->v['forum']['cancel']) $this->redirectToAction(Array());
 		  Else $errors = Array();
 
 		Global $TYPO3_DB;
@@ -367,17 +367,17 @@ Class tx_mmforum_FrontendAdministration {
 		$template = $this->cObj->fileResource($this->conf['templates.']['edit']);
 
 			# Select the forum to be edited. The "hidden" flag is not queried on purpose!
-		If($forumUid > 0) {
+		if ($forumUid > 0) {
 			$res = $TYPO3_DB->exec_SELECTquery ( 'uid, forum_name AS name, forum_desc AS description, parentID AS parent',
 			                                     'tx_mmforum_forums', 'uid='.$forumUid.' AND deleted=0 '.$this->p->getStoragePIDQuery() );
-			If($TYPO3_DB->sql_num_rows($res) == 0) Return $this->p->errorMessage($this->p->conf, $this->l('error-forumnotfound'));
+			if ($TYPO3_DB->sql_num_rows($res) == 0) Return $this->p->errorMessage($this->p->conf, $this->l('error-forumnotfound'));
 			$forumArray = $TYPO3_DB->sql_fetch_assoc($res);
 		} Else $forumArray = Array();
-		If(is_array($this->v['forum'])) $forumArray = array_merge($forumArray, $this->v['forum']);
+		if (is_array($this->v['forum'])) $forumArray = array_merge($forumArray, $this->v['forum']);
 
-		If(!$forumArray['name']) $forumArray['name'] = $this->l('new-dummytitle');
+		if (!$forumArray['name']) $forumArray['name'] = $this->l('new-dummytitle');
 
-		If(!$this->checkActionAllowance($forumArray['parent'] == 0 ? 'category' : 'forum', $forumUid == -1 ? 'create' : 'edit'))
+		if (!$this->checkActionAllowance($forumArray['parent'] == 0 ? 'category' : 'forum', $forumUid == -1 ? 'create' : 'edit'))
 			Return $this->displayNoAccessError();
 
 		$forumMarkers = Array(
@@ -391,7 +391,7 @@ Class tx_mmforum_FrontendAdministration {
 		);
 
 		ForEach(Array('name','description','parent') As $field) {
-			If($errors[$field]) {
+			if ($errors[$field]) {
 				$messages = Array();
 				ForEach($errors[$field] As $error)
 					$messages[] = vsprintf($this->l('error-'.$field.'-'.$error['type']), $error['args']);
@@ -426,20 +426,20 @@ Class tx_mmforum_FrontendAdministration {
 		$forum = $this->v['forum']; $forumUid = intval($this->v['editForum']);
 		$validationResult = $this->forumValidator->validateEditObject($forumUid, $forum);
 
-		If(!$this->checkActionAllowance($forum['parent'] == 0 ? 'category' : 'forum', $forumUid == -1 ? 'create' : 'edit'))
+		if (!$this->checkActionAllowance($forum['parent'] == 0 ? 'category' : 'forum', $forumUid == -1 ? 'create' : 'edit'))
 			Return $this->displayNoAccessError();
 
-		If($validationResult['error']) Return Array ( 'success'        => FALSE,
+		if ($validationResult['error']) Return Array ( 'success'        => FALSE,
 		                                              'errors'         => $validationResult['errors'],
 		                                              'overrideValues' => $forum );
-		$saveArray = Array ( 'tstamp'      => time(),
+		$saveArray = Array ( 'tstamp'      => $GLOBALS['EXEC_TIME'],
 		                     'forum_name'  => $forum['name'],
 		                     'forum_desc'  => $forum['description'],
 		                     'parentID'    => $forum['parent'],
 		                     'hidden'      => $forum['hidden'] ? 1 : 0 );
-		If($forumUid == -1) {
+		if ($forumUid == -1) {
 			$saveArray['pid']     = $this->p->getStoragePID();
-			$saveArray['crdate']  = time();
+			$saveArray['crdate']  = $GLOBALS['EXEC_TIME'];
 			$saveArray['sorting'] = $this->getSortingForNewForum($forum['parent']);
 			$TYPO3_DB->exec_INSERTquery('tx_mmforum_forums', $saveArray);
 		} Else $TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.intval($forumUid), $saveArray);
@@ -502,7 +502,7 @@ Class tx_mmforum_FrontendAdministration {
 		 */
 
 	Function getOptionImage($name, $disable=FALSE) {
-		If(!$disable)
+		if (!$disable)
 			Return $this->p->cObj->cObjGetSingle ( $this->conf['list.']['buttons.'][$name],
 			                                       $this->conf['list.']['buttons.'][$name.'.'] );
 		Else {
@@ -569,9 +569,9 @@ Class tx_mmforum_FrontendAdministration {
 		Global $TYPO3_DB;
 		$forumUid = intval($forumUid);
 		$forumData = $this->p->getBoardData($forumUid);
-		If(!$this->checkActionAllowance($forumData['parentID']==0?'category':'forum', 'remove'))
+		if (!$this->checkActionAllowance($forumData['parentID']==0?'category':'forum', 'remove'))
 			{ $this->flashmessage = $this->l('access-error'); Return FALSE; }
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', "uid=$forumUid OR parentID=$forumUid", Array('deleted'=>1, 'tstamp'=>time()));
+		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', "uid=$forumUid OR parentID=$forumUid", Array('deleted'=>1, 'tstamp'=>$GLOBALS['EXEC_TIME']));
 		$this->flashmessage = sprintf($this->l('delete-success'), $forumData['forum_name']);
 	}
 
@@ -589,18 +589,18 @@ Class tx_mmforum_FrontendAdministration {
 
 	Function moveForumUp($forumUid) {
 		$forumData = $this->p->getBoardData($forumUid);
-		If(!$this->checkActionAllowance($forumData['parentID']==0?'category':'forum', 'order'))
+		if (!$this->checkActionAllowance($forumData['parentID']==0?'category':'forum', 'order'))
 			{ $this->flashmessage = $this->l('access-error'); Return FALSE; }
 		Global $TYPO3_DB;
 		$res = $TYPO3_DB->exec_SELECTquery ( 'uid, sorting', 'tx_mmforum_forums',
 		                                     'deleted=0 AND parentID='.$forumData['parentID'].'
 					                            AND sorting < '.$forumData['sorting'],
 				                             '', 'sorting DESC', 1 );
-		If($TYPO3_DB->sql_num_rows($res) == 0) Return;
+		if ($TYPO3_DB->sql_num_rows($res) == 0) Return;
 		List($upperUid, $upperSorting) = $TYPO3_DB->sql_fetch_row($res);
 
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumData['uid'], Array('sorting' => $upperSorting, 'tstamp' => time()));
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$upperUid, Array('sorting' => $forumData['sorting'], 'tstamp' => time()));
+		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumData['uid'], Array('sorting' => $upperSorting, 'tstamp' => $GLOBALS['EXEC_TIME']));
+		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$upperUid, Array('sorting' => $forumData['sorting'], 'tstamp' => $GLOBALS['EXEC_TIME']));
 	}
 
 
@@ -617,18 +617,18 @@ Class tx_mmforum_FrontendAdministration {
 
 	Function moveForumDown($forumUid) {
 		$forumData = $this->p->getBoardData($forumUid);
-		If(!$this->checkActionAllowance($forumData['parentID']==0?'category':'forum', 'order'))
+		if (!$this->checkActionAllowance($forumData['parentID']==0?'category':'forum', 'order'))
 			{ $this->flashmessage = $this->l('access-error'); Return FALSE; }
 		Global $TYPO3_DB;
 		$res = $TYPO3_DB->exec_SELECTquery ( 'uid, sorting', 'tx_mmforum_forums',
 		                                     'deleted=0 AND parentID='.$forumData['parentID'].'
 					                            AND sorting > '.$forumData['sorting'],
 				                             '', 'sorting ASC', 1 );
-		If($TYPO3_DB->sql_num_rows($res) == 0) Return;
+		if ($TYPO3_DB->sql_num_rows($res) == 0) Return;
 		List($lowerUid, $lowerSorting) = $TYPO3_DB->sql_fetch_row($res);
 
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumData['uid'], Array('sorting' => $lowerSorting, 'tstamp' => time()));
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$lowerUid, Array('sorting' => $forumData['sorting'], 'tstamp' => time()));
+		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumData['uid'], Array('sorting' => $lowerSorting, 'tstamp' => $GLOBALS['EXEC_TIME']));
+		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$lowerUid, Array('sorting' => $forumData['sorting'], 'tstamp' => $GLOBALS['EXEC_TIME']));
 	}
 
 
@@ -677,8 +677,8 @@ Class tx_mmforum_FrontendAdministration {
 
 	Function checkActionAllowance($group, $action) {
 		$aclList = $this->conf['acl.']["$group."][$action];
-		If($aclList == 'all') Return TRUE;
-		If($aclList == '' || $aclList == 'none') Return FALSE;
+		if ($aclList == 'all') Return TRUE;
+		if ($aclList == '' || $aclList == 'none') Return FALSE;
 
         $authGroups = array_filter(explode(',',tx_mmforum_tools::getParentUserGroups($aclList)),'intval');
         $groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];

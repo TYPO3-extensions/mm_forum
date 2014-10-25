@@ -24,7 +24,7 @@ mod.web_txmmforumM1 {
 		40.name = LLL:EXT:mm_forum/mod1/locallang.xml:menu.tools
 		40.handler = Tools
 
-		50 = MMFORUM_SECTION_ITEM
+		50 = MMFORUM_SECTION_ITEM_DISABLED
 		50.id   = import
 		50.name = LLL:EXT:mm_forum/mod1/locallang.xml:menu.import
 		50.handler = EXT:mm_forum/mod1/class.tx_mmforum_import.php:tx_mmforum_import->main
@@ -254,6 +254,12 @@ mod.web_txmmforumM1 {
 							type = int
 							type.unit = LLL:EXT:mm_forum/mod1/locallang_install.xml:install.unit.seconds
 						}
+
+						pmUserSearchFields = MMFORUM_CONF_ITEM
+						pmUserSearchFields.type = string
+
+						pmUserSearchOrderBy = MMFORUM_CONF_ITEM
+						pmUserSearchOrderBy.type = string
 					}
 				}
 

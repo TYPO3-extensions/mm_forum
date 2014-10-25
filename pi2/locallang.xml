@@ -107,7 +107,7 @@
             <label index="msg-pleaseActivate">vielen Dank für Ihre Anmeldung auf ###SITENAME###. Damit Ihr Account freigeschaltet werden kann, bitten wir Sie darum, den folgenden Link zu folgen.</label>
             <label index="msg-pleaseActivate-inf">vielen Dank für deine Anmeldung auf ###SITENAME###. Damit dein Account freigeschaltet werden kann, bitten wir dich darum, den folgenden Link zu folgen.</label>
             <label index="msg-activated">Ihre Anmeldung ist jetzt abgeschlossen. Sie können sich jetzt direkt anmelden und die erweiterten Funktionen von ###SITENAME### nutzen.</label>
-            <label index="msg-activated-inf">Deine Anmeldung ist jetzt abgeschlossen. Du kannst sich jetzt direkt anmelden und die erweiterten Funktionen von ###SITENAME### nutzen.</label>
+            <label index="msg-activated-inf">deine Anmeldung ist jetzt abgeschlossen. Du kannst dich jetzt direkt anmelden und die erweiterten Funktionen von ###SITENAME### nutzen.</label>
             <label index="msg-subject">Ihre Anmeldung auf ###SITENAME###</label>
             <label index="msg-subject-inf">Deine Anmeldung auf ###SITENAME###</label>
             

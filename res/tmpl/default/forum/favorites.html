@@ -1,11 +1,24 @@
 <!-- ###FAVORITES_BEGIN### -->
-<form action="###ACTION###" method="post" style="padding:0px; margin: 0px;" onsubmit="return confirm('###LABEL_CONFIRMMULTIPLE###');">
+<script language="JavaScript" type="text/javascript">
+	function checker(toggle, form) {
+		for( var i=0; i < form.length; i++ ) {
+			if(toggle) {
+				form.elements[i].checked = 'checked';
+			} else {
+				form.elements[i].checked = '';
+			}
+		}
+	}
+</script>
+
+
+<form action="###ACTION###" method="post" style="padding:0px; margin: 0px;" onsubmit="return confirm('###LABEL_CONFIRMMULTIPLE###');" name="favorites">
 <table border="1" class="tx-mmforum-table" width="100%">
 	<tr>
 		<th colspan="3" class="tx-mmforum-th">###LABEL_FAVORITES###</th>
 	</tr>
 	<tr>
-		<td class="tx-mmforum-td tx-mmforum-subth2"></td>
+		<td class="tx-mmforum-td tx-mmforum-subth2"><input type="checkbox" onclick="checker((this.checked === true),document.favorites);" /></td>
 		<td class="tx-mmforum-td tx-mmforum-subth2">###LABEL_TOPICNAME###</td>
 		<td class="tx-mmforum-td tx-mmforum-subth2">###LABEL_OPTIONS###</td>
 	</tr>
@@ -26,11 +39,11 @@
 	</tr>
 <!-- ###LIST_FAVORITES### end -->
 <!-- ###LIST_FAVORITES_EMPTY### begin -->
-    <tr>
-        <td class="tx-mmforum-tdtext" colspan="3" style="text-align:center;">
-            ###LLL_FAVORITES_EMPTY###
-        </td>
-    </tr>
+	<tr>
+		<td class="tx-mmforum-tdtext" colspan="3" style="text-align:center;">
+			###LLL_FAVORITES_EMPTY###
+		</td>
+	</tr>
 <!-- ###LIST_FAVORITES_EMPTY### end -->
 <!-- ###FAVORITES_END### -->
 </table>
@@ -51,8 +64,8 @@
 	<select class="tx-mmforum-select" name="tx_mmforum_pi1[order]" onchange="document.favourites_settings.submit();">
 		<option value="lpdate" ###ORDER_LPDATE###>###LABEL_ORDER_LPDATE###</option>
 		<option value="alphab" ###ORDER_ALPHAB###>###LABEL_ORDER_ALPHAB###</option>
-		<option value="cat"    ###ORDER_CAT###   >###LABEL_ORDER_CAT###</option>
-		<option value="added"  ###ORDER_ADDED### >###LABEL_ORDER_ADDED###</option>
+		<option value="cat" ###ORDER_CAT###   >###LABEL_ORDER_CAT###</option>
+		<option value="added" ###ORDER_ADDED### >###LABEL_ORDER_ADDED###</option>
 	</select>
 </form>
 <br />

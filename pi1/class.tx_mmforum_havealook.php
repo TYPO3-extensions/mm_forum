@@ -181,7 +181,7 @@ class tx_mmforum_havealook {
 					$marker   = $_procObj->havealook_listsettings($marker, $forumObj);
 				}
 			}
-			$content .= $forumObj->cObj->substituteMarkerArray($template, $marker);
+			$content = $forumObj->cObj->substituteMarkerArray($template, $marker);
 
 
 			// rendering the head part
@@ -382,8 +382,8 @@ class tx_mmforum_havealook {
 			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1) {
 				$insertData = array(
 					'pid'      => $forumObj->getStoragePID(),
-					'tstamp'   => time(),
-					'crdate'   => time(),
+					'tstamp'   => $GLOBALS['EXEC_TIME'],
+					'crdate'   => $GLOBALS['EXEC_TIME'],
 					'topic_id' => $topicId,
 					'user_id'  => $feUserId
 				);
@@ -437,10 +437,10 @@ class tx_mmforum_havealook {
 
 		// get all users on this topic
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'DISTINCT m.user_id, u.email, u.' . $forumObj->getUserNameField(),
-			'tx_mmforum_topicmail m, fe_users u',
-			'm.user_id = u.uid AND m.topic_id = ' . $topicId .
-			' AND u.deleted = 0 AND u.email != "" AND u.disable = 0 AND m.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('m')
+			'DISTINCT tx_mmforum_topicmail.user_id, fe_users.email, fe_users.' . $forumObj->getUserNameField(),
+			'tx_mmforum_topicmail, fe_users',
+			'tx_mmforum_topicmail.user_id = fe_users.uid AND tx_mmforum_topicmail.topic_id = ' . $topicId .
+			' AND fe_users.deleted = 0 AND fe_users.email != "" AND fe_users.disable = 0 AND tx_mmforum_topicmail.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('tx_mmforum_topicmail')
 		);
 
 		// loop through each user who subscribed
@@ -460,6 +460,7 @@ class tx_mmforum_havealook {
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_contentMarker'])) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_contentMarker'] as $_classRef) {
 						$_procObj = &t3lib_div::getUserObj($_classRef);
+						//TODO: FIXME undefined variable $row
 						$llMarker = $_procObj->newPostMail_contentMarker($llMarker, $row, $forumObj);
 					}
 				}
@@ -480,7 +481,7 @@ class tx_mmforum_havealook {
 					}
 				}
 
-				if($do_send) {
+				if ($do_send) {
 					$mail = t3lib_div::makeInstance('t3lib_mail_Message');
 					$mail->setFrom(array($forumObj->conf['notifyingMail.']['sender_address'] => $forumObj->conf['notifyingMail.']['sender']));
 					$mail->setTo(array($toEmail => $toUsername));
@@ -492,18 +493,15 @@ class tx_mmforum_havealook {
 		}
 	}
 
-
 	/**
 	 * Sends an e-mail to users who have subscribed to certain forumcategory
-	 * @param  string $content The plugin content
-	 * @param  array  $conf    The configuration vars
-	 * @param  int    $topic_id   The UID of the new topic that was created
-	 * @param  int    $forum_id   The UID of the forum about which the users are
-	 *                        to be alerted.
+	 * @param $topicId int The UID of the new topic that was created
+	 * @param $forumId int The UID of the forum about which the users are to be alerted.
+	 * @param $forumObj tx_mmforum_pi1
 	 * @return void
 	 * @author Cyrill Helg
 	 */
-	function notifyForumSubscribers($topicId, $forumId, $forumObj) {
+	static function notifyForumSubscribers($topicId, $forumId, $forumObj) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . intval($topicId) . $forumObj->getStoragePIDQuery());
 		list($topicName) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
@@ -527,7 +525,7 @@ class tx_mmforum_havealook {
 
 		$marker = array(
 			'###LINK###'      => $link,
-			'###USERNAME###'  => $toUsername,
+			'###USERNAME###'  => $toUsername, //TODO: FIXME undefined variable $toUsername
 			'###FORUMNAME###' => $forumName,
 			'###TEAM###'      => $forumObj->conf['teamName'],
 		);
@@ -540,14 +538,14 @@ class tx_mmforum_havealook {
 
 		// loop through each user who subscribed
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'DISTINCT m.user_id, u.email, u.' . $forumObj->getUserNameField(),
-			'tx_mmforum_forummail m, fe_users u',
-			'm.user_id = u.uid AND
-			 (m.forum_id = ' . intval($forumId) . ($categoryId > 0 ? ' OR m.forum_id = ' . $categoryId : '') . ') AND
-			 u.deleted = 0 AND
-			 u.disable = 0 AND
-			 u.email != "" AND
-			 m.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('m')
+			'DISTINCT tx_mmforum_forummail.user_id, fe_users.email, fe_users.' . $forumObj->getUserNameField(),
+			'tx_mmforum_forummail, fe_users',
+			'tx_mmforum_forummail.user_id = fe_users.uid AND
+			 (tx_mmforum_forummail.forum_id = ' . intval($forumId) . ($categoryId > 0 ? ' OR tx_mmforum_forummail.forum_id = ' . $categoryId : '') . ') AND
+			 fe_users.deleted = 0 AND
+			 fe_users.disable = 0 AND
+			 fe_users.email != "" AND
+			 tx_mmforum_forummail.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('tx_mmforum_forummail')
 		);
 
 		while (list($toUserId, $toEmail, $toUsername) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {

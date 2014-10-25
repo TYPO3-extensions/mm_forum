@@ -53,18 +53,30 @@ class ext_update {
         'tx_mmfeuserreg_occ'            => 'tx_mmforum_occ',
         'tx_mmfeuserreg_reg_hash'       => 'tx_mmforum_reg_hash'
     );
-    var $action;
+    var $action = array();
 
     /**
      * The main function. Executes all updates.
      * @return string  The update process output.
      */
     function main() {
-        $content = "";
+
+    	if (t3lib_div::_GP('do_update') == 'htaccess') {
+			$this->removeHtaccesFromUploadFolder();
+		}
+
+        $content = '';
 
         foreach($this->action as $action) {
-            if($action == 'rename_tables') $content .= $this->renameTables();
+            if ($action == 'rename_tables') $content .= $this->renameTables();
         }
+
+		if ($this->hasHtaccessFile()) {
+			$content .= '<a href="' . t3lib_div::linkThisScript(array('do_update' => 'htaccess')) . '">Remove .htaccess file in upload dir<img style="vertical-align:bottom;" ' . t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'], 'gfx/refresh_n.gif', 'width="18" height="16"') . '></a><br>';
+		}
+
+		if ($content == '')
+			$content = 'Nothing to update!';
 
         return $content;
     }
@@ -75,7 +87,7 @@ class ext_update {
      */
     function renameTables() {
         $sql = $this->renameTables_getQuery();
-        $content .= 'Executing the following MySQL queries:<br /><br />'.implode('<br />',$sql);
+        $content = 'Executing the following MySQL queries:<br /><br />'.implode('<br />',$sql);
         $content .= '<br /><br />';
 
         foreach($sql as $singleQuery)
@@ -112,21 +124,37 @@ class ext_update {
      */
     function access() {
 
-        // Check for deprecated table names
-        // Update check from 0.0.3 to 0.0.4
-            $res = $GLOBALS['TYPO3_DB']->sql_query('SHOW TABLES');
-            $tbl = array_keys($this->obsTableNames);
-            while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
-                if(in_array($arr[0],$tbl)) {
-                    $this->action[] = 'rename_tables';
-                    return true;
-                }
-            }
+    	// Check for deprecated table names
+		// Update check from 0.0.3 to 0.0.4
+		$res = $GLOBALS['TYPO3_DB']->sql_query('SHOW TABLES');
+		$tbl = array_keys($this->obsTableNames);
+		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
+			if (in_array($arr[0],$tbl)) {
+				$this->action[] = 'rename_tables';
+				return true;
+			}
+		}
+
+		if ($this->hasHtaccessFile())
+			return true;
 
         return false;
-
     }
 
+	function hasHtaccessFile() {
+		if (file_exists(PATH_site.'uploads/tx_mmforum/.htaccess')) {
+			if (file_get_contents(PATH_site.'uploads/tx_mmforum/.htaccess') == 'deny from all')
+				return true;
+		}
+		return false;
+	}
+
+	function removeHtaccesFromUploadFolder() {
+		if (file_exists(PATH_site.'uploads/tx_mmforum/.htaccess')) {
+			if (file_get_contents(PATH_site.'uploads/tx_mmforum/.htaccess') == 'deny from all')
+				unlink(PATH_site.'uploads/tx_mmforum/.htaccess');
+		}
+	}
 }
 
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/class.ext_update.php'])	{

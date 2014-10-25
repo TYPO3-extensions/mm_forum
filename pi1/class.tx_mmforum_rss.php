@@ -83,11 +83,11 @@ class tx_mmforum_rss {
 		$this->selectFields .= $this->conf['userNameField'] ? $this->conf['userNameField'] : 'username';
 
 			// Load post array
-		if($this->piVars['tid']) {
+		if ($this->piVars['tid']) {
 			$posts = $this->getPosts_topic($this->piVars['tid']);
 			$this->mode = 'topic';
 			$this->param = $this->piVars['tid'];
-		} elseif($this->piVars['fid']) {
+		} elseif ($this->piVars['fid']) {
 			$posts = $this->getPosts_forum($this->piVars['fid']);
 			$this->mode = 'forum';
 			$this->param = $this->piVars['fid'];
@@ -129,9 +129,9 @@ class tx_mmforum_rss {
 
 	function setHTMLHeadData($mode, $param=null) {
 			// If method is called statically, instantiate class
-		#if(!$this instanceof tx_mmforum_rss) {
+		#if (!$this instanceof tx_mmforum_rss) {
 			// Workaround. "instanceof" does not work with old PHP versions.
-		if(isset($this->extKey)) {
+		if (isset($this->extKey)) {
 			$rssObj = t3lib_div::makeInstance('tx_mmforum_rss');
 			$rssObj->initialize($this->conf, $this);
 			$rssObj->setHTMLHeadData($mode, $param);
@@ -144,7 +144,7 @@ class tx_mmforum_rss {
 			}
 
 				/* Set HTML head data only if a RSS page is specified */
-			if($this->conf['rssPID']) {
+			if ($this->conf['rssPID']) {
 					// Compose RSS URL
 				$rssLink = $this->pObj->pi_getPageLink($this->conf['rssPID'], null, $linkParams);
 				$rssLink = $this->pObj->tools->getAbsoluteUrl($rssLink);
@@ -183,33 +183,34 @@ class tx_mmforum_rss {
 		$rowTemplate	= $this->cObj->getSubpart($template, '###RSS_POST_ITEM###');
 
 		// Include hooks
-			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_posts'])) {
-				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_posts'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-					$marker = $_procObj->rss_posts($posts, $this);
-				}
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_posts'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_posts'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$marker = $_procObj->rss_posts($posts, $this);
 			}
-
-		$marker			= array(
-			'###RSS_ENCODING###'        => $GLOBALS['TSFE']->renderCharset,
-			'###RSS_TITLE###'           => $this->getFeedTitle($mode, $param),
-			'###RSS_DESCRIPTION###'     => $this->getFeedDescription(),
-			'###RSS_URL###'             => $this->pObj->escapeURL($this->getFeedURL()),
-			'###RSS_GENERATOR###'       => 'mm_forum powered by TYPO3',
-			'###RSS_LASTBUILT###'       => date('r'),
+		}
+		// TODO: FIXME undefined variables $mode, $param
+		$marker = array(
+			'###RSS_ENCODING###'    => $GLOBALS['TSFE']->renderCharset,
+			'###RSS_TITLE###'       => '<![CDATA['.$this->getFeedTitle($mode, $param).']]>',
+			'###RSS_DESCRIPTION###' => $this->getFeedDescription(),
+			'###RSS_URL###'         => $this->pObj->escapeURL($this->getFeedURL()),
+			'###RSS_GENERATOR###'   => 'mm_forum powered by TYPO3',
+			'###RSS_LASTBUILT###'   => date('r'),
 			'###RSS_LANGUAGE###'		=> $this->pObj->LLkey == 'default' ? 'en' : $this->pObj->LLkey
 		);
 
 		// Include hooks
-			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_globalMarkers'])) {
-				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_globalMarkers'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-					$marker = $_procObj->rss_globalMarkers($marker, $posts, $this);
-				}
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_globalMarkers'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_globalMarkers'] as $_classRef) {
+				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$marker = $_procObj->rss_globalMarkers($marker, $posts, $this);
 			}
+		}
 
-		$template		= $this->cObj->substituteMarkerArray($template, $marker);
+		$template = $this->cObj->substituteMarkerArray($template, $marker);
 
+		$rowContent = '';
 		foreach($posts as $post) {
 			$rowMarker	= array(
 				'###RSS_TOPIC_NAME###'      => $this->pObj->escape($post['topic_title']),
@@ -223,14 +224,14 @@ class tx_mmforum_rss {
 			$rowContent .= $this->cObj->substituteMarkerArray($rowTemplate, $rowMarker);
 
 			// Include hooks
-				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_itemMarkers'])) {
-					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_itemMarkers'] as $_classRef) {
-						$_procObj = & t3lib_div::getUserObj($_classRef);
-						$rowMarker = $_procObj->rss_itemMarkers($marker, $post, $this);
-					}
+			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_itemMarkers'])) {
+				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_itemMarkers'] as $_classRef) {
+					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$rowMarker = $_procObj->rss_itemMarkers($marker, $post, $this);
 				}
+			}
 		}
-		$template		= $this->cObj->substituteSubpart($template, '###RSS_POST_ITEM###', $rowContent);
+		$template = $this->cObj->substituteSubpart($template, '###RSS_POST_ITEM###', $rowContent);
 
 		return $template;
 	}
@@ -316,18 +317,19 @@ class tx_mmforum_rss {
 	function getFeedTitle($mode='all', $param=null) {
 		$mode = $mode?$mode:$this->mode;
 		$param = $param?$param:$this->param;
+		$pageTitle = $this->conf['rssTitle']?$this->conf['rssTitle']:$GLOBALS['TSFE']->page['title'];
 
 		switch($mode) {
 			default:
-			case 'all':     return $GLOBALS['TSFE']->page['title']; break;
+			case 'all':     return $pageTitle; break;
 			case 'topic':
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title, forum_name', 'tx_mmforum_topics t LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid', 't.uid='.intval($param));
 				list($topic_title, $forum_title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-				return $GLOBALS['TSFE']->page['title'].' : '.$forum_title.' : '.$topic_title; break;
+				return $pageTitle.' : '.$forum_title.' : '.$topic_title; break;
 			case 'forum':
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('forum_name', 'tx_mmforum_forums', 'uid='.intval($param));
 				list($forum_title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-				return $GLOBALS['TSFE']->page['title'].' : '.$forum_title; break;
+				return $pageTitle.' : '.$forum_title; break;
 		}
 
 		return $GLOBALS['TSFE']->page['title'];
@@ -344,7 +346,7 @@ class tx_mmforum_rss {
 		 */
 
     function getFeedDescription() {
-        if($this->piVars['tid']) {
+        if ($this->piVars['tid']) {
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'topic_title',
 				'tx_mmforum_topics t
@@ -354,7 +356,7 @@ class tx_mmforum_rss {
 				 $this->pObj->getMayRead_forum_query('f').
 				 $this->pObj->getMayRead_forum_query('c')
 			);
-        } elseif($this->piVars['fid']) {
+        } elseif ($this->piVars['fid']) {
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'f.forum_name',
 				'tx_mmforum_forums f
@@ -382,12 +384,12 @@ class tx_mmforum_rss {
 		 */
 
 	function getFeedURL() {
-		if($this->piVars['tid']) {
+		if ($this->piVars['tid']) {
 			$linkParams[$this->pObj->prefixId]		= array(
 				'action'		=> 'list_post',
 				'tid'			=> $this->piVars['tid']
 			);
-		} elseif($this->piVars['fid']) {
+		} elseif ($this->piVars['fid']) {
 			$linkParams[$this->pObj->prefixId]		= array(
 				'action'		=> 'list_topic',
 				'fid'			=> $this->piVars['fid']
@@ -545,4 +547,5 @@ class tx_mmforum_rss {
 if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_rss.php'])	{
 	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_rss.php']);
 }
+
 ?>

@@ -110,7 +110,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 
 			// find the page links, but if ($page -3) is less than 1, set it to at least "1"
 			$i = max(($page - 3), 1);
-
+			$pages = '';
 			for ($j = 1; $j <= 7; $j++) {
 				$pagelink = tx_mmforum_user::listpost_pagelink($i, $i, $userId);
 
@@ -156,11 +156,8 @@ class tx_mmforum_user extends tx_mmforum_base {
 				'p.crdate DESC',
 				$from . ', ' . $itemsPerPage
 			);
+			$content = '';
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$title = $this->escape($row['topic_title']);
-				if ($row['topic_is']) {
-					$title = '<span class="tx-mmforum-prefix">[{'.$row['topic_is'].'}] </span>' . $title;
-				}
 				$imgInfo = array(
 					'src' => $conf['path_img'] . $conf['images.']['solved'],
 					'alt' => $this->pi_getLL('topic.isSolved')
@@ -175,7 +172,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 					$linkParams[$this->prefixId]['fid'] = $row['forum_id'];
 				}
 				$postMarker = array(
-					'###TOPICNAME###' => $this->pi_linkToPage($title, $conf['pid_forum'], '', $linkParams) . $solved,
+					'###TOPICNAME###' => ($row['topic_is']?$this->cObj->wrap($row['topic_is'],$this->conf['list_topics.']['prefix_wrap']):'').$this->pi_linkToPage($this->escape($row['topic_title']), $conf['pid_forum'], '', $linkParams) . $solved,
 					'###TOPICDATE###' => $this->formatDate($row['post_time']),
 					'###PREFIX###'    => $this->escape($row['topic_is']),
 					'###CATEGORY###'  => $this->escape($row['category_name']),
@@ -200,7 +197,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 		list($ucrdate) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 		$marker['###STAT###'] .= '<strong>' . $count . '</strong> ' . $this->pi_getLL('user.totalPosts') . ', <strong>' . $topics . '</strong> ' . $this->pi_getLL('user.topicsTotal') . '<br />';
-		$marker['###STAT###'] .= $this->cObj->substituteMarker($this->pi_getLL('user.postsPerDay'), '###POSTS###', '<strong>' . round($count / ceil(((time() - $ucrdate) / 86400)), 2) . '</strong>');
+		$marker['###STAT###'] .= $this->cObj->substituteMarker($this->pi_getLL('user.postsPerDay'), '###POSTS###', '<strong>' . round($count / ceil((($GLOBALS['EXEC_TIME'] - $ucrdate) / 86400)), 2) . '</strong>');
 
 		$template = $this->cObj->substituteMarkerArray($template, $marker);
 		$content = $this->cObj->substituteSubpart($template, '###LIST###', $content);
