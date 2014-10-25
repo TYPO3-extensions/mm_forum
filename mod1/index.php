@@ -360,8 +360,8 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 			if ($mmforum['sword']) $gp='&mmforum[sword]='.$mmforum['sword'];
 
 			$groups	= implode(',',array(intval($this->confArr['userGroup']),intval($this->confArr['modGroup']),intval($this->confArr['adminGroup'])));
-			$filter	= $mmforum['sword']?"username like '".mysql_escape_string($mmforum['sword'])."%'":'1';
-			$orderBy = t3lib_div::_GP('mmforum_style') ? strtoupper(mysql_escape_string(t3lib_div::_GP('mmforum_style'))) : 'ASC';
+		$filter = $mmforum['sword'] ? 'username like ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($mmforum['sword'], '') . '%' : '1';
+			$orderBy = t3lib_div::_GP('mmforum_style') ? strtoupper($GLOBALS['TYPO3_DB']->fullQuoteStr(t3lib_div::_GP('mmforum_style'))) : 'ASC';
             if (t3lib_div::_GP('mmforum_sort') == 'username'){
                 $order		= 'username '.$orderBy.'';
 				$uOrder     = $orderBy == 'ASC' ? 'DESC' : 'ASC';

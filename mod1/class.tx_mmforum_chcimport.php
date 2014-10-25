@@ -71,6 +71,20 @@ class tx_mmforum_chcimport {
 
     var $chc_clearTables = 'forums,posts,postread,posts_text,topics,favorites,post_alert,searchresults,wordlist,wordmatch,attachments,polls,polls_answers,polls_votes,postqueue';
 
+	/**
+	 * @var array
+	 */
+	var $data;
+
+	/**
+	 * @var t3lib_db
+	 */
+	var $dbObj;
+
+	var $p;
+	
+	var $importVars;
+	
     /**
      * Main function.
      * @author Martin Helmich <m.helmich@mittwald.de>
@@ -79,11 +93,9 @@ class tx_mmforum_chcimport {
     function main($content) {
         $this->importVars = t3lib_div::_GP('tx_mmforum_chc');
 
-        $this->ext_db = $this->dbObj->link;
         $this->loc_db = $GLOBALS['TYPO3_DB']->link;
 
         if (is_array($this->importVars['import'])) {
-
             foreach($this->importVars['import'] as $import) {
 
                 $content .= '<fieldset><legend>'.$GLOBALS['LANG']->getLL('chc.step4').'</legend>';
@@ -446,7 +458,7 @@ class tx_mmforum_chcimport {
     		$res = $this->dbObj->exec_SELECTquery(
     			'forumgroup_groups',
     			'tx_chcforum_forumgroup',
-    			'uid='.$groups.' AND deleted=0'
+    			'uid='.$group.' AND deleted=0'
     		);
     		if (!$res || !$this->dbObj->sql_num_rows($res)) continue;
 
@@ -517,8 +529,8 @@ class tx_mmforum_chcimport {
 
 	    //FORUM KATEGORIE
 	    $sql = 'SELECT * FROM tx_chcforum_category';
-	    $query=mysql_query($sql,$this->ext_db);
-	    while($res=mysql_fetch_array($query)) {
+	    $query = $this->dbObj->sql_query($sql);
+	    while($res = $this->dbObj->sql_fetch_assoc($query)) {
 
 		    $sql_insert = 'INSERT INTO tx_mmforum_forums SET
 				    uid = '.$res['uid'].',
@@ -530,7 +542,7 @@ class tx_mmforum_chcimport {
 
 				    forum_name = "'.$res['cat_title'].'"
 		    ';
-		    mysql_query($sql_insert,$this->loc_db);
+			$GLOBALS['TYPO3_DB']->sql_query($sql_insert);
 
 		    $anz_cat++;
 	    }
@@ -547,8 +559,8 @@ class tx_mmforum_chcimport {
                 WHERE
                     w.uid = tx_chcforum_conference.auth_forumgroup_w AND
                     r.uid = tx_chcforum_conference.auth_forumgroup_r';
-	    $query=mysql_query($sql,$this->ext_db);
-	    while($res=mysql_fetch_array($query)) {
+	    $query=$this->dbObj->sql_query($sql);
+	    while($res=$this->dbObj->sql_fetch_assoc($query)) {
 
 		    $anz_forum++;
 
@@ -565,18 +577,18 @@ class tx_mmforum_chcimport {
 				    forum_desc = "'.$res['conference_desc'].'"
 		    ';
 
-		    mysql_query($sql_insert,$this->loc_db);
+			$GLOBALS['TYPO3_DB']->sql_query($sql_insert);
 
 		    $conference_id=$res['uid'];
-		    $forum_uid = mysql_insert_id($this->loc_db);
+		    $forum_uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
 
 		    $topics = 0;
 		    $posts_ges = 0;
 
 		    //FORUM THREADS ERZEUGEN
 		    $sql_topic = 'SELECT * FROM tx_chcforum_thread WHERE conference_id='.$conference_id;
-		    $query_topic=mysql_query($sql_topic,$this->ext_db);
-		    while($res_topic=mysql_fetch_array($query_topic)) {
+		    $query_topic=$this->dbObj->sql_query($sql_topic);
+		    while($res_topic=$this->dbObj->sql_fetch_assoc($query_topic)) {
 
 			    $sql_insert = 'INSERT INTO tx_mmforum_topics SET
 				    uid = '.$res_topic['uid'].',
@@ -595,7 +607,7 @@ class tx_mmforum_chcimport {
 				    topic_first_post_id = '.$res_topic['thread_firstpostid'].'
 			    ';
 
-			    mysql_query($sql_insert,$this->loc_db);
+				$GLOBALS['TYPO3_DB']->sql_query($sql_insert);
 			    $topics++;
 
 			    $anz_threads++;
@@ -604,8 +616,8 @@ class tx_mmforum_chcimport {
 
 			    //Forum Posts erzeugen
 			    $sql_post = 'SELECT * FROM tx_chcforum_post WHERE thread_id='.$res_topic['uid'];
-			    $query_post=mysql_query($sql_post,$this->ext_db);
-			    while($res_post=mysql_fetch_array($query_post)) {
+			    $query_post=$this->dbObj->sql_query($sql_post);
+			    while($res_post=$this->dbObj->sql_fetch_assoc($query_post)) {
 				    $sql_insert = 'INSERT INTO tx_mmforum_posts SET
 					    uid = '.$res_post['uid'].',
 					    pid = '.$pid.',
@@ -622,7 +634,7 @@ class tx_mmforum_chcimport {
 					    edit_time  = '.$res_post['post_edit_tstamp'].',
 					    edit_count  = '.$res_post['post_edit_count'].'
 				    ';
-				    mysql_query($sql_insert,$this->loc_db);
+					$GLOBALS['TYPO3_DB']->sql_query($sql_insert);
 
 				    $sql_insert = 'INSERT INTO tx_mmforum_posts_text SET
 					    uid = '.$res_post['uid'].',
@@ -632,9 +644,9 @@ class tx_mmforum_chcimport {
 					    deleted = '.$res_post['deleted'].',
 					    hidden = '.$res_post['hidden'].',
 					    post_id  = '.$res_post['uid'].',
-					    post_text  = "'.mysql_real_escape_string($res_post['post_text']).'"
+					    post_text  = "'.$GLOBALS['TYPO3_DB']->quoteStr($res_post['post_text'], '').'"
 				    ';
-				    mysql_query($sql_insert,$this->loc_db);
+					$GLOBALS['TYPO3_DB']->sql_query($sql_insert);
 				    $posts++;
 
 				    $anz_posts++;
@@ -643,32 +655,32 @@ class tx_mmforum_chcimport {
 			    $posts_ges = $posts_ges + $posts + 1;
 
 			    $sql_update = 'UPDATE tx_mmforum_topics SET topic_replies = '.$posts.', topic_views = '.$posts.' WHERE uid='.$res_topic['uid'];
-			    mysql_query($sql_update,$this->loc_db);
+				$GLOBALS['TYPO3_DB']->sql_query($sql_update);
 
 		    }
 
 		    $sql_last = 'SELECT topic_last_post_id FROM tx_mmforum_topics WHERE forum_id='.$forum_uid.' ORDER BY crdate DESC LIMIT 1';
-		    $query_last=mysql_query($sql_last,$this->loc_db);
-		    $res_last=mysql_fetch_array($query_last);
+		    $query_last=$GLOBALS['TYPO3_DB']->sql_query($sql_last);
+		    $res_last=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($query_last);
 
 
 		    $sql_update = 'UPDATE tx_mmforum_forums SET forum_posts = '.$posts_ges.', forum_last_post_id='.$res_last['topic_last_post_id'].' , forum_topics = '.$topics.' WHERE uid='.$forum_uid;
-		    mysql_query($sql_update,$this->loc_db);
+			$GLOBALS['TYPO3_DB']->sql_query($sql_update);
 	    }
 
 	    //Benutzer die im Forum gepostet haben auslesen
 	    $sql = 'SELECT poster_id FROM  tx_mmforum_posts WHERE deleted=0 AND hidden = 0 GROUP BY poster_id';
-	    $query=mysql_query($sql,$this->loc_db);
-	    while($res=mysql_fetch_array($query)) {
+	    $query=$GLOBALS['TYPO3_DB']->sql_query($sql);
+	    while($res=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($query)) {
 
 		    //Anzahl der Postings pro Benutzer auslesen
 		    $sql_count = 'SELECT COUNT(uid) AS anzahl FROM  tx_mmforum_posts WHERE deleted=0 AND hidden=0 AND poster_id='.$res['poster_id'];
-		    $query_count=mysql_query($sql_count,$this->loc_db);
-		    $res_count=mysql_fetch_array($query_count);
+		    $query_count=$GLOBALS['TYPO3_DB']->sql_query($sql_count);
+		    $res_count=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($query_count);
 
 		    //Benutzer mit der Anzahl der Postings Updaten
 		    $sql = 'UPDATE fe_users SET tx_mmforum_posts='.$res_count['anzahl'].' WHERE uid='.$res['poster_id'];
-		    mysql_query($sql,$this->loc_db);
+			$GLOBALS['TYPO3_DB']->sql_query($sql);
 	    }
 
 	    $content= '<strong>'.$GLOBALS['LANG']->getLL('chc.success').'</strong><br/>';
@@ -688,7 +700,7 @@ class tx_mmforum_chcimport {
      * @version 2007-05-03
      */
     function import_cwt() {
-        mysql_query('TRUNCATE TABLE tx_mmforum_pminbox');
+		$GLOBALS['TYPO3_DB']->sql_query('TRUNCATE TABLE tx_mmforum_pminbox');
 
 	    $anz_pm = 0;
 
@@ -696,8 +708,8 @@ class tx_mmforum_chcimport {
 
 	    //PM Importieren
 	    $sql = 'SELECT *,(SELECT username FROM fe_users WHERE uid= tx_cwtcommunity_message.cruser_id) AS from_user, (SELECT username FROM fe_users WHERE uid= tx_cwtcommunity_message.fe_users_uid) AS to_user FROM tx_cwtcommunity_message';
-	    $query=mysql_query($sql,$this->ext_db);
-	    while($res=mysql_fetch_array($query)) {
+	    $query = $GLOBALS['TYPO3_DB']->sql_query($sql);
+	    while($res=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($query)) {
 
 		    if ($res['status']>0)
 			    $read = 'read_flg = 1,';
@@ -713,15 +725,15 @@ class tx_mmforum_chcimport {
 				    sendtime = '.$res['crdate'].',
 				    cruser_id  = '.$res['cruser_id'].',
 				    from_uid  = '.$res['cruser_id'].',
-				    from_name = "'.mysql_real_escape_string($res['from_user']).'",
+				    from_name = "'.$GLOBALS['TYPO3_DB']->quoteStr($res['from_user'], '').'",
 				    to_uid  = '.$res['fe_users_uid'].',
-				    to_name = "'.mysql_real_escape_string($res['to_user']).'",
-				    subject = "'.mysql_real_escape_string($res['subject']).'",
-				    message = "'.mysql_real_escape_string($res['body']).'",
+				    to_name = "'.$GLOBALS['TYPO3_DB']->quoteStr($res['to_user'], '').'",
+				    subject = "'.$GLOBALS['TYPO3_DB']->quoteStr($res['subject'], '').'",
+				    message = "'.$GLOBALS['TYPO3_DB']->quoteStr($res['body'], '').'",
 				    '.$read.'
 				    mess_type = 0
 		    ';
-		    mysql_query($sql_insert,$this->loc_db);
+			$GLOBALS['TYPO3_DB']->sql_query($sql_insert);
 
 		    $sql_insert = 'INSERT INTO tx_mmforum_pminbox SET
 				    pid = '.$pid.',
@@ -732,14 +744,14 @@ class tx_mmforum_chcimport {
 				    sendtime = '.$res['crdate'].',
 				    cruser_id  = '.$res['cruser_id'].',
 				    from_uid  = '.$res['cruser_id'].',
-				    from_name = "'.mysql_real_escape_string($res['to_user']).'",
+				    from_name = "'.$GLOBALS['TYPO3_DB']->quoteStr($res['to_user'], '').'",
 				    to_uid  = '.$res['cruser_id'].',
-				    to_name = "'.mysql_real_escape_string($res['from_user']).'",
-				    subject = "'.mysql_real_escape_string($res['subject']).'",
-				    message = "'.mysql_real_escape_string($res['body']).'",
+				    to_name = "'.$GLOBALS['TYPO3_DB']->quoteStr($res['from_user'], '').'",
+				    subject = "'.$GLOBALS['TYPO3_DB']->quoteStr($res['subject'], '').'",
+				    message = "'.$GLOBALS['TYPO3_DB']->quoteStr($res['body'], '').'",
 				    mess_type = 1
 		    ';
-		    mysql_query($sql_insert,$this->loc_db);
+			$GLOBALS['TYPO3_DB']->sql_query($sql_insert);
 
 		    $anz_pm++;
 	    }

@@ -272,8 +272,7 @@ class tx_mmforum_indexing {
 	function wordAdd($word) {
 		// Attempt to load word from database
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_wordlist',"word=".$GLOBALS['TYPO3_DB']->fullQuoteStr($word, 'tx_mmforum_wordlist')." ".$this->getPidQuery($this->conf));
-		//TODO use API
-		if (mysql_error()) echo mysql_error().'<hr>';
+		if (!$res) echo $GLOBALS['TYPO3_DB']->sql_error().'<hr>';
 
 		// If words already exists, just return the UID
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
@@ -289,9 +288,8 @@ class tx_mmforum_indexing {
 			);
 
 			// Execute insert query
-			$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_wordlist', $insertArray);
-			//TODO use API
-			$uid = mysql_insert_id();
+			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_wordlist', $insertArray);
+			$uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
 		}
 		return $uid;
 	}
@@ -335,17 +333,17 @@ class tx_mmforum_indexing {
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-04-02
 	 */
-	function getPidQuery($conf,$tables="") {
+	function getPidQuery($conf,$tables='') {
 
-		if (strlen(trim($conf['pidList']))==0) return "";
-		if ($tables == "") {
+		if (strlen(trim($conf['pidList']))==0) return '';
+		if ($tables == '') {
 			if ($conf['storagePID'])
 				return ' AND pid = '.$conf['storagePID'].' ';
 			else return ' AND pid IN ('.$conf['pidList'].')';
 		}
 
 		$tables = t3lib_div::trimExplode(',',$tables);
-		$query = "";
+		$query = '';
 
 		foreach($tables as $table) {
 			if ($conf['storagePID'])
@@ -409,7 +407,7 @@ class tx_mmforum_indexing {
 		"/\[\*:[a-z0-9]{10}\]/isS",
 		"/\[\*\]/isS"
 		);
-		$string     = preg_replace( $patterns, "", $string) ;
+		$string     = preg_replace( $patterns, '', $string) ;
 		return $string;
 	}
 

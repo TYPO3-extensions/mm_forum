@@ -90,8 +90,9 @@ class ext_update {
         $content = 'Executing the following MySQL queries:<br /><br />'.implode('<br />',$sql);
         $content .= '<br /><br />';
 
-        foreach($sql as $singleQuery)
-            mysql_query($singleQuery);
+        foreach($sql as $singleQuery) {
+			$GLOBALS['TYPO3_DB']->sql_query($singleQuery);
+		}
 
         return $content;
     }
@@ -105,7 +106,7 @@ class ext_update {
 
         foreach($this->obsTableNames as $oldTable => $newTable) {
             $sql[] = "DROP TABLE IF EXISTS $newTable";
-            $sql[] = "ALTER TABLE ".$oldTable." RENAME ".$newTable."";
+            $sql[] = "ALTER TABLE ".$oldTable." RENAME ".$newTable;
         }
         foreach($this->obsFieldNames_feuser as $oldField => $newField) {
             $sql[] = "ALTER TABLE fe_users DROP $newField";

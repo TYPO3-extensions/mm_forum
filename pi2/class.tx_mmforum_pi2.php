@@ -201,8 +201,8 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		}
 
 			/* Load user record from database */
-		$hash = mysql_escape_string($hash); //TODO use api here
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users','tx_mmforum_reg_hash="'.$hash.'"');
+		$hash = $GLOBALS['TYPO3_DB']->fullQuoteStr($hash, 'fe_users');
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users','tx_mmforum_reg_hash='.$hash);
 
 			/* If user records exists exactly once, continue... */
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==1) {
@@ -214,7 +214,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 				'tx_mmforum_reg_hash'   => ''
 			);
 
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users',"tx_mmforum_reg_hash='$hash'",$updateArray);
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','tx_mmforum_reg_hash='.$hash,$updateArray);
 
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['activateUser'])) {
 			    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['activateUser'] as $_classRef) {
@@ -224,9 +224,9 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			}
 
 			// Output error message in case of failure
-			if (mysql_error()) {
+			if ($GLOBALS['TYPO3_DB']->sql_error()) {
 				$template = $this->cObj->getSubpart($this->tmpl, "###FEHLER###");
-					$marker = array(
+				$marker = array(
 					'###LABEL_ERRORGENERAL###'		=> $this->pi_getLL('error.generalError'),
 					'###LABEL_PLEASECONTACT###'		=> $this->cObj->substituteMarker($this->pi_getLL('error.support'),'###SUPPORTMAIL###',str_replace('@',' [at] ',$this->conf['supportMail'])),
 				);
@@ -296,7 +296,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			$userField->init($this->userLib, $this->cObj);
 
 			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$userField->get($arr);;
+				$userField->get($arr);
 
 				$value = trim($this->piVars['userfields'][$userField->getUID()]);
 				$userField->setForUser($user->getUid(), $value, $this->getStoragePID());
@@ -334,7 +334,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
             }
         }*/
 
-		if (mysql_error()) return 0;
+		if ($GLOBALS['TYPO3_DB']->sql_error()) return 0;
 		return 1;
 	}
 
