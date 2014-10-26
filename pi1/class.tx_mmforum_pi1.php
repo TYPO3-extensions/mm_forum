@@ -1875,6 +1875,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			c.uid = f.parentID AND
 			p.deleted = 0 AND t.deleted = 0 AND f.deleted = 0 AND c.deleted = 0 AND
 			p.hidden  = 0 AND t.hidden  = 0 AND f.hidden  = 0 AND c.hidden  = 0 '.
+			$this->getStoragePIDQuery('t').
 			$this->getMayRead_forum_query('f').
 			$this->getMayRead_forum_query('c').
 			$this->getCategoryLimit_query('c'),
