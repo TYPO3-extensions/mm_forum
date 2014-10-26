@@ -826,7 +826,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 						<td class="mm_forum-listrow"><select name="mmforum[new][fe_inserticon]" onchange="document.getElementById(\'fe_inserticon_preview\').src=\'../res/img/default/editor_icons/\'+this[this.selectedIndex].value">'.$surlOptions.'</select></td>
 						<td class="mm_forum-listrow"><input type="text" name="mmforum[new][lang_title]" value="'.htmlspecialchars($mmforum['new']['lang_title']).'" /></td>
 						<td class="mm_forum-listrow"><input type="text" name="mmforum[new][lang_pattern]" value="'.htmlspecialchars($mmforum['new']['lang_pattern']).'" /></td>
-						<td class="mm_forum-listrow"><select name="mmforum[new][lang_code]">'.$this->getFileOptionFields('../includes/geshi/geshi/','php','',FALSE).'</select></td>
+						<td class="mm_forum-listrow"><select name="mmforum[new][lang_code]">'.$this->getFileOptionFields('../res/geshi/geshi/','php','',FALSE).'</select></td>
 						<td align="right" class="mm_forum-listrow"><input type="image" src="img/save.png" name="mmforum[save][0]" /></td>
 					</tr>';
 
@@ -839,7 +839,7 @@ class  tx_mmforum_module1 extends t3lib_SCbase {
 			$content .= '	<td><select name="mmforum[fe_inserticon]['.$row['uid'].']">'.$this->getFileOptionFields('../res/img/default/editor_icons/','',$row[fe_inserticon],TRUE).'</select></td>';
 			$content .= '	<td><input type="text" name="mmforum[lang_title]['.$row['uid'].']" value="'.$row['lang_title'].'" /></td>';
 			$content .= '	<td><input type="text" name="mmforum[lang_pattern]['.$row['uid'].']" value="'.$row['lang_pattern'].'" /></td>';
-			$content .= '	<td><select name="mmforum[lang_code]['.$row['uid'].']">'.$this->getFileOptionFields('../includes/geshi/geshi/','php',$row[lang_code],FALSE).'</select></td>';
+			$content .= '	<td><select name="mmforum[lang_code]['.$row['uid'].']">'.$this->getFileOptionFields('../res/geshi/geshi/','php',$row[lang_code],FALSE).'</select></td>';
 			$content .= '	<td align="right">';
 			$content .= '		<a href="index.php?mmforum[tools]=3&mmforum[delete]['.$row['uid'].']=1"><img src="img/edit-delete.png" /></a>';
 			$content .= 		$row['hidden']?'<a href="index.php?mmforum[tools]=3&mmforum[unhide]['.$row['uid'].']=1"><img src="img/edit-hide.png" /></a>':'<a href="index.php?mmforum[tools]=3&mmforum[hide]['.$row['uid'].']=1"><img src="img/edit-hide.png" /></a>';

@@ -48,7 +48,7 @@
 if (t3lib_extMgm::isLoaded('geshilib')) {
 	include_once ( t3lib_extMgm::siteRelPath('geshilib') . 'res/geshi.php' );
 } elseif (!class_exists("GeSHi")) { // Checks if there is an instance of this class already in use!
-	include_once ( t3lib_extMgm::extPath('mm_forum') . 'includes/geshi/geshi.php' );
+	include_once ( t3lib_extMgm::extPath('mm_forum') . 'res/geshi/geshi.php' );
 }
 
 /**
@@ -403,7 +403,7 @@ class tx_mmforum_postparser {
 	 */
 	function syntaxhighlighting($content, $parent, $conf) {
 		/* Path to Geshi Syntax-Highlighting files. */
-		$path = t3lib_div::getFileAbsFileName('EXT:mm_forum/includes/geshi/geshi/', $onlyRelative = 1, $relToTYPO3_mainDir = 0);
+		$path = t3lib_div::getFileAbsFileName('EXT:mm_forum/res/geshi/geshi/', $onlyRelative = 1, $relToTYPO3_mainDir = 0);
 		($conf['postparser.']['tsrefUrl']) ? define('GESHI_TS_REF', $conf['postparser.']['tsrefUrl']) : define('GESHI_TS_REF', 'www.typo3.net');
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
