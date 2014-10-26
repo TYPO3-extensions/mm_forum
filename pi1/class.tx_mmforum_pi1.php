@@ -5500,7 +5500,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$a = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
 		if (@file_exists($a['file_path']) /*&& $this->getMayRead_post($a['post_id'])*/) {
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid='.$aUID, array('downloads' => 'downloads + 1'));
+			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid='.$aUID, array('downloads' => 'downloads + 1'), 'downloads');
 
 			header('Content-Type: '.$a['file_type']);
 			header('Content-Length: '.filesize($a['file_path']));
