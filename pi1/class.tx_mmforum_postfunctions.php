@@ -158,7 +158,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		}
 
 		// Increase hit counter
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, array('topic_views' => 'topic_views+1'));
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, array('topic_views' => 'topic_views+1'), 'topic_views');
 
 		// Generate page navigation
 		$limitCount = $this->conf['post_limit'];
