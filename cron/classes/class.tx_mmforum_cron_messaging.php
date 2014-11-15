@@ -50,6 +50,20 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 	var $cron_name = 'tx_mmforum_cron_messaging';
 
 	/**
+	 * The TYPO3 database object
+	 *
+	 * @var t3lib_DB
+	 */
+	protected $databaseHandle;
+	
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
+	
+	/**
 	 * Main function
 	 * The main function of this class. Loads language variables and
 	 * calls subsidiary functions.
@@ -62,7 +76,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 
 		$this->debug('Starting message notification');
 
-		$user_res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$user_res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'fe_users',
 			'tx_mmforum_pmnotifymode = 1 AND deleted=0 AND disable=0 AND starttime < '.$GLOBALS['EXEC_TIME'].' AND (endtime = 0 OR endtime <= '.$GLOBALS['EXEC_TIME'].')'
@@ -76,21 +90,21 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 		$itemTemplate		= t3lib_parsehtml::getSubpart($template, '###NOTIFY_LISTITEM###');
 
 		$content = '';
-		while($user_arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($user_res)) {
+		while($user_arr = $this->databaseHandle->sql_fetch_assoc($user_res)) {
 
-			$pm_res		= $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$pm_res		= $this->databaseHandle->exec_SELECTquery(
 				'*',
 				'tx_mmforum_pminbox',
 				'to_uid='.$user_arr['uid'].' AND notified=0 AND mess_type=0'
 			);
 			$pm_content	= '';
 
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($pm_res) == 0) {
+			if ($this->databaseHandle->sql_num_rows($pm_res) == 0) {
 				$this->debug('No new messages for user '.$user_arr['username'].'. Continue with next user.');
 				continue;
-			} else $this->debug($GLOBALS['TYPO3_DB']->sql_num_rows($pm_res).' new messages for user '.$user_arr['username'].'. Creating email.');
+			} else $this->debug($this->databaseHandle->sql_num_rows($pm_res).' new messages for user '.$user_arr['username'].'. Creating email.');
 
-			while($pm_arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($pm_res)) {
+			while($pm_arr = $this->databaseHandle->sql_fetch_assoc($pm_res)) {
 				$link = sprintf($this->conf['cron_pm_readlink'],$pm_arr['uid']);
 
 				$cache_link = $this->getCacheValue_remove('pm.urlCache.'.$pm_arr['uid']);
@@ -112,8 +126,8 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 			$user_content	= t3lib_parsehtml::substituteSubpart($template, '###NOTIFY_LISTITEM###', $pm_content);
 
 			$user_marker	= array(
-				'###NOTIFY_SUBJECT###'				=> sprintf($this->getLL('subject'),$GLOBALS['TYPO3_DB']->sql_num_rows($pm_res)),
-				'###NOTIFY_TEXT###'					=> sprintf($this->getLL('text'),$this->conf['cron_sitetitle'],$GLOBALS['TYPO3_DB']->sql_num_rows($pm_res)),
+				'###NOTIFY_SUBJECT###'				=> sprintf($this->getLL('subject'),$this->databaseHandle->sql_num_rows($pm_res)),
+				'###NOTIFY_TEXT###'					=> sprintf($this->getLL('text'),$this->conf['cron_sitetitle'],$this->databaseHandle->sql_num_rows($pm_res)),
 				'###NOTIFY_ADDRESS###'				=> sprintf($this->getLL('address'),$user_arr[$this->conf['userNameField']?$this->conf['userNameField']:'username']),
 				'###NOTIFY_LINK###'					=> $this->conf['cron_pm_link'],
 
@@ -123,7 +137,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 			);
 			$user_content	= t3lib_parsehtml::substituteMarkerArray($user_content, $user_marker);
 
-			$subject		= sprintf($this->getLL('mailSubject'),$this->conf['cron_sitetitle'],$GLOBALS['TYPO3_DB']->sql_num_rows($pm_res));
+			$subject		= sprintf($this->getLL('mailSubject'),$this->conf['cron_sitetitle'],$this->databaseHandle->sql_num_rows($pm_res));
 			$username		= $user_arr['name']?$user_arr['name']:$user_arr['username'];
 			$recipient		= '"'.$username.'" <'.$user_arr['email'].'>';
 			$contenttype	= $this->conf['cron_htmlemail']?'text/html':'text/plain';
@@ -140,7 +154,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 		}
 
 		$updateArray = array('notified' => 1, 'tstamp' => $GLOBALS['EXEC_TIME']);
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_pminbox', 'notified=0', $updateArray);
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_pminbox', 'notified=0', $updateArray);
 
 		$this->content = $content;
 	}
@@ -152,10 +166,10 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 	 * @return string           The user name
 	 */
 	function getUsername($user_uid) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->conf['userNameField']?$this->conf['userNameField']:'username', 'fe_users', 'uid='.intval($user_uid).' AND deleted=0');
+		$res = $this->databaseHandle->exec_SELECTquery($this->conf['userNameField']?$this->conf['userNameField']:'username', 'fe_users', 'uid='.intval($user_uid).' AND deleted=0');
 
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
-			list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res); return $username;
+		if ($this->databaseHandle->sql_num_rows($res)) {
+			list($username) = $this->databaseHandle->sql_fetch_row($res); return $username;
 		} else {
 			return $this->getLL('deletedUser');
 		}
