@@ -434,10 +434,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 	}
 
-
 	/**
 	 * Renders the page footer
-	 * @return	string	Returns the Footerstring
+	 * @param array $conf
+	 * @return    string    Returns the Footerstring
 	 */
 	function page_footer($conf) {
 		$template = $this->cObj->fileResource($conf['template.']['footer']);
@@ -465,7 +465,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 	/**
 	 * Renders the page header, containing links to e.g. the user control center
-	 * @param	array	The plugin's configuration vars
+	 * @param	array	$conf The plugin's configuration vars
 	 * @return	string	The header string
 	 */
 	function page_header($conf) {
@@ -980,7 +980,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$content .= $this->cObj->substituteMarkerArray($template, $marker);
 		$feUserId = intval(isset($GLOBALS['TSFE']->fe_user->user['uid']) ? $GLOBALS['TSFE']->fe_user->user['uid'] : 0);
-
+		$lastlogin = 0;
 		if ($feUserId) {
 			//$resunread = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			//	'tx_mmforum_prelogin as lastlogin',
@@ -1070,23 +1070,23 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 //			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forumlist)) {
 			$parentID = $row['uid'];
 			if (is_array($parentForums[$parentID])) {
-				foreach ($parentForums[$parentID] as $row) {
-					$forumId = intval($row['uid']);
+				foreach ($parentForums[$parentID] as $innerRow) {
+					$forumId = intval($innerRow['uid']);
 					$template = $this->cObj->getSubpart($templateFile, '###LIST_FORUM###');
 
 					$linkparams[$this->prefixId] = array(
 						'action' => 'list_topic',
-						'fid'    => $row['uid']
+						'fid'    => $innerRow['uid']
 					);
-					$marker['###FORUMNAME###'] = $this->pi_linkToPage($this->escape($row['forum_name']), $GLOBALS['TSFE']->id, '', $linkparams);
-					$marker['###FORUMDESC###'] = $this->escape($row['forum_desc']);
-					$marker['###THEMES###']    = ($row['forum_topics'] ? intval($row['forum_topics']) : '');
-					$marker['###POSTS###']     = ($row['forum_posts']  ? intval($row['forum_posts'])  : '');
-					$marker['###LASTPOSTS###'] = $this->getlastpost($row['forum_last_post_id'], $conf, true);
+					$marker['###FORUMNAME###'] = $this->pi_linkToPage($this->escape($innerRow['forum_name']), $GLOBALS['TSFE']->id, '', $linkparams);
+					$marker['###FORUMDESC###'] = $this->escape($innerRow['forum_desc']);
+					$marker['###THEMES###']    = ($innerRow['forum_topics'] ? intval($innerRow['forum_topics']) : '');
+					$marker['###POSTS###']     = ($innerRow['forum_posts']  ? intval($innerRow['forum_posts'])  : '');
+					$marker['###LASTPOSTS###'] = $this->getlastpost($innerRow['forum_last_post_id'], $conf, true);
 					$marker['###FORUMID###']   = 'f' . $forumId;
 					$marker['###LIST_FORUM_EVENODD###'] = $this->conf['display.']['listItem.'][($i % 2 ? 'odd' : 'even' ) . 'Class'];
 					$i++;
-					$closed = (!$this->getMayWrite_forum($row));
+					$closed = (!$this->getMayWrite_forum($innerRow));
 
 					// If there is a user logged in, it is checked if
 					//there are new posts since the last login.
@@ -1103,7 +1103,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	//							break;
 	//						}
 	//					}
-					if ($feUserId && in_array($row['uid'], $unreadarray)) {
+					if ($feUserId && in_array($innerRow['uid'], $unreadarray)) {
 						$marker['###READIMAGE###'] = $this->getForumIcon(null, $closed, true);
 					} else {
 						$marker['###READIMAGE###'] = $this->getForumIcon(null, $closed, false);
@@ -1241,6 +1241,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$content .= $this->cObj->substituteMarkerArray($template, $marker);
 
 		// load the posts that the user set as "favorites"
+		$userFav = '';
 		if ($feUserId) {
 			$userFav = $this->get_user_fav();
 		}
@@ -1285,6 +1286,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		//get tuhe unread state _of only the 30 (or so) topics per page and not that _of all posts_
 		$conf['topic_id'] = $topicIds;
+		$readarray = array();
 		if ($GLOBALS['TSFE']->fe_user->user['uid']) {
 			$lastlogin = $GLOBALS['TSFE']->fe_user->user['tx_mmforum_prelogin'];
 			$readarray = $this->getunreadposts($content, $conf, $lastlogin);
@@ -1991,6 +1993,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$userField->init($this->userLib, $this->cObj);
 
 		$content_th = '';
+		$userfields_config = array();
 		foreach($list_fields as $field) {
 
 			if (intval($field)>0) {
@@ -2024,7 +2027,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$label = $this->pi_getLL('userlist.fields.'.$field);
 				if (!$label) $label = $field;
 			}
-
+			$linkParams = array();
 			if ($sorting == $field) {
 				if ($sorting_mode == 'DESC') {
 					$label = '&#x25BC;&nbsp;'.$label;
@@ -2085,7 +2088,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			if ($userfields_config[$sorting]['datasource'])
 				$sorting = $userfields_config[$sorting]['datasource'];
 		}
-
+		$userResult = array();
 		if (!is_numeric($sorting)) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'*',
@@ -2133,7 +2136,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$i = 0;
 
 		$user_rows = '';
-		foreach($userResult as $user) {
+		foreach ($userResult as $user) {
 			$user_row = $template_row;
 			$user_fields = '';
 
@@ -2251,7 +2254,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return string HTML content
 	 */
 	function frontendAdministration() {
-		require_once(t3lib_extMgm::extPath('mm_forum').'pi1/feadmin/class.tx_mmforum_frontendadministration.php');
 		$frontendAdministration = t3lib_div::makeInstance('tx_mmforum_FrontendAdministration');
 		return $frontendAdministration->main($this->conf, $this);
 	}
@@ -2986,8 +2988,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$ext = array_pop(explode('.', $file['name']));
 			$newpath .= '.' . $ext;
 
-			move_uploaded_file($file['tmp_name'], $newpath);
-			chmod($newpath, 0444);
+			t3lib_div::upload_copy_move($file['tmp_name'], $newpath);
 
 			/* Fix wrong mime-type for pdf when uploading through Firefox
 			 * Mime-type for PDF should be: 'application/pdf'
@@ -3079,7 +3080,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'deleted=0 AND hidden=0 AND uid=' . $topicId . $this->getStoragePIDQuery()
 		);
 		$topicData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-
+		$previewContent = '';
 		if ((
 				($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid'])
 				&& ($lastpostdate == $row['post_time'])
@@ -3848,7 +3849,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$content .= $this->cObj->wrap('<a href="'.$href.'" title="'.$row['code'].'">'.$this->buildImageTag($imgInfo).'</a>',$this->conf['postForm.']['smiliesAsDiv.']['itemWrap']);
 			} else {
 				if ($i >= 4){
-					$content .= "\r\n</tr><tr>\r\n";
+					$content .= CRLF."</tr><tr>".CRLF;
 					$i = 0;
 				}
 				$i++;
@@ -3859,7 +3860,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		if ($this->conf['postForm.']['smiliesAsDiv']) {
 			$content = $this->cObj->wrap($content, $this->conf['postForm.']['smiliesAsDiv.']['allWrap']);
 		} else {
-			$content = '<table style="width:100%; border:0px;"><tr>'.$content.'</tr></table>';
+			$content = '<table style="width:100%; border:0;"><tr>'.$content.'</tr></table>';
 		}
 
 		return $content;
@@ -3980,8 +3981,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		#$user_id = intval($this->piVars['user_id']);
 
 		if ($this->useRealUrl() && $this->piVars['fid'])
-			$user = tx_mmforum_FeUser::GetByUsername($this->piVars['fid']);
-		else $user = tx_mmforum_FeUser::GetByUID($this->piVars['user_id']);
+			$user = tx_mmforum_FeUser::getByUsername($this->piVars['fid']);
+		else $user = tx_mmforum_FeUser::getByUID($this->piVars['user_id']);
 
 		$template = $this->cObj->fileResource($conf['template.']['userdetail']);
 		$template = $this->cObj->getSubpart($template, "###USERDETAIL###");
@@ -4430,7 +4431,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 */
 	function pagecount ($table,$column,$id,$limitcount,$count=FALSE) {
 		$id = intval($id);
-		$column = preg_replace("/[^A-Za-z0-9\._]/","",$column);
+		$column = preg_replace("/[^A-Za-z0-9\._]/",'',$column);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			"COUNT($column)",
 			$table,
@@ -4888,13 +4889,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 *                         the previous page fails.
 	 */
 	function reset_unreadpost($content, $conf) {
-		// Executing database operations
 		$updateArray = array(
 			'lastlogin'           => $GLOBALS['EXEC_TIME'],
 			'tx_mmforum_prelogin' => $GLOBALS['EXEC_TIME'],
 			'tstamp'              => $GLOBALS['EXEC_TIME']
 		);
-		$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users', 'uid = ' . $GLOBALS['TSFE']->fe_user->user['uid'], $updateArray);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users', 'uid = ' . $GLOBALS['TSFE']->fe_user->user['uid'], $updateArray);
 
 		// Redirecting visitor back to previous page
 		$ref = t3lib_div::getIndpEnv('HTTP_REFERER');
@@ -4917,11 +4917,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function highlight_text ($text,$words) {
 		$word_array = explode(" ",$words);
 		foreach ($word_array as $needle) {
-			if (trim($needle) != "") {
+			if (trim($needle) != '') {
 				$needle      = preg_quote($needle);
 				$needle      = str_replace('/','\\/',$needle);
 
-				$check       = preg_match_all("/<(.*?)$needle(.*?)>/i", $text, $htmltags);
+				preg_match_all("/<(.*?)$needle(.*?)>/i", $text, $htmltags);
 				$placemark   = chr(1).chr(1).chr(1);
 				$text        = preg_replace("/<(.*?)$needle(.*?)>/i", $placemark, $text);
 
@@ -5194,7 +5194,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 	/**
 	 * Returns the UID of the last post in a topic.
-	 * @param  int $topic_id The topic UID
+	 * @param int $topicId The topic UID
 	 * @return int           The UID of the last post
 	 */
 	function get_last_post($topicId) {
@@ -5226,8 +5226,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	/**
 	 * Generates an error message.
 	 * @author Martin Helmich <m.helmich@mittwald.de>
-	 * @param  array  $conf The plugin's configuration vars
-	 * @param  string $msg  The error message
+	 * @param  array $conf The plugin's configuration vars
+	 * @param  string $message The error message
 	 * @return string       The HTML error message
 	 */
 	function errorMessage($conf, $message) {
@@ -5299,8 +5299,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * read/closed status etc.
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 11. 01. 2007
-	 * @param   mixed  $topic The topic data. May either be a topic UID or a topic record
+	 * @param   mixed $topic The topic data. May either be a topic UID or a topic record
 	 *                        as associative array.
+	 * @param $readarray
 	 * @return  string        The topic icon as HTML img tag
 	 */
 	function getTopicIcon($topic, $readarray=-1) {
@@ -5435,7 +5436,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			if ($this->conf['forumIcon'])
 				$image = $this->cObj->cObjGetSingle($this->conf['forumIcon'],$this->conf['forumIcon.']);
-			Else $image = $this->cObj->cObjGetSingle($this->conf['topicIcon'],$this->conf['topicIcon.']);
+			else $image = $this->cObj->cObjGetSingle($this->conf['topicIcon'],$this->conf['topicIcon.']);
 
 			$this->cObj->data = $oldData;
 
@@ -5480,7 +5481,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-05-21
-	 * @return  void
+	 * @return  string
 	 */
 	function getAttachment() {
 		if ($this->useRealUrl()) {
@@ -5520,7 +5521,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 	/**
 	 * Generates a MySQL-query to determine in which boards the current user may read.
-	 * @return string  A MySQL-WHERE-query, beginning with "AND", checking which boards the
+	 * @param string $prefix
+	 * @return string  $prefix A MySQL-WHERE-query, beginning with "AND", checking which boards the
 	 *                 user that is currently logged in may read in.
 	 * @author Martin Helmich <m.helmich@mittwald.de>
 	 */
@@ -5548,6 +5550,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
 
+		$queryParts = NULL;
 		// If the user is not in any group, build a subquery that always returns FALSE.
 		if (!is_array($groups) || count($groups) == 0) {
 			$queryParts = '1=2';
@@ -5759,7 +5762,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		/* Check if the user is in the base user group. If this is not the
 		 * case, the user is not allowed to write anywhere. */
 		if (!in_array($this->getBaseUserGroup(), $groups)) {
-			$this->cache->save("getMayWrite_forum_{$userId}_{$forum[uid]}", false);
+			$this->cache->save("getMayWrite_forum_{$userId}_{$forum['uid']}", false);
 			return false;
 		}
 
@@ -5811,7 +5814,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Save the result to cache and return
 			$this->cache->save('getMayWrite_topic_' . $topic . '_' . $userId, $result);
 			return $result;
-
 		} else {
 
 			/* If the topic's forum UID is already known, just delegate to the
@@ -5819,7 +5821,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			 * already being cached, there is no need to cache the result at this
 			 * place again. */
 			return $this->getMayWrite_forum($topic['forum_id']);
-
 		}
 	}
 
@@ -5850,7 +5851,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 	/**
 	 * Determines if the current user may read a certain post.
-	 * @param  mixed   $topic The post identifier. This may either be a post UID pointing to
+	 * @param  mixed $post The post identifier. This may either be a post UID pointing to
 	 *                        a record in the tx_mmforum_posts table or an associative array
 	 *                        already containing this record.
 	 * @return boolean        TRUE, if the user that is currently logged in may read the
@@ -5871,7 +5872,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 
 			return $this->getMayRead_forum($arr);
-
 		} else {
 			return $this->getMayRead_forum($post['forum_id']);
 		}
@@ -5915,10 +5915,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @param  string $tablename The table name
 	 * @return string            The MySQL-query part
 	 */
-	function getCategoryLimit_query($tablename="") {
-		if (!$this->limitCat) return "";
+	function getCategoryLimit_query($tablename='') {
+		if (!$this->limitCat) return '';
 
-		$prefix = $tablename?"$tablename.":'';
+		$prefix = $tablename ? "$tablename." : '';
 		$query = " AND $prefix"."uid IN (".$this->limitCat.")";
 		return $query;
 	}
@@ -5935,7 +5935,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		switch ($this->piVars['action']) {
 			// List post view, new post form, post alert form
-			// Sets a title like "mm_forum page -> Category -> Board -> Topic (-> New post/Report post)""
+			// Sets a title like "mm_forum page -> Category -> Board -> Topic (-> New post/Report post)"
 			case 'list_post':
 			case 'new_post':
 			case 'post_alert':
@@ -5996,9 +5996,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Sets a title like "mm_forum page -> User profile: Username"
 			case 'forum_view_profil':
 				if ($this->useRealUrl() && $this->piVars['fid']) {
-					$user = tx_mmforum_FeUser::GetByUsername($this->piVars['fid']);
+					$user = tx_mmforum_FeUser::getByUsername($this->piVars['fid']);
 				} else {
-					$user = tx_mmforum_FeUser::GetByUID($this->piVars['user_id']);
+					$user = tx_mmforum_FeUser::getByUID($this->piVars['user_id']);
 				}
 
 				$pageTitle = sprintf($this->pi_getLL('rootline.userprofile'), ((bool) $user?$this->escape($user->gD($this->getUserNameField())):''));
@@ -6100,9 +6100,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function createRootline($content, $conf) {
 		t3lib_div::logDeprecatedFunction();
 
-		include_once(t3lib_extMgm::extPath('mm_forum') . '/includes/class.tx_mmforum_menus.php');
-
-		$menuObj = t3lib_div::makeInstance('tx_mmforum_menus');
+  		$menuObj = t3lib_div::makeInstance('tx_mmforum_menus');
 		return $menuObj->createRootline($content,$conf);
 	}
 
@@ -6393,7 +6391,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_pi1.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_pi1.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_pi1.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_pi1.php']);
 }
-?>

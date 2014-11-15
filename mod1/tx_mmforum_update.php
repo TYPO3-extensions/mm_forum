@@ -67,23 +67,22 @@ function dieSuccess() {
 }
 
 // Make a backup copy of the extension directory
-	if (system('cp -r ./mm_forum ./mm_forum-backup') === false)
-		dieError(false);
+if (system('cp -r ./mm_forum ./mm_forum-backup') === false)
+	dieError(false);
 
 // Remove the mm_forum directory
-	if (system('rm -rf ./mm_forum/') === false)
-		dieError(true);
+if (system('rm -rf ./mm_forum/') === false)
+	dieError(true);
 
 // Unzip the tarball archive
-	if (system('tar -xzf mm_forum_update.tar.gz') === false)
-		dieError(true);
+if (system('tar -xzf mm_forum_update.tar.gz') === false)
+	dieError(true);
 
 // Set access rights
-	system('chmod -R 755 ./mm_forum');
+system('chmod -R 755 ./mm_forum');
 
 // Remove the tarball archive
-	system('rm mm_forum_update.tar.gz');
+system('rm mm_forum_update.tar.gz');
 
 // Return user to updater form
-	dieSuccess();
-?>
+dieSuccess();

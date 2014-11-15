@@ -355,7 +355,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 
 			/* Generate the label array. Kick out empty labels. */
 		$uf_labels = array();
-		foreach($data['label'] as $key => $label) {
+		foreach($data['label'] as $label) {
 			$label['content'] = trim($label['content']);
 			$label['lang'] = trim($label['lang']);
 
@@ -366,7 +366,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 
 			/* Generate the radio value array. Kick out empty values. */
 		$uf_radio_values = array();
-		foreach($data['radio']['value'] as $key => $label) {
+		foreach($data['radio']['value'] as $label) {
 			$label['content'] = trim($label);
 
 			if (strlen($label['content']) == 0) continue;
@@ -376,7 +376,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 
 			/* Generate the select value array. Kick out empty values. */
 		$uf_select_values = array();
-		foreach($data['select']['value'] as $key => $label) {
+		foreach($data['select']['value'] as $label) {
 			$label['content'] = trim($label);
 
 			if (strlen($label['content']) == 0) continue;
@@ -536,7 +536,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			$lTemplate	= tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_FORM_LABEL###');
 			$rTemplate	= tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_FORM_RADIOVALUE###');
 			$sTemplate	= tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_FORM_SELECTVALUE###');
-
+			$lContent = '';
 				/* Generate labels */
 			foreach((array)$userfield['meta']['label'] as $key=>$content) {
 				$lMarker = array(
@@ -548,7 +548,8 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_FORM_LABEL###', $lContent);
 
 				/* Generate radio values */
-			foreach((array)$userfield['meta']['radio']['value'] as $key=>$content) {
+			$rContent = '';
+			foreach((array)$userfield['meta']['radio']['value'] as $content) {
 				$rMarker = array(
 					'###UF_RADIO_VALUE###'			=> addslashes($content),
 				);
@@ -557,7 +558,8 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_FORM_RADIOVALUE###', $rContent);
 
 				/* Generate select values */
-			foreach((array)$userfield['meta']['select']['value'] as $key=>$content) {
+			$sContent = '';
+			foreach((array)$userfield['meta']['select']['value'] as $content) {
 				$sMarker = array(
 					'###UF_SELECT_VALUE###'			=> addslashes($content),
 				);
@@ -582,7 +584,6 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		$template = tx_mmforum_BeTools::substituteMarkerArray($template, $marker);
 
 		return $template;
-
 	}
 
 	function getFeUserFields($selected='') {
@@ -613,7 +614,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 	     */
     function displayFieldTable() {
 
-        $content .= $this->saveData();
+        $this->saveData();
 
 		$template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/userfields.html'));
 		$template = tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_LIST###');
@@ -641,6 +642,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
         );
         $i = 0;
         $max = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		$iContent = '';
         while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 
 			$meta = unserialize($arr['meta']);
@@ -660,15 +662,11 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			$i ++;
         }
 
-		$template = tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_LIST_ITEM###', $iContent);
-		$content .= $template;
-
-        return $content;
+		return tx_mmforum_BeTools::substituteSubpart($template, '###USERFIELD_LIST_ITEM###', $iContent);
     }
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_userfields.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_userfields.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_userfields.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_userfields.php']);
 }
-?>

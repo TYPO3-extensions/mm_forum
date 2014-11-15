@@ -62,7 +62,7 @@ class ext_update {
     function main() {
 
     	if (t3lib_div::_GP('do_update') == 'htaccess') {
-			$this->removeHtaccesFromUploadFolder();
+			$this->removeHtaccessFromUploadFolder();
 		}
 
         $content = '';
@@ -150,7 +150,7 @@ class ext_update {
 		return false;
 	}
 
-	function removeHtaccesFromUploadFolder() {
+	function removeHtaccessFromUploadFolder() {
 		if (file_exists(PATH_site.'uploads/tx_mmforum/.htaccess')) {
 			if (file_get_contents(PATH_site.'uploads/tx_mmforum/.htaccess') == 'deny from all')
 				unlink(PATH_site.'uploads/tx_mmforum/.htaccess');
@@ -158,7 +158,6 @@ class ext_update {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/class.ext_update.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/class.ext_update.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/class.ext_update.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/class.ext_update.php']);
 }
-?>

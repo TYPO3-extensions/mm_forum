@@ -323,7 +323,10 @@ class tx_mmforum_postqueue {
 
 	}
 
-    function getModeratorBoards() {
+	/**
+	 * @return array|bool
+	 */
+	function getModeratorBoards() {
 
 		if ($this->parent->getIsAdmin()) return true;
 
@@ -331,6 +334,7 @@ class tx_mmforum_postqueue {
 
 		if (count($groups) == 0) return false;
 
+		$queryParts = array();
         foreach($groups as $group) {
             $queryParts[] = 'FIND_IN_SET('.$group.',c.grouprights_mod)';
             $queryParts[] = 'FIND_IN_SET('.$group.',f.grouprights_mod)';
@@ -342,16 +346,15 @@ class tx_mmforum_postqueue {
             'tx_mmforum_forums f LEFT JOIN tx_mmforum_forums c ON c.uid=f.parentID',
             'f.deleted=0 AND c.deleted=0 AND ('.$query.')'
         );
+		$result = array();
         while(list($uid)=$GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
             $result[] = $uid;
         }
         return count($result)?$result:false;
-
     }
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_postqueue.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_postqueue.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_postqueue.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_postqueue.php']);
 }
-?>

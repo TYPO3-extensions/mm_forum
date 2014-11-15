@@ -352,7 +352,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 		$data = t3lib_div::trimExplode(',', $this->conf['userFields'], true);
 
-		foreach ($data as $k=>$v) {
+		foreach ($data as $v) {
 			$updateArr[$v] = $this->piVars[$v];
 		}
 
@@ -494,8 +494,8 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			global $TCA;
 			$GLOBALS['TSFE']->includeTCA();
 			t3lib_div::loadTCA('fe_users');
-			if (filesize($avatarFile['tmp_name']['file']) > $TCA['fe_users']['columns']['tx_mmforum_avatar']['config']['max_size']*1024)
-				return;
+			if (filesize($avatarFile['tmp_name']['file']) > $GLOBALS['TCA']['fe_users']['columns']['tx_mmforum_avatar']['config']['max_size']*1024)
+				return '';
 
 			$file = $this->user->getUid() . '_' . $GLOBALS['EXEC_TIME'] . '.' . $fileExt;
 			$uploadfile = $uploaddir . $file;
@@ -575,8 +575,6 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi5/class.tx_mmforum_pi5.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi5/class.tx_mmforum_pi5.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi5/class.tx_mmforum_pi5.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi5/class.tx_mmforum_pi5.php']);
 }
-
-?>

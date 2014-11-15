@@ -185,13 +185,13 @@ class tx_mmforum_cronbase {
 	 */
 	function validateConfig() {
 		if (!intval($this->conf['userPID'])) {
-			$this->debug("Constant \"userPID\" is not set.",$this->DEBUG_FATAL);
+			$this->debug('Constant "userPID" is not set.',$this->DEBUG_FATAL);
 		}
 		if (!intval($this->conf['storagePID'])) {
-			$this->debug("Constant \"storagePID\" is not set.",$this->DEBUG_FATAL);
+			$this->debug('Constant "storagePID" is not set.',$this->DEBUG_FATAL);
 		}
 		if (!$this->conf['cron_pathTmpl']) {
-			$this->debug("Constant \"cron_pathTmpl\" is not set.",$this->DEBUG_FATAL);
+			$this->debug('Constant "cron_pathTmpl" is not set.',$this->DEBUG_FATAL);
 		}
 	}
 
@@ -246,7 +246,8 @@ class tx_mmforum_cronbase {
 			return $this->lang[$this->conf['cron_lang']][$lKey];
 		}
 		else {
-			return $this->debug('Language label not found: '.$lKey,$this->DEBUG_NOTICE);
+			$this->debug('Language label not found: '.$lKey,$this->DEBUG_NOTICE);
+			return '';
 		}
 	}
 
@@ -282,7 +283,8 @@ class tx_mmforum_cronbase {
 			return file_get_contents($absFileName);
 		}
 		else {
-			return $this->debug('Template file not found: '.$absFileName,$this->DEBUG_ERROR);
+			$this->debug('Template file not found: '.$absFileName,$this->DEBUG_ERROR);
+			return '';
 		}
 	}
 
@@ -387,8 +389,8 @@ class tx_mmforum_cronbase {
 	 *                          the message.
 	 * @return  void
 	 */
-	function debug($message, $mode=0) {
-		if ($this->conf['cron_verbose'] == $this->DEBUGMODE_QUIET || strlen($message)==0) {
+	function debug($message, $mode = 0) {
+		if ($this->conf['cron_verbose'] == $this->DEBUGMODE_QUIET || strlen($message) == 0) {
 			return;
 		}
 		switch($mode) {
@@ -403,7 +405,6 @@ class tx_mmforum_cronbase {
 	}
 }
 
-if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/cron/classes/class.tx_mmforum_cronbase.php"])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/cron/classes/class.tx_mmforum_cronbase.php"]);
+if (defined("TYPO3_MODE") && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/cron/classes/class.tx_mmforum_cronbase.php"])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/cron/classes/class.tx_mmforum_cronbase.php"]);
 }
-?>

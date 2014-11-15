@@ -1,26 +1,26 @@
 <?php
 /***************************************************************
-*  Copyright notice
-*
-*  (c) 2008 Mittwald CM Service GmbH & Co. KG
-*  All rights reserved
-*
-*  This script is part of the TYPO3 project. The TYPO3 project is
-*  free software; you can redistribute it and/or modify
-*  it under the terms of the GNU General Public License as published by
-*  the Free Software Foundation; either version 2 of the License, or
-*  (at your option) any later version.
-*
-*  The GNU General Public License can be found at
-*  http://www.gnu.org/copyleft/gpl.html.
-*
-*  This script is distributed in the hope that it will be useful,
-*  but WITHOUT ANY WARRANTY; without even the implied warranty of
-*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-*  GNU General Public License for more details.
-*
-*  This copyright notice MUST APPEAR in all copies of the script!
-***************************************************************/
+ *  Copyright notice
+ *
+ *  (c) 2008 Mittwald CM Service GmbH & Co. KG
+ *  All rights reserved
+ *
+ *  This script is part of the TYPO3 project. The TYPO3 project is
+ *  free software; you can redistribute it and/or modify
+ *  it under the terms of the GNU General Public License as published by
+ *  the Free Software Foundation; either version 2 of the License, or
+ *  (at your option) any later version.
+ *
+ *  The GNU General Public License can be found at
+ *  http://www.gnu.org/copyleft/gpl.html.
+ *
+ *  This script is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  This copyright notice MUST APPEAR in all copies of the script!
+ ***************************************************************/
 /**
 * [CLASS/FUNCTION INDEX of SCRIPT]
 */
@@ -40,7 +40,6 @@
  *
  * @copyright  2008 Martin Helmich, Mittwald CM Service
  * @author     Martin Helmich <m.helmich@mittwald.de>
- * @version    2008-07-17
  * @package    mm_forum
  * @subpackage Forum
  */
@@ -48,41 +47,68 @@ class tx_mmforum_rss {
 
 
 
-		/**
-		 * Global objects
-		 */
+	/**
+	 * Global objects
+	 */
 
-	var $pObj, $main, $piVars, $cObj, $mode, $param;
+	/**
+	 * @var tx_mmforum_pi1
+	 */
+	public $pObj;
+	public $main;
+	public $piVars;
+
+	public $cObj;
+	public $mode;
+	public $param;
+
+	/**
+	 * @var array
+	 */
+	public $conf;
 
 
 
-		/**
-		 * Fields that are to be selected into the post array
-		 */
+	/**
+	 * Fields that are to be selected into the post array
+	 */
 
 	var $selectFields = 'p.uid AS post_uid, p.post_time, x.post_text, t.topic_title, f.forum_name, u.';
 
 
+	/**
+	 * Initializes the class by getting all vital attributes from parent object.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2008-07-17
+	 * @param   array          $conf   The configuration array
+	 * @param   tx_mmforum_pi1 $parent The parent object
+	 */
+	function initialize($conf, $parent) {
+		$this->pObj = $parent;
+		$this->cObj = $parent->cObj;
+		$this->conf = $conf;
+		$this->piVars = $parent->piVars;
+	}
 
-		/**
-		 * Main function. Handles all output.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2008-07-17
-		 * @param   array          $conf   The configuration array
-		 * @param   tx_mmforum_pi1 $parent The parent object
-		 * @return  void
-		 */
-
+	/**
+	 * Main function. Handles all output.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2008-07-17
+	 * @param   array          $conf   The configuration array
+	 * @param   tx_mmforum_pi1 $parent The parent object
+	 * @return  void
+	 */
 	function main($conf, $parent) {
 
-			// Initialize variables
+		// Initialize variables
 		$this->initialize($conf, $parent);
 
 		// load userfield
 		$this->selectFields .= $this->conf['userNameField'] ? $this->conf['userNameField'] : 'username';
 
-			// Load post array
+		// Load post array
 		if ($this->piVars['tid']) {
 			$posts = $this->getPosts_topic($this->piVars['tid']);
 			$this->mode = 'topic';
@@ -97,40 +123,38 @@ class tx_mmforum_rss {
 			$this->param = null;
 		}
 
-			// Set headers
+		// Set headers
 		$this->setHeaders();
 
-			// Output rss data and die
+		// Output rss data and die
 		die( $this->printPosts($posts) );
-
 	}
 
 
 
-		/**
-		 * Writes HTML header data to include the rss file.
-		 * This function creates HTML header data to include the rss file into the
-		 * generated output. Using the parameters, it can be specified whether to link
-		 * to an RSS feed of the entire forum, just a single forum or even a single
-		 * topic.
-		 * It is possible to include multiple RSS feeds onto a single page. If the
-		 * forum is e.g. in post listing mode, an RSS feed containing the latest
-		 * posts of this specific topic will be included, but there will also RSS
-		 * feeds for the forum this thread is contained in and for the entire forum
-		 * be included.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2008-12-27
-		 * @param   string $mode  The RSS display mode. Can be 'all', 'topic' or 'forum'
-		 * @param   int    $param If $mode is 'topic' or 'forum', this parameter has
-		 *                        to contain the topic of forum UID.
-		 * @return  void
-		 */
-
+	/**
+	 * Writes HTML header data to include the rss file.
+	 * This function creates HTML header data to include the rss file into the
+	 * generated output. Using the parameters, it can be specified whether to link
+	 * to an RSS feed of the entire forum, just a single forum or even a single
+	 * topic.
+	 * It is possible to include multiple RSS feeds onto a single page. If the
+	 * forum is e.g. in post listing mode, an RSS feed containing the latest
+	 * posts of this specific topic will be included, but there will also RSS
+	 * feeds for the forum this thread is contained in and for the entire forum
+	 * be included.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2008-12-27
+	 * @param   string $mode  The RSS display mode. Can be 'all', 'topic' or 'forum'
+	 * @param   int    $param If $mode is 'topic' or 'forum', this parameter has
+	 *                        to contain the topic of forum UID.
+	 * @return  void
+	 */
 	function setHTMLHeadData($mode, $param=null) {
-			// If method is called statically, instantiate class
+		// If method is called statically, instantiate class
 		#if (!$this instanceof tx_mmforum_rss) {
-			// Workaround. "instanceof" does not work with old PHP versions.
+		// Workaround. "instanceof" does not work with old PHP versions.
 		if (isset($this->extKey)) {
 			$rssObj = t3lib_div::makeInstance('tx_mmforum_rss');
 			$rssObj->initialize($this->conf, $this);
@@ -143,13 +167,13 @@ class tx_mmforum_rss {
 				case 'topic':   $linkParams[$this->pObj->prefixId] = array('tid' => $param); break;
 			}
 
-				/* Set HTML head data only if a RSS page is specified */
+			/* Set HTML head data only if a RSS page is specified */
 			if ($this->conf['rssPID']) {
-					// Compose RSS URL
+				// Compose RSS URL
 				$rssLink = $this->pObj->pi_getPageLink($this->conf['rssPID'], null, $linkParams);
 				$rssLink = $this->pObj->tools->getAbsoluteUrl($rssLink);
 
-					// Include RSS URL in HTML header data
+				// Include RSS URL in HTML header data
 				$GLOBALS['TSFE']->additionalHeaderData['mm_forum_rss_'.$mode] = '<link rel="alternate" type="application/rss+xml" title="'.$this->pObj->escape($this->getFeedTitle($mode, $param)).'" href="'.$rssLink.'" />';
 			}
 		}
@@ -157,26 +181,26 @@ class tx_mmforum_rss {
 
 
 
-		/**
-		 * Sets the output's content type to application/xml.
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2008-07-17
-		 * @return  void
-		 */
+	/**
+	 * Sets the output's content type to application/xml.
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2008-07-17
+	 * @return  void
+	 */
+	function setHeaders() { 
+		header('Content-Type: application/xml');
+	}
 
-	function setHeaders() { header('Content-Type: application/xml'); }
 
 
-
-		/**
-		 * Prints an array of posts.
-		 * This function prints an array of posts that are to be listed in the RSS
-		 * feed.
-		 * @param  array  A numeric array of all posts that shall be listed in the
-		 *                RSS
-		 * @return string The RSS feed as XML string
-		 */
-
+	/**
+	 * Prints an array of posts.
+	 * This function prints an array of posts that are to be listed in the RSS
+	 * feed.
+	 * @param  array  $posts A numeric array of all posts that shall be listed in the
+	 *                RSS
+	 * @return string The RSS feed as XML string
+	 */
 	function printPosts($posts) {
 		$template		= $this->cObj->fileResource($this->conf['template.']['rss']);
 		$template		= $this->cObj->getSubpart($template, '###RSS_FEED###');
@@ -238,18 +262,17 @@ class tx_mmforum_rss {
 
 
 
-		/**
-		 * Gets the description text of a posts.
-		 * This function parses the posts text for being displayed as post summary
-		 * in the RSS feed. It removes all linebreaks and BBCodes and replaces
-		 * special characters.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2008-07-17
-		 * @param   string $text The post text
-		 * @return  string       The parsed post text
-		 */
-
+	/**
+	 * Gets the description text of a posts.
+	 * This function parses the posts text for being displayed as post summary
+	 * in the RSS feed. It removes all linebreaks and BBCodes and replaces
+	 * special characters.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2008-07-17
+	 * @param   string $text The post text
+	 * @return  string       The parsed post text
+	 */
 	function getPostTextShort($text) {
 		$text = str_replace("\r\n"," ",$text);
 		$text = str_replace("\n", " ",$text);
@@ -263,57 +286,51 @@ class tx_mmforum_rss {
 
 
 
-		/**
-		 * Gets the complete post text.
-		 * This function returns the complete text of a posts. It uses the postparser
-		 * class to generate the content.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2008-07-17
-		 * @param   <type> $text The post text
-		 * @return  <type>       The parsed post text
-		 */
-
+	/**
+	 * Gets the complete post text.
+	 * This function returns the complete text of a posts. It uses the postparser
+	 * class to generate the content.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @param   string $text The post text
+	 * @return  string       The parsed post text
+	 */
 	function getPostTextComplete($text) {
 		return tx_mmforum_postparser::main($this->pObj,$this->conf,$text,'textparser');
 	}
 
 
 
-		/**
-		 * Generates a link to a post.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2008-07-17
-		 * @param   integer $post_id The post UID
-		 * @return  string           The absolute post URL
-		 */
-
-    function getPostLink($post_id) {
-        $linkParams[$this->pObj->prefixId]		= array(
-            'action'	=> 'list_post',
-            'pid'		=> $post_id
-        );
-        return $this->pObj->escapeURL($this->pObj->tools->getAbsoluteUrl($this->pObj->pi_getPageLink($this->conf['pid_forum'], '', $linkParams)));
-    }
+	/**
+	 * Generates a link to a post.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @param   integer $post_id The post UID
+	 * @return  string           The absolute post URL
+	 */
+	function getPostLink($post_id) {
+		$linkParams[$this->pObj->prefixId]		= array(
+			'action'	=> 'list_post',
+			'pid'		=> $post_id
+		);
+		return $this->pObj->escapeURL($this->pObj->tools->getAbsoluteUrl($this->pObj->pi_getPageLink($this->conf['pid_forum'], '', $linkParams)));
+	}
 
 
 
-		/**
-		 * Gets the RSS feed title.
-		 * This function generates the title of the RSS feed. This consists of the
-		 * page's title and - if a forum or topic UID is specified - the forum and/or
-		 * topic title.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2008-07-17
-		 * @param   string  $mode  The display mode of the feed. Can be 'all', 'topic'
-		 *                         or 'forum'.
-		 * @param   integer $param If $mode is 'topic' or 'forum', this parameter has
-		 *                         to contain the topic or forum UID.
-		 * @return  string         The feed title
-		 */
-
+	/**
+	 * Gets the RSS feed title.
+	 * This function generates the title of the RSS feed. This consists of the
+	 * page's title and - if a forum or topic UID is specified - the forum and/or
+	 * topic title.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @param   string  $mode  The display mode of the feed. Can be 'all', 'topic'
+	 *                         or 'forum'.
+	 * @param   integer $param If $mode is 'topic' or 'forum', this parameter has
+	 *                         to contain the topic or forum UID.
+	 * @return  string         The feed title
+	 */
 	function getFeedTitle($mode='all', $param=null) {
 		$mode = $mode?$mode:$this->mode;
 		$param = $param?$param:$this->param;
@@ -321,7 +338,7 @@ class tx_mmforum_rss {
 
 		switch($mode) {
 			default:
-			case 'all':     return $pageTitle; break;
+			case 'all': return $pageTitle; break;
 			case 'topic':
 				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title, forum_name', 'tx_mmforum_topics t LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid', 't.uid='.intval($param));
 				list($topic_title, $forum_title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
@@ -337,27 +354,27 @@ class tx_mmforum_rss {
 
 
 
-		/**
-		 * Gets the RSS feed's description
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2008-07-17
-		 * @return  string The RSS feed's description.
-		 */
+	/**
+	 * Gets the RSS feed's description
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2008-07-17
+	 * @return  string The RSS feed's description.
+	 */
 
-    function getFeedDescription() {
-        if ($this->piVars['tid']) {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+	function getFeedDescription() {
+		if ($this->piVars['tid']) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'topic_title',
 				'tx_mmforum_topics t
 				 LEFT JOIN tx_mmforum_forums f ON f.uid = t.forum_id
 				 LEFT JOIN tx_mmforum_forums c ON c.uid = f.parentID',
 				'uid='.intval($this->piVars['tid']).
-				 $this->pObj->getMayRead_forum_query('f').
-				 $this->pObj->getMayRead_forum_query('c')
+				$this->pObj->getMayRead_forum_query('f').
+				$this->pObj->getMayRead_forum_query('c')
 			);
-        } elseif ($this->piVars['fid']) {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		} elseif ($this->piVars['fid']) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'f.forum_name',
 				'tx_mmforum_forums f
 				 LEFT JOIN tx_mmforum_forums c ON c.uid = f.parentID',
@@ -365,24 +382,22 @@ class tx_mmforum_rss {
 				$this->pObj->getMayRead_forum_query('f').
 				$this->pObj->getMayRead_forum_query('c')
 			);
-        } else {
-            return "";
-        }
+		} else {
+			return '';
+		}
 
-        list($result) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-        return $result;
-    }
+		list($result) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		return $result;
+	}
 
 
 
-		/**
-		 * Gets the URL the feed is linked to.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2008-07-17
-		 * @return  string The URL the feed is linked to.
-		 */
-
+	/**
+	 * Gets the URL the feed is linked to.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @return  string The URL the feed is linked to.
+	 */
 	function getFeedURL() {
 		if ($this->piVars['tid']) {
 			$linkParams[$this->pObj->prefixId]		= array(
@@ -401,42 +416,38 @@ class tx_mmforum_rss {
 
 
 
-    /**
-     * Returns the amount of posts to be listed in the feed.
-     *
-     * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2008-07-17
-     * @return  integer Returns 30
-     */
-
+	/**
+	 * Returns the amount of posts to be listed in the feed.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @return  integer Returns 30
+	 */
 	function getPostNum() { return 30; }
 
 
 
-		/**
-		 * Gets the latest posts of a specific topic.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2008-07-17
-		 * @param   integer $topic_id The topic UID
-		 * @return  array             An array containing all matching posts
-		 */
-
+	/**
+	 * Gets the latest posts of a specific topic.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @param   integer $topic_id The topic UID
+	 * @return  array             An array containing all matching posts
+	 */
 	function getPosts_topic($topic_id) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			$this->selectFields,
 			'tx_mmforum_posts p
-			 LEFT JOIN tx_mmforum_posts_text x ON x.post_id = p.uid
-			 LEFT JOIN fe_users u ON u.uid = p.poster_id
-			 LEFT JOIN tx_mmforum_topics t ON t.uid = p.topic_id
-			 LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid
-			 LEFT JOIN tx_mmforum_forums c ON f.parentID = c.uid',
+			LEFT JOIN tx_mmforum_posts_text x ON x.post_id = p.uid
+			LEFT JOIN fe_users u ON u.uid = p.poster_id
+			LEFT JOIN tx_mmforum_topics t ON t.uid = p.topic_id
+			LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid
+			LEFT JOIN tx_mmforum_forums c ON f.parentID = c.uid',
 			'p.deleted=0 AND
-			 t.deleted=0 AND
-			 f.deleted=0 AND
-			 p.topic_id='.intval($topic_id).
-			 $this->pObj->getMayRead_forum_query('f').
-			 $this->pObj->getMayRead_forum_query('c'),
+			t.deleted=0 AND
+			f.deleted=0 AND
+			p.topic_id='.intval($topic_id).
+			$this->pObj->getMayRead_forum_query('f').
+			$this->pObj->getMayRead_forum_query('c'),
 			/*'p.uid',*/ '',
 			'p.post_time DESC',
 			$this->getPostNum()
@@ -449,15 +460,14 @@ class tx_mmforum_rss {
 
 
 
-		/**
-		 * Gets the latest posts of a specific forum.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2008-07-17
-		 * @param   integer $topic_id The forum UID
-		 * @return  array             An array containing all matching posts
-		 */
-
+	/**
+	 * Gets the latest posts of a specific forum.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2008-07-17
+	 * @param   integer $forum_id The forum UID
+	 * @return  array             An array containing all matching posts
+	 */
 	function getPosts_forum($forum_id) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			$this->selectFields,
@@ -471,8 +481,8 @@ class tx_mmforum_rss {
 			 t.deleted=0 AND
 			 f.deleted=0 AND
 			 f.uid='.intval($forum_id).
-			 $this->pObj->getMayRead_forum_query('f').
-			 $this->pObj->getMayRead_forum_query('c'),
+			$this->pObj->getMayRead_forum_query('f').
+			$this->pObj->getMayRead_forum_query('c'),
 			/*'p.uid',*/ '',
 			'p.post_time DESC',
 			$this->getPostNum()
@@ -486,14 +496,12 @@ class tx_mmforum_rss {
 
 
 
-		/**
-		 * Gets the latest posts from all public forums.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2008-07-17
-		 * @return  array             An array containing all matching posts
-		 */
-
+	/**
+	 * Gets the latest posts from all public forums.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @return  array             An array containing all matching posts
+	 */
 	function getPosts_all() {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			$this->selectFields,
@@ -506,8 +514,8 @@ class tx_mmforum_rss {
 			'p.deleted=0 AND
 			 t.deleted=0 AND
 			 f.deleted=0 '.
-			 $this->pObj->getMayRead_forum_query('f').
-			 $this->pObj->getMayRead_forum_query('c'),
+			$this->pObj->getMayRead_forum_query('f').
+			$this->pObj->getMayRead_forum_query('c'),
 			/*'p.uid',*/ '',
 			'p.post_time DESC',
 			$this->getPostNum()
@@ -520,33 +528,16 @@ class tx_mmforum_rss {
 	}
 
 
-
-		/**
-		 * Initializes the class by getting all vital attributes from parent object.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2008-07-17
-		 * @param   array          $conf   The configuration array
-		 * @param   tx_mmforum_pi1 $parent The parent object
-		 */
-
-	function initialize($conf, $parent) {
-		$this->pObj = $parent;
-		$this->cObj = $parent->cObj;
-		$this->conf = $conf;
-		$this->piVars = $parent->piVars;
-	}
-
-
-
+	/**
+	 * @param $key
+	 * @return string
+	 */
 	function pi_getLL($key) {
 		return $this->pObj->pi_getLL($key);
 	}
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_rss.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_rss.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_rss.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_rss.php']);
 }
-
-?>

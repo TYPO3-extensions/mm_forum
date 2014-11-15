@@ -54,7 +54,6 @@
  *
  */
 
-
 /**
  * Plugin 'Forum Search' for the 'mm_forum_search' extension.
  * The plugin 'Search' for the 'mm_forum' extension displays the
@@ -475,7 +474,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 
 				// Cleaning empty elements
 				foreach ($word_array as $key => $value) {
-					if ($value == "") {
+					if ($value == '') {
 						unset($word_array[$key]);
 					}
 				}
@@ -538,9 +537,12 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 
 	/**
 	 * Displays the page navigation for the search result listing.
-	 * @param int   $items The amount of search results listed
-	 * @param int   $diff  The amount of search results to be listed on one page.
+	 *
+	 * @param int $items The amount of search results listed
+	 * @param int $diff The amount of search results to be listed on one page.
 	 * @param array $param The parameters for the page navigation.
+	 *
+	 * @return string
 	 */
 	function pagebar($items, $diff, $param) {
 		$pages = ceil($items / $diff);
@@ -608,6 +610,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 *                              in $word_id_list was found in.
 	 */
 	function find_posts($word_id_list,$param,$words = 0,$username = '') {
+		$mysql_option = '';
 		$word_id_list = implode(',',$word_id_list);
 		if (!empty($word_id_list)) {
 			$mysql_option  = ' AND word_id IN ('.$word_id_list.') ';
@@ -865,7 +868,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			$userGroups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 			sort($userGroups);
 			$grouprights_query = " AND (user_groups = '".implode(',',$userGroups)."')";
-			#$grouprights_query = "";
+			#$grouprights_query = '';
 			#foreach ($userGroups as $userGroup) {
 			#	$grouprights_queries[] = ' FIND_IN_SET('.$userGroup.',user_groups) ';
 			#}
@@ -948,7 +951,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-04-03
 	 */
-	function getPidQuery($conf=null, $tables="") {
+	function getPidQuery($conf=null, $tables='') {
 		return tx_mmforum_indexing::getPidQuery($conf?$conf:$this->conf,$tables);
 	}
 
@@ -976,7 +979,6 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 
 }
 
-if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi4/class.tx_mmforum_pi4.php"])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi4/class.tx_mmforum_pi4.php"]);
+if (defined("TYPO3_MODE") && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi4/class.tx_mmforum_pi4.php"])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi4/class.tx_mmforum_pi4.php"]);
 }
-?>

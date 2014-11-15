@@ -350,6 +350,4 @@ class tx_mmforum_menus extends tx_mmforum_base {
 		}
 		return $result;
 	}
-
 }
-?>

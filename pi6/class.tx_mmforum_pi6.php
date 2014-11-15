@@ -60,7 +60,6 @@
  *
  */
 
-
 /**
  * The plugin "Portal information" for the extension "mm_forum" displays
  * information about the message board brought by the extension.
@@ -242,7 +241,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @uses getPartUserList
 	 */
 	function getUserList($userData, $seperate=TRUE, $sepChar='<br />') {
-		$result = "";
+		$result = '';
 
 		// Output regular user list
 		if (count($userData['users'])>0) {
@@ -556,14 +555,12 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @version 2007-04-16
 	 */
 	function getUserPidQuery($table="fe_users") {
-		if ($this->conf['userPID']==-1) return "";
-		if ($this->conf['userPID']=="") return "";
+		if ($this->conf['userPID']==-1) return '';
+		if ($this->conf['userPID']=='') return '';
 		else return " AND $table.pid='".$this->conf['userPID']."'";
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi6/class.tx_mmforum_pi6.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi6/class.tx_mmforum_pi6.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi6/class.tx_mmforum_pi6.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi6/class.tx_mmforum_pi6.php']);
 }
-
-?>

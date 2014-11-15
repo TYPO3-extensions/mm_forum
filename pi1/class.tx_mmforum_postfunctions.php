@@ -39,7 +39,6 @@
  *
  */
 
-
 /**
  * The class 'tx_mmforum_postfunctions' is a subclass for the 'Forum'
  * plugin (tx_mmforum_pi1) of the 'mm_forum' extension.
@@ -55,11 +54,11 @@
  */
 class tx_mmforum_postfunctions extends tx_mmforum_base {
 
-
 	/**
 	 * Lists all posts in a certain topic.
 	 * @param  string $content The plugin content
-	 * @param  array  $conf    The plugin's configuration vars
+	 * @param  array $conf The plugin's configuration vars
+	 * @param $order
 	 * @return string          The content
 	 */
 	function list_post($content, $conf, $order) {
@@ -97,7 +96,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		);
 		list($replies) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 		$updateArray = array('topic_replies' => $replies);
-		$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, $updateArray);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, $updateArray);
 
 
 		// Set or unset solved flag
@@ -153,7 +152,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 					'tstamp'    => $GLOBALS['EXEC_TIME'],
 					'crdate'    => $GLOBALS['EXEC_TIME'],
 				);
-				$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_postsread', $insertArray);
+				$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_postsread', $insertArray);
 			}
 		}
 
@@ -190,7 +189,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				'',
 				'post_time ' . $orderingMode
 			);
-
+			$i = 0;
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				$i++;
 				if ($row['uid'] == $this->piVars['search_pid']) {
@@ -805,13 +804,13 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 			'forum_last_post_id' => $lastPostId,
 			'tstamp'             => $GLOBALS['EXEC_TIME']
 		);
-		$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'uid = ' . $forumId, $updateArray);
+		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'uid = ' . $forumId, $updateArray);
 	}
 
 	/**
 	 * updates the number of posts of a user
 	 *
-	 * @param	userId	the user ID of which posts should be updated
+	 * @param	int $userId the user ID of which posts should be updated
 	 * @return	void
 	 */
 	function update_user_posts($userId) {
@@ -829,7 +828,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 	/**
 	 * updates the number of attachments for a post
 	 *
-	 * @param	postId	the post ID of which attachments should be updated
+	 * @param	int $postId the post ID of which attachments should be updated
 	 * @return	void
 	 */
 	function update_post_attachment($postId) {
@@ -1021,8 +1020,8 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 
 				// Update new board UID
 				$updateArray = array('forum_id' => $changeForumId);
-				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, $updateArray);
-				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts',  'topic_id = ' . $topicId, $updateArray);
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, $updateArray);
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts',  'topic_id = ' . $topicId, $updateArray);
 
 				// update the posts in the old and the new forum
 				$this->update_lastpost_forum($changeForumId);
@@ -1075,7 +1074,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 					'tstamp'                       => $GLOBALS['EXEC_TIME'],
 					'tx_mmforumsearch_index_write' => 0,
 				);
-				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'topic_id = ' . $topicData['uid'], $updateArray);
+				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'topic_id = ' . $topicData['uid'], $updateArray);
 
 				//mark all posts_text as deleted
 				$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
@@ -1276,8 +1275,6 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_postfunctions.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_postfunctions.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_postfunctions.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_postfunctions.php']);
 }
-
-?>

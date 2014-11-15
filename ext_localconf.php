@@ -1,7 +1,7 @@
 <?php
 if (!defined ("TYPO3_MODE")) 	die ("Access denied.");
 
-## Extending TypoScript from static template uid=43 to set up userdefined tag:
+# Extending TypoScript from static template uid=43 to set up userdefined tag:
 t3lib_extMgm::addTypoScript($_EXTKEY,"editorcfg","tt_content.CSS_editor.ch.tx_mmforum_pi1 = < plugin.tx_mmforum_pi1.CSS_editor",43);
 t3lib_extMgm::addTypoScript($_EXTKEY,"editorcfg","tt_content.CSS_editor.ch.tx_mmforum_pi2 = < plugin.tx_mmforum_pi2.CSS_editor",43);
 t3lib_extMgm::addTypoScript($_EXTKEY,"editorcfg","tt_content.CSS_editor.ch.tx_mmforum_pi3 = < plugin.tx_mmforum_pi3.CSS_editor",43);
@@ -23,7 +23,7 @@ t3lib_extMgm::addPageTSConfig('<INCLUDE_TYPOSCRIPT: source="FILE:EXT:mm_forum/re
 	 * delete all cache files used for the mm_forum. This hook is
 	 * called after clearing the TYPO3 cache.
 	 */
-$TYPO3_CONF_VARS['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] = 'EXT:mm_forum/includes/cache/class.tx_mmforum_cache.php:tx_mmforum_cache->clearAllCaches';
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['clearCachePostProc'][] = 'EXT:mm_forum/includes/cache/class.tx_mmforum_cache.php:tx_mmforum_cache->clearAllCaches';
 
 	/**
 	 * This config variable adds the 'nav_hide' field to the fields
@@ -34,6 +34,6 @@ if ($GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'])
 	$GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] .= ',nav_hide';
 else $GLOBALS['TYPO3_CONF_VARS']['FE']['addRootLineFields'] = 'nav_hide';
 
-$TYPO3_CONF_VARS['FE']['eID_include']['tx_mmforum_UserSearch'] = 'EXT:mm_forum/pi3/ajax.tx_mmforum_usersearch.php';
+$GLOBALS['TYPO3_CONF_VARS']['FE']['eID_include']['tx_mmforum_UserSearch'] = 'EXT:mm_forum/pi3/ajax.tx_mmforum_usersearch.php';
 
 ?>

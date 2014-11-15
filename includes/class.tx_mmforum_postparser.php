@@ -124,8 +124,8 @@ class tx_mmforum_postparser {
 		if ($conf['postparser.']['syntaxHighlighter'] == 1)
 			$content = $this->syntaxhighlighting($content, $parent, $conf);
 		/* Need for no double parsing, for example that the codeboxes are not double parsed. That really would not good look :-) */
-		$content = str_replace("###DONT_PARSE_AGAIN_START###", "", $content);
-		$content = str_replace("###DONT_PARSE_AGAIN_ENDE###", "", $content);
+		$content = str_replace("###DONT_PARSE_AGAIN_START###", '', $content);
+		$content = str_replace("###DONT_PARSE_AGAIN_ENDE###", '', $content);
 		return $content;
 	}
 
@@ -379,17 +379,6 @@ class tx_mmforum_postparser {
 	}
 
 	/**
-	 * Validates an email address.
-	 * @param  string  $email The email address to be validated
-	 * @return boolean        TRUE, if the email address is valid, otherwise FALSE
-	 * @deprecated This function is not used anymore
-	 */
-	function validate_email($email) {
-		(eregi("^[_a-z0-9-]+(\.[_a-z0-9-]+)*@[a-z0-9-]+(\.[a-z0-9-]+)*(\.[a-z]{2,4})$", $email)) ? $bool = TRUE : $bool = FALSE;
-		return $bool;
-	}
-
-	/**
 	 * Highlights the content parts marked as source code using the GeSHi
 	 * class.
 	 * @author  Björn Detert <b.detert@mittwald.de>
@@ -496,7 +485,7 @@ class tx_mmforum_postparser {
 		$text = html_entity_decode($text, ENT_QUOTES);
 		$text = preg_replace('/&#(\d+);/me', "chr(\\1)", $text); #decimal notation
 		$text = preg_replace('/&#x([a-f0-9]+);/mei', "chr(0x\\1)", $text);  #hex notation
-		$text = str_replace("<br />", "", $text);
+		$text = str_replace("<br />", '', $text);
 		return $text;
 	}
 
@@ -562,7 +551,6 @@ class tx_mmforum_postparser {
 			if (is_array($GLOBALS['TCA'][$linkHandlerData[1]]['ctrl'])) {
 				$row = $this->getRecordRow($linkHandlerData[1], $linkHandlerData[2], $localcObj);
 				$localcObj->start($row, ''); // make data available in TypoScript
-				$lconf = array();
 				if (is_array($linkhandler[$linkHandlerData[1] . '.'][$row['pid'] . '.'])) {
 					$lconf = $linkhandler[$linkHandlerData[1] . '.'][$row['pid'] . '.'];
 				} else {
@@ -594,7 +582,6 @@ class tx_mmforum_postparser {
 
 }
 
-if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/includes/class.tx_mmforum_postparser.php"]) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/includes/class.tx_mmforum_postparser.php"]);
+if (defined("TYPO3_MODE") && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/includes/class.tx_mmforum_postparser.php"]) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/includes/class.tx_mmforum_postparser.php"]);
 }
-?>

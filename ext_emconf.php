@@ -1,13 +1,13 @@
 <?php
 
 ########################################################################
-# Extension Manager/Repository config file for ext "mm_forum".
+# Extension Manager/Repository config file for ext: "mm_forum"
 #
-# Auto generated 11-02-2011 15:14
+# Auto generated 20-09-2009 21:15
 #
 # Manual updates:
-# Only the data in the array - everything else is removed by next
-# writing. "version" and "dependencies" must not be touched!
+# Only the data in the array - anything else is removed by next write.
+# "version" and "dependencies" must not be touched!
 ########################################################################
 
 $EM_CONF[$_EXTKEY] = array(

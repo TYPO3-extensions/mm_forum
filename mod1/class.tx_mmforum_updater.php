@@ -208,7 +208,6 @@ class tx_mmforum_updater {
 }
 
 	// XClass inclusion
-if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/mod1/class.tx_mmforum_updater.php"])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/mod1/class.tx_mmforum_updater.php"]);
+if (defined("TYPO3_MODE") && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/mod1/class.tx_mmforum_updater.php"])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/mod1/class.tx_mmforum_updater.php"]);
 }
-?>

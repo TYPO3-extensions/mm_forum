@@ -137,7 +137,7 @@ class tx_mmforum_validator {
 	 * @version 2008-06-22
 	 * @return  tx_mmforum_validator A validator object
 	 */
-	function getValidatorObject() {
+	static function getValidatorObject() {
 		$validatorObj = t3lib_div::makeInstance('tx_mmforum_validator'); /* @var $validatorObj tx_mmforum_validator */
 		$validatorObj->init();
 		return $validatorObj;
@@ -146,7 +146,6 @@ class tx_mmforum_validator {
 }
 
 	// XClass inclusion
-if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/includes/class.tx_mmforum_validator.php"])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/includes/class.tx_mmforum_validator.php"]);
+if (defined("TYPO3_MODE") && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/includes/class.tx_mmforum_validator.php"])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/includes/class.tx_mmforum_validator.php"]);
 }
-?>

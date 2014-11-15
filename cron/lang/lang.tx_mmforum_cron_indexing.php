@@ -7,4 +7,3 @@ $LANG = array(
 		'subject'			=> 'This file is actually empty. It only exists so that the Cronjob does not throw any errors... ;)',
 	),
 );
-?>

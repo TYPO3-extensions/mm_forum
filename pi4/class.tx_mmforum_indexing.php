@@ -257,7 +257,7 @@ class tx_mmforum_indexing {
 	 * @param int $topic_id The UID if the topic that is to be marked as not
 	 *                      indexed.
 	 */
-	function delete_topic_ind_date($topic_id) {
+	static function delete_topic_ind_date($topic_id) {
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = '.intval($topic_id), array(
 			'tx_mmforumsearch_index_write' => 0,
 		));
@@ -475,8 +475,6 @@ class tx_mmforum_indexing {
 }
 
 
-if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi4/class.tx_mmforum_indexing.php"])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi4/class.tx_mmforum_indexing.php"]);
+if (defined("TYPO3_MODE") && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi4/class.tx_mmforum_indexing.php"])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi4/class.tx_mmforum_indexing.php"]);
 }
-
-?>

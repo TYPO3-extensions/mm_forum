@@ -154,8 +154,8 @@ class tx_mmforum_userSearch {
 	}
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi3/ajax.tx_mmforum_usersearch.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi3/ajax.tx_mmforum_usersearch.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi3/ajax.tx_mmforum_usersearch.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi3/ajax.tx_mmforum_usersearch.php']);
 }
 
 
@@ -168,7 +168,5 @@ $SOBE = t3lib_div::makeInstance('tx_mmforum_userSearch');
 $sword = t3lib_div::_GP('userSearch');
 $data = $SOBE->search($sword);
 
-header('Content-Type: text/plain'); //TODO: json?
+header('Content-Type: application/json');
 echo $SOBE->render($data);
-
-?>

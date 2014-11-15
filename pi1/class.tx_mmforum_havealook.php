@@ -57,11 +57,11 @@ class tx_mmforum_havealook {
 	 * Adds a topic to a user's list of email subscriptions and then does a
 	 * redirect to the previous page.
 	 * this function is called from teh
-	 * @param  string $forumObj The plugin object
+	 * @param \tx_mmforum_base $forumObj The plugin object
 	 * @return string           An error message in case the redirect attempt to
 	 *                          the previous page fails.
 	 */
-	function set($forumObj) {
+	static function set(tx_mmforum_base $forumObj) {
 		tx_mmforum_havealook::addSubscription($forumObj, $forumObj->piVars['tid'], $GLOBALS['TSFE']->fe_user->user['uid']);
 
 		// Redirecting visitor back to previous page
@@ -69,15 +69,14 @@ class tx_mmforum_havealook {
 		return $forumObj->pi_getLL('subscr.addSuccess') . '<br/>' . $forumObj->pi_getLL('redirect.error') . '<br />';
 	}
 
-
 	/**
 	 * Removes a topic from a user's list of email subscriptions.
 	 *
-	 * @param  object  $forumObj  The plugin object
+	 * @param \tx_mmforum_base $forumObj The plugin object
 	 * @return string             An error message in case the redirect attempt to
 	 *                            the previous page fails.
 	 */
-	function delete($forumObj) {
+	static function delete(tx_mmforum_base $forumObj) {
 		$feUserId = intval($GLOBALS['TSFE']->fe_user->user['uid']);
 		$topicId  = intval($forumObj->piVars['tid']);
 
@@ -94,14 +93,13 @@ class tx_mmforum_havealook {
 		return $forumObj->pi_getLL('subscr.delSuccess') . '<br />' . $forumObj->pi_getLL('redirect.error') . '<br />';
 	}
 
-
 	/**
 	 * Displays a list of a user's email subscriptions.
 	 * Performs also actions like editing or deleting subscriptions.
-	 * @param  string $content The plugin content
-	 * @param  array  $conf    The configuration vars of the plugin
+	 * @param tx_mmforum_base $forumObj
+	 * @return string
 	 */
-	function edit($forumObj) {
+	static function edit(tx_mmforum_base $forumObj) {
 		$feUserId = intval($GLOBALS['TSFE']->fe_user->user['uid']);
 
 		// can be
@@ -356,19 +354,19 @@ class tx_mmforum_havealook {
 			}
 		}
 
-		$content .= $forumObj->cObj->substituteMarkerArray($template, $marker);
+		$content = $forumObj->cObj->substituteMarkerArray($template, $marker);
 		return $content;
 	}
-
 
 	/**
 	 * Adds a topic to a (logged in) user's list of email subscriptions.
 	 *
-	 * @param  string $forumObj The plugin object
-	 * @param  string $topicId  The topic identifier
+	 * @param  \tx_mmforum_base $forumObj The plugin object
+	 * @param  string $topicId The topic identifier
+	 * @param $feUserId
 	 * @return bool             Whether it worked or not
 	 */
-	function addSubscription($forumObj, $topicId, $feUserId) {
+	function addSubscription(tx_mmforum_base $forumObj, $topicId, $feUserId) {
 		$feUserId = intval($feUserId);
 		$topicId  = intval($topicId);
 		if ($feUserId && $topicId) {
@@ -406,7 +404,7 @@ class tx_mmforum_havealook {
 	 * @param  tx_mmforum_pi1 $forumObj An instance of the tx_mmforum_pi1 class.
      * @return void
      */
-	function notifyTopicSubscribers($topicId, $forumObj) {
+	function notifyTopicSubscribers($topicId, tx_mmforum_base $forumObj) {
 		$topicId = intval($topicId);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . $topicId  . $forumObj->getStoragePIDQuery());
 		list($topicName) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
@@ -501,7 +499,7 @@ class tx_mmforum_havealook {
 	 * @return void
 	 * @author Cyrill Helg
 	 */
-	static function notifyForumSubscribers($topicId, $forumId, $forumObj) {
+	static function notifyForumSubscribers($topicId, $forumId, tx_mmforum_base $forumObj) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . intval($topicId) . $forumObj->getStoragePIDQuery());
 		list($topicName) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
@@ -565,8 +563,6 @@ class tx_mmforum_havealook {
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_havealook.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_havealook.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_havealook.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_havealook.php']);
 }
-
-?>

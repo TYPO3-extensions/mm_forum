@@ -70,14 +70,15 @@ class tx_mmforum_statistics {
     );
 
     /**
-     * The module's main function.
-     *
-     * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2007-05-31
-     * @param   string $content The content
-     * @return  string          The content
-     */
-    function main($content) {
+	/**
+	 * The module's main function.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @param   string $content The content
+	 * @param $settings
+	 * @return  string          The content
+	 */
+    function main($content, $settings) {
 
         $this->init();
 
@@ -96,7 +97,6 @@ class tx_mmforum_statistics {
         $content .= $this->additionalStats();
 
         return $content;
-
     }
 
     /**
@@ -105,7 +105,6 @@ class tx_mmforum_statistics {
      * and this post's creation date is used as "forum starting time".
      *
      * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2007-05-31
      * @return  int The forum starting time as UNIX-timestamp
      */
     function getStartTime() {
@@ -122,7 +121,6 @@ class tx_mmforum_statistics {
      * Displays the statistic module configuration module.
      *
      * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2007-05-31
      * @return  string The menu content
      */
     function displayMenu() {
@@ -153,7 +151,7 @@ class tx_mmforum_statistics {
             $sOption_Days .= '<option value="'.$i.'" '.$sel.'>'.$i.'</option>';
         }
 
-        $content .= '
+        $content = '
     <table cellspacing="0" cellpadding="2">
         <tr>
             <td>'.$this->getLL('menu.table').'</td>
@@ -213,10 +211,10 @@ class tx_mmforum_statistics {
      * This table header contains the starting and the stop date of the
      * period that is displayed.
      *
-     * @param   int    The starting date
-     * @param   int    The stop date
-     * @param   int    The colspan for the table header
-     * @param   int    The cell padding for the whole table
+     * @param   int    $start The starting date
+     * @param   int    $stop The stop date
+     * @param   int    $colspan The colspan for the table header
+     * @param   int    $padding The cell padding for the whole table
      * @return  string The table header
      *
      * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -235,7 +233,7 @@ class tx_mmforum_statistics {
      * Displays a statistic grouped by the forum the records are located in.
      * This is only possible for posts and topics.
      *
-     * @return  The statistic table
+     * @return  string The statistic table
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
      */
@@ -247,7 +245,7 @@ class tx_mmforum_statistics {
 
         if (!in_array($table,array('tx_mmforum_posts','tx_mmforum_topics'))) return "<br />The selected display mode is not supported.";
 
-        $content .= $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,3,0);
+        $content = $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,3,0);
 
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
             'COUNT(*)',
@@ -294,7 +292,6 @@ class tx_mmforum_statistics {
         <td style="width:100%;"><div style="background-color: '.$color.'; height: 14px; width:'.$width.'%; border-right: 1px solid #660000; border-bottom: 1px solid #660000; border-top: 1px solid #ff6666;">&nbsp;</div></td>
         </tr>';
                 $i ++;
-
             }
 
             $width    = $total_amount?round($ctgRecords / $total_amount * 100,2):0;
@@ -305,7 +302,6 @@ class tx_mmforum_statistics {
         <td><div style="background-color: '.$color.'; height: 14px; width:'.$width.'%; border-right: 1px solid #660000; border-bottom: 1px solid #660000; border-top: 1px solid #ff6666;">&nbsp;</div></td>
         </tr>';
             $content .= $ctgContent;
-
         }
 
         $content .= '</table>';
@@ -316,7 +312,7 @@ class tx_mmforum_statistics {
     /**
      * Displays a statistic grouped by the day of month.
      *
-     * @return  The statistic table
+     * @return  string The statistic table
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
      */
@@ -363,7 +359,7 @@ class tx_mmforum_statistics {
             }
         }
 
-        $content .= $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,3,0);
+        $content = $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,3,0);
 
         for($i=1; $i <= $dayCount; $i ++) {
             $result = intval($results[$i]);
@@ -383,7 +379,7 @@ class tx_mmforum_statistics {
     /**
      * Displays a statistic grouped by the day of year.
      *
-     * @return  The statistic table
+     * @return  string The statistic table
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
      */
@@ -415,7 +411,6 @@ class tx_mmforum_statistics {
                     $results[$i][$d] = $num;
                     if ($num > $maxValue) $maxValue = $num;
                 }
-
             }
         }
         else {
@@ -435,7 +430,7 @@ class tx_mmforum_statistics {
             ksort($results);
         }
 
-        $content .= $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,2,0);
+        $content = $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,2,0);
 
         $i = 1;
         for($month = 1; $month <= 12; $month ++) {
@@ -457,7 +452,7 @@ class tx_mmforum_statistics {
                     if ($day == $dayCount) $tColor = '#660000';
                 } else $bWidth = 0;
 
-                $content  .= '<div style="background-color: '.$tColor.'; width:'.$width.'%; height:1px; border-right: '.$bWidth.'px solid #660000;"></div>'."\r\n";
+                $content  .= '<div style="background-color: '.$tColor.'; width:'.$width.'%; height:1px; border-right: '.$bWidth.'px solid #660000;"></div>'.CRLF;
                 if ($result == $maxValue && $this->param['mode']!='total') $content .= '<div style="float:right">'.$maxValue.'</div>';
             }
 
@@ -477,7 +472,7 @@ class tx_mmforum_statistics {
     /**
      * Displays a statistic grouped by the month of year.
      *
-     * @return  The statistic table
+     * @return  string The statistic table
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
      */
@@ -524,7 +519,7 @@ class tx_mmforum_statistics {
 
         $dayCount = intval(date('t',$tstamp_Start));
 
-        $content .= $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,3,0);
+        $content = $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,3,0);
 
         for($i=1; $i <= 12; $i ++) {
             $result = intval($results[$i]);
@@ -544,7 +539,7 @@ class tx_mmforum_statistics {
     /**
      * Displays a statistic grouped by the time of day.
      *
-     * @return  The statistic table
+     * @return  string The statistic table
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
      */
@@ -595,7 +590,7 @@ class tx_mmforum_statistics {
             }
         }
 
-        $content .= $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,4,0);
+        $content = $this->getDateTitleLink($tstamp_Start,$tstamp_Stop,4,0);
 
         for($i=0; $i < 24; $i ++) {
             $result = intval($results[$i]);
@@ -616,7 +611,7 @@ class tx_mmforum_statistics {
     /**
      * Displays additional statistics.
      *
-     * @return  The statistic table
+     * @return  string The statistic table
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-31
      */
@@ -658,7 +653,7 @@ class tx_mmforum_statistics {
         $pm_count /= 2;
         $pm_average = round($pm_count / $days,4);
 
-        $content .= '
+        $content = '
     <table cellspacing="0" cellpadding="2">
         <tr>
             <td>'.$this->getLL('menu.table.posts').' ('.$this->getLL('additional.totavg').')</td>
@@ -762,7 +757,6 @@ class tx_mmforum_statistics {
     }
 }
 
-if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/mod1/class.tx_mmforum_statistics.php"])    {
-    include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/mod1/class.tx_mmforum_statistics.php"]);
+if (defined("TYPO3_MODE") && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/mod1/class.tx_mmforum_statistics.php"])    {
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/mod1/class.tx_mmforum_statistics.php"]);
 }
-?>
