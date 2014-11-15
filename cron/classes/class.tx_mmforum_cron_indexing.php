@@ -21,20 +21,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-/**
- * [CLASS/FUNCTION INDEX of SCRIPT]
- *
- *
- *
- *   52: class tx_mmforum_cron_indexing extends tx_mmforum_cronbase
- *   68:     function main()
- *  104:     function getIndexCount()
- *
- * TOTAL FUNCTIONS: 2
- * (This index is automatically created/updated by the extension "extdeveval")
- *
- */
-
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This cronjob script handles the automatic indexing of the mm_forum
@@ -69,7 +56,7 @@ class tx_mmforum_cron_indexing extends tx_mmforum_cronbase {
 		$this->debug('Starting indexing');
 
 			// Initialize indexing class
-		$indexing = t3lib_div::makeInstance('tx_mmforum_indexing'); /* @var $indexing tx_mmforum_indexing */
+		$indexing = GeneralUtility::makeInstance('tx_mmforum_indexing'); /* @var $indexing tx_mmforum_indexing */
 		$indexing->objectMode = true;
 		$indexing->conf = $this->conf;
 

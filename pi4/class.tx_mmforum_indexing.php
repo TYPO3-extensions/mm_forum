@@ -21,6 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -127,8 +129,8 @@ class tx_mmforum_indexing {
 				'f.uid="'.$topicData['forum_id'].'" AND c.uid = f.parentID'
 			);
 			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-			$f_groups = t3lib_div::intExplode(',',$arr['f_read']);
-			$c_groups = t3lib_div::intExplode(',',$arr['c_read']);
+			$f_groups = GeneralUtility::intExplode(',',$arr['f_read']);
+			$c_groups = GeneralUtility::intExplode(',',$arr['c_read']);
 
 			$rFGroups = array();
 			foreach($f_groups as $group) {
@@ -193,8 +195,8 @@ class tx_mmforum_indexing {
 				'f.uid="'.$topic_array['forum_id'].'" AND c.uid = f.parentID'
 			);
 			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-			$f_groups = t3lib_div::intExplode(',',$arr['f_read']);
-			$c_groups = t3lib_div::intExplode(',',$arr['c_read']);
+			$f_groups = GeneralUtility::intExplode(',',$arr['f_read']);
+			$c_groups = GeneralUtility::intExplode(',',$arr['c_read']);
 
 			#$groups = array_merge($f_groups,$c_groups);
 			$rFGroups = array();
@@ -342,7 +344,7 @@ class tx_mmforum_indexing {
 			else return ' AND pid IN ('.$conf['pidList'].')';
 		}
 
-		$tables = t3lib_div::trimExplode(',',$tables);
+		$tables = GeneralUtility::trimExplode(',',$tables);
 		$query = '';
 
 		foreach($tables as $table) {
@@ -359,7 +361,7 @@ class tx_mmforum_indexing {
 			// Otherwise it is called from browser
 		else {
 			if (strlen(trim($conf['pidList']))==0) return 0;
-			$pids = t3lib_div::trimExplode(',',$conf['pidList']);
+			$pids = GeneralUtility::trimExplode(',',$conf['pidList']);
 			return $pids[0];
 		}
 	}

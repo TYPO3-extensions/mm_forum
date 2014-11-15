@@ -21,6 +21,9 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -144,7 +147,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 		$todayUsers = $this->getTodayUsers();
 
 		// Determine amount of guests
-		if (t3lib_extMgm::isLoaded('sys_stat')) {
+		if ( ExtensionManagementUtility::isLoaded('sys_stat')) {
 			$onlineGuests = $this->getOnlineGuests();
 			$todayGuests = $this->getTodayGuests();
 		} else {
@@ -489,7 +492,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 			'users','mods',"admins",'count'
 		);
 
-		if (!t3lib_extMgm::isLoaded('sys_stat')) $sesBackcheck = TRUE;
+		if (! ExtensionManagementUtility::isLoaded('sys_stat')) $sesBackcheck = TRUE;
 
 		$grp_admin		= array($this->getAdministratorGroup());
 		$grp_mod		= $this->getModeratorGroups();
@@ -522,7 +525,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 				$arr['postCount'] = $arr2[0];
 			}
 
-			$user_groups = t3lib_div::intExplode(',',$arr['usergroup']);
+			$user_groups = GeneralUtility::intExplode(',',$arr['usergroup']);
 
 			    if (count(array_intersect($user_groups, $grp_mod))   > 0) $result['mods'][]   = $arr;
 			elseif (count(array_intersect($user_groups, $grp_admin)) > 0) $result['admins'][] = $arr;

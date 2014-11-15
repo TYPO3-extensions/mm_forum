@@ -21,65 +21,20 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-/**
- * [CLASS/FUNCTION INDEX of SCRIPT]
- *
- *
- *
- *  113: class  tx_mmforum_module1 extends t3lib_SCbase
- *
- *              SECTION: Basic backend module functions
- *  130:     function init()
- *  147:     function menuConfig()
- *  172:     function main()
- *  200:     function jumpToUrl(URL)
- *  256:     function printContent()
- *  267:     function moduleContent()
- *  324:     function noSettingsError()
- *
- *              SECTION: Content functions
- *  343:     function userManagement()
- *  461:     function forumManagement()
- *  472:     function editTemplates()
- *  484:     function Tools()
- *  519:     function BBCodes()
- *  605:     function Smilies()
- *  697:     function SyntaxHL()
- *  809:     function getFileOptionFields($path,$fileExt,$opVar = '',$noDel)
- *  828:     function Import()
- *  840:     function Install()
- *  853:     function UserFields()
- *
- *              SECTION: Miscellaneous helper functions
- *  872:     function linkParams($arr)
- *  886:     function getForenCount()
- *  901:     function feGroups2Array()
- *  918:     function getItemFromRecord($table,$row)
- *  947:     function convertToTCEList($list,$table,$fieldname)
- *
- *              SECTION: Configuration variable management
- *  974:     function loadConfVars()
- * 1003:     function setConfVar($elem,$value)
- * 1031:     function parseConf($conf=FALSE,$ind=0)
- * 1053:     function getIsConfigured()
- * 1066:     function getInd($ind)
- *
- * TOTAL FUNCTIONS: 28
- * (This index is automatically created/updated by the extension "extdeveval")
- *
- */
 
-	// DEFAULT initialization of a module [BEGIN]
+use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Backend\Utility\IconUtility;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 unset($MCONF);
 require_once('conf.php');
-require_once($BACK_PATH.'init.php');
-require_once($BACK_PATH.'template.php');
+require_once($GLOBALS['BACK_PATH'] . 'init.php');
 
-define("BACK_PATH",$BACK_PATH);
+define("BACK_PATH", $GLOBALS['BACK_PATH']);
 
-$LANG->includeLLFile('EXT:mm_forum/mod1/locallang.xml');
-$BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users has no permission for entry.
+$GLOBALS['LANG']->includeLLFile('EXT:mm_forum/mod1/locallang.xml');
+$GLOBALS['BE_USER']->modAccess($MCONF, 1); // This checks permissions and exits if the users has no permission for entry.
 
 /**
  *
@@ -95,12 +50,16 @@ $BE_USER->modAccess($MCONF,1);	// This checks permissions and exits if the users
  * @package    mm_forum
  * @subpackage Backend
  */
-class tx_mmforum_module1 extends t3lib_SCbase {
+class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 
-    var $confArr;
-    var $tceforms;
-    var $configFile;
+	public $confArr;
+	public $tceforms;
+	public $configFile;
 
+	/**
+	 * @var array
+	 */
+	public $config;
 
 
 	/**
@@ -114,8 +73,15 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 	 *
 	 */
 	function init() {
-		$this->modTSconfig = t3lib_BEfunc::getModTSconfig($id,"mod.".$GLOBALS["MCONF"]["name"]);
+		global $TBE_STYLES;
+		
+		$this->id = (int)GeneralUtility::_GP('id');
+		#$this->modTSconfig = BackendUtility::getModTSconfig($this->id, 'mod.' . $this->MCONF['name']);
+		$this->modTSconfig = BackendUtility::getModTSconfig($this->id, 'mod.' . $GLOBALS["MCONF"]["name"]);
 		parent::init();
+
+		$TBE_STYLES['stylesheet2'] = ExtensionManagementUtility::extRelPath('mm_forum') . 'mod1/css/style.css';
+		$this->doc = GeneralUtility::makeInstance('TYPO3\\CMS\\Backend\\Template\\DocumentTemplate');
 	}
 
 	/**
@@ -129,7 +95,7 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 	 */
 
 	function menuConfig() {
-		global $LANG;
+		global $LANG; /** @var $LANG \TYPO3\CMS\Lang\LanguageService */
 
 		$items = array();
 		foreach ($this->modTSconfig['properties']['sections.'] as $k => $v) {
@@ -147,9 +113,8 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 	 * @return void
 	 */
 	function main() {
-		global $BE_USER,$LANG,$BACK_PATH,$TCA_DESCR,$TCA,$CLIENT,$TYPO3_CONF_VARS,$TBE_STYLES;
+		global $BE_USER, $LANG, $BACK_PATH; /** @var $LANG \TYPO3\CMS\Lang\LanguageService */
 
-        $TBE_STYLES['stylesheet2']=t3lib_extMgm::extRelPath('mm_forum').'mod1/css/style.css';
 		$this->configFile = PATH_typo3conf . '../typo3conf/tx_mmforum_config.ts';
 
 		$this->loadConfVars();
@@ -158,7 +123,6 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 		}
 
 		// Draw the header.
-		$this->doc = t3lib_div::makeInstance('mediumDoc');
 		$this->doc->backPath = $BACK_PATH;
 		$this->doc->form = '<form action="" name="editform" method="post">';
 
@@ -181,17 +145,16 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 
 		$this->content .= $this->doc->header($LANG->getLL('title'));
 		$this->content .= $this->doc->spacer(5);
-		$this->content .= $this->doc->section('',$this->doc->funcMenu('', t3lib_BEfunc::getFuncMenu($this->id,'SET[function]',$this->MOD_SETTINGS['function'],$this->MOD_MENU['function'])));
+		$this->content .= $this->doc->section('', $this->doc->funcMenu('', BackendUtility::getFuncMenu($this->id, 'SET[function]', $this->MOD_SETTINGS['function'], $this->MOD_MENU['function'], 'index.php')));
 		$this->content .= $this->doc->divider(5);
 
-		$this->tceforms = t3lib_div::makeInstance("t3lib_TCEforms");
+		$this->tceforms = GeneralUtility::makeInstance("t3lib_TCEforms");
 		$this->tceforms->backPath = $BACK_PATH;
 
 		$this->content .= $this->tceforms->printNeededJSFunctions_top();
 
 		// Render content:
 		$this->moduleContent();
-		$content = $this->content;
 
 		$this->content .= $this->tceforms->printNeededJSFunctions();
 		$this->content = $this->doc->startPage($LANG->getLL('title')) . $this->content;
@@ -223,7 +186,7 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 	 */
 
 	function moduleContent() {
-		global $LANG;
+		global $LANG; /** @var $LANG \TYPO3\CMS\Lang\LanguageService */
 		$content = '';
 
 		if (!$this->getIsConfigured()) {
@@ -264,9 +227,9 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 				list($className, $methodName) = explode('->', $moduleSettings['handler']);
 
 				if (strpos($className, 'Tx_Extbase_') === 0) {
-					$obj = t3lib_div::makeInstance($className);
+					$obj = GeneralUtility::makeInstance($className);
 				} else {
-					$obj = t3lib_div::getUserObj($className);
+					$obj = GeneralUtility::getUserObj($className);
 					$obj->p =& $this;
 				}
 
@@ -319,17 +282,17 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 	 */
 	function userManagement() {
 
-			/* Get template */
-        $template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/users.html'));
+		/* Get template */
+		$template = file_get_contents( GeneralUtility::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/users.html'));
 		$template = tx_mmforum_BeTools::getSubpart($template, '###USERS_LIST###');
 		$uTemplate = tx_mmforum_BeTools::getSubpart($template, '###USERS_LIST_ITEM###');
 
 		// Retrieve global variables
-			global $LANG;
+		global $LANG, $BACK_PATH, $BE_USER; /** @var $LANG \TYPO3\CMS\Lang\LanguageService */
 
 		// Generate SQL query
 		$ug = $this->feGroups2Array();
-		$mmforum=t3lib_div::_GP('mmforum');
+		$mmforum = GeneralUtility::_GP('mmforum');
 		if ($mmforum['no_filter']) {
 			unset($mmforum['sword']);
 			unset($mmforum['old_sword']);
@@ -344,12 +307,12 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 
 		$groups	= implode(',',array(intval($this->confArr['userGroup']),intval($this->confArr['modGroup']),intval($this->confArr['adminGroup'])));
 		$filter = $mmforum['sword'] ? 'username like ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($mmforum['sword'], '') . '%' : '1';
-		$orderBy = t3lib_div::_GP('mmforum_style') ? strtoupper($GLOBALS['TYPO3_DB']->fullQuoteStr(t3lib_div::_GP('mmforum_style'))) : 'ASC';
-		if (t3lib_div::_GP('mmforum_sort') == 'username'){
+		$orderBy = GeneralUtility::_GP('mmforum_style') ? strtoupper($GLOBALS['TYPO3_DB']->fullQuoteStr(GeneralUtility::_GP('mmforum_style'))) : 'ASC';
+		if ( GeneralUtility::_GP('mmforum_sort') == 'username') {
 			$order = 'username ' . $orderBy . '';
 			$uOrder = $orderBy == 'ASC' ? 'DESC' : 'ASC';
 			$aOrder = 'ASC';
-		} elseif (t3lib_div::_GP('mmforum_sort') == 'age'){
+		} elseif ( GeneralUtility::_GP('mmforum_sort') == 'age') {
 			$order = 'crdate ' . $orderBy . '';
 			$aOrder = $orderBy == 'ASC' ? 'DESC' : 'ASC';
 			$uOrder = 'ASC';
@@ -426,16 +389,14 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 				foreach ($g as $sg) {
 					$outg .= $ug[$sg] . ', ';
 				}
-				// Generate link to the record editing page
-				global $BACK_PATH,$LANG,$TCA,$BE_USER;
 
-				$iconAltText	= t3lib_BEfunc::getRecordIconAltText($row,$table);
-				$elementTitle	= t3lib_BEfunc::getRecordPath($row['uid'],'1=1',0);
-				$elementTitle	= t3lib_div::fixed_lgd_cs($elementTitle,-($BE_USER->uc['titleLen']));
-				$elementIcon	= t3lib_iconworks::getIconImage($table,$row,$BACK_PATH,'class="c-recicon" title="'.$iconAltText.'"');
+				$iconAltText	= BackendUtility::getRecordIconAltText($row,$table);
+				$elementTitle	= BackendUtility::getRecordPath($row['uid'],'1=1',0);
+				$elementTitle	= GeneralUtility::fixed_lgd_cs($elementTitle,-($BE_USER->uc['titleLen']));
+				$elementIcon	= IconUtility::getIconImage($table,$row,$BACK_PATH,'class="c-recicon" title="'.$iconAltText.'"');
 
 				$params = '&edit[fe_users][' . $row['uid'] . ']=edit';
-				$editOnClick = t3lib_BEfunc::editOnClick($params,$BACK_PATH);
+				$editOnClick = BackendUtility::editOnClick($params, $BACK_PATH);
 
 				// Generate row item
 				$class_suffix = ($i++ % 2 == 0 ? '2' : '');
@@ -446,7 +407,7 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 
 				$uMarker = array(
 					'###USER_USERNAME###' => htmlspecialchars($row['username']), 
-					'###USER_REGISTERED###' => t3lib_BEfunc::dateTimeAge($row['crdate'],1),
+					'###USER_REGISTERED###' => BackendUtility::dateTimeAge($row['crdate'], 1), 
 					'###USER_GROUPS###' => (substr($outg, -2) == ', ' ? substr($outg, 0, strlen($outg) - 2) : $outg), 
 					'###USER_OPTIONS###' => '<img src="img/edit.png" onclick="' . htmlspecialchars($editOnClick) . '" style="cursor:pointer;" />'
 				);
@@ -473,9 +434,9 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 
 	function Tools() {
 
-		global $LANG;
+		global $LANG; /** @var $LANG \TYPO3\CMS\Lang\LanguageService */
 
-		$mmforum=t3lib_div::_GP('mmforum');
+		$mmforum = GeneralUtility::_GP('mmforum');
 
 		// Output tools menu
 		/*$content .= '<div><a href="index.php?mmforum[tools]=1" '.($mmforum['tools']==1 ? 'class="activ"':'').'>'.$LANG->getLL('tools.bbcodes').'</a>&nbsp;|&nbsp;';
@@ -528,9 +489,9 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 
 	function BBCodes() {
 
-		global $LANG;
+		global $LANG; /** @var $LANG \TYPO3\CMS\Lang\LanguageService */
 
-		$mmforum=t3lib_div::_GP('mmforum');
+		$mmforum = GeneralUtility::_GP('mmforum');
 
 		// Process submitted data
 		if (isset($mmforum['delete'])) {
@@ -616,10 +577,10 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 
 	function Smilies() {
 
-		global $LANG;
+		global $LANG; /** @var $LANG \TYPO3\CMS\Lang\LanguageService */
 		$content = '';
 
-		$mmforum=t3lib_div::_GP('mmforum');
+		$mmforum = GeneralUtility::_GP('mmforum');
 
 		// Process submitted data
 		if (isset($mmforum['delete'])) {
@@ -651,8 +612,8 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 
 		// Display smilie editing form
 
-		$path	= t3lib_div::getFileAbsFileName($this->config['plugin.']['tx_mmforum.']['path_smilie']);
-		$files	= t3lib_div::getFilesInDir($path,'gif');
+		$path = GeneralUtility::getFileAbsFileName($this->config['plugin.']['tx_mmforum.']['path_smilie']);
+		$files = GeneralUtility::getFilesInDir($path, 'gif');
 		$firstFile = '';
 
 		if (count($files) > 0) {
@@ -719,10 +680,10 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 
 	function SyntaxHL() {
 
-		global $LANG;
+		global $LANG; /** @var $LANG \TYPO3\CMS\Lang\LanguageService */
 		$content = '';
 
-		$mmforum=t3lib_div::_GP('mmforum');
+		$mmforum = GeneralUtility::_GP('mmforum');
 
 		// Process submitted data
 		if (isset($mmforum['delete'])) {
@@ -761,8 +722,8 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 		}
 
 		// Display syntaxhl editing form
-		$path=t3lib_extMgm::extPath('mm_forum').'/res/img/default/editor_icons/';
-		$files=t3lib_div::getFilesInDir($path,'gif');
+		$path = ExtensionManagementUtility::extPath('mm_forum') . '/res/img/default/editor_icons/';
+		$files = GeneralUtility::getFilesInDir($path, 'gif');
 		$firstFile = '';
 		$surlOptions = '';
 		if (count($files) > 0) {
@@ -848,7 +809,7 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 	 * @return   string
 	 */
 	function getFileOptionFields($path, $fileExt, $opVar = '', $noDel = false) {
-		$files=t3lib_div::getFilesInDir($path,$fileExt);
+		$files = GeneralUtility::getFilesInDir($path, $fileExt);
 		$Options = '';
 		if (count($files) > 0) {
 			foreach ($files as $k => $f) {
@@ -913,15 +874,15 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 	 */
 
 	function getItemFromRecord($table, $row) {
-		global $BACK_PATH,$LANG,$TCA,$BE_USER;
+		global $BACK_PATH, $BE_USER;
 
-		$iconAltText	= t3lib_BEfunc::getRecordIconAltText($row,$table);
-		$elementTitle	= t3lib_BEfunc::getRecordPath($row['uid'],'1=1',0);
-		$elementTitle	= t3lib_div::fixed_lgd_cs($elementTitle,-($BE_USER->uc['titleLen']));
-		$elementIcon	= t3lib_iconworks::getIconImage($table,$row,$BACK_PATH,'class="c-recicon" title="'.$iconAltText.'"');
+		$iconAltText = BackendUtility::getRecordIconAltText($row, $table);
+		//$elementTitle = BackendUtility::getRecordPath($row['uid'], '1=1', 0);
+		//$elementTitle = GeneralUtility::fixed_lgd_cs($elementTitle, -($BE_USER->uc['titleLen']));
+		$elementIcon = IconUtility::getIconImage($table, $row, $BACK_PATH, 'class="c-recicon" title="' . $iconAltText . '"');
 
 		$params = '&edit[' . $table . '][' . $row['uid'] . ']=edit';
-		$editOnClick = t3lib_BEfunc::editOnClick($params,$BACK_PATH);
+		$editOnClick = BackendUtility::editOnClick($params, $BACK_PATH);
 
 		return '<a href="#" onclick="' . htmlspecialchars($editOnClick) . '">' . $elementIcon . '</a>';
 	}
@@ -946,7 +907,7 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 	 * @version 2007-04-23
 	 */
 	function convertToTCEList($list, $table, $fieldname) {
-		$items = t3lib_div::trimExplode(',',$list);
+		$items = GeneralUtility::trimExplode(',', $list);
 		if (count($items) == 0) {
 			return '';
 		}
@@ -992,14 +953,14 @@ class tx_mmforum_module1 extends t3lib_SCbase {
 		 */
 		$conf = '';
 		foreach ($this->modTSconfig['properties']['defaultConfigFiles.'] as $configFile) {
-			$conf .= file_get_contents(t3lib_div::getFileAbsFileName($configFile))."\n";
+			$conf .= file_get_contents( GeneralUtility::getFileAbsFileName($configFile)) . "\n";
 		}
 
 		if (file_exists($this->configFile)) {
 			$conf .= file_get_contents($this->configFile);
 		}
 
-		$parser  = t3lib_div::makeInstance('t3lib_TSparser');
+		$parser = GeneralUtility::makeInstance('t3lib_TSparser');
 		$parser->parse($conf);
 
 		$this->config = $parser->setup;
@@ -1120,11 +1081,7 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 
 // Make instance:
 global $SOBE;
-$SOBE = t3lib_div::makeInstance('tx_mmforum_module1');
+$SOBE = GeneralUtility::makeInstance('tx_mmforum_module1'); /* @var $SOBE tx_mmforum_module1 */
 $SOBE->init();
-
-// Include files?
-foreach($SOBE->include_once as $INC_FILE)	include_once($INC_FILE);
-
 $SOBE->main();
 $SOBE->printContent();

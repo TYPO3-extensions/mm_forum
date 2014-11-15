@@ -1,4 +1,6 @@
 <?php
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /***************************************************************
  *  Copyright notice
  *
@@ -22,8 +24,8 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-
 class tx_mmforum_menus extends tx_mmforum_base {
+
 	var $prefixId = 'tx_mmforum_pi1';
 
 		/* VERY dirty hack, but has to be this way in order for the
@@ -32,10 +34,10 @@ class tx_mmforum_menus extends tx_mmforum_base {
 
 	function menuInit($conf) {
 		$this->prefixId = ($conf['prefixId'] ? $conf['prefixId'] : 'tx_mmforum_pi1');
-		$this->piVars   = t3lib_div::_GPmerged($this->prefixId);
+		$this->piVars   = GeneralUtility::_GPmerged($this->prefixId);
 		$this->pi_loadLL();
 
-		$this->cObj = t3lib_div::makeInstance('tslib_cObj');
+		$this->cObj = GeneralUtility::makeInstance('tslib_cObj');
 	}
 
 	/**
@@ -344,7 +346,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['rootlineArray'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['rootlineArray'] as $_classRef) {
-				$_procObj = &t3lib_div::getUserObj($_classRef);
+				$_procObj = &GeneralUtility::getUserObj($_classRef);
 				$result   = $_procObj->processRootlineArray($result, $this);
 			}
 		}

@@ -52,6 +52,8 @@
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This class manages the data import from the chc_forum and
@@ -77,7 +79,7 @@ class tx_mmforum_chcimport {
 	var $data;
 
 	/**
-	 * @var t3lib_db
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
 	 */
 	var $dbObj;
 
@@ -91,7 +93,7 @@ class tx_mmforum_chcimport {
      * @version 2007-05-03
      */
     function main($content) {
-        $this->importVars = t3lib_div::_GP('tx_mmforum_chc');
+        $this->importVars = GeneralUtility::_GP('tx_mmforum_chc');
 
         $this->loc_db = $GLOBALS['TYPO3_DB']->link;
 
@@ -127,18 +129,18 @@ class tx_mmforum_chcimport {
     function select_import() {
         global $LANG;
 
-        $chc_enabled = t3lib_extMgm::isLoaded('chc_forum')?'checked="checked"':'disabled="disabled"';
-        $cwt_enabled = t3lib_extMgm::isLoaded('cwt_community')?'checked="checked"':'disabled="disabled"';
+        $chc_enabled = ExtensionManagementUtility::isLoaded('chc_forum')?'checked="checked"':'disabled="disabled"';
+        $cwt_enabled = ExtensionManagementUtility::isLoaded('cwt_community')?'checked="checked"':'disabled="disabled"';
 
         $content = '<fieldset><legend>'.$LANG->getLL('chc.step3').'</legend>';
         $content .= '<table cellspacing="0" cellpadding="2" border="0">
     <tr>
         <td style="width:32px"><input type="checkbox" name="tx_mmforum_chc[import][]" value="chc" '.$chc_enabled.' /></td>
-        <td '.(t3lib_extMgm::isLoaded('chc_forum')?'':'style="color:#808080;"').'><strong>'.$LANG->getLL('chc.import.chc').'</strong><br />'.$LANG->getLL('chc.import.chc.desc').'</td>
+        <td '.( ExtensionManagementUtility::isLoaded('chc_forum')?'':'style="color:#808080;"').'><strong>'.$LANG->getLL('chc.import.chc').'</strong><br />'.$LANG->getLL('chc.import.chc.desc').'</td>
     </tr>
     <tr>
         <td style="width:32px"><input type="checkbox" name="tx_mmforum_chc[import][]" value="cwt" '.$cwt_enabled.' /></td>
-        <td '.(t3lib_extMgm::isLoaded('cwt_community')?'':'style="color:#808080;"').'><strong>'.$LANG->getLL('chc.import.cwt').'</strong><br />'.$LANG->getLL('chc.import.cwt.desc').'</td>
+        <td '.( ExtensionManagementUtility::isLoaded('cwt_community')?'':'style="color:#808080;"').'><strong>'.$LANG->getLL('chc.import.cwt').'</strong><br />'.$LANG->getLL('chc.import.cwt.desc').'</td>
     </tr>
 </table>
 <br /><input type="submit" value="'.$LANG->getLL('chc.import.continue').'" />
@@ -453,7 +455,7 @@ class tx_mmforum_chcimport {
      *                         list.
      */
     function convertGroups($groups) {
-    	$groupArray = t3lib_div::intExplode(',',$groups);
+    	$groupArray = GeneralUtility::intExplode(',',$groups);
 
     	$resultFeGroups = array();
 
@@ -467,7 +469,7 @@ class tx_mmforum_chcimport {
 
     		list($feGroups) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-    		$feGroupArray = t3lib_div::intExplode(',',$feGroups);
+    		$feGroupArray = GeneralUtility::intExplode(',',$feGroups);
     		foreach($feGroupArray as $feGroup) $resultFeGroups[] = $feGroup;
     	}
     	return implode(',',$resultFeGroups);
@@ -499,7 +501,7 @@ class tx_mmforum_chcimport {
      * @return  void
      */
     function clearDB() {
-    	$clearTables_array = t3lib_div::trimExplode(',', $this->chc_clearTables);
+    	$clearTables_array = GeneralUtility::trimExplode(',', $this->chc_clearTables);
 
     	foreach($clearTables_array as $clearTable) {
     		$GLOBALS['TYPO3_DB']->exec_TRUNCATEquery('tx_mmforum_' . $clearTable);

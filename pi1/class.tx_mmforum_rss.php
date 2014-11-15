@@ -21,9 +21,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-/**
-* [CLASS/FUNCTION INDEX of SCRIPT]
-*/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * The tx_mmforum_rss class handles the display and generation of
@@ -58,6 +56,9 @@ class tx_mmforum_rss {
 	public $main;
 	public $piVars;
 
+	/**
+	 * @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
+	 */
 	public $cObj;
 	public $mode;
 	public $param;
@@ -156,7 +157,7 @@ class tx_mmforum_rss {
 		#if (!$this instanceof tx_mmforum_rss) {
 		// Workaround. "instanceof" does not work with old PHP versions.
 		if (isset($this->extKey)) {
-			$rssObj = t3lib_div::makeInstance('tx_mmforum_rss');
+			$rssObj = GeneralUtility::makeInstance('tx_mmforum_rss');
 			$rssObj->initialize($this->conf, $this);
 			$rssObj->setHTMLHeadData($mode, $param);
 		} else {
@@ -209,7 +210,7 @@ class tx_mmforum_rss {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_posts'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_posts'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->rss_posts($posts, $this);
 			}
 		}
@@ -227,7 +228,7 @@ class tx_mmforum_rss {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_globalMarkers'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_globalMarkers'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->rss_globalMarkers($marker, $posts, $this);
 			}
 		}
@@ -250,7 +251,7 @@ class tx_mmforum_rss {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_itemMarkers'])) {
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['rss_itemMarkers'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$rowMarker = $_procObj->rss_itemMarkers($marker, $post, $this);
 				}
 			}

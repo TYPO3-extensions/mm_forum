@@ -21,26 +21,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-/**
- * [CLASS/FUNCTION INDEX of SCRIPT]
- *
- *
- *
- *   56: class tx_mmforum_cron_publish extends tx_mmforum_cronbase
- *   72:     function main()
- *   88:     function validateConfig()
- *  106:     function sendEmailToModerators()
- *  145:     function generateOutput()
- *  187:     function getTopicForum($record)
- *  209:     function getTopicAuthor($user_uid)
- *  225:     function getTopicTitle($record)
- *  241:     function loadPostQueueItems()
- *
- * TOTAL FUNCTIONS: 8
- * (This index is automatically created/updated by the extension "extdeveval")
- *
- */
-
+use TYPO3\CMS\Core\Html\HtmlParser;
 
 /**
  * Handles automatic reminders for posts that still have to be
@@ -112,7 +93,7 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 			$marker			= array(
 				'###PNOTIFY_ADDRESS###' => sprintf($this->getLL('address'),$arr['username'])
 			);
-			$mailtext		= t3lib_parsehtml::substituteMarkerArray($this->postqueueMail, $marker);
+			$mailtext		= HtmlParser::substituteMarkerArray($this->postqueueMail, $marker);
 			$subject		= sprintf($this->getLL('subject'), count($this->postqueueItems));
 			$username		= $arr['name']?$arr['name']:$arr['username'];
 			$recipient		= '"'.$username.'" <'.$arr['email'].'>';
@@ -141,13 +122,13 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 
 		$template = $this->loadTemplateFile('notifyPublish');
 		if ($this->conf['cron_htmlemail']) {
-			$template = t3lib_parsehtml::getSubpart($template, '###PNOTIFY_HTML###');
+			$template = HtmlParser::getSubpart($template, '###PNOTIFY_HTML###');
 		}
 		else {
-			$template = t3lib_parsehtml::getSubpart($template, '###PNOTIFY_PLAINTEXT###');
+			$template = HtmlParser::getSubpart($template, '###PNOTIFY_PLAINTEXT###');
 		}
 
-		$itemTemplate = t3lib_parsehtml::getSubpart($template, '###PNOTIFY_LISTITEM###');
+		$itemTemplate = HtmlParser::getSubpart($template, '###PNOTIFY_LISTITEM###');
 
 		$marker = array(
 			'###PNOTIFY_SUBJECT###'				=> sprintf($this->getLL('subject'), count($this->postqueueItems)),
@@ -158,7 +139,7 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 			'###LABEL_PNOTIFY_TOPICAUTHOR###'	=> $this->getLL('topicauthor'),
 			'###LABEL_PNOTIFY_TOPICFORUM###'	=> $this->getLL('topicforum'),
 		);
-		$template = t3lib_parsehtml::substituteMarkerArray($template, $marker);
+		$template = HtmlParser::substituteMarkerArray($template, $marker);
 		$itemContent = '';
 		foreach($this->postqueueItems as $postqueueItem) {
 			$itemMarker = array(
@@ -167,10 +148,10 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 				'###PNOTIFY_TOPICDATE###'		=> date('d. m. Y, H:i',$postqueueItem['post_time']),
 				'###PNOTIFY_TOPICFORUM###'		=> $this->getTopicForum($postqueueItem)
 			);
-			$itemContent .= t3lib_parsehtml::substituteMarkerArray($itemTemplate, $itemMarker);
+			$itemContent .= HtmlParser::substituteMarkerArray($itemTemplate, $itemMarker);
 		}
 
-		$template = t3lib_parsehtml::substituteSubpart($template, '###PNOTIFY_LISTITEM###', $itemContent);
+		$template = HtmlParser::substituteSubpart($template, '###PNOTIFY_LISTITEM###', $itemContent);
 		$this->postqueueMail = $template;
 	}
 

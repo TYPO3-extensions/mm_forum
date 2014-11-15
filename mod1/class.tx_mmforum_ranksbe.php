@@ -21,6 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -66,7 +68,7 @@ class tx_mmforum_ranksBE {
             'special DESC, CAST(minPosts AS UNSIGNED)'
         );
 
-        $returnUrl  = t3lib_extMgm::extRelPath('mm_forum').'mod1/index.php';
+        $returnUrl  = ExtensionManagementUtility::extRelPath('mm_forum').'mod1/index.php';
         $returnUrl  = urlencode($returnUrl);
         $createlink = $GLOBALS['BACK_PATH'].'alt_doc.php?returnUrl='.$returnUrl.'&edit[tx_mmforum_ranks]['.$this->p->confArr['forumPID'].']=new';
 

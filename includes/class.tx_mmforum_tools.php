@@ -21,43 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-/**
- * [CLASS/FUNCTION INDEX of SCRIPT]
- *
- *
- *
- *   74: class tx_mmforum_tools extends tslib_pibase
- *   84:     function res_img($image, $width, $height)
- *  108:     function get_userdata($userId)
- *  123:     function get_username($userId)
- *  139:     function get_userid($username)
- *  160:     function link_profil($userid)
- *  185:     function textCut($text, $cut, $needle = '')
- *  219:     function getsessid($conf)
- *  240:     function processArray_numeric($arr)
- *  260:     function getUserGroup($uid)
- *  277:     function getParentUserGroups($group)
- *  312:     function getParentUserGroupsR($group)
- *  346:     function getSubUserGroups($group)
- *  382:     function getSubUserGroupsR($group)
- *  409:     function getUserGroupList($content, $conf = array())
- *  443:     function generateSiteRelExtPath($path)
- *  453:     function replaceExtPath($matches)
- *  471:     function storeCacheVar($key, $value, $forceOverwrite = false)
- *  509:     function getCacheVar($key, $default = null)
- *  530:     function deleteCacheVar($key)
- *  543:     function generateRandomString($length)
- *  562:     function hex2ip($hex)
- *  578:     function ip2hex($ipAddress)
- *  601:     function getAbsoluteUrl($link)
- *  639:     function appendTrailingSlash($str)
- *  649:     function removeLeadingSlash($str)
- *
- * TOTAL FUNCTIONS: 25
- * (This index is automatically created/updated by the extension "extdeveval")
- *
- */
-
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * The class 'tx_mmforum_tools' contains a collection of useful
@@ -70,7 +35,7 @@
  * @package    mm_forum
  * @subpackage Includes
  */
-class tx_mmforum_tools extends tslib_pibase {
+class tx_mmforum_tools extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 	/**
 	 * Resizes an image.
@@ -264,7 +229,7 @@ class tx_mmforum_tools extends tslib_pibase {
 		 */
 	static function getParentUserGroups($group) {
 			/* Parse to int for security reasons */
-		$group = implode(',',array_filter(t3lib_div::intExplode(',',$group)));
+		$group = implode(',', array_filter(GeneralUtility::intExplode(',', $group)));
 
 			/* Try to load result from cache */
 		$cache =& tx_mmforum_cache::getGlobalCacheObject();
@@ -277,7 +242,7 @@ class tx_mmforum_tools extends tslib_pibase {
 
 			/* Otherwise get groups */
 		$groups = tx_mmforum_tools::getParentUserGroupsR($group);
-		$groups = t3lib_div::intExplode(',',$groups);
+		$groups = GeneralUtility::intExplode(',',$groups);
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
 		$groups = array_unique($groups);
 
@@ -300,7 +265,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	function getParentUserGroupsR($group) {
 		$result = '';
 		if (strpos($group, ',') !== false) {
-			$groups = t3lib_div::intExplode(',', $group);
+			$groups = GeneralUtility::intExplode(',', $group);
 			foreach ($groups as $sGroup) {
 				$result .= tx_mmforum_tools::getParentUserGroupsR($sGroup);
 			}
@@ -348,7 +313,7 @@ class tx_mmforum_tools extends tslib_pibase {
 
 			/* Otherwise load all subgroups now */
 		$groups = tx_mmforum_tools::getSubUserGroupsR($group);
-		$groups = t3lib_div::intExplode(',', $groups);
+		$groups = GeneralUtility::intExplode(',', $groups);
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
 		$groups = array_unique($groups);
 
@@ -373,7 +338,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	function getSubUserGroupsR($group) {
 		$result = '';
 		if (strstr($group, ',') !== false) {
-			$groups = t3lib_div::intExplode(',', $group);
+			$groups = GeneralUtility::intExplode(',', $group);
 			foreach ($groups as $sGroup) {
 				$result .= tx_mmforum_tools::getSubUserGroupsR($sGroup);
 			}
@@ -399,7 +364,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * @return  string          A list of group names.
 	 */
 	function getUserGroupList($content, $conf = array()) {
-		$groups = t3lib_div::intExplode(',', $content);
+		$groups = GeneralUtility::intExplode(',', $content);
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
 		$sGroups = array();
 		foreach ($groups as $group) {
@@ -423,7 +388,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * Parses a file path containing a reference to an extension directory.
 	 * This function replaces references to an extension directory in a file
 	 * path (like e.g. EXT:mm_forum) with the actual path of the extension using
-	 * the t3lib_extMgm class.
+	 * the \TYPO3\CMS\Core\Utility\ExtensionManagementUtility class.
 	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-01-06
@@ -439,7 +404,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * Callback function for the generateSiteRelExtPath method.
 	 */
 	function replaceExtPath($matches) {
-		return t3lib_extMgm::siteRelPath($matches[1]);
+		return ExtensionManagementUtility::siteRelPath($matches[1]);
 	}
 
 	/**
@@ -594,9 +559,9 @@ class tx_mmforum_tools extends tslib_pibase {
 			}
 			$result = $baseUrl;
 		} else {
-			$useSSL = (t3lib_div::getIndpEnv('SERVER_PORT') == 443);
+			$useSSL = ( GeneralUtility::getIndpEnv('SERVER_PORT') == 443);
 
-			$dirname = dirname(t3lib_div::getIndpEnv('SCRIPT_NAME'));
+			$dirname = dirname( GeneralUtility::getIndpEnv('SCRIPT_NAME'));
 			// on windows, dirname returns a backslash for the root directory, replace it with a forward slash
 			$dirname = ($dirname == '\\') ? '/' : $dirname;
 			$dirname = tx_mmforum_tools::appendTrailingSlash($dirname);
@@ -604,7 +569,7 @@ class tx_mmforum_tools extends tslib_pibase {
 			if ($dirname == '/') {
 				$dirname = '';
 			}
-			$host = t3lib_div::getIndpEnv('TYPO3_REQUEST_HOST');
+			$host = GeneralUtility::getIndpEnv('TYPO3_REQUEST_HOST');
 			$host = tx_mmforum_tools::appendTrailingSlash($host);
 
 			if ((substr($host, 0, 8) != 'https://') && (substr($host, 0, 7) != 'http://')) {

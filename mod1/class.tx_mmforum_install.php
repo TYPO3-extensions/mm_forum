@@ -64,7 +64,8 @@
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
-
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This class handles the backend mm_forum configuration. If offers
@@ -151,8 +152,8 @@ class tx_mmforum_install {
 		 */
 
 	function init() {
-		$this->instVars    = t3lib_div::_GP('tx_mmforum_install');
-		$this->conf        = $this->p->config['plugin.']['tx_mmforum.'];
+		$this->instVars = GeneralUtility::_GP('tx_mmforum_install');
+		$this->conf = $this->p->config['plugin.']['tx_mmforum.'];
 		$this->fieldConfig = $this->p->modTSconfig['properties']['submodules.']['installation.']['categories.'];
 
 		$GLOBALS['LANG']->includeLLFile('EXT:mm_forum/mod1/locallang_install.xml');
@@ -170,9 +171,9 @@ class tx_mmforum_install {
 		 */
 
 	function loadDefaultConfiguration() {
-        $conf    = file_get_contents('../ext_typoscript_constants.txt');
-        $parser  = t3lib_div::makeInstance('t3lib_TSparser');
-        $parser->parse($conf);
+		$conf = file_get_contents('../ext_typoscript_constants.txt');
+		$parser = GeneralUtility::makeInstance('t3lib_TSparser');
+		$parser->parse($conf);
 
         return $parser->setup['plugin.']['tx_mmforum.'];
 	}
@@ -233,8 +234,9 @@ class tx_mmforum_install {
 		 *
 		 */
 
-	function replaceRelativeExtReference($matches) { return t3lib_extMgm::extRelPath($matches[1]); }
-
+	function replaceRelativeExtReference($matches) {
+		return ExtensionManagementUtility::extRelPath($matches[1]);
+	}
 
 
 		/**
@@ -249,7 +251,7 @@ class tx_mmforum_install {
 		 */
 
     function display_helpForm() {
-        $template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/install.html'));
+		$template = file_get_contents( GeneralUtility::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/install.html'));
 		$template = tx_mmforum_BeTools::getSubpart($template, '###INSTALL_HELP###');
 
 		$marker = array(
@@ -347,7 +349,7 @@ class tx_mmforum_install {
 				if ($config['type.']['handler']) {
 					if (strpos($config['type.']['handler'],'->') !== false) {
 						list($className, $methodName) = explode('->', $config['type.']['handler']);
-						$obj = t3lib_div::getUserObj($className);
+						$obj = GeneralUtility::getUserObj($className);
 						$options = $obj->$methodName($this->conf[$field], $field, $config);
 					} else $options = $this->$config['type.']['handler']($this->conf[$field], $field, $config);
 					$input = $this->getLSelectField($field,$this->conf[$field],$options);
@@ -368,7 +370,7 @@ class tx_mmforum_install {
 			} elseif ($config['type'] == 'special') {
 				if (strpos($config['type.']['handler'],'->') !== false) {
 					list($className, $methodName) = explode('->', $config['type.']['handler']);
-					$obj = t3lib_div::getUserObj($className);
+					$obj = GeneralUtility::getUserObj($className);
 					$obj->p = $this;
 					$input = $obj->$methodName($this->conf[$field], $field, $config);
 				} else {
@@ -563,10 +565,9 @@ class tx_mmforum_install {
 
 			/* Get TCA of fe_user table */
 		global $TCA;
-		t3lib_div::loadTCA('fe_users');
 
 			/* Get list of selected fields */
-		$selFields = t3lib_div::trimExplode(',',$value);
+		$selFields = GeneralUtility::trimExplode(',', $value);
 		$selFieldsLabels = array();
 
 			/* Iterate through all fields and retrieve labels. */
@@ -639,9 +640,10 @@ class tx_mmforum_install {
 
 	function getFeUserFields($value, $fieldname, $config) {
 		global $TCA;
-		t3lib_div::loadTCA('fe_users');
-		foreach($TCA['fe_users']['columns'] as $k => $v)
+		$result = array();
+		foreach ($TCA['fe_users']['columns'] as $k => $v) {
 			$result[$k] = preg_replace('/:$/','',$GLOBALS['LANG']->sL($v['label']));
+		}
 		return $result;
 	}
 
@@ -935,7 +937,7 @@ class tx_mmforum_install {
 				$this->p->setConfVar($var,$value);
 		}
 
-        $TCE = t3lib_div::makeInstance('t3lib_tcemain');
+		$TCE = GeneralUtility::makeInstance('t3lib_tcemain');
         $TCE->admin = TRUE;
 		$TCE->BE_USER = $GLOBALS['BE_USER'];
         $TCE->clear_cacheCmd('all');

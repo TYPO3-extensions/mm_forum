@@ -21,6 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -142,8 +144,8 @@ class tx_mmforum_phpbbimport {
 		$this->data['step'] = 1;
 		$this->data = array_merge(
 			$this->data,
-			is_array(t3lib_div::_GET('tx_mmforum_phpbb'))?t3lib_div::_GET('tx_mmforum_phpbb'):array(),
-			is_array(t3lib_div::_POST('tx_mmforum_phpbb'))?t3lib_div::_POST('tx_mmforum_phpbb'):array()
+			is_array( GeneralUtility::_GET('tx_mmforum_phpbb'))? GeneralUtility::_GET('tx_mmforum_phpbb'):array(),
+			is_array( GeneralUtility::_POST('tx_mmforum_phpbb'))? GeneralUtility::_POST('tx_mmforum_phpbb'):array()
 		);
 
         if (!$this->dbObj) $this->dbObj = $GLOBALS['TYPO3_DB'];
@@ -441,7 +443,7 @@ class tx_mmforum_phpbbimport {
 			$this->data['step3.']['import1.']['avatarpath'] = 'uploads/tx_mmforum/';
 			$this->data['step3.']['import1.']['importSingleUserGroups'] = 0;
 			$this->data['step3.']['import5.']['phpbb_smilie_url'] = 'images/smilies/';
-			$this->data['step3.']['import5.']['mmforum_smilie_url'] = t3lib_extMgm::siteRelPath('mm_forum').'res/smilies/';
+			$this->data['step3.']['import5.']['mmforum_smilie_url'] = ExtensionManagementUtility::siteRelPath('mm_forum').'res/smilies/';
 		}
 
 		if ($this->data['step3.']['submit'] == $LANG->getLL('phpbb.general.continue')) {
@@ -1261,7 +1263,7 @@ class tx_mmforum_phpbbimport {
 
         if (is_array($this->updateMapping['groups'])) {
             foreach($this->updateMapping['groups'] as $updateMapping_groups) {
-			    $data = t3lib_div::trimExplode(':',$updateMapping_groups);
+			    $data = GeneralUtility::trimExplode(':',$updateMapping_groups);
 
 			    if ($data[0] == 'forum') {
                     if (substr($data[2],-5,5)=='/list') {
@@ -1274,8 +1276,8 @@ class tx_mmforum_phpbbimport {
                         while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
                             $sList = $arr[$data[1]];
                             $uid = $arr['uid'];
-                            $list = t3lib_div::trimExplode($sList);
-
+                            $list = GeneralUtility::trimExplode(',', $sList);
+							$updatedList = array();
                             foreach($list as $listItem) {
                                 if ($listItem == $data[1]) {
                                     $updatedList[] = $this->usergroupID_mapping[$data[1]]; continue;
@@ -1398,7 +1400,7 @@ class tx_mmforum_phpbbimport {
 		$this->saveMappingArray($this->postID_mapping,'postID_mapping');
 
 		foreach($this->updateMapping['posts'] as $updateMapping_post) {
-			$data = t3lib_div::trimExplode(':',$updateMapping_post);
+			$data = GeneralUtility::trimExplode(':',$updateMapping_post);
 
 			if ($data[0] == 'forum') {
 				$updateArray = array($data[2] => $this->postID_mapping[$data[1]]);
@@ -1560,7 +1562,7 @@ class tx_mmforum_phpbbimport {
 			else $searchOrder = 1;
 
 			if (!is_array($searchData['split_search'])) $searchData['split_search'] = array($searchData['split_search']);
-			if (!is_array($searchData['search_results'])) $searchData['search_results'] = t3lib_div::trimExplode(',',$searchData['search_results']);
+			if (!is_array($searchData['search_results'])) $searchData['search_results'] = GeneralUtility::trimExplode(',',$searchData['search_results']);
 
 			$insertArray = array(
 				'pid'					=> $this->data['step3.']['import4.']['pid'],

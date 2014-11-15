@@ -1,4 +1,6 @@
 <?php
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 class tx_mmforum_searchparser {
 
 	function parseSearchString($sStr) {
@@ -8,7 +10,7 @@ class tx_mmforum_searchparser {
 		$sStr = str_replace('+', ' + ', $sStr);
 		$sStr = str_replace('-', ' - ', $sStr);
 
-		$rawData = t3lib_div::trimExplode(' ',$sStr);
+		$rawData = GeneralUtility::trimExplode(' ',$sStr);
 		foreach($rawData as $r)
 			if (strlen($r)>0) $rawData2[] = $r;
 

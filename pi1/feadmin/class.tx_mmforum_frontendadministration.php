@@ -23,8 +23,7 @@
  *                                                                      *
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
-
-Require_Once ( t3lib_extMgm::extPath('mm_forum').'pi1/feadmin/class.tx_mmforum_frontendadministration_validator.php' );
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  *
@@ -708,7 +707,7 @@ class tx_mmforum_FrontendAdministration {
 		$this->v    = $parentObject->piVars;
 		$this->tools = $parentObject->tools;
 
-		$this->forumValidator = t3lib_div::makeInstance('tx_mmforum_FrontendAdministration_Validator');
+		$this->forumValidator = GeneralUtility::makeInstance('tx_mmforum_FrontendAdministration_Validator');
 		$this->forumValidator->conf = $this->conf;
 		$this->forumValidator->parent = $this->p;
 	}

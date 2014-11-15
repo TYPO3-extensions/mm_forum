@@ -22,6 +22,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -239,7 +241,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
     // Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['listPosts_topic'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['listPosts_topic'] as $_classRef) {
-				$_procObj = &t3lib_div::getUserObj($_classRef);
+				$_procObj = &GeneralUtility::getUserObj($_classRef);
 				$marker   = $_procObj->listPosts_topic($marker, $topicData, $this);
 			}
 		}
@@ -278,7 +280,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			);
 			$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
 			$link = $this->tools->getAbsoluteUrl($link);
-			header('Location: ' . t3lib_div::locationHeaderUrl($link));
+			header('Location: ' . GeneralUtility::locationHeaderUrl($link));
 			exit();
 		}
 
@@ -352,7 +354,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['listPosts_footer'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['listPosts_footer'] as $_classRef) {
-				$_procObj = &t3lib_div::getUserObj($_classRef);
+				$_procObj = &GeneralUtility::getUserObj($_classRef);
 				$marker   = $_procObj->listPosts_footer($marker, $topicData, $this);
 			}
 		}
@@ -512,7 +514,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['postListMarkerArray'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['postListMarkerArray'] as $_classRef) {
-				$_procObj = &t3lib_div::getUserObj($_classRef);
+				$_procObj = &GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->processPostListMarkerArray($marker, $row, $topic, $this);
 			}
 		}
@@ -761,7 +763,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 				// Include hooks
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['postAttachmentListMarkerArray'])) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['postAttachmentListMarkerArray'] as $_classRef) {
-						$_procObj = &t3lib_div::getUserObj($_classRef);
+						$_procObj = &GeneralUtility::getUserObj($_classRef);
 						$markers = $_procObj->processPostAttachmentListMarkerArray($markers, $wrappedSubparts, $row, $topic, $attachment, $this);
 					}
 				}
@@ -930,7 +932,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
                     $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics',"uid='$topic_id'",$updArray);
 
                     // Delete poll
-                    $pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
+                    $pollObj = GeneralUtility::makeInstance('tx_mmforum_polls');
                     $pollObj->deletePoll(0,$topic_id);
 
                     // Determine last active post in board
@@ -1102,7 +1104,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 				);
 				$link = $this->pi_getPageLink($this->getForumPID(), '', $linkParams);
 				$link = $this->tools->getAbsoluteUrl($link);
-				header('Location: ' . t3lib_div::locationHeaderUrl($link));
+				header('Location: ' . GeneralUtility::locationHeaderUrl($link));
 				exit();
 			}
 
@@ -1154,7 +1156,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 			$marker['###ACTIONLINK###'] = $this->escapeURL($this->tools->getAbsoluteUrl($this->pi_linkTP_keepPIvars_url()));
 
 			// Generate prefix list
-			$prefixes = t3lib_div::trimExplode(',', $this->conf['prefixes']);
+			$prefixes = GeneralUtility::trimExplode(',', $this->conf['prefixes']);
 			$marker['###PREFIXES###'] .= '<option value="0"></option>';
 
 			foreach ($prefixes as $prefix) {
@@ -1204,7 +1206,7 @@ $image = $this->pi_linkTP($this->buildImageTag($imgInfo),$favlinkParams);
 		if ($postId) {
 			$link = $this->get_pid_link($postId, $this->piVars['sword'], $this->conf);
 			$link = $this->tools->getAbsoluteUrl($link);
-			header('Location: ' . t3lib_div::locationHeaderUrl($link));
+			header('Location: ' . GeneralUtility::locationHeaderUrl($link));
 			exit();
 		}
 	 }

@@ -21,6 +21,10 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -142,12 +146,8 @@
  *
  */
 
-
-
-
-
-if (t3lib_extMgm::isLoaded('ratings'))
-	require_once(t3lib_extMgm::extPath('ratings') . 'class.tx_ratings_api.php');
+if ( ExtensionManagementUtility::isLoaded('ratings'))
+	require_once( ExtensionManagementUtility::extPath('ratings') . 'class.tx_ratings_api.php');
 
 /**
  * Plugin 'mm_forum' for the 'mm_forum' extension.
@@ -176,7 +176,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	/**
 	 * The TYPO3 database object
 	 *
-	 * @var t3lib_DB
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
 	 */
 	protected $databaseHandle;
 
@@ -211,7 +211,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$this->templateFile = $conf['templateFile'];
 
 			/* Load plugin code */
-		$codes = t3lib_div::trimExplode(',', ($this->config['code'] ? $this->config['code'] : $this->conf['defaultCode']), 1);
+		$codes = GeneralUtility::trimExplode(',', ($this->config['code'] ? $this->config['code'] : $this->conf['defaultCode']), 1);
 		if (!count($codes)) {
 			$codes = array('');
 		}
@@ -265,13 +265,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 								'content' => &$content,
 								'conf'    => &$conf
 							);
-							$_procObj = &t3lib_div::getUserObj($_classRef);
+							$_procObj = &GeneralUtility::getUserObj($_classRef);
 							$_procObj->preDispatchHook($_params, $this);
 						}
 					}
 
 					if ($this->redirectTo) {
-						header('Location: ' . t3lib_div::locationHeaderUrl($this->redirectTo));
+						header('Location: ' . GeneralUtility::locationHeaderUrl($this->redirectTo));
 						exit();
 					}
 
@@ -298,6 +298,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 							$content = $this->new_post($content, $conf);
 							break;
 						case 'send_mail':
+							/** @noinspection PhpDeprecationInspection */
 							$content = $this->send_mail($content, $conf);
 							break;
 						case 'forum_view_profil':
@@ -369,7 +370,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['mainContentHook'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['mainContentHook'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$content = $_procObj->mainContentHook($content, $this);
 			}
 		}
@@ -455,7 +456,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$template = $this->cObj->getSubpart($template, '###FOOTER###');
 
 		$_EXTKEY = 'mm_forum';
-		@include(t3lib_extMgm::extPath('mm_forum') . 'ext_emconf.php');
+		@include( ExtensionManagementUtility::extPath('mm_forum') . 'ext_emconf.php');
 
 		if (isset($EM_CONF)) {
 			$marker['###FOOTER_MESSAGE###'] = sprintf($this->pi_getLL('footermessage'), $EM_CONF['mm_forum']['version']);
@@ -466,7 +467,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['pageFooter'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['pageFooter'] as $_classRef) {
-				$_procObj = &t3lib_div::getUserObj($_classRef);
+				$_procObj = &GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->pageFooter($marker, $this);
 			}
 		}
@@ -488,7 +489,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['pageHeader'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['pageHeader'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->pageHeader($marker, $this);
 			}
 		}
@@ -547,7 +548,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnread_header'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnread_header'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->listUnread_header($marker, $this);
 			}
 		}
@@ -684,7 +685,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnread_listitem'])) {
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnread_listitem'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$marker = $_procObj->listUnread_listitem($marker, $row, $this);
 				}
 			}
@@ -700,7 +701,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnread_footer'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnread_footer'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->listUnread_footer($marker, $this);
 			}
 		}
@@ -744,7 +745,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnanswered_header'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnanswered_header'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->listUnanswered_header($marker, $this);
 			}
 		}
@@ -834,7 +835,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnanswered_listitem'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnanswered_listitem'] as $_classRef) {
-					$_procObj = &t3lib_div::getUserObj($_classRef);
+					$_procObj = &GeneralUtility::getUserObj($_classRef);
 					$marker = $_procObj->listUnanswered_listitem($marker, $row, $this);
 				}
 			}
@@ -848,7 +849,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnanswered_footer'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnanswered_footer'] as $_classRef) {
-				$_procObj = &t3lib_div::getUserObj($_classRef);
+				$_procObj = &GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->listUnanswered_footer($marker, $this);
 			}
 		}
@@ -877,7 +878,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listCategories_header'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listCategories_header'] as $_classRef) {
-				$_procObj = &t3lib_div::getUserObj($_classRef);
+				$_procObj = &GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->listCategories_header($marker, $this);
 			}
 		}
@@ -904,7 +905,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listCategories_listitem'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listCategories_listitem'] as $_classRef) {
-					$_procObj = &t3lib_div::getUserObj($_classRef);
+					$_procObj = &GeneralUtility::getUserObj($_classRef);
 					$marker   = $_procObj->listCategories_listitem($marker, $row, $this);
 				}
 			}
@@ -940,7 +941,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				// Include hooks
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listCategories_sublistitem'])) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listCategories_sublistitem'] as $_classRef) {
-						$_procObj = &t3lib_div::getUserObj($_classRef);
+						$_procObj = &GeneralUtility::getUserObj($_classRef);
 						$marker = $_procObj->listCategories_sublistitem($marker, $row, $this);
 					}
 				}
@@ -951,7 +952,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listCategories_footer'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listCategories_footer'] as $_classRef) {
-				$_procObj = &t3lib_div::getUserObj($_classRef);
+				$_procObj = &GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->listCategories_footer($marker, $this);
 			}
 		}
@@ -984,7 +985,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listForums_header'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listForums_header'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->listForums_header($marker, $this);
 			}
 		}
@@ -1061,7 +1062,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listForums_categoryItem'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listForums_categoryItem'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$marker = $_procObj->listForums_categoryItem($marker, $row, $this);
 				}
 			}
@@ -1123,7 +1124,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					// Include hooks
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listForums_forumItem'])) {
 						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listForums_forumItem'] as $_classRef) {
-							$_procObj = & t3lib_div::getUserObj($_classRef);
+							$_procObj = & GeneralUtility::getUserObj($_classRef);
 							$marker = $_procObj->listForums_forumItem($marker, $row, $this);
 						}
 					}
@@ -1244,7 +1245,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_header'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_header'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->listTopics_header($marker, $this, $rowForum);
 			}
 		}
@@ -1420,7 +1421,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_topicItem'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_topicItem'] as $_classRef) {
-					$_procObj = &t3lib_div::getUserObj($_classRef);
+					$_procObj = &GeneralUtility::getUserObj($_classRef);
 					$marker = $_procObj->listTopics_topicItem($marker, $row, $this);
 				}
 			}
@@ -1439,7 +1440,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_footer'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_footer'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->listTopics_footer($marker, $this, $rowForum);
 			}
 		}
@@ -1504,8 +1505,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function list_prefix($content, $conf, $prefix) {
 
 		// determine the selected prefix based on the allowed list and the disallowed list
-		$prefixes = t3lib_div::trimExplode(',', $conf['prefixes']);
-		$noListPrefixes = t3lib_div::trimExplode(',', $conf['noListPrefixes']);
+		$prefixes = GeneralUtility::trimExplode(',', $conf['prefixes']);
+		$noListPrefixes = GeneralUtility::trimExplode(',', $conf['noListPrefixes']);
 
 		foreach ($prefixes as $sPrefix) {
 			if (in_array($sPrefix, $noListPrefixes)) {
@@ -1695,7 +1696,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			if (is_array($cat['boards'])) {
 				foreach ($cat['boards'] as $forumValue => $forum) {
-					$title = t3lib_div::fixed_lgd_cs($forum['forum_name'], 50);
+					$title = GeneralUtility::fixed_lgd_cs($forum['forum_name'], 50);
 					$sel = ($forumValue == $settings['show'] ? 'selected="selected"' : '');
 					$marker['###CATEGORIES###'] .= '<option value="' . $forumValue . '" ' . $sel . '>' . $this->escape($title) . '</option>';
 				}
@@ -1706,7 +1707,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listPrefix_header'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listPrefix_header'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->listPrefix_header($marker, $this, $forumList);
 			}
 		}
@@ -1742,7 +1743,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listPrefix_settings'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listPrefix_settings'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->listPrefix_settings($marker, $this);
 			}
 		}
@@ -1835,7 +1836,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listPrefix_topicItem'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listPrefix_topicItem'] as $_classRef) {
-					$_procObj = &t3lib_div::getUserObj($_classRef);
+					$_procObj = &GeneralUtility::getUserObj($_classRef);
 					$marker = $_procObj->listPrefix_topicItem($marker, $topicRow, $this);
 				}
 			}
@@ -1852,7 +1853,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listPrefix_footer'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listPrefix_footer'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->listPrefix_footer($marker, $this);
 			}
 		}
@@ -1935,7 +1936,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_topicItem'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_topicItem'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$rMarker  = $_procObj->listLatest_topicItem($rMarker, $row, $this);
 				}
 			}
@@ -1952,7 +1953,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_allMarkers'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_allMarkers'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker   = $_procObj->listLatest_allMarkers($marker, $this);
 			}
 		}
@@ -1971,7 +1972,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$list_fields    = $this->userlist_fields;
 		$list_count     = $this->userlist_limit;
 
-		$list_fields    = t3lib_div::trimExplode(',',$list_fields);
+		$list_fields    = GeneralUtility::trimExplode(',',$list_fields);
 
 		$template       = $this->cObj->fileResource($this->conf['template.']['userlist']);
 		$template       = $this->cObj->getSubpart($template, '###USERLIST###');
@@ -1998,9 +1999,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		if (!in_array($sorting_mode,array('ASC','DESC'))) $sorting_mode = 'ASC';
 
 			/* Instantiate user management library */
-		$this->userLib = t3lib_div::makeInstance('tx_mmforum_usermanagement');
+		$this->userLib = GeneralUtility::makeInstance('tx_mmforum_usermanagement');
 
-		$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
+		$userField = GeneralUtility::makeInstance('tx_mmforum_userfield');
 		$userField->init($this->userLib, $this->cObj);
 
 		$content_th = '';
@@ -2142,7 +2143,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$userResult = array_slice($users,$offset,$list_count);
 		}
 
-		$parser  = t3lib_div::makeInstance('t3lib_TSparser');
+		$parser  = GeneralUtility::makeInstance('t3lib_TSparser');
 
 		$i = 0;
 
@@ -2203,7 +2204,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				// Include hooks
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_userCell'])) {
 					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_userCell'] as $_classRef) {
-						$_procObj = & t3lib_div::getUserObj($_classRef);
+						$_procObj = & GeneralUtility::getUserObj($_classRef);
 						$cellMarker = $_procObj->listLatest_userCell($cellMarker, $user, $field, $this);
 					}
 				}
@@ -2213,7 +2214,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_preUserRow'])) {
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_preUserRow'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$user_row = $_procObj->listLatest_preUserRow($user_row, $user, $this);
 				}
 			}
@@ -2223,7 +2224,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_postUserRow'])) {
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listLatest_postUserRow'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$user_row .= $_procObj->listLatest_postUserRow($user_row, $user, $this);
 				}
 			}
@@ -2242,7 +2243,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return	[type]		...
 	 */
 	function list_postqueue() {
-		$postqueue = t3lib_div::makeInstance('tx_mmforum_postqueue');
+		$postqueue = GeneralUtility::makeInstance('tx_mmforum_postqueue');
 		return $postqueue->main($this->conf, $this);
 	}
 
@@ -2252,7 +2253,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return	[type]		...
 	 */
 	function list_rss() {
-		$rss = t3lib_div::makeInstance('tx_mmforum_rss');
+		$rss = GeneralUtility::makeInstance('tx_mmforum_rss');
 		return $rss->main($this->conf, $this);
 	}
 
@@ -2265,7 +2266,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return string HTML content
 	 */
 	function frontendAdministration() {
-		$frontendAdministration = t3lib_div::makeInstance('tx_mmforum_FrontendAdministration');
+		$frontendAdministration = GeneralUtility::makeInstance('tx_mmforum_FrontendAdministration');
 		return $frontendAdministration->main($this->conf, $this);
 	}
 
@@ -2317,12 +2318,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 
 				// Create postfactory object
-				$postfactory = t3lib_div::makeInstance('tx_mmforum_postfactory'); /* @var $postfactory tx_mmforum_postfactory */
+				$postfactory = GeneralUtility::makeInstance('tx_mmforum_postfactory'); /* @var $postfactory tx_mmforum_postfactory */
 				$postfactory->init($this->conf,$this);
 
 				// Create poll
 				if ($this->piVars['enable_poll'] == '1') {
-					$pollObj = t3lib_div::makeInstance('tx_mmforum_polls'); /* @var $pollObj tx_mmforum_polls */
+					$pollObj = GeneralUtility::makeInstance('tx_mmforum_polls'); /* @var $pollObj tx_mmforum_polls */
 					$poll_id = $pollObj->createPoll($this->piVars['poll'], $this);
 					if (!is_numeric($poll_id)) {
 						$content .= $this->errorMessage($this->conf, $poll_id);
@@ -2357,7 +2358,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$this->piVars['topicname'],
 						$this->piVars['message'],
 						$GLOBALS['EXEC_TIME'],
-						$this->tools->ip2hex(t3lib_div::getIndpEnv('REMOTE_ADDR')),
+						$this->tools->ip2hex(GeneralUtility::getIndpEnv('REMOTE_ADDR')),
 						$attachment_ids,
 						$poll_id
 					);
@@ -2372,7 +2373,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$this->piVars['topicname'],
 						$this->piVars['message'],
 						$GLOBALS['EXEC_TIME'],
-						$this->tools->ip2hex(t3lib_div::getIndpEnv('REMOTE_ADDR')),
+						$this->tools->ip2hex(GeneralUtility::getIndpEnv('REMOTE_ADDR')),
 						$attachment_ids,
 						$poll_id,
 						$this->piVars['havealook'] == 'havealook'
@@ -2388,14 +2389,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					}
 					$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
 					$link = $this->tools->getAbsoluteUrl($link);
-					header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $topic_uid));
+					header('Location: ' . GeneralUtility::locationHeaderUrl($link . '#pid' . $topic_uid));
 					exit();
 				}
 			} else {
 				$this->generateToken();
 				if ($this->piVars['button'] == $this->pi_getLL('newTopic.preview')) {
 					if ($this->piVars['enable_poll'] == '1') {
-						$pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
+						$pollObj = GeneralUtility::makeInstance('tx_mmforum_polls');
 						$content .= $pollObj->displayPreview($this->piVars['poll'], $this);
 					}
 
@@ -2422,7 +2423,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					// Include hooks
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newTopic_INpreview'])) {
 						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newTopic_INpreview'] as $_classRef) {
-							$_procObj = & t3lib_div::getUserObj($_classRef);
+							$_procObj = & GeneralUtility::getUserObj($_classRef);
 							$marker = $_procObj->newTopic_INpreview($marker, $this);
 						}
 					}
@@ -2440,7 +2441,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					// Include hooks
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newTopic_preview'])) {
 						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newTopic_preview'] as $_classRef) {
-							$_procObj = & t3lib_div::getUserObj($_classRef);
+							$_procObj = & GeneralUtility::getUserObj($_classRef);
 							$previewMarker = $_procObj->newTopic_preview($previewMarker, $this);
 						}
 					}
@@ -2468,7 +2469,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$template = $this->cObj->substituteSubpart($template, '###BBCODEBUTTONS###', $bbCodeButtons);
 				$template = str_replace('###POLLJAVASCRIPT###',$this->conf['polljavascript'],$template);
 
-				$pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
+				$pollObj = GeneralUtility::makeInstance('tx_mmforum_polls');
 
 				$marker = array(
 					'###LABEL_CREATETOPIC###'   => $this->pi_getLL('newTopic.create'),
@@ -2521,7 +2522,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 
 				// Maximum file size
-				$mFileSize = t3lib_div::formatSize($this->conf['attachments.']['maxFileSize']);
+				$mFileSize = GeneralUtility::formatSize($this->conf['attachments.']['maxFileSize']);
 
 				$marker['###MAXFILESIZE_TEXT###'] = sprintf($this->pi_getLL('newPost.maxFileSize'), $mFileSize);
 				$marker['###MAXFILESIZE_TEXT###'] = $this->cObj->stdWrap($marker['###MAXFILESIZE_TEXT###'], $this->conf['attachments.']['maxFileSize_stdWrap.']);
@@ -2544,7 +2545,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newTopic_formMarker'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newTopic_formMarker'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->newTopic_formMarker($marker, $this);
 			}
 		}
@@ -2639,7 +2640,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 
 				// Instantiate postfactory class
-				$postfactory = t3lib_div::makeInstance('tx_mmforum_postfactory');
+				$postfactory = GeneralUtility::makeInstance('tx_mmforum_postfactory');
 				$postfactory->init($this->conf, $this);
 
 				if ($this->isModeratedForum() && !$this->getIsAdmin() && !$this->getIsMod($this->piVars['fid'])) {
@@ -2650,7 +2651,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$this->getUserID(),
 						$this->piVars['message'],
 						$GLOBALS['EXEC_TIME'],
-						$this->tools->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
+						$this->tools->ip2hex(GeneralUtility::getIndpEnv("REMOTE_ADDR")),
 						$attachment_ids
 					);
 
@@ -2664,7 +2665,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$this->getUserID(),
 						$this->piVars['message'],
 						$GLOBALS['EXEC_TIME'],
-						$this->tools->ip2hex(t3lib_div::getIndpEnv("REMOTE_ADDR")),
+						$this->tools->ip2hex(GeneralUtility::getIndpEnv("REMOTE_ADDR")),
 						$attachment_ids,
 						false,
 						($this->piVars['havealook'] == 'havealook')
@@ -2680,7 +2681,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
 					$link = $this->tools->getAbsoluteUrl($link);
 
-					header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $postId));
+					header('Location: ' . GeneralUtility::locationHeaderUrl($link . '#pid' . $postId));
 					exit();
 				}
 			} else {
@@ -2712,7 +2713,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					// Include hooks
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_INpreview'])) {
 						foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_INpreview'] as $classRef) {
-							$procObj = & t3lib_div::getUserObj($classRef);
+							$procObj = & GeneralUtility::getUserObj($classRef);
 							$marker = $procObj->newPost_INpreview($marker, $this);
 						}
 					}
@@ -2727,7 +2728,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					// Include hooks
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_preview'])) {
 						foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_preview'] as $classRef) {
-							$procObj = & t3lib_div::getUserObj($classRef);
+							$procObj = & GeneralUtility::getUserObj($classRef);
 							$previewMarker = $procObj->newPost_preview($previewMarker, $this);
 						}
 					}
@@ -2874,7 +2875,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_formMarker'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_formMarker'] as $classRef) {
-				$procObj = & t3lib_div::getUserObj($classRef);
+				$procObj = & GeneralUtility::getUserObj($classRef);
 				$marker = $procObj->newPost_formMarker($marker, $this);
 			}
 		}
@@ -2944,8 +2945,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 *                error message.
 	 */
 	function performAttachmentUpload() {
-		$deny   = t3lib_div::trimExplode(',', $this->conf['attachments.']['deny']);
-		$allow  = t3lib_div::trimExplode(',', $this->conf['attachments.']['allow']);
+		$deny   = GeneralUtility::trimExplode(',', $this->conf['attachments.']['deny']);
+		$allow  = GeneralUtility::trimExplode(',', $this->conf['attachments.']['allow']);
 		$maxAttachments = intval($this->conf['attachments.']['maxCount'] ? $this->conf['attachments.']['maxCount'] : 1);
 
 		if (!$this->conf['attachments.']['enable']) {
@@ -2959,7 +2960,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				continue;
 			}
 			if ($file['size'] > $this->conf['attachments.']['maxFileSize']) {
-				$fileSize = t3lib_div::formatSize($file['size']) . 'B';
+				$fileSize = GeneralUtility::formatSize($file['size']) . 'B';
 				return $this->errorMessage($this->conf, sprintf($this->pi_getLL('attachment.toobig'), $fileSize));
 			}
 			if($GLOBALS['TYPO3_CONF_VARS']['BE']['fileDenyPattern'] != '') {
@@ -2999,7 +3000,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$ext = array_pop(explode('.', $file['name']));
 			$newpath .= '.' . $ext;
 
-			t3lib_div::upload_copy_move($file['tmp_name'], $newpath);
+			GeneralUtility::upload_copy_move($file['tmp_name'], $newpath);
 
 			/* Fix wrong mime-type for pdf when uploading through Firefox
 			 * Mime-type for PDF should be: 'application/pdf'
@@ -3027,7 +3028,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['attachment_dataRecord'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['attachment_dataRecord'] as $_classRef) {
-					$_procObj = &t3lib_div::getUserObj($_classRef);
+					$_procObj = &GeneralUtility::getUserObj($_classRef);
 					$insertArray = $_procObj->attachment_dataRecord($insertArray, $this);
 				}
 			}
@@ -3126,7 +3127,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$attachementId = intval($attachementId);
 						$this->databaseHandle->exec_UPDATEquery('tx_mmforum_attachments', 'uid=' . $attachementId, array('deleted' => 1, 'tstamp' => $GLOBALS['EXEC_TIME']));
 						$this->databaseHandle->exec_UPDATEquery('tx_mmforum_posts', 'uid=' . $attachementId, array('attachment' => 0, 'tstamp' => $GLOBALS['EXEC_TIME']));
-						$attachments = t3lib_div::intExplode(',', $row['attachment']);
+						$attachments = GeneralUtility::intExplode(',', $row['attachment']);
 						unset($attachments[array_search($attachementId, $attachments)]);
 						$row['attachment'] = implode(',', $attachments);
 					}
@@ -3147,7 +3148,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						return $this->post_edit($content, $conf);
 					} else {
 						$attachmentIds = $res;
-						$attachments = t3lib_div::intExplode(',', $row['attachment']);
+						$attachments = GeneralUtility::intExplode(',', $row['attachment']);
 						$attachments = tx_mmforum_tools::processArray_numeric($attachments);
 
 						$updateData = array(
@@ -3171,7 +3172,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				if ($this->conf['polls.']['enable']) {
 
 					if ($this->piVars['enable_poll'] == '1' && $firstPost) {
-						$pollObj = t3lib_div::makeInstance('tx_mmforum_polls'); /* @var $pollObj tx_mmforum_polls */
+						$pollObj = GeneralUtility::makeInstance('tx_mmforum_polls'); /* @var $pollObj tx_mmforum_polls */
 
 						if ($topicData['poll_id'] > 0) {
 
@@ -3202,7 +3203,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						}
 					} else if ($firstPost && $topicData['poll_id'] > 0) {
 
-						$pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
+						$pollObj = GeneralUtility::makeInstance('tx_mmforum_polls');
 						$pollObj->deletePoll($topicData['poll_id'],$topicData['uid']);
 					}
 				}
@@ -3249,7 +3250,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
 				$link = $this->tools->getAbsoluteUrl($link);
 
-				header('Location: ' . t3lib_div::locationHeaderUrl($link . '#pid' . $postId));
+				header('Location: ' . GeneralUtility::locationHeaderUrl($link . '#pid' . $postId));
 				exit();
 
 			} else {
@@ -3280,7 +3281,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					// Include hooks
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_INpreviewMarker'])) {
 						foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_INpreviewMarker'] as $classRef) {
-							$procObj = & t3lib_div::getUserObj($classRef);
+							$procObj = & GeneralUtility::getUserObj($classRef);
 							$marker = $procObj->editPost_INpreviewMarker($marker, $this);
 						}
 					}
@@ -3296,7 +3297,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					// Include hooks
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_previewMarker'])) {
 						foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_previewMarker'] as $classRef) {
-							$procObj = & t3lib_div::getUserObj($classRef);
+							$procObj = & GeneralUtility::getUserObj($classRef);
 							$previewMarker = $procObj->editPost_previewMarker($previewMarker, $this);
 						}
 					}
@@ -3308,7 +3309,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$template = $this->cObj->getSubpart($template,
 					stristr($template, '###NEWTOPIC###') === false ? '###NEWPOST###' : '###NEWTOPIC###');	// compatibility: typo in template file fixed. was 'NEWTOPIC'
 
-				$attachments = t3lib_div::intExplode(',', $row['attachment']);
+				$attachments = GeneralUtility::intExplode(',', $row['attachment']);
 				$attachments = tx_mmforum_tools::processArray_numeric($attachments);
 				$attachCount = count($attachments);
 
@@ -3384,7 +3385,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 
 				if ($firstPost && $this->conf['polls.']['enable']) {
-					$pollObj = t3lib_div::makeInstance('tx_mmforum_polls');
+					$pollObj = GeneralUtility::makeInstance('tx_mmforum_polls');
 					if ($topicData['poll_id'] == 0) {
 						$marker['###POLL###']           = $pollObj->display_createForm($this->piVars['poll'] ? $this->piVars['poll'] : array(), $this);
 						$marker['###ENABLE_POLL###']    = $this->piVars['enable_poll'] ? 'checked="checked"' : '';
@@ -3478,7 +3479,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_formMarker'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['editPost_formMarker'] as $classRef) {
-				$procObj = & t3lib_div::getUserObj($classRef);
+				$procObj = & GeneralUtility::getUserObj($classRef);
 				$marker = $procObj->editPost_formMarker($marker, $this);
 			}
 		}
@@ -3521,7 +3522,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['setFavorite_dataRecord'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['setFavorite_dataRecord'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$insertArray = $_procObj->setFavorite_dataRecord($insertArray, $this);
 				}
 			}
@@ -3618,7 +3619,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listFavorites_header'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listFavorites_header'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$settingsMarker = $_procObj->listFavorites_header($settingsMarker, $this);
 				}
 			}
@@ -3639,7 +3640,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listFavorites_options'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listFavorites_options'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$marker = $_procObj->listFavorites_options($marker, $this);
 				}
 			}
@@ -3705,7 +3706,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					// Include hooks
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listFavorites_listItem'])) {
 						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listFavorites_listItem'] as $_classRef) {
-							$_procObj = & t3lib_div::getUserObj($_classRef);
+							$_procObj = & GeneralUtility::getUserObj($_classRef);
 							$marker = $_procObj->listFavorites_listItem($marker, $row, $this);
 						}
 					}
@@ -3726,7 +3727,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listFavorites_footer'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listFavorites_footer'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$marker = $_procObj->listFavorites_footer($marker, $this);
 				}
 			}
@@ -3775,7 +3776,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			else $title = $arr['title'];
 
 			$imgpath = $this->conf['postparser.']['buttonPath'].$arr['fe_inserticon'];
-			$imgpath = str_replace('EXT:mm_forum/',t3lib_extMgm::siteRelPath('mm_forum'),$imgpath);
+			$imgpath = str_replace('EXT:mm_forum/', ExtensionManagementUtility::siteRelPath('mm_forum'),$imgpath);
 
 			preg_match('/\[(.*?)\]\|\[\/(.*?)\]/',$arr['bbcode'],$items);
 
@@ -3806,7 +3807,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				else $title = $arr['lang_title'];
 
 				$imgpath = $this->conf['postparser.']['buttonPath'].$arr['fe_inserticon'];
-				$imgpath = str_replace('EXT:mm_forum/',t3lib_extMgm::siteRelPath('mm_forum'),$imgpath);
+				$imgpath = str_replace('EXT:mm_forum/', ExtensionManagementUtility::siteRelPath('mm_forum'),$imgpath);
 
 				$marker = array(
 					'###CODE_IMAGE###'          => $imgpath,
@@ -3938,7 +3939,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @deprecated since 0.1.8, please use the direct call to the static function
 	 */
 	function send_newpost_mail($content, $conf, $topicId) {
-		t3lib_div::logDeprecatedFunction();
+		GeneralUtility::logDeprecatedFunction();
 
 		tx_mmforum_havealook::notifyTopicSubscribers($topicId, $this);
 	}
@@ -3955,7 +3956,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @deprecated since 0.1.8, please use the direct call to the static function
 	 */
 	function send_newpost_mail_forum($content, $conf, $topicId, $forumId) {
-		t3lib_div::logDeprecatedFunction();
+		GeneralUtility::logDeprecatedFunction();
 
 		tx_mmforum_havealook::notifyForumSubscribers($topicId, $forumId, $this);
 	}
@@ -4120,7 +4121,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'',
 			'sorting DESC'
 		);
-		$parser  = t3lib_div::makeInstance('t3lib_TSparser');
+		$parser  = GeneralUtility::makeInstance('t3lib_TSparser');
 		while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$cRes = $this->databaseHandle->exec_SELECTquery(
 				'field_value',
@@ -4175,7 +4176,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['userProfile_marker'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['userProfile_marker'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$marker = $_procObj->userProfile_marker($marker, $user->data, $this);
 			}
 		}
@@ -4238,7 +4239,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @deprecated - not in use, will be removed in version 1.11. please use post_history instead
 	 */
 	function view_last_10_posts($uid) {
-		t3lib_div::logDeprecatedFunction();
+		GeneralUtility::logDeprecatedFunction();
 
 		$uid = intval($uid);
 		$res = $this->databaseHandle->exec_SELECTquery('*','tx_mmforum_posts',"poster_id='$uid' AND deleted='0' AND hidden='0'".$this->getStoragePIDQuery(),'','crdate DESC','10');
@@ -4269,7 +4270,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @deprecated Currently not used
 	 */
 	function send_mail($content, $conf) {
-		t3lib_div::logDeprecatedFunction();
+		GeneralUtility::logDeprecatedFunction();
 
 		$benutzer = $GLOBALS['TSFE']->fe_user->user['username'];
 		$mailtimeout    = 30;                   // Mail time Out
@@ -4626,7 +4627,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['viewLastPost_postContentHook'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['viewLastPost_postContentHook'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$content = $_procObj->viewLastPost_postContentHook($content, $row, $this);
 			}
 		}
@@ -4654,7 +4655,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['profileLink_postContentHook'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['profileLink_postContentHook'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$content = $_procObj->profileLink_postContentHook($content, $userData, $this);
 			}
 		}
@@ -4712,7 +4713,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['userInformation_marker'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['userInformation_marker'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$marker = $_procObj->userInformation_marker($marker, $userData, $this);
 				}
 			}
@@ -4763,7 +4764,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			} else {
 				// only take the first image, if there are multiple ones
 				if (strpos($feuserImg, ',') !== false) {
-					list($feuserImg) = t3lib_div::trimExplode(',', $feuserImg);
+					list($feuserImg) = GeneralUtility::trimExplode(',', $feuserImg);
 				}
 				if (file_exists('uploads/pics/' . $feuserImg)) {
 					$imgConf['file'] = 'uploads/pics/' . $feuserImg;
@@ -4826,7 +4827,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 *             delegates the task to class postparser.
 	 */
 	function bb2text($text, $conf) {
-		t3lib_div::logDeprecatedFunction();
+		GeneralUtility::logDeprecatedFunction();
 
 		return tx_mmforum_postparser::main($this, $conf, $text, 'textparser');
 	}
@@ -4888,7 +4889,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$res[] = $row['topic_id'];
 			}
 		}
-		//t3lib_div::debug (count($res), 'number of unread posts : took ms: ' . (microtime(true) - $starttime));
+		//GeneralUtility::debug (count($res), 'number of unread posts : took ms: ' . (microtime(true) - $starttime));
 		return $res;
 	}
 
@@ -4908,11 +4909,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$this->databaseHandle->exec_UPDATEquery('fe_users', 'uid = ' . $GLOBALS['TSFE']->fe_user->user['uid'], $updateArray);
 
 		// Redirecting visitor back to previous page
-		$ref = t3lib_div::getIndpEnv('HTTP_REFERER');
+		$ref = GeneralUtility::getIndpEnv('HTTP_REFERER');
 		if ($ref) {
 			$ref = $this->tools->getAbsoluteUrl($ref);
-			header('Location: ' . t3lib_div::locationHeaderUrl($ref));
-			exit();
+			\TYPO3\CMS\Core\Utility\HttpUtility::redirect($ref);
 		}
 		$content = $this->pi_getLL('board.markedAllRead') . '<br />' . $this->pi_getLL('redirect.error') . '<br />';
 		return $content;
@@ -5017,7 +5017,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return string         The user's ranking.
 	 **/
 	function get_userranking($userId, $conf) {
-		$userRanksObj = t3lib_div::makeInstance('tx_mmforum_ranksFE');
+		$userRanksObj = GeneralUtility::makeInstance('tx_mmforum_ranksFE');
 		$userRanksObj->init($this);
 		$userRanksObj->setContentObject($this->cObj);
 		return $userRanksObj->displayUserRanks($userId);
@@ -5064,7 +5064,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				'tstamp'        => $GLOBALS['EXEC_TIME'],
 				'crdate'        => $GLOBALS['EXEC_TIME'],
 				'userid'        => $GLOBALS['TSFE']->fe_user->user['uid'],
-				'ip'            => t3lib_div::getIndpEnv("REMOTE_ADDR")
+				'ip'            => GeneralUtility::getIndpEnv("REMOTE_ADDR")
 			);
 			$res = $this->databaseHandle->exec_INSERTquery('tx_mmforum_userconfig',$insertArray);
 		} else {
@@ -5103,8 +5103,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		);
 		$linkto = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
 		$linkto = $this->tools->getAbsoluteUrl($linkto);
-		header('Location: ' . t3lib_div::locationHeaderUrl($linkto));
-		exit();
+		\TYPO3\CMS\Core\Utility\HttpUtility::redirect($linkto);
 	}
 
 	/**
@@ -5229,7 +5228,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return int              The user UID of $username.
 	 */
 	function get_userid($username) {
-		t3lib_div::logDeprecatedFunction();
+		GeneralUtility::logDeprecatedFunction();
 
 		return tx_mmforum_tools::get_userid($username);
 	}
@@ -5640,7 +5639,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 
 		// Parse allowed groups into an array
-		$authRead = t3lib_div::trimExplode(',',$authRead);
+		$authRead = GeneralUtility::trimExplode(',',$authRead);
 
 		// Load the current user's groups
 		$groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
@@ -5759,7 +5758,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		/* If no groups with write access have been specified, everyone
 		 * can write, so just return true. */
-		$authWrite = t3lib_div::intExplode(',',$authWrite);
+		$authWrite = GeneralUtility::intExplode(',',$authWrite);
 		$authWrite = $this->tools->processArray_numeric($authWrite);
 		if (count($authWrite)==0) {
 			$this->cache->save('getMayWrite_forum_'.$userId.'_'.$forum['uid'],true);
@@ -6109,9 +6108,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 *             method in the tx_mmforum_menu class.
 	 */
 	function createRootline($content, $conf) {
-		t3lib_div::logDeprecatedFunction();
+		GeneralUtility::logDeprecatedFunction();
 
-  		$menuObj = t3lib_div::makeInstance('tx_mmforum_menus');
+		$menuObj = GeneralUtility::makeInstance('tx_mmforum_menus');
 		return $menuObj->createRootline($content,$conf);
 	}
 
@@ -6193,7 +6192,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			}
 
 			$link = $this->tools->getAbsoluteUrl($this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams));
-			header('Location: ' . t3lib_div::locationHeaderUrl($link));
+			header('Location: ' . GeneralUtility::locationHeaderUrl($link));
 			exit();
 		} else {
 			return $this->errorMessage($this->conf, $this->pi_getLL('topic-noSolveRights'));
@@ -6257,7 +6256,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['profileLink_postLinkGen'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['profileLink_postLinkGen'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$link = $_procObj->userProfileLink($userData, $link, $this);
 			}
 		}
@@ -6323,7 +6322,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 *                        or the 'ratings' extension is not installed.
 	 */
 	function isRating($table) {
-		if (!t3lib_extMgm::isLoaded('ratings')) return false;
+		if (! ExtensionManagementUtility::isLoaded('ratings')) return false;
 		return $this->conf['enableRating.'][$table] ? true : false;
 	}
 

@@ -21,6 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -80,7 +82,7 @@ class tx_mmforum_ranksFE {
      */
     function displayUserRanks($user_id=-1) {
 
-        #$userRanksObj = t3lib_div::makeInstance('tx_mmforum_ranksFE');
+        #$userRanksObj = GeneralUtility::makeInstance('tx_mmforum_ranksFE');
         #$userRanksObj->setContentObject($this->cObj);
 
         if ($this->conf['ranks.']['enable']) {
@@ -170,7 +172,7 @@ class tx_mmforum_ranksFE {
                 list($groups) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
             }
         }
-        $aGroup = t3lib_div::intExplode(',',$groups);
+        $aGroup = GeneralUtility::intExplode(',',$groups);
         $aGroup = tx_mmforum_tools::processArray_numeric($aGroup);
         return $aGroup;
     }

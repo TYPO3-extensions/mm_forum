@@ -1,5 +1,8 @@
 <?php
 
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Saltedpasswords\Utility\SaltedPasswordsUtility;
 
 class tx_mmforum_FeUser extends tx_mmforum_data {
 
@@ -11,7 +14,7 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 	 * @return null|tx_mmforum_FeUser
 	 */
 	static function getByUID($uid, $pid = -1) {
-		$user = t3lib_div::makeInstance('tx_mmforum_FeUser');
+		$user = GeneralUtility::makeInstance('tx_mmforum_FeUser');
 		/* @var $user tx_mmforum_FeUser */
 		$user->setUid($uid);
 		$user->loadFromDB($pid);
@@ -35,7 +38,7 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', 'username=' . $username . ' AND deleted=0 ' . $andWhere);
 
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
-			$user = t3lib_div::makeInstance('tx_mmforum_FeUser');
+			$user = GeneralUtility::makeInstance('tx_mmforum_FeUser');
 			/* @var $user tx_mmforum_FeUser */
 			$user->initFromArray($GLOBALS['TYPO3_DB']->sql_fetch_assoc($res));
 			return $user;
@@ -78,15 +81,15 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 		}
 
 		$saltedSv = null;
-		if (t3lib_extMgm::isLoaded('t3sec_saltedpw')) {
-			require_once(t3lib_extMgm::extPath('t3sec_saltedpw', 'sv1/class.tx_t3secsaltedpw_sv1.php'));
+		if ( ExtensionManagementUtility::isLoaded('t3sec_saltedpw')) {
+			require_once( ExtensionManagementUtility::extPath('t3sec_saltedpw', 'sv1/class.tx_t3secsaltedpw_sv1.php'));
 			if (tx_t3secsaltedpw_div::isUsageEnabled()) {
-				$saltedSv = t3lib_div::makeInstance('tx_t3secsaltedpw_sv1');
+				$saltedSv = GeneralUtility::makeInstance('tx_t3secsaltedpw_sv1');
 			}
 		}
-		if (!$saltedSv && t3lib_extMgm::isLoaded('saltedpasswords')) {
-			if (tx_saltedpasswords_div::isUsageEnabled()) {
-				$saltedSv = t3lib_div::makeInstance('tx_saltedpasswords_sv1');
+		if (!$saltedSv && ExtensionManagementUtility::isLoaded('saltedpasswords')) {
+			if ( SaltedPasswordsUtility::isUsageEnabled()) {
+				$saltedSv = GeneralUtility::makeInstance('tx_saltedpasswords_sv1');
 			}
 		}
 		if ($saltedSv) {
@@ -95,7 +98,7 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 				return false;
 			}
 		} else {
-			if (t3lib_extMgm::isLoaded('kb_md5fepw')) {
+			if ( ExtensionManagementUtility::isLoaded('kb_md5fepw')) {
 				$password = md5($password);
 			}
 
@@ -114,23 +117,23 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 		$this->data['tx_mmforum_md5'] = md5($password);
 
 		$objPHPass = null;
-		if (t3lib_extMgm::isLoaded('t3sec_saltedpw')) {
-			require_once(t3lib_extMgm::extPath('t3sec_saltedpw') . 'res/staticlib/class.tx_t3secsaltedpw_div.php');
+		if ( ExtensionManagementUtility::isLoaded('t3sec_saltedpw')) {
+			require_once( ExtensionManagementUtility::extPath('t3sec_saltedpw') . 'res/staticlib/class.tx_t3secsaltedpw_div.php');
 			if (tx_t3secsaltedpw_div::isUsageEnabled()) {
-				require_once(t3lib_extMgm::extPath('t3sec_saltedpw') . 'res/lib/class.tx_t3secsaltedpw_phpass.php');
-				$objPHPass = t3lib_div::makeInstance('tx_t3secsaltedpw_phpass');
+				require_once( ExtensionManagementUtility::extPath('t3sec_saltedpw') . 'res/lib/class.tx_t3secsaltedpw_phpass.php');
+				$objPHPass = GeneralUtility::makeInstance('tx_t3secsaltedpw_phpass');
 			}
 		}
-		if (!$objPHPass && t3lib_extMgm::isLoaded('saltedpasswords')) {
-			if (tx_saltedpasswords_div::isUsageEnabled()) {
-				$objPHPass = t3lib_div::makeInstance(tx_saltedpasswords_div::getDefaultSaltingHashingMethod());
+		if (!$objPHPass && ExtensionManagementUtility::isLoaded('saltedpasswords')) {
+			if ( SaltedPasswordsUtility::isUsageEnabled()) {
+				$objPHPass = GeneralUtility::makeInstance( SaltedPasswordsUtility::getDefaultSaltingHashingMethod());
 			}
 		}
 
 		if ($objPHPass) {
 			$this->data['password'] = $objPHPass->getHashedPassword($password);
 		} else {
-			if (t3lib_extMgm::isLoaded('kb_md5fepw')) { //if kb_md5fepw is installed, crypt password
+			if ( ExtensionManagementUtility::isLoaded('kb_md5fepw')) { //if kb_md5fepw is installed, crypt password
 				$this->data['password'] = md5($password);
 			}
 		}
@@ -181,7 +184,7 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 
 			// Delete avatar file
 			if ($avatar && !$keepFile) {
-				$absPath = t3lib_div::getFileAbsFileName($avatarPath . $avatar);
+				$absPath = GeneralUtility::getFileAbsFileName($avatarPath . $avatar);
 				if (@file_exists($absPath)) {
 					@unlink($absPath);
 				}
@@ -189,11 +192,11 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 
 			// Delete user image file
 			if ($image && !$keepFile) {
-				$absPath = t3lib_div::getFileAbsFileName('uploads/pics/' . $image);
+				$absPath = GeneralUtility::getFileAbsFileName('uploads/pics/' . $image);
 				if (@file_exists($absPath)) {
 					@unlink($absPath);
 				} else {
-					$absPath = t3lib_div::getFileAbsFileName('uploads/tx_srfeuserregister/' . $image);
+					$absPath = GeneralUtility::getFileAbsFileName('uploads/tx_srfeuserregister/' . $image);
 					if (@file_exists($absPath)) {
 						@unlink($absPath);
 					}

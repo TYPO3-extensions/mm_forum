@@ -22,22 +22,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 
-
-
-	/** Include database based cache. */
-include_once t3lib_extMgm::extPath('mm_forum').'includes/cache/class.tx_mmforum_cache_database.php';
-
-	/** Include file based cache. */
-include_once t3lib_extMgm::extPath('mm_forum').'includes/cache/class.tx_mmforum_cache_file.php';
-
-	/** Include APC based cache */
-include_once t3lib_extMgm::extPath('mm_forum').'includes/cache/class.tx_mmforum_cache_apc.php';
-
-	/** Include dummy cache. */
-include_once t3lib_extMgm::extPath('mm_forum').'includes/cache/class.tx_mmforum_cache_none.php';
-
-
-
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 	/**
 	 * This class handles data caching for the mm_forum extension.
 	 * The tx_mmforum_cache class is a wrapper class for various caching
@@ -166,8 +151,8 @@ class tx_mmforum_cache {
 						$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('cache_hash');
 
 					if (class_exists($className)) {
-						$cacheBackend		= t3lib_div::makeInstance($className, $configuration);
-						$cacheObject		= t3lib_div::makeInstance('t3lib_cache_frontend_VariableFrontend', 'mm_forum', $cacheBackend);
+						$cacheBackend		= GeneralUtility::makeInstance($className, $configuration);
+						$cacheObject		= GeneralUtility::makeInstance('t3lib_cache_frontend_VariableFrontend', 'mm_forum', $cacheBackend);
 
 						$GLOBALS['typo3CacheManager']->registerCache( $cacheObject );
 						$this->cacheObj =& $GLOBALS['typo3CacheManager']->getCache('mm_forum');
@@ -176,7 +161,7 @@ class tx_mmforum_cache {
 			}
 		} else {
 			$className = 'tx_mmforum_cache_'.$useMode;
-			$this->cacheObj =& t3lib_div::makeInstance($className);
+			$this->cacheObj =& GeneralUtility::makeInstance($className);
 		}
 
 	}
@@ -303,7 +288,7 @@ class tx_mmforum_cache {
 		}
 
 			/* Instantiate file cache and delete everything */
-		$fileCache = t3lib_div::makeInstance('tx_mmforum_cache_file');
+		$fileCache = GeneralUtility::makeInstance('tx_mmforum_cache_file');
 		$fileCache->deleteAll();
 
 	}
@@ -327,7 +312,7 @@ class tx_mmforum_cache {
 
 			/* Otherwise create a new cache object */
 		else {
-			$cacheObj = t3lib_div::makeInstance('tx_mmforum_cache');
+			$cacheObj = GeneralUtility::makeInstance('tx_mmforum_cache');
 			$cacheObj->init($mode, $configuration);
 
 			$GLOBALS['mm_forum']['cacheObj'] =& $cacheObj;

@@ -21,6 +21,9 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -71,7 +74,7 @@ class tx_mmforum_templates {
      */
     function main($content) {
 
-        $this->tmpVars = t3lib_div::_GP('tx_mmforum_template');
+        $this->tmpVars = GeneralUtility::_GP('tx_mmforum_template');
 
         $this->updateVars();
 
@@ -90,14 +93,14 @@ class tx_mmforum_templates {
         $this->conf = $this->p->config['plugin.']['tx_mmforum.'];
 
         if (strlen($this->conf['path_template'])==0) $this->conf['path_template'] = 'EXT:mm_forum/res/tmpl/';
-        $path = str_replace('EXT:mm_forum/',t3lib_extMgm::extPath('mm_forum'),$this->conf['path_template']);
+        $path = str_replace('EXT:mm_forum/', ExtensionManagementUtility::extPath('mm_forum'),$this->conf['path_template']);
         if (substr($path,-1,1)!='/') $path = $path.'/';
 
         $this->templatePath = $path;
 
         if (strlen($this->conf['path_altTemplate'])==0) $this->conf['path_altTemplate'] = 'fileadmin/ext/mm_forum/tmpl/';
         if (preg_match('/^EXT:/',$this->conf['path_altTemplate']))
-            $altPath = str_replace('EXT:mm_forum/',t3lib_extMgm::siteRelPath('mm_forum'),$this->conf['path_altTemplate']);
+            $altPath = str_replace('EXT:mm_forum/', ExtensionManagementUtility::siteRelPath('mm_forum'),$this->conf['path_altTemplate']);
         else $altPath = PATH_site.$this->conf['path_altTemplate'];
         if (substr($altPath,-1,1)!='/') $altPath = $altPath.'/';
 
@@ -124,7 +127,7 @@ class tx_mmforum_templates {
 
         if (substr($path,-1,1)=='/') $path = substr($path,0,strlen($path)-1);
 
-        $dirs = t3lib_div::get_dirs($path);
+        $dirs = GeneralUtility::get_dirs($path);
 
         if (count($dirs)>0) {
             foreach($dirs as $dir) {
@@ -133,7 +136,7 @@ class tx_mmforum_templates {
             }
         }
 
-        $files = t3lib_div::getFilesInDir($path,'',0,$order='1');
+        $files = GeneralUtility::getFilesInDir($path,'',0,$order='1');
 
         if (count($files)==0) return $result;
         foreach($files as $file) {
@@ -399,11 +402,11 @@ function catchTab(item,e){
         if (substr($dstdir,-1,1)=='/') $dstdir = substr($dstdir,0,strlen($dstdir)-1);
         if (substr($srcdir,-1,1)=='/') $srcdir = substr($srcdir,0,strlen($srcdir)-1);
 
-        $dirs = t3lib_div::get_dirs($srcdir);
+        $dirs = GeneralUtility::get_dirs($srcdir);
 
         if (!is_dir($dstdir)) {
 			mkdir($dstdir);
-			t3lib_div::fixPermissions($dstdir);
+			GeneralUtility::fixPermissions($dstdir);
 		}
 
         if (count($dirs)>0) {
@@ -413,11 +416,11 @@ function catchTab(item,e){
             }
         }
 
-        $files = t3lib_div::getFilesInDir($srcdir);
+        $files = GeneralUtility::getFilesInDir($srcdir);
         if (count($files)>0) {
             foreach($files as $file) {
                 copy($srcdir.'/'.$file,$dstdir.'/'.$file);
-				t3lib_div::fixPermissions($dstdir.'/'.$file);
+				GeneralUtility::fixPermissions($dstdir.'/'.$file);
             }
         }
     }

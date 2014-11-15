@@ -61,7 +61,7 @@ class ext_update {
      */
     function main() {
 
-    	if (t3lib_div::_GP('do_update') == 'htaccess') {
+    	if (\TYPO3\CMS\Core\Utility\GeneralUtility::_GP('do_update') == 'htaccess') {
 			$this->removeHtaccessFromUploadFolder();
 		}
 
@@ -72,7 +72,7 @@ class ext_update {
         }
 
 		if ($this->hasHtaccessFile()) {
-			$content .= '<a href="' . t3lib_div::linkThisScript(array('do_update' => 'htaccess')) . '">Remove .htaccess file in upload dir<img style="vertical-align:bottom;" ' . t3lib_iconWorks::skinImg($GLOBALS['BACK_PATH'], 'gfx/refresh_n.gif', 'width="18" height="16"') . '></a><br>';
+			$content .= '<a href="' . \TYPO3\CMS\Core\Utility\GeneralUtility::linkThisScript(array('do_update' => 'htaccess')) . '">Remove .htaccess file in upload dir<img style="vertical-align:bottom;" ' . \TYPO3\CMS\Backend\Utility\IconUtility::skinImg($GLOBALS['BACK_PATH'], 'gfx/refresh_n.gif', 'width="18" height="16"') . '></a><br>';
 		}
 
 		if ($content == '')

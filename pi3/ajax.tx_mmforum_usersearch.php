@@ -22,10 +22,9 @@
  *                                                                     *
  *  This copyright notice MUST APPEAR in all copies of the script!     *
  *                                                                     */
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
-
-
-	/**
+/**
 	 * This script is used for the dynamic user search in the tx_mmforum_pi3
 	 * private messaging plugin.
 	 * The idea is to present the user a list of users correspoinding to
@@ -70,8 +69,6 @@ class tx_mmforum_userSearch {
 	protected function init() {
 		error_reporting(0);
 		session_start();
-
-		tslib_eidtools::connectDB();
 
 		$this->pid = $_SESSION['tx_mmforum_pi3']['userPID'];
 		$this->group_id = $_SESSION['tx_mmforum_pi3']['userGID'];
@@ -162,10 +159,10 @@ if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['
 if (!defined('TYPO3_MODE'))
 	die();
 
-$SOBE = t3lib_div::makeInstance('tx_mmforum_userSearch');
+$SOBE = GeneralUtility::makeInstance('tx_mmforum_userSearch');
 /* @var $SOBE tx_mmforum_userSearch */
 
-$sword = t3lib_div::_GP('userSearch');
+$sword = GeneralUtility::_GP('userSearch');
 $data = $SOBE->search($sword);
 
 header('Content-Type: application/json');

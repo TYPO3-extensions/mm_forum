@@ -21,47 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-/**
- * [CLASS/FUNCTION INDEX of SCRIPT]
- *
- *
- *
- *   80: class tx_mmforum_base extends tslib_pibase
- *   94:     function init($conf)
- *  144:     function pi_getLL($key)
- *  175:     function getForumPID()
- *  204:     function getUserProfilePID()
- *  216:     function isModeratedForum()
- *  227:     function getStoragePID()
- *  241:     function getStoragePIDQuery($tables = '')
- *  268:     function useRealUrl()
- *  280:     function formatDate($tstamp)
- *  296:     function escape($string)
- *  306:     function escapeURL($url)
- *  318:     function highlight_text($text, $words)
- *  358:     function buildImageTag($imgInfo)
- *  396:     function getFirstPid()
- *  405:     function randkey($length)
- *  415:     function hex2ip($hex)
- *  424:     function ip2hex($val)
- *  433:     function getAbsUrl($link)
- *  442:     function appendTrailingSlash($str)
- *  451:     function removeLeadingSlash($str)
- *  461:     function getIsModeratedBoard()
- *  471:     function getIsRealURL()
- *  482:     function shieldURL($url)
- *  493:     function shield($str)
- *  504:     function getPidQuery($tbl = '')
- *  533:     function imgtag($imgInfo, $debug = TRUE)
- *  544:     function getAdminGroup()
- *  559:     function getModeratorGroups()
- *  585:     function getUserID()
- *
- * TOTAL FUNCTIONS: 30
- * (This index is automatically created/updated by the extension "extdeveval")
- *
- */
-
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Provides basic functionalities for all mm_forum plugins.
@@ -72,7 +33,7 @@
  * @package    mm_forum
  * @subpackage Core
  */
-class tx_mmforum_base extends tslib_pibase {
+class tx_mmforum_base extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 	var $extKey = 'mm_forum';
 
@@ -104,24 +65,24 @@ class tx_mmforum_base extends tslib_pibase {
 		$this->validatorObj = & $this->validator;
 
 		/* Initialize tools */
-		$this->tools = t3lib_div::makeInstance('tx_mmforum_tools');
+		$this->tools = GeneralUtility::makeInstance('tx_mmforum_tools');
 
 		/* Initialize cache object */
 		$this->cache = &tx_mmforum_cache::getGlobalCacheObject($this->conf['caching'], $this->conf['caching.']);
 
 		/* Local cObj */
-		$this->local_cObj = t3lib_div::makeInstance('tslib_cObj');
+		$this->local_cObj = GeneralUtility::makeInstance('tslib_cObj');
 
 		/* get the PID List */
 		if (!$this->conf['pidList']) {
 			$this->conf['pidList'] = $this->pi_getPidList($this->cObj->data['pages'], $this->cObj->data['recursive']);
 		}
 
-		$this->conf['path_img']    = str_replace('EXT:mm_forum/', t3lib_extMgm::siteRelPath('mm_forum'), $this->conf['path_img']);
-		$this->conf['path_smilie'] = str_replace('EXT:mm_forum/', t3lib_extMgm::siteRelPath('mm_forum'), $this->conf['path_smilie']);
+		$this->conf['path_img'] = str_replace('EXT:mm_forum/', ExtensionManagementUtility::siteRelPath('mm_forum'), $this->conf['path_img']);
+		$this->conf['path_smilie'] = str_replace('EXT:mm_forum/', ExtensionManagementUtility::siteRelPath('mm_forum'), $this->conf['path_smilie']);
 
 		if (!class_exists('tx_pagebrowse_pi1')) {
-			include_once t3lib_extMgm::extPath('pagebrowse').'pi1/class.tx_pagebrowse_pi1.php';
+			include_once ExtensionManagementUtility::extPath('pagebrowse') . 'pi1/class.tx_pagebrowse_pi1.php';
 		}
 
 		if ($this->conf['debug']) {
@@ -249,7 +210,7 @@ class tx_mmforum_base extends tslib_pibase {
 			if (empty($tables)) {
 				$query = ' AND pid = ' . $storagePID;
 			} else {
-				$tables = t3lib_div::trimExplode(',', $tables);
+				$tables = GeneralUtility::trimExplode(',', $tables);
 				foreach ($tables as $table) {
 					$query .= ' AND ' . $table . '.pid = ' . $storagePID;
 				}
@@ -445,7 +406,7 @@ class tx_mmforum_base extends tslib_pibase {
 			);
 			list($groups) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-			$groupArr = t3lib_div::intExplode(',', $groups, true);
+			$groupArr = GeneralUtility::intExplode(',', $groups, true);
 			$result = array_unique($groupArr);
 
 			$this->cache->save('moderator_groups', $result, true);
@@ -507,8 +468,8 @@ class tx_mmforum_base extends tslib_pibase {
 
 		list($category_auth, $forum_auth) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-		$category_auth = t3lib_div::intExplode(',', $category_auth);
-		$forum_auth = t3lib_div::intExplode(',', $forum_auth);
+		$category_auth = GeneralUtility::intExplode(',', $category_auth);
+		$forum_auth = GeneralUtility::intExplode(',', $forum_auth);
 
 		$auth = array_merge($category_auth, $forum_auth);
 		$auth = array_unique($auth);
@@ -540,10 +501,10 @@ class tx_mmforum_base extends tslib_pibase {
 	 */
 	function redirectToReferrer() {
 		// Redirecting visitor back to previous page
-		$ref = t3lib_div::getIndpEnv('HTTP_REFERER');
+		$ref = GeneralUtility::getIndpEnv('HTTP_REFERER');
 		if ($ref) {
 			$ref = $this->tools->getAbsoluteUrl($ref);
-			header('Location: ' . t3lib_div::locationHeaderUrl($ref));
+			header('Location: ' . GeneralUtility::locationHeaderUrl($ref));
 			exit();
 		} else {
 			return false;
@@ -573,14 +534,14 @@ class tx_mmforum_base extends tslib_pibase {
 	 *                         NULL if the ratings extension is not installed.
 	 */
 	function getRatingInstance() {
-		if (! t3lib_extMgm::isLoaded('ratings')) {
+		if (! ExtensionManagementUtility::isLoaded('ratings')) {
 			return null;
 		}
 
 		if (isset($this->rating)) {
 			return $this->rating;
 		} else {
-			$this->rating = t3lib_div::makeInstance('tx_ratings_api');
+			$this->rating = GeneralUtility::makeInstance('tx_ratings_api');
 			$this->ratingConf = $this->rating->getDefaultConfig();
 			$this->ratingConf['templateFile'] = $this->conf['stylePath'] . '/rating/ratings.html';
 
@@ -619,11 +580,11 @@ class tx_mmforum_base extends tslib_pibase {
 		$conf['numberOfPages'] = $numberOfPages;
 
 		if (count($additionalParameters) > 0) {
-			$conf['extraQueryString'] = t3lib_div::implodeArrayForUrl(null, $additionalParameters);
+			$conf['extraQueryString'] = GeneralUtility::implodeArrayForUrl(null, $additionalParameters);
 		}
 
 		// Get page browser
-		$cObj = t3lib_div::makeInstance('tslib_cObj');
+		$cObj = GeneralUtility::makeInstance('tslib_cObj');
 
 		/* @var $cObj tslib_cObj */
 		$cObj->start(array(), '');

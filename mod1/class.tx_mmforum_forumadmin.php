@@ -53,6 +53,7 @@
  * (This index is automatically created/updated by the extension "extdeveval")
  *
  */
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This class handles the backend administration of categories and
@@ -1047,7 +1048,7 @@ class tx_mmforum_forumAdmin {
      * @return  void
      */
     function init() {
-        $this->param = t3lib_div::_GP('tx_mmforum_fadm');
+        $this->param = GeneralUtility::_GP('tx_mmforum_fadm');
         $this->conf = $this->p->config['plugin.']['tx_mmforum.'];
         $this->pid  = intval($this->conf['storagePID']);
 

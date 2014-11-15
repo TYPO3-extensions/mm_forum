@@ -21,6 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -77,6 +79,10 @@ class tx_mmforum_polls {
 	public $conf;
 	
 	public $piVars;
+
+	/**
+	 * @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
+	 */
 	public $cObj;
 	
 	public $data;
@@ -117,7 +123,7 @@ class tx_mmforum_polls {
 	 */
 	function display($poll_id) {
 		if ($this->conf['polls.']['enable']) {
-			$poll = t3lib_div::makeInstance('tx_mmforum_polls');
+			$poll = GeneralUtility::makeInstance('tx_mmforum_polls');
 			$poll->load($poll_id);
 			$poll->conf = $this->conf;
 			$poll->piVars = $this->piVars;
@@ -748,7 +754,7 @@ class tx_mmforum_polls {
 	function getMayCreatePoll($pObj) {
 		if (!$pObj->conf['polls.']['enable']) return false;
 		if ($pObj->conf['polls.']['restrictToGroups']) {
-			$authPolls  = t3lib_div::intExplode(',',$pObj->conf['polls.']['restrictToGroups']);
+			$authPolls  = GeneralUtility::intExplode(',',$pObj->conf['polls.']['restrictToGroups']);
 			$groups     = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 
 			$authPolls  = tx_mmforum_tools::processArray_numeric($authPolls);

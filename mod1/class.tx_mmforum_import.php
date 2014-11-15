@@ -21,6 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -72,7 +74,7 @@ class tx_mmforum_import {
      * @uses    outputImportSettings
      */
     function main($content) {
-        $this->importData = t3lib_div::_GP('tx_mmforum_import');
+        $this->importData = GeneralUtility::_GP('tx_mmforum_import');
 
         if (!isset($this->importData['step']))
             $this->importData['step'] = 0;
@@ -156,10 +158,16 @@ class tx_mmforum_import {
                 if (strlen($this->importData['extdb']['user'])   == 0 ) $errors['user']   = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_user').'</div>';
                 if (strlen($this->importData['extdb']['dbname']) == 0 ) $errors['dbname'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_dbname').'</div>';
 
-                $link = @mysql_connect($this->importData['extdb']['server'],$this->importData['extdb']['user'],$this->importData['extdb']['password'],true);
-                if (!$link) $errors['connect'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_connect').'</div>';
+				$dbObj = GeneralUtility::makeInstance('\TYPO3\CMS\Core\Database\DatabaseConnection'); /* @var $dbObj \TYPO3\CMS\Core\Database\DatabaseConnection */
+				$dbObj->setDatabaseHost($this->importData['extdb']['server']);
+				$dbObj->setDatabaseUsername($this->importData['extdb']['user']);
+				$dbObj->setDatabasePassword($this->importData['extdb']['password']);
+				$dbObj->sql_pconnect();
+                
+                if (!$dbObj->isConnected()) $errors['connect'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_connect').'</div>';
                 else {
-                    $res = mysql_select_db($this->importData['extdb']['dbname'],$link);
+					$dbObj->setDatabaseName($this->importData['extdb']['dbname']);
+					$res = $dbObj->sql_select_db();
                     if (!$res) $errors['selectdb'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_selectdb').'</div>';
                 }
             }
@@ -230,9 +238,13 @@ class tx_mmforum_import {
     function display_step2() {
         if ($this->importData['db'] == 'local') $dbObj = $GLOBALS['TYPO3_DB'];
         else {
-            $dbObj = t3lib_div::makeInstance('t3lib_db');
-            $dbObj->sql_pconnect($this->importData['extdb']['server'],$this->importData['extdb']['user'],$this->importData['extdb']['password']);
-            $dbObj->sql_select_db($this->importData['extdb']['dbname']);
+            $dbObj = GeneralUtility::makeInstance('\TYPO3\CMS\Core\Database\DatabaseConnection'); /* @var $dbObj \TYPO3\CMS\Core\Database\DatabaseConnection */
+			$dbObj->setDatabaseHost($this->importData['extdb']['server']);
+			$dbObj->setDatabaseUsername($this->importData['extdb']['user']);
+			$dbObj->setDatabasePassword($this->importData['extdb']['password']);
+			$dbObj->sql_pconnect();
+			$dbObj->setDatabaseName($this->importData['extdb']['dbname']);
+			$dbObj->sql_select_db();
         }
 		$content = '';
         switch($this->importData['action']) {
@@ -247,13 +259,13 @@ class tx_mmforum_import {
      *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-02
-     * @param   object dbObj A database object signifying the database the data
+     * @param   \TYPO3\CMS\Core\Database\DatabaseConnection $dbObj A database object signifying the database the data
      *                       that is to be imported is stored in. This object is an
      *                       instance of the class "t3lib_db".
      * @return  string       The result of the CHC Forum import
      */
     function import_chc($dbObj) {
-        $import_chc = t3lib_div::makeInstance('tx_mmforum_chcimport');
+        $import_chc = GeneralUtility::makeInstance('tx_mmforum_chcimport'); /* @var $import_chc tx_mmforum_chcimport */
         $import_chc->dbObj = $dbObj;
         $import_chc->p     = $this->p;
 
@@ -265,13 +277,13 @@ class tx_mmforum_import {
      *
      * @author  Martin Helmich <m.helmich@mittwald.de>
      * @version 2007-05-02
-     * @param   object dbObj A database object signifying the database the data
+     * @param   \TYPO3\CMS\Core\Database\DatabaseConnection $dbObj A database object signifying the database the data
      *                       that is to be imported is stored in. This object is an
      *                       instance of the class "t3lib_db".
      * @return  string       The result of the phpBB import
      */
     function import_phpbb($dbObj) {
-        $import_phpbb = t3lib_div::makeInstance('tx_mmforum_phpbbimport');
+        $import_phpbb = GeneralUtility::makeInstance('tx_mmforum_phpbbimport'); /* @var $import_phpbb tx_mmforum_phpbbimport */
         $import_phpbb->dbObj = $dbObj;
         $import_phpbb->p     = $this->p;
 

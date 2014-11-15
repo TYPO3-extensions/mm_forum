@@ -21,10 +21,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-/**
- * [CLASS/FUNCTION INDEX of SCRIPT]
- */
-
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * The plugin 'Change Userdetails' for the 'mm_forum' extension
@@ -71,11 +68,11 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		$this->pi_USER_INT_obj = 1;
 
 			/* Instantiate user management library */
-		$this->userLib = t3lib_div::makeInstance('tx_mmforum_usermanagement');
+		$this->userLib = GeneralUtility::makeInstance('tx_mmforum_usermanagement');
 
 
 		if ($GLOBALS['TSFE']->loginUser) {
-			$this->user = t3lib_div::makeInstance('tx_mmforum_FeUser');
+			$this->user = GeneralUtility::makeInstance('tx_mmforum_FeUser');
 			$this->user->initFromDB($GLOBALS['TSFE']->fe_user->user['uid']);
 			$this->user->loadFromDB();
 			$content = $this->listUserdata($content);
@@ -98,7 +95,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	 * @return  string          The content
 	 */
 	function listUserdata ($content) {
-		switch (t3lib_div::_GP('action'))
+		switch ( GeneralUtility::_GP('action'))
 		{
 			case 'change_data':
 				$this->writeUserdata($content);
@@ -150,8 +147,8 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 		// Create marker array, field names are retrieved from TypoScript
 		$extrafields = array('uid', 'username', 'crdate', 'tx_mmforum_posts', 'tx_mmforum_avatar', 'image');
-		$fields = array_unique(array_merge($extrafields, t3lib_div::trimExplode(',', $this->conf['userFields'], true)));
-		$required = t3lib_div::trimExplode(',', $this->conf['required.']['fields'], true);
+		$fields = array_unique(array_merge($extrafields, GeneralUtility::trimExplode(',', $this->conf['userFields'], true)));
+		$required = GeneralUtility::trimExplode(',', $this->conf['required.']['fields'], true);
 
 		foreach ($fields as $fieldName) {
 			$label = $this->pi_getLL($fieldName);
@@ -195,7 +192,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			'sorting DESC'				// orderby
 		);
 
-		$parser = t3lib_div::makeInstance('t3lib_TSparser');
+		$parser = GeneralUtility::makeInstance('t3lib_TSparser');
 		foreach ($userFields as $field) {
 			if (isset($this->piVars['userfield'][$field['uid']])) {
 				$value = $this->piVars['userfield'][$field['uid']];
@@ -258,7 +255,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilMarkerArray'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilMarkerArray'] as $classRef) {
-				$procObj = &t3lib_div::getUserObj($classRef);
+				$procObj = &GeneralUtility::getUserObj($classRef);
 				$marker = $procObj->processProfilMarkerArray($marker, $this->cObj);
 			}
 		}
@@ -273,7 +270,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	 */
 	function &getTSParser() {
 		if (!$this->parser) {
-			$this->parser = t3lib_div::makeInstance('t3lib_TSparser');
+			$this->parser = GeneralUtility::makeInstance('t3lib_TSparser');
 		}
 
 		return $this->parser;
@@ -350,13 +347,13 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		$template = $this->cObj->fileResource($this->conf['template']);
 		$template = $this->cObj->getSubpart($template, '###ERROR###');
 
-		$data = t3lib_div::trimExplode(',', $this->conf['userFields'], true);
+		$data = GeneralUtility::trimExplode(',', $this->conf['userFields'], true);
 
 		foreach ($data as $v) {
 			$updateArr[$v] = $this->piVars[$v];
 		}
 
-		$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
+		$userField = GeneralUtility::makeInstance('tx_mmforum_userfield');
 		/* @var $userField tx_mmforum_userfield */
 		$userField->init($this->userLib, $this->cObj);
 
@@ -383,7 +380,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 		}
 
-		t3lib_div::debug($this->userfield_error);
+		debug($this->userfield_error);
 
 		if ($requiredMissing) $error = 1;
 
@@ -393,7 +390,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			// Include hooks
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilUpdateArray'])) {
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['display']['editProfilUpdateArray'] as $_classRef) {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$updateArr = $_procObj->processProfilUpdateArray($updateArr, $this->cObj);
 				}
 			}
@@ -477,12 +474,12 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			return $content;
 		}
 
-		$fI = t3lib_div::split_fileref($avatarFile['name']['file']);
+		$fI = GeneralUtility::split_fileref($avatarFile['name']['file']);
 		$fileExt = $fI['fileext'];
 
-		if (!t3lib_div::verifyFilenameAgainstDenyPattern($avatarFile['name']['file'])
-			|| !t3lib_div::inList($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'], $fileExt))
-			return;
+		if (! GeneralUtility::verifyFilenameAgainstDenyPattern($avatarFile['name']['file'])
+			|| ! GeneralUtility::inList($GLOBALS['TYPO3_CONF_VARS']['GFX']['imagefile_ext'], $fileExt))
+			return '';
 
 		if (isset($this->piVars['upload'])) {
 			$uploaddir = $this->conf['path_avatar'];
@@ -491,19 +488,13 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			 * Load the allowed file size for avatar image from the TCA and
 			 * check against the size of the uploaded image.
 			 */
-			global $TCA;
-			$GLOBALS['TSFE']->includeTCA();
-			t3lib_div::loadTCA('fe_users');
 			if (filesize($avatarFile['tmp_name']['file']) > $GLOBALS['TCA']['fe_users']['columns']['tx_mmforum_avatar']['config']['max_size']*1024)
 				return '';
 
 			$file = $this->user->getUid() . '_' . $GLOBALS['EXEC_TIME'] . '.' . $fileExt;
 			$uploadfile = $uploaddir . $file;
 
-			if (move_uploaded_file($avatarFile['tmp_name']['file'], $uploadfile)) {
-					/* Paranoid? Eh, you never know... */
-				chmod($uploadfile, 0444);
-				
+			if ( GeneralUtility::upload_copy_move($avatarFile['tmp_name']['file'], $uploadfile)) {
 				$this->user->setAvatar($file);
 				$this->user->updateDatabase();
 			}

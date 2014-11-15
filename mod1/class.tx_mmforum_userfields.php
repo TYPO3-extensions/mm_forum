@@ -21,6 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -110,7 +112,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
      * @return  void
      */
     function init() {
-		$this->ufVars = t3lib_div::_GP('tx_mmforum_userfields');
+		$this->ufVars = GeneralUtility::_GP('tx_mmforum_userfields');
         $GLOBALS['LANG']->includeLLFile('EXT:mm_forum/mod1/locallang_userfields.xml');
     }
 
@@ -326,7 +328,6 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			 * case, replace this link with an empty value. */
 		if ($data['link']) {
 			global $TCA;
-			t3lib_div::loadTCA('fe_users');
 
 			$fields = array_keys($TCA['fe_users']['columns']);
 			$uf_link = in_array($data['link'], $fields) ? $data['link'] : null;
@@ -470,7 +471,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 
 		if ($uid != -1) $userfield = $this->getuserFieldData($uid);
 
-		$template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/userfields.html'));
+		$template = file_get_contents( GeneralUtility::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/userfields.html'));
 		$template = tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_FORM###');
 
 		$llMarker		= array(
@@ -590,7 +591,6 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 
 			/* Get TCA of fe_user table */
 		global $TCA;
-		t3lib_div::loadTCA('fe_users');
 
 		$content = '<option value=""></option>';
 
@@ -616,7 +616,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 
         $this->saveData();
 
-		$template = file_get_contents(t3lib_div::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/userfields.html'));
+		$template = file_get_contents( GeneralUtility::getFileAbsFileName('EXT:mm_forum/res/tmpl/mod1/userfields.html'));
 		$template = tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_LIST###');
 
 		$iTemplate = tx_mmforum_BeTools::getSubpart($template, '###USERFIELD_LIST_ITEM###');

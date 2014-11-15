@@ -59,6 +59,11 @@
  */
 class tx_mmforum_statistics {
 
+	/**
+	 * @var tx_mmforum_module1
+	 */
+	public $p;
+	
     /**
      * Defines in which database field the creation date is stored.
      */
@@ -69,7 +74,22 @@ class tx_mmforum_statistics {
         'fe_users'              => 'crdate'
     );
 
-    /**
+	/**
+	 * Initializes the forum administration tool.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @return  void
+	 */
+	function init() {
+		$this->param = \TYPO3\CMS\Core\Utility\GeneralUtility::_GP('tx_mmforum_stats');
+		$this->conf = $this->p->config['plugin.']['tx_mmforum.'];
+		$this->pid  = intval($this->conf['storagePID']);
+
+		$this->func = $this->p->MOD_SETTINGS['function'];
+
+		$GLOBALS['LANG']->includeLLFile('EXT:mm_forum/mod1/locallang_statistics.xml');
+	}
+	
 	/**
 	 * The module's main function.
 	 *
@@ -114,6 +134,9 @@ class tx_mmforum_statistics {
             'deleted=0'
         );
         list($minPostTime) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		if ($minPostTime == '') {
+			return 0;
+		}
         return $minPostTime;
     }
 
@@ -737,23 +760,6 @@ class tx_mmforum_statistics {
      */
     function getLL($key) {
         return $GLOBALS['LANG']->getLL('statistics.'.$key);
-    }
-
-    /**
-     * Initializes the forum administration tool.
-     *
-     * @author  Martin Helmich <m.helmich@mittwald.de>
-     * @version 2007-05-29
-     * @return  void
-     */
-    function init() {
-        $this->param = t3lib_div::_GP('tx_mmforum_stats');
-        $this->conf = $this->p->config['plugin.']['tx_mmforum.'];
-        $this->pid  = intval($this->conf['storagePID']);
-
-        $this->func = $this->p->MOD_SETTINGS['function'];
-
-        $GLOBALS['LANG']->includeLLFile('EXT:mm_forum/mod1/locallang_statistics.xml');
     }
 }
 

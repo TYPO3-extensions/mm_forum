@@ -22,6 +22,9 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\HttpUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -64,7 +67,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 	 * @return string       The post alert list
 	 */
 	function list_alerts($conf) {
-		$param = t3lib_div::_GP('tx_mmforum_pi1');
+		$param = GeneralUtility::_GP('tx_mmforum_pi1');
 		if ($param['update'] == 'update_status') {
 			foreach($param as $key => $value) {
 				$key = str_replace('status_','',$key);
@@ -257,7 +260,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			$template		= $this->cObj->fileResource($conf['template.']['post_alert']);
 			$template		= $this->cObj->getSubpart($template, "###POST_ALERT###");
 
-			$param		= t3lib_div::_GP('mm_forum');
+			$param		= GeneralUtility::_GP('mm_forum');
 			$post_id 	= intval($this->piVars['pid']);
 
 			// Language dependent markers
@@ -287,10 +290,10 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 					);
 					$GLOBALS['TYPO3_DB']->exec_INSERTquery(' tx_mmforum_post_alert', $insertArray);
 
-					$linkto	= $this->get_pid_link($post_id,t3lib_div::_GP('sword'),$conf);
+					$linkto	= $this->get_pid_link($post_id, GeneralUtility::_GP('sword'),$conf);
 					$linkto = $this->tools->getAbsoluteUrl($linkto);
 
-					header('Location: '.$linkto);
+					HttpUtility::redirect($linkto);
 				}
 			}
 

@@ -21,6 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -138,7 +140,7 @@ class tx_mmforum_validator {
 	 * @return  tx_mmforum_validator A validator object
 	 */
 	static function getValidatorObject() {
-		$validatorObj = t3lib_div::makeInstance('tx_mmforum_validator'); /* @var $validatorObj tx_mmforum_validator */
+		$validatorObj = GeneralUtility::makeInstance('tx_mmforum_validator'); /* @var $validatorObj tx_mmforum_validator */
 		$validatorObj->init();
 		return $validatorObj;
 	}

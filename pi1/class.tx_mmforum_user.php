@@ -21,6 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -182,7 +184,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 				// Include hooks
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUserPosts_item'])) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUserPosts_item'] as $_classRef) {
-						$_procObj = &t3lib_div::getUserObj($_classRef);
+						$_procObj = &GeneralUtility::getUserObj($_classRef);
 						$postMarker = $_procObj->listUserPosts_item($postMarker, $row, $this);
 					}
 				}

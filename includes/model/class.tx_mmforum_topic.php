@@ -1,6 +1,6 @@
 <?php
 
-include_once t3lib_extMgm::extPath('mm_forum').'includes/model/class.tx_mmforum_data.php';
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class tx_mmforum_topic extends tx_mmforum_data {
 
@@ -50,7 +50,7 @@ class tx_mmforum_topic extends tx_mmforum_data {
 			return null;
 		}
 
-		$topic = t3lib_div::makeInstance('tx_mmforum_topic'); /* @var $topic tx_mmforum_topic */
+		$topic = GeneralUtility::makeInstance('tx_mmforum_topic'); /* @var $topic tx_mmforum_topic */
 		$topic->initFromDB($uid);
 
 		return $topic;

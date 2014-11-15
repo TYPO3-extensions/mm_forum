@@ -21,6 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MathUtility;
 
 /**
  * Provides user management functions.
@@ -53,7 +55,7 @@ class tx_mmforum_usermanagement {
 	 */
 	function &getTSParser() {
 		if ($this->parser === null)
-			$this->parser = t3lib_div::makeInstance('t3lib_TSparser');
+			$this->parser = GeneralUtility::makeInstance('t3lib_TSparser');
 		
 		return $this->parser;
 	}
@@ -98,7 +100,7 @@ class tx_mmforum_usermanagement {
 		if (is_array($value)) {
 			$data = $value;
 
-		} else if (t3lib_div::testInt($value) || intval($value) != 0) {
+		} else if ( MathUtility::canBeInterpretedAsInteger($value) || intval($value) != 0) {
 			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 				'*', 'tx_mmforum_userfields', 'uid=' . intval($value)
 			);

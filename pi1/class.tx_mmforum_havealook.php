@@ -21,6 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -175,7 +177,7 @@ class tx_mmforum_havealook {
 			// Include hook to modify the output of the settings
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['havealook']['listsettings'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['havealook']['listsettings'] as $_classRef) {
-					$_procObj = &t3lib_div::getUserObj($_classRef);
+					$_procObj = &GeneralUtility::getUserObj($_classRef);
 					$marker   = $_procObj->havealook_listsettings($marker, $forumObj);
 				}
 			}
@@ -323,7 +325,7 @@ class tx_mmforum_havealook {
 					// Include hook to modify the output of each item
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['havealook']['listitem'])) {
 						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['havealook']['listitem'] as $_classRef) {
-							$_procObj = &t3lib_div::getUserObj($_classRef);
+							$_procObj = &GeneralUtility::getUserObj($_classRef);
 							$marker = $_procObj->havealook_listitem($marker, $row, $forumObj);
 						}
 					}
@@ -349,7 +351,7 @@ class tx_mmforum_havealook {
 		// Include hook to modify the output of the whole thing
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['havealook']['edit'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['havealook']['edit'] as $_classRef) {
-				$_procObj = &t3lib_div::getUserObj($_classRef);
+				$_procObj = &GeneralUtility::getUserObj($_classRef);
 				$marker   = $_procObj->havealook_edit($marker, $forumObj);
 			}
 		}
@@ -457,14 +459,14 @@ class tx_mmforum_havealook {
 				// Include hooks
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_contentMarker'])) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_contentMarker'] as $_classRef) {
-						$_procObj = &t3lib_div::getUserObj($_classRef);
+						$_procObj = &GeneralUtility::getUserObj($_classRef);
 						//TODO: FIXME undefined variable $row
 						$llMarker = $_procObj->newPostMail_contentMarker($llMarker, $row, $forumObj);
 					}
 				}
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_subject'])) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_subject'] as $_classRef) {
-						$_procObj = &t3lib_div::getUserObj($_classRef);
+						$_procObj = &GeneralUtility::getUserObj($_classRef);
 						$subject = $_procObj->newPostMail_subject($subject, $row, $forumObj);
 					}
 				}
@@ -474,13 +476,13 @@ class tx_mmforum_havealook {
 				$do_send = true;
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_beforeSend'])) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_beforeSend'] as $_classRef) {
-						$_procObj = &t3lib_div::getUserObj($_classRef);
+						$_procObj = &GeneralUtility::getUserObj($_classRef);
 						$do_send = $_procObj->newPostMail_beforeSend($subject, $mailtext, $toUserId, $this);
 					}
 				}
 
 				if ($do_send) {
-					$mail = t3lib_div::makeInstance('t3lib_mail_Message');
+					$mail = GeneralUtility::makeInstance('t3lib_mail_Message');
 					$mail->setFrom(array($forumObj->conf['notifyingMail.']['sender_address'] => $forumObj->conf['notifyingMail.']['sender']));
 					$mail->setTo(array($toEmail => $toUsername));
 					$mail->setSubject($subject);
@@ -552,7 +554,7 @@ class tx_mmforum_havealook {
 
 			// Compose mail and send
 			$subject = $forumObj->cObj->substituteMarkerArray($forumObj->pi_getLL('ntfMailForum.subject'), $subjectMarker);
-			$mail = t3lib_div::makeInstance('t3lib_mail_Message');
+			$mail = GeneralUtility::makeInstance('t3lib_mail_Message');
 			$mail->setFrom(array($forumObj->conf['notifyingMail.']['sender_address'] => $forumObj->conf['notifyingMail.']['sender']));
 			$mail->setTo(array($toEmail => $toUsername));
 			$mail->setSubject($subject);

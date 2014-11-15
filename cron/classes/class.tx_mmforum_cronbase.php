@@ -23,30 +23,9 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  *
  */
-/**
- *
- * [CLASS/FUNCTION INDEX of SCRIPT]
- *
- *
- *
- *   60: class tx_mmforum_cronbase
- *  123:     function initialize()
- *  151:     function validateConfig()
- *  167:     function loadLanguageFile($langFile='')
- *  188:     function getLL($lKey)
- *  201:     function getPid()
- *  216:     function loadTemplateFile($filename)
- *  235:     function formatDate($tstamp)
- *  251:     function removeCacheValue($key)
- *  270:     function getCacheValue($key)
- *  292:     function getCacheValue_remove($key)
- *  311:     function debug($message, $mode=0)
- *
- * TOTAL FUNCTIONS: 11
- * (This index is automatically created/updated by the extension "extdeveval")
- *
- */
-
+use TYPO3\CMS\Core\TypoScript\Parser\TypoScriptParser;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This class is the base object for all cronjob classes of the mm_forum.
@@ -55,7 +34,6 @@
  *
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @copyright  2008 Martin Helmich, Mittwald CM Service
- * @version    $Id$
  * @package    mm_forum
  * @subpackage Cronjobs
  */
@@ -150,7 +128,7 @@ class tx_mmforum_cronbase {
 	 * @return  void
 	 */
 	function initialize() {
-		$this->MMFORUMPATH = t3lib_extMgm::extPath('mm_forum');
+		$this->MMFORUMPATH = ExtensionManagementUtility::extPath('mm_forum');
 
 		// Load default constants file
 		$conf = file_get_contents($this->MMFORUMPATH . 'ext_typoscript_constants.txt');
@@ -162,7 +140,7 @@ class tx_mmforum_cronbase {
 		}
 
 		// Parse setup
-		$parser = new t3lib_TSparser();
+		$parser = new TypoScriptParser();
 		$parser->parse($conf);
 		$this->conf = $parser->setup['plugin.']['tx_mmforum.'];
 
@@ -277,8 +255,7 @@ class tx_mmforum_cronbase {
 	 * @return  string           The content of the template file.
 	 */
 	function loadTemplateFile($filename) {
-		$absFileName = PATH_site.$this->conf['cron_pathTmpl'].$filename.'.html';
-		$absFileName = realpath($absFileName);
+		$absFileName = GeneralUtility::getFileAbsFileName($this->conf['cron_pathTmpl'].$filename.'.html');
 		if (file_exists($absFileName)) {
 			return file_get_contents($absFileName);
 		}

@@ -21,30 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-/**
- * [CLASS/FUNCTION INDEX of SCRIPT]
- *
- *
- *
- *   65: class tx_mmforum_pi2 extends tslib_pibase
- *   79:     function main($content,$conf)
- *  136:     function sendEmail()
- *  172:     function showMailVersand()
- *  195:     function check_hash($hash)
- *  259:     function saveData()
- *  337:     function showRegForm($marker, $conf)
- *  422:     function validate($marker)
- *  527:     function validate_email($email)
- *  538:     function makeMarker()
- *  581:     function getPidQuery($tables="")
- *  618:     function getFirstPid()
- *  641:     function pi_getLL($key)
- *
- * TOTAL FUNCTIONS: 12
- * (This index is automatically created/updated by the extension "extdeveval")
- *
- */
-
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * The plugin 'User registration' for the 'mm_forum' extension
@@ -86,7 +64,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		$userHash = $this->piVars['user_hash'];
 
 			/* Instantiate user management library */
-		$this->userLib = t3lib_div::makeInstance('tx_mmforum_usermanagement');
+		$this->userLib = GeneralUtility::makeInstance('tx_mmforum_usermanagement');
 
 		if ($userHash) {
 			$this->data['action'] = 'checkHash';
@@ -152,7 +130,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 		$subject = $this->cObj->substituteMarker($this->pi_getLL('msg.subject'), '###SITENAME###', $this->conf['siteName']);
 
-		$mail = t3lib_div::makeInstance('t3lib_mail_Message');
+		$mail = GeneralUtility::makeInstance('t3lib_mail_Message');
 		$mail->setFrom(array($this->conf['supportMail'] => $this->conf['notifyingMail.']['sender']));
 		$mail->setTo(array($this->data['email'] => $this->data[$this->conf['userNameField']]));
 		$mail->setSubject($subject);
@@ -218,7 +196,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['activateUser'])) {
 			    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['activateUser'] as $_classRef) {
-			        $_procObj = & t3lib_div::getUserObj($_classRef);
+			        $_procObj = & GeneralUtility::getUserObj($_classRef);
 			        $_procObj->activateUser($row,$this);
 			    }
 			}
@@ -275,12 +253,12 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['saveData'])) {
 		    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['saveData'] as $classRef) {
-		        $procObj = &t3lib_div::getUserObj($classRef);
+		        $procObj = &GeneralUtility::getUserObj($classRef);
 		        $insertArray = $procObj->saveRegistrationFormData($insertArray, $this->data, $this);
 		    }
 		}
 
-		$user = t3lib_div::makeInstance('tx_mmforum_FeUser');
+		$user = GeneralUtility::makeInstance('tx_mmforum_FeUser');
 		/* @var $user tx_mmforum_FeUser */
 		$user->setDataArray($insertArray);
 		$user->setPassword($this->data['password']);
@@ -290,7 +268,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_mmforum_userfields', 'deleted=0');
         if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 
-			$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
+			$userField = GeneralUtility::makeInstance('tx_mmforum_userfield');
 			/* @var $userField tx_mmforum_userfield */
 			$userField->init($this->userLib, $this->cObj);
 
@@ -350,8 +328,8 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 		$marker["###FORM_NAME###"]=$this->extKey."[reg]";
 
-		if (t3lib_extMgm::isLoaded('captcha') && $this->conf['useCaptcha']) {
-			$marker['###CAPTCHA_IMAGE###'] = '<img src="'.t3lib_extMgm::siteRelPath('captcha').'captcha/captcha.php" alt="" />';
+		if ( ExtensionManagementUtility::isLoaded('captcha') && $this->conf['useCaptcha']) {
+			$marker['###CAPTCHA_IMAGE###'] = '<img src="'. ExtensionManagementUtility::siteRelPath('captcha').'captcha/captcha.php" alt="" />';
 		} else {
 			$template = $this->cObj->substituteSubpart($template, '###CAPTCHA###', '');
 		}
@@ -359,7 +337,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		$fields = 'username,name,tx_mmforum_occ,city,tx_mmforum_interests,www,email';
 		$fields = explode(',',$fields); //TODO: unused variable
 
-		$requiredFields = t3lib_div::trimExplode(',',$this->conf['required.']['fields']);
+		$requiredFields = GeneralUtility::trimExplode(',',$this->conf['required.']['fields']);
 		$requiredFields[] = 'username';
 		$requiredFields[] = 'password';
 		$requiredFields[] = 'passwordrepeat';
@@ -412,7 +390,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
         if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
 
-			$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
+			$userField = GeneralUtility::makeInstance('tx_mmforum_userfield');
 			$userField->init($this->userLib, $this->cObj);
 
 			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
@@ -443,7 +421,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			}
 
 			/*
-			$parser = t3lib_div::makeInstance('t3lib_TSparser');
+			$parser = GeneralUtility::makeInstance('t3lib_TSparser');
             while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
                 $parser->setup = array();
                 if (strlen($arr['config'])>0) {
@@ -542,7 +520,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			/*
 			 * Check captcha
 			 */
-		if (t3lib_extMgm::isLoaded('captcha') && $this->conf['useCaptcha']) {
+		if ( ExtensionManagementUtility::isLoaded('captcha') && $this->conf['useCaptcha']) {
 			session_start();
 			if ($this->data['captcha'] != $_SESSION['tx_captcha_string']) {
 				$marker['###ERROR_captcha###'] = $this->cObj->wrap($this->pi_getLL('error.captcha'), $this->conf['errorwrap']);
@@ -606,7 +584,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			'*', 'tx_mmforum_userfields', 'deleted=0'
 		);
 
-		$userField = t3lib_div::makeInstance('tx_mmforum_userfield');
+		$userField = GeneralUtility::makeInstance('tx_mmforum_userfield');
 		$userField->init($this->userLib, $this->cObj);
 
 		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
@@ -632,7 +610,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			/* Include hooks */
 	    if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['validateFormData'])) {
 	        foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['validateFormData'] as $_classRef) {
-	            $_procObj = & t3lib_div::getUserObj($_classRef);
+	            $_procObj = & GeneralUtility::getUserObj($_classRef);
 	            $marker = $_procObj->validateRegistrationFormData($marker,$this->data,$this);
 	        }
 	    }
@@ -680,7 +658,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['makeMarker'])) {
 		    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['makeMarker'] as $_classRef) {
-		        $_procObj = & t3lib_div::getUserObj($_classRef);
+		        $_procObj = & GeneralUtility::getUserObj($_classRef);
 		        $marker = $_procObj->processMakeMarker($marker,$this->data,$this);
 		    }
 		}

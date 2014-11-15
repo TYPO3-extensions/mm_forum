@@ -21,6 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  */
@@ -152,7 +154,7 @@ class tx_mmforum_postqueue {
 	 */
 	function commit_changes() {
 
-		$postfactory = t3lib_div::makeInstance('tx_mmforum_postfactory');
+		$postfactory = GeneralUtility::makeInstance('tx_mmforum_postfactory');
 		$postfactory->init($this->conf,$this->parent);
 
 		foreach($this->piVars['items'] as $item_uid => $action) {
@@ -211,7 +213,7 @@ class tx_mmforum_postqueue {
 				$arr['post_text'],
 				$arr['post_time'],
 				$arr['post_ip'],
-				t3lib_div::trimExplode(',',$arr['post_attachment']),
+				GeneralUtility::trimExplode(',',$arr['post_attachment']),
 				$arr['topic_poll'],
 				$arr['topic_subscribe'],
 				true
@@ -223,7 +225,7 @@ class tx_mmforum_postqueue {
 				$arr['post_text'],
 				$arr['post_time'],
 				$arr['post_ip'],
-				t3lib_div::trimExplode(',',$arr['post_attachment']),
+				GeneralUtility::trimExplode(',',$arr['post_attachment']),
 				true
 			);
 		}

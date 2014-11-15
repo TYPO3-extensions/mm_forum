@@ -21,6 +21,9 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\ArrayUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  *
@@ -85,9 +88,10 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		$this->init($conf);
 		$this->pi_USER_INT_obj = 1;
 
-		$paramA = (t3lib_div::_GP('mmfsearch') ? t3lib_div::_GP('mmfsearch') : array());
+		$paramA = ( GeneralUtility::_GP('mmfsearch') ? GeneralUtility::_GP('mmfsearch') : array());
 		$paramB = $this->piVars?$this->piVars:array();
-		$param = t3lib_div::array_merge_recursive_overrule($paramB,$paramA);
+		ArrayUtility::mergeRecursiveWithOverrule($paramB,$paramA);
+		$param = $paramB;
 
 		$this->conf['min_length']   = $conf['sword_minLength'];
 		$this->conf['show_items']   = $conf['resultsPerPage'];
@@ -124,7 +128,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			if (!$GLOBALS['TSFE']->fe_user) {
 				return $content;
 			}
-			$groups = t3lib_div::intExplode(',',$GLOBALS['TSFE']->fe_user->user['usergroup']);
+			$groups = GeneralUtility::intExplode(',',$GLOBALS['TSFE']->fe_user->user['usergroup']);
 			if (!in_array($conf['grp_admin'],$groups)) {
 				return $content;
 			}
@@ -142,7 +146,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		}
 
 			// Instantiate indexing class
-		$indexing = t3lib_div::makeInstance('tx_mmforum_indexing'); /* @var $indexing tx_mmforum_indexing */
+		$indexing = GeneralUtility::makeInstance('tx_mmforum_indexing'); /* @var $indexing tx_mmforum_indexing */
 		$indexing->conf = $this->conf;
 
 		// Indexes all topics currently
@@ -306,7 +310,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		}
 
 		if ($conf['debug_mode'] == 1) {
-			t3lib_div::debug ($this->piVars);
+			debug ($this->piVars);
 		}
 
 			// Include hooks
@@ -315,7 +319,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				$params = array(
 					'marker' => $marker,
 				);
-				$marker = t3lib_div::callUserFunction($userFunction, $params, $this);
+				$marker = GeneralUtility::callUserFunction($userFunction, $params, $this);
 			}
 		}
 
@@ -491,7 +495,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				$marker['###SHORTTEXT###']  = $post_text;
 				$dummylinkParams['tx_mmforum_pi1'] = array('action'=>'list_post','tid'=>$topic_id);
 				if (tx_mmforum_pi1::getIsRealURL()) $dummylinkParams['tx_mmforum_pi1']['fid'] = $topic_info['forum_id'];
-				#$link = t3lib_div::getIndpEnv("HTTP_HOST").'/'.$this->pi_getPageLink($conf['pid_forum'],'',$dummylinkParams);
+				#$link = GeneralUtility::getIndpEnv("HTTP_HOST").'/'.$this->pi_getPageLink($conf['pid_forum'],'',$dummylinkParams);
 				$link = tx_mmforum_pi1::getAbsUrl($this->pi_getPageLink($conf['pid_forum'],'',$dummylinkParams));
 				$link = $this->cObj->stdWrap($link,$conf['postPath.']);
 				$marker['###POSTPATH###']   = $this->pi_linkToPage($link,$conf['pid_forum'],'_self',$linkparams);
@@ -517,7 +521,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 							'post_info' => $post_info,
 							'post_text' => $post_text,
 						);
-						$marker = t3lib_div::callUserFunction($userFunction, $params, $this);
+						$marker = GeneralUtility::callUserFunction($userFunction, $params, $this);
 					}
 				}
 
@@ -686,7 +690,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				''
 			);
 			if ($this->conf['debug_mode']) {
-				t3lib_div::devLog('find_posts', 'mm_forum', 0, $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery);
+				GeneralUtility::devLog('find_posts', 'mm_forum', 0, $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery);
 			}
 
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {

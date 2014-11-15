@@ -21,6 +21,9 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
  */
@@ -115,7 +118,7 @@ class tx_mmforum_postfactory {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostqueue'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostqueue'] as $_classRef) {
-				$_procObj = &t3lib_div::getUserObj($_classRef);
+				$_procObj = &GeneralUtility::getUserObj($_classRef);
 				$insertArray = $_procObj->processPostqueueInsertArray($insertArray, $this);
 			}
 		}
@@ -171,7 +174,7 @@ class tx_mmforum_postfactory {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertTopic'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertTopic'] as $_classRef) {
-				$_procObj = & t3lib_div::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$insertArray = $_procObj->processTopicInsertArray($insertArray, $this);
 			}
 		}
@@ -257,7 +260,7 @@ class tx_mmforum_postfactory {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostqueue'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostqueue'] as $_classRef) {
-				$_procObj    = &t3lib_div::getUserObj($_classRef);
+				$_procObj    = &GeneralUtility::getUserObj($_classRef);
 				$insertArray = $_procObj->processPostqueueInsertArray($insertArray);
 			}
 		}
@@ -316,7 +319,7 @@ class tx_mmforum_postfactory {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPost'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPost'] as $_classRef) {
-				$_procObj    = &t3lib_div::getUserObj($_classRef);
+				$_procObj    = &GeneralUtility::getUserObj($_classRef);
 				$insertArray = $_procObj->processPostInsertArray($insertArray, $this);
 			}
 		}
@@ -346,7 +349,7 @@ class tx_mmforum_postfactory {
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostText'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['postfactory']['insertPostText'] as $_classRef) {
-				$_procObj    = &t3lib_div::getUserObj($_classRef);
+				$_procObj    = &GeneralUtility::getUserObj($_classRef);
 				$insertArray = $_procObj->processPostTextInsertArray($insertArray, $this);
 			}
 		}
@@ -432,7 +435,7 @@ class tx_mmforum_postfactory {
 		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_favorites', $uA, 'topic_id='.intval($postId));
 		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_havealook', $uA, 'topic_id='.intval($postId));
 		$TYPO3_DB->exec_DELETEquery('tx_mmforum_wordmatch', 'topic_id='.intval($topicId).'');
-		if (t3lib_extMgm::extLoaded('ratings'))
+		if ( ExtensionManagementUtility::extLoaded('ratings'))
 			$TYPO3_DB->exec_DELETEquery('tx_ratings_data', $uA, 'reference="tx_mmforum_topics_'.intval($postId).'"');
 
 		/*
@@ -477,7 +480,7 @@ class tx_mmforum_postfactory {
 		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_attachments', $uA, 'post_id='.intval($postId));
 		$TYPO3_DB->exec_DELETEquery('tx_mmforum_wordmatch', 'post_id='.intval($postId).'');
 
-		if (t3lib_extMgm::extLoaded('ratings'))
+		if ( ExtensionManagementUtility::extLoaded('ratings'))
 			$TYPO3_DB->exec_DELETEquery('tx_ratings_data', $uA, 'reference="tx_mmforum_posts_'.intval($postId).'"');
 
 		if (!$noUpdate) {
@@ -740,7 +743,7 @@ class tx_mmforum_postfactory {
 			if ($tables == '')
 				return " AND pid='".$this->conf['storagePID']."'";
 
-			$tables = t3lib_div::trimExplode(',',$tables);
+			$tables = GeneralUtility::trimExplode(',',$tables);
 			$query = '';
 
 			foreach($tables as $table) {

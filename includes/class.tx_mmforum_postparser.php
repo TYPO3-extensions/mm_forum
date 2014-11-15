@@ -22,33 +22,14 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-/**
- * [CLASS/FUNCTION INDEX of SCRIPT]
- *
- *
- *
- *   68: class tx_mmforum_postparser
- *   86:     function main($parent,$conf,$text,$job='textparser')
- *  117:     function parse_text($text,$parent,$conf)
- *  143:     function linkgenerator($content,$conf,$switch)
- *  199:     function getMailTo($mailAddress,$linktxt,$initP='?')
- *  228:     function bbcode2html($text,$parent,$conf)
- *  295:     function processList($matches)
- *  322:     function generate_smilies($text,$parent,$conf)
- *  352:     function validate_email($email)
- *  370:     function syntaxhighlighting($content, $parent, $conf)
- *  421:     function zitat($text,$parent, $conf)
- *  462:     function decode_entities($text)
- *  479:     function links($text, $conf)
- *
- * TOTAL FUNCTIONS: 12
- * (This index is automatically created/updated by the extension "extdeveval")
- *
- */
-if (t3lib_extMgm::isLoaded('geshilib')) {
-	include_once ( t3lib_extMgm::siteRelPath('geshilib') . 'res/geshi.php' );
+
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
+if ( ExtensionManagementUtility::isLoaded('geshilib')) {
+	include_once ( ExtensionManagementUtility::siteRelPath('geshilib') . 'res/geshi.php' );
 } elseif (!class_exists("GeSHi")) { // Checks if there is an instance of this class already in use!
-	include_once ( t3lib_extMgm::extPath('mm_forum') . 'res/geshi/geshi.php' );
+	include_once ( ExtensionManagementUtility::extPath('mm_forum') . 'includes/geshi/geshi.php' );
 }
 
 /**
@@ -83,7 +64,7 @@ class tx_mmforum_postparser {
 	 */
 	function main($parent, $conf, $text, $job='textparser') {
 
-		$postParserObj = t3lib_div::makeInstance('tx_mmforum_postparser');
+		$postParserObj = GeneralUtility::makeInstance('tx_mmforum_postparser');
 
 		switch ($job) {
 			case 'textparser':
@@ -392,7 +373,7 @@ class tx_mmforum_postparser {
 	 */
 	function syntaxhighlighting($content, $parent, $conf) {
 		/* Path to Geshi Syntax-Highlighting files. */
-		$path = t3lib_div::getFileAbsFileName('EXT:mm_forum/res/geshi/geshi/', $onlyRelative = 1, $relToTYPO3_mainDir = 0);
+		$path = GeneralUtility::getFileAbsFileName('EXT:mm_forum/res/geshi/geshi/', $onlyRelative = 1, $relToTYPO3_mainDir = 0);
 		($conf['postparser.']['tsrefUrl']) ? define('GESHI_TS_REF', $conf['postparser.']['tsrefUrl']) : define('GESHI_TS_REF', 'www.typo3.net');
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -536,7 +517,7 @@ class tx_mmforum_postparser {
 	 * @return string       The parsed string
 	 */
 	function typoLinkURL($id, &$parent) {
-		$localcObj = t3lib_div::makeInstance('tslib_cObj');
+		$localcObj = GeneralUtility::makeInstance('tslib_cObj');
 		$SERVER_NAME = $_SERVER['SERVER_NAME'];
 
 		if (strpos($SERVER_NAME, 'http://') === false) {
@@ -546,7 +527,7 @@ class tx_mmforum_postparser {
 		if (strpos($id, 'record:page:') === false) {
 			$PagesTSconfig = $GLOBALS['TSFE']->getPagesTSconfig();
 			$linkhandler = $PagesTSconfig['RTE.']['default.']['linkhandler.'];
-			$linkHandlerData = t3lib_div::trimExplode(':', $id);
+			$linkHandlerData = GeneralUtility::trimExplode(':', $id);
 
 			if (is_array($GLOBALS['TCA'][$linkHandlerData[1]]['ctrl'])) {
 				$row = $this->getRecordRow($linkHandlerData[1], $linkHandlerData[2], $localcObj);

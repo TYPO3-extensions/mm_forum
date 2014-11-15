@@ -21,20 +21,9 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
-/**
- * [CLASS/FUNCTION INDEX of SCRIPT]
- *
- *
- *
- *   49: class tx_mmforum_cron_messaging extends tx_mmforum_cronbase
- *   62:     function main()
- *  155:     function getUsername($user_uid)
- *
- * TOTAL FUNCTIONS: 2
- * (This index is automatically created/updated by the extension "extdeveval")
- *
- */
 
+use TYPO3\CMS\Core\Html\HtmlParser;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * This class handles the automatic notification of users about
@@ -52,7 +41,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 	/**
 	 * The TYPO3 database object
 	 *
-	 * @var t3lib_DB
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
 	 */
 	protected $databaseHandle;
 	
@@ -84,10 +73,10 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 
 		$template			= $this->loadTemplateFile('notifyPM');
 		if ($this->conf['cron_htmlemail'])
-			$template		= t3lib_parsehtml::getSubpart($template, '###NOTIFY_HTML###');
-		else $template		= t3lib_parsehtml::getSubpart($template, '###NOTIFY_PLAINTEXT###');
+			$template		= HtmlParser::getSubpart($template, '###NOTIFY_HTML###');
+		else $template		= HtmlParser::getSubpart($template, '###NOTIFY_PLAINTEXT###');
 
-		$itemTemplate		= t3lib_parsehtml::getSubpart($template, '###NOTIFY_LISTITEM###');
+		$itemTemplate		= HtmlParser::getSubpart($template, '###NOTIFY_LISTITEM###');
 
 		$content = '';
 		while($user_arr = $this->databaseHandle->sql_fetch_assoc($user_res)) {
@@ -120,10 +109,10 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 					'###LLL_BY###'					=> $this->getLL('by'),
 					'###LLL_ON###'					=> $this->getLL('on'),
 				);
-				$pm_content .= t3lib_parsehtml::substituteMarkerArray($itemTemplate, $pm_marker);
+				$pm_content .= HtmlParser::substituteMarkerArray($itemTemplate, $pm_marker);
 			}
 
-			$user_content	= t3lib_parsehtml::substituteSubpart($template, '###NOTIFY_LISTITEM###', $pm_content);
+			$user_content	= HtmlParser::substituteSubpart($template, '###NOTIFY_LISTITEM###', $pm_content);
 
 			$user_marker	= array(
 				'###NOTIFY_SUBJECT###'				=> sprintf($this->getLL('subject'),$this->databaseHandle->sql_num_rows($pm_res)),
@@ -135,7 +124,7 @@ class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 				'###LABEL_NOTIFY_SENDER###'			=> $this->getLL('sender'),
 				'###LABEL_NOTIFY_DATE###'			=> $this->getLL('date')
 			);
-			$user_content	= t3lib_parsehtml::substituteMarkerArray($user_content, $user_marker);
+			$user_content	= HtmlParser::substituteMarkerArray($user_content, $user_marker);
 
 			$subject		= sprintf($this->getLL('mailSubject'),$this->conf['cron_sitetitle'],$this->databaseHandle->sql_num_rows($pm_res));
 			$username		= $user_arr['name']?$user_arr['name']:$user_arr['username'];

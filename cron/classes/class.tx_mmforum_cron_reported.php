@@ -21,7 +21,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
+use TYPO3\CMS\Core\Html\HtmlParser;
 
 /**
  * Handles automatic reminders for posts that still have to be
@@ -95,7 +95,7 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 			$marker			= array(
 				'###PNOTIFY_ADDRESS###'			=> sprintf($this->getLL('address'),$arr['username'])
 			);
-			$mailtext		= t3lib_parsehtml::substituteMarkerArray($this->postalertMail, $marker);
+			$mailtext		= HtmlParser::substituteMarkerArray($this->postalertMail, $marker);
 			$subject		= sprintf($this->getLL('subject'), count($this->postalertItems));
 			$username		= $arr['name']?$arr['name']:$arr['username'];
 			$recipient		= '"'.$username.'" <'.$arr['email'].'>';
@@ -125,10 +125,10 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 
 		$template			= $this->loadTemplateFile('notifyReported');
 		if ($this->conf['cron_htmlemail'])
-			$template		= t3lib_parsehtml::getSubpart($template, '###PNOTIFY_HTML###');
-		else $template		= t3lib_parsehtml::getSubpart($template, '###PNOTIFY_PLAINTEXT###');
+			$template		= HtmlParser::getSubpart($template, '###PNOTIFY_HTML###');
+		else $template		= HtmlParser::getSubpart($template, '###PNOTIFY_PLAINTEXT###');
 
-		$itemTemplate		= t3lib_parsehtml::getSubpart($template, '###PNOTIFY_LISTITEM###');
+		$itemTemplate		= HtmlParser::getSubpart($template, '###PNOTIFY_LISTITEM###');
 
 		$marker				= array(
 			'###PNOTIFY_SUBJECT###'				=> sprintf($this->getLL('subject'), count($this->postalertItems)),
@@ -145,7 +145,7 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 
 			'###LABEL_PNOTIFY_POSTCONTENT###'	=> $this->getLL('reportedcontent'),
 		);
-		$template			= t3lib_parsehtml::substituteMarkerArray($template, $marker);
+		$template			= HtmlParser::substituteMarkerArray($template, $marker);
 		$itemContent = '';
 		foreach($this->postalertItems as $postalertItem) {
 			$itemMarker = array(
@@ -164,10 +164,10 @@ class tx_mmforum_cron_reported extends tx_mmforum_cronbase {
 				'###LABEL_PNOTIFY_POSTCONTENT###'	=> $this->getLL('reportedcontent'),
 			);
 
-			$itemContent .= t3lib_parsehtml::substituteMarkerArray($itemTemplate, $itemMarker);
+			$itemContent .= HtmlParser::substituteMarkerArray($itemTemplate, $itemMarker);
 		}
 
-		$template			= t3lib_parsehtml::substituteSubpart($template, '###PNOTIFY_LISTITEM###', $itemContent);
+		$template = HtmlParser::substituteSubpart($template, '###PNOTIFY_LISTITEM###', $itemContent);
 		$this->postalertMail = $template;
 	}
 

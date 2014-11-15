@@ -3,10 +3,10 @@ if (!defined('TYPO3_MODE')) {
 	die('Access denied.');
 }
 
-t3lib_extMgm::addStaticFile($_EXTKEY, 'res/ts', 'mm_forum');
-t3lib_extMgm::addStaticFile($_EXTKEY, 'res/static/css', 'mm_forum Stylesheets');
-t3lib_extMgm::addStaticFile($_EXTKEY, 'res/static/javascript', 'mm_forum Javascript: Prototype');
-t3lib_extMgm::addStaticFile($_EXTKEY, 'res/static/javascriptJquery', 'mm_forum Javascript: jQuery');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'res/ts', 'mm_forum');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'res/static/css', 'mm_forum Stylesheets');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'res/static/javascript', 'mm_forum Javascript: Prototype');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'res/static/javascriptJquery', 'mm_forum Javascript: jQuery');
 
 /*
  * Extend fe_user table
@@ -106,9 +106,8 @@ $tempColumns = array(
 );
 
 
-t3lib_div::loadTCA('fe_users');
-t3lib_extMgm::addTCAcolumns    ( 'fe_users', $tempColumns, 1);
-t3lib_extMgm::addToAllTCAtypes ( 'fe_users', '--div--;LLL:EXT:mm_forum/locallang_db.xml:fe_users.tx_mmforum.tab.settings, tx_mmforum_avatar;;;;1-1-1, tx_mmforum_interests, tx_mmforum_occ, tx_mmforum_icq;;;;1-1-1, tx_mmforum_aim, tx_mmforum_yim, tx_mmforum_msn, tx_mmforum_skype, tx_mmforum_md5;;;;1-1-1, tx_mmforum_posts, tx_mmforum_user_sig, tx_mmforum_prelogin, tx_mmforum_reg_hash, tx_mmforum_pmnotifymode');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns    ( 'fe_users', $tempColumns, 1);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes ( 'fe_users', '--div--;LLL:EXT:mm_forum/locallang_db.xml:fe_users.tx_mmforum.tab.settings, tx_mmforum_avatar;;;;1-1-1, tx_mmforum_interests, tx_mmforum_occ, tx_mmforum_icq;;;;1-1-1, tx_mmforum_aim, tx_mmforum_yim, tx_mmforum_msn, tx_mmforum_skype, tx_mmforum_md5;;;;1-1-1, tx_mmforum_posts, tx_mmforum_user_sig, tx_mmforum_prelogin, tx_mmforum_reg_hash, tx_mmforum_pmnotifymode');
 
 
 /*
@@ -131,9 +130,8 @@ $tempColumns = array(
         'config'  => array( 'type' => 'check' ) )
 );
 
-t3lib_div::loadTCA('fe_groups');
-t3lib_extMgm::addTCAcolumns    ( 'fe_groups', $tempColumns, 1);
-t3lib_extMgm::addToAllTCAtypes ( 'fe_groups', 'tx_mmforum_rank, tx_mmforum_rank_excl');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns    ( 'fe_groups', $tempColumns, 1);
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes ( 'fe_groups', 'tx_mmforum_rank, tx_mmforum_rank_excl');
 
 
 /*
@@ -151,8 +149,8 @@ $TCA['tx_mmforum_forums'] = array(
 		'delete'            => 'deleted',
 		'dividers2tabs'     => true,
 		'enablecolumns'     => array( 'disabled' => 'hidden' ),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/report.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/report.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'hidden, forum_name, forum_desc, forum_posts, forum_last_post_id, cat_id, forum_order, forum_topics, forum_posts_568ce612f3, forum_last_post_id_8724a146ef, forum_internal',
@@ -173,8 +171,8 @@ $TCA['tx_mmforum_topics'] = array(
 		'delete'            => 'deleted',
 		'dividers2tabs'     => true,
 		'enablecolumns'     => array( 'disabled' => 'hidden' ),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/comments.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/comments.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'hidden, topic_title, topic_poster, topic_time, topic_views, topic_replies, topic_last_post_id, forum_id, topic_first_post_id, poll_id, shadow_tid, shadow_fid, tx_mmforumsearch_index_write',
@@ -195,8 +193,8 @@ $TCA['tx_mmforum_posts'] = array(
 		'delete'            => 'deleted',
 		'dividers2tabs'     => true,
 		'enablecolumns'     => array( 'disabled' => 'hidden' ),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/comment.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/comment.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'hidden, topic_id, forum_id, poster_id, post_time, poster_ip, edit_time, edit_count, attachment',
@@ -219,8 +217,8 @@ $TCA['tx_mmforum_posts_text'] = array(
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/comment.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/comment.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'hidden, post_text',
@@ -242,8 +240,8 @@ $TCA['tx_mmforum_smilies'] = array(
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/emoticon.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/emoticon.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'hidden, code, smile_url, emoticon',
@@ -262,8 +260,8 @@ $TCA['tx_mmforum_mailkey'] = array(
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'default_sortby' => 'ORDER BY crdate',
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/email.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/email.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'code',
@@ -285,8 +283,8 @@ $TCA['tx_mmforum_postsread'] = array(
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/comment.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/comment.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'hidden, user, topic_id, post_id',
@@ -308,8 +306,8 @@ $TCA['tx_mmforum_topicmail'] = array(
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/email_go.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/email_go.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'hidden, user_id, topic_id',
@@ -331,8 +329,8 @@ $TCA['tx_mmforum_favorites'] = array(
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/favorite.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/favorite.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'hidden, user_id, topic_id',
@@ -354,8 +352,8 @@ $TCA['tx_mmforum_pminbox'] = array(
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/email.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/email.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'hidden, sendtime, from_uid, from_name, to_uid, to_name, subject, message, read_flg',
@@ -377,8 +375,8 @@ $TCA['tx_mmforum_wordlist'] = array(
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/words.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/words.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'hidden, word, metaphone',
@@ -400,8 +398,8 @@ $TCA['tx_mmforum_wordmatch'] = array(
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/words.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/words.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'hidden, word_id, post_id, is_header, topic_id, forum_id, solved, topic_title, topic_views, topic_replies',
@@ -423,8 +421,8 @@ $TCA['tx_mmforum_searchresults'] = array(
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/find.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/find.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'hidden, search_string, array_string',
@@ -447,8 +445,8 @@ $TCA['tx_mmforum_userfields'] = array(
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
 		),
-		'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-		'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/custom.png',
+		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/custom.png',
 	),
 	'feInterface' => array(
 		'fe_admin_fieldList' => 'hidden, label, config',
@@ -470,8 +468,8 @@ $TCA['tx_mmforum_attachments'] = array(
         'enablecolumns'     => array(
             'disabled'          => 'hidden'
         ),
-        'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-	'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/attach.png',
+        'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+	'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/attach.png',
     ),
     'feInterface' => array(
         'fe_admin_fieldList' => 'hidden, file_type, file_name, file_path, file_size, downloads, post_id'
@@ -493,8 +491,8 @@ $TCA['tx_mmforum_polls'] = array(
         'enablecolumns'     => array(
             'disabled'          => 'hidden'
         ),
-        'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-	'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/poll.png',
+        'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+	'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/poll.png',
     ),
     'feInterface' => array(
         'fe_admin_fieldList' => 'hidden, question, endtime, votes'
@@ -516,8 +514,8 @@ $TCA['tx_mmforum_polls_answers'] = array(
         'enablecolumns'     => array(
             'disabled'      => 'hidden'
         ),
-        'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-	'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/poll.png',
+        'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+	'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/poll.png',
     ),
     'feInterface' => array(
         'fe_admin_fieldList' => 'hidden, answer, poll_id, votes'
@@ -539,8 +537,8 @@ $TCA['tx_mmforum_polls_votes'] = array(
         'enablecolumns'     => array(
             'disabled'          => 'hidden'
         ),
-        'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-        'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/poll.png',
+        'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+        'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/poll.png',
     ),
     'feInterface' => array(
         'fe_admin_fieldList' => 'hidden, poll_id, answer_id, user_id'
@@ -562,8 +560,8 @@ $TCA['tx_mmforum_ranks'] = array(
         'enablecolumns'     => array(
             'disabled'          => 'hidden'
         ),
-        'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-        'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/rank.png',
+        'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+        'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/rank.png',
     ),
     'feInterface' => array(
         'fe_admin_fieldList' => 'hidden, icon, title, color, minPosts, special'
@@ -585,8 +583,8 @@ $TCA['tx_mmforum_postqueue'] = array(
         'enablecolumns'     => array(
             'disabled'          => 'hidden'
         ),
-        'dynamicConfigFile' => t3lib_extMgm::extPath($_EXTKEY) . 'tca.php',
-	'iconfile'          => t3lib_extMgm::extRelPath($_EXTKEY) . 'res/dbicons/comments.png',
+        'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
+	'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/comments.png',
     ),
     'feInterface' => array(
         'fe_admin_fieldList' => 'hidden, topic, topic_forum, topic_title, topic_poll, topic_subscribe, post_parent, post_text, post_user, post_time, post_attachment, post_ip'
@@ -598,56 +596,49 @@ $TCA['tx_mmforum_postqueue'] = array(
 /*
  * Include plugin 'mm_forum :: Forum'
  */
-t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi1'] = 'layout,select_key,pages';
-t3lib_extMgm::addPlugin(array('LLL:EXT:mm_forum/locallang_db.php:tt_content.list_type_pi1', $_EXTKEY . '_pi1'), 'list_type');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(array('LLL:EXT:mm_forum/locallang_db.php:tt_content.list_type_pi1', $_EXTKEY . '_pi1'), 'list_type');
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_pi1'] = 'pi_flexform';
-t3lib_extMgm::addPiFlexFormValue($_EXTKEY . '_pi1', 'FILE:EXT:mm_forum/flexform_ds_pi1.xml');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($_EXTKEY . '_pi1', 'FILE:EXT:mm_forum/flexform_ds_pi1.xml');
 
 if (TYPO3_MODE == 'BE') {
-	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_mmforum_pi1_wizicon'] = t3lib_extMgm::extPath($_EXTKEY) . 'pi1/class.tx_mmforum_pi1_wizicon.php';
+	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_mmforum_pi1_wizicon'] = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'pi1/class.tx_mmforum_pi1_wizicon.php';
 }
 
 /*
  * Include plugin 'mm_forum :: User registration'
  */
-t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi2'] = 'layout,select_key,pages';
-t3lib_extMgm::addPlugin(array('LLL:EXT:mm_forum/locallang_db.php:tt_content.list_type_pi2', $_EXTKEY . '_pi2'), 'list_type');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(array('LLL:EXT:mm_forum/locallang_db.php:tt_content.list_type_pi2', $_EXTKEY . '_pi2'), 'list_type');
 
 /*
  * Include plugin 'mm_forum :: Private messaging'
  */
-t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi3'] = 'layout,select_key,pages';
-t3lib_extMgm::addPlugin(array('LLL:EXT:mm_forum/locallang_db.php:tt_content.list_type_pi3', $_EXTKEY . '_pi3'), 'list_type');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(array('LLL:EXT:mm_forum/locallang_db.php:tt_content.list_type_pi3', $_EXTKEY . '_pi3'), 'list_type');
 
 /*
  * Include plugin 'mm_forum :: Search'
  */
-t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi4'] = 'layout,select_key,pages';
-t3lib_extMgm::addPlugin(array('LLL:EXT:mm_forum/locallang_db.xml:tt_content.list_type_pi4', $_EXTKEY . '_pi4'), 'list_type');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(array('LLL:EXT:mm_forum/locallang_db.xml:tt_content.list_type_pi4', $_EXTKEY . '_pi4'), 'list_type');
 
 /*
  * Include plugin 'mm_forum :: User settings'
  */
-t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi5'] = 'layout,select_key,pages';
-t3lib_extMgm::addPlugin(array('LLL:EXT:mm_forum/locallang_db.php:tt_content.list_type_pi5', $_EXTKEY . '_pi5'), 'list_type');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(array('LLL:EXT:mm_forum/locallang_db.php:tt_content.list_type_pi5', $_EXTKEY . '_pi5'), 'list_type');
 
 /*
  * Include plugin 'mm_forum :: Portal information'
  */
-t3lib_div::loadTCA('tt_content');
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi6'] = 'layout,select_key,pages';
-t3lib_extMgm::addPlugin(array('LLL:EXT:mm_forum/locallang_db.php:tt_content.list_type_pi6', $_EXTKEY . '_pi6'), 'list_type');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(array('LLL:EXT:mm_forum/locallang_db.php:tt_content.list_type_pi6', $_EXTKEY . '_pi6'), 'list_type');
 
 
 /*
  * Include backend module
  */
 if (TYPO3_MODE == 'BE') {
-	t3lib_extMgm::addModule('web', 'txmmforumM1', '', t3lib_extMgm::extPath($_EXTKEY) . 'mod1/');
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule('web', 'txmmforumM1', '', \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'mod1/');
 }
-?>

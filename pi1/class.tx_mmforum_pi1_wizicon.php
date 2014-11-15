@@ -21,6 +21,8 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 /**
  * Class that adds the wizard icon.
  *
@@ -37,7 +39,7 @@ class tx_mmforum_pi1_wizicon {
 
 		for($i=1; $i<=6; $i++) {
 			$wizardItems["plugins_tx_mmforum_pi$i"] = array(
-				"icon"=>t3lib_extMgm::extRelPath("mm_forum")."pi1/ce_wiz.gif",
+				"icon"=> ExtensionManagementUtility::extRelPath("mm_forum")."pi1/ce_wiz.gif",
 				"title"=>$LANG->getLLL('pi'.$i.'_title',$LL),
 				"description"=>$LANG->getLLL('pi'.$i.'_plus_wiz_description',$LL),
 				"params"=>'&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=mm_forum_pi'.$i

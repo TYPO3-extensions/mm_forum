@@ -23,7 +23,7 @@
  *                                                                      *
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
-
+use TYPO3\CMS\Core\Html\HtmlParser;
 
 /**
  *
@@ -45,7 +45,7 @@ class tx_mmforum_BeTools {
 	/**
 	 *
 	 * Substitutes markers in a template. Usually, this is just a wrapper method
-	 * around the t3lib_parsehtml::substituteMarkerArray method. However, this
+	 * around the \TYPO3\CMS\Core\Html\HtmlParser::substituteMarkerArray method. However, this
 	 * method is only available from TYPO3 4.2.
 	 *
 	 * @param  String $template The template
@@ -58,7 +58,7 @@ class tx_mmforum_BeTools {
 		if (TYPO3_branch === '4.1' || TYPO3_branch === '4.0')
 			return str_replace(array_keys($marker), array_values($marker), $template);
 		else
-			return t3lib_parsehtml::substituteMarkerArray($template, $marker);
+			return HtmlParser::substituteMarkerArray($template, $marker);
 	}
 
 
@@ -66,7 +66,7 @@ class tx_mmforum_BeTools {
 	/**
 	 *
 	 * Replaces a subpart in a template with content. This is just a wrapper method
-	 * around the substituteSubpart method of the t3lib_parsehtml class.
+	 * around the substituteSubpart method of the \TYPO3\CMS\Core\Html\HtmlParser class.
 	 *
 	 * @param  String $template The tempalte
 	 * @param  String $subpart  The subpart name
@@ -76,7 +76,7 @@ class tx_mmforum_BeTools {
 	 */
 
 	static function substituteSubpart($template, $subpart, $replace) {
-		return t3lib_parsehtml::substituteSubpart($template, $subpart, $replace);
+		return HtmlParser::substituteSubpart($template, $subpart, $replace);
 	}
 
 
@@ -84,7 +84,7 @@ class tx_mmforum_BeTools {
 	/**
 	 *
 	 * Gets a subpart from a template. This is just a wrapper around the getSubpart
-	 * method of the t3lib_parsehtml class.
+	 * method of the \TYPO3\CMS\Core\Html\HtmlParser class.
 	 *
 	 * @param  String $template The template
 	 * @param  String $subpart  The subpart name
@@ -93,7 +93,7 @@ class tx_mmforum_BeTools {
 	 */
 
 	static function getSubpart($template, $subpart) {
-		return t3lib_parsehtml::getSubpart($template, $subpart);
+		return HtmlParser::getSubpart($template, $subpart);
 	}
 
 }

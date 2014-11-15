@@ -82,6 +82,6 @@ if (!file_exists($cronFileName)) die("FATAL ERROR - Cronjob mode $cronMode is no
 else require_once($cronFileName);
 
 	// Instantiate cronjob object and execute
-$cronObj = t3lib_div::makeInstance($cronClassName);
+$cronObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($cronClassName);
 $cronObj->initialize();
 $cronObj->main();

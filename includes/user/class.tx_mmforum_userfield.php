@@ -21,6 +21,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * A custom user field.
@@ -67,7 +68,7 @@ class tx_mmforum_userfield {
 		$this->userLib =& $userLib;
 
 		if ($cObj === null)
-			$this->cObj = t3lib_div::makeInstance('tslib_cObj');
+			$this->cObj = GeneralUtility::makeInstance('tslib_cObj');
 		else $this->cObj =& $cObj;
 	}
 

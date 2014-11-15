@@ -21,35 +21,11 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\HttpUtility;
+
 /**
- * [CLASS/FUNCTION INDEX of SCRIPT]
- *
- *
- *
- *   69: class tx_mmforum_pi3 extends tslib_pibase
- *   85:     function main($content,$conf)
- *  168:     function list_inbox ($content,$conf)
- *  349:     function message_del ($content,$conf)
- *  379:     function message_read ($content,$conf)
- *  462:     function message_write ($content,$conf)
- *  677:     function top_navi ($content,$conf)
- *  726:     function list_user($content,$conf)
- *  762:     function count_new_pm($uid)
- *  797:     function getLanguage()
- *  816:     function getStoragePIDQuery($tables="")
- *
- * TOTAL FUNCTIONS: 14
- * (This index is automatically created/updated by the extension "extdeveval")
- *
- */
-
-
-
-
-
-
-
-	/**
 	 * Plugin 'Private Messaging' for the 'mm_forum' extension.
 	 * The 'private messaging' plugin for the extension 'mm_forum' displays
 	 * the personal in- and outbox for each user's private messages and
@@ -75,7 +51,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 	/**
 	 * The TYPO3 database object
 	 *
-	 * @var t3lib_DB
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
 	 */
 	protected $databaseHandle;
 
@@ -104,7 +80,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		$this->config["code"] = $this->cObj->stdWrap($this->conf["code"],$this->conf["code."]);
 
 		$this->templateFile = $conf["templateFile"];
-		$codes=t3lib_div::trimExplode(",", $this->config["code"]?$this->config["code"]:$this->conf["defaultCode"],1);
+		$codes= GeneralUtility::trimExplode(",", $this->config["code"]?$this->config["code"]:$this->conf["defaultCode"],1);
 		if (!count($codes))  $codes=array('');
 
 		$conf = $this->conf;
@@ -632,7 +608,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 					unset($_SESSION['mm_forum']['pm']['message']);
 
 					// Notification to the recipient via email
-					if ($recipient['tx_mmforum_pmnotifymode'] == 0 && t3lib_div::validEmail($recipient['email'])) {
+					if ($recipient['tx_mmforum_pmnotifymode'] == 0 && GeneralUtility::validEmail($recipient['email'])) {
 
 						$template = $this->pi_getLL('ntfmail.content');
 
@@ -658,7 +634,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						$mailtext = $this->cObj->substituteMarkerArrayCached($template, $marker);
 
 						// Compose mail and send
-						$mail = t3lib_div::makeInstance('t3lib_mail_Message');
+						$mail = GeneralUtility::makeInstance('t3lib_mail_Message');
 						$mail->setFrom(array($this->conf['mailerEmail'] => $this->conf['siteName']));
 						$mail->setTo(array($recipient['email'] => $recipient['username']));
 						$mail->setSubject($this->pi_getLL('ntfmail.subject'));
@@ -686,7 +662,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 					// Redirect user to inbox
 					$link = $this->pi_getPageLink($conf['pm_id']);
-					header('Location: ' . $this->tools->getAbsoluteUrl($link));
+					HttpUtility::redirect(tx_mmforum_tools::getAbsoluteUrl($link));
 
 				// Display an error message in case the recipient does not exist
 				} else {
@@ -713,14 +689,14 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				'###LABEL_SEND###'				=> $this->pi_getLL('write.send'),
 				'###LABEL_RESET###'				=> $this->pi_getLL('write.reset'),
 				'###LABEL_SEARCH###'			=> $this->pi_getLL('write.search'),
-				'###EXT_PATH###'				=> t3lib_extMgm::siteRelPath("mm_forum"),
+				'###EXT_PATH###'				=> ExtensionManagementUtility::siteRelPath("mm_forum"),
 				'###PID###'						=> $conf['userPID'],
 				'###LANG###'					=> $this->pi_getLL('write.search'),
 				'###PM###'						=> $conf['pm_id'],
-				'###AJAX_URL###'				=> t3lib_extMgm::siteRelPath('mm_forum').'pi3/tx_mmforum_usersearch.php',
+				'###AJAX_URL###'				=> ExtensionManagementUtility::siteRelPath('mm_forum').'pi3/tx_mmforum_usersearch.php',
 				'###JAVASCRIPTUSERSEARCHREFRESH###'		=> $conf['pm_refreshUserSearch'],
 				'###JAVASCRIPTUSERSEARCHHIDE###'		=> $conf['pm_hideUserSearch'],
-				'###JAVASCRIPTUSERSEARCH###'			=> str_replace('###AJAX_URL###', t3lib_extMgm::siteRelPath('mm_forum') . 'pi3/tx_mmforum_usersearch.php', $conf['pm_UserSearch'])
+				'###JAVASCRIPTUSERSEARCH###'			=> str_replace('###AJAX_URL###', ExtensionManagementUtility::siteRelPath('mm_forum') . 'pi3/tx_mmforum_usersearch.php', $conf['pm_UserSearch'])
 			);
 
 			session_start();
@@ -741,7 +717,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 			// Create entirely new PM
 			} else {
-				$to_userid = $this->piVars['userid'] ? intval($this->piVars['userid']) : intval(t3lib_div::_GP('userid'));
+				$to_userid = $this->piVars['userid'] ? intval($this->piVars['userid']) : intval( GeneralUtility::_GP('userid'));
 				if ($to_userid != 0) {
 					$res = $this->databaseHandle->exec_SELECTquery('username', 'fe_users', 'uid=' . $to_userid);
 					list($username) = $this->databaseHandle->sql_fetch_row($res);
@@ -831,7 +807,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			// Include hooks
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['pm']['listUser_beginMarkers'])) {
             foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['pm']['listUser_beginMarkers'] as $_classRef) {
-                $_procObj = & t3lib_div::getUserObj($_classRef);
+                $_procObj = & GeneralUtility::getUserObj($_classRef);
                 $marker = $_procObj->listUser_beginMarkers($marker, $this);
             }
         }
@@ -841,7 +817,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		$usersearch = $this->databaseHandle->quoteStr($this->piVars['user'],'fe_users');
 
 		$searchqueryparts = array();		
-		$searchfields = t3lib_div::trimExplode(',', $conf['userSearchFields']);
+		$searchfields = GeneralUtility::trimExplode(',', $conf['userSearchFields']);
 		$searchquery = '';
 		
 		foreach($searchfields as $field) {
@@ -876,7 +852,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				// Include hooks
 	        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['pm']['listUser_userMarkers'])) {
 	            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['pm']['listUser_userMarkers'] as $_classRef) {
-	                $_procObj = & t3lib_div::getUserObj($_classRef);
+	                $_procObj = & GeneralUtility::getUserObj($_classRef);
 	                $marker = $_procObj->listUser_userMarkers($userMarker, $row, $this); //TODO: unused variable $marker
 	            }
 	        }
@@ -894,7 +870,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			// Include hooks
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['pm']['listUser_endMarkers'])) {
             foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['pm']['listUser_endMarkers'] as $_classRef) {
-                $_procObj = & t3lib_div::getUserObj($_classRef);
+                $_procObj = & GeneralUtility::getUserObj($_classRef);
                 $marker = $_procObj->listUser_endMarkers($marker, $this);
             }
         }
