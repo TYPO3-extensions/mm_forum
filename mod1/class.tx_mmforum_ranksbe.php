@@ -104,7 +104,6 @@ class tx_mmforum_ranksBE {
                 $posts = $rank['minPosts'];
             $editlink = $GLOBALS['BACK_PATH'].'alt_doc.php?returnUrl='.$returnUrl.'&edit[tx_mmforum_ranks]['.$rank['uid'].']=edit';
 
-            $i = 0;
             $content .= '<tr class="mm_forum-listrow">
                 <td>'.$title.'</td>
                 <td>'.$icon.'</td>
@@ -112,7 +111,6 @@ class tx_mmforum_ranksBE {
                 <td><a href="'.$editlink.'"><img src="img/edit.png" alt="Edit" /></a></td>
             </tr>
             ';
-
         }
 
         $content .= '</table>';
@@ -136,7 +134,6 @@ class tx_mmforum_ranksBE {
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_ranksbe.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_ranksbe.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_ranksbe.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_ranksbe.php']);
 }
-?>

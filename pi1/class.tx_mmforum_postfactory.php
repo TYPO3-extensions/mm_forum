@@ -733,15 +733,15 @@ class tx_mmforum_postfactory {
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-04-03
 	 */
-	function getPidQuery($tables="") {
-		if ($this->conf['storagePID']==-1) return "";
-		if ($this->conf['storagePID']=="") return "";
+	function getPidQuery($tables='') {
+		if ($this->conf['storagePID']==-1) return '';
+		if ($this->conf['storagePID']=='') return '';
 		else {
-			if ($tables == "")
+			if ($tables == '')
 				return " AND pid='".$this->conf['storagePID']."'";
 
 			$tables = t3lib_div::trimExplode(',',$tables);
-			$query = "";
+			$query = '';
 
 			foreach($tables as $table) {
 				$query .= " AND $table.pid='".$this->conf['storagePID']."'";
@@ -752,7 +752,6 @@ class tx_mmforum_postfactory {
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_postfactory.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_postfactory.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_postfactory.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_postfactory.php']);
 }
-?>

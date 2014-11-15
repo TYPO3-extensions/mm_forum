@@ -225,7 +225,7 @@ class tx_mmforum_templates {
         }
 
         if ($this->tmpVars['theme']) {
-            $templateOptions .= '<option value=""></option>';
+            $templateOptions = '<option value=""></option>';
             $themeData = $vars[$this->tmpVars['theme']];
 
             foreach($themeData as $key => $template) {
@@ -257,7 +257,7 @@ class tx_mmforum_templates {
             else $activeLink = $GLOBALS['LANG']->getLL('tmpl_themeInactive').' <input type="submit" name="tx_mmforum_template[activate]" value="'.$GLOBALS['LANG']->getLL('tmpl_themeActivate').'" />';
         }
 
-        $content .= '
+        $content = '
 <fieldset><legend>'.$GLOBALS['LANG']->getLL('tmpl_select_title').'</legend>
 <table cellspacing="0" cellpadding="3" border="0">
     <tr>
@@ -296,7 +296,7 @@ class tx_mmforum_templates {
         else $filename = $this->altTemplatePath.$theme.'/'.$template;
         $tContent = file_get_contents($filename);
 
-        $content .= '
+        $content = '
 <script type="text/javascript">
 function setSelectionRange(input, selectionStart, selectionEnd) {
   if (input.setSelectionRange) {
@@ -452,7 +452,6 @@ function catchTab(item,e){
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_templates.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_templates.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_templates.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_templates.php']);
 }
-?>

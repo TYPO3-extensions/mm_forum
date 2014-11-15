@@ -85,4 +85,3 @@ else require_once($cronFileName);
 $cronObj = t3lib_div::makeInstance($cronClassName);
 $cronObj->initialize();
 $cronObj->main();
-?>

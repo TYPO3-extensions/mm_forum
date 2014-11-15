@@ -92,7 +92,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 		$this->templateFile = $conf["templateFile"];
 		$codes=t3lib_div::trimExplode(",", $this->config["code"]?$this->config["code"]:$this->conf["defaultCode"],1);
-		if (!count($codes))  $codes=array("");
+		if (!count($codes))  $codes=array('');
 
 		$conf = $this->conf;
 
@@ -119,7 +119,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				// Output a cObj telling whether there are new messages or not
 				case "CHECKNEW":
 					$new_messages = $this->count_new_pm($GLOBALS['TSFE']->fe_user->user['uid']);
-					IF ($new_messages > 0){
+					if ($new_messages > 0){
 						if ($new_messages == 1){
 							$content = $this->pi_linkToPage($new_messages.$this->pi_getLL('newmessage'),$conf['pm_id'],$target='_self',array());
 						}
@@ -137,11 +137,11 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 					if ($GLOBALS['TSFE']->fe_user->user['username']) {
 						$action = $this->piVars['action']?$this->piVars['action']:'';
 
-						IF ($action == "")               $content = $this->list_inbox($content,$conf);
-						IF ($action == "message_read")   $content = $this->message_read($content,$conf);
-						IF ($action == "message_write")  $content = $this->message_write($content,$conf);
-						IF ($action == "message_del")    $content = $this->message_del($content,$conf);
-						IF ($action == "import")   		 $content = $this->import($content,$conf);
+						if ($action == '')               $content = $this->list_inbox($content,$conf);
+						if ($action == "message_read")   $content = $this->message_read($content,$conf);
+						if ($action == "message_write")  $content = $this->message_write($content,$conf);
+						if ($action == "message_del")    $content = $this->message_del($content,$conf);
+						if ($action == "import")   		 $content = $this->import($content,$conf);
 					} else {
 						$template = $this->cObj->fileResource($conf['template.']['error_message']);
 						$marker['###ERROR###'] = $this->pi_getLL('msgError');
@@ -560,7 +560,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				$error = 1;
 				$errormessage = sprintf($this->pi_getLL('errorBlockinTime'), $conf['block_time']);
 			}
-
+			$marker = array();
 			// Check if an error has occurred so far. If so, abort.
 			if ($error > 0) {
 				$template = $this->cObj->fileResource($conf['template.']['error_message']);
@@ -658,7 +658,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						);
 						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_pminbox', 'uid=' . $mess_id, $updateArray);
 
-					} else if ($recipient['tx_mmforum_pmnotifymode'] == 1) {
+					} elseif ($recipient['tx_mmforum_pmnotifymode'] == 1) {
 
 						$linkParams[$this->prefixId] = array(
 							'action' => 'message_read',
@@ -929,8 +929,6 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
     }
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi3/class.tx_mmforum_pi3.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi3/class.tx_mmforum_pi3.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi3/class.tx_mmforum_pi3.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi3/class.tx_mmforum_pi3.php']);
 }
-
-?>

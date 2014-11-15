@@ -102,7 +102,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * @param  int   $userId The user UID
 	 * @return array          The user record as associative array.
 	 */
-	function get_userdata($userId) {
+	static function get_userdata($userId) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', 'uid = ' . intval($userId));
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 			return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
@@ -128,10 +128,10 @@ class tx_mmforum_tools extends tslib_pibase {
 
 	/**
 	 * Determines a user UID from the user name
-	 * @param  string $user_name The user name
-	 * @return int               The user UID
+	 * @param string $username The user name
+	 * @return int The user UID
 	 */
-	function get_userid($username) {
+	static function get_userid($username) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'uid',
 			'fe_users',
@@ -227,7 +227,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * @return array      The processed array
 	 * @author Martin Helmich <m.helmich@mittwald.de>
 	 */
-	function processArray_numeric($arr) {
+	static function processArray_numeric($arr) {
 		$res = array();
 		foreach($arr as $v) {
 			if (strlen(trim($v)) > 0 && intval($v) > 0) {
@@ -262,8 +262,7 @@ class tx_mmforum_tools extends tslib_pibase {
 		 *                     be determined.
 		 * @return  array      An array of user group UIDs.
 		 */
-	function getParentUserGroups($group) {
-
+	static function getParentUserGroups($group) {
 			/* Parse to int for security reasons */
 		$group = implode(',',array_filter(t3lib_div::intExplode(',',$group)));
 
@@ -299,6 +298,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * @param   int    $group A group UID or a commaseperated list of group UIDs
 	 */
 	function getParentUserGroupsR($group) {
+		$result = '';
 		if (strpos($group, ',') !== false) {
 			$groups = t3lib_div::intExplode(',', $group);
 			foreach ($groups as $sGroup) {
@@ -319,8 +319,8 @@ class tx_mmforum_tools extends tslib_pibase {
 
 	/**
 	 * Determines a user group's sub user groups.
-	 * This functions delivers a commaseperated list of all subordinate user
-	 * groups of a frontend user group. Subgroups are determined resursively
+	 * This functions delivers a comma separated list of all subordinate user
+	 * groups of a frontend user group. Subgroups are determined recursively
 	 * up to infinity.
 	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
@@ -328,8 +328,9 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * @param   mixed  $group The user group UID whose subgroups are to be checked.
 	 *                        This parameter may either be a single UID or a comma
 	 *                        seperated list of UIDs.
-	 * @return  string        A commaseperated list of the groups and all of their
+	 * @return  string        A comma separated list of the groups and all of their
 	 *                        subgroups.
+	 * @deprecated Not in use
 	 */
 	function getSubUserGroups($group) {
 
@@ -367,8 +368,10 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * @version 2007-11-24
 	 * @param   mixed  $group Same as the parameter of getSubUserGroups.
 	 * @return  string        A part of the user group list.
+	 * @deprecated Not in use
 	 */
 	function getSubUserGroupsR($group) {
+		$result = '';
 		if (strstr($group, ',') !== false) {
 			$groups = t3lib_div::intExplode(',', $group);
 			foreach ($groups as $sGroup) {
@@ -398,7 +401,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	function getUserGroupList($content, $conf = array()) {
 		$groups = t3lib_div::intExplode(',', $content);
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
-
+		$sGroups = array();
 		foreach ($groups as $group) {
 			if ($GLOBALS['tx_mmforum_tools']['grpCache'][$group]) {
 				$sGroups[] = $GLOBALS['tx_mmforum_tools']['grpCache'][$group];
@@ -428,7 +431,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * @return  string       The path with the extension reference replaced by
 	 *                       the actual physical extension path.
 	 */
-	function generateSiteRelExtPath($path) {
+	static function generateSiteRelExtPath($path) {
 		return preg_replace_callback('/^EXT:([a-z0-9_]+)/', array('tx_mmforum_tools', 'replaceExtPath'), $path);
 	}
 
@@ -444,15 +447,16 @@ class tx_mmforum_tools extends tslib_pibase {
 	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-06-22
-	 * @param   string  $key   The key this cache variable shall be referenced with
-	 * @param   mixed   $value The value that is to be stored in the cache table. Since
+	 * @param   string $key The key this cache variable shall be referenced with
+	 * @param   mixed $value The value that is to be stored in the cache table. Since
 	 *                         this value is stored in a serialized form, this can a
 	 *                         variable of any type.
-	 * @param   boolean $ovr   Defines if the variable should be overwritten in case it
-	 *                         already exists.
+	 * @param bool $forceOverwrite Defines if the variable should be overwritten in case
+	 * it already exists.
+	 *                         
 	 * @return  void
 	 */
-	function storeCacheVar($key, $value, $forceOverwrite = false) {
+	static function storeCacheVar($key, $value, $forceOverwrite = false) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'uid',
 			'tx_mmforum_cache',
@@ -485,8 +489,9 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * Gets a cache variable from the database
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-06-22
-	 * @param   string $key     The variable key
-	 * @param   mixed  $default The default value in case the variable is not found.
+	 * @param   string $key The variable key
+	 * @param   mixed $default The default value in case the variable is not found.
+	 * @return mixed|null
 	 */
 	function getCacheVar($key, $default = null) {
 		$cachedVal = null;
@@ -551,8 +556,8 @@ class tx_mmforum_tools extends tslib_pibase {
 
 	/**
 	 * Converts an IP Address into a hexadecimal string.
-	 * @param  string $val The IP Address
-	 * @return string      The hexadecimal string
+	 * @param string $ipAddress The IP Address
+	 * @return string The hexadecimal string
 	 */
 	function ip2hex($ipAddress) {
 		$result = '';
@@ -577,7 +582,7 @@ class tx_mmforum_tools extends tslib_pibase {
 	 * @return string       The submitted string converted into an absolute link
 	 * @author Martin Helmich <m.helmich@mittwald.de>
 	 */
-	function getAbsoluteUrl($link) {
+	static function getAbsoluteUrl($link) {
 		if (substr($link, 0, 7) == 'http://' || substr($link, 0, 8) == 'https://')  {
 			return $link;
 		}
@@ -642,12 +647,8 @@ class tx_mmforum_tools extends tslib_pibase {
 		$replace = array('[' => '%5b', ']' => '%5d');
 		return str_replace(array_keys($replace), array_values($replace), $url);
 	}
-
-
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/includes/class.tx_mmforum_tools.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/includes/class.tx_mmforum_tools.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/includes/class.tx_mmforum_tools.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/includes/class.tx_mmforum_tools.php']);
 }
-
-?>

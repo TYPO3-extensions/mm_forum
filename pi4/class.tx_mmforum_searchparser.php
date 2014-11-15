@@ -93,4 +93,3 @@ class tx_mmforum_searchparser {
 		return $sWords;
 	}
 }
-?>

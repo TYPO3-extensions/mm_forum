@@ -103,8 +103,12 @@ class tx_mmforum_chcimport {
                 $conf        = $this->p->confArr;
                 $this->pid   = $conf['forumPID'];
 
-                if ($import == 'chc')        $content .= $this->import_chc();
-                if ($import == 'cwt')        $content .= $this->import_cwt();
+                if ($import == 'chc') {
+			$this->import_chc();
+		}
+                if ($import == 'cwt') {
+			$content .= $this->import_cwt();
+		}
 
                 $content .= '</fieldset>';
             }
@@ -192,7 +196,7 @@ class tx_mmforum_chcimport {
      * @return  void
      */
     function chc_updateRels() {
-
+		$mappingArr = array();
     	// Update database relations
 	    	foreach($this->updateRel as $updateRel) {
 	    		list($table,$uid,$field,$mapping,$value) = explode(':',$updateRel);
@@ -202,7 +206,7 @@ class tx_mmforum_chcimport {
 	    		}
 
 	    		$updateArray = array(
-	    			$field			=> $mappingArr[$value]
+	    			$field => $mappingArr[$value]
 	    		);
 	    		$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
 	    			'tx_mmforum_'.$table,
@@ -220,8 +224,8 @@ class tx_mmforum_chcimport {
 	    	);
 	    	list($user, $posts) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 	    	$updateArray = array(
-	    		'tstamp'			=> $GLOBALS['EXEC_TIME'],
-	    		'tx_mmforum_posts'	=> $posts
+	    		'tstamp' => $GLOBALS['EXEC_TIME'],
+	    		'tx_mmforum_posts' => $posts
 	    	);
 	    	$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$user.' AND pid='.$this->p->confArr['userPID'],$updateArray);
     }
@@ -239,7 +243,7 @@ class tx_mmforum_chcimport {
      */
     function chc_importCategories() {
 
-    	$res		= $this->dbObj->exec_SELECTquery(
+    	$res= $this->dbObj->exec_SELECTquery(
     		'*',
     		'tx_chcforum_category',
     		'deleted=0'
@@ -247,22 +251,22 @@ class tx_mmforum_chcimport {
     	while($ctg = $this->dbObj->sql_fetch_assoc($res)) {
 
     		$insertArray = array(
-    			'pid'				=> $this->pid,
-    			'hidden'			=> $ctg['hidden'],
-    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
-    			'crdate'			=> $GLOBALS['EXEC_TIME'],
-    			'forum_name'		=> $ctg['cat_title'],
-    			'forum_desc'		=> $ctg['cat_description'],
-    			'sorting'			=> $ctg['sorting'],
-    			'grouprights_read'	=> $this->convertGroups($ctg['auth_forumgroup_r']),
-    			'grouprights_write'	=> $this->convertGroups($ctg['auth_forumgroup_w']),
-    			'parentID'			=> 0
+    			'pid' => $this->pid,
+    			'hidden' => $ctg['hidden'],
+    			'tstamp' => $GLOBALS['EXEC_TIME'],
+    			'crdate' => $GLOBALS['EXEC_TIME'],
+    			'forum_name' => $ctg['cat_title'],
+    			'forum_desc' => $ctg['cat_description'],
+    			'sorting' => $ctg['sorting'],
+    			'grouprights_read' => $this->convertGroups($ctg['auth_forumgroup_r']),
+    			'grouprights_write' => $this->convertGroups($ctg['auth_forumgroup_w']),
+    			'parentID' => 0
     		);
     		$GLOBALS['TYPO3_DB']->exec_INSERTquery(
     			'tx_mmforum_forums',
 				$insertArray
     		);
-    		$ctgUid		= $GLOBALS['TYPO3_DB']->sql_insert_id();
+    		$ctgUid= $GLOBALS['TYPO3_DB']->sql_insert_id();
 
     		$this->categoryMapping[$ctg['uid']] = $ctgUid;
 
@@ -289,7 +293,7 @@ class tx_mmforum_chcimport {
      */
     function chc_importConferences() {
 
-    	$res		= $this->dbObj->exec_SELECTquery(
+    	$res= $this->dbObj->exec_SELECTquery(
     		'*',
     		'tx_chcforum_conference',
     		'deleted=0'
@@ -297,24 +301,24 @@ class tx_mmforum_chcimport {
     	while($conf = $this->dbObj->sql_fetch_assoc($res)) {
 
     		$insertArray = array(
-    			'pid'				=> $this->pid,
-    			'hidden'			=> $conf['hidden'],
-    			'sorting'			=> $conf['sorting'],
-    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
-    			'crdate'			=> $GLOBALS['EXEC_TIME'],
-    			'forum_name'		=> $conf['conference_name'],
-    			'forum_desc'		=> $conf['desc'],
-    			'grouprights_read'	=> $conf['conference_public_r']?'':$this->convertGroups($conf['auth_forumgroup_r']),
-    			'grouprights_write'	=> $conf['conference_public_w']?'':$this->convertGroups($conf['auth_forumgroup_w']),
-    			'parentID'			=> $this->categoryMapping[$conf['cat_id']],
-    			'forum_posts'		=> $this->chc_getConferencePostCount($conf['uid']),
-    			'forum_topics'		=> $this->chc_getConferenceTopicCount($conf['uid']),
+    			'pid' => $this->pid,
+    			'hidden' => $conf['hidden'],
+    			'sorting' => $conf['sorting'],
+    			'tstamp' => $GLOBALS['EXEC_TIME'],
+    			'crdate' => $GLOBALS['EXEC_TIME'],
+    			'forum_name' => $conf['conference_name'],
+    			'forum_desc' => $conf['desc'],
+    			'grouprights_read' => $conf['conference_public_r']?'':$this->convertGroups($conf['auth_forumgroup_r']),
+    			'grouprights_write' => $conf['conference_public_w']?'':$this->convertGroups($conf['auth_forumgroup_w']),
+    			'parentID' => $this->categoryMapping[$conf['cat_id']],
+    			'forum_posts' => $this->chc_getConferencePostCount($conf['uid']),
+    			'forum_topics' => $this->chc_getConferenceTopicCount($conf['uid']),
     		);
     		$GLOBALS['TYPO3_DB']->exec_INSERTquery(
     			'tx_mmforum_forums',
     			$insertArray
     		);
-    		$forumUid		= $GLOBALS['TYPO3_DB']->sql_insert_id();
+    		$forumUid= $GLOBALS['TYPO3_DB']->sql_insert_id();
 
     		$this->forumMapping[$conf['uid']] = $forumUid;
 
@@ -339,7 +343,7 @@ class tx_mmforum_chcimport {
      */
     function chc_importTopics() {
 
-    	$res		= $this->dbObj->exec_SELECTquery(
+    	$res = $this->dbObj->exec_SELECTquery(
     		'*',
     		'tx_chcforum_thread',
     		'deleted=0'
@@ -347,23 +351,23 @@ class tx_mmforum_chcimport {
     	while($topic = $this->dbObj->sql_fetch_assoc($res)) {
 
     		$insertArray = array(
-    			'pid'				=> $this->pid,
-    			'hidden'			=> $topic['hidden'],
-    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
-    			'crdate'			=> $GLOBALS['EXEC_TIME'],
-    			'topic_title'		=> $topic['thread_subject'],
-    			'topic_poster'		=> $this->convertUser($topic['thread_author']),
-    			'topic_time'		=> $topic['thread_datetime'],
-    			'topic_views'		=> $topic['thread_views'],
-    			'topic_replies'		=> $this->chc_getTopicReplyCount($topic['uid']),
-    			'forum_id'			=> $this->forumMapping[$topic['conference_id']],
-    			'closed_flag'		=> $topic['thread_closed']
+    			'pid' => $this->pid,
+    			'hidden' => $topic['hidden'],
+    			'tstamp' => $GLOBALS['EXEC_TIME'],
+    			'crdate' => $GLOBALS['EXEC_TIME'],
+    			'topic_title' => $topic['thread_subject'],
+    			'topic_poster' => $this->convertUser($topic['thread_author']),
+    			'topic_time' => $topic['thread_datetime'],
+    			'topic_views' => $topic['thread_views'],
+    			'topic_replies' => $this->chc_getTopicReplyCount($topic['uid']),
+    			'forum_id' => $this->forumMapping[$topic['conference_id']],
+    			'closed_flag' => $topic['thread_closed']
     		);
     		$GLOBALS['TYPO3_DB']->exec_INSERTquery(
     			'tx_mmforum_topics',
     			$insertArray
     		);
-    		$topicUid		= $GLOBALS['TYPO3_DB']->sql_insert_id();
+    		$topicUid= $GLOBALS['TYPO3_DB']->sql_insert_id();
 
     		$this->topicMapping[$topic['uid']] = $topicUid;
 
@@ -371,7 +375,6 @@ class tx_mmforum_chcimport {
     		$this->updateRel[] = 'topics:'.$topicUid.':topic_first_post_id:post:'.$this->chc_getTopicFirstPost($topic['uid']);
 
     	}
-
     }
 
     /**
@@ -387,7 +390,7 @@ class tx_mmforum_chcimport {
      * @version 2007-10-08
      * @return  void
      * @todo    Import file attachments
-     * @usesconvertUser
+     * @uses convertUser
      */
     function chc_importPosts() {
 
@@ -399,29 +402,29 @@ class tx_mmforum_chcimport {
     	while($post = $this->dbObj->sql_fetch_assoc($res)) {
 
     		$insertArray = array(
-    			'pid'				=> $this->pid,
-    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
-    			'crdate'			=> $GLOBALS['EXEC_TIME'],
-    			'hidden'			=> $post['hidden'],
-    			'topic_id'			=> $this->topicMapping[$post['thread_id']],
-    			'forum_id'			=> $this->forumMapping[$post['conference_id']],
-    			'poster_id'			=> $this->convertUser($post['post_author']),
-    			'post_time'			=> $post['crdate'],
-    			'edit_time'			=> $post['post_edit_tstamp'],
-    			'edit_count'		=> $post['post_edit_count']
+    			'pid' => $this->pid,
+    			'tstamp' => $GLOBALS['EXEC_TIME'],
+    			'crdate' => $GLOBALS['EXEC_TIME'],
+    			'hidden' => $post['hidden'],
+    			'topic_id' => $this->topicMapping[$post['thread_id']],
+    			'forum_id' => $this->forumMapping[$post['conference_id']],
+    			'poster_id' => $this->convertUser($post['post_author']),
+    			'post_time' => $post['crdate'],
+    			'edit_time' => $post['post_edit_tstamp'],
+    			'edit_count' => $post['post_edit_count']
     		);
     		$GLOBALS['TYPO3_DB']->exec_INSERTquery(
     			'tx_mmforum_posts',
     			$insertArray
     		);
-    		$postUid		= $GLOBALS['TYPO3_DB']->sql_insert_id();
+    		$postUid= $GLOBALS['TYPO3_DB']->sql_insert_id();
 
     		$insertArray = array(
-    			'pid'				=> $this->pid,
-    			'tstamp'			=> $GLOBALS['EXEC_TIME'],
-    			'crdate'			=> $GLOBALS['EXEC_TIME'],
-    			'post_id'			=> $postUid,
-    			'post_text'			=> $post['post_text']
+    			'pid' => $this->pid,
+    			'tstamp' => $GLOBALS['EXEC_TIME'],
+    			'crdate' => $GLOBALS['EXEC_TIME'],
+    			'post_id' => $postUid,
+    			'post_text' => $post['post_text']
     		);
     		$GLOBALS['TYPO3_DB']->exec_INSERTquery(
     			'tx_mmforum_posts_text',
@@ -504,7 +507,7 @@ class tx_mmforum_chcimport {
 
     	$updateArray = array(
     		'tx_mmforum_posts'  => 0,
-    		'tstamp'			=> 0
+    		'tstamp' => 0
     	);
     	$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','pid='.$this->p->confArr['userPID'],$updateArray);
     }
@@ -764,7 +767,7 @@ class tx_mmforum_chcimport {
 
     function chc_getConferenceLastPost($conf_uid) {
 
-    	$res		= $this->dbObj->exec_SELECTquery(
+    	$res= $this->dbObj->exec_SELECTquery(
     		'uid','tx_chcforum_post','conference_id='.$conf_uid.' AND deleted=0','','crdate DESC','1'
     	);
     	list($uid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
@@ -774,7 +777,7 @@ class tx_mmforum_chcimport {
 
     function chc_getTopicLastPost($topic_id) {
 
-    	$res		= $this->dbObj->exec_SELECTquery(
+    	$res= $this->dbObj->exec_SELECTquery(
     		'uid','tx_chcforum_post','thread_id='.$topic_id.' AND deleted=0','','crdate DESC','1'
     	);
     	list($uid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
@@ -784,7 +787,7 @@ class tx_mmforum_chcimport {
 
     function chc_getTopicFirstPost($topic_id) {
 
-    	$res		= $this->dbObj->exec_SELECTquery(
+    	$res= $this->dbObj->exec_SELECTquery(
     		'uid','tx_chcforum_post','thread_id='.$topic_id.' AND deleted=0','','crdate ASC','1'
     	);
     	list($uid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
@@ -794,7 +797,7 @@ class tx_mmforum_chcimport {
 
     function chc_getTopicReplyCount($topic_id) {
 
-    	$res		= $this->dbObj->exec_SELECTquery(
+    	$res= $this->dbObj->exec_SELECTquery(
     		'COUNT(*)','tx_chcforum_post','thread_id='.$topic_id.' AND deleted=0'
     	);
     	list($count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
@@ -803,7 +806,7 @@ class tx_mmforum_chcimport {
 
     function chc_getConferencePostCount($conf_uid) {
 
-    	$res		= $this->dbObj->exec_SELECTquery(
+    	$res= $this->dbObj->exec_SELECTquery(
     		'COUNT(*)','tx_chcforum_post','conference_id='.$conf_uid.' AND deleted=0'
     	);
     	list($count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
@@ -813,7 +816,7 @@ class tx_mmforum_chcimport {
 
     function chc_getConferenceTopicCount($conf_uid) {
 
-    	$res		= $this->dbObj->exec_SELECTquery(
+    	$res = $this->dbObj->exec_SELECTquery(
     		'COUNT(*)','tx_chcforum_thread','conference_id='.$conf_uid.' AND deleted=0'
     	);
     	list($count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
@@ -823,7 +826,6 @@ class tx_mmforum_chcimport {
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_chcimport.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_chcimport.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_chcimport.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_chcimport.php']);
 }
-?>

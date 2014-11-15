@@ -63,8 +63,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 	 * @param  array  $conf The calling plugin's configuration vars
 	 * @return string       The post alert list
 	 */
-	function list_alerts($conf)
-	{
+	function list_alerts($conf) {
 		$param = t3lib_div::_GP('tx_mmforum_pi1');
 		if ($param['update'] == 'update_status') {
 			foreach($param as $key => $value) {
@@ -146,7 +145,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 				$marker['###ORDERASC###'] = 'selected';
 			break;
 		}
-
+		$allowedStatus = array();
 		// Determine filtering mode
 		if ($param['view_open'] == 1) {
 			$marker['###VIEW_OPEN###']		= 'checked';
@@ -254,7 +253,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 	 */
 	function post_alert($conf) {
 		// Check login
-		IF ($GLOBALS['TSFE']->fe_user->user['uid']) {
+		if ($GLOBALS['TSFE']->fe_user->user['uid']) {
 			$template		= $this->cObj->fileResource($conf['template.']['post_alert']);
 			$template		= $this->cObj->getSubpart($template, "###POST_ALERT###");
 
@@ -286,10 +285,10 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 						'mod_id'		=> '',
 						'status'		=> '-1'
 					);
-					$res        = $GLOBALS['TYPO3_DB']->exec_INSERTquery(' tx_mmforum_post_alert', $insertArray);
+					$GLOBALS['TYPO3_DB']->exec_INSERTquery(' tx_mmforum_post_alert', $insertArray);
 
-					$linkto		= $this->get_pid_link($post_id,t3lib_div::_GP('sword'),$conf);
-                    $linkto     = $this->tools->getAbsoluteUrl($linkto);
+					$linkto	= $this->get_pid_link($post_id,t3lib_div::_GP('sword'),$conf);
+					$linkto = $this->tools->getAbsoluteUrl($linkto);
 
 					header('Location: '.$linkto);
 				}
@@ -319,19 +318,18 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 		return $content;
 	}
 
-    function getModeratorBoards() {
-
+	/**
+	 * @return array|bool
+	 */
+	function getModeratorBoards() {
 		$this->parent = $this;
 		$result = tx_mmforum_postqueue::getModeratorBoards();
 		unset($this->parent);
 		return $result;
-
     }
 
 }
 
-if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi1/class.tx_mmforum_postalert.php"])    {
-    include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi1/class.tx_mmforum_postalert.php"]);
+if (defined("TYPO3_MODE") && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi1/class.tx_mmforum_postalert.php"])    {
+    include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi1/class.tx_mmforum_postalert.php"]);
 }
-
-?>

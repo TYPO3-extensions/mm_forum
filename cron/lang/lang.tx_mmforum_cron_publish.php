@@ -21,4 +21,3 @@ $LANG = array(
 		'deletedUser'		=> 'Deleted user'
 	),
 );
-?>

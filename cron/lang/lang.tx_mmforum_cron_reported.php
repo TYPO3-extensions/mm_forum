@@ -31,4 +31,3 @@ $LANG = array(
 		'reportedcontent'	=> 'Content of reported post:'
 	)
 );
-?>

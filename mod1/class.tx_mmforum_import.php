@@ -118,7 +118,7 @@ class tx_mmforum_import {
             else $error = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step0.error').'</div>';
         }
 
-        $content .= '<fieldset><legend>'.sprintf($LANG->getLL('import.stepX'),1).': '.$LANG->getLL('import.step0').'</legend>';
+        $content = '<fieldset><legend>'.sprintf($LANG->getLL('import.stepX'),1).': '.$LANG->getLL('import.step0').'</legend>';
 
         $content .= '<table cellspacing="0" cellpadding="3" style="width:100%;">';
         $content .= '<tr><td valign="top" style="width:32px;"><input id="import_phpbb" type="radio" name="tx_mmforum_import[action]" value="phpbb" /></td>';
@@ -149,28 +149,28 @@ class tx_mmforum_import {
      */
     function display_step1() {
         global $LANG;
-
+		$errors = array();
         if (isset($this->importData['step1']['submit'])) {
             if ($this->importData['db'] == 'external') {
-                if (strlen($this->importData['extdb']['server']) == 0 ) $error['server'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_server').'</div>';
-                if (strlen($this->importData['extdb']['user'])   == 0 ) $error['user']   = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_user').'</div>';
-                if (strlen($this->importData['extdb']['dbname']) == 0 ) $error['dbname'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_dbname').'</div>';
+                if (strlen($this->importData['extdb']['server']) == 0 ) $errors['server'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_server').'</div>';
+                if (strlen($this->importData['extdb']['user'])   == 0 ) $errors['user']   = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_user').'</div>';
+                if (strlen($this->importData['extdb']['dbname']) == 0 ) $errors['dbname'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_dbname').'</div>';
 
                 $link = @mysql_connect($this->importData['extdb']['server'],$this->importData['extdb']['user'],$this->importData['extdb']['password'],true);
-                if (!$link) $error['connect'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_connect').'</div>';
+                if (!$link) $errors['connect'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_connect').'</div>';
                 else {
                     $res = mysql_select_db($this->importData['extdb']['dbname'],$link);
-                    if (!$res) $error['selectdb'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_selectdb').'</div>';
+                    if (!$res) $errors['selectdb'] = '<div class="mm_forum-fatalerror">'.$LANG->getLL('import.step1.error_selectdb').'</div>';
                 }
             }
 
-            if (count($error) == 0) {
+            if (count($errors) == 0) {
                 $this->importData['step'] = 2;
                 return $this->display_step2();
             }
         }
 
-        $content .= '<fieldset><legend>'.sprintf($LANG->getLL('import.stepXofY'),2,$this->maxSteps).': '.$LANG->getLL('import.step1').'</legend>';
+        $content = '<fieldset><legend>'.sprintf($LANG->getLL('import.stepXofY'),2,$this->maxSteps).': '.$LANG->getLL('import.step1').'</legend>';
 
         $db_ext = ( $this->importData['db']=='external')?'checked="checked"':'';
         $db_loc = (!$this->importData['db']=='external')?'checked="checked"':'';
@@ -187,11 +187,11 @@ class tx_mmforum_import {
             <table cellspacing="0" cellpadding="2" border="0" style="margin-top: 4px;">
                 <tr>
                     <td style="padding-left:0px;">'.$LANG->getLL('import.step1.ext.server').'</td>
-                    <td><input type="text" name="tx_mmforum_import[extdb][server]" value="'.$this->importData['extdb']['server'].'" />'.$error['server'].'</td>
+                    <td><input type="text" name="tx_mmforum_import[extdb][server]" value="'.$this->importData['extdb']['server'].'" />'.$errors['server'].'</td>
                 </tr>
                 <tr>
                     <td style="padding-left:0px;">'.$LANG->getLL('import.step1.ext.user').'</td>
-                    <td><input type="text" name="tx_mmforum_import[extdb][user]" value="'.$this->importData['extdb']['user'].'" />'.$error['user'].'</td>
+                    <td><input type="text" name="tx_mmforum_import[extdb][user]" value="'.$this->importData['extdb']['user'].'" />'.$errors['user'].'</td>
                 </tr>
                 <tr>
                     <td style="padding-left:0px;">'.$LANG->getLL('import.step1.ext.password').'</td>
@@ -199,12 +199,12 @@ class tx_mmforum_import {
                 </tr>
                 <tr>
                     <td style="padding-left:0px;">'.$LANG->getLL('import.step1.ext.dbname').'</td>
-                    <td><input type="text" name="tx_mmforum_import[extdb][dbname]" value="'.$this->importData['extdb']['dbname'].'" />'.$error['dbname'].'</td>
+                    <td><input type="text" name="tx_mmforum_import[extdb][dbname]" value="'.$this->importData['extdb']['dbname'].'" />'.$errors['dbname'].'</td>
                 </tr>
             </table>
         </td>
     </tr>
-</table>'.$error['connect'].$error['selectdb'].'
+</table>'.$errors['connect'].$errors['selectdb'].'
 <br /><input type="submit" name="tx_mmforum_import[step1][submit]" value="'.$LANG->getLL('import.step1.continue').'" />
     ';
 
@@ -234,7 +234,7 @@ class tx_mmforum_import {
             $dbObj->sql_pconnect($this->importData['extdb']['server'],$this->importData['extdb']['user'],$this->importData['extdb']['password']);
             $dbObj->sql_select_db($this->importData['extdb']['dbname']);
         }
-
+		$content = '';
         switch($this->importData['action']) {
             case 'phpbb':       $content = $this->import_phpbb($dbObj); break;
             case 'chc':         $content = $this->import_chc($dbObj); break;
@@ -288,6 +288,7 @@ class tx_mmforum_import {
      * @return  string The configuration vars in hidden HTML input fields
      */
     function outputImportSettings() {
+		$content = '';
         if (!empty($this->importData['action']))
             $content .= '<input type="hidden" name="tx_mmforum_import[action]" value="'.$this->importData['action'].'" />';
         $content .= '<input type="hidden" name="tx_mmforum_import[step]" value="'.$this->importData['step'].'" />';
@@ -302,7 +303,6 @@ class tx_mmforum_import {
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_import.php'])	{
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_import.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_import.php'])	{
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/mod1/class.tx_mmforum_import.php']);
 }
-?>

@@ -11,4 +11,4 @@ $MCONF['script']='index.php';
 
 $MLANG['default']['tabs_images']['tab'] = 'moduleicon.gif';
 $MLANG['default']['ll_ref']='LLL:EXT:mm_forum/mod1/locallang_mod.xml';
-?>
+

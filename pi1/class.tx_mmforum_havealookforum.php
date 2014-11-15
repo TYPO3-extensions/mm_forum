@@ -61,7 +61,7 @@ class tx_mmforum_havealookforum {
 	 * @return string           An error message in case the redirect attempt to
 	 *                          the previous page fails.
 	 */
-	function set($forumObj) {
+	static function set($forumObj) {
 		$feUserId = intval($GLOBALS['TSFE']->fe_user->user['uid']);
 		$forumId  = intval($forumObj->piVars['fid']);
 
@@ -95,7 +95,7 @@ class tx_mmforum_havealookforum {
 	 * @return string           An error message in case the redirect attempt to
 	 *                          the previous page fails.
 	 */
-	function delete($forumObj) {
+	static function delete($forumObj) {
 		$feUserId = intval($GLOBALS['TSFE']->fe_user->user['uid']);
 		$forumId  = intval($forumObj->piVars['fid']);
 
@@ -112,8 +112,6 @@ class tx_mmforum_havealookforum {
 }
 
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_havealookforum.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_havealookforum.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_havealookforum.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi1/class.tx_mmforum_havealookforum.php']);
 }
-
-?>

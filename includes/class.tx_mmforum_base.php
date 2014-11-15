@@ -63,16 +63,17 @@
  */
 
 
-	/**
-	 * Provides basic functionalities for all mm_forum plugins.
-	 *
-	 * @author     Martin Helmich <m.helmich@mittwald.de>
-	 * @author     Benjamin Mack  <benni@typo3.org>
-	 * @version    2008-10-12
-	 * @package    mm_forum
-	 * @subpackage Core
-	 */
+/**
+ * Provides basic functionalities for all mm_forum plugins.
+ *
+ * @author     Martin Helmich <m.helmich@mittwald.de>
+ * @author     Benjamin Mack  <benni@typo3.org>
+ * @version    2008-10-12
+ * @package    mm_forum
+ * @subpackage Core
+ */
 class tx_mmforum_base extends tslib_pibase {
+
 	var $extKey = 'mm_forum';
 
 	/**
@@ -83,7 +84,7 @@ class tx_mmforum_base extends tslib_pibase {
 	 * @var tx_mmforum_validator
 	 */
 	var $validator;
-	var $validatorObj;	// same as the above, is kept for backwards-compatibility, will be deleted at some point, use the one above
+	var $validatorObj; // same as the above, is kept for backwards-compatibility, will be deleted at some point, use the one above
 
 
 	/**
@@ -98,20 +99,20 @@ class tx_mmforum_base extends tslib_pibase {
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
 
-			/* Initialize validator */
+		/* Initialize validator */
 		$this->validator = tx_mmforum_validator::getValidatorObject();
-		$this->validatorObj = &$this->validator;
+		$this->validatorObj = & $this->validator;
 
-			/* Initialize tools */
+		/* Initialize tools */
 		$this->tools = t3lib_div::makeInstance('tx_mmforum_tools');
 
-			/* Initialize cache object */
+		/* Initialize cache object */
 		$this->cache = &tx_mmforum_cache::getGlobalCacheObject($this->conf['caching'], $this->conf['caching.']);
 
-			/* Local cObj */
+		/* Local cObj */
 		$this->local_cObj = t3lib_div::makeInstance('tslib_cObj');
 
-			/* get the PID List */
+		/* get the PID List */
 		if (!$this->conf['pidList']) {
 			$this->conf['pidList'] = $this->pi_getPidList($this->cObj->data['pages'], $this->cObj->data['recursive']);
 		}
@@ -120,15 +121,13 @@ class tx_mmforum_base extends tslib_pibase {
 		$this->conf['path_smilie'] = str_replace('EXT:mm_forum/', t3lib_extMgm::siteRelPath('mm_forum'), $this->conf['path_smilie']);
 
 		if (!class_exists('tx_pagebrowse_pi1')) {
-			Include_Once t3lib_extMgm::extPath('pagebrowse').'pi1/class.tx_pagebrowse_pi1.php';
+			include_once t3lib_extMgm::extPath('pagebrowse').'pi1/class.tx_pagebrowse_pi1.php';
 		}
-
 
 		if ($this->conf['debug']) {
 			$GLOBALS['TYPO3_DB']->debugOutput = true;
 		}
 	}
-
 
 	/**
 	 * Wrapper function for retrieval of language dependent strings.
@@ -176,7 +175,7 @@ class tx_mmforum_base extends tslib_pibase {
 	 *
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-02-11
- 	 * @return  int The page UID where the mm_forum plugin is placed on
+	 * @return  int The page UID where the mm_forum plugin is placed on
 	 */
 	function getForumPID() {
 		$pid = 0;
@@ -213,12 +212,12 @@ class tx_mmforum_base extends tslib_pibase {
 	}
 
 	/**
-	* Determines if this instance of the mm_forum is a moderated forum.
-	*
-	* @author  Martin Helmich <m.helmich@mittwald.de>
-	* @version 2007-07-19
-	* @return  boolean	true if the forum is moderated, otherwise false.
-	*/
+	 * Determines if this instance of the mm_forum is a moderated forum.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2007-07-19
+	 * @return  boolean    true if the forum is moderated, otherwise false.
+	 */
 	function isModeratedForum() {
 		return ($this->conf['moderated'] ? true : false);
 	}
@@ -273,12 +272,11 @@ class tx_mmforum_base extends tslib_pibase {
 		return ($this->conf['realUrl_specialLinks'] == '1') ? true : false;
 	}
 
-
 	/**
 	 * Formats a date, and checks if there is a "%" in the dateFormat. If so, then
 	 * the php function strftime() function is used, otherwise date() is used
 	 *
-	 * @param  int     the timestamp
+	 * @param  int $tstamp the timestamp
 	 * @return boolean The formatted date
 	 */
 	function formatDate($tstamp) {
@@ -294,7 +292,7 @@ class tx_mmforum_base extends tslib_pibase {
 	/**
 	 * Wraps a string to make it safe for outputting to the browser
 	 *
-	 * @param   string  the uncertain variable
+	 * @param   string $string the uncertain variable
 	 * @return  string  a string ready to output
 	 */
 	function escape($string) {
@@ -304,7 +302,7 @@ class tx_mmforum_base extends tslib_pibase {
 	/**
 	 * Wraps a URL to make it safe for outputting to the browser
 	 *
-	 * @param   string  the uncertain variable
+	 * @param   string $url the uncertain variable
 	 * @return  string  a string ready to output
 	 */
 	function escapeURL($url) {
@@ -314,23 +312,23 @@ class tx_mmforum_base extends tslib_pibase {
 	/**
 	 * Highlights certain words in a text. Highlighting is done by applying a
 	 * specific wrap defined in TypoScript (plugin.tx_mmforum_pi1.list_posts.highlight_wrap).
-	 * @param  string $text  The text, in which the words are to be highlighted
-	 * @param  array  $words An array of words that are to be highlighted
+	 * @param  string $text The text, in which the words are to be highlighted
+	 * @param  array $words An array of words that are to be highlighted
 	 * @return string        The text with highlighted words.
 	 */
 	function highlight_text($text, $words) {
 		$word_array = explode(' ', $words);
 		foreach ($word_array as $needle) {
 			if (trim($needle)) {
-				$needle    = preg_quote($needle);
-				$needle    = str_replace('/', '\\/', $needle);
+				$needle = preg_quote($needle);
+				$needle = str_replace('/', '\\/', $needle);
 
-				$check     = preg_match_all("/<(.*?)$needle(.*?)>/i", $text, $htmltags);
-				$placemark = chr(1).chr(1).chr(1);
-				$text      = preg_replace("/<(.*?)$needle(.*?)>/i", $placemark, $text);
+				preg_match_all("/<(.*?)$needle(.*?)>/i", $text, $htmltags);
+				$placemark = chr(1) . chr(1) . chr(1);
+				$text = preg_replace("/<(.*?)$needle(.*?)>/i", $placemark, $text);
 
-				$replace   = $this->cObj->wrap('\\0', $this->conf['list_posts.']['highlight_wrap']);
-				$text      = preg_replace("/$needle/i", $replace, $text);
+				$replace = $this->cObj->wrap('\\0', $this->conf['list_posts.']['highlight_wrap']);
+				$text = preg_replace("/$needle/i", $replace, $text);
 
 				if (count($htmltags[0])) {
 					foreach ($htmltags[0] as $htmltag) {
@@ -347,7 +345,7 @@ class tx_mmforum_base extends tslib_pibase {
 	 * Generates a complete XHTML img-tag from parameters submitted in an
 	 * associative array.
 	 *
-	 * @param array  $imgInfo The parameters for image creation as associative array.
+	 * @param array $imgInfo The parameters for image creation as associative array.
 	 *                        The array is to be generated according to the following pattern:
 	 *                             'src'           => Image source file
 	 *                          'width'         => Image width in pixels
@@ -376,19 +374,21 @@ class tx_mmforum_base extends tslib_pibase {
 			$imgTag = '';
 		} else {
 
-				# Get width/height from image if not provided
-				# This fixes an Internet Explorer error with transparent PNGs.
-				#
-				# See http://forge.typo3.org/issues/12120
-				# Credits to Urs Weiss
+			# Get width/height from image if not provided
+			# This fixes an Internet Explorer error with transparent PNGs.
+			#
+			# See http://forge.typo3.org/issues/12120
+			# Credits to Urs Weiss
 			if ($imgInfo['width'] == '' || $imgInfo['height'] == '') {
 				$imgSize = getimagesize($imgInfo['src']);
 				if ($imgSize !== false) {
-					if ($imgInfo['width'] == '')
+					if ($imgInfo['width'] == '') {
 						$imgInfo['width'] = $imgSize[0];
+					}
 
-					if ($imgInfo['height'] == '')
+					if ($imgInfo['height'] == '') {
 						$imgInfo['height'] = $imgSize[1];
+					}
 				}
 			}
 
@@ -399,7 +399,7 @@ class tx_mmforum_base extends tslib_pibase {
 			if (strlen($imgInfo['height'])) {
 				$imgTag .= 'height="' . $imgInfo['height'] . '" ';
 			}
-			$imgTag .= 'style="border: ' . ((strlen($imgInfo['border']) > 0) ? $imgInfo['border'] : 0 ) . 'px;" ';
+			$imgTag .= 'style="border: ' . ((strlen($imgInfo['border']) > 0) ? $imgInfo['border'] : 0) . 'px;" ';
 			$imgTag .= 'alt="' . $imgInfo['alt'] . '" ';
 			if (strlen($imgInfo['title'])) {
 				$imgTag .= 'title="' . $imgInfo['title'] . '" ';
@@ -424,7 +424,6 @@ class tx_mmforum_base extends tslib_pibase {
 		return $this->getAdminGroup();
 	}
 
-
 	/**
 	 * Gets the UID of all moderator groups.
 	 * This function gets an array of the UIDs of all moderator groups,
@@ -447,12 +446,14 @@ class tx_mmforum_base extends tslib_pibase {
 			list($groups) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
 			$groupArr = t3lib_div::intExplode(',', $groups, true);
-			$result   = array_unique($groupArr);
+			$result = array_unique($groupArr);
 
 			$this->cache->save('moderator_groups', $result, true);
 
 			return $result;
-		} else return $cacheRes;
+		} else {
+			return $cacheRes;
+		}
 	}
 
 	/**
@@ -463,7 +464,6 @@ class tx_mmforum_base extends tslib_pibase {
 	function getUserID() {
 		return intval($GLOBALS['TSFE']->fe_user->user['uid']);
 	}
-
 
 	/**
 	 * Determines if the user that is currently logged in is an administrator.
@@ -481,43 +481,51 @@ class tx_mmforum_base extends tslib_pibase {
 	/**
 	 * Determines if the user that is currently logged in is an moderator.
 	 *
+	 * @param int $forum
 	 * @return boolean  TRUE, if the user that is currently logged in is an moderator.
 	 */
-	function getIsMod($forum=0) {
-		if ($GLOBALS['TSFE']->fe_user->user['username']=="") return false;
+	function getIsMod($forum = 0) {
+		if ($GLOBALS['TSFE']->fe_user->user['username'] == '') {
+			return false;
+		}
 
 		$userId = $this->getUserID();
 		$cacheRes = $this->cache->restore("userIsMod_{$userId}_{$forum}");
 
-		if ($cacheRes !== null) return $cacheRes;
+		if ($cacheRes !== null) {
+			return $cacheRes;
+		}
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            'c.grouprights_mod as category_auth, f.grouprights_mod as forum_auth',
-            'tx_mmforum_forums f LEFT JOIN tx_mmforum_forums c ON f.parentID=c.uid',
-            'f.uid='.intval($forum).' AND f.deleted=0'
-        );
-		if (!$res || $GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return false;
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			'c.grouprights_mod as category_auth, f.grouprights_mod as forum_auth',
+			'tx_mmforum_forums f LEFT JOIN tx_mmforum_forums c ON f.parentID=c.uid',
+			'f.uid=' . intval($forum) . ' AND f.deleted=0'
+		);
+		if (!$res || $GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+			return false;
+		}
 
-        list($category_auth, $forum_auth) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($category_auth, $forum_auth) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-        $category_auth      = t3lib_div::intExplode(',', $category_auth);
-        $forum_auth         = t3lib_div::intExplode(',', $forum_auth);
+		$category_auth = t3lib_div::intExplode(',', $category_auth);
+		$forum_auth = t3lib_div::intExplode(',', $forum_auth);
 
-        $auth               = array_merge($category_auth, $forum_auth);
-        $auth               = array_unique($auth);
+		$auth = array_merge($category_auth, $forum_auth);
+		$auth = array_unique($auth);
 
-        $intersect = array_intersect($GLOBALS['TSFE']->fe_user->groupData['uid'], $auth);
+		$intersect = array_intersect($GLOBALS['TSFE']->fe_user->groupData['uid'], $auth);
 
-        $isMod = count($intersect) > 0;
+		$isMod = count($intersect) > 0;
 
 		$this->cache->store("userIsMod_{$userId}_{$forum}", $isMod);
 
-        return $isMod;
+		return $isMod;
 	}
 
 	/**
 	 * Determines if the user that is currently logged in is an administrator or a moderator.
 	 *
+	 * @param int $forum
 	 * @return boolean  TRUE, if the user that is currently logged in is an
 	 *                  administrator or a moderator.
 	 */
@@ -528,7 +536,7 @@ class tx_mmforum_base extends tslib_pibase {
 	/**
 	 * Jumps back to the previous page via an HTTP redirect
 	 *
-	 * @return	boolean	checks if the referrer
+	 * @return    boolean    checks if the referrer
 	 */
 	function redirectToReferrer() {
 		// Redirecting visitor back to previous page
@@ -537,92 +545,96 @@ class tx_mmforum_base extends tslib_pibase {
 			$ref = $this->tools->getAbsoluteUrl($ref);
 			header('Location: ' . t3lib_div::locationHeaderUrl($ref));
 			exit();
-			return true;
 		} else {
 			return false;
 		}
 	}
 
-		/**
-		 * Gets the UID of the main mm_forum user group.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 0.1.8-090410
-		 * @return  int The UID of the main mm_forum user group.
-		 */
+	/**
+	 * Gets the UID of the main mm_forum user group.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 0.1.8-090410
+	 * @return  int The UID of the main mm_forum user group.
+	 */
 	function getBaseUserGroup() {
 		return $this->conf['userGroup'];
 	}
 
-		/**
-		 * Gets an instance of the tx_ratings_api class.
-		 * This function returns an instance of the tx_ratings_api class. The
-		 * class is only instantiated once. If the 'ratings' extension is not
-		 * installed, this function returns NULL.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 0.1.8-090410
-		 * @return  tx_ratings_api An instance of the tx_ratings_api class or
-		 *                         NULL if the ratings extension is not installed.
-		 */
+	/**
+	 * Gets an instance of the tx_ratings_api class.
+	 * This function returns an instance of the tx_ratings_api class. The
+	 * class is only instantiated once. If the 'ratings' extension is not
+	 * installed, this function returns NULL.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 0.1.8-090410
+	 * @return  tx_ratings_api An instance of the tx_ratings_api class or
+	 *                         NULL if the ratings extension is not installed.
+	 */
 	function getRatingInstance() {
-		if (!t3lib_extMgm::isLoaded('ratings')) return null;
+		if (! t3lib_extMgm::isLoaded('ratings')) {
+			return null;
+		}
 
-		if (isset($this->rating)) return $this->rating;
-		else {
+		if (isset($this->rating)) {
+			return $this->rating;
+		} else {
 			$this->rating = t3lib_div::makeInstance('tx_ratings_api');
 			$this->ratingConf = $this->rating->getDefaultConfig();
-			$this->ratingConf['templateFile'] = $this->conf['stylePath'].'/rating/ratings.html';
+			$this->ratingConf['templateFile'] = $this->conf['stylePath'] . '/rating/ratings.html';
 
 			return $this->rating;
 		}
 	}
 
-		/**
-		 * Displays a rating form using the API of the 'ratings' extension.
-		 * Rated records are identified by a combination of the table name and
-		 * the record's uid.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 0.1.8-090410
-		 * @param  string $table The table name of the rated record (e.g. fe_users
-		 *                       or tx_mmforum_topics)
-		 * @param  int    $uid   The uid of the rated record.
-		 * @return string        The HTML code of the ratings form
-		 */
+	/**
+	 * Displays a rating form using the API of the 'ratings' extension.
+	 * Rated records are identified by a combination of the table name and
+	 * the record's uid.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 0.1.8-090410
+	 * @param  string $table The table name of the rated record (e.g. fe_users
+	 *                       or tx_mmforum_topics)
+	 * @param  int $uid The uid of the rated record.
+	 * @return string        The HTML code of the ratings form
+	 */
 	function getRatingDisplay($table, $uid) {
 		$rating =& $this->getRatingInstance();
 		return $rating != null ? $rating->getRatingDisplay("{$table}_{$uid}", $this->ratingConf) : '';
 	}
 
+	/**
+	 * @param $numberOfPages
+	 * @param array $additionalParameters
+	 * @return string
+	 */
+	function getListGetPageBrowser($numberOfPages, $additionalParameters = array()) {
+		// Get default configuration
+		$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pagebrowse_pi1.'];
 
-
-    function getListGetPageBrowser($numberOfPages, $additionalParameters=array()) {
-    	// Get default configuration
-    	$conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_pagebrowse_pi1.'];
-
-    	// Modify this configuration
+		// Modify this configuration
 		$conf['pageParameterName'] = $this->prefixId . '|page';
 		$conf['numberOfPages'] = $numberOfPages;
 
-		if (count($additionalParameters)>0) {
+		if (count($additionalParameters) > 0) {
 			$conf['extraQueryString'] = t3lib_div::implodeArrayForUrl(null, $additionalParameters);
 		}
 
-    	// Get page browser
-    	$cObj = t3lib_div::makeInstance('tslib_cObj');
+		// Get page browser
+		$cObj = t3lib_div::makeInstance('tslib_cObj');
 
-    	/* @var $cObj tslib_cObj */
-    	$cObj->start(array(), '');
-    	return $cObj->cObjGetSingle('USER_INT', $conf);
-    }
+		/* @var $cObj tslib_cObj */
+		$cObj->start(array(), '');
+		return $cObj->cObjGetSingle('USER_INT', $conf);
+	}
 
 
 	/**
 	 * DEPRECATED METHODS
-	 * (kept for compatability reasons
+	 * (kept for compatibility reasons
 	 */
-
 
 	/**
 	 * @deprecated: use the $this->getStoragePID() method
@@ -725,5 +737,3 @@ class tx_mmforum_base extends tslib_pibase {
 }
 
 // does not make sense to XCLASS here
-
-?>

@@ -67,6 +67,21 @@
 class tx_mmforum_polls {
 
 	/**
+	 * @var tx_mmforum_base
+	 */
+	public $p;
+
+	/**
+	 * @var array
+	 */
+	public $conf;
+	
+	public $piVars;
+	public $cObj;
+	
+	public $data;
+
+	/**
 	 * Loads a poll record from database.
 	 * The submitted parameter may either be a poll's UID or a
 	 * poll record as associative array. In the latter case, the
@@ -80,13 +95,11 @@ class tx_mmforum_polls {
 	function load($uid) {
 		if (!is_array($uid)) {
 			$uid = intval($uid);
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-				'*',
-				'tx_mmforum_polls',
-				'uid='.$uid
-			);
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_mmforum_polls', 'uid=' . $uid);
 			$this->data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-		} else $this->data = $uid;
+		} else {
+			$this->data = $uid;
+		}
 	}
 
 	/**
@@ -112,7 +125,9 @@ class tx_mmforum_polls {
 			$poll->p = $this;
 
 			return $poll->objDisplay();
-		} else return "";
+		} else {
+			return '';
+		}
 	}
 
 	/**
@@ -123,11 +138,11 @@ class tx_mmforum_polls {
 	 * created.
 	 *
 	 * @param   array  $data An array containing data on the poll to be previewed.
-	 * @param   $pObj
+	 * @param   tx_mmforum_base $pObj
 	 * @return  string       The poll content
 	 * @version 2007-05-25
 	 */
-	function displayPreview($data, $pObj) {
+	static function displayPreview($data, $pObj) {
 		$template = $pObj->cObj->fileResource($pObj->conf['template.']['polls']);
 		$template = $pObj->cObj->getSubpart($template, '###POLL_DISPLAY###');
 		$template = $pObj->cObj->substituteSubpart($template, '###POLL_SUBMIT###', '');
@@ -140,16 +155,19 @@ class tx_mmforum_polls {
 		$answers    = array_merge(array_values($edit),array_values($new));
 
 		if ($data['expires']['act']) {
-			$expDate = mktime($data['expires']['hour'],$data['expires']['minute'],0,$data['expires']['month'],$data['expires']['day'],$data['expires']['year']);
-		} else $expDate = 0;
+			$expDate = mktime($data['expires']['hour'], $data['expires']['minute'], 0, $data['expires']['month'], $data['expires']['day'], $data['expires']['year']);
+		} else {
+			$expDate = 0;
+		}
 
 		$i = 0;
 		$aContent = '';
 		foreach($answers as $answer) {
 			if ($pObj->conf['polls.']['pollBar_colorMap.'][$i]) {
 				$color = $pObj->conf['polls.']['pollBar_colorMap.'][$i];
+			} else {
+				$color = $pObj->conf['polls.']['pollBar_colorMap.']['default'];
 			}
-			else $color = $pObj->conf['polls.']['pollBar_colorMap.']['default'];
 
 			$aMarker = array(
 				'###ANSWER_UID###'          => '',
@@ -202,7 +220,7 @@ class tx_mmforum_polls {
 		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_answers', 'uid='.$answer_id.' AND deleted=0', array('votes' => 'votes + 1'));
 
 		$insertArray = array(
-			'pid'           => $this->p->getFirstPid(),
+			'pid'           => $this->p->getStoragePID(),
 			'tstamp'        => $GLOBALS['EXEC_TIME'],
 			'crdate'        => $GLOBALS['EXEC_TIME'],
 			'poll_id'       => $poll_id,
@@ -238,7 +256,9 @@ class tx_mmforum_polls {
 		if (!$vote) {
 			$template = $this->cObj->substituteSubpart($template, '###POLL_SUBMIT###', '');
 			$row_template = $this->cObj->getSubpart($template, '###POLL_ANSWER_2###');
-		} else $row_template = $this->cObj->getSubpart($template, '###POLL_ANSWER_1###');
+		} else {
+			$row_template = $this->cObj->getSubpart($template, '###POLL_ANSWER_1###');
+		}
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'*',
@@ -252,8 +272,9 @@ class tx_mmforum_polls {
 
 			if ($this->conf['polls.']['pollBar_colorMap.'][$i]) {
 				$color = $this->conf['polls.']['pollBar_colorMap.'][$i];
+			} else {
+				$color = $this->conf['polls.']['pollBar_colorMap.']['default'];
 			}
-			else $color = $this->conf['polls.']['pollBar_colorMap.']['default'];
 
 			$aMarker = array(
 				'###ANSWER_UID###'          => $arr['uid'],
@@ -303,8 +324,8 @@ class tx_mmforum_polls {
 	 *
 	 * @param   int   $poll_id The UID of the poll that is to be edited
 	 * @param   array $data    The poll data array
-	 * @param   $pObj
-	 * @return  void
+	 * @param   tx_mmforum_base $pObj
+	 * @return  void|string
 	 * @version 2007-05-25
 	 */
 	function editPoll($poll_id, $data, $pObj) {
@@ -333,8 +354,10 @@ class tx_mmforum_polls {
 		if ($answerCount < $defACount) return sprintf($pObj->pi_getLL('poll.noAnswers'),$defACount);
 
 		if ($data['expires']['act']) {
-			$expDate = mktime($data['expires']['hour'],$data['expires']['minute'],0,$data['expires']['month'],$data['expires']['day'],$data['expires']['year']);
-		} else $expDate = 0;
+			$expDate = mktime($data['expires']['hour'], $data['expires']['minute'], 0, $data['expires']['month'], $data['expires']['day'], $data['expires']['year']);
+		} else {
+			$expDate = 0;
+		}
 		$pollUpdateData = array(
 			'tstamp'        => $GLOBALS['EXEC_TIME'],
 			'question'      => $data['question'],
@@ -346,7 +369,6 @@ class tx_mmforum_polls {
 		// Edit answering possibilities
 		if (is_array($data['answer']['edit'])) {
 			foreach($data['answer']['edit'] as $uid => $value) {
-				$answer = trim($value);
 				if (strlen($value) == 0) {
 					$data['answer']['delete'][] = $uid;
 					continue;
@@ -362,7 +384,7 @@ class tx_mmforum_polls {
 		if (is_array($data['answer']['new'])) {
 			foreach($data['answer']['new'] as $answer) {
 				$answerInsertData = array(
-					'pid'           => $pObj->getFirstPid(),
+					'pid'           => $pObj->getStoragePID(),
 					'tstamp'        => $GLOBALS['EXEC_TIME'],
 					'crdate'        => $GLOBALS['EXEC_TIME'],
 					'poll_id'       => $poll_id,
@@ -396,7 +418,7 @@ class tx_mmforum_polls {
 	 * itself as well as creating the regarding answering possibilities.
 	 *
 	 * @param   array $data The poll data array
-	 * @param   $pObj
+	 * @param   tx_mmforum_base $pObj
 	 * @return  int         The newly created poll's UID
 	 * @version 2007-05-25
 	 */
@@ -416,10 +438,12 @@ class tx_mmforum_polls {
 		if ($answerCount < $defACount) return sprintf($pObj->pi_getLL('poll.noAnswers'),$defACount);
 
 		if ($data['expires']['act']) {
-			$expDate = mktime($data['expires']['hour'],$data['expires']['minute'],0,$data['expires']['month'],$data['expires']['day'],$data['expires']['year']);
-		} else $expDate = 0;
+			$expDate = mktime($data['expires']['hour'], $data['expires']['minute'], 0, $data['expires']['month'], $data['expires']['day'], $data['expires']['year']);
+		} else {
+			$expDate = 0;
+		}
 		$pollInsertData = array(
-			'pid'           => $pObj->getFirstPid(),
+			'pid'           => $pObj->getStoragePID(),
 			'tstamp'        => $GLOBALS['EXEC_TIME'],
 			'crdate'        => $GLOBALS['EXEC_TIME'],
 			'crfeuser_id'   => $GLOBALS['TSFE']->fe_user->user['uid'],
@@ -434,7 +458,7 @@ class tx_mmforum_polls {
 			$answer = trim($answer);
 			if (strlen($answer) == 0) continue;
 			$answerInsertData = array(
-				'pid'           => $pObj->getFirstPid(),
+				'pid'           => $pObj->getStoragePID(),
 				'tstamp'        => $GLOBALS['EXEC_TIME'],
 				'crdate'        => $GLOBALS['EXEC_TIME'],
 				'poll_id'       => $poll_id,
@@ -466,8 +490,11 @@ class tx_mmforum_polls {
 				'tx_mmforum_topics',
 				'poll_id='.$poll_id
 			);
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) $topic_id=0;
-			else list($topic_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+				$topic_id = 0;
+			} else {
+				list($topic_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			}
 		}
 		elseif ($uid == 0) {
 			$topic_id = intval($topic);
@@ -476,8 +503,11 @@ class tx_mmforum_polls {
 				'tx_mmforum_topics',
 				'uid='.$topic
 			);
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) $poll_id=0;
-			else list($poll_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+				$poll_id = 0;
+			} else {
+				list($poll_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			}
 		}
 		else {
 			$poll_id    = intval($uid);
@@ -504,12 +534,12 @@ class tx_mmforum_polls {
 	 *
 	 * @param   int    $uid The UID of the poll that is to be edited.
 	 * @param   array  $override
-	 * @param          $pObj
+	 * @param   tx_mmforum_base $pObj
 	 * @return  string      The form content
 	 * @version 2007-05-25
 	 */
 	function display_editForm($uid, $override=array(),$pObj=NULL) {
-		if (!$pObj->conf['polls.']['enable']) return "";
+		if (!$pObj->conf['polls.']['enable']) return '';
 		$defACount = $pObj->conf['polls.']['minAnswers'];
 
 		$uid = intval($uid);
@@ -528,11 +558,15 @@ class tx_mmforum_polls {
 
 		$answerTemplate = $pObj->cObj->getSubpart($template, '###ANSWERSECTION###');
 
-		if (strlen($override['expires']['act'])>0) {
-			if ($override['expires']['act'])
-				$expDate = mktime($override['expires']['hour'],$override['expires']['minute'],0,$override['expires']['month'],$override['expires']['day'],$override['expires']['year']);
-			else $expDate = 0;
-		} else $expDate = $poll['endtime'];
+		if (strlen($override['expires']['act']) > 0) {
+			if ($override['expires']['act']) {
+				$expDate = mktime($override['expires']['hour'], $override['expires']['minute'], 0, $override['expires']['month'], $override['expires']['day'], $override['expires']['year']);
+			} else {
+				$expDate = 0;
+			}
+		} else {
+			$expDate = $poll['endtime'];
+		}
 
 		$marker = array(
 			'###LABEL_QUESTION###'      => $pObj->pi_getLL('poll.question'),
@@ -577,9 +611,11 @@ class tx_mmforum_polls {
 				'###ANSWER_UID###'  => $arr['uid'],
 				'###ANSWER_MODE###' => 'edit'
 			);
-			if ($i < $defACount)
+			if ($i < $defACount) {
 				$tAnswTmpl = $pObj->cObj->substituteSubpart($answerTemplate, '###DELLINK###', '');
-			else $tAnswTmpl = $answerTemplate;
+			} else {
+				$tAnswTmpl = $answerTemplate;
+			}
 			$answers .= $pObj->cObj->substituteMarkerArrayCached($tAnswTmpl, $aMarker);
 			$i ++;
 		}
@@ -612,12 +648,12 @@ class tx_mmforum_polls {
 	 * This function displays a form allowing the user to create a new post.
 	 *
 	 * @param array $piVars
-	 * @param tx_mmforum_pi1 $pObj
+	 * @param tx_mmforum_base $pObj
 	 * @return  string The form content
 	 * @version 2007-05-25
 	 */
 	function display_createForm($piVars = array(), $pObj = NULL) {
-		if (!$pObj->conf['polls.']['enable']) return "";
+		if (!$pObj->conf['polls.']['enable']) return '';
 
 		$defACount = $pObj->conf['polls.']['minAnswers'];
 		$rDefACount = $defACount;
@@ -661,9 +697,11 @@ class tx_mmforum_polls {
 				'###DELETE###'      => $pObj->pi_getLL('poll.deleteAnswer'),
 					'###DISABLED###'		=> '',
 			);
-			if ($i < $rDefACount)
+			if ($i < $rDefACount) {
 				$tAnswTmpl = $pObj->cObj->substituteSubpart($answerTemplate, '###DELLINK###', '');
-			else $tAnswTmpl = $answerTemplate;
+			} else {
+				$tAnswTmpl = $answerTemplate;
+			}
 			$answers .= $pObj->cObj->substituteMarkerArrayCached($tAnswTmpl, $marker);
 		}
 
@@ -703,6 +741,7 @@ class tx_mmforum_polls {
 	 * in is allowed to create a poll. This checks if polls are enabled in
 	 * general and if poll creation is limited to certain user groups.
 	 *
+	 * @param tx_mmforum_base $pObj
 	 * @return  boolean TRUE, if the current user may create a post, otherwise false.
 	 * @version 2007-05-22
 	 */
@@ -718,31 +757,29 @@ class tx_mmforum_polls {
 			if (count($authPolls)==0) return true;
 
 			$i = array_intersect($authPolls, $groups);
-			return (count($i)>0);
+			return (count($i) > 0);
 		}
 		return true;
 	}
 
 
 
-		/**
-		 *
-		 * Determines whether the currently logged in user is allowed to edit an
-		 * existing poll. Polls can only be edited if they have not been voted
-		 * on yet. Or if you are an administrator. Administrators are allowed to
-		 * do everythink. Just like root. Or god.
-		 *
-		 * @author  Martin Helmich <m.helmich@mittwald.de>
-		 * @version 2010-01-07
-		 * @param   int            $pollId The UID of the poll that is to be
-		 *                                 checked.
-		 * @param   tx_mmforum_pi1 $pObj   The parent object. Usually, this is
-		 *                                 instance of the tx_mmforum_pi1 class.
-		 * @return  boolean                TRUE, if the poll may be edited,
-		 *                                 otherwise FALSE.
-		 *
-		 */
-
+	/**
+	 *
+	 * Determines whether the currently logged in user is allowed to edit an
+	 * existing poll. Polls can only be edited if they have not been voted
+	 * on yet. Or if you are an administrator. Administrators are allowed to
+	 * do everything.
+	 *
+	 * @author  Martin Helmich <m.helmich@mittwald.de>
+	 * @version 2010-01-07
+	 * @param   int            $pollId The UID of the poll that is to be
+	 *                                 checked.
+	 * @param   tx_mmforum_base $pObj   The parent object. Usually, this is
+	 *                                 instance of the tx_mmforum_pi1 class.
+	 * @return  boolean                TRUE, if the poll may be edited,
+	 *                                 otherwise FALSE.
+	 */
 	function getMayEditPoll($pollId, $pObj) {
 		global $TYPO3_DB;
 		if (!$this->getMayCreatePoll($pObj)) return false;
@@ -752,7 +789,6 @@ class tx_mmforum_polls {
 
 }
 
-if (defined("TYPO3_MODE") && $TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi1/class.tx_mmforum_polls.php"])    {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi1/class.tx_mmforum_polls.php"]);
+if (defined("TYPO3_MODE") && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi1/class.tx_mmforum_polls.php"])    {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/pi1/class.tx_mmforum_polls.php"]);
 }
-?>

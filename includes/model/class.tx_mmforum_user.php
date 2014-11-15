@@ -10,7 +10,7 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 	 * @param $pid
 	 * @return null|tx_mmforum_FeUser
 	 */
-	static function GetByUID($uid, $pid=-1) {
+	static function getByUID($uid, $pid = -1) {
 		$user = t3lib_div::makeInstance('tx_mmforum_FeUser');
 		/* @var $user tx_mmforum_FeUser */
 		$user->setUid($uid);
@@ -24,37 +24,44 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 	 * @param $pid
 	 * @return null|tx_mmforum_FeUser
 	 */
-	static function GetByUsername($username, $pid=-1) {
+	static function getByUsername($username, $pid = -1) {
 		$andWhere = '';
-		if ($pid+1) $andWhere = ' AND pid=' . $pid;
+		if ($pid + 1) {
+			$andWhere = ' AND pid=' . $pid;
+		}
 
 		$username = $GLOBALS['TYPO3_DB']->fullQuoteStr($username, 'fe_users');
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'*',
-			'fe_users',
-			'username=' . $username . ' AND deleted=0 ' . $andWhere
-		);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', 'username=' . $username . ' AND deleted=0 ' . $andWhere);
 
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
 			$user = t3lib_div::makeInstance('tx_mmforum_FeUser');
 			/* @var $user tx_mmforum_FeUser */
 			$user->initFromArray($GLOBALS['TYPO3_DB']->sql_fetch_assoc($res));
-			
 			return $user;
-
 		} else {
 			return null;
 		}
 	}
 
-		/*
-		 * GETTER FUNCTIONS
-		 */
-	function getPostCount() { return intval($this->gD('tx_mmforum_posts')); }
-	function getCity() { return $this->gD('city'); }
-	function getUsername() { return $this->gD('username'); }
-	function getPmNotifyMode() { return $this->gD('tx_mmforum_pmnotifymode'); }
+	/*
+	 * GETTER FUNCTIONS
+	 */
+	function getPostCount() {
+		return intval($this->gD('tx_mmforum_posts'));
+	}
+
+	function getCity() {
+		return $this->gD('city');
+	}
+
+	function getUsername() {
+		return $this->gD('username');
+	}
+
+	function getPmNotifyMode() {
+		return $this->gD('tx_mmforum_pmnotifymode');
+	}
 
 	/**
 	 *
@@ -66,8 +73,10 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 	}
 
 	function checkPassword($password) {
-		if ($this->loaded !== true) $this->loadFromDB();
-		
+		if ($this->loaded !== true) {
+			$this->loadFromDB();
+		}
+
 		$saltedSv = null;
 		if (t3lib_extMgm::isLoaded('t3sec_saltedpw')) {
 			require_once(t3lib_extMgm::extPath('t3sec_saltedpw', 'sv1/class.tx_t3secsaltedpw_sv1.php'));
@@ -91,7 +100,7 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 			}
 
 			if ($password <> $this->data['password']) {
-				if (md5($password) <> $this->datar['tx_mmforum_md5']) {
+				if (md5($password) <> $this->data['tx_mmforum_md5']) {
 					return false;
 				}
 			}
@@ -100,7 +109,7 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 		return true;
 	}
 
-	function setPassword($password) {		
+	function setPassword($password) {
 		$this->data['password'] = $password;
 		$this->data['tx_mmforum_md5'] = md5($password);
 
@@ -120,31 +129,34 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 
 		if ($objPHPass) {
 			$this->data['password'] = $objPHPass->getHashedPassword($password);
-
-		} else if (t3lib_extMgm::isLoaded('kb_md5fepw')) {	//if kb_md5fepw is installed, crypt password
-			$this->data['password'] = md5($password);
+		} else {
+			if (t3lib_extMgm::isLoaded('kb_md5fepw')) { //if kb_md5fepw is installed, crypt password
+				$this->data['password'] = md5($password);
+			}
 		}
 	}
 
 	function getAvatar($avatarPath) {
 		if ($this->data['tx_mmforum_avatar']) {
-            return $avatarPath . $this->data['tx_mmforum_avatar'];
-			
-		} else if ($this->data['image']) {
-            if (strstr($this->data['image'],',') !== false) {
-            	list($image_field) = t3lib_div::trimExplode(',', $this->data['image']);
-            } else {
-				$image_field = $this->data['image'];
-			}
+			return $avatarPath . $this->data['tx_mmforum_avatar'];
+		} else {
+			if ($this->data['image']) {
+				if (strstr($this->data['image'], ',') !== false) {
+					list($image_field) = GeneralUtility::trimExplode(',', $this->data['image']);
+				} else {
+					$image_field = $this->data['image'];
+				}
 
-            if (file_exists('uploads/pics/' . $image_field)) {
-            	return 'uploads/pics/' . $image_field;
-
-			} else if (file_exists('uploads/tx_srfeuserregister/' . $image_field)) {
-            	return 'uploads/tx_srfeuserregister/' . $image_field;
+				if (file_exists('uploads/pics/' . $image_field)) {
+					return 'uploads/pics/' . $image_field;
+				} else {
+					if (file_exists('uploads/tx_srfeuserregister/' . $image_field)) {
+						return 'uploads/tx_srfeuserregister/' . $image_field;
+					}
+				}
 			}
-        }
-		
+		}
+
 		return '';
 	}
 
@@ -153,7 +165,7 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 	 *
 	 * @return boolean
 	 */
-	function hasAvatar() { 
+	function hasAvatar() {
 		return strlen($this->getAvatar('')) > 0;
 	}
 
@@ -161,7 +173,7 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 		$this->data['tx_mmforum_avatar'] = $file;
 	}
 
-	function removeAvatar($avatarPath, $keepFile=false) {
+	function removeAvatar($avatarPath, $keepFile = false) {
 		$avatar = $this->data['tx_mmforum_avatar'];
 		$image = $this->data['image'];
 
@@ -170,19 +182,21 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 			// Delete avatar file
 			if ($avatar && !$keepFile) {
 				$absPath = t3lib_div::getFileAbsFileName($avatarPath . $avatar);
-				if (@file_exists($absPath))
+				if (@file_exists($absPath)) {
 					@unlink($absPath);
+				}
 			}
 
 			// Delete user image file
 			if ($image && !$keepFile) {
 				$absPath = t3lib_div::getFileAbsFileName('uploads/pics/' . $image);
-				if (@file_exists($absPath))
+				if (@file_exists($absPath)) {
 					@unlink($absPath);
-				else {
+				} else {
 					$absPath = t3lib_div::getFileAbsFileName('uploads/tx_srfeuserregister/' . $image);
-					if (@file_exists($absPath))
+					if (@file_exists($absPath)) {
 						@unlink($absPath);
+					}
 				}
 			}
 
@@ -192,5 +206,3 @@ class tx_mmforum_FeUser extends tx_mmforum_data {
 		}
 	}
 }
-
-?>

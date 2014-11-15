@@ -163,7 +163,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 
 		/**
-		 * Shows a message indicationg the registration was successful and that a
+		 * Shows a message indicating the registration was successful and that a
 		 * mail requesting an activation has been sent.
 		 * @return string The message
 		 */
@@ -261,8 +261,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 	 * Saves the data submitted during registration to database.
 	 * @return int  1 in case of success, otherwise 0
 	 */
-	function saveData()
-	{
+	function saveData() {
 		$this->data['reghash'] = substr(md5($GLOBALS['EXEC_TIME'] . $this->data['username']), 1, 15);
 
 		$insertArray = array(
@@ -340,8 +339,9 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 	/**
 	 * Shows the registration form.
-	 * @param  array  $marker An array of markers, with which the template is to
+	 * @param  array $marker An array of markers, with which the template is to
 	 *                        be filled.
+	 * @param $conf
 	 * @return string         The registration form.
 	 */
 	function showRegForm($marker, $conf) {
@@ -522,8 +522,8 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		}
 
 		$marker["###VALUE_username###"]			= $this->data['username'];
-		$marker["###VALUE_password###"]			= "";
-		$marker["###VALUE_password_again###"]	= "";
+		$marker["###VALUE_password###"]			= '';
+		$marker["###VALUE_password_again###"]	= '';
 		$marker["###VALUE_name###"]				= $this->data['name'];
 		$marker["###VALUE_beruf###"]			= $this->data['tx_mmforum_occ']?$this->data['tx_mmforum_occ']:$this->data['beruf'];
 		$marker["###VALUE_tx_mmforum_occ###"]	= $this->data['tx_mmforum_occ']?$this->data['tx_mmforum_occ']:$this->data['beruf'];
@@ -648,16 +648,16 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 	function makeMarker() {
 		$marker = array();
 
-		$marker["###ERROR_username###"]			= "";
-		$marker["###ERROR_password###"]			= "";
-		$marker["###ERROR_name###"]				= "";
-		$marker["###ERROR_email###"]			= "";
-		$marker['###ERROR_captcha###']			= "";
-		$marker['###ERROR_tx_mmforum_occ###']	= "";
-		$marker['###ERROR_tx_mmforum_interests###']			= "";
-		$marker['###ERROR_www###']				= "";
-		$marker['###ERROR_city###']				= "";
-		$marker["###HIDDENFIELDS###"]			= "";
+		$marker["###ERROR_username###"]			= '';
+		$marker["###ERROR_password###"]			= '';
+		$marker["###ERROR_name###"]				= '';
+		$marker["###ERROR_email###"]			= '';
+		$marker['###ERROR_captcha###']			= '';
+		$marker['###ERROR_tx_mmforum_occ###']	= '';
+		$marker['###ERROR_tx_mmforum_interests###']			= '';
+		$marker['###ERROR_www###']				= '';
+		$marker['###ERROR_city###']				= '';
+		$marker["###HIDDENFIELDS###"]			= '';
 
 		$marker["###VALUE_username###"]			= $this->data['username'];
 		$marker["###VALUE_password###"]			= $this->data['password'];
@@ -690,8 +690,6 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 }
 
-if (defined('TYPO3_MODE') && $TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi2/class.tx_mmforum_pi2.php']) {
-	include_once($TYPO3_CONF_VARS[TYPO3_MODE]['XCLASS']['ext/mm_forum/pi2/class.tx_mmforum_pi2.php']);
+if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi2/class.tx_mmforum_pi2.php']) {
+	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/mm_forum/pi2/class.tx_mmforum_pi2.php']);
 }
-
-?>
