@@ -174,8 +174,19 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	var $scriptRelPath = 'pi1/class.tx_mmforum_pi1.php';
 
 	/**
-	 * General plugin methods
+	 * The TYPO3 database object
+	 *
+	 * @var t3lib_DB
 	 */
+	protected $databaseHandle;
+
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+		parent::__construct();
+	}
 
 	/**
 	 * The plugin main function. Generates all content.
@@ -502,12 +513,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$marker = array();
 
 		if ($GLOBALS['TSFE']->fe_user->user['uid']) {
-			$resunread = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$resunread = $this->databaseHandle->exec_SELECTquery(
 				'tx_mmforum_prelogin as lastlogin',
 				'fe_users',
 				'uid = "'.$GLOBALS['TSFE']->fe_user->user['uid'].'"'
 			);
-			$rowunread = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resunread);
+			$rowunread = $this->databaseHandle->sql_fetch_assoc($resunread);
 			$lastlogin = $rowunread['lastlogin'];
 		}
 		else {
@@ -550,7 +561,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$limit = ($limitCount - 1) * ($currentPage) . ',' . $limitCount;
 
-		$topiclist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$topiclist = $this->databaseHandle->exec_SELECTquery(
 			"distinct tx_mmforum_topics.topic_title,
 			tx_mmforum_topics.topic_is,
 			tx_mmforum_topics.closed_flag,
@@ -577,7 +588,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$limit
 		);
 
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($topiclist)>0) {
+		if ($this->databaseHandle->sql_num_rows($topiclist)>0) {
 			$template = $this->cObj->fileResource($conf['template.']['list_topic']);
 			$template = $this->cObj->getSubpart($template, "###LIST_TOPIC3###");
 		}
@@ -592,20 +603,20 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$template = $this->cObj->substituteSubpart($template, '###SUBP_RATING###', '');
 		}
 
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($topiclist)) {
-			$forum = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		while ($row = $this->databaseHandle->sql_fetch_assoc($topiclist)) {
+			$forum = $this->databaseHandle->exec_SELECTquery(
 				'forum_name,parentID',
 				'tx_mmforum_forums',
 				'uid="'.intval($row['forum_id']).'"'
 			);
-			$rowf = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forum);
+			$rowf = $this->databaseHandle->sql_fetch_assoc($forum);
 
-			$cat = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$cat = $this->databaseHandle->exec_SELECTquery(
 				'forum_name as cat_title',
 				'tx_mmforum_forums',
 				'uid="'.intval($rowf['parentID']).'"'
 			);
-			$rowc = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($cat);
+			$rowc = $this->databaseHandle->sql_fetch_assoc($cat);
 
 			if ($row['solved'] == 1) {
 				$imgInfo['src'] = $conf['path_img'].$conf['images.']['solved'];
@@ -713,7 +724,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		// find out the unread posts since the last login
 		if ($feUser) {
-			list($rowUnread) = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			list($rowUnread) = $this->databaseHandle->exec_SELECTgetRows(
 				'tx_mmforum_prelogin as lastLogin',
 				'fe_users',
 				'uid = ' . $feUser);
@@ -746,7 +757,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$limit = ($limitCount - 1) * ($currentPage) . ',' . $limitCount;
 
-		$topiclist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$topiclist = $this->databaseHandle->exec_SELECTquery(
 			't.*,
 				c.grouprights_read as cat_read,
 				f.grouprights_read as f_read',
@@ -765,20 +776,20 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$limit
 		);
 
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($topiclist)) {
-			$forum = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		while ($row = $this->databaseHandle->sql_fetch_assoc($topiclist)) {
+			$forum = $this->databaseHandle->exec_SELECTquery(
 				'forum_name, parentID',
 				'tx_mmforum_forums',
 				'uid = "'.$row['forum_id'].'"'
 			);
-			$rowf = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forum);
+			$rowf = $this->databaseHandle->sql_fetch_assoc($forum);
 
-			$cat = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$cat = $this->databaseHandle->exec_SELECTquery(
 				'forum_name as cat_title',
 				'tx_mmforum_forums',
 				'uid="'.$rowf['parentID'].'"'
 			);
-			$rowc = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($cat);
+			$rowc = $this->databaseHandle->sql_fetch_assoc($cat);
 
 			$template = $this->cObj->getSubpart($templateFile, '###LIST_TOPIC_UNANSW###');
 			$row['topic_title'] = str_replace('<', '&lt;', $row['topic_title']);
@@ -878,7 +889,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$templateCatList   = $this->cObj->getSubpart($templateFile, '###LIST_CAT###');
 		$templateForumList = $this->cObj->getSubpart($templateFile, '###LIST_FORUM###');
 
-		$catList = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$catList = $this->databaseHandle->exec_SELECTquery(
 			'uid, forum_name',
 			'tx_mmforum_forums f',
 			'f.deleted = 0 AND f.hidden = 0 AND f.parentID=0 AND f.uid = ' . intval($this->piVars['cid']) .
@@ -887,7 +898,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		);
 
 		// loop through every parent forum (= category)
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($catList)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($catList)) {
 			$marker['###CATNAME###'] = $this->escape($row['forum_name']);
 
 			// Include hooks
@@ -900,7 +911,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// add the category list
 			$content .= $this->cObj->substituteMarkerArrayCached($templateCatList, $marker);
 
-			$forumList = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$forumList = $this->databaseHandle->exec_SELECTquery(
 				'uid, forum_name, forum_desc, forum_topics, forum_posts, forum_last_post_id',
 				'tx_mmforum_forums f',
 				'f.deleted = 0 AND f.hidden = 0 AND f.parentID = ' . $row['uid'] .
@@ -911,7 +922,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			);
 
 			// loop through every forum
-			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forumList)) {
+			while ($row = $this->databaseHandle->sql_fetch_assoc($forumList)) {
 				$linkParams[$this->prefixId] = array(
 					'action' => 'list_topic',
 					'fid'     => $row['uid']
@@ -982,18 +993,18 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$feUserId = intval(isset($GLOBALS['TSFE']->fe_user->user['uid']) ? $GLOBALS['TSFE']->fe_user->user['uid'] : 0);
 		$lastlogin = 0;
 		if ($feUserId) {
-			//$resunread = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			//$resunread = $this->databaseHandle->exec_SELECTquery(
 			//	'tx_mmforum_prelogin as lastlogin',
 			//	'fe_users',
 			//	'uid = ' . $feUserId
 			//);
-			//$rowunread = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resunread);
+			//$rowunread = $this->databaseHandle->sql_fetch_assoc($resunread);
 			//$lastlogin = $rowunread['lastlogin'];#-1814400;
 			//$readarray = $this->getunreadposts($content, $conf, $lastlogin);
 			$lastlogin = $GLOBALS['TSFE']->fe_user->user['tx_mmforum_prelogin'];
 		}
 
-		$catlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$catlist = $this->databaseHandle->exec_SELECTquery(
 			'uid, forum_name',
 			'tx_mmforum_forums f',
 			'deleted = 0 AND hidden = 0 AND parentID = 0 ' .
@@ -1007,7 +1018,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		//Remember the read forum data na dextract only the needed subforums
 		$parents = array();
 		$parentIds = array();
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($catlist)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($catlist)) {
 			$parents[] = $row;
 			$parentIds[] = $row['uid'];
 		}
@@ -1015,7 +1026,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$where ='deleted = 0 AND hidden = 0 AND ' . $catIdWhere.
 					$this->getStoragePIDQuery().
 					$this->getMayRead_forum_query();
-		$forumlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$forumlist = $this->databaseHandle->exec_SELECTquery(
 				'*',
 				'tx_mmforum_forums',
 				$where,
@@ -1024,7 +1035,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			);
 		$parentForums = array();
 		$visibleForumKeys = array();
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forumlist)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($forumlist)) {
 			$parentForums[$row['parentID']][] = $row;
 			$visibleForumKeys[] = $row['uid'];
 		}
@@ -1039,7 +1050,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$x = 0;
 		$i = 1;
-		//while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($catlist)) {
+		//while ($row = $this->databaseHandle->sql_fetch_assoc($catlist)) {
 		foreach ($parents as $row) {
 			$x++;
 			$template = $this->cObj->getSubpart($templateFile, '###LIST_CAT###');
@@ -1057,7 +1068,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 
-//			$forumlist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+//			$forumlist = $this->databaseHandle->exec_SELECTquery(
 //				'*',
 //				'tx_mmforum_forums f',
 //				'deleted = 0 AND hidden = 0 AND parentID = ' . $row['uid'] .
@@ -1067,7 +1078,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 //				'sorting ASC'
 //			);
 //
-//			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($forumlist)) {
+//			while ($row = $this->databaseHandle->sql_fetch_assoc($forumlist)) {
 			$parentID = $row['uid'];
 			if (is_array($parentForums[$parentID])) {
 				foreach ($parentForums[$parentID] as $innerRow) {
@@ -1091,13 +1102,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					// If there is a user logged in, it is checked if
 					//there are new posts since the last login.
 	//				if ($feUserId) {
-	//					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+	//					$res = $this->databaseHandle->exec_SELECTquery(
 	//						'*',
 	//						'tx_mmforum_topics',
 	//						'forum_id = ' . $forumId . $this->getStoragePIDQuery());
 	//					$blnnew = false;
 	//
-	//					while ($row_topic = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+	//					while ($row_topic = $this->databaseHandle->sql_fetch_assoc($res)) {
 	//						if (in_array($row_topic['uid'], $readarray)) {
 	//							$blnnew = true;
 	//							break;
@@ -1164,19 +1175,19 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		// find out the unread posts since the last login
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid',
 			'tx_mmforum_forums',
 			'uid = ' . $forumId . $this->getStoragePIDQuery()
 		);
 
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+		if ($this->databaseHandle->sql_num_rows($res) == 0) {
 			$content .= $this->errorMessage($conf, $this->pi_getLL('board.noAccess'));
 			return $content;
 		}
 
 		// load the forum details for the header
-		list($rowForum) = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+		list($rowForum) = $this->databaseHandle->exec_SELECTgetRows(
 			'*',
 			'tx_mmforum_forums',
 			'uid = ' . $forumId . $this->getStoragePIDQuery()
@@ -1255,7 +1266,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$shadowCon = ($this->conf['enableShadows'] ? '' : ' AND t.shadow_tid=0 ');
 
 		// load all the posts
-		$topiclist = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$topiclist = $this->databaseHandle->exec_SELECTquery(
 			't.*',
 			'tx_mmforum_topics t, tx_mmforum_posts p',
 			'p.uid = t.topic_last_post_id AND ' .
@@ -1266,7 +1277,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$limit
 		);
 
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($topiclist) > 0) {
+		if ($this->databaseHandle->sql_num_rows($topiclist) > 0) {
 			$template = $this->cObj->getSubpart($templateFile, '###LIST_TOPIC###');
 		} else {
 			$template = $this->cObj->getSubpart($templateFile, '###LIST_NOTOPIC###');
@@ -1279,7 +1290,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$topics = array();
 		$topicIds = array();
 
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($topiclist)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($topiclist)) {
 			$topics[] = $row;
 			$topicIds[] = $row['uid'];
 		}
@@ -1439,13 +1450,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		if ($feUserId) {
 			$template = $this->cObj->getSubpart($templateFile, '###LIST_POSTS_OPTIONEN###');
 
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'uid',
 				'tx_mmforum_forummail',
 				'user_id = ' . $feUserId . ' AND forum_id = ' . $forumId . $this->getStoragePIDQuery()
 			);
 
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1) {
+			if ($this->databaseHandle->sql_num_rows($res) < 1) {
 				$imgInfo['alt']		= $this->pi_getLL('topic.emailSubscr.off');
 				$imgInfo['title']	= $this->pi_getLL('topic.emailSubscr.off');
 				$imgInfo['src']		= $conf['path_img'].$conf['images.']['info_mail_off'];
@@ -1510,7 +1521,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			list($realPrefix) = array_diff($prefixes, $noListPrefixes);
 			$prefix           = $realPrefix;
 		}
-		$prefix = $GLOBALS['TYPO3_DB']->quoteStr($prefix, '');
+		$prefix = $this->databaseHandle->quoteStr($prefix, '');
 		$templateFile = $this->cObj->fileResource($conf['template.']['list_topic']);
 		$template     = $this->cObj->getSubpart($templateFile, '###PREFIX_SETTINGS###');
 		$marker = array(
@@ -1566,7 +1577,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			break;
 			default:
 				if ($settings['order']) {
-					$order = $GLOBALS['TYPO3_DB']->quoteStr($settings['order'], 'tx_mmforum_topics') . ' DESC';
+					$order = $this->databaseHandle->quoteStr($settings['order'], 'tx_mmforum_topics') . ' DESC';
 				} else {
 					$order = 'topic_last_post_id DESC';
 				}
@@ -1613,7 +1624,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 
 		// Detect the number of topics with a certain prefix from the DB
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			't.uid',
 			'tx_mmforum_topics t, tx_mmforum_forums f, tx_mmforum_forums c, fe_users u',
 			't.deleted = 0 AND t.hidden = 0 AND
@@ -1625,10 +1636,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'',
 			$order
 		);
-		$numTopicsTotal = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		$numTopicsTotal = $this->databaseHandle->sql_num_rows($res);
 
 		// Load topics with a certain prefix from the DB
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			't.*, f.forum_name, c.forum_name as cat_title',
 			'tx_mmforum_topics t, tx_mmforum_forums f, tx_mmforum_forums c, fe_users u',
 			't.deleted = 0 AND t.hidden = 0 AND
@@ -1652,7 +1663,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 
 		// Fill category/board select field in settings form
-		$cres = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$cres = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_forums f',
 			'deleted = 0 AND hidden = 0 ' .
@@ -1665,7 +1676,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		// load all data from the categories and boards in a multi-dimensional array
 		$forumList = array();
-		while ($forum = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($cres)) {
+		while ($forum = $this->databaseHandle->sql_fetch_assoc($cres)) {
 			if ($forum['parentID'] == 0) {
 				// we need to have an associative array to preserve sorting
 				$forumList['c_' . $forum['uid']] = $forum;
@@ -1738,7 +1749,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// add the settings part to the template
 		$content .= $this->cObj->substituteMarkerArray($template, $marker);
 
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+		if ($this->databaseHandle->sql_num_rows($res) > 0) {
 			$template = $this->cObj->getSubpart($templateFile, '###LIST_TOPIC###');
 		} else {
 			$template = $this->cObj->getSubpart($templateFile, '###LIST_NOTOPIC###');
@@ -1747,7 +1758,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		// Load already read topics from database
 		if ($GLOBALS['TSFE']->fe_user->user['uid']) {
-			list($rowUnread) = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+			list($rowUnread) = $this->databaseHandle->exec_SELECTgetRows(
 				'tx_mmforum_prelogin as lastlogin',
 				'fe_users',
 				'uid = ' . intval($GLOBALS['TSFE']->fe_user->user['uid'])
@@ -1756,7 +1767,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 
 		// Output topics
-		while ($topicRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while ($topicRow = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$topicTitle = stripslashes(htmlspecialchars($topicRow['topic_title']));
 
 			$linkParams[$this->prefixId] = array(
@@ -1865,7 +1876,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$limit = $this->conf['listLatest.']['limit'];
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			't.topic_last_post_id as post_id, t.uid as topic_id, t.*,
 			f.uid as forum_id, f.forum_name as forum_name,
 			c.forum_name as category_name,
@@ -1887,7 +1898,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		);
 
 		$rowContent = '';
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$linkParams[$this->prefixId] = array(
 				'action' => 'list_post',
 				'tid'    => $row['topic_id']
@@ -1997,14 +2008,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		foreach($list_fields as $field) {
 
 			if (intval($field)>0) {
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res = $this->databaseHandle->exec_SELECTquery(
 					'*',
 					'tx_mmforum_userfields',
 					'uid='.$field.' AND deleted=0'
 				);
-				if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) continue;
+				if ($this->databaseHandle->sql_num_rows($res) == 0) continue;
 
-				$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+				$arr = $this->databaseHandle->sql_fetch_assoc($res);
 				$userField->get($arr);
 
 				/*if (strlen($arr['config'])>0) {
@@ -2059,12 +2070,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 		$template       = $this->cObj->substituteSubpart($template, '###USERLIST_TH###', $content_th);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'COUNT(*)',
 			'fe_users',
 			'1=1'.$this->cObj->enableFields('fe_users').$this->getUserPidQuery()
 		);
-		list($user_num) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($user_num) = $this->databaseHandle->sql_fetch_row($res);
 
 		$page_max   = ceil($user_num / $list_count);
 		$page_cur   = intval($this->piVars['page'])>0?$this->piVars['page']:0;
@@ -2090,7 +2101,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 		$userResult = array();
 		if (!is_numeric($sorting)) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'*',
 				'fe_users',
 				'1=1'.$this->cObj->enableFields('fe_users').$this->getUserPidQuery(),
@@ -2098,23 +2109,23 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$sorting.' '.$sorting_mode,
 				$limit
 			);
-			while($user = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
+			while($user = $this->databaseHandle->sql_fetch_assoc($res))
 				$userResult[] = $user;
 		} else {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'*',
 				'fe_users',
 				'1=1'.$this->cObj->enableFields('fe_users').$this->getUserPidQuery()
 			);
-			while($user = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			while($user = $this->databaseHandle->sql_fetch_assoc($res)) {
+				$res2 = $this->databaseHandle->exec_SELECTquery(
 					'field_value',
 					'tx_mmforum_userfields_contents',
 					'field_id='.$sorting.' AND deleted=0 AND user_id='.$user['uid']
 				);
-				if ($GLOBALS['TYPO3_DB']->sql_num_rows($res2)==0) $user['__userdef'] = '';
+				if ($this->databaseHandle->sql_num_rows($res2)==0) $user['__userdef'] = '';
 				else {
-					list($userdef) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res2);
+					list($userdef) = $this->databaseHandle->sql_fetch_row($res2);
 					$user['__userdef'] = $userdef;
 				}
 
@@ -2147,14 +2158,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			foreach($list_fields as $field) {
 				if (intval($field)>0) {
-					$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					$res2 = $this->databaseHandle->exec_SELECTquery(
 						'f.config,c.field_value',
 						'tx_mmforum_userfields f LEFT JOIN tx_mmforum_userfields_contents c ON c.field_id = f.uid',
 						'f.hidden=0 AND f.deleted=0 AND (c.deleted=0 OR c.deleted IS NULL) AND f.uid='.$field.' AND (c.user_id IS NULL OR c.user_id='.$user['uid'].')',
 						'',
 						'f.sorting DESC'
 					);
-					$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2);
+					$arr = $this->databaseHandle->sql_fetch_assoc($res2);
 
 					unset($parser->setup);
 
@@ -2586,13 +2597,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$interval = $conf['spamblock_interval'];
 
 				$time = $GLOBALS['EXEC_TIME'] - $interval;
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res = $this->databaseHandle->exec_SELECTquery(
 					'*',
 					'tx_mmforum_posts',
 					'poster_id=' . $this->getUserID() . ' AND post_time>=' . $time . $this->cObj->enableFields('tx_mmforum_posts')
 				);
 
-				if (($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0)) {
+				if (($this->databaseHandle->sql_num_rows($res) > 0)) {
 
 					$template = $this->cObj->fileResource($conf['template.']['login_error']);
 					$template = $this->cObj->getSubpart($template, "###LOGINERROR###");
@@ -2791,24 +2802,24 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						}
 
 						// Get user UID of quoted user
-						$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+						$res = $this->databaseHandle->exec_SELECTquery(
 							'poster_id',
 							'tx_mmforum_posts',
 							'uid=' . intval($this->piVars['quote'])
 						);
-						list($quoteuserid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+						list($quoteuserid) = $this->databaseHandle->sql_fetch_row($res);
 
 						// Get user name of quoted user
 						$quoteuser_array = tx_mmforum_tools::get_userdata($quoteuserid);
 						$quoteuser = $quoteuser_array[$this->getUserNameField()];
 
 						// Get text to be quoted
-						$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+						$res = $this->databaseHandle->exec_SELECTquery(
 							'post_text',
 							'tx_mmforum_posts_text',
 							'post_id=' . intval($this->piVars['quote'])
 						);
-						list($posttext) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+						list($posttext) = $this->databaseHandle->sql_fetch_row($res);
 
 						// Insert quote into message text.
 						$marker['###POSTTEXT###'] = '[quote="' . $quoteuser . '"]' . "\r\n" . $posttext . "\r\n" . '[/quote]';
@@ -3021,8 +3032,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				}
 			}
 
-			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_attachments', $insertArray);
-			$attachments[] = $GLOBALS['TYPO3_DB']->sql_insert_id();
+			$this->databaseHandle->exec_INSERTquery('tx_mmforum_attachments', $insertArray);
+			$attachments[] = $this->databaseHandle->sql_insert_id();
 		}
 
 		return $attachments;
@@ -3043,43 +3054,43 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$this->generateToken();
 
 		// Get topic UID
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_posts',
 			'deleted=0 AND hidden=0 AND uid=' . $postId . $this->getStoragePIDQuery()
 		);
 
-		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$row = $this->databaseHandle->sql_fetch_assoc($res);
 
 		$topicId = $row['topic_id'];
 		$forumId = $row['forum_id'];
 
 		// Determine, if edited post is the last post in topic
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'MAX(post_time)',
 			'tx_mmforum_posts',
 			'deleted=0 AND hidden=0 AND topic_id='. $topicId . $this->getStoragePIDQuery()
 		);
-		list($lastpostdate) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($lastpostdate) = $this->databaseHandle->sql_fetch_row($res);
 
 		// Determine if edited post is the first post in topic
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid',
 			'tx_mmforum_posts',
 			'deleted=0 AND hidden=0 AND topic_id='.$topicId.' '.$this->getStoragePIDQuery(),
 			'',
 			'post_time ASC'
 		);
-		list($firstPostId) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($firstPostId) = $this->databaseHandle->sql_fetch_row($res);
 		$firstPost = ($postId === intval($firstPostId));
 
 		// Load topic data
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_topics',
 			'deleted=0 AND hidden=0 AND uid=' . $topicId . $this->getStoragePIDQuery()
 		);
-		$topicData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$topicData = $this->databaseHandle->sql_fetch_assoc($res);
 		$previewContent = '';
 		if ((
 				($row['poster_id'] == $GLOBALS['TSFE']->fe_user->user['uid'])
@@ -3103,7 +3114,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					'tstamp'    => $GLOBALS['EXEC_TIME']
 				);
 
-				$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+				$res = $this->databaseHandle->exec_UPDATEquery(
 					'tx_mmforum_posts_text',
 					'post_id=' . $postId,
 					$updateArray
@@ -3113,13 +3124,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				if ($this->piVars['attachment_delete']) {
 					foreach ($this->piVars['attachment_delete'] as $attachementId => $delete) {
 						$attachementId = intval($attachementId);
-						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid=' . $attachementId, array('deleted' => 1, 'tstamp' => $GLOBALS['EXEC_TIME']));
-						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid=' . $attachementId, array('attachment' => 0, 'tstamp' => $GLOBALS['EXEC_TIME']));
+						$this->databaseHandle->exec_UPDATEquery('tx_mmforum_attachments', 'uid=' . $attachementId, array('deleted' => 1, 'tstamp' => $GLOBALS['EXEC_TIME']));
+						$this->databaseHandle->exec_UPDATEquery('tx_mmforum_posts', 'uid=' . $attachementId, array('attachment' => 0, 'tstamp' => $GLOBALS['EXEC_TIME']));
 						$attachments = t3lib_div::intExplode(',', $row['attachment']);
 						unset($attachments[array_search($attachementId, $attachments)]);
 						$row['attachment'] = implode(',', $attachments);
 					}
-					$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+					$this->databaseHandle->exec_UPDATEquery(
 						'tx_mmforum_posts',
 						'uid=' . $postId,
 						array('attachment' => $row['attachment'])
@@ -3142,11 +3153,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$updateData = array(
 							'attachment' => implode(',', array_merge($attachments, $attachmentIds))
 						);
-						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid = ' . $postId, $updateData);
+						$this->databaseHandle->exec_UPDATEquery('tx_mmforum_posts', 'uid = ' . $postId, $updateData);
 
 						// Update attachment records with the post ID (as this is not set within the performAttachmentUpload)
 						if (count($attachmentIds)) {
-							$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+							$this->databaseHandle->exec_UPDATEquery(
 								'tx_mmforum_attachments',
 								'uid IN (' . implode(',', $attachmentIds) . ')',
 								array('post_id' => $postId)
@@ -3183,7 +3194,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 								return $this->post_edit($content,$conf);
 							}
 
-							$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+							$this->databaseHandle->exec_UPDATEquery(
 								'tx_mmforum_topics',
 								'uid=' . $topicId,
 								array('poll_id' => $pollId, 'tstamp'=>$GLOBALS['EXEC_TIME'])
@@ -3207,7 +3218,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						'topic_title'   => $this->piVars['title'],
 						'tstamp'        => $GLOBALS['EXEC_TIME']
 					);
-					$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+					$res = $this->databaseHandle->exec_UPDATEquery(
 						'tx_mmforum_topics',
 						'uid=' . $topicId,
 						$updateArray
@@ -3216,7 +3227,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 				// If the editing user is no admin or mod, the change is logged in the database
 				if (!$this->getIsMod($row['forum_id']) && !$this->getIsAdmin()) {
-					$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+					$this->databaseHandle->exec_UPDATEquery(
 						'tx_mmforum_posts',
 						'uid=' . $postId,
 						array(
@@ -3342,7 +3353,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				if (strlen($row['attachment']) == 0) {
 					$template = $this->cObj->substituteSubpart($template,'###ATTACHMENT_EDITSECTION###', '');
 				} else {
-					$aRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					$aRes = $this->databaseHandle->exec_SELECTquery(
 						'*',
 						'tx_mmforum_attachments',
 						'uid IN (' .$row['attachment'] . ') AND deleted=0',
@@ -3354,7 +3365,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$aTemplate = $this->cObj->getSubpart($template, '###ATTACHMENT_EDITFIELD###');
 					$aContent = '';
 
-					while($attachment = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($aRes)) {
+					while($attachment = $this->databaseHandle->sql_fetch_assoc($aRes)) {
 						$size = $attachment['file_size'].' '.$this->pi_getLL('attachment.bytes');
 						if ($attachment['file_size'] > 1024) $size = round($attachment['file_size']/1024,2).' '.$this->pi_getLL('attachment.kilobytes');
 						if ($attachment['file_size'] > 1048576) $size = round($attachment['file_size']/1048576,2).' '.$this->pi_getLL('attachment.megabytes');
@@ -3397,11 +3408,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$template = $this->cObj->substituteSubpart($template, '###POLL_SECTION###', '');
 				}
 
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('post_text', 'tx_mmforum_posts_text', 'post_id=' . $postId);
-				list($posttext) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				$res = $this->databaseHandle->exec_SELECTquery('post_text', 'tx_mmforum_posts_text', 'post_id=' . $postId);
+				list($posttext) = $this->databaseHandle->sql_fetch_row($res);
 
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid=' . $topicId);
-				list($title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				$res = $this->databaseHandle->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid=' . $topicId);
+				list($title) = $this->databaseHandle->sql_fetch_row($res);
 
 				$marker['###POSTTEXT###'] = $this->piVars['message'] ? $this->escape($this->piVars['message']) : $this->escape($posttext);
 
@@ -3492,13 +3503,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$topicId = intval($this->piVars['tid']);
 		$userId  = intval($GLOBALS['TSFE']->fe_user->user['uid']);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid',
 			'tx_mmforum_favorites',
 			'user_id = ' . $userId . ' AND topic_id = ' . $topicId . $this->getStoragePIDQuery()
 		);
 
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1 && $userId > 0) {
+		if ($this->databaseHandle->sql_num_rows($res) < 1 && $userId > 0) {
 			$insertArray = array(
 				'pid'       => $this->getStoragePID(),
 				'tstamp'    => $GLOBALS['EXEC_TIME'],
@@ -3514,7 +3525,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$insertArray = $_procObj->setFavorite_dataRecord($insertArray, $this);
 				}
 			}
-			$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_favorites', $insertArray);
+			$res = $this->databaseHandle->exec_INSERTquery('tx_mmforum_favorites', $insertArray);
 		}
 
 		// Redirect back to previous page
@@ -3531,7 +3542,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$topicId = intval($this->piVars['tid']);
 		$userId  = intval($GLOBALS['TSFE']->fe_user->user['uid']);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_DELETEquery(
+		$res = $this->databaseHandle->exec_DELETEquery(
 			'tx_mmforum_favorites',
 			'user_id = ' . $userId . ' AND topic_id = ' . $topicId);
 
@@ -3554,7 +3565,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Delete favorite
 			if ($this->piVars['fav']['deltid']) {
 				$del_tid = intval($this->piVars['fav']['deltid']);
-				$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_favorites', 'user_id = ' . $userId .' AND topic_id = '.$del_tid);
+				$this->databaseHandle->exec_DELETEquery('tx_mmforum_favorites', 'user_id = ' . $userId .' AND topic_id = '.$del_tid);
 				unset($this->piVars['fav']);
 			}
 
@@ -3562,7 +3573,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			if ($this->piVars['fav']['action'] == 'delete') {
 				foreach ((array)$this->piVars['fav']['delete'] as $del_tid) {
 					$del_tid = intval($del_tid);        // Parse to int for security reasons
-					$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_favorites', 'user_id = ' . $userId . ' AND topic_id = ' . $del_tid);
+					$this->databaseHandle->exec_DELETEquery('tx_mmforum_favorites', 'user_id = ' . $userId . ' AND topic_id = ' . $del_tid);
 				}
 				unset($this->piVars['fav']);
 			}
@@ -3636,7 +3647,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 
 			// Load favorites and start output
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'fa.topic_id,
 					t.*,
 					c.forum_name as cat_title,
@@ -3660,7 +3671,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			$template = $this->cObj->fileResource($conf['template.']['favorites']);
 
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+			if ($this->databaseHandle->sql_num_rows($res) == 0) {
 				$template = $this->cObj->getSubpart($template, '###LIST_FAVORITES_EMPTY###');
 				$marker = array(
 					'###LLL_FAVORITES_EMPTY###' => $this->pi_getLL('favorites.empty')
@@ -3669,7 +3680,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			} else {
 				$template = $this->cObj->getSubpart($template, "###LIST_FAVORITES###");
 
-				while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 
 					$topicParams[$this->prefixId] = array(
 						'action' => 'list_post',
@@ -3752,14 +3763,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function generateBBCodeButtons($template) {
 
 		// Load regular BBCodes
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_postparser',
 			'deleted=0 AND hidden=0'
 		);
 		$i = 0;
 		$content = '';
-		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 			if (substr($arr['title'],0,4)=='LLL:') $title = $this->pi_getLL(substr($arr['title'],4));
 			else $title = $arr['title'];
 
@@ -3782,15 +3793,15 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 		}
 		// Load syntax highlighting data
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_syntaxhl',
 			'deleted=0 AND hidden=0'
 		);
 
 		$content = '';
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
-			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		if ($this->databaseHandle->sql_num_rows($res) > 0) {
+			while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 				if (substr($arr['lang_title'],0,4)=='LLL:') $title = $this->pi_getLL(substr($arr['lang_title'],4));
 				else $title = $arr['lang_title'];
 
@@ -3820,7 +3831,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function show_smilie_db($conf) {
 		$imgInfo = array('border' => $conf['img_border'], 'alt' => '', 'src' => '', 'style' => '');
 		// Load smilies from database
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'smile_url,uid,code',
 			'tx_mmforum_smilies',
 			'deleted=0 AND hidden=0',
@@ -3832,7 +3843,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		// Display smilies in table, 4 smilies a row.
 		$content = '';
-		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)){
+		while($row = $this->databaseHandle->sql_fetch_assoc($res)){
 
 			$smiliePath = 'uploads/tx_mmforum/'.$row['smile_url'];
 			if (!file_exists($smiliePath)) $smiliePath = $conf['path_smilie'].$row['smile_url'];
@@ -3876,7 +3887,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'topic_last_post_id' => $this->get_last_post($topicId),
 			'tstamp'             => $GLOBALS['EXEC_TIME']
 		);
-		$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . intval($topicId), $updateArray);
+		$res = $this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . intval($topicId), $updateArray);
 	}
 
 	/**
@@ -3886,7 +3897,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 */
 	function update_lastpost_forum($forumId) {
 		$forumId = intval($forumId);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid',
 			'tx_mmforum_posts',
 			'forum_id = ' . $forumId . ' AND deleted = 0 AND hidden = 0 ' . $this->getStoragePIDQuery(),
@@ -3894,13 +3905,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'crdate DESC',
 			'1'
 		);
-		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$row = $this->databaseHandle->sql_fetch_assoc($res);
 
 		$updateArray = array(
 			'forum_last_post_id' => $row['uid'],
 			'tstamp'             => $GLOBALS['EXEC_TIME']
 		);
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'uid = ' . $forumId, $updateArray);
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_forums', 'uid = ' . $forumId, $updateArray);
 	}
 
 	/**
@@ -3914,7 +3925,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'solved'    => intval($solved),
 			'tstamp'    => $GLOBALS['EXEC_TIME']
 		);
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . intval($topicId), $updateArray);
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . intval($topicId), $updateArray);
 	}
 
 	/**
@@ -4075,16 +4086,16 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$marker['###10TOPICS###']        = $this->view_last_10_topics($user->getUID());
 
 		// The number of topics created by this user (currently not used?)
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('COUNT(uid)','tx_mmforum_topics',"topic_poster='{$user->getUID()}'".$this->getStoragePIDQuery());
-		list($topic_num) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $this->databaseHandle->exec_SELECTquery('COUNT(uid)','tx_mmforum_topics',"topic_poster='{$user->getUID()}'".$this->getStoragePIDQuery());
+		list($topic_num) = $this->databaseHandle->sql_fetch_row($res);
 		$marker['###THEMEN###']         = "<strong>".$topic_num."</strong>";
 
 		// The last post made by this user (currently not used?)
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid,topic_id','tx_mmforum_posts',"deleted='0' AND hidden='0' AND poster_id='{$user->getUID()}'".$this->getStoragePIDQuery(),'','crdate DESC','1');
-		list($lastpost_id,$lastpost_topic_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $this->databaseHandle->exec_SELECTquery('uid,topic_id','tx_mmforum_posts',"deleted='0' AND hidden='0' AND poster_id='{$user->getUID()}'".$this->getStoragePIDQuery(),'','crdate DESC','1');
+		list($lastpost_id,$lastpost_topic_id) = $this->databaseHandle->sql_fetch_row($res);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics',"uid='$lastpost_topic_id'".$this->getStoragePIDQuery());
-		list($lastpost_topic_name) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $this->databaseHandle->exec_SELECTquery('topic_title','tx_mmforum_topics',"uid='$lastpost_topic_id'".$this->getStoragePIDQuery());
+		list($lastpost_topic_name) = $this->databaseHandle->sql_fetch_row($res);
 
 		$lastpost_topic_name = str_replace('<','&lt;',$lastpost_topic_name);
 		$lastpost_topic_name = str_replace('>','&gt;',$lastpost_topic_name);
@@ -4095,14 +4106,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 		$userField_private = ($this->getIsAdmin() || $this->getIsMod())?'':' AND f.public=1';
 
-		/*$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		/*$res = $this->databaseHandle->exec_SELECTquery(
 			'f.*,c.field_value',
 			'tx_mmforum_userfields f, tx_mmforum_userfields_contents c',
 			'f.hidden=0 AND f.deleted=0 AND c.deleted=0 AND c.field_id=f.uid AND c.user_id='.$user_id.$userField_private,
 			'',
 			'f.sorting DESC'
 		);*/
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_userfields f',
 			'f.hidden=0 AND f.deleted=0'.$userField_private,
@@ -4110,14 +4121,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'sorting DESC'
 		);
 		$parser  = t3lib_div::makeInstance('t3lib_TSparser');
-		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			$cRes = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
+			$cRes = $this->databaseHandle->exec_SELECTquery(
 				'field_value',
 				'tx_mmforum_userfields_contents c',
 				'c.deleted=0 AND c.field_id='.$arr['uid'].' AND c.user_id='.$user->getUid()
 			);
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($cRes)) {
-				list($fieldContent) = $GLOBALS['TYPO3_DB']->sql_fetch_row($cRes);
+			if ($this->databaseHandle->sql_num_rows($cRes)) {
+				list($fieldContent) = $this->databaseHandle->sql_fetch_row($cRes);
 				$arr['field_value'] = $fieldContent;
 			} else $fieldContent = '';
 
@@ -4159,7 +4170,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 		$template = $this->cObj->substituteSubpart($template, '###USERFIELDS###', $userField_content);
 
-		$marker['###ROWSPAN###'] = 15 + $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		$marker['###ROWSPAN###'] = 15 + $this->databaseHandle->sql_num_rows($res);
 
 		// Include hooks
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['userProfile_marker'])) {
@@ -4181,7 +4192,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function view_last_10_topics($uid) {
 		$uid = intval($uid);
 		$imgInfo = array('border' => $this->conf['img_border'], 'alt' => '', 'src' => '', 'style' => '');
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			't.*',
 			'tx_mmforum_topics t,tx_mmforum_forums f',
 			't.topic_poster="'.$uid.'" AND
@@ -4196,7 +4207,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		);
 
 		$content = '';
-		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$row['topic_title'] = stripslashes($row['topic_title']);
 
 			$row['topic_title'] = str_replace('<','&lt;',$row['topic_title']);
@@ -4230,10 +4241,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		t3lib_div::logDeprecatedFunction();
 
 		$uid = intval($uid);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"poster_id='$uid' AND deleted='0' AND hidden='0'".$this->getStoragePIDQuery(),'','crdate DESC','10');
+		$res = $this->databaseHandle->exec_SELECTquery('*','tx_mmforum_posts',"poster_id='$uid' AND deleted='0' AND hidden='0'".$this->getStoragePIDQuery(),'','crdate DESC','10');
 
 		$content = '';
-		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$topic_name = $this->get_topic_name($row['topic_id']);
 			$topic_name = str_replace('<','&lt;',$topic_name);
 			$topic_name = str_replace('>','&gt;',$topic_name);
@@ -4277,18 +4288,18 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					'crdate'        => $GLOBALS['EXEC_TIME'],
 					'cruser_id'     => $GLOBALS['TSFE']->fe_user->user['uid']
 				);
-				$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_mailkey',$insertArray);
+				$this->databaseHandle->exec_INSERTquery('tx_mmforum_mailkey',$insertArray);
 				$marker['###MAILCODE###'] =  $mailcode;
 
 				// Retrieve user name from database
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField(),'fe_users',"uid = '".intval($this->piVars['uid'])."'");
-				list($usermailname) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				$res = $this->databaseHandle->exec_SELECTquery($this->getUserNameField(),'fe_users',"uid = '".intval($this->piVars['uid'])."'");
+				list($usermailname) = $this->databaseHandle->sql_fetch_row($res);
 				$marker['###USERMAILNAME###'] =  $usermailname;
 			}
 			else {
 				// Check if user is authorized to send emails.
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_mailkey',"code = '".$this->piVars['authcode']."' AND cruser_id = '".$GLOBALS['TSFE']->fe_user->user['uid']."'");
-				$mailok = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+				$res = $this->databaseHandle->exec_SELECTquery('*','tx_mmforum_mailkey',"code = '".$this->piVars['authcode']."' AND cruser_id = '".$GLOBALS['TSFE']->fe_user->user['uid']."'");
+				$mailok = $this->databaseHandle->sql_num_rows($res);
 
 				if ($mailok) {
 					// Load template
@@ -4297,8 +4308,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					$marker = array();
 
 					// Get recipient user data
-					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField().',email','fe_users',"uid = '".intval($this->piVars['uid'])."'");
-					list($usermailname,$to) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+					$res = $this->databaseHandle->exec_SELECTquery($this->getUserNameField().',email','fe_users',"uid = '".intval($this->piVars['uid'])."'");
+					list($usermailname,$to) = $this->databaseHandle->sql_fetch_row($res);
 
 					$header = "From: <".$GLOBALS['TSFE']->fe_user->user[$this->getUserNameField()].">".$GLOBALS['TSFE']->fe_user->user['email']."\n";
 					$header .= "Reply-To:" . $GLOBALS['TSFE']->fe_user->user['email'] . "\n";
@@ -4316,7 +4327,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					}
 
 					// Remove authentification code from databse
-					$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_mailkey',"cruser_id = '".$GLOBALS['TSFE']->fe_user->user['uid']."'");
+					$this->databaseHandle->exec_DELETEquery('tx_mmforum_mailkey',"cruser_id = '".$GLOBALS['TSFE']->fe_user->user['uid']."'");
 
 					// Output information
 					$llMarker = array("###RECIPIENT###" => $usermailname);
@@ -4432,12 +4443,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	function pagecount ($table,$column,$id,$limitcount,$count=FALSE) {
 		$id = intval($id);
 		$column = preg_replace("/[^A-Za-z0-9\._]/",'',$column);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			"COUNT($column)",
 			$table,
 			"deleted='0' AND hidden='0' AND $column='$id'".$this->getStoragePIDQuery()
 		);
-		list($postcount) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($postcount) = $this->databaseHandle->sql_fetch_row($res);
 
 		if (! ($count === FALSE)) $postcount = intval($count);
 
@@ -4514,7 +4525,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return string             The page navigation menu
 	 */
 	function pagecount2 ($lastlogin, $limitcount) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'distinct tx_mmforum_topics.topic_title,
 			tx_mmforum_topics.uid,
 			tx_mmforum_topics.topic_poster,
@@ -4525,7 +4536,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			tx_mmforum_posts.deleted = 0 and
 			post_time >= '$lastlogin'".$this->getStoragePIDQuery('tx_mmforum_topics,tx_mmforum_posts')
 		);
-		$postcount = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		$postcount = $this->databaseHandle->sql_num_rows($res);
 
 		$maxpage = intval($postcount / $limitcount)+1;
 		if ($this->piVars['page'] == 0) $page = 1;
@@ -4574,15 +4585,15 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 */
 	function getlastpost($postid,$conf,$topicTitle=false) {
 		$postid = intval($postid);
-		$postdata = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"uid='$postid'".$this->getStoragePIDQuery());
+		$postdata = $this->databaseHandle->exec_SELECTquery('*','tx_mmforum_posts',"uid='$postid'".$this->getStoragePIDQuery());
 
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($postdata) == 0) $content = $this->pi_getLL('no_info');
+		if ($this->databaseHandle->sql_num_rows($postdata) == 0) $content = $this->pi_getLL('no_info');
 		else {
-			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($postdata);
+			$row = $this->databaseHandle->sql_fetch_assoc($postdata);
 
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->getUserNameField().',deleted','fe_users','uid="'.$row['poster_id'].'"');
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0)
-				list($username,$deleted) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			$res = $this->databaseHandle->exec_SELECTquery($this->getUserNameField().',deleted','fe_users','uid="'.$row['poster_id'].'"');
+			if ($this->databaseHandle->sql_num_rows($res)>0)
+				list($username,$deleted) = $this->databaseHandle->sql_fetch_row($res);
 
 			$link = $this->get_pid_link($postid,'',$conf);
 			$link = $this->escapeURL($link);
@@ -4597,9 +4608,9 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			else $usrlink = $this->escape($username);
 
 			if ($topicTitle && $this->conf['list_topics.']['lastPostTopicTitle']) {
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics','uid='.$row['topic_id'].' AND deleted=0');
-				if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
-					list($topicname) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				$res = $this->databaseHandle->exec_SELECTquery('topic_title','tx_mmforum_topics','uid='.$row['topic_id'].' AND deleted=0');
+				if ($this->databaseHandle->sql_num_rows($res)>0) {
+					list($topicname) = $this->databaseHandle->sql_fetch_row($res);
 					$topicname = $this->escape($topicname);
 					$topicname = $this->cObj->stdWrap($topicname,$this->conf['list_topics.']['lastPostTopicTitle_innerStdWrap.']);
 					$title = '<a href="'.$link.'">'.$topicname.'</a>';
@@ -4656,8 +4667,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return string          The title of the topic
 	 */
 	function get_topic_name($topicId) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid=' . intval($topicId) . $this->getStoragePIDQuery());
-		list($name) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $this->databaseHandle->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid=' . intval($topicId) . $this->getStoragePIDQuery());
+		list($name) = $this->databaseHandle->sql_fetch_row($res);
 		return $name;
 	}
 
@@ -4776,26 +4787,26 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$forumpath_index        = $this->pi_linkTP($this->pi_getLL('board.rootline'));
 		$forum_id                = intval($forumid);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			"parentID, forum_name",
 			"tx_mmforum_forums",
 			"uid = '".$forumid."'".$this->getStoragePIDQuery()
 		);
-		list($catid, $forumpath_forum)    = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($catid, $forumpath_forum)    = $this->databaseHandle->sql_fetch_row($res);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			"forum_name",
 			"tx_mmforum_forums",
 			"uid = '".$catid."'".$this->getStoragePIDQuery()
 		);
-		list($forumpath_category)        = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($forumpath_category)        = $this->databaseHandle->sql_fetch_row($res);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			"topic_title",
 			"tx_mmforum_topics",
 			" uid = '".$topicid."'".$this->getStoragePIDQuery()
 		);
-		list($forumpath_topic)            = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($forumpath_topic)            = $this->databaseHandle->sql_fetch_row($res);
 
 		if ( $forumpath_category)    $forumpath_category   = $this->conf['display.']['rootline.']['separator'].'<a href="'.$this->pi_getPageLink($GLOBALS['TSFE']->id).'#cat'.$catid.'">'.$this->escape($forumpath_category).'</a>';
 		if ( $forumpath_forum)       $forumpath_forum      = $this->conf['display.']['rootline.']['separator'].$this->pi_linkTP($this->escape($forumpath_forum),array('tx_mmforum_pi1[action]'=>'list_topic','tx_mmforum_pi1[fid]'=>$forumid));
@@ -4863,14 +4874,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		} else {
 			$select = 'distinct(topic_id)';
 		}
-		$unread    = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$unread    = $this->databaseHandle->exec_SELECTquery(
 			$select ,
 			'tx_mmforum_posts a',
 			$where
 		);
 
 		$res = array();
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($unread)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($unread)) {
 			if ($filter['onlyCategories']) {
 				$res[] = $row['forum_id'];
 			} else {
@@ -4894,7 +4905,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'tx_mmforum_prelogin' => $GLOBALS['EXEC_TIME'],
 			'tstamp'              => $GLOBALS['EXEC_TIME']
 		);
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users', 'uid = ' . $GLOBALS['TSFE']->fe_user->user['uid'], $updateArray);
+		$this->databaseHandle->exec_UPDATEquery('fe_users', 'uid = ' . $GLOBALS['TSFE']->fe_user->user['uid'], $updateArray);
 
 		// Redirecting visitor back to previous page
 		$ref = t3lib_div::getIndpEnv('HTTP_REFERER');
@@ -4948,14 +4959,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 */
 	function get_pid_link ($post_id, $sword, $conf) {
 		$post_id = intval($post_id);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 				'topic_id,forum_id',
 				'tx_mmforum_posts',
 				'deleted=0 AND hidden=0 AND uid=\'' . $post_id . '\'' . $this->getStoragePIDQuery()
 			);
-		list($topic_id, $forum_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($topic_id, $forum_id) = $this->databaseHandle->sql_fetch_row($res);
 
-		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+		$rows = $this->databaseHandle->exec_SELECTgetRows(
 				'uid',
 				'tx_mmforum_posts',
 				'deleted=0 AND hidden=0 AND topic_id=\'' . $topic_id . '\'' . $this->getStoragePIDQuery(),
@@ -4992,8 +5003,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return string           The prefix of the topic
 	 */
 	function get_topic_is($topicId) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_is', 'tx_mmforum_topics', 'uid=' . intval($topicId) . $this->getStoragePIDQuery());
-		list($row) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $this->databaseHandle->exec_SELECTquery('topic_is', 'tx_mmforum_topics', 'uid=' . intval($topicId) . $this->getStoragePIDQuery());
+		list($row) = $this->databaseHandle->sql_fetch_row($res);
 		return $row;
 	}
 
@@ -5031,7 +5042,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				'post_sort' => $post_sort,
 				'ip'        => getenv("REMOTE_ADDR")
 			);
-			$res = $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userconfig', 'userid='.$GLOBALS['TSFE']->fe_user->user['uid'] , $updateArray);
+			$res = $this->databaseHandle->exec_UPDATEquery('tx_mmforum_userconfig', 'userid='.$GLOBALS['TSFE']->fe_user->user['uid'] , $updateArray);
 		}
 
 		$template = $this->cObj->fileResource($conf['template.']['userconf']);
@@ -5045,19 +5056,19 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'###LABEL_SAVE###'                => $this->pi_getLL('user.save')
 		);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_userconfig','userid="'.$GLOBALS['TSFE']->fe_user->user['uid'].'"');
+		$res = $this->databaseHandle->exec_SELECTquery('*','tx_mmforum_userconfig','userid="'.$GLOBALS['TSFE']->fe_user->user['uid'].'"');
 
 		// If there is no config record for current user, create one.
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+		if ($this->databaseHandle->sql_num_rows($res) == 0) {
 			$insertArray = array(
 				'tstamp'        => $GLOBALS['EXEC_TIME'],
 				'crdate'        => $GLOBALS['EXEC_TIME'],
 				'userid'        => $GLOBALS['TSFE']->fe_user->user['uid'],
 				'ip'            => t3lib_div::getIndpEnv("REMOTE_ADDR")
 			);
-			$res = $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userconfig',$insertArray);
+			$res = $this->databaseHandle->exec_INSERTquery('tx_mmforum_userconfig',$insertArray);
 		} else {
-			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$row = $this->databaseHandle->sql_fetch_assoc($res);
 		}
 
 		// Sorting order of posts
@@ -5106,8 +5117,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$userId = intval($userId ? $userId : $GLOBALS['TSFE']->fe_user->user['uid']);
 		$userFavorites = array();
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_id', 'tx_mmforum_favorites', 'user_id = ' . $userId . $this->getStoragePIDQuery());
-		while (list($favoritesId) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
+		$res = $this->databaseHandle->exec_SELECTquery('topic_id', 'tx_mmforum_favorites', 'user_id = ' . $userId . $this->getStoragePIDQuery());
+		while (list($favoritesId) = $this->databaseHandle->sql_fetch_row($res)) {
 			$userFavorites[] = $favoritesId;
 		}
 		return $userFavorites;
@@ -5119,8 +5130,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return int          The topic UID
 	 */
 	function get_topic_id($postId) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_id', 'tx_mmforum_posts', 'uid = ' . intval($postId) . $this->getStoragePIDQuery());
-		list($topicId) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $this->databaseHandle->exec_SELECTquery('topic_id', 'tx_mmforum_posts', 'uid = ' . intval($postId) . $this->getStoragePIDQuery());
+		list($topicId) = $this->databaseHandle->sql_fetch_row($res);
 		return $topicId;
 	}
 
@@ -5130,8 +5141,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return int          The board UID
 	 **/
 	function get_forum_id($topicId) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('forum_id', 'tx_mmforum_topics', 'uid = ' . intval($topicId) . $this->getStoragePIDQuery());
-		list($forumId) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $this->databaseHandle->exec_SELECTquery('forum_id', 'tx_mmforum_topics', 'uid = ' . intval($topicId) . $this->getStoragePIDQuery());
+		list($forumId) = $this->databaseHandle->sql_fetch_row($res);
 		return $forumId;
 	}
 
@@ -5149,7 +5160,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$content    = '<select class="tx-mmforum-select" name="'.$this->prefixId.'[change_forum_id]" size="12">';
 
 		// Load categories
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_forums',
 			'deleted="0"
@@ -5161,11 +5172,11 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'',
 			'sorting ASC'
 		);
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$content .= '<optgroup label="'.$this->escape($row['forum_name']).'">';
 
 			// Load boards
-			$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res2 = $this->databaseHandle->exec_SELECTquery(
 				'*',
 				'tx_mmforum_forums',
 				'deleted="0" AND
@@ -5176,7 +5187,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				'',
 				'sorting ASC'
 			);
-			while ($row2 = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2)) {
+			while ($row2 = $this->databaseHandle->sql_fetch_assoc($res2)) {
 				if ($row2['uid'] == $forum_id) {
 					$select = 'selected="selected"';
 				} else {
@@ -5198,7 +5209,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return int           The UID of the last post
 	 */
 	function get_last_post($topicId) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid',
 			'tx_mmforum_posts',
 			'topic_id = ' . intval($topicId) . ' AND deleted = 0 AND hidden = 0' . $this->getStoragePIDQuery(),
@@ -5206,7 +5217,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'crdate DESC',
 			'1'
 		);
-		list($lastPostId) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($lastPostId) = $this->databaseHandle->sql_fetch_row($res);
 		return $lastPostId;
 	}
 
@@ -5285,12 +5296,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return  array          The topic record as associative array.
 	 */
 	function getTopicData($topicId) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_topics',
 			'uid = ' . intval($topicId) . ' AND deleted = "0" AND hidden = "0"' . $this->getStoragePIDQuery()
 		);
-		return (($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) ? false : $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res));
+		return (($this->databaseHandle->sql_num_rows($res) == 0) ? false : $this->databaseHandle->sql_fetch_assoc($res));
 	}
 
 	/**
@@ -5394,12 +5405,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 
 			if ($GLOBALS['TSFE']->fe_user->user['uid']) {
 				if (!isset($GLOBALS['tx_mmforum_pi1']['readarray'])) {
-					$resunread = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+					$resunread = $this->databaseHandle->exec_SELECTquery(
 						'tx_mmforum_prelogin as lastlogin',
 						'fe_users',
 						'uid="'.$GLOBALS['TSFE']->fe_user->user['uid'].'"'
 					);
-					$rowunread = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resunread);
+					$rowunread = $this->databaseHandle->sql_fetch_assoc($resunread);
 					$lastlogin = $rowunread['lastlogin'];
 					$readarray = $this->getunreadposts('', $this->conf, $lastlogin);
 
@@ -5409,10 +5420,10 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			}
 			else $readarray = array();
 
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_topics','forum_id="'.$forum['uid'].'"'.$this->getStoragePIDQuery());
+			$res = $this->databaseHandle->exec_SELECTquery('*','tx_mmforum_topics','forum_id="'.$forum['uid'].'"'.$this->getStoragePIDQuery());
 			$blnnew = false;
 
-			while($row_topic = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			while($row_topic = $this->databaseHandle->sql_fetch_assoc($res)) {
 				if (in_array($row_topic['uid'], $readarray)) {
 					$blnnew = true;
 					break;
@@ -5491,18 +5502,18 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			$aUID = $this->piVars['attachment'];
 		$aUID = intval($aUID);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_attachments',
 			'uid='.$aUID.' AND deleted=0'
 		);
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0)
+		if ($this->databaseHandle->sql_num_rows($res)==0)
 			return $this->errorMessage($this->conf,$this->pi_getLL('attachment.doesNotExist'));
 
-		$a = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$a = $this->databaseHandle->sql_fetch_assoc($res);
 
 		if (@file_exists($a['file_path']) /*&& $this->getMayRead_post($a['post_id'])*/) {
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid='.$aUID, array('downloads' => 'downloads + 1'), 'downloads');
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_attachments', 'uid='.$aUID, array('downloads' => 'downloads + 1'), 'downloads');
 
 			header('Content-Type: '.$a['file_type']);
 			header('Content-Length: '.filesize($a['file_path']));
@@ -5803,12 +5814,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			}
 
 			// Load the topic's forum UID
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'f.*',
 				'tx_mmforum_forums f, tx_mmforum_topics t',
 				't.uid="'.$topic.'" AND f.uid = t.forum_id'
 			);
-			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$arr = $this->databaseHandle->sql_fetch_assoc($res);
 			$result = $this->getMayWrite_forum($arr);
 
 			// Save the result to cache and return
@@ -5835,12 +5846,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 */
 	function getMayRead_topic($topic) {
 		if (!is_array($topic)) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'f.*',
 				'tx_mmforum_forums f, tx_mmforum_topics t',
 				't.uid=' . intval($topic) . ' AND f.uid=t.forum_id'
 			);
-			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$arr = $this->databaseHandle->sql_fetch_assoc($res);
 
 			return $this->getMayRead_forum($arr);
 
@@ -5864,12 +5875,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		}
 
 		if (!is_array($post)) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'f.*',
 				'tx_mmforum_forums f, tx_mmforum_posts p',
 				'p.uid=' . intval($post) . ' AND f.uid=p.forum_id'
 			);
-			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$arr = $this->databaseHandle->sql_fetch_assoc($res);
 
 			return $this->getMayRead_forum($arr);
 		} else {
@@ -5902,12 +5913,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 */
 	function getBoardData($uid) {
 		$uid = intval($uid);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_forums',
 			"uid='$uid'"
 		);
-		return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		return $this->databaseHandle->sql_fetch_assoc($res);
 	}
 
 	/**
@@ -5939,12 +5950,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			case 'list_post':
 			case 'new_post':
 			case 'post_alert':
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res = $this->databaseHandle->exec_SELECTquery(
 					'topic_title, f.forum_name, c.forum_name',
 					'tx_mmforum_topics t, tx_mmforum_forums f, tx_mmforum_forums c',
 					't.uid="' . intval($this->piVars['tid']) . '" AND f.uid=t.forum_id AND c.uid=f.parentID'
 				);
-				list($topicTitle,$forumTitle,$catTitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				list($topicTitle,$forumTitle,$catTitle) = $this->databaseHandle->sql_fetch_row($res);
 
 				$topicTitle = stripslashes($topicTitle);
 
@@ -5962,12 +5973,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Sets a title like "mm_forum page -> Category -> Board (-> New topic)"
 			case 'new_topic':
 			case 'list_topic':
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res = $this->databaseHandle->exec_SELECTquery(
 					'f.forum_name, c.forum_name',
 					'tx_mmforum_forums f, tx_mmforum_forums c',
 					'f.uid="'.intval($this->piVars['fid']).'" AND c.uid=f.parentID'
 				);
-				list($forumTitle,$catTitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				list($forumTitle,$catTitle) = $this->databaseHandle->sql_fetch_row($res);
 
 				if ($this->piVars['action'] == 'new_topic') {
 					$pageTitle = $this->pi_getLL('rootline.new_topic');
@@ -5977,12 +5988,12 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			// Post editing form
 			// Sets a title like "mm_forum page -> Category -> Board -> Topic -> Edit post"
 			case 'post_edit':
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res = $this->databaseHandle->exec_SELECTquery(
 					'topic_title,f.forum_name,c.forum_name',
 					'tx_mmforum_posts p, tx_mmforum_topics t, tx_mmforum_forums f, tx_mmforum_forums c',
 					'p.uid="' . intval($this->piVars['pid']) . '" AND t.uid=p.topic_id AND f.uid=p.forum_id AND c.uid=f.parentID'
 				);
-				list($topicTitle,$forumTitle,$catTitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				list($topicTitle,$forumTitle,$catTitle) = $this->databaseHandle->sql_fetch_row($res);
 
 				$topicTitle = stripslashes($topicTitle);
 
@@ -6163,15 +6174,15 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 */
 	function topic_setSolveStatus($status) {
 		$topicId   = intval($this->piVars[$status ? 'solve' : 'unsolve']);
-		$res       = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_mmforum_topics', 'uid = ' . $topicId);
-		$topicData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$res       = $this->databaseHandle->exec_SELECTquery('*', 'tx_mmforum_topics', 'uid = ' . $topicId);
+		$topicData = $this->databaseHandle->sql_fetch_assoc($res);
 
 		if ($topicData['topic_poster'] == $GLOBALS['TSFE']->fe_user->user['uid'] || $this->getIsModOrAdmin($topicData['forum_id'])) {
 			$updateArray = array(
 				'solved' => $status,
 				'tstamp' => $GLOBALS['EXEC_TIME']
 			);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, $updateArray);
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, $updateArray);
 
 			$linkParams[$this->prefixId] = array(
 				'action' => 'list_post',

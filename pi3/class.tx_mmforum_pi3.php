@@ -72,7 +72,20 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 	var $scriptRelPath	= 'pi3/class.tx_mmforum_pi3.php';	// Path to this script relative to the extension dir.
     var $mm1;
 
+	/**
+	 * The TYPO3 database object
+	 *
+	 * @var t3lib_DB
+	 */
+	protected $databaseHandle;
 
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+		parent::__construct();
+	}
 
 		/**
 		 * Main function. Delegates tasks to other functions.
@@ -180,7 +193,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				$value = intval($value);
 				$where = 'uid = ' . $value . ' AND to_uid = ' . $feUserId;
 				$val = array('mess_type' => 2);
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_pminbox', $where, $val);
+				$this->databaseHandle->exec_UPDATEquery('tx_mmforum_pminbox', $where, $val);
 			}
 		}
 
@@ -190,7 +203,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				$value = intval($value);
 				$where =  'uid = ' . $value . ' AND to_uid = ' . $feUserId;
 				$val = array('deleted' => 1);
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_pminbox', $where, $val);
+				$this->databaseHandle->exec_UPDATEquery('tx_mmforum_pminbox', $where, $val);
 			}
 		}
 
@@ -226,7 +239,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		// Generate and execute SQL query
 		$where = 'hidden = 0 AND deleted = 0 AND to_uid = ' . $feUserId . ' AND mess_type = ' . $mess_type . $this->getStoragePIDQuery();
 		$orderBy = 'sendtime DESC';
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_mmforum_pminbox', $where, '', $orderBy);
+		$res = $this->databaseHandle->exec_SELECTquery('*', 'tx_mmforum_pminbox', $where, '', $orderBy);
 
 		// Load Template
 		$template = $this->cObj->getSubpart($templateFile, '###MESSAGES_TOP###');
@@ -244,7 +257,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 
 		$marker = array();
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+		if ($this->databaseHandle->sql_num_rows($res) == 0) {
 			$template = $this->cObj->getSubpart($templateFile, '###NO_MESSAGES###');
 			$marker['###LABEL_NOMESSAGES###'] = $this->pi_getLL('noMessages');
 			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
@@ -253,7 +266,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			$template = $this->cObj->getSubpart($templateFile, '###MESSAGES###');
 
 			// Output messages
-			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 				$marker['###MESSID###']  = $row['uid'];
 				$marker['###SELECT###']  = '<input type="checkbox"  name="'.$this->prefixId.'[messid][]" value="'.$row['uid'].'" />';
 
@@ -370,11 +383,11 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 	function message_del ($content,$conf) {
 		$where = 'hidden = 0 AND DELETED = 0 AND uid = \''.intval($this->piVars["messid"]).'\' AND to_uid = '.$GLOBALS['TSFE']->fe_user->user['uid'].$this->getStoragePIDQuery();
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_pminbox',$where,'','',$limit=1);
+		$res = $this->databaseHandle->exec_SELECTquery('uid','tx_mmforum_pminbox',$where,'','',$limit=1);
 
 		if ($res) {
 			$val = Array('deleted' => 1);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_pminbox',$where,$val);
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_pminbox',$where,$val);
 
 			$link = $this->pi_getPageLink($GLOBALS["TSFE"]->id,$target='',array($this->prefixId=>array('folder'=>$this->piVars['folder'])));
 			$link = $this->tools->getAbsoluteUrl($link);
@@ -407,12 +420,12 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		// Load message from database
 		$field = 'uid, subject, from_name, sendtime, message, read_flg, from_uid';
 		$where = 'hidden = 0 AND DELETED = 0 AND uid = '.intval($this->piVars["messid"]).' AND to_uid = '.$GLOBALS['TSFE']->fe_user->user['uid'].$this->getStoragePIDQuery();
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($field,'tx_mmforum_pminbox',$where,'','',$limit=1);
+		$res = $this->databaseHandle->exec_SELECTquery($field,'tx_mmforum_pminbox',$where,'','',$limit=1);
 
 		if ($res) {
 			// Set read flag
 			$val = Array('read_flg' => 1);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_pminbox',$where,$val);
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_pminbox',$where,$val);
 
 			// Display message
 			$content = $this->top_navi($content,$conf);
@@ -424,7 +437,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				'###LABEL_SUBJECT###'		=> $this->pi_getLL('headerSubject'),
 				'###LABEL_READMESSAGE###'	=> $this->pi_getLL('read.readMessage')
 			);
-			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$row = $this->databaseHandle->sql_fetch_assoc($res);
 			$marker['###MESSID###']		= $row['uid'];
 			$marker['###SUBJECT###']	= $this->escape($row['subject']);
 
@@ -495,16 +508,16 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		$messageId = intval($this->piVars['messid']);
 
 		// Load message to reply to from database
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 				'uid,from_name,message,subject',
 				'tx_mmforum_pminbox',
 				'hidden=0 AND deleted=0 AND uid=' . $messageId . ' AND to_uid=' . $GLOBALS['TSFE']->fe_user->user['uid'] . $this->getStoragePIDQuery(),
 				'',
 				'sendtime ASC',
 				'1');
-		$isReply = ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0);
-		$originalMsg = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-		$GLOBALS['TYPO3_DB']->sql_free_result($res);
+		$isReply = ($this->databaseHandle->sql_num_rows($res) > 0);
+		$originalMsg = $this->databaseHandle->sql_fetch_assoc($res);
+		$this->databaseHandle->sql_free_result($res);
 
 
 		// Commit user search
@@ -547,13 +560,13 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 			// Spam protection: just one message per $conf['block_time']
 			// Load last sent message from database
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 					'crdate',
 					'tx_mmforum_pminbox',
 					'from_uid=' . $GLOBALS['TSFE']->fe_user->user['uid'] . ' AND mess_type=0' . $this->getStoragePIDQuery(),
 					'','crdate DESC','1');
-			$lastMessage = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-			$GLOBALS['TYPO3_DB']->sql_free_result($res);
+			$lastMessage = $this->databaseHandle->sql_fetch_assoc($res);
+			$this->databaseHandle->sql_free_result($res);
 
 			// Compare with current time and spam block interval
 			if (($GLOBALS['EXEC_TIME'] - $conf['block_time']) <= $lastMessage['crdate']) {
@@ -570,13 +583,13 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			} else {
 
 				// Retrieve userId from username
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res = $this->databaseHandle->exec_SELECTquery(
 						'uid,email,tx_mmforum_pmnotifymode,' . tx_mmforum_pi1::getUserNameField(),
 						'fe_users',
-						'deleted=0 AND disable=0 AND username=' . $GLOBALS['TYPO3_DB']->fullQuoteStr($to_username, 'fe_users') . ' AND pid=' . $this->conf['userPID']
+						'deleted=0 AND disable=0 AND username=' . $this->databaseHandle->fullQuoteStr($to_username, 'fe_users') . ' AND pid=' . $this->conf['userPID']
 				);
-				$recipient = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-				$GLOBALS['TYPO3_DB']->sql_free_result($res);
+				$recipient = $this->databaseHandle->sql_fetch_assoc($res);
+				$this->databaseHandle->sql_free_result($res);
 				$recipientId = intval($recipient['uid']);
 
 				// Save and send the private message
@@ -595,8 +608,8 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						'subject'		=> $subject,
 						'message'		=> $message
 					);
-					$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_pminbox', $val);
-					$mess_id = $GLOBALS['TYPO3_DB']->sql_insert_id();
+					$this->databaseHandle->exec_INSERTquery('tx_mmforum_pminbox', $val);
+					$mess_id = $this->databaseHandle->sql_insert_id();
 
 					// Save as sent private message
 					$val = Array(
@@ -613,7 +626,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						'message'		=> $message,
 						'mess_type'		=> 1
 					);
-					$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_pminbox', $val);
+					$this->databaseHandle->exec_INSERTquery('tx_mmforum_pminbox', $val);
 
 					session_start();
 					unset($_SESSION['mm_forum']['pm']['message']);
@@ -656,7 +669,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 							'notified' => 1,
 							'tstamp' => $GLOBALS['EXEC_TIME'],
 						);
-						$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_pminbox', 'uid=' . $mess_id, $updateArray);
+						$this->databaseHandle->exec_UPDATEquery('tx_mmforum_pminbox', 'uid=' . $mess_id, $updateArray);
 
 					} elseif ($recipient['tx_mmforum_pmnotifymode'] == 1) {
 
@@ -677,7 +690,6 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 				// Display an error message in case the recipient does not exist
 				} else {
-
 					$template = $this->cObj->fileResource($conf['template.']['error_message']);
 
 					$marker['###ERROR###'] = $this->pi_getLL('errorRecipientNotExists');
@@ -731,9 +743,9 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			} else {
 				$to_userid = $this->piVars['userid'] ? intval($this->piVars['userid']) : intval(t3lib_div::_GP('userid'));
 				if ($to_userid != 0) {
-					$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('username', 'fe_users', 'uid=' . $to_userid);
-					list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-					$GLOBALS['TYPO3_DB']->sql_free_result($res);
+					$res = $this->databaseHandle->exec_SELECTquery('username', 'fe_users', 'uid=' . $to_userid);
+					list($username) = $this->databaseHandle->sql_fetch_row($res);
+					$this->databaseHandle->sql_free_result($res);
 				} else {
 					$username = '';
 				}
@@ -826,7 +838,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 
-		$usersearch = $GLOBALS['TYPO3_DB']->quoteStr($this->piVars['user'],'fe_users');
+		$usersearch = $this->databaseHandle->quoteStr($this->piVars['user'],'fe_users');
 
 		$searchqueryparts = array();		
 		$searchfields = t3lib_div::trimExplode(',', $conf['userSearchFields']);
@@ -842,9 +854,9 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 		$where = 'disable = 0 AND deleted = 0' . $searchquery . ' AND pid=' . $this->conf['userPID'];
 		$orderBy = $conf['userSearchOrderBy'];
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users',$where,$groupBy='',$orderBy,'100');
+		$res = $this->databaseHandle->exec_SELECTquery('*','fe_users',$where,$groupBy='',$orderBy,'100');
 
-		if (!$GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+		if (!$this->databaseHandle->sql_num_rows($res)) {
 			$template = $this->cObj->fileResource($conf['template.']['user_list']);
 			$template = $this->cObj->getSubpart($template, "###USERLIST_NO_RESULTS###");
 			$userMarker = array(
@@ -853,7 +865,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			$content .= $this->cObj->substituteMarkerArrayCached($template, $userMarker);
 		}
 
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$template = $this->cObj->fileResource($conf['template.']['user_list']);
 			$template = $this->cObj->getSubpart($template, "###USERLIST###");
 
@@ -908,13 +920,13 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			$uid = $GLOBALS['TSFE']->fe_user->user['uid'];
 		}
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 				'count(uid) as msg_count',
 				'tx_mmforum_pminbox',
 				'hidden=0 AND deleted=0 AND read_flg=0 AND mess_type=0 AND to_uid=' . $uid . $this->getStoragePIDQuery()
 		);
 		
-		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$row = $this->databaseHandle->sql_fetch_assoc($res);
 		return $row['msg_count'];
 	}
 
