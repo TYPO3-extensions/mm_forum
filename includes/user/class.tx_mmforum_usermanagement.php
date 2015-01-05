@@ -115,7 +115,7 @@ class tx_mmforum_usermanagement {
         $parser = $this->getTSParser();
         $parser->parse($data['config']);
         $data['config_parsed'] = $parser->setup;
-		$parser->setup = null;
+		$parser->setup = array();
 
 		$this->initializeOldMetaArray($data);
 
