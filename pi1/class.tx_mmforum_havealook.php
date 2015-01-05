@@ -356,7 +356,7 @@ class tx_mmforum_havealook {
 			}
 		}
 
-		$content = $forumObj->cObj->substituteMarkerArray($template, $marker);
+		$content .= $forumObj->cObj->substituteMarkerArray($template, $marker);
 		return $content;
 	}
 
