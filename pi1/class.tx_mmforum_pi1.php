@@ -3762,7 +3762,6 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 * @return  string           The BBCode buttons
 	 */
 	function generateBBCodeButtons($template) {
-
 		// Load regular BBCodes
 		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
@@ -3772,25 +3771,27 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		$i = 0;
 		$content = '';
 		while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
-			if (substr($arr['title'],0,4)=='LLL:') $title = $this->pi_getLL(substr($arr['title'],4));
-			else $title = $arr['title'];
+			if (substr($arr['title'],0,4)=='LLL:') {
+				$title = $this->pi_getLL(substr($arr['title'],4));
+			} else {
+				$title = $arr['title'];
+			}
 
 			$imgpath = $this->conf['postparser.']['buttonPath'].$arr['fe_inserticon'];
-			$imgpath = str_replace('EXT:mm_forum/', ExtensionManagementUtility::siteRelPath('mm_forum'),$imgpath);
+			$imgpath = str_replace('EXT:mm_forum/', ExtensionManagementUtility::siteRelPath('mm_forum'), $imgpath);
 
-			preg_match('/\[(.*?)\]\|\[\/(.*?)\]/',$arr['bbcode'],$items);
+			preg_match('/\[(.*?)\]\|\[\/(.*?)\]/', $arr['bbcode'], $items);
 
-			$items[1] = str_replace('|','',$items[1]);
-			$items[2] = str_replace('|','',$items[2]);
+			$items[1] = str_replace('|', '', $items[1]);
+			$items[2] = str_replace('|', '', $items[2]);
 
 			$marker = array(
-				'###CODE_IMAGE###'          => $imgpath,
-				'###CODE_LABEL###'          => $this->escape($title),
-				'###CODE_NUMBER###'         => $i,
-				'###CODE_OPEN###'			=> '['.strtolower($items[1]).']',
-				'###CODE_CLOSE###'			=> '[/'.strtolower($items[2]).']',
+				'###CODE_IMAGE###' => $imgpath,
+				'###CODE_LABEL###' => $this->escape($title),
+				'###CODE_NUMBER###' => $i,
+				'###CODE_OPEN###' => '['.strtolower($items[1]).']',
+				'###CODE_CLOSE###' => '[/'.strtolower($items[2]).']',
 			);
-
 			$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 		}
 		// Load syntax highlighting data
@@ -3800,27 +3801,27 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'deleted=0 AND hidden=0'
 		);
 
-		$content = '';
 		if ($this->databaseHandle->sql_num_rows($res) > 0) {
 			while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
-				if (substr($arr['lang_title'],0,4)=='LLL:') $title = $this->pi_getLL(substr($arr['lang_title'],4));
-				else $title = $arr['lang_title'];
+				if (substr($arr['lang_title'],0,4)=='LLL:') {
+					$title = $this->pi_getLL(substr($arr['lang_title'],4));
+				} else {
+					$title = $arr['lang_title'];
+				}
 
 				$imgpath = $this->conf['postparser.']['buttonPath'].$arr['fe_inserticon'];
-				$imgpath = str_replace('EXT:mm_forum/', ExtensionManagementUtility::siteRelPath('mm_forum'),$imgpath);
+				$imgpath = str_replace('EXT:mm_forum/', ExtensionManagementUtility::siteRelPath('mm_forum'), $imgpath);
 
 				$marker = array(
-					'###CODE_IMAGE###'          => $imgpath,
-					'###CODE_LABEL###'          => $this->escape($title),
-					'###CODE_NUMBER###'         => $i,
-					'###CODE_OPEN###'			=> '['.strtolower($arr['lang_code']).']',
-					'###CODE_CLOSE###'			=> '[/'.strtolower($arr['lang_code']).']',
+					'###CODE_IMAGE###' => $imgpath,
+					'###CODE_LABEL###' => $this->escape($title),
+					'###CODE_NUMBER###' => $i,
+					'###CODE_OPEN###' => '['.strtolower($arr['lang_code']).']',
+					'###CODE_CLOSE###' => '[/'.strtolower($arr['lang_code']).']',
 				);
-
 				$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
 			}
 		}
-
 		return $content;
 	}
 
