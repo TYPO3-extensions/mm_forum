@@ -49,7 +49,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @author     Martin Helmich <m.helmich@mittwald.de>
  * @author     Björn Detert <b.detert@mittwald.de>
  * @copyright  2007 Mittwald CM Service
- * @version    11. 01. 2007
  * @package    mm_forum
  * @subpackage Forum
  */
@@ -98,10 +97,11 @@ class tx_mmforum_havealook {
 	/**
 	 * Displays a list of a user's email subscriptions.
 	 * Performs also actions like editing or deleting subscriptions.
-	 * @param tx_mmforum_base $forumObj
+	 * @param \tx_mmforum_base $forumObj
 	 * @return string
 	 */
-	static function edit(tx_mmforum_base $forumObj) {
+	static function edit(\tx_mmforum_base $forumObj) {
+		$content = '';
 		$feUserId = intval($GLOBALS['TSFE']->fe_user->user['uid']);
 
 		// can be
@@ -115,7 +115,6 @@ class tx_mmforum_havealook {
 		if (isset($forumObj->piVars['displayMode'])) {
 			$displayMode = $forumObj->piVars['displayMode'];
 		}
-
 
 		if ($feUserId) {
 
@@ -156,7 +155,6 @@ class tx_mmforum_havealook {
 			// Determination of sorting mode
 			$orderBy = ($forumObj->piVars['order'] ? $forumObj->piVars['order'] : 'added');
 
-
 			// rendering the settings
 			$templateFile = $forumObj->cObj->fileResource($forumObj->conf['template.']['havealook']);
 			$template     = $forumObj->cObj->getSubpart($templateFile, '###HAVEALOOK_SETTINGS###');
@@ -182,7 +180,6 @@ class tx_mmforum_havealook {
 				}
 			}
 			$content = $forumObj->cObj->substituteMarkerArray($template, $marker);
-
 
 			// rendering the head part
 			$template      = $forumObj->cObj->getSubpart($templateFile, '###HAVEALOOK_BEGIN###');
@@ -275,7 +272,6 @@ class tx_mmforum_havealook {
 				$sql = '(' . $sqlTopic . ') UNION (' . $sqlForum . ')';
 			}
 
-
 			$sql .= 'ORDER BY ' . $order;
 			$res = $GLOBALS['TYPO3_DB']->sql_query($sql);
 
@@ -287,7 +283,6 @@ class tx_mmforum_havealook {
 
 				// go through every found subscription
 				while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-
 					if ($row['notify_mode'] == 'topic') {
 						$linkParams[$forumObj->prefixId] = array(
 							'action' => 'list_post',
@@ -356,7 +351,7 @@ class tx_mmforum_havealook {
 			}
 		}
 
-		$content = $forumObj->cObj->substituteMarkerArray($template, $marker);
+		$content .= $forumObj->cObj->substituteMarkerArray($template, $marker);
 		return $content;
 	}
 
@@ -368,7 +363,7 @@ class tx_mmforum_havealook {
 	 * @param $feUserId
 	 * @return bool             Whether it worked or not
 	 */
-	function addSubscription(tx_mmforum_base $forumObj, $topicId, $feUserId) {
+	function addSubscription(\tx_mmforum_base $forumObj, $topicId, $feUserId) {
 		$feUserId = intval($feUserId);
 		$topicId  = intval($topicId);
 		if ($feUserId && $topicId) {
@@ -392,21 +387,21 @@ class tx_mmforum_havealook {
 				// it's already added, so "it worked"
 				return true;
 			}
-		 }
-		 // invalid parameters
-		 return false;
+		}
+		// invalid parameters
+		return false;
 	}
 
 
-    /**
-     * Sends an e-mail to users who have subscribed a certain topic.
-     *
-     * @param  int            $topicId  The UID of the topic about which the users are
-     *                                  to be alerted.
-	 * @param  tx_mmforum_pi1 $forumObj An instance of the tx_mmforum_pi1 class.
-     * @return void
-     */
-	function notifyTopicSubscribers($topicId, tx_mmforum_base $forumObj) {
+	/**
+	 * Sends an e-mail to users who have subscribed a certain topic.
+	 *
+	 * @param  int            $topicId  The UID of the topic about which the users are
+	 *                                  to be alerted.
+	 * @param  \tx_mmforum_base $forumObj An instance of the tx_mmforum_pi1 class.
+	 * @return void
+	 */
+	function notifyTopicSubscribers($topicId, \tx_mmforum_base $forumObj) {
 		$topicId = intval($topicId);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . $topicId  . $forumObj->getStoragePIDQuery());
 		list($topicName) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
@@ -433,7 +428,6 @@ class tx_mmforum_havealook {
 			'###BOARDNAME###' => $forumObj->conf['boardName'],
 			'###TEAM###'      => $forumObj->conf['teamName']
 		);
-
 
 		// get all users on this topic
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
@@ -467,6 +461,7 @@ class tx_mmforum_havealook {
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_subject'])) {
 					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPostMail_subject'] as $_classRef) {
 						$_procObj = &GeneralUtility::getUserObj($_classRef);
+						//TODO: FIXME undefined variable $row
 						$subject = $_procObj->newPostMail_subject($subject, $row, $forumObj);
 					}
 				}
@@ -497,11 +492,11 @@ class tx_mmforum_havealook {
 	 * Sends an e-mail to users who have subscribed to certain forumcategory
 	 * @param $topicId int The UID of the new topic that was created
 	 * @param $forumId int The UID of the forum about which the users are to be alerted.
-	 * @param $forumObj tx_mmforum_pi1
+	 * @param \tx_mmforum_base $forumObj
 	 * @return void
 	 * @author Cyrill Helg
 	 */
-	static function notifyForumSubscribers($topicId, $forumId, tx_mmforum_base $forumObj) {
+	static function notifyForumSubscribers($topicId, $forumId, \tx_mmforum_base $forumObj) {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . intval($topicId) . $forumObj->getStoragePIDQuery());
 		list($topicName) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
