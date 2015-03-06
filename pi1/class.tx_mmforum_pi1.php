@@ -1125,7 +1125,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listForums_forumItem'])) {
 						foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listForums_forumItem'] as $_classRef) {
 							$_procObj = & GeneralUtility::getUserObj($_classRef);
-							$marker = $_procObj->listForums_forumItem($marker, $row, $this);
+							$marker = $_procObj->listForums_forumItem($marker, $innerRow, $this);
 						}
 					}
 					$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
