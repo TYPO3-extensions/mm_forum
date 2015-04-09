@@ -334,7 +334,7 @@ class tx_mmforum_userfield {
 
 			/* Parse configuration TypoScript */
         $parser =& $this->userLib->getTSParser();
-		$parser->setup = null;
+		$parser->setup = array();
         $parser->parse($arr['config']);
         $arr['config_parsed'] = $parser->setup;
 
