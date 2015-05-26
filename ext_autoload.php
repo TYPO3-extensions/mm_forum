@@ -56,7 +56,7 @@ return array(
 	'tx_mmforum_userfield' => $extensionPath . 'includes/user/class.tx_mmforum_userfield.php',
 	'tx_mmforum_userfields' => $extensionPath . 'mod1/class.tx_mmforum_userfields.php',
 	'tx_mmforum_usermanagement' => $extensionPath . 'includes/user/class.tx_mmforum_usermanagement.php',
-	'tx_mmforum_usersearch' => $extensionPath . 'pi3/ajax.tx_mmforum_usersearch.php',
+	'tx_mmforum_usersearch' => $extensionPath . 'pi3/class.tx_mmforum_usersearch.php',
 	'tx_mmforum_validator' => $extensionPath . 'includes/class.tx_mmforum_validator.php',
 );
 ?>
