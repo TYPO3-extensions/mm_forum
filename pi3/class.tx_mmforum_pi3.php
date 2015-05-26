@@ -299,6 +299,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 				// Unread messages are wrapped with a wrap defined in TypoScript
 				if ($row['read_flg'] == 0) {
+					$marker['###IS_READ###'] = 'unread';
 					if ($mess_type != 1) {
 						$marker['###SUBJECT###'] = $this->cObj->wrap($marker['###SUBJECT###'], $conf['unreadWrap']);
 						$marker['###FROM###']    = $this->cObj->wrap($marker['###FROM###'],    $conf['unreadWrap']);
@@ -310,6 +311,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						$marker['###ICON###']	 = $this->conf['path_img'] . $this->conf['images.']['pmicon'];
 					}
 				} else {
+					$marker['###IS_READ###'] = 'is-read';
 					$marker['###ICON###'] = $this->conf['path_img'] . $this->conf['images.']['pmicon'];
 				}
 
