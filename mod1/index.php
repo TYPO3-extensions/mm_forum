@@ -306,7 +306,15 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 		}
 
 		$groups	= implode(',',array(intval($this->confArr['userGroup']),intval($this->confArr['modGroup']),intval($this->confArr['adminGroup'])));
-		$filter = $mmforum['sword'] ? 'username like ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($mmforum['sword'], '') . '%' : '1';
+
+		if ($sword = $mmforum['sword']) {
+			$sword = $GLOBALS['TYPO3_DB']->escapeStrForLike($sword, 'fe_users');
+			$sword = $GLOBALS['TYPO3_DB']->fullQuoteStr($sword.'%', 'fe_users');
+			$filter = 'username like ' . $sword;
+		} else {
+			$filter = '1';
+		}
+
 		$orderBy = GeneralUtility::_GP('mmforum_style') ? strtoupper($GLOBALS['TYPO3_DB']->fullQuoteStr(GeneralUtility::_GP('mmforum_style'))) : 'ASC';
 		if ( GeneralUtility::_GP('mmforum_sort') == 'username') {
 			$order = 'username ' . $orderBy . '';
