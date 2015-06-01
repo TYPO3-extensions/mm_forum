@@ -61,7 +61,7 @@ class tx_mmforum_cron_indexing extends tx_mmforum_cronbase {
 		$indexing->conf = $this->conf;
 
 			// Load topics that are to be indexed
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid',
 			'tx_mmforum_topics',
 			'pid='.$this->getPid(),		// Deleted posts have to be selected too in order to remove deleted posts from index
@@ -70,7 +70,7 @@ class tx_mmforum_cron_indexing extends tx_mmforum_cronbase {
 			$this->getIndexCount()
 		);
 
-		while($topic = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while($topic = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$this->debug($indexing->ind_topic($topic['uid'],$this->conf));
 		}
 

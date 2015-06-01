@@ -76,6 +76,19 @@ class tx_mmforum_rss {
 
 	var $selectFields = 'p.uid AS post_uid, p.post_time, x.post_text, t.topic_title, f.forum_name, u.';
 
+	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
 
 	/**
 	 * Initializes the class by getting all vital attributes from parent object.
@@ -341,12 +354,12 @@ class tx_mmforum_rss {
 			default:
 			case 'all': return $pageTitle; break;
 			case 'topic':
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title, forum_name', 'tx_mmforum_topics t LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid', 't.uid='.intval($param));
-				list($topic_title, $forum_title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				$res = $this->databaseHandle->exec_SELECTquery('topic_title, forum_name', 'tx_mmforum_topics t LEFT JOIN tx_mmforum_forums f ON t.forum_id = f.uid', 't.uid='.intval($param));
+				list($topic_title, $forum_title) = $this->databaseHandle->sql_fetch_row($res);
 				return $pageTitle.' : '.$forum_title.' : '.$topic_title; break;
 			case 'forum':
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('forum_name', 'tx_mmforum_forums', 'uid='.intval($param));
-				list($forum_title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				$res = $this->databaseHandle->exec_SELECTquery('forum_name', 'tx_mmforum_forums', 'uid='.intval($param));
+				list($forum_title) = $this->databaseHandle->sql_fetch_row($res);
 				return $pageTitle.' : '.$forum_title; break;
 		}
 
@@ -365,7 +378,7 @@ class tx_mmforum_rss {
 
 	function getFeedDescription() {
 		if ($this->piVars['tid']) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'topic_title',
 				'tx_mmforum_topics t
 				 LEFT JOIN tx_mmforum_forums f ON f.uid = t.forum_id
@@ -375,7 +388,7 @@ class tx_mmforum_rss {
 				$this->pObj->getMayRead_forum_query('c')
 			);
 		} elseif ($this->piVars['fid']) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'f.forum_name',
 				'tx_mmforum_forums f
 				 LEFT JOIN tx_mmforum_forums c ON c.uid = f.parentID',
@@ -387,7 +400,7 @@ class tx_mmforum_rss {
 			return '';
 		}
 
-		list($result) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($result) = $this->databaseHandle->sql_fetch_row($res);
 		return $result;
 	}
 
@@ -435,7 +448,7 @@ class tx_mmforum_rss {
 	 * @return  array             An array containing all matching posts
 	 */
 	function getPosts_topic($topic_id) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			$this->selectFields,
 			'tx_mmforum_posts p
 			LEFT JOIN tx_mmforum_posts_text x ON x.post_id = p.uid
@@ -454,7 +467,7 @@ class tx_mmforum_rss {
 			$this->getPostNum()
 		);
 		$results = array();
-		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))
+		while($arr = $this->databaseHandle->sql_fetch_assoc($res))
 			array_push($results, $arr);
 		return $results;
 	}
@@ -470,7 +483,7 @@ class tx_mmforum_rss {
 	 * @return  array             An array containing all matching posts
 	 */
 	function getPosts_forum($forum_id) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			$this->selectFields,
 			'tx_mmforum_posts p
 			 LEFT JOIN tx_mmforum_posts_text x ON x.post_id = p.uid
@@ -489,7 +502,7 @@ class tx_mmforum_rss {
 			$this->getPostNum()
 		);
 		$results = array();
-		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 			array_push($results, $arr);
 		}
 		return $results;
@@ -504,7 +517,7 @@ class tx_mmforum_rss {
 	 * @return  array             An array containing all matching posts
 	 */
 	function getPosts_all() {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			$this->selectFields,
 			'tx_mmforum_posts p
 			 LEFT JOIN tx_mmforum_posts_text x ON x.post_id = p.uid
@@ -522,7 +535,7 @@ class tx_mmforum_rss {
 			$this->getPostNum()
 		);
 		$results = array();
-		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 			array_push($results, $arr);
 		}
 		return $results;

@@ -184,7 +184,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		$userField_template = $this->cObj->getSubpart($template, '###USERFIELDS###');
 		$userField_content  = '';
 
-		$userFields = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+		$userFields = $this->databaseHandle->exec_SELECTgetRows(
 			'*',
 			'tx_mmforum_userfields',
 			'deleted=0 AND hidden=0',	// where
@@ -197,15 +197,15 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			if (isset($this->piVars['userfield'][$field['uid']])) {
 				$value = $this->piVars['userfield'][$field['uid']];
 			} else {
-				$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res2 = $this->databaseHandle->exec_SELECTquery(
 					'field_value',
 					'tx_mmforum_userfields_contents',
 					'field_id=' . $field['uid'] . ' AND user_id=' . $this->user->getUid()
 				);
 
 				$value = '';
-				if ($GLOBALS['TYPO3_DB']->sql_num_rows($res2) > 0) {
-					list($value) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res2);
+				if ($this->databaseHandle->sql_num_rows($res2) > 0) {
+					list($value) = $this->databaseHandle->sql_fetch_row($res2);
 				}
 			}
 
@@ -319,14 +319,14 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	 * @return array
 	 */
 	function getUserfieldConfig($uid) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'config',
 			'tx_mmforum_userfields',
 			'uid=' . intval($uid) . ' AND deleted=0 AND hidden=0'
 		);
 
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
-			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		if ($this->databaseHandle->sql_num_rows($res) > 0) {
+			$arr = $this->databaseHandle->sql_fetch_assoc($res);
 			return $arr;
 
 		} else {
@@ -358,7 +358,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		$userField->init($this->userLib, $this->cObj);
 
 		// Check required user fields
-		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows('*', 'tx_mmforum_userfields', 'deleted=0');
+		$rows = $this->databaseHandle->exec_SELECTgetRows('*', 'tx_mmforum_userfields', 'deleted=0');
 		
 		foreach ($rows as $fieldData) {
 			$userField->get($fieldData);
@@ -411,19 +411,19 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 								$this->piVars['userfield_exists'][$uid]		=> $value,
 								'tstamp'									=> $GLOBALS['EXEC_TIME']
 							);
-							$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+							$this->databaseHandle->exec_UPDATEquery(
 								'fe_users',
 								'uid=' . $this->user->getUid() . ' AND deleted=0',
 								$updateArray
 							);
 						}
 					} else {
-						$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+						$res = $this->databaseHandle->exec_SELECTquery(
 							'*',
 							'tx_mmforum_userfields_contents',
 							'user_id=' . $this->user->getUid() . ' AND field_id=' . $uid . ' AND deleted=0'
 						);
-						if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+						if ($this->databaseHandle->sql_num_rows($res) == 0) {
 							$insertArray = array(
 								'pid'           => $this->getStoragePID(),
 								'tstamp'        => $GLOBALS['EXEC_TIME'],
@@ -432,14 +432,14 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 								'field_id'      => $uid,
 								'field_value'   => $value
 							);
-							$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userfields_contents', $insertArray);
+							$this->databaseHandle->exec_INSERTquery('tx_mmforum_userfields_contents', $insertArray);
 						}
 						else {
 							$updateArray = array(
 								'tstamp'        => $GLOBALS['EXEC_TIME'],
 								'field_value'   => $value
 							);
-							$GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+							$this->databaseHandle->exec_UPDATEquery(
 								'tx_mmforum_userfields_contents',
 								'field_id=' . $uid . ' AND user_id=' . $this->user->getUid(),
 								$updateArray

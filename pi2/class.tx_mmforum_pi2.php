@@ -179,12 +179,12 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 		}
 
 			/* Load user record from database */
-		$hash = $GLOBALS['TYPO3_DB']->fullQuoteStr($hash, 'fe_users');
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','fe_users','tx_mmforum_reg_hash='.$hash);
+		$hash = $this->databaseHandle->fullQuoteStr($hash, 'fe_users');
+		$res = $this->databaseHandle->exec_SELECTquery('*','fe_users','tx_mmforum_reg_hash='.$hash);
 
 			/* If user records exists exactly once, continue... */
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==1) {
-			$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		if ($this->databaseHandle->sql_num_rows($res)==1) {
+			$row = $this->databaseHandle->sql_fetch_assoc($res);
 
 				/* Activate user */
 			$updateArray = array(
@@ -192,7 +192,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 				'tx_mmforum_reg_hash'   => ''
 			);
 
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','tx_mmforum_reg_hash='.$hash,$updateArray);
+			$this->databaseHandle->exec_UPDATEquery('fe_users','tx_mmforum_reg_hash='.$hash,$updateArray);
 
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['activateUser'])) {
 			    foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['registration']['activateUser'] as $_classRef) {
@@ -202,7 +202,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 			}
 
 			// Output error message in case of failure
-			if ($GLOBALS['TYPO3_DB']->sql_error()) {
+			if ($this->databaseHandle->sql_error()) {
 				$template = $this->cObj->getSubpart($this->tmpl, "###FEHLER###");
 				$marker = array(
 					'###LABEL_ERRORGENERAL###'		=> $this->pi_getLL('error.generalError'),
@@ -265,14 +265,14 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 		$user->updateDatabase();
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_mmforum_userfields', 'deleted=0');
-        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+		$res = $this->databaseHandle->exec_SELECTquery('*', 'tx_mmforum_userfields', 'deleted=0');
+        if ($this->databaseHandle->sql_num_rows($res) > 0) {
 
 			$userField = GeneralUtility::makeInstance('tx_mmforum_userfield');
 			/* @var $userField tx_mmforum_userfield */
 			$userField->init($this->userLib, $this->cObj);
 
-			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 				$userField->get($arr);
 
 				$value = trim($this->piVars['userfields'][$userField->getUID()]);
@@ -295,7 +295,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
                             'tstamp'                                    => $GLOBALS['EXEC_TIME'],
                             $this->piVars['userfields_exist'][$uid]    => $value
                         );
-                        $GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$user_id,$updateArray);
+                        $this->databaseHandle->exec_UPDATEquery('fe_users','uid='.$user_id,$updateArray);
                     }
                 } else {
                     $insertArray = array(
@@ -306,12 +306,12 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
                         'tstamp'        => $GLOBALS['EXEC_TIME'],
                         'crdate'        => $GLOBALS['EXEC_TIME'],
                     );
-                    $GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userfields_contents',$insertArray);
+                    $this->databaseHandle->exec_INSERTquery('tx_mmforum_userfields_contents',$insertArray);
                 }
             }
         }*/
 
-		if ($GLOBALS['TYPO3_DB']->sql_error()) return 0;
+		if ($this->databaseHandle->sql_error()) return 0;
 		return 1;
 	}
 
@@ -381,19 +381,19 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
         $userField_template = $this->cObj->getSubpart($template, '###USERFIELDS###');
 		$userFields_content  = '';
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        $res = $this->databaseHandle->exec_SELECTquery(
             '*',
             'tx_mmforum_userfields',
             'deleted=0',
             '','sorting DESC'
         );
 
-        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
+        if ($this->databaseHandle->sql_num_rows($res)>0) {
 
 			$userField = GeneralUtility::makeInstance('tx_mmforum_userfield');
 			$userField->init($this->userLib, $this->cObj);
 
-			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 				$userField->get($arr);
 
 				if (($this->conf['showOnlyRequiredUserfields'] == 1 && $userField->isRequired()) || ($this->conf['showOnlyRequiredUserfields'] != 1)) {
@@ -422,7 +422,7 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 			/*
 			$parser = GeneralUtility::makeInstance('t3lib_TSparser');
-            while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+            while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
                 $parser->setup = array();
                 if (strlen($arr['config'])>0) {
                     $parser->parse($arr['config']);
@@ -557,12 +557,12 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 			/* Checks if username already exists in database */
 		if (!$marker["fehler"]) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'*',
 				'fe_users',
 				'username LIKE "'.$this->data['username'].'" AND deleted=0 AND pid='.$this->conf['userPID']
 			);
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+			if ($this->databaseHandle->sql_num_rows($res)) {
 				$marker["###ERROR_username###"] = $this->cObj->wrap($this->pi_getLL('error.usernameExists'), $this->conf['errorwrap']);
 				$marker["fehler"] = 1;
 			}
@@ -580,14 +580,14 @@ class tx_mmforum_pi2 extends tx_mmforum_base {
 
 			/* Validate user defined fields */
 			/* Check required user fields */
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*', 'tx_mmforum_userfields', 'deleted=0'
 		);
 
 		$userField = GeneralUtility::makeInstance('tx_mmforum_userfield');
 		$userField->init($this->userLib, $this->cObj);
 
-		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 
 			$userField->get($arr);
 

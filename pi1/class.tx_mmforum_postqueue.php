@@ -41,6 +41,20 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class tx_mmforum_postqueue {
 
 	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
+
+	/**
 	 * Main function.
 	 * This is the postqueue class' main function which mainly consists
 	 * of inheriting the most important plugin variables from the parent
@@ -132,12 +146,12 @@ class tx_mmforum_postqueue {
 	 * @return  string      A link to the forum
 	 */
 	function getForumLink($fid) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'f.forum_name, c.forum_name as cat_name',
 			'tx_mmforum_forums f, tx_mmforum_forums c',
 			'f.uid='.$fid.' AND c.uid=f.parentID'
 		);
-		$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$arr = $this->databaseHandle->sql_fetch_assoc($res);
 
 		return $arr['cat_name'].' / '.$this->pi_linkToPage($arr['forum_name'],$fid,'',array('fid'=>$fid));
 	}
@@ -163,14 +177,14 @@ class tx_mmforum_postqueue {
 					'tstamp'			=> $GLOBALS['EXEC_TIME'],
 					'hidden'			=> 1
 				);
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,$updateArray);
+				$this->databaseHandle->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,$updateArray);
 			}
 			elseif ($action == 'delete') {
 				$updateArray = array(
 					'tstamp'			=> $GLOBALS['EXEC_TIME'],
 					'deleted'			=> 1
 				);
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,$updateArray);
+				$this->databaseHandle->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,$updateArray);
 			} else {
 				$this->commit_create($item_uid,$postfactory);
 			}
@@ -196,14 +210,14 @@ class tx_mmforum_postqueue {
 	function commit_create($item_uid,&$postfactory) {
 
 		$item_uid = intval($item_uid);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_postqueue',
 			'uid='.$item_uid.' AND deleted=0'
 		);
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return false;
+		if ($this->databaseHandle->sql_num_rows($res)==0) return false;
 
-		$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$arr = $this->databaseHandle->sql_fetch_assoc($res);
 
 		if ($arr['topic']) {
 			$postfactory->create_topic(
@@ -230,7 +244,7 @@ class tx_mmforum_postqueue {
 			);
 		}
 
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,array('tstamp'=>$GLOBALS['EXEC_TIME'],'deleted'=>1));
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_postqueue','uid='.$item_uid,array('tstamp'=>$GLOBALS['EXEC_TIME'],'deleted'=>1));
 	}
 
 	/**
@@ -261,34 +275,34 @@ class tx_mmforum_postqueue {
 		$template		= $this->cObj->substituteMarkerArray($template, $marker);
 		$rContent		= '';
 
-        $boards = $this->getModeratorBoards();
+		$boards = $this->getModeratorBoards();
 
-        if (is_array($boards)) {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery (
-                'q.*',
-                'tx_mmforum_postqueue q LEFT JOIN tx_mmforum_topics t ON q.post_parent = t.uid',
-                'q.deleted = 0 AND (t.deleted=0 OR t.uid IS NULL) AND (q.topic_forum IN ('.implode(',',$boards).') OR t.forum_id IN ('.implode(',',$boards).'))',
-                '',
-                'q.crdate DESC'
-            );
-        } elseif ($boards === true) {
-		    $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			    '*',
-			    'tx_mmforum_postqueue',
-			    'deleted=0',
-			    '',
-			    'crdate DESC'
-		    );
-        }
+		if (is_array($boards)) {
+			$res = $this->databaseHandle->exec_SELECTquery (
+				'q.*',
+				'tx_mmforum_postqueue q LEFT JOIN tx_mmforum_topics t ON q.post_parent = t.uid',
+				'q.deleted = 0 AND (t.deleted=0 OR t.uid IS NULL) AND (q.topic_forum IN ('.implode(',',$boards).') OR t.forum_id IN ('.implode(',',$boards).'))',
+				'',
+				'q.crdate DESC'
+			);
+		} elseif ($boards === true) {
+			$res = $this->databaseHandle->exec_SELECTquery(
+				'*',
+				'tx_mmforum_postqueue',
+				'deleted=0',
+				'',
+				'crdate DESC'
+			);
+		}
 
 		if ($boards !== false) {
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
+			if ($this->databaseHandle->sql_num_rows($res)>0) {
 				$template		= $this->cObj->substituteSubpart($template, '###POSTQUEUE_NOITEMS###', '');
 			} else {
 				$template		= $this->cObj->substituteSubpart($template, '###POSTQUEUE_ITEMLIST###', '');
 			}
 
-			while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 				$rMarker = array(
 					'###LLL_WROTE###'		=> $this->pi_getLL('postqueue.wrote'),
 					'###DATE###'			=> $this->parent->formatDate($arr['post_time']),
@@ -332,28 +346,28 @@ class tx_mmforum_postqueue {
 
 		if ($this->parent->getIsAdmin()) return true;
 
-        $groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
+		$groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 
 		if (count($groups) == 0) return false;
 
 		$queryParts = array();
-        foreach($groups as $group) {
-            $queryParts[] = 'FIND_IN_SET('.$group.',c.grouprights_mod)';
-            $queryParts[] = 'FIND_IN_SET('.$group.',f.grouprights_mod)';
-        }
-        $query = implode(' OR ', $queryParts);
+		foreach($groups as $group) {
+			$queryParts[] = 'FIND_IN_SET('.$group.',c.grouprights_mod)';
+			$queryParts[] = 'FIND_IN_SET('.$group.',f.grouprights_mod)';
+		}
+		$query = implode(' OR ', $queryParts);
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery (
-            'f.uid',
-            'tx_mmforum_forums f LEFT JOIN tx_mmforum_forums c ON c.uid=f.parentID',
-            'f.deleted=0 AND c.deleted=0 AND ('.$query.')'
-        );
+		$res = $this->databaseHandle->exec_SELECTquery (
+			'f.uid',
+			'tx_mmforum_forums f LEFT JOIN tx_mmforum_forums c ON c.uid=f.parentID',
+			'f.deleted=0 AND c.deleted=0 AND ('.$query.')'
+		);
 		$result = array();
-        while(list($uid)=$GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
-            $result[] = $uid;
-        }
-        return count($result)?$result:false;
-    }
+		while(list($uid)=$this->databaseHandle->sql_fetch_row($res)) {
+			$result[] = $uid;
+		}
+		return count($result)?$result:false;
+	}
 
 }
 

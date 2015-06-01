@@ -12,6 +12,20 @@ class tx_mmforum_data {
 	protected $uid;
 	protected $loaded = false;
 
+	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
+
 	/*
 	 * INITIALISATION METHODS
 	 */
@@ -20,17 +34,17 @@ class tx_mmforum_data {
 		$andWhere = '';
 		if ($pid+1) $andWhere = ' AND pid=' . $pid;
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			$this->getTableName(),
 			'uid=' . $this->getUid() . ' AND deleted=0 ' . $andWhere
 		);
 
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+		if ($this->databaseHandle->sql_num_rows($res) == 0) {
 			$this->data = null;
 			$this->origData = array();
 		} else {
-			$this->data = $this->origData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$this->data = $this->origData = $this->databaseHandle->sql_fetch_assoc($res);
 		}
 
 		$this->loaded = true;
@@ -71,13 +85,13 @@ class tx_mmforum_data {
 			$this->data['tstamp'] = $diff['tstamp'] = $GLOBALS['EXEC_TIME'];
 
 			if (intVal($this->data['uid']) > 0) {
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery($this->getTableName(), 'uid=' . $this->getUid(), $diff);
+				$this->databaseHandle->exec_UPDATEquery($this->getTableName(), 'uid=' . $this->getUid(), $diff);
 			} else {
 				$this->data['crdate'] = $diff['crdate'] = $GLOBALS['EXEC_TIME'];
 
-				$GLOBALS['TYPO3_DB']->exec_INSERTquery($this->getTableName(), $diff);
+				$this->databaseHandle->exec_INSERTquery($this->getTableName(), $diff);
 
-				$this->setUid($GLOBALS['TYPO3_DB']->sql_insert_id());
+				$this->setUid($this->databaseHandle->sql_insert_id());
 				$this->data['uid'] = $this->getUid();
 			}
 

@@ -176,8 +176,8 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
             );
             list($uid_2,$sorting_2) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_2, array('sorting' => $sorting_1));
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_1, array('sorting' => $sorting_2));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_2, array('sorting' => $sorting_1));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_1, array('sorting' => $sorting_2));
 		}
         foreach((array)$this->ufVars['field'] as $uid => $data) {
             if (intval($uid)>0) {
@@ -186,7 +186,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
                         'tstamp'        => $GLOBALS['EXEC_TIME'],
                         'deleted'       => 1
                     );
-                    $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid, $updateArr);
+                    $this->databaseHandle->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid, $updateArr);
                 }
             }
         }
@@ -427,7 +427,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			'meta'              => serialize($meta),
 			'config'	        => $config
 		);
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.intval($uid), $updateArray);
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.intval($uid), $updateArray);
 
 	}
 
@@ -442,8 +442,8 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			$config  = $this->p->parseConf($confArr);
 		}
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('MAX(sorting)+1','tx_mmforum_userfields','1');
-		list($sorting) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $this->databaseHandle->exec_SELECTquery('MAX(sorting)+1','tx_mmforum_userfields','1');
+		list($sorting) = $this->databaseHandle->sql_fetch_row($res);
 
 		$insertArray = array(
 			'tstamp'			=> $GLOBALS['EXEC_TIME'],
@@ -456,8 +456,8 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 			'meta'				=> serialize($meta),
 			'config'			=> $config
 		);
-		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userfields', $insertArray);
-		return $GLOBALS['TYPO3_DB']->sql_insert_id();
+		$this->databaseHandle->exec_INSERTquery('tx_mmforum_userfields', $insertArray);
+		return $this->databaseHandle->sql_insert_id();
 
 	}
 
@@ -633,7 +633,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 		);
 		$template = tx_mmforum_BeTools::substituteMarkerArray($template, $marker);
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        $res = $this->databaseHandle->exec_SELECTquery(
             '*',
             'tx_mmforum_userfields',
             'deleted=0',
@@ -641,9 +641,9 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
             'sorting DESC'
         );
         $i = 0;
-        $max = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+        $max = $this->databaseHandle->sql_num_rows($res);
 		$iContent = '';
-        while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+        while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 
 			$meta = unserialize($arr['meta']);
 

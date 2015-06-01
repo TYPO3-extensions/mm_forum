@@ -46,6 +46,20 @@ class tx_mmforum_usermanagement {
 	protected $parser = null;
 
 	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
+
+	/**
 	 * Gets an instance of the t3lib_TSparser class.
 	 *
 	 * @return t3lib_TSparser A reference to an t3lib_TSparser object.
@@ -56,7 +70,7 @@ class tx_mmforum_usermanagement {
 	function &getTSParser() {
 		if ($this->parser === null)
 			$this->parser = GeneralUtility::makeInstance('t3lib_TSparser');
-		
+
 		return $this->parser;
 	}
 
@@ -101,14 +115,14 @@ class tx_mmforum_usermanagement {
 			$data = $value;
 
 		} else if ( MathUtility::canBeInterpretedAsInteger($value) || intval($value) != 0) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'*', 'tx_mmforum_userfields', 'uid=' . intval($value)
 			);
-			
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0)
+
+			if ($this->databaseHandle->sql_num_rows($res) == 0)
 				return null;
 
-			$data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$data = $this->databaseHandle->sql_fetch_assoc($res);
 		}
 
 		/* Parse configuration TypoScript */
@@ -168,7 +182,7 @@ class tx_mmforum_usermanagement {
 	protected function convertFromOldData(array &$data) {
 		if (!isset($data['meta']))
 			return $data;
-		
+
 		if ($data['meta']['label']['default'])
 			$data['label'] = $data['meta']['label']['default'];
 

@@ -80,22 +80,22 @@ class tx_mmforum_user extends tx_mmforum_base {
 		);
 
 		// Determine post count
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'COUNT(uid)',
 			'tx_mmforum_posts',
 			'hidden = 0 AND deleted = 0 AND poster_id = ' .  $userId
 		);
-		list($count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($count) = $this->databaseHandle->sql_fetch_row($res);
 
 		$marker['###POSTCOUNT###'] = $this->getauthor($userId);
 
 		// Determine topic count
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'COUNT(uid)',
 			'tx_mmforum_topics',
 			'hidden = 0 AND deleted = 0 AND topic_poster = "' . $userId . '"'
 		);
-		list($topics) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($topics) = $this->databaseHandle->sql_fetch_row($res);
 
 
 		// Build page navigation
@@ -142,7 +142,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 			$template = $this->cObj->substituteSubpart($template, '###NOPOSTS###', '');
 
 			// Read posts
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				't.topic_title, t.topic_is, t.solved,
 					f.forum_name,
 					c.forum_name AS category_name,
@@ -158,7 +158,7 @@ class tx_mmforum_user extends tx_mmforum_base {
 				$from . ', ' . $itemsPerPage
 			);
 			$content = '';
-			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 				$imgInfo = array(
 					'src' => $conf['path_img'] . $conf['images.']['solved'],
 					'alt' => $this->pi_getLL('topic.isSolved')
@@ -194,8 +194,8 @@ class tx_mmforum_user extends tx_mmforum_base {
 			$marker['###LABEL_NOPOSTS###'] = $this->pi_getLL('user.noposts');
 		}
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('crdate', 'fe_users', 'uid = ' . $userId);
-		list($ucrdate) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $this->databaseHandle->exec_SELECTquery('crdate', 'fe_users', 'uid = ' . $userId);
+		list($ucrdate) = $this->databaseHandle->sql_fetch_row($res);
 
 		$marker['###STAT###'] .= '<strong>' . $count . '</strong> ' . $this->pi_getLL('user.totalPosts') . ', <strong>' . $topics . '</strong> ' . $this->pi_getLL('user.topicsTotal') . '<br />';
 		$marker['###STAT###'] .= $this->cObj->substituteMarker($this->pi_getLL('user.postsPerDay'), '###POSTS###', '<strong>' . round($count / ceil((($GLOBALS['EXEC_TIME'] - $ucrdate) / 86400)), 2) . '</strong>');
@@ -234,8 +234,8 @@ class tx_mmforum_user extends tx_mmforum_base {
 	 * @return array          The user record as associative array
 	 */
 	function get_userdetails($userId) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', 'uid = ' . $userId);
-		return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$res = $this->databaseHandle->exec_SELECTquery('*', 'fe_users', 'uid = ' . $userId);
+		return $this->databaseHandle->sql_fetch_assoc($res);
 	}
 }
 

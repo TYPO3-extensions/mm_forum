@@ -88,6 +88,20 @@ class tx_mmforum_polls {
 	public $data;
 
 	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
+
+	/**
 	 * Loads a poll record from database.
 	 * The submitted parameter may either be a poll's UID or a
 	 * poll record as associative array. In the latter case, the
@@ -101,8 +115,8 @@ class tx_mmforum_polls {
 	function load($uid) {
 		if (!is_array($uid)) {
 			$uid = intval($uid);
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_mmforum_polls', 'uid=' . $uid);
-			$this->data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$res = $this->databaseHandle->exec_SELECTquery('*', 'tx_mmforum_polls', 'uid=' . $uid);
+			$this->data = $this->databaseHandle->sql_fetch_assoc($res);
 		} else {
 			$this->data = $uid;
 		}
@@ -222,8 +236,8 @@ class tx_mmforum_polls {
 
 		if (!$answer_id) return;
 
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls', 'uid='.$poll_id.' AND deleted=0', array('votes' => 'votes + 1'));
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_answers', 'uid='.$answer_id.' AND deleted=0', array('votes' => 'votes + 1'));
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_polls', 'uid='.$poll_id.' AND deleted=0', array('votes' => 'votes + 1'));
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_polls_answers', 'uid='.$answer_id.' AND deleted=0', array('votes' => 'votes + 1'));
 
 		$insertArray = array(
 			'pid'           => $this->p->getStoragePID(),
@@ -233,7 +247,7 @@ class tx_mmforum_polls {
 			'answer_id'     => $answer_id,
 			'user_id'       => $user_id
 		);
-		$GLOBALS['TYPO3_DB']->exec_INSERTquery(
+		$this->databaseHandle->exec_INSERTquery(
 			'tx_mmforum_polls_votes',
 			$insertArray
 		);
@@ -266,14 +280,14 @@ class tx_mmforum_polls {
 			$row_template = $this->cObj->getSubpart($template, '###POLL_ANSWER_1###');
 		}
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_polls_answers',
 			'poll_id='.intval($this->data['uid']).' AND deleted=0'
 		);
 		$i = 1;
 		$aContent = '';
-		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$pAnswers = ($arr['votes']>0)?round($arr['votes'] / $this->data['votes'] * 100):0;
 
 			if ($this->conf['polls.']['pollBar_colorMap.'][$i]) {
@@ -370,7 +384,7 @@ class tx_mmforum_polls {
 			'endtime'       => $expDate
 		);
 
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls', 'uid='.$poll_id, $pollUpdateData);
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_polls', 'uid='.$poll_id, $pollUpdateData);
 
 		// Edit answering possibilities
 		if (is_array($data['answer']['edit'])) {
@@ -383,7 +397,7 @@ class tx_mmforum_polls {
 					'tstamp'        => $GLOBALS['EXEC_TIME'],
 					'answer'        => $value
 				);
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_answers', 'uid='.intval($uid), $answerUpdateArray);
+				$this->databaseHandle->exec_UPDATEquery('tx_mmforum_polls_answers', 'uid='.intval($uid), $answerUpdateArray);
 			}
 		}
 		// Add answers
@@ -397,7 +411,7 @@ class tx_mmforum_polls {
 					'votes'         => 0,
 					'answer'        => $answer
 				);
-				$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_polls_answers', $answerInsertData);
+				$this->databaseHandle->exec_INSERTquery('tx_mmforum_polls_answers', $answerInsertData);
 			}
 		}
 		// Remove answers
@@ -405,14 +419,14 @@ class tx_mmforum_polls {
 			foreach($data['answer']['delete'] as $delUid) {
 				$delUid = intval($delUid);
 
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('votes','tx_mmforum_polls_answers','uid='.$delUid);
-				list($votes) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls', 'uid='.$poll_id, array('votes' => 'votes - '.$votes));
+				$res = $this->databaseHandle->exec_SELECTquery('votes','tx_mmforum_polls_answers','uid='.$delUid);
+				list($votes) = $this->databaseHandle->sql_fetch_row($res);
+				$this->databaseHandle->exec_UPDATEquery('tx_mmforum_polls', 'uid='.$poll_id, array('votes' => 'votes - '.$votes));
 				$answerUpdateArray = array(
 					'tstamp'        => $GLOBALS['EXEC_TIME'],
 					'deleted'       => 1
 				);
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_answers', 'uid='.$delUid, $answerUpdateArray);
+				$this->databaseHandle->exec_UPDATEquery('tx_mmforum_polls_answers', 'uid='.$delUid, $answerUpdateArray);
 			}
 		}
 	}
@@ -457,8 +471,8 @@ class tx_mmforum_polls {
 			'question'      => trim($data['question']),
 			'endtime'       => $expDate
 		);
-		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_polls', $pollInsertData);
-		$poll_id = $GLOBALS['TYPO3_DB']->sql_insert_id();
+		$this->databaseHandle->exec_INSERTquery('tx_mmforum_polls', $pollInsertData);
+		$poll_id = $this->databaseHandle->sql_insert_id();
 
 		foreach($data['answer']['new'] as $answer) {
 			$answer = trim($answer);
@@ -471,7 +485,7 @@ class tx_mmforum_polls {
 				'votes'         => 0,
 				'answer'        => $answer
 			);
-			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_polls_answers', $answerInsertData);
+			$this->databaseHandle->exec_INSERTquery('tx_mmforum_polls_answers', $answerInsertData);
 		}
 
 		return $poll_id;
@@ -491,28 +505,28 @@ class tx_mmforum_polls {
 	function deletePoll($uid,$topic=0) {
 		if ($topic == 0) {
 			$poll_id   = intval($uid);
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'uid',
 				'tx_mmforum_topics',
 				'poll_id='.$poll_id
 			);
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+			if ($this->databaseHandle->sql_num_rows($res) == 0) {
 				$topic_id = 0;
 			} else {
-				list($topic_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				list($topic_id) = $this->databaseHandle->sql_fetch_row($res);
 			}
 		}
 		elseif ($uid == 0) {
 			$topic_id = intval($topic);
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'poll_id',
 				'tx_mmforum_topics',
 				'uid='.$topic
 			);
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+			if ($this->databaseHandle->sql_num_rows($res) == 0) {
 				$poll_id = 0;
 			} else {
-				list($poll_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				list($poll_id) = $this->databaseHandle->sql_fetch_row($res);
 			}
 		}
 		else {
@@ -521,12 +535,12 @@ class tx_mmforum_polls {
 		}
 
 		if ($poll_id > 0) {
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls'        ,    'uid='.$poll_id,array('deleted'=>1,'tstamp'=>$GLOBALS['EXEC_TIME']));
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_answers','poll_id='.$poll_id,array('deleted'=>1,'tstamp'=>$GLOBALS['EXEC_TIME']));
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_polls_votes'  ,'poll_id='.$poll_id,array('deleted'=>1,'tstamp'=>$GLOBALS['EXEC_TIME']));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_polls'        ,    'uid='.$poll_id,array('deleted'=>1,'tstamp'=>$GLOBALS['EXEC_TIME']));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_polls_answers','poll_id='.$poll_id,array('deleted'=>1,'tstamp'=>$GLOBALS['EXEC_TIME']));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_polls_votes'  ,'poll_id='.$poll_id,array('deleted'=>1,'tstamp'=>$GLOBALS['EXEC_TIME']));
 		}
 		if ($topic_id > 0)
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics'       ,    'uid='.$topic_id,array('poll_id'=>0));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics'       ,    'uid='.$topic_id,array('poll_id'=>0));
 	}
 
 	/**
@@ -550,12 +564,12 @@ class tx_mmforum_polls {
 
 		$uid = intval($uid);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_polls',
 			'uid='.$uid.' AND deleted=0'
 		);
-		$poll = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$poll = $this->databaseHandle->sql_fetch_assoc($res);
 
 		$mayEdit = $this->getMayEditPoll($uid, $pObj);
 
@@ -597,14 +611,14 @@ class tx_mmforum_polls {
 			'###DISABLED_VAR###'		=> $mayEdit ? 0 : 1
 		);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_polls_answers',
 			'poll_id='.$poll['uid'].' AND deleted=0'
 		);
 		$i = 0;
 		$answers = '';
-		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$answer = $override['answer']['edit'][$arr['uid']]?$override['answer']['edit'][$arr['uid']]:$arr['answer'];
 			if (is_array($override['answer']['delete'])) {
 				if (in_array($arr['uid'],$override['answer']['delete'])) {
@@ -733,12 +747,12 @@ class tx_mmforum_polls {
 		if ($this->data['endtime']>0 && $this->data['endtime']<$GLOBALS['EXEC_TIME']) return false;
 		if (!$GLOBALS['TSFE']->fe_user->user['uid']) return false;
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_polls_votes',
 			'poll_id='.intval($this->data['uid']).' AND user_id='.$GLOBALS['TSFE']->fe_user->user['uid'].' AND deleted=0'
 		);
-		return ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0);
+		return ($this->databaseHandle->sql_num_rows($res)==0);
 	}
 
 	/**

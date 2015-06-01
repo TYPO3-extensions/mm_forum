@@ -41,12 +41,24 @@ class tx_mmforum_base extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	 * @var tx_mmforum_tools
 	 */
 	var $tools;
+
 	/**
 	 * @var tx_mmforum_validator
 	 */
 	var $validator;
 	var $validatorObj; // same as the above, is kept for backwards-compatibility, will be deleted at some point, use the one above
 
+	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+		parent::__construct();
+	}
 
 	/**
 	 * Initializes all the things for a mm_forum plugin that is needed
@@ -148,13 +160,13 @@ class tx_mmforum_base extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			$cacheRes = $this->cache->restore('forum_pid');
 			if ($cacheRes !== null) return $cacheRes;
 
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'pid',
 				'tt_content',
 				'list_type = "mm_forum_pi1" AND CType = "list" AND deleted = "0" AND hidden = "0" AND pi_flexform LIKE "%<value index=\"vDEF\">BOARD</value>%"'
 			);
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
-				list($pid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			if ($this->databaseHandle->sql_num_rows($res)) {
+				list($pid) = $this->databaseHandle->sql_fetch_row($res);
 			}
 
 			$this->cache->save('forum_pid', $pid);
@@ -399,12 +411,12 @@ class tx_mmforum_base extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		$cacheRes = $this->cache->restore('moderator_groups');
 
 		if ($cacheRes === null) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'GROUP_CONCAT(grouprights_mod)',
 				'tx_mmforum_forums',
 				'deleted=0 '.$this->getStoragePIDQuery()
 			);
-			list($groups) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			list($groups) = $this->databaseHandle->sql_fetch_row($res);
 
 			$groupArr = GeneralUtility::intExplode(',', $groups, true);
 			$result = array_unique($groupArr);
@@ -457,16 +469,16 @@ class tx_mmforum_base extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			return $cacheRes;
 		}
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'c.grouprights_mod as category_auth, f.grouprights_mod as forum_auth',
 			'tx_mmforum_forums f LEFT JOIN tx_mmforum_forums c ON f.parentID=c.uid',
 			'f.uid=' . intval($forum) . ' AND f.deleted=0'
 		);
-		if (!$res || $GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) {
+		if (!$res || $this->databaseHandle->sql_num_rows($res) == 0) {
 			return false;
 		}
 
-		list($category_auth, $forum_auth) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($category_auth, $forum_auth) = $this->databaseHandle->sql_fetch_row($res);
 
 		$category_auth = GeneralUtility::intExplode(',', $category_auth);
 		$forum_auth = GeneralUtility::intExplode(',', $forum_auth);

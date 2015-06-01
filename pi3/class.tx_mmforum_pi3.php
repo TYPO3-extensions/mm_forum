@@ -48,21 +48,6 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 	var $scriptRelPath	= 'pi3/class.tx_mmforum_pi3.php';	// Path to this script relative to the extension dir.
     var $mm1;
 
-	/**
-	 * The TYPO3 database object
-	 *
-	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-	 */
-	protected $databaseHandle;
-
-	/**
-	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
-	 */
-	public function __construct() {
-		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
-		parent::__construct();
-	}
-
 		/**
 		 * Main function. Delegates tasks to other functions.
 		 *

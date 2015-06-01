@@ -71,6 +71,20 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class tx_mmforum_forumAdmin {
 
+	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
+	
     /**
      * The main function.
      *
@@ -300,13 +314,13 @@ class tx_mmforum_forumAdmin {
             }
         }
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        $res = $this->databaseHandle->exec_SELECTquery(
             '*',
             'tx_mmforum_forums',
             'uid='.intval($this->param['fid']).' AND deleted=0'
         );
-        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return $this->display_tree();
-        else $forum = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        if ($this->databaseHandle->sql_num_rows($res) == 0) return $this->display_tree();
+        else $forum = $this->databaseHandle->sql_fetch_assoc($res);
 
         $orderOptions = $this->getForumOrderField($forum,$forum['parentID']);
         $input_authRead     = $this->getUserGroupAccess_field('[forum][authRead]',$forum['grouprights_read']);
@@ -401,13 +415,13 @@ class tx_mmforum_forumAdmin {
             }
         }
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        $res = $this->databaseHandle->exec_SELECTquery(
             '*',
             'tx_mmforum_forums',
             'uid='.intval($this->param['cid']).' AND deleted=0'
         );
-        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return $this->display_tree();
-        else $ctg = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        if ($this->databaseHandle->sql_num_rows($res) == 0) return $this->display_tree();
+        else $ctg = $this->databaseHandle->sql_fetch_assoc($res);
 
         $orderOptions = $this->getForumOrderField($ctg,0);
         $input_authRead = $this->getUserGroupAccess_field('[ctg][authRead]',$ctg['grouprights_read']);
@@ -489,7 +503,7 @@ class tx_mmforum_forumAdmin {
      * @return  void
      */
     function globalIncSorting($start,$amount=1,$parentId=0) {
-        $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'sorting >= '.$start.' AND pid='.$this->pid.' AND deleted=0 AND parentID='.$parentId, array('sorting' => 'sorting + '.$amount));
+        $this->databaseHandle->exec_UPDATEquery('tx_mmforum_forums', 'sorting >= '.$start.' AND pid='.$this->pid.' AND deleted=0 AND parentID='.$parentId, array('sorting' => 'sorting + '.$amount));
     }
 
     /**
@@ -503,8 +517,8 @@ class tx_mmforum_forumAdmin {
      * @return  void
      */
     function getMaxSorting($parentId = 0) {
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('MAX(sorting)','tx_mmforum_forums','pid='.$this->pid.' AND deleted=0 AND parentId='.$parentId);
-        list($sorting) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+        $res = $this->databaseHandle->exec_SELECTquery('MAX(sorting)','tx_mmforum_forums','pid='.$this->pid.' AND deleted=0 AND parentId='.$parentId);
+        list($sorting) = $this->databaseHandle->sql_fetch_row($res);
         return $sorting;
     }
 
@@ -519,17 +533,17 @@ class tx_mmforum_forumAdmin {
      * @return  void
      */
     function delete_category() {
-        $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+        $this->databaseHandle->exec_UPDATEquery(
             'tx_mmforum_forums',
             'uid='.intval($this->param['cid']).' OR parentID='.intval($this->param['cid']),
             array('deleted' => 1)
         );
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        $res = $this->databaseHandle->exec_SELECTquery(
             'uid',
             'tx_mmforum_forums',
             'parentId='.intval($this->param['cid'])
         );
-        while(list($fid)=$GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
+        while(list($fid)=$this->databaseHandle->sql_fetch_row($res)) {
             $this->delete_forumContents($fid);
             $this->delete_forumIndex($fid);
         }
@@ -551,7 +565,7 @@ class tx_mmforum_forumAdmin {
             'tstamp'        => $GLOBALS['EXEC_TIME'],
             'deleted'       => 1
         );
-        $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+        $this->databaseHandle->exec_UPDATEquery(
             'tx_mmforum_forums',
             'uid='.intval($this->param['fid']),
             $updateArray
@@ -576,12 +590,12 @@ class tx_mmforum_forumAdmin {
             'tstamp'        => $GLOBALS['EXEC_TIME'],
             'deleted'       => 1
         );
-        $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+        $this->databaseHandle->exec_UPDATEquery(
             'tx_mmforum_topics',
             'forum_id='.$fid,
             $updateArray
         );
-        $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+        $this->databaseHandle->exec_UPDATEquery(
             'tx_mmforum_posts',
             'forum_id='.$fid,
             $updateArray
@@ -599,9 +613,9 @@ class tx_mmforum_forumAdmin {
      * @return void
      */
     function delete_forumIndex($fid) {
-        $GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_wordmatch', 'forum_id='.$fid);
-        $GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_searchresults', '1');
-        $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+        $this->databaseHandle->exec_DELETEquery('tx_mmforum_wordmatch', 'forum_id='.$fid);
+        $this->databaseHandle->exec_DELETEquery('tx_mmforum_searchresults', '1');
+        $this->databaseHandle->exec_UPDATEquery(
             'tx_mmforum_topics',
             'forum_id='.$fid,
             array('tx_mmforumsearch_index_write' => 0)
@@ -619,25 +633,25 @@ class tx_mmforum_forumAdmin {
      * @return  void
      */
     function updateUserPosts() {
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        $res = $this->databaseHandle->exec_SELECTquery(
             'uid, tx_mmforum_posts',
             'fe_users',
             'deleted=0'
         );
-        while(list($user_id,$posts) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
-            $res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        while(list($user_id,$posts) = $this->databaseHandle->sql_fetch_row($res)) {
+            $res2 = $this->databaseHandle->exec_SELECTquery(
                 'COUNT(*)',
                 'tx_mmforum_posts',
                 'deleted=0 AND poster_id='.$user_id.' AND pid='.$this->pid
             );
-            list($nPosts) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res2);
+            list($nPosts) = $this->databaseHandle->sql_fetch_row($res2);
 
             if ($posts == $nPosts) continue;
             $updateArray = array(
                 'tstamp'            => $GLOBALS['EXEC_TIME'],
                 'tx_mmforum_posts'  => $nPosts
             );
-            $GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$user_id,$updateArray);
+            $this->databaseHandle->exec_UPDATEquery('fe_users','uid='.$user_id,$updateArray);
         }
     }
 
@@ -678,7 +692,7 @@ class tx_mmforum_forumAdmin {
             $insertArray['sorting'] = $this->param['forum']['order']+1;
         }
 
-        $GLOBALS['TYPO3_DB']->exec_INSERTquery(
+        $this->databaseHandle->exec_INSERTquery(
             'tx_mmforum_forums',
             $insertArray
         );
@@ -719,7 +733,7 @@ class tx_mmforum_forumAdmin {
             $insertArray['sorting'] = $this->param['ctg']['order']+1;
         }
 
-        $GLOBALS['TYPO3_DB']->exec_INSERTquery(
+        $this->databaseHandle->exec_INSERTquery(
             'tx_mmforum_forums',
             $insertArray
         );
@@ -733,12 +747,12 @@ class tx_mmforum_forumAdmin {
      * @return  void
      */
     function save_editCategory() {
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        $res = $this->databaseHandle->exec_SELECTquery(
             '*',
             'tx_mmforum_forums',
             'uid='.intval($this->param['cid'])
         );
-        $ctg = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        $ctg = $this->databaseHandle->sql_fetch_assoc($res);
 
         $updateArray = array(
             'tstamp'            => $GLOBALS['EXEC_TIME'],
@@ -764,19 +778,19 @@ class tx_mmforum_forumAdmin {
             $updateArray['sorting'] = $this->param['ctg']['order'];
         }
 
-        $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+        $this->databaseHandle->exec_UPDATEquery(
             'tx_mmforum_forums',
             'uid='.intval($this->param['cid']),
             $updateArray
         );
 
         if ($updateArray['grouprights_read'] != $ctg['grouprights_read']) {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+            $res = $this->databaseHandle->exec_SELECTquery(
                 'uid',
                 'tx_mmforum_forums',
                 'parentID='.$ctg['uid']
             );
-            while(list($fid)=$GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
+            while(list($fid)=$this->databaseHandle->sql_fetch_row($res)) {
                 $this->delete_forumIndex($fid);
             }
         }
@@ -790,12 +804,12 @@ class tx_mmforum_forumAdmin {
      * @return  void
      */
     function save_editForum() {
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        $res = $this->databaseHandle->exec_SELECTquery(
             '*',
             'tx_mmforum_forums',
             'uid='.intval($this->param['fid'])
         );
-        $ctg = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        $ctg = $this->databaseHandle->sql_fetch_assoc($res);
 
         $updateArray = array(
             'tstamp'            => $GLOBALS['EXEC_TIME'],
@@ -822,7 +836,7 @@ class tx_mmforum_forumAdmin {
             $updateArray['sorting'] = $this->param['forum']['order'];
         }
 
-        $GLOBALS['TYPO3_DB']->exec_UPDATEquery(
+        $this->databaseHandle->exec_UPDATEquery(
             'tx_mmforum_forums',
             'uid='.intval($this->param['fid']),
             $updateArray
@@ -853,7 +867,7 @@ class tx_mmforum_forumAdmin {
         <td class="mm_forum-listrow_header" ><img src="img/forum.png" style="vertical-align: middle; margin-right:8px;" />'.$this->getLL('tree').'</td>
     </tr>';
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        $res = $this->databaseHandle->exec_SELECTquery(
             '*',
             'tx_mmforum_forums',
             'parentID = 0 AND pid='.$this->pid.' AND deleted=0',
@@ -861,7 +875,7 @@ class tx_mmforum_forumAdmin {
             'sorting ASC'
         );
         $i = 0;
-        while($ctg = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+        while($ctg = $this->databaseHandle->sql_fetch_assoc($res)) {
             $class_suffix = ($i++ % 2==0 ? '2' : '');
 
             if ($this->param['cid'] == $ctg['uid'] && !$this->param['fid']) $class_suffix = '_active';
@@ -877,14 +891,14 @@ class tx_mmforum_forumAdmin {
 
 			$content .= '<tr class="mm_forum-listrow" '.$js.'><td><img src="img/category.png" style="vertical-align: middle; margin-right:8px;" />'.htmlspecialchars($ctg['forum_name']).'</td></tr>';
 
-            $res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+            $res2 = $this->databaseHandle->exec_SELECTquery(
                 '*',
                 'tx_mmforum_forums',
                 'parentID = '.$ctg['uid'].' AND pid='.$this->pid.' AND deleted=0',
                 '',
                 'sorting ASC'
             );
-            while($forum = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2)) {
+            while($forum = $this->databaseHandle->sql_fetch_assoc($res2)) {
                 $class_suffix = ($i++ % 2==0 ? '2' : '');
 
                 if ($this->param['fid'] == $forum['uid']) $class_suffix = '_active';
@@ -982,7 +996,7 @@ class tx_mmforum_forumAdmin {
      * @version 2007-05-24
      */
     function getForumOrderField($row,$pid,$new=false,$sec='ctg') {
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        $res = $this->databaseHandle->exec_SELECTquery(
             '*',
             'tx_mmforum_forums',
             'parentID='.$pid.' AND pid='.$this->pid.' AND deleted=0 AND uid!='.intval($row['uid']),
@@ -991,7 +1005,7 @@ class tx_mmforum_forumAdmin {
         );
         $pos = 'beginning';
 
-        while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+        while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
             $ctgs[] = $arr;
             if ($row['sorting'] > $arr['sorting']) $pos = $arr['uid'];
         }

@@ -61,6 +61,20 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 	 */
 	public $config;
 
+	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
+
 
 	/**
 	 * Basic backend module functions
@@ -308,14 +322,14 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 		$groups	= implode(',',array(intval($this->confArr['userGroup']),intval($this->confArr['modGroup']),intval($this->confArr['adminGroup'])));
 
 		if ($sword = $mmforum['sword']) {
-			$sword = $GLOBALS['TYPO3_DB']->escapeStrForLike($sword, 'fe_users');
-			$sword = $GLOBALS['TYPO3_DB']->fullQuoteStr($sword.'%', 'fe_users');
+			$sword = $this->databaseHandle->escapeStrForLike($sword, 'fe_users');
+			$sword = $this->databaseHandle->fullQuoteStr($sword.'%', 'fe_users');
 			$filter = 'username like ' . $sword;
 		} else {
 			$filter = '1';
 		}
 
-		$orderBy = GeneralUtility::_GP('mmforum_style') ? strtoupper($GLOBALS['TYPO3_DB']->fullQuoteStr(GeneralUtility::_GP('mmforum_style'))) : 'ASC';
+		$orderBy = GeneralUtility::_GP('mmforum_style') ? strtoupper($this->databaseHandle->fullQuoteStr(GeneralUtility::_GP('mmforum_style'))) : 'ASC';
 		if ( GeneralUtility::_GP('mmforum_sort') == 'username') {
 			$order = 'username ' . $orderBy . '';
 			$uOrder = $orderBy == 'ASC' ? 'DESC' : 'ASC';
@@ -333,8 +347,8 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 		#$userGroup_query = "(".$this->confArr['userGroup']." IN (usergroup) OR ".$this->confArr['modGroup']." IN (usergroup) OR ".$this->confArr['adminGroup']." IN (usergroup))";
 		$userGroup_query = "(FIND_IN_SET('" . $this->confArr['userGroup'] . "',usergroup) OR FIND_IN_SET('" . $this->confArr['modGroup'] . "',usergroup) OR FIND_IN_SET('" . $this->confArr['adminGroup'] . "',usergroup))";
 		#$userGroup_query = "1";
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('count(*)', 'fe_users', "$filter and pid='" . $this->confArr['userPID'] . "' and " . $userGroup_query . " and deleted=0");
-		$row = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $this->databaseHandle->exec_SELECTquery('count(*)', 'fe_users', "$filter and pid='" . $this->confArr['userPID'] . "' and " . $userGroup_query . " and deleted=0");
+		$row = $this->databaseHandle->sql_fetch_row($res);
 		$records = $row[0];
 		$pages = ceil($records / $this->confArr['recordsPerPage']);
 		$offset = intval($mmforum['offset']);
@@ -377,7 +391,7 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 
 		// Display userdata table
 		// Execute database query
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_users', "$filter and pid='" . $this->confArr['userPID'] . "' and deleted=0 AND " . $userGroup_query, '', $order, ($offset * $this->confArr['recordsPerPage']) . "," . $this->confArr['recordsPerPage']);
+		$res = $this->databaseHandle->exec_SELECTquery('*', 'fe_users', "$filter and pid='" . $this->confArr['userPID'] . "' and deleted=0 AND " . $userGroup_query, '', $order, ($offset * $this->confArr['recordsPerPage']) . "," . $this->confArr['recordsPerPage']);
 		if ($res) {
 
 			$marker = array(
@@ -390,7 +404,7 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 
 			$i = 0;
 			$uContent = '';
-			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 				// Display user groups
 				$g = explode(',', $row['usergroup']);
 				$outg = '';
@@ -504,15 +518,15 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 		// Process submitted data
 		if (isset($mmforum['delete'])) {
 			$key = key($mmforum['delete']);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postparser', 'uid=' . $key, array('deleted' => 1));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_postparser', 'uid=' . $key, array('deleted' => 1));
 		}
 		if (isset($mmforum['hide'])) {
 			$key = key($mmforum['hide']);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postparser', 'uid=' . $key, array('hidden' => 1));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_postparser', 'uid=' . $key, array('hidden' => 1));
 		}
 		if (isset($mmforum['unhide'])) {
 			$key = key($mmforum['unhide']);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postparser', 'uid=' . $key, array('hidden' => 0));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_postparser', 'uid=' . $key, array('hidden' => 0));
 		}
 		if (isset($mmforum['save'])) {
 			$key = key($mmforum['save']);
@@ -524,10 +538,10 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 					'pattern' => $mmforum['pattern'][0], 
 					'replacement' => $mmforum['replacement'][0]
 				);
-				$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_postparser', $insertArr);
+				$this->databaseHandle->exec_INSERTquery('tx_mmforum_postparser', $insertArr);
 				$mmforum['bbcode'][0] = $mmforum['pattern'][0] = $mmforum['replacement'][0] = '';
 			} else {
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_postparser', 'uid=' . $key, array(
+				$this->databaseHandle->exec_UPDATEquery('tx_mmforum_postparser', 'uid=' . $key, array(
 					'bbcode' => $mmforum['bbcode'][$key],
 					'pattern' => $mmforum['pattern'][$key],
 					'replacement' => $mmforum['replacement'][$key]
@@ -553,9 +567,9 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 				<td class="mm_forum-listrow" align="right"><input style="border:0px;" type="image" name="mmforum[save][0]" src="img/save.png" /></td>
 			</tr>';
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_mmforum_postparser', 'deleted=0', '', 'bbcode asc');
+		$res = $this->databaseHandle->exec_SELECTquery('*', 'tx_mmforum_postparser', 'deleted=0', '', 'bbcode asc');
 
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$content .= (!$row['hidden']) ? '<tr class="mm_forum-listrow">' : '<tr class="mm_forum-listrow" style="background-color: #f0f0f0 !important;">';
 			$content .= '	<td><input type="text" name="mmforum[bbcode][' . $row['uid'] . ']" value="' . htmlspecialchars($row['bbcode']) . '" style="width:100%;" /></td>';
 			$content .= '	<td><input type="text" name="mmforum[pattern][' . $row['uid'] . ']" value="' . htmlspecialchars($row['pattern']) . '" style="width:100%;" /></td>';
@@ -593,15 +607,15 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 		// Process submitted data
 		if (isset($mmforum['delete'])) {
 			$key = key($mmforum['delete']);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_smilies', 'uid=' . $key, array('deleted' => 1));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_smilies', 'uid=' . $key, array('deleted' => 1));
 		}
 		if (isset($mmforum['hide'])) {
 			$key = key($mmforum['hide']);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_smilies', 'uid=' . $key, array('hidden' => 1));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_smilies', 'uid=' . $key, array('hidden' => 1));
 		}
 		if (isset($mmforum['unhide'])) {
 			$key = key($mmforum['unhide']);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_smilies', 'uid=' . $key, array('hidden' => 0));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_smilies', 'uid=' . $key, array('hidden' => 0));
 		}
 		if (isset($mmforum['save'])) {
 			$key = key($mmforum['save']);
@@ -612,9 +626,9 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 					'smile_url' => $mmforum['new']['smile_url'],
 					'code' => $mmforum['new']['code']
 				);
-				$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_smilies', $insertArr);
+				$this->databaseHandle->exec_INSERTquery('tx_mmforum_smilies', $insertArr);
 			} else {
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_smilies', 'uid=' . $key, array('code' => $mmforum['code'][$key]));
+				$this->databaseHandle->exec_UPDATEquery('tx_mmforum_smilies', 'uid=' . $key, array('code' => $mmforum['code'][$key]));
 			}
 		}
 
@@ -658,9 +672,9 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 				<td align="right" class="mm_forum-listrow"><input type="image" src="img/save.png" name="mmforum[save][0]" /></td>
 			</tr>';
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_mmforum_smilies', 'deleted=0', '', 'smile_url asc');
+		$res = $this->databaseHandle->exec_SELECTquery('*', 'tx_mmforum_smilies', 'deleted=0', '', 'smile_url asc');
 
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$content .= (!$row['hidden']) ? '<tr class="mm_forum-listrow">' : '<tr class="mm_forum-listrow" style="background-color: #f0f0f0;">';
 			$content .= '	<td>' . $row['code'] . '</td>';
 			$content .= '	<td><img src="../res/smilies/' . $row['smile_url'] . '" /></td>';
@@ -696,15 +710,15 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 		// Process submitted data
 		if (isset($mmforum['delete'])) {
 			$key = key($mmforum['delete']);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_syntaxhl', 'uid=' . $key, array('deleted' => 1));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_syntaxhl', 'uid=' . $key, array('deleted' => 1));
 		}
 		if (isset($mmforum['hide'])) {
 			$key = key($mmforum['hide']);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_syntaxhl', 'uid=' . $key, array('hidden' => 1));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_syntaxhl', 'uid=' . $key, array('hidden' => 1));
 		}
 		if (isset($mmforum['unhide'])) {
 			$key = key($mmforum['unhide']);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_syntaxhl', 'uid=' . $key, array('hidden' => 0));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_syntaxhl', 'uid=' . $key, array('hidden' => 0));
 		}
 		if (isset($mmforum['save'])) {
 			$key = key($mmforum['save']);
@@ -717,7 +731,7 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 					'lang_code' => $mmforum['new']['lang_code'],
 					'fe_inserticon' => $mmforum['new']['fe_inserticon']
 				);
-				$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_syntaxhl', $insertArr);
+				$this->databaseHandle->exec_INSERTquery('tx_mmforum_syntaxhl', $insertArr);
 			} else {
 				$UpdateArr = array(
 					'lang_title' => $mmforum['lang_title'][$key],
@@ -725,7 +739,7 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 					'lang_code' => $mmforum['lang_code'][$key],
 					'fe_inserticon' => $mmforum['fe_inserticon'][$key]
 				);
-				$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_syntaxhl', 'uid=' . $key, $UpdateArr);
+				$this->databaseHandle->exec_UPDATEquery('tx_mmforum_syntaxhl', 'uid=' . $key, $UpdateArr);
 			}
 		}
 
@@ -782,9 +796,9 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 				<td align="right" class="mm_forum-listrow"><input type="image" src="img/save.png" name="mmforum[save][0]" /></td>
 			</tr>';
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'tx_mmforum_syntaxhl', 'deleted=0', '', 'uid asc');
+		$res = $this->databaseHandle->exec_SELECTquery('*', 'tx_mmforum_syntaxhl', 'deleted=0', '', 'uid asc');
 
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$content .= (!$row['hidden']) ? '<tr class="mm_forum-listrow">' : '<tr class="mm_forum-listrow" style="background-color: #f0f0f0;">';
 			$content .= '	<td>&nbsp;</td>';
 			$content .= '	<td><img src="../res/img/default/editor_icons/' . $row['fe_inserticon'] . '" /></td>';
@@ -862,8 +876,8 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 
 	function feGroups2Array() {
 		$ug = array();
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid,title', 'fe_groups', 'hidden=0 and deleted=0', '', 'uid asc');
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		$res = $this->databaseHandle->exec_SELECTquery('uid,title', 'fe_groups', 'hidden=0 and deleted=0', '', 'uid asc');
+		while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$ug[$row['uid']] = $row['title'];
 		}
 		return $ug;
@@ -924,8 +938,8 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 			if ($item == '') {
 				continue;
 			}
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fieldname, $table, 'uid="' . $item . '"');
-			list($title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			$res = $this->databaseHandle->exec_SELECTquery($fieldname, $table, 'uid="' . $item . '"');
+			list($title) = $this->databaseHandle->sql_fetch_row($res);
 			$resultItems[] = "$item|$title";
 		}
 		if (count($resultItems) == 0) {

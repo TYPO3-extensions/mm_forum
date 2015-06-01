@@ -155,12 +155,12 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 
 				$intern_forums = array ();
 
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res = $this->databaseHandle->exec_SELECTquery(
 					'uid',
 					'tx_mmforum_forums',
 					'forum_internal = 1'
 				);
-				while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 					array_push($intern_forums,$row['uid']);
 				}
 
@@ -168,7 +168,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 
 				$noIndex_cond = (strlen($conf['noIndex_boardUIDs'])>0)?'forum_id NOT IN ('.$conf['noIndex_boardUIDs'].')':'1';
 
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res = $this->databaseHandle->exec_SELECTquery(
 					'*',
 					'tx_mmforum_topics',
 					'('.$noIndex_cond.') and deleted=0',
@@ -177,7 +177,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 					$conf['indexCount']
 				);
 
-				while ($row     = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				while ($row     = $this->databaseHandle->sql_fetch_assoc($res)) {
 					$content   .= $indexing->ind_topic($row['uid'],$conf);
 					# $content   .= $row['uid'].' **<br />';
 				}
@@ -440,7 +440,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				'groupPost'     => $param['groupPost'],
 				'user_groups'	=> implode(',',$userGroups),
 			);
-			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_searchresults',$insertArray);
+			$this->databaseHandle->exec_INSERTquery('tx_mmforum_searchresults',$insertArray);
 			if ($conf['debug_mode'] == 1) {
 				echo '<h1>Suche Indiziert</h1>';
 			}
@@ -630,7 +630,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		}
 
 		if (is_numeric($param['search_place']) && ($param['search_place'] > 0))
-			$mysql_option   .= ' AND forum_id = '.$GLOBALS['TYPO3_DB']->fullQuoteStr($param['search_place'], '');
+			$mysql_option   .= ' AND forum_id = '.$this->databaseHandle->fullQuoteStr($param['search_place'], '');
 
 		if ($param['solved'] == 1)
 			$mysql_option   .= ' AND solved = 1 ';
@@ -681,7 +681,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 		$post_id_array = array();            // Array in denen die gefundenen Posts gespeichert werden
 
 		if (!empty($mysql_option)) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'post_id, topic_id'.$count_option,
 				'tx_mmforum_wordmatch',
 				'1=1 '.$mysql_option.$this->getPidQuery(),
@@ -690,10 +690,10 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				''
 			);
 			if ($this->conf['debug_mode']) {
-				GeneralUtility::devLog('find_posts', 'mm_forum', 0, $GLOBALS['TYPO3_DB']->debug_lastBuiltQuery);
+				GeneralUtility::devLog('find_posts', 'mm_forum', 0, $this->databaseHandle->debug_lastBuiltQuery);
 			}
 
-			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 				array_push($post_id_array, $row['post_id']);
 			}
 		}
@@ -728,13 +728,13 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * @return array        An numeric array of word UIDs
 	 */
 	function word_id($word) {
-		$word = $GLOBALS['TYPO3_DB']->fullQuoteStr($word, 'tx_mmforum_wordlist');
+		$word = $this->databaseHandle->fullQuoteStr($word, 'tx_mmforum_wordlist');
 		$word = str_replace('*','%',$word);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_wordlist', 'word LIKE '.$word.$this->getPidQuery());
+		$res = $this->databaseHandle->exec_SELECTquery('uid','tx_mmforum_wordlist', 'word LIKE '.$word.$this->getPidQuery());
 
 		$word_id_array = array();
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
-			while (list($uid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res)) {
+		if ($this->databaseHandle->sql_num_rows($res) > 0) {
+			while (list($uid) = $this->databaseHandle->sql_fetch_row($res)) {
 				array_push($word_id_array,$uid);
 			}
 		}
@@ -758,9 +758,9 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 *                 indexed topics.
 	 */
 	function search_stat () {
-		list($words) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery('COUNT(uid)','tx_mmforum_wordlist','1'.$this->getPidQuery()));
-		list($match) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery('COUNT(uid)','tx_mmforum_wordmatch','1'.$this->getPidQuery()));
-		list($topic) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery('COUNT(uid)','tx_mmforum_topics','tx_mmforumsearch_index_write>0'.$this->getPidQuery()));
+		list($words) = $this->databaseHandle->sql_fetch_row($this->databaseHandle->exec_SELECTquery('COUNT(uid)','tx_mmforum_wordlist','1'.$this->getPidQuery()));
+		list($match) = $this->databaseHandle->sql_fetch_row($this->databaseHandle->exec_SELECTquery('COUNT(uid)','tx_mmforum_wordmatch','1'.$this->getPidQuery()));
+		list($topic) = $this->databaseHandle->sql_fetch_row($this->databaseHandle->exec_SELECTquery('COUNT(uid)','tx_mmforum_topics','tx_mmforumsearch_index_write>0'.$this->getPidQuery()));
 
 		$llMarker = array('words'=>$words,'matches'=>$match,'topics'=>$topic);
 		$content = $this->cObj->substituteMarkerArray($this->pi_getLL('stats'),$llMarker,'###|###',1);
@@ -776,13 +776,13 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	function list_forum($cat_id) {
 		$forum_array    = array();
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid,forum_name',
 			'tx_mmforum_forums',
 			'deleted="0" AND hidden="0" AND forum_internal="0" AND parentID="'.$cat_id.'"'.$this->getPidQuery().$this->getMayRead_forum_query()
 		);
 
-		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$tmp_array['uid']     = $row['uid'];
 			$tmp_array['name']    = $row['forum_name'];
 			$tmp_array['type']    = 'F';
@@ -799,7 +799,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	function list_cat() {
 		$cat_array    = array();
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid,forum_name as cat_title',
 			'tx_mmforum_forums',
 			'deleted="0" AND hidden="0" AND parentID="0" AND forum_internal="0"'.$this->getPidQuery().$this->getMayRead_forum_query(),
@@ -807,7 +807,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			'sorting ASC'
 		);
 
-		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$tmp_array['uid']     = $row['uid'];
 			$tmp_array['name']    = $row['cat_title'];
 			$tmp_array['type']    = 'C';
@@ -841,7 +841,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * @return array                The result record
 	 */
 	function get_search_results($searchstring,$param) {
-		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_searchresults','tstamp < '.($GLOBALS['EXEC_TIME'] - (3600 * 2)));
+		$this->databaseHandle->exec_DELETEquery('tx_mmforum_searchresults','tstamp < '.($GLOBALS['EXEC_TIME'] - (3600 * 2)));
 
 		$searchstring = str_replace('*','\*',$searchstring);
 
@@ -878,7 +878,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			#}
 			#$grouprights_query = " AND (".implode(' AND ',$grouprights_queries).")";
 		}
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'tx_mmforum_searchresults',
 			'search_string LIKE "'.$searchstring.'" AND search_place = '.$param['search_place'].' AND solved = '.$solved.' AND search_order = '.$search_order.' AND groupPost = '.$groupPost.$this->getPidQuery().$grouprights_query,
@@ -887,7 +887,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			'1'
 		);
 
-		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$row = $this->databaseHandle->sql_fetch_assoc($res);
 
 		$search_array = unserialize($row['array_string']);
 
@@ -918,9 +918,10 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * @return string          The username
 	 */
 	function get_username($user_id) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('username','fe_users',"uid='$user_id'");
+		$username = '';
+		$res = $this->databaseHandle->exec_SELECTquery('username','fe_users',"uid='$user_id'");
 		if (is_resource($res)){
-			list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			list($username) = $this->databaseHandle->sql_fetch_row($res);
 		}
 		return $username;
 	}

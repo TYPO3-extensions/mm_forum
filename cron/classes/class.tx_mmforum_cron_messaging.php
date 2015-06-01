@@ -37,20 +37,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class tx_mmforum_cron_messaging extends tx_mmforum_cronbase {
 
 	var $cron_name = 'tx_mmforum_cron_messaging';
-
-	/**
-	 * The TYPO3 database object
-	 *
-	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-	 */
-	protected $databaseHandle;
-	
-	/**
-	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
-	 */
-	public function __construct() {
-		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
-	}
 	
 	/**
 	 * Main function

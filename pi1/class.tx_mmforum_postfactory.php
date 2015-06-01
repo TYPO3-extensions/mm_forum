@@ -44,9 +44,16 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 class tx_mmforum_postfactory {
 
-	/*
-	 * INITIALIZATION
+	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
 	 */
+	protected $databaseHandle;
+
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
 
 	/**
 	 *
@@ -124,7 +131,7 @@ class tx_mmforum_postfactory {
 		}
 
 		// Insert data
-		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_postqueue', $insertArray);
+		$this->databaseHandle->exec_INSERTquery('tx_mmforum_postqueue', $insertArray);
 	}
 
 
@@ -180,23 +187,23 @@ class tx_mmforum_postfactory {
 		}
 
 		// Insert topic record
-		if (!$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_topics', $insertArray)) {
+		if (!$this->databaseHandle->exec_INSERTquery('tx_mmforum_topics', $insertArray)) {
 			return false;
 		}
 
 		// Retrieve topic uid
-		$topicId = $GLOBALS['TYPO3_DB']->sql_insert_id();
+		$topicId = $this->databaseHandle->sql_insert_id();
 
 		// Generate post record
 		$postId = $this->create_post($topicId, $author, $text, $date, $ip, $attachments, $noUpdate);
 		if ($postId === false) {
-			$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_topics', 'uid = ' . $topicId);
+			$this->databaseHandle->exec_DELETEquery('tx_mmforum_topics', 'uid = ' . $topicId);
 			return false;
 		}
 
 		// Update first post record
 		$updateData = array('topic_first_post_id' => $postId);
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, $updateData);
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, $updateData);
 
 		// Subscribe the author to the topic
 		if ($subscribe) {
@@ -266,7 +273,7 @@ class tx_mmforum_postfactory {
 		}
 
 		// Insert data
-		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_postqueue', $insertArray);
+		$this->databaseHandle->exec_INSERTquery('tx_mmforum_postqueue', $insertArray);
 	}
 
 
@@ -325,16 +332,16 @@ class tx_mmforum_postfactory {
 		}
 
 		// Insert post record
-		if (!$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_posts', $insertArray)) {
+		if (!$this->databaseHandle->exec_INSERTquery('tx_mmforum_posts', $insertArray)) {
 			return false;
 		}
 
 		// Retrieve post uid
-		$postId = $GLOBALS['TYPO3_DB']->sql_insert_id();
+		$postId = $this->databaseHandle->sql_insert_id();
 
 		// Update attachment record
 		if (is_array($attachments) && count($attachments)) {
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_attachments', 'uid IN (' . implode(',', $attachments) . ')', array('post_id' => $postId));
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_attachments', 'uid IN (' . implode(',', $attachments) . ')', array('post_id' => $postId));
 		}
 
 		// Generate post text record
@@ -355,8 +362,8 @@ class tx_mmforum_postfactory {
 		}
 
 		// Insert post text record
-		if (!$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_posts_text', $insertArray)) {
-			$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_posts', 'uid = ', $postId);
+		if (!$this->databaseHandle->exec_INSERTquery('tx_mmforum_posts_text', $insertArray)) {
+			$this->databaseHandle->exec_DELETEquery('tx_mmforum_posts', 'uid = ' . $postId);
 			return false;
 		}
 
@@ -373,7 +380,7 @@ class tx_mmforum_postfactory {
 		}
 
 		// Set topic for all users to "not read"
-		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_postsread', 'topic_id = ' . $topicId);
+		$this->databaseHandle->exec_DELETEquery('tx_mmforum_postsread', 'topic_id = ' . $topicId);
 
 		// Update topic and forum post counters
 		if (!$noUpdate) {
@@ -409,40 +416,35 @@ class tx_mmforum_postfactory {
 	function delete_topic ( $topicId ) {
 
 		/*
-		 * Get the global database interface, because I am lazy of writing... :P
-		 */
-		global $TYPO3_DB;
-
-		/*
 		 * Load the topic from the database.
 		 */
 
-		$arr = $TYPO3_DB->sql_fetch_assoc($TYPO3_DB->exec_SELECTquery('*','tx_mmforum_topics','uid='.intval($topicId)));
+		$arr = $this->databaseHandle->sql_fetch_assoc($this->databaseHandle->exec_SELECTquery('*','tx_mmforum_topics','uid='.intval($topicId)));
 		$uA = array('deleted'=>1, 'tstamp'=>$GLOBALS['EXEC_TIME']);
 
 		/*
 		 * Load all posts of this topic and delete them all.
 		 */
 
-		$res = $TYPO3_DB->exec_SELECTquery('uid','tx_mmforum_posts','topic_id='.intval($topicId).' AND deleted=0');
-		while(list($postId) = $TYPO3_DB->sql_fetch_row($res))
+		$res = $this->databaseHandle->exec_SELECTquery('uid','tx_mmforum_posts','topic_id='.intval($topicId).' AND deleted=0');
+		while(list($postId) = $this->databaseHandle->sql_fetch_row($res))
 			$this->delete_post($postId, true);
 
 		/*
 		 * Now delete all favorites, subscriptions, ratings and search index entries.
 		 */
 
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_favorites', $uA, 'topic_id='.intval($postId));
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_havealook', $uA, 'topic_id='.intval($postId));
-		$TYPO3_DB->exec_DELETEquery('tx_mmforum_wordmatch', 'topic_id='.intval($topicId).'');
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_favorites', $uA, 'topic_id='.intval($postId));
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_havealook', $uA, 'topic_id='.intval($postId));
+		$this->databaseHandle->exec_DELETEquery('tx_mmforum_wordmatch', 'topic_id='.intval($topicId).'');
 		if ( ExtensionManagementUtility::extLoaded('ratings'))
-			$TYPO3_DB->exec_DELETEquery('tx_ratings_data', $uA, 'reference="tx_mmforum_topics_'.intval($postId).'"');
+			$this->databaseHandle->exec_DELETEquery('tx_ratings_data', $uA, 'reference="tx_mmforum_topics_'.intval($postId).'"');
 
 		/*
 		 * Congratulations. Now delete the topic itself.
 		 */
 
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_topics', $uA, 'uid='.intval($postId));
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics', $uA, 'uid='.intval($postId));
 
 		/*
 		 * Now update all the internal counters.
@@ -469,19 +471,17 @@ class tx_mmforum_postfactory {
 	 * @return  void
 	 */
 	function delete_post($postId, $noUpdate = false) {
-		global $TYPO3_DB;
-
-		$arr = $TYPO3_DB->sql_fetch_assoc($TYPO3_DB->exec_SELECTquery('*','tx_mmforum_posts','uid='.intval($postId)));
+		$arr = $this->databaseHandle->sql_fetch_assoc($this->databaseHandle->exec_SELECTquery('*','tx_mmforum_posts','uid='.intval($postId)));
 		$uA = array('deleted'=>1, 'tstamp'=>$GLOBALS['EXEC_TIME']);
 
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_posts', $uA, 'uid='.intval($postId));
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_posts_text', $uA, 'post_id='.intval($postId));
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_post_alert', $uA, 'post_id='.intval($postId));
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_attachments', $uA, 'post_id='.intval($postId));
-		$TYPO3_DB->exec_DELETEquery('tx_mmforum_wordmatch', 'post_id='.intval($postId).'');
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_posts', $uA, 'uid='.intval($postId));
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_posts_text', $uA, 'post_id='.intval($postId));
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_post_alert', $uA, 'post_id='.intval($postId));
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_attachments', $uA, 'post_id='.intval($postId));
+		$this->databaseHandle->exec_DELETEquery('tx_mmforum_wordmatch', 'post_id='.intval($postId).'');
 
-		if ( ExtensionManagementUtility::extLoaded('ratings'))
-			$TYPO3_DB->exec_DELETEquery('tx_ratings_data', $uA, 'reference="tx_mmforum_posts_'.intval($postId).'"');
+		if ( ExtensionManagementUtility::isLoaded('ratings'))
+			$this->databaseHandle->exec_DELETEquery('tx_ratings_data', $uA, 'reference="tx_mmforum_posts_'.intval($postId).'"');
 
 		if (!$noUpdate) {
 			$this->updateTopicPostCount($arr['topic_id']);
@@ -584,18 +584,18 @@ class tx_mmforum_postfactory {
 	 */
 	function updateUserPostCount($user_uid) {
 		$user_uid = intval($user_uid);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'COUNT(*)',
 			'tx_mmforum_posts',
 			'poster_id='.$user_uid.' AND deleted=0'.$this->getPidQuery()
 		);
-		list($postcount) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($postcount) = $this->databaseHandle->sql_fetch_row($res);
 
 		$updateArray = array(
 			'tstamp'			=> $GLOBALS['EXEC_TIME'],
 			'tx_mmforum_posts'	=> $postcount
 		);
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.$user_uid,$updateArray);
+		$this->databaseHandle->exec_UPDATEquery('fe_users','uid='.$user_uid,$updateArray);
 	}
 
 
@@ -616,22 +616,22 @@ class tx_mmforum_postfactory {
 	 */
 	function updateForumPostCount($forum_uid, $orderBy='post_time') {
 		$forum_uid = intval($forum_uid);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid',
 			'tx_mmforum_posts',
 			'forum_id='.$forum_uid.' AND deleted=0'.$this->getPidQuery(),
 			'',
 			$orderBy.' DESC'
 		);
-		list($last_post_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-		$postcount = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		list($last_post_id) = $this->databaseHandle->sql_fetch_row($res);
+		$postcount = $this->databaseHandle->sql_num_rows($res);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'COUNT(*)',
 			'tx_mmforum_topics',
 			'forum_id='.$forum_uid.' AND deleted=0'.$this->getPidQuery()
 		);
-		list($topiccount) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($topiccount) = $this->databaseHandle->sql_fetch_row($res);
 
 		$updateArray = array(
 			'tstamp'				=> $GLOBALS['EXEC_TIME'],
@@ -639,7 +639,7 @@ class tx_mmforum_postfactory {
 			'forum_posts'			=> $postcount,
 			'forum_topics'			=> $topiccount
 		);
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums','uid='.$forum_uid,$updateArray);
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_forums','uid='.$forum_uid,$updateArray);
 	}
 
 
@@ -660,22 +660,22 @@ class tx_mmforum_postfactory {
 	 */
 	function updateTopicPostCount($topic_uid, $orderBy='post_time') {
 		$topic_uid = intval($topic_uid);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid',
 			'tx_mmforum_posts',
 			'topic_id='.$topic_uid.' AND deleted=0'.$this->getPidQuery(),
 			'',
 			$orderBy.' DESC'
 		);
-		list($last_post_id) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-		$postcount = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		list($last_post_id) = $this->databaseHandle->sql_fetch_row($res);
+		$postcount = $this->databaseHandle->sql_num_rows($res);
 
 		$updateArray = array(
 			'tstamp'				=> $GLOBALS['EXEC_TIME'],
 			'topic_last_post_id'	=> $last_post_id,
 			'topic_replies'			=> $postcount - 1
 		);
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics','uid='.$topic_uid,$updateArray);
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics','uid='.$topic_uid,$updateArray);
 	}
 
 
@@ -695,13 +695,13 @@ class tx_mmforum_postfactory {
 	 */
 	function getForumUIDByTopic($topic_uid) {
 		$topic_uid = intval($topic_uid);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'forum_id',
 			'tx_mmforum_topics',
 			'uid='.$topic_uid.' AND deleted=0'
 		);
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)>0) {
-			list($forum_uid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		if ($this->databaseHandle->sql_num_rows($res)>0) {
+			list($forum_uid) = $this->databaseHandle->sql_fetch_row($res);
 			return $forum_uid;
 		} else {
 			return false;

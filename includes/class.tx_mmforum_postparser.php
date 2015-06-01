@@ -48,6 +48,17 @@ if ( ExtensionManagementUtility::isLoaded('geshilib')) {
 class tx_mmforum_postparser {
 
 	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
+
+	/**
 	 * Initialization function. A text is submitted as parameter and the parsed text
 	 * is returned.
 	 *
@@ -220,29 +231,30 @@ class tx_mmforum_postparser {
 		/* SET Buffer markers for Syntax Highlithing Boxes */
 		/* ======================== */
 		/* getting all activated syntaxhl languages out of the database ... */
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-						'lang_title,lang_pattern,lang_code',
-						'tx_mmforum_syntaxhl',
-						'deleted=0 AND hidden=0'
+		$res = $this->databaseHandle->exec_SELECTquery(
+			'lang_title,lang_pattern,lang_code',
+			'tx_mmforum_syntaxhl',
+			'deleted=0 AND hidden=0'
 		);
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0)
+		if ($this->databaseHandle->sql_num_rows($res) == 0)
 			$buffer = array();
 		else {
-			while ($data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$check = preg_match_all($data['lang_pattern'], $text, $buffer[$data['lang_title']]);
+			$buffer = array();
+			while ($data = $this->databaseHandle->sql_fetch_assoc($res)) {
+				preg_match_all($data['lang_pattern'], $text, $buffer[$data['lang_title']]);
 				$text = preg_replace($data['lang_pattern'], '###' . $data['lang_title'] . '_BUFFER_MARKER_MMCMS###', $text);
 			}
 		}
 		$text = $this->links($text, $conf);
 		$text = $this->linkgenerator($text, $conf, 'cryptmail');
 		$text = $this->typolinks($text, $parent);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'pattern,replacement',
 			'tx_mmforum_postparser',
 			'deleted=0'
 		);
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
-			while ($data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		if ($this->databaseHandle->sql_num_rows($res) > 0) {
+			while ($data = $this->databaseHandle->sql_fetch_assoc($res)) {
 				$text = preg_replace($data['pattern'], $data['replacement'], $text);
 			}
 		}
@@ -333,14 +345,14 @@ class tx_mmforum_postparser {
 	 * @return  string         The parsed string
 	 */
 	function generate_smilies($text, $parent, $conf) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'code,smile_url',
 			'tx_mmforum_smilies',
 			'deleted=0',
 			'',
 			'LENGTH(code) DESC'
 		);
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 
 			$uploadPath = 'uploads/tx_mmforum/' . $row['smile_url'];
 
@@ -376,12 +388,12 @@ class tx_mmforum_postparser {
 		$path = GeneralUtility::getFileAbsFileName('EXT:mm_forum/res/geshi/geshi/', $onlyRelative = 1, $relToTYPO3_mainDir = 0);
 		($conf['postparser.']['tsrefUrl']) ? define('GESHI_TS_REF', $conf['postparser.']['tsrefUrl']) : define('GESHI_TS_REF', 'www.typo3.net');
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'lang_title,lang_pattern,lang_code',
 			'tx_mmforum_syntaxhl',
 			'deleted=0'
 		);
-		while ($data = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while ($data = $this->databaseHandle->sql_fetch_assoc($res)) {
 			preg_match_all($data['lang_pattern'], $content, $source_arr);
 			while (list($key, $value) = each($source_arr[1])) {
 				$value = trim($this->decode_entities($value));
@@ -556,8 +568,8 @@ class tx_mmforum_postparser {
 	 *
 	 */
 	function getRecordRow($table, $uid, &$localcObj) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', $table, 'uid=' . intval($uid) . $localcObj->enableFields($table), '', '');
-		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$res = $this->databaseHandle->exec_SELECTquery('*', $table, 'uid=' . intval($uid) . $localcObj->enableFields($table), '', '');
+		$row = $this->databaseHandle->sql_fetch_assoc($res);
 		return $row;
 	}
 

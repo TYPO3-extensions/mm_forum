@@ -151,9 +151,9 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 			$onlineGuests = $this->getOnlineGuests();
 			$todayGuests = $this->getTodayGuests();
 		} else {
-            $onlineGuests = 0;
-            $todayGuests = 0;
-        }
+			$onlineGuests = 0;
+			$todayGuests = 0;
+		}
 
 		// Determine total amount of visitors
 		$onlineTotal = $onlineUsers['count'] + $onlineGuests;
@@ -292,22 +292,22 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @uses getTotalPosts
 	 */
 	function getAveragePosts() {
-        $res=$GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            '(UNIX_TIMESTAMP()-min(post_time))',
-            'tx_mmforum_posts',
-            '1=1'.$this->cObj->enableFields('tx_mmforum_posts').$this->getStoragePIDQuery()
-        );
-        $arr = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-        $daysTotal = floor($arr[0]/(3600*24))+1;
+		$res=$this->databaseHandle->exec_SELECTquery(
+			'(UNIX_TIMESTAMP()-min(post_time))',
+			'tx_mmforum_posts',
+			'1=1'.$this->cObj->enableFields('tx_mmforum_posts').$this->getStoragePIDQuery()
+		);
+		$arr = $this->databaseHandle->sql_fetch_row($res);
+		$daysTotal = floor($arr[0]/(3600*24))+1;
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-            'COUNT(*)/'.$daysTotal,
-            'tx_mmforum_posts',
-            '1=1'.$this->cObj->enableFields('tx_mmforum_posts').$this->getStoragePIDQuery()
-        );
-        $arr = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
-        return $arr[0];
-    }
+		$res = $this->databaseHandle->exec_SELECTquery(
+			'COUNT(*)/'.$daysTotal,
+			'tx_mmforum_posts',
+			'1=1'.$this->cObj->enableFields('tx_mmforum_posts').$this->getStoragePIDQuery()
+		);
+		$arr = $this->databaseHandle->sql_fetch_row($res);
+		return $arr[0];
+	}
 
 	/**
 	 * Determines the total amount of posts in the board.
@@ -315,12 +315,12 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @return integer The total amount of posts in the board.
 	 */
 	function getTotalPosts() {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'COUNT(*)',
 			'tx_mmforum_posts',
 			'1=1'.$this->cObj->enableFields('tx_mmforum_posts').$this->getStoragePIDQuery()
 		);
-		$arr = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$arr = $this->databaseHandle->sql_fetch_row($res);
 		return $arr[0];
 	}
 
@@ -342,12 +342,12 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @return integer The total amount of topics in the board.
 	 */
 	function getTotalTopics() {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'COUNT(*)',
 			'tx_mmforum_topics',
 			'1=1'.$this->cObj->enableFields('tx_mmforum_topics').$this->getStoragePIDQuery()
 		);
-		$arr = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$arr = $this->databaseHandle->sql_fetch_row($res);
 		return $arr[0];
 	}
 
@@ -357,12 +357,12 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @return integer The total amount of registered users.
 	 */
 	function getTotalUsers() {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'COUNT(*)',
 			'fe_users',
 			'1=1'.$this->cObj->enableFields('fe_users').$this->getUserPidQuery()
 		);
-		$arr = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$arr = $this->databaseHandle->sql_fetch_row($res);
 		return $arr[0];
 	}
 
@@ -406,13 +406,13 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @return integer       The amount of visitors since $time
 	 */
 	function getTotalFromTime($time) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid',
 			'sys_stat',
 			'tstamp >= "'.$time.'"',
 			'surecookie'
 		);
-		return $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		return $this->databaseHandle->sql_num_rows($res);
 	}
 
 	/**
@@ -422,13 +422,13 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @return integer       The total amount of guests since $time
 	 */
 	function getGuestsFromTime($time) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid',
 			'sys_stat',
 			'tstamp >= "'.$time.'" AND feuser_id = "0"',
 			'surecookie'
 		);
-		return $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		return $this->databaseHandle->sql_num_rows($res);
 	}
 
 	/**
@@ -498,7 +498,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 		$grp_mod		= $this->getModeratorGroups();
 
 		if ($sesBackcheck) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'u.usergroup, u.'.tx_mmforum_pi1::getUserNameField().', u.uid',
 				'fe_users u, fe_sessions s',
 				's.ses_tstamp >= "'.$time.'" AND u.deleted=0 AND u.disable=0 AND u.uid=s.ses_userid '.$this->getUserPidQuery('u'),
@@ -507,31 +507,31 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 			);
 		}
 		else {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'u.usergroup, u.'.tx_mmforum_pi1::getUserNameField().', u.uid',
 				'fe_users u, sys_stat s',
 				's.feuser_id != "0" AND u.uid = s.feuser_id AND s.tstamp >= "'.$time.'" '.$this->getUserPidQuery('u'),
 				'feuser_id'
 			);
 		}
-		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 			if ($postCount) {
-				$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res2 = $this->databaseHandle->exec_SELECTquery(
 					'COUNT(*)',
 					'tx_mmforum_posts',
 					'poster_id="'.$arr['uid'].'" AND post_time >= "'.$time.'"'.$this->cObj->enableFields('tx_mmforum_posts').' '.$this->getStoragePIDQuery()
 				);
-				$arr2 = $GLOBALS['TYPO3_DB']->sql_fetch_row($res2);
+				$arr2 = $this->databaseHandle->sql_fetch_row($res2);
 				$arr['postCount'] = $arr2[0];
 			}
 
 			$user_groups = GeneralUtility::intExplode(',',$arr['usergroup']);
 
-			    if (count(array_intersect($user_groups, $grp_mod))   > 0) $result['mods'][]   = $arr;
+				if (count(array_intersect($user_groups, $grp_mod))   > 0) $result['mods'][]   = $arr;
 			elseif (count(array_intersect($user_groups, $grp_admin)) > 0) $result['admins'][] = $arr;
 			else $result['users'][] = $arr;
 		}
-		$result['count'] = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		$result['count'] = $this->databaseHandle->sql_num_rows($res);
 
 		return $result;
 	}

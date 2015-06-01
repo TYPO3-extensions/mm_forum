@@ -72,10 +72,10 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			foreach($param as $key => $value) {
 				$key = str_replace('status_','',$key);
 				if (is_numeric($key)){
-					$key = $GLOBALS['TYPO3_DB']->fullQuoteStr($key, 'tx_mmforum_post_alert');
-					$value = $GLOBALS['TYPO3_DB']->fullQuoteStr($value, 'tx_mmforum_post_alert');
+					$key = $this->databaseHandle->fullQuoteStr($key, 'tx_mmforum_post_alert');
+					$value = $this->databaseHandle->fullQuoteStr($value, 'tx_mmforum_post_alert');
 					$updateArray = array('status'=>$value,'tstamp'=>$GLOBALS['EXEC_TIME']);
-					$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_post_alert', 'uid='.$key.' AND status <> '.$value, $updateArray);
+					$this->databaseHandle->exec_UPDATEquery('tx_mmforum_post_alert', 'uid='.$key.' AND status <> '.$value, $updateArray);
 				}
 			}
 		}
@@ -187,7 +187,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 		}
 
 			// Load post alert records from database
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'a.*',
 			'tx_mmforum_post_alert a LEFT JOIN tx_mmforum_topics t ON a.topic_id = t.uid',
 			"1 = 1 $where $accessWhere",
@@ -195,7 +195,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 			$order_by.' '.$order);
 
 		$content_sub = '';
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$marker['###STATUS###'] = '';
 
 			switch ($row['status']) {
@@ -226,7 +226,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 				'pid'		=> $row['post_id']
 			);
 
-			list($posttext) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery('post_text','tx_mmforum_posts_text','deleted="0" AND hidden="0" AND post_id="'.$row['post_id'].'"'));
+			list($posttext) = $this->databaseHandle->sql_fetch_row($this->databaseHandle->exec_SELECTquery('post_text','tx_mmforum_posts_text','deleted="0" AND hidden="0" AND post_id="'.$row['post_id'].'"'));
 
 			$marker['###UID###']		= $row['uid'];
 			$marker['###TOPIC###']		= $this->pi_linkToPage($this->escape(tx_mmforum_pi1::get_topic_name($row['topic_id'])),$conf['pid_forum'],$target='_self',$linkparams);
@@ -288,7 +288,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 						'mod_id'		=> '',
 						'status'		=> '-1'
 					);
-					$GLOBALS['TYPO3_DB']->exec_INSERTquery(' tx_mmforum_post_alert', $insertArray);
+					$this->databaseHandle->exec_INSERTquery(' tx_mmforum_post_alert', $insertArray);
 
 					$linkto	= $this->get_pid_link($post_id, GeneralUtility::_GP('sword'),$conf);
 					$linkto = $this->tools->getAbsoluteUrl($linkto);
@@ -297,7 +297,7 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 				}
 			}
 
-			list($posttext) = $GLOBALS['TYPO3_DB']->sql_fetch_row($GLOBALS['TYPO3_DB']->exec_SELECTquery('post_text','tx_mmforum_posts_text',"deleted='0' AND hidden='0' AND post_id='$post_id'"));
+			list($posttext) = $this->databaseHandle->sql_fetch_row($this->databaseHandle->exec_SELECTquery('post_text','tx_mmforum_posts_text',"deleted='0' AND hidden='0' AND post_id='$post_id'"));
 
 			$linkParams[$this->prefixId] = array(
 				'action'		=> 'list_post',

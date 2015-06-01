@@ -110,7 +110,19 @@ class tx_mmforum_cronbase {
 	 */
 	var $MMFORUMPATH = '';
 
+	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
 
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
 
 	/**
 	 * Initializes the cronjob.
@@ -300,8 +312,8 @@ class tx_mmforum_cronbase {
 	 * @return  boolean     TRUE on success, otherwise FALSE
 	 */
 	function removeCacheValue($key) {
-		$res = $GLOBALS['TYPO3_DB']->exec_DELETEquery(
-			'tx_mmforum_cache', 'cache_key='.$GLOBALS['TYPO3_DB']->fullQuoteStr($key,'tx_mmforum_cache')
+		$res = $this->databaseHandle->exec_DELETEquery(
+			'tx_mmforum_cache', 'cache_key='.$this->databaseHandle->fullQuoteStr($key,'tx_mmforum_cache')
 		);
 		return $res ? true : false;
 	}
@@ -320,11 +332,11 @@ class tx_mmforum_cronbase {
 	 *                      cache table, this function will return NULL.
 	 */
 	function getCacheValue($key) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-			'cache_value', 'tx_mmforum_cache', 'cache_key='.$GLOBALS['TYPO3_DB']->fullQuoteStr($key,'tx_mmforum_cache')
+		$res = $this->databaseHandle->exec_SELECTquery(
+			'cache_value', 'tx_mmforum_cache', 'cache_key='.$this->databaseHandle->fullQuoteStr($key,'tx_mmforum_cache')
 		);
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
-			list($value) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		if ($this->databaseHandle->sql_num_rows($res)) {
+			list($value) = $this->databaseHandle->sql_fetch_row($res);
 			return unserialize($value);
 		}
 		return null;

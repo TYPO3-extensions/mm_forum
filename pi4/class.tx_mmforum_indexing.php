@@ -64,6 +64,20 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class tx_mmforum_indexing {
 
 	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
+
+	/**
 	 * Indexes a specific topic.
 	 * @param  int    $topic_id The topic UID
 	 * @param  array  $conf     The calling plugin's configuration vars. Not actually used.
@@ -71,13 +85,13 @@ class tx_mmforum_indexing {
 	 */
 	function ind_topic($topic_id,$conf) {
 			// Delete old index records regarding this topic
-		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_wordmatch',"topic_id='$topic_id'");
+		$this->databaseHandle->exec_DELETEquery('tx_mmforum_wordmatch',"topic_id='$topic_id'");
 
 			// Retrieve post data
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts',"topic_id='$topic_id' AND hidden='0'".$this->getPidQuery($conf));
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+		$res = $this->databaseHandle->exec_SELECTquery('*','tx_mmforum_posts',"topic_id='$topic_id' AND hidden='0'".$this->getPidQuery($conf));
+		if ($this->databaseHandle->sql_num_rows($res)) {
 			// Index each post in the topic
-			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 				$this->ind_post($conf,$row);
 			}
             $this->ind_topic_title($conf,$topic_id);
@@ -97,8 +111,8 @@ class tx_mmforum_indexing {
 	 */
 	function ind_check() {
 		// Load date of last indexing process from database
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('tx_mmforumsearch_index_write','tx_mmforum_posts','','','tx_mmforumsearch_index_write DESC','1');
-		list($date) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $this->databaseHandle->exec_SELECTquery('tx_mmforumsearch_index_write','tx_mmforum_posts','','','tx_mmforumsearch_index_write DESC','1');
+		list($date) = $this->databaseHandle->sql_fetch_row($res);
 
 		// If last indexing process happened less than 10 seconds ago, return TRUE
 		if ($date < ($GLOBALS['EXEC_TIME']-10)) {
@@ -111,24 +125,24 @@ class tx_mmforum_indexing {
 	}
 
     function ind_topic_title($conf,$topic_id) {
-        $GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_wordmatch',"topic_id='".$topic_id."' AND is_header=1");
+        $this->databaseHandle->exec_DELETEquery('tx_mmforum_wordmatch',"topic_id='".$topic_id."' AND is_header=1");
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        $res = $this->databaseHandle->exec_SELECTquery(
             '*',
             'tx_mmforum_topics',
             'uid='.intval($topic_id)
         );
-        $topicData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        $topicData = $this->databaseHandle->sql_fetch_assoc($res);
 
 		if ($topicData['deleted'] == 0) {
 	        $words = $this->wordArray($conf, $topicData['topic_title']);
 
-	        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+	        $res = $this->databaseHandle->exec_SELECTquery(
 				'f.grouprights_read as f_read, c.grouprights_read as c_read',
 				'tx_mmforum_forums f, tx_mmforum_forums c',
 				'f.uid="'.$topicData['forum_id'].'" AND c.uid = f.parentID'
 			);
-			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$arr = $this->databaseHandle->sql_fetch_assoc($res);
 			$f_groups = GeneralUtility::intExplode(',',$arr['f_read']);
 			$c_groups = GeneralUtility::intExplode(',',$arr['c_read']);
 
@@ -164,8 +178,6 @@ class tx_mmforum_indexing {
 	            $this->wortMatchAdd($word_id,$matchparams,false);
 	        }
 		}
-
-
     }
 
 	/**
@@ -177,7 +189,7 @@ class tx_mmforum_indexing {
 	 */
 	function ind_post($conf,$post_array) {
 			// Delete old records in the index table regarding this post.
-		$GLOBALS['TYPO3_DB']->exec_DELETEquery('tx_mmforum_wordmatch',"post_id='".$post_array['uid']."'");
+		$this->databaseHandle->exec_DELETEquery('tx_mmforum_wordmatch',"post_id='".$post_array['uid']."'");
 
 			// If post is deleted, do not index again...
 		if ($post_array['deleted'] == 0) {
@@ -189,12 +201,12 @@ class tx_mmforum_indexing {
 				// Load topic information
 			$topic_array	= $this->topic_information($post_array['topic_id']);
 
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'f.grouprights_read as f_read, c.grouprights_read as c_read',
 				'tx_mmforum_forums f, tx_mmforum_forums c',
 				'f.uid="'.$topic_array['forum_id'].'" AND c.uid = f.parentID'
 			);
-			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$arr = $this->databaseHandle->sql_fetch_assoc($res);
 			$f_groups = GeneralUtility::intExplode(',',$arr['f_read']);
 			$c_groups = GeneralUtility::intExplode(',',$arr['c_read']);
 
@@ -239,7 +251,7 @@ class tx_mmforum_indexing {
 	 * @param int $post_id The post UID
 	 */
 	function write_post_ind_date($post_id) {
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_posts', 'uid = '.intval($post_id), array(
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_posts', 'uid = '.intval($post_id), array(
 			'tx_mmforumsearch_index_write' => $GLOBALS['EXEC_TIME'],
 		));
 	}
@@ -249,7 +261,7 @@ class tx_mmforum_indexing {
 	 * @param int $topic_id The topic UID
 	 */
 	function write_topic_ind_date($topic_id) {
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_topics', 'uid = '.intval($topic_id), array(
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics', 'uid = '.intval($topic_id), array(
 			'tx_mmforumsearch_index_write' => $GLOBALS['EXEC_TIME'],
 		));
 	}
@@ -273,12 +285,12 @@ class tx_mmforum_indexing {
 	 */
 	function wordAdd($word) {
 		// Attempt to load word from database
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('uid','tx_mmforum_wordlist',"word=".$GLOBALS['TYPO3_DB']->fullQuoteStr($word, 'tx_mmforum_wordlist')." ".$this->getPidQuery($this->conf));
-		if (!$res) echo $GLOBALS['TYPO3_DB']->sql_error().'<hr>';
+		$res = $this->databaseHandle->exec_SELECTquery('uid','tx_mmforum_wordlist',"word=".$this->databaseHandle->fullQuoteStr($word, 'tx_mmforum_wordlist')." ".$this->getPidQuery($this->conf));
+		if (!$res) echo $this->databaseHandle->sql_error().'<hr>';
 
 		// If words already exists, just return the UID
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
-			list($uid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		if ($this->databaseHandle->sql_num_rows($res) > 0) {
+			list($uid) = $this->databaseHandle->sql_fetch_row($res);
 		}
 		// Otherwise, create new record and return the UID
 		else {
@@ -290,8 +302,8 @@ class tx_mmforum_indexing {
 			);
 
 			// Execute insert query
-			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_wordlist', $insertArray);
-			$uid = $GLOBALS['TYPO3_DB']->sql_insert_id();
+			$this->databaseHandle->exec_INSERTquery('tx_mmforum_wordlist', $insertArray);
+			$uid = $this->databaseHandle->sql_insert_id();
 		}
 		return $uid;
 	}
@@ -322,7 +334,7 @@ class tx_mmforum_indexing {
 			'crdate'            => $GLOBALS['EXEC_TIME'],
 			'tstamp'			=> $GLOBALS['EXEC_TIME']
 		);
-		$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_wordmatch', $insertArray);
+		$this->databaseHandle->exec_INSERTquery('tx_mmforum_wordmatch', $insertArray);
 	}
 
 	/**
@@ -447,8 +459,8 @@ class tx_mmforum_indexing {
 	}
 
 	function get_posttext($post_id) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts_text',"post_id='$post_id' AND deleted='0' AND hidden='0'".$this->getPidQuery($this->conf),'','','1');
-		$row    = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$res = $this->databaseHandle->exec_SELECTquery('*','tx_mmforum_posts_text',"post_id='$post_id' AND deleted='0' AND hidden='0'".$this->getPidQuery($this->conf),'','','1');
+		$row    = $this->databaseHandle->sql_fetch_assoc($res);
 		return $row['post_text'];
 	}
 
@@ -458,8 +470,8 @@ class tx_mmforum_indexing {
 	 * @return array           The topic record as array
 	 */
 	function topic_information($topic_id) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_topics',"uid='$topic_id' AND hidden='0' AND deleted='0'".$this->getPidQuery($this->conf));
-		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$res = $this->databaseHandle->exec_SELECTquery('*','tx_mmforum_topics',"uid='$topic_id' AND hidden='0' AND deleted='0'".$this->getPidQuery($this->conf));
+		$row = $this->databaseHandle->sql_fetch_assoc($res);
 		return  $row;
 	}
 
@@ -469,8 +481,8 @@ class tx_mmforum_indexing {
 	 * @return array          The post record as array
 	 */
 	function post_information($post_id) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_posts', "uid='$post_id' AND hidden='0' AND deleted='0'".$this->getPidQuery($this->conf));
-		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		$res = $this->databaseHandle->exec_SELECTquery('*','tx_mmforum_posts', "uid='$post_id' AND hidden='0' AND deleted='0'".$this->getPidQuery($this->conf));
+		$row = $this->databaseHandle->sql_fetch_assoc($res);
 		return  $row;
 	}
 

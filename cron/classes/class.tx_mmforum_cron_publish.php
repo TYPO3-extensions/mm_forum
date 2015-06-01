@@ -83,13 +83,13 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 	 */
 	function sendEmailToModerators() {
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'*',
 			'fe_users',
 			'FIND_IN_SET('.$this->conf['cron_notifyPublish_group'].',usergroup) AND deleted=0 AND disable=0 AND pid IN ('.$this->conf['userPID'].')'
 		);
 
-		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$marker			= array(
 				'###PNOTIFY_ADDRESS###' => sprintf($this->getLL('address'),$arr['username'])
 			);
@@ -166,13 +166,13 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 		if ($record['topic_forum']) {
 			$forum_uid = $record['topic_forum'];
 		} else {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('forum_id','tx_mmforum_topics','uid='.$record['post_parent'].' AND deleted=0');
-			list($forum_uid) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			$res = $this->databaseHandle->exec_SELECTquery('forum_id','tx_mmforum_topics','uid='.$record['post_parent'].' AND deleted=0');
+			list($forum_uid) = $this->databaseHandle->sql_fetch_row($res);
 		}
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('forum_name', 'tx_mmforum_forums', 'uid='.$forum_uid.' AND deleted=0');
+		$res = $this->databaseHandle->exec_SELECTquery('forum_name', 'tx_mmforum_forums', 'uid='.$forum_uid.' AND deleted=0');
 
-		list($forum_name) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($forum_name) = $this->databaseHandle->sql_fetch_row($res);
 		return $forum_name;
 	}
 
@@ -184,10 +184,10 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 	 * @return  string        The user's user name
 	 */
 	function getTopicAuthor($user_uid) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($this->conf['userNameField'], 'fe_users', 'uid='.$user_uid.' AND deleted=0');
+		$res = $this->databaseHandle->exec_SELECTquery($this->conf['userNameField'], 'fe_users', 'uid='.$user_uid.' AND deleted=0');
 
-		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
-			list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res); return $username;
+		if ($this->databaseHandle->sql_num_rows($res)) {
+			list($username) = $this->databaseHandle->sql_fetch_row($res); return $username;
 		} else {
 			return $this->getLL('deletedUser');
 		}
@@ -206,8 +206,8 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 			return $record['topic_title'];
 		}
 		else {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('topic_title','tx_mmforum_topics','uid='.$record['post_parent']);
-			list($title) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+			$res = $this->databaseHandle->exec_SELECTquery('topic_title','tx_mmforum_topics','uid='.$record['post_parent']);
+			list($title) = $this->databaseHandle->sql_fetch_row($res);
 			return $title;
 		}
 	}
@@ -220,8 +220,8 @@ class tx_mmforum_cron_publish extends tx_mmforum_cronbase {
 	 * @return  void
 	 */
 	function loadPostQueueItems() {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*','tx_mmforum_postqueue','deleted=0 AND hidden=0');
-		while($arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		$res = $this->databaseHandle->exec_SELECTquery('*','tx_mmforum_postqueue','deleted=0 AND hidden=0');
+		while($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$this->postqueueItems[] = $arr;
 		}
 	}

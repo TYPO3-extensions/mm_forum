@@ -56,6 +56,20 @@ class tx_mmforum_ranksFE {
 	var $cObj;
 
 	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
+
+	/**
 	 * Initializes the object.
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-04-20
@@ -135,14 +149,14 @@ class tx_mmforum_ranksFE {
         if ($user_id == $GLOBALS['TSFE']->fe_user->user['uid'])
             return $GLOBALS['TSFE']->fe_user->user['tx_mmforum_posts'];
         else {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+            $res = $this->databaseHandle->exec_SELECTquery(
                 'tx_mmforum_posts',
                 'fe_users',
                 'uid='.intval($user_id)
             );
-            if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return 0;
+            if ($this->databaseHandle->sql_num_rows($res)==0) return 0;
             else {
-                list($post_count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+                list($post_count) = $this->databaseHandle->sql_fetch_row($res);
                 return $post_count;
             }
         }
@@ -162,14 +176,14 @@ class tx_mmforum_ranksFE {
         if ($user_id == $GLOBALS['TSFE']->fe_user->user['uid'])
             $groups = $GLOBALS['TSFE']->fe_user->user['usergroup'];
         else {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+            $res = $this->databaseHandle->exec_SELECTquery(
                 'usergroup',
                 'fe_users',
                 'uid='.intval($user_id)
             );
-            if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return 0;
+            if ($this->databaseHandle->sql_num_rows($res)==0) return 0;
             else {
-                list($groups) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+                list($groups) = $this->databaseHandle->sql_fetch_row($res);
             }
         }
         $aGroup = GeneralUtility::intExplode(',',$groups);
@@ -200,23 +214,23 @@ class tx_mmforum_ranksFE {
             if ($GLOBALS['tx_mmforum_ranksFE']['groupCache'][$group])
                 $groupData = $GLOBALS['tx_mmforum_ranksFE']['groupCache'][$group];
             else {
-                $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+                $res = $this->databaseHandle->exec_SELECTquery(
                     '*',
                     'fe_groups',
                     'uid='.$group
                 );
-                $groupData = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+                $groupData = $this->databaseHandle->sql_fetch_assoc($res);
                 $GLOBALS['tx_mmforum_ranksFE']['groupCache'][$group] = $groupData;
             }
 
             if ($groupData['tx_mmforum_rank']) {
-                $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+                $res = $this->databaseHandle->exec_SELECTquery(
                     '*',
                     'tx_mmforum_ranks',
                     'uid='.$groupData['tx_mmforum_rank'].' AND deleted=0 AND hidden=0'
                 );
-                if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) continue;
-                $rank = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+                if ($this->databaseHandle->sql_num_rows($res)==0) continue;
+                $rank = $this->databaseHandle->sql_fetch_assoc($res);
                 if ($groupData['tx_mmforum_rank_excl']) {
                     $rank['excl'] = 1;
                     return array($rank);
@@ -238,15 +252,15 @@ class tx_mmforum_ranksFE {
      * @return  array             The regarding user rank as associative array.
      */
     function getRankByPostCount($post_count) {
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        $res = $this->databaseHandle->exec_SELECTquery(
             '*',
             'tx_mmforum_ranks',
             'minPosts <= '.$post_count.' AND deleted=0 AND hidden=0 AND special=0',
             '',
             'minPosts DESC'
         );
-        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)==0) return 'error';
-        else return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        if ($this->databaseHandle->sql_num_rows($res)==0) return 'error';
+        else return $this->databaseHandle->sql_fetch_assoc($res);
     }
 
     /**

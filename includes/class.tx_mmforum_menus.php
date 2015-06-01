@@ -65,7 +65,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 			$activeBoard = tx_mmforum_pi1::get_forum_id($activeTopic);
 		}
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid, forum_name AS name, parentID',
 			'tx_mmforum_forums',
 			'deleted = 0 AND hidden = 0' . $this->getStoragePIDQuery(),
@@ -74,7 +74,7 @@ class tx_mmforum_menus extends tx_mmforum_base {
 		);
 
 		// compile every entry in the list
-		while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 
 			// top level = categories
 			if ($row['parentID'] == 0) {
@@ -166,12 +166,12 @@ class tx_mmforum_menus extends tx_mmforum_base {
 			case 'list_post':
 			case 'new_post':
 			case 'post_alert':
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res = $this->databaseHandle->exec_SELECTquery(
 					't.uid, t.forum_id, c.uid, topic_title, f.forum_name, c.forum_name',
 					'tx_mmforum_topics t, tx_mmforum_forums f, tx_mmforum_forums c',
 					't.uid="' . intval($this->piVars['tid']) . '" AND f.uid=t.forum_id AND c.uid=f.parentID'
 				);
-				list($topicId,$forumId,$catId,$topicTitle,$forumTitle,$catTitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				list($topicId,$forumId,$catId,$topicTitle,$forumTitle,$catTitle) = $this->databaseHandle->sql_fetch_row($res);
 
 				$topicTitle = stripslashes($topicTitle);
 
@@ -206,12 +206,12 @@ class tx_mmforum_menus extends tx_mmforum_base {
 			// Displays a rootline like "mm_forum page -> Category -> Board (-> New topic)"
 			case 'new_topic':
 			case 'list_topic':
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res = $this->databaseHandle->exec_SELECTquery(
 					'f.uid,f.forum_name,c.uid,c.forum_name',
 					'tx_mmforum_forums f, tx_mmforum_forums c',
 					'f.uid="'.intval($this->piVars['fid']).'" AND c.uid=f.parentID'
 				);
-				list($forumId, $forumTitle, $catId, $catTitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				list($forumId, $forumTitle, $catId, $catTitle) = $this->databaseHandle->sql_fetch_row($res);
 
 				if ($action == 'new_topic') {
 					$linkParams[$this->prefixId] = array(
@@ -228,12 +228,12 @@ class tx_mmforum_menus extends tx_mmforum_base {
 			// Post editing form
 			// Displays a rootline like "mm_forum page -> Category -> Board -> Topic -> Edit post"
 			case 'post_edit':
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res = $this->databaseHandle->exec_SELECTquery(
 					't.uid,t.forum_id,c.uid,topic_title,f.forum_name,c.forum_name',
 					'tx_mmforum_posts p, tx_mmforum_topics t, tx_mmforum_forums f, tx_mmforum_forums c',
 					'p.uid="' . intval($this->piVars['pid']) . '" AND t.uid=p.topic_id AND f.uid=p.forum_id AND c.uid=f.parentID'
 				);
-				list($topicId,$forumId,$catId,$topicTitle,$forumTitle,$catTitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				list($topicId,$forumId,$catId,$topicTitle,$forumTitle,$catTitle) = $this->databaseHandle->sql_fetch_row($res);
 
 				$topicTitle = stripslashes($topicTitle);
 
@@ -262,12 +262,12 @@ class tx_mmforum_menus extends tx_mmforum_base {
 
 				$conf['userNameField']?$conf['userNameField']:$conf['userNameField']='username';
 
-				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				$res = $this->databaseHandle->exec_SELECTquery(
 					$conf['userNameField'],
 					'fe_users',
 					'uid="'.intval($user_id).'"'
 				);
-				list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+				list($username) = $this->databaseHandle->sql_fetch_row($res);
 				$linkParams[$this->prefixId] = array(
 					'action'  => 'forum_view_profil',
 					'user_id' => $this->piVars['user_id']
