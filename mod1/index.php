@@ -329,7 +329,18 @@ class tx_mmforum_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 			$filter = '1';
 		}
 
-		$orderBy = GeneralUtility::_GP('mmforum_style') ? strtoupper($this->databaseHandle->fullQuoteStr(GeneralUtility::_GP('mmforum_style'))) : 'ASC';
+		// Determine sort order. The default is "ASC" order.
+		switch (strtoupper(GeneralUtility::_GP('mmforum_style'))) {
+			case 'DESC':
+				$orderBy = 'DESC';
+			break;
+
+			case 'ASC':
+			default:
+				$orderBy = 'ASC';
+			break;
+		}
+
 		if ( GeneralUtility::_GP('mmforum_sort') == 'username') {
 			$order = 'username ' . $orderBy . '';
 			$uOrder = $orderBy == 'ASC' ? 'DESC' : 'ASC';
