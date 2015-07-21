@@ -23,6 +23,7 @@
  ***************************************************************/
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
@@ -79,6 +80,24 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	var $prefixId_pi1  = 'tx_mmforum_pi1';
 	var $scriptRelPath = 'pi6/class.tx_mmforum_pi6.php';	// Path to this script relative to the extension dir.
 
+	/**
+	 * @var tx_mmforum_pi1
+	 */
+	protected $tx_mmforum_pi1;
+	
+	protected $small;
+
+	/**
+	 * @var ContentObjectRenderer
+	 */
+	public $cObj;
+	
+	public function __construct() {
+		$this->tx_mmforum_pi1 = GeneralUtility::makeInstance('tx_mmforum_pi1');
+		$this->cObj = GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
+		parent::__construct();
+	}
+	
 	/**
 	 * The plugin's main function
 	 * @author Martin Helmich <m.helmich@mittwald.de>
@@ -276,11 +295,11 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 	 * @return string        The part-user list's HTML code
 	 */
 	function getPartUserList($users, $class='') {
-		$links = Array();
+		$links = array();
 		foreach($users as $user) {
-			$pageLink = tx_mmforum_pi1::getUserProfileLink($user['uid']);
+			$pageLink = $this->tx_mmforum_pi1->getUserProfileLink($user['uid']);
 			$postCount = $user['postCount']?' ('.$user['postCount'].')':'';
-			$links[] = '<a href="'.$pageLink.'" class="'.$class.'">'.$user[tx_mmforum_pi1::getUserNameField()].$postCount.'</a>';
+			$links[] = '<a href="'.$pageLink.'" class="'.$class.'">'.$user[$this->tx_mmforum_pi1->getUserNameField()].$postCount.'</a>';
 		}
 		return implode(', ',$links);
 	}
@@ -499,7 +518,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 
 		if ($sesBackcheck) {
 			$res = $this->databaseHandle->exec_SELECTquery(
-				'u.usergroup, u.'.tx_mmforum_pi1::getUserNameField().', u.uid',
+				'u.usergroup, u.'.$this->tx_mmforum_pi1->getUserNameField().', u.uid',
 				'fe_users u, fe_sessions s',
 				's.ses_tstamp >= "'.$time.'" AND u.deleted=0 AND u.disable=0 AND u.uid=s.ses_userid '.$this->getUserPidQuery('u'),
 				'ses_userid',
@@ -508,7 +527,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 		}
 		else {
 			$res = $this->databaseHandle->exec_SELECTquery(
-				'u.usergroup, u.'.tx_mmforum_pi1::getUserNameField().', u.uid',
+				'u.usergroup, u.'.$this->tx_mmforum_pi1->getUserNameField().', u.uid',
 				'fe_users u, sys_stat s',
 				's.feuser_id != "0" AND u.uid = s.feuser_id AND s.tstamp >= "'.$time.'" '.$this->getUserPidQuery('u'),
 				'feuser_id'
@@ -527,7 +546,7 @@ class tx_mmforum_pi6 extends tx_mmforum_base {
 
 			$user_groups = GeneralUtility::intExplode(',',$arr['usergroup']);
 
-				if (count(array_intersect($user_groups, $grp_mod))   > 0) $result['mods'][]   = $arr;
+			if (count(array_intersect($user_groups, $grp_mod))   > 0) $result['mods'][]   = $arr;
 			elseif (count(array_intersect($user_groups, $grp_admin)) > 0) $result['admins'][] = $arr;
 			else $result['users'][] = $arr;
 		}

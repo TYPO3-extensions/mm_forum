@@ -65,21 +65,18 @@ class tx_mmforum_postparser {
 	 * @author  Björn Detert <b.detert@mittwald.de>
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 20. 9. 2006
-	 * @param   object $parent The calling object (regulary of type tx_mmforum_pi1), so this
+	 * @param   tx_mmforum_base  $parent The calling object (regulary of type tx_mmforum_pi1), so this
 	 *                         object inherits all configuration and language options from the
 	 *                         calling object.
 	 * @param   array  $conf   The calling plugin's configuration vars
 	 * @param   string $text   The text that is to be parsed
-	 * @param   strong $job    The task to fulfil. At the moment, the only possible job is "textparser"
+	 * @param   string $job    The task to fulfil. At the moment, the only possible job is "textparser"
 	 * @return  string         The parsed text.
 	 */
-	function main($parent, $conf, $text, $job='textparser') {
-
-		$postParserObj = GeneralUtility::makeInstance('tx_mmforum_postparser');
-
+	function main(tx_mmforum_base $parent, $conf, $text, $job = 'textparser') {
 		switch ($job) {
 			case 'textparser':
-				$content = $postParserObj->parse_text($text, $parent, $conf);
+				$content = $this->parse_text($text, $parent, $conf);
 				break;
 			default:
 				$content = $parent->pi_getLL('postparser_noJob');
@@ -127,12 +124,13 @@ class tx_mmforum_postparser {
 	 * @author  Björn Detert <b.detert@mittwald.de>
 	 * @version 20. 9. 2006
 	 * @param   string $content The string in which the email links are to be generated
-	 * @param   array  $conf    The calling plugin's configuration vars
-	 * @param   string $switch  Determines the parsing option. At the moment, the only accepted
+	 * @param   array $conf The calling plugin's configuration vars
+	 * @param   string $switch Determines the parsing option. At the moment, the only accepted
 	 *                          value is 'cryptmail'.
-	 * @return  string          The text with email links
+	 * @param $parent
+	 * @return string The text with email links
 	 */
-	function linkgenerator($content, $conf, $switch) {
+	function linkgenerator($content, $conf, $switch, $parent) {
 		switch ($switch) {
 			case 'cryptmail':
 				$patterns = array(
@@ -162,7 +160,7 @@ class tx_mmforum_postparser {
 					if ($bool == TRUE && is_array($res_arr)) {
 						while (list($key, $value) = each($res_arr[1])) {
 							$value = str_replace('mailto:', '', $value);
-							$link = $this->getMailTo($value, $value, '');
+							$link = $this->getMailTo($value, $value, $parent);
 							$content = str_replace($v['front'] . $value . $v['end'], '<a href="' . $link[0] . '">' . $link[1] . '</a>', $content);
 						}
 					}
@@ -182,12 +180,12 @@ class tx_mmforum_postparser {
 	 * @version 20. 9. 2006
 	 * @param   string $mailAddress The email address to be linked
 	 * @param   string $linktxt     The text of the link
-	 * @param   string $initP       ?
+	 * @param   object $parent       
 	 * @return  array               A numeric array containing the data for the email
 	 *                              link. Index 0 contains the URL, index 1 contains the link
 	 *                              text.
 	 */
-	function getMailTo($mailAddress, $linktxt, $initP='?') {
+	function getMailTo($mailAddress, $linktxt, $parent) {
 		if (!strcmp($linktxt, '')) {
 			$linktxt = $mailAddress;
 		}
@@ -217,7 +215,7 @@ class tx_mmforum_postparser {
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2008-12-08
 	 * @param   string $text   The text to be parsed
-	 * @param   object $parent The calling object (regulary of type tx_mmforum_pi1), so this
+	 * @param   tx_mmforum_base $parent The calling object (regulary of type tx_mmforum_pi1), so this
 	 *                         object inherits all configuration and language options from the
 	 *                         calling object.
 	 * @param   array  $conf   The calling plugin's configuration vars
@@ -226,7 +224,7 @@ class tx_mmforum_postparser {
 	function bbcode2html($text, $parent, $conf) {
 
 		/* Parse special characters */
-		$text = $parent->validatorObj->specialChars($text);
+		$text = $parent->validator->specialChars($text);
 
 		/* SET Buffer markers for Syntax Highlithing Boxes */
 		/* ======================== */
@@ -246,7 +244,7 @@ class tx_mmforum_postparser {
 			}
 		}
 		$text = $this->links($text, $conf);
-		$text = $this->linkgenerator($text, $conf, 'cryptmail');
+		$text = $this->linkgenerator($text, $conf, 'cryptmail', $parent);
 		$text = $this->typolinks($text, $parent);
 		$res = $this->databaseHandle->exec_SELECTquery(
 			'pattern,replacement',

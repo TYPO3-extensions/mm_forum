@@ -84,6 +84,8 @@ class tx_mmforum_indexing {
 	 * @return string           If an error occurred, an error message is returned
 	 */
 	function ind_topic($topic_id,$conf) {
+		$content = '';
+		
 			// Delete old index records regarding this topic
 		$this->databaseHandle->exec_DELETEquery('tx_mmforum_wordmatch',"topic_id='$topic_id'");
 
@@ -347,7 +349,7 @@ class tx_mmforum_indexing {
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-04-02
 	 */
-	function getPidQuery($conf,$tables='') {
+	public function getPidQuery($conf,$tables='') {
 
 		if (strlen(trim($conf['pidList']))==0) return '';
 		if ($tables == '') {

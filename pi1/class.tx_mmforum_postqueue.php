@@ -22,6 +22,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
@@ -41,17 +42,38 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class tx_mmforum_postqueue {
 
 	/**
-	 * The TYPO3 database object
-	 *
-	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 * @var array
+	 */
+	protected $conf;
+	
+	/**
+	 * @var tx_mmforum_base
+	 */
+	public $parent;
+
+	/**
+	 * @var ContentObjectRenderer
+	 */
+	protected $cObj;
+
+	/**
+	 * @var array
+	 */
+	protected $piVars;
+	
+	/**
+	 * @var array
 	 */
 	protected $databaseHandle;
 
 	/**
-	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 * @var tx_mmforum_postparser
 	 */
+	protected $tx_mmforum_postparser;
+
 	public function __construct() {
 		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+		$this->tx_mmforum_postparser = GeneralUtility::makeInstance('tx_mmforum_postparser');
 	}
 
 	/**
@@ -270,7 +292,7 @@ class tx_mmforum_postqueue {
 			'###LLL_POSTQUEUE###'		=> $this->pi_getLL('postqueue.title'),
 			'###LLL_PUBLISHBUTTON###'	=> $this->pi_getLL('postqueue.publishbutton'),
 			'###LLL_NOITEMS###'			=> $this->pi_getLL('postqueue.noitems'),
-			'###ACTION###'				=> $this->parent->escapeURL($this->parent->tools->getAbsoluteUrl($this->parent->pi_getPageLink($GLOBALS['TSFE']->id)))
+			'###ACTION###'				=> $this->parent->escapeURL($this->parent->pi_getPageLink($GLOBALS['TSFE']->id))
 		);
 		$template		= $this->cObj->substituteMarkerArray($template, $marker);
 		$rContent		= '';
@@ -306,7 +328,7 @@ class tx_mmforum_postqueue {
 				$rMarker = array(
 					'###LLL_WROTE###'		=> $this->pi_getLL('postqueue.wrote'),
 					'###DATE###'			=> $this->parent->formatDate($arr['post_time']),
-					'###POST_TEXT###'		=> $this->parent->bb2text($this->parent->escape($arr['post_text']),$this->conf),
+					'###POST_TEXT###'		=> $this->tx_mmforum_postparser->main($this->parent, $this->conf, $this->parent->escape($arr['post_text']), 'textparser'),
 					'###UID###'				=> $arr['uid'],
 					'###POST_POSTER###'		=> $this->parent->linkToUserProfile($arr['post_user']),
 					'###CHECK_DELETE###'	=> '',
@@ -332,7 +354,7 @@ class tx_mmforum_postqueue {
 
 			$template = $this->cObj->substituteSubpart($template, '###POSTQUEUE_ITEM###', $rContent);
 		} else {
-			$template		= $this->cObj->substituteSubpart($template, '###POSTQUEUE_ITEMLIST###', '');
+			$template = $this->cObj->substituteSubpart($template, '###POSTQUEUE_ITEMLIST###', '');
 		}
 
 		return $template;

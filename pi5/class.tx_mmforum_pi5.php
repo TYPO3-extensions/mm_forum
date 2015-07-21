@@ -55,6 +55,16 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	protected $user = null;
 
 	/**
+	 * @var tx_mmforum_postparser
+	 */
+	protected $tx_mmforum_postparser;
+
+	public function __construct() {
+		$this->tx_mmforum_postparser = GeneralUtility::makeInstance('tx_mmforum_postparser');
+		parent::__construct();
+	}
+
+	/**
 	 * Main method. Calls the function list_userdata.
 	 *
 	 * @author  Georg Ringer <typo3@ringerge.org>
@@ -95,8 +105,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	 * @return  string          The content
 	 */
 	function listUserdata ($content) {
-		switch ( GeneralUtility::_GP('action'))
-		{
+		switch ( GeneralUtility::_GP('action')) {
 			case 'change_data':
 				$this->writeUserdata($content);
 				break;
@@ -126,12 +135,12 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			'###LABEL_PMNOTIFY_1###'     => $this->pi_getLL('pmnotifymode.1'),
 			'###LABEL_PMNOTIFY_2###'     => $this->pi_getLL('pmnotifymode.2'),
 
-			'###IMG_MAIL###'             => tx_mmforum_pi1::createButton('email',array(),0,true,'',true),
-			'###IMG_ICQ###'              => tx_mmforum_pi1::createButton('icq',array(),0,true,'',true),
-			'###IMG_AIM###'              => tx_mmforum_pi1::createButton('aim',array(),0,true,'',true),
-			'###IMG_YIM###'              => tx_mmforum_pi1::createButton('yim',array(),0,true,'',true),
-			'###IMG_MSN###'              => tx_mmforum_pi1::createButton('msn',array(),0,true,'',true),
-			'###IMG_SKYPE###'            => tx_mmforum_pi1::createButton('skype',array(),0,true,'',true),
+			'###IMG_MAIL###'             => $this->createButton('email',array(),0,true,'',true),
+			'###IMG_ICQ###'              => $this->createButton('icq',array(),0,true,'',true),
+			'###IMG_AIM###'              => $this->createButton('aim',array(),0,true,'',true),
+			'###IMG_YIM###'              => $this->createButton('yim',array(),0,true,'',true),
+			'###IMG_MSN###'              => $this->createButton('msn',array(),0,true,'',true),
+			'###IMG_SKYPE###'            => $this->createButton('skype',array(),0,true,'',true),
 
 			'###PMNOTIFY_0###'           => $this->user->pmNotifyModeIs(0) ? 'checked="checked"' : '',
 			'###PMNOTIFY_1###'           => $this->user->pmNotifyModeIs(1) ? 'checked="checked"' : '',
@@ -161,7 +170,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 		// Some special fields
 		$marker['###CRDATE###']				= strftime($this->conf['date'], $this->user->gD('crdate'));
 		$marker['###ACTIONLINK###']         = '';
-		$marker['###SIGNATUR_PREVIEW###']	= tx_mmforum_postparser::main(
+		$marker['###SIGNATUR_PREVIEW###']	= $this->tx_mmforum_postparser->main(
 				$this, $this->conf, $this->user->gD('tx_mmforum_user_sig'), 'textparser');
 
 		// Avatar
@@ -380,7 +389,7 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 
 		}
 
-		debug($this->userfield_error);
+		#debug($this->userfield_error);
 
 		if ($requiredMissing) $error = 1;
 

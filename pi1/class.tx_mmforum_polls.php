@@ -320,7 +320,7 @@ class tx_mmforum_polls {
 			'###LABEL_QUESTION###'      => $this->p->pi_getLL('poll.question'),
 			'###QUESTION###'            => $this->p->escape($this->data['question']),
 			'###EXPIRES###'             => $this->data['endtime']?($this->p->pi_getLL('poll.expires').' '.date('d. m. Y, H:i',$this->data['endtime'])):'',
-			'###ACTION###'              => $this->p->escapeURL($this->p->tools->getAbsoluteUrl($actionLink)),
+			'###ACTION###'              => $this->p->escapeURL($actionLink),
 			'###ICON###'				=> $this->cObj->cObjGetSingle($this->conf['polls.']['poll_icon'],$this->conf['polls.']['poll_icon.']),
 		);
 		$marker['###EXPIRES###'] = $this->cObj->stdWrap($marker['###EXPIRES###'], $this->conf['polls.']['expired_stdWrap.']);

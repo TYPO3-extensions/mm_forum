@@ -167,9 +167,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				$this->databaseHandle->exec_UPDATEquery('tx_mmforum_pminbox', $where, $val);
 			}
 		}
-
-
-
+		
 		switch ($this->piVars['folder']) {
 			// display outbox
 			case 'send':
@@ -211,7 +209,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		$marker['###HEAD_REPLY###']		= $this->pi_getLL('reply');
 		$marker['###HEAD_DELETE###']	= $this->pi_getLL('delete');
 
-		$marker['###FORMLINK###']		= $this->tools->getAbsoluteUrl($this->pi_getPageLink($GLOBALS['TSFE']->id));
+		$marker['###FORMLINK###']		= $this->pi_getPageLink($GLOBALS['TSFE']->id);
 		$marker['###CONFIRM_ACTION###']	= $this->pi_getLL('confirmAction');
 
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
@@ -247,9 +245,9 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				if ($userdata === FALSE) {
 					$marker['###FROM###'] = $this->pi_getLL('user.deleted');
 				} else if ($userdata['deleted'] == '1') {
-					$marker['###FROM###'] = $this->escape($userdata[tx_mmforum_pi1::getUserNameField()]);
+					$marker['###FROM###'] = $this->escape($userdata[$this->getUserNameField()]);
 				} else {
-					$marker['###FROM###'] = tx_mmforum_pi1::linkToUserProfile($row['from_uid']);
+					$marker['###FROM###'] = $this->linkToUserProfile($row['from_uid']);
 				}
 
 				// Generate date
@@ -265,9 +263,9 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 					if ($this->useRealUrl()) {
 						$linkParams[$this->prefixId]['folder'] = $this->piVars['folder'];
 					}
-					$marker['###PM###']	= tx_mmforum_pi1::createButton('pmreply', $linkParams, 0, true);
+					$marker['###PM###']	= $this->createButton('pmreply', $linkParams, 0, true);
 				} else {
-					$marker['###PM###'] = tx_mmforum_pi1::createButton('pmreply', $linkParams, 0, true, '', true); //TODO: undefined variable $linkParams
+					$marker['###PM###'] = $this->createButton('pmreply', $linkParams, 0, true, '', true); //TODO: undefined variable $linkParams
 				}
 
 				// Generate PM deletion link
@@ -280,7 +278,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 					$linkParam[$this->prefixId]['folder'] = $this->piVars['folder'];
 				}
 
-				$marker['###DEL###'] = tx_mmforum_pi1::createButton('pmdelete', $linkParam, 0, true, '', false, 'onclick="return confirm(\''.$this->pi_getLL('deleteConfirm').'\');"');
+				$marker['###DEL###'] = $this->createButton('pmdelete', $linkParam, 0, true, '', false, 'onclick="return confirm(\''.$this->pi_getLL('deleteConfirm').'\');"');
 
 				// Unread messages are wrapped with a wrap defined in TypoScript
 				if ($row['read_flg'] == 0) {
@@ -325,7 +323,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		if ($this->useRealUrl()) {
 			$linkParams[$this->prefixId]['folder'] = 'inbox';
 		}
-		$marker['###NEWMESSAGE###']	   = tx_mmforum_pi1::createButton('newpm', $linkParams);
+		$marker['###NEWMESSAGE###']	   = $this->createButton('newpm', $linkParams);
 		$marker['###LABEL_EXECUTE###'] = $this->pi_getLL('main.execute');
 
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
@@ -413,9 +411,9 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
             else $userdata = tx_mmforum_tools::get_userdata($row['from_uid']);
 
             if ($userdata === FALSE)             $marker['###FROM###'] = $this->pi_getLL('user.deleted');
-            elseif ($userdata['deleted'])        $marker['###FROM###'] = $this->escape($userdata[tx_mmforum_pi1::getUserNameField()]);
+            elseif ($userdata['deleted'])        $marker['###FROM###'] = $this->escape($userdata[$this->getUserNameField()]);
             else {
-                $marker['###FROM###']	= tx_mmforum_pi1::linkToUserProfile($userdata);
+                $marker['###FROM###']	= $this->linkToUserProfile($userdata);
             }
 			$marker['###DATE###']		= $this->formatDate($row['sendtime']);
 			$marker['###MESSAGE###']	= nl2br($this->escape($message_text));
@@ -427,7 +425,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 					'messid' => $row['uid']
 				);
 				if ($this->useRealUrl()) $linkParams[$this->prefixId]['folder'] = $this->piVars['folder']?$this->piVars['folder']:'inbox';
-				$marker['###REPLY###']		= tx_mmforum_pi1::createButton('pmreply',$linkParams);
+				$marker['###REPLY###']		= $this->createButton('pmreply',$linkParams);
 			} else {
 				$marker['###REPLY###'] = '';
 			}
@@ -437,7 +435,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
                 'messid'=>$row['uid']
             );
             if ($this->useRealUrl()) $linkParams[$this->prefixId]['folder'] = $this->piVars['folder']?$this->piVars['folder']:'inbox';
-            $marker['###DELETE###']		= tx_mmforum_pi1::createButton('pmdelete',$linkParams,0,false,'',false,'onclick="return confirm(\''.$this->pi_getLL('deleteConfirm').'\');"');
+            $marker['###DELETE###']		= $this->createButton('pmdelete',$linkParams,0,false,'',false,'onclick="return confirm(\''.$this->pi_getLL('deleteConfirm').'\');"');
 		}
 		// Display error message if message not found
 		else {
@@ -485,7 +483,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		if ($this->piVars['save'] == $this->pi_getLL('write.search')) {
 
 			// If a messsage text has already been entered, store this text
-			// in the session variables in order to have it available lateron.
+			// in the session variables in order to have it available later on.
 			if (!empty($this->piVars['message'])) {
 				session_start();
 				$_SESSION['mm_forum']['pm']['message'] = $this->piVars['message'];
@@ -529,6 +527,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			$lastMessage = $this->databaseHandle->sql_fetch_assoc($res);
 			$this->databaseHandle->sql_free_result($res);
 
+			$errormessage = '';
 			// Compare with current time and spam block interval
 			if (($GLOBALS['EXEC_TIME'] - $conf['block_time']) <= $lastMessage['crdate']) {
 				$error = 1;
@@ -542,10 +541,9 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				$marker['###BACKLINK###'] = '<a href="javascript:history.back()">' . $this->pi_getLL('back') . '</a>';
 			
 			} else {
-
 				// Retrieve userId from username
 				$res = $this->databaseHandle->exec_SELECTquery(
-						'uid,email,tx_mmforum_pmnotifymode,' . tx_mmforum_pi1::getUserNameField(),
+						'uid,email,tx_mmforum_pmnotifymode,' . $this->getUserNameField(),
 						'fe_users',
 						'deleted=0 AND disable=0 AND username=' . $this->databaseHandle->fullQuoteStr($to_username, 'fe_users') . ' AND pid=' . $this->conf['userPID']
 				);
@@ -556,7 +554,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				// Save and send the private message
 				if ($recipientId > 0) {
 					// Save the private message for the recipient
-					$val = Array(
+					$val = array(
 						'pid'			=> $this->getStoragePID(),
 						'tstamp'		=> $GLOBALS['EXEC_TIME'],
 						'crdate'		=> $GLOBALS['EXEC_TIME'],
@@ -573,7 +571,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 					$mess_id = $this->databaseHandle->sql_insert_id();
 
 					// Save as sent private message
-					$val = Array(
+					$val = array(
 						'pid'			=> $this->getStoragePID(),
 						'tstamp'		=> $GLOBALS['EXEC_TIME'],
 						'crdate'		=> $GLOBALS['EXEC_TIME'],
@@ -609,13 +607,15 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						$msgLink = $this->tools->escapeBrackets($msgLink);
 
 						$marker = array(
-							'###USERNAME###' => $recipient[tx_mmforum_pi1::getUserNameField()],
-							'###PMLINK###'   => tx_mmforum_pi1::getAbsUrl($msgLink),
+							'###USERNAME###' => $recipient[$this->getUserNameField()],
+							'###PMLINK###'   => $msgLink,
 							'###SITENAME###' => $conf['siteName'],
 							'###MESSAGE###'  => $message,
 							'###SUBJECT###'  => $this->pi_getLL('messageReplySubjectPrefix') . $subject,
-							'###FROM###'     => $GLOBALS['TSFE']->fe_user->user[tx_mmforum_pi1::getUserNameField()]
+							'###FROM###'     => $GLOBALS['TSFE']->fe_user->user[$this->getUserNameField()],
+							'###LINK##'	 => $conf['siteName'] . '/' . $msgLink
 						);
+						
 						$mailtext = $this->cObj->substituteMarkerArrayCached($template, $marker);
 
 						// Compose mail and send
@@ -640,7 +640,6 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						);
 
 						$link = $this->pi_getPageLink($this->conf['pm_id'], '', $linkParams);
-						$link = $this->tools->getAbsoluteUrl($link);
 						
 						tx_mmforum_tools::storeCacheVar('pm.urlCache.' . $mess_id, $link);
 					}
@@ -687,7 +686,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			session_start();
 			$_SESSION[$this->prefixId]['userPID'] = $this->conf['userPID'];
 			$_SESSION[$this->prefixId]['userGID'] = $this->conf['userGroup'];
-			$_SESSION[$this->prefixId]['usernameField'] = 'username'; //tx_mmforum_pi1::getUserNameField();
+			$_SESSION[$this->prefixId]['usernameField'] = 'username'; //$this->getUserNameField();
 
 			// If PM is a reply to another PM, there is a prefix in subject/msg-text
 			if ($isReply) {
@@ -695,7 +694,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 				$msgPrefix = $this->pi_getLL('messageReplyTextPrefix');
 				$initialText = $msgPrefix . str_replace("\n", "\n" . $msgPrefix, $originalMsg['message']);
 
-				$marker['###ACTION###']     = $this->tools->getAbsoluteUrl($this->pi_getPageLink($GLOBALS['TSFE']->id, '', array($this->prefixId=>array('action'=>'message_write'))));
+				$marker['###ACTION###']     = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', array($this->prefixId=>array('action'=>'message_write')));
 				$marker['###SUBJECT###']    = $this->pi_getLL('messageReplySubjectPrefix') . $originalMsg['subject'];
 				$marker['###TO_USER###']    = $this->escape($originalMsg['from_name']);
 				$marker['###MESSAGE###']    = $this->escape($initialText);
@@ -717,7 +716,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 						'',
 						array($this->prefixId => $linkVars)
 				);
-				$marker['###ACTION###'] = $this->tools->getAbsoluteUrl($link);
+				$marker['###ACTION###'] = htmlspecialchars($link);
 				$marker['###SUBJECT###'] = '';
 				$marker['###TO_USER###'] = $this->escape($username);
 				$marker['###DATE###'] = '';
@@ -751,13 +750,13 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 		else $marker['###NEWMESSAGES###'] = sprintf($this->pi_getLL('newmessages2'),$count);
 
 		// Display inbox button
-        $marker['###INBOX###']		= tx_mmforum_pi1::createButton('inbox',array($this->prefixId.'[folder]'=>'inbox'));
+        $marker['###INBOX###']		= $this->createButton('inbox',array($this->prefixId.'[folder]'=>'inbox'));
 
         // Display outbox button
-        $marker['###OUTBOX###']		= tx_mmforum_pi1::createButton('outbox',array($this->prefixId.'[folder]'=>'send'));
+        $marker['###OUTBOX###']		= $this->createButton('outbox',array($this->prefixId.'[folder]'=>'send'));
 
         // Display archive button
-        $marker['###ARCHIV###']		= tx_mmforum_pi1::createButton('archive',array($this->prefixId.'[folder]'=>'archive'));
+        $marker['###ARCHIV###']		= $this->createButton('archive',array($this->prefixId.'[folder]'=>'archive'));
 
         // Display message creation button
         $linkParams[$this->prefixId] = array(
@@ -765,7 +764,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
         );
 		if ($this->useRealUrl())
 			$linkParams[$this->prefixId]['folder'] = 'inbox';
-		$marker['###NEWPM###']		= tx_mmforum_pi1::createButton('newpm',$linkParams);
+		$marker['###NEWPM###']		= $this->createButton('newpm',$linkParams);
 
 		$content .= $this->cObj->substituteMarkerArrayCached($template, $marker);
         return $content;
@@ -831,7 +830,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			$template = $this->cObj->getSubpart($template, "###USERLIST###");
 
 			$userMarker = array(
-				'###USERNAME###' => $this->pi_linkTP($this->escape($row[tx_mmforum_pi1::getUserNameField()]),array('tx_mmforum_pi3[action]'=>'message_write','userid'=>$row['uid']))
+				'###USERNAME###' => $this->pi_linkTP($this->escape($row[$this->getUserNameField()]),array('tx_mmforum_pi3[action]'=>'message_write','userid'=>$row['uid']))
 			);
 
 				// Include hooks
@@ -898,7 +897,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
     */
 
     function getLanguage(){
-        return tx_mmforum_pi1::getLanguageFolder();
+        return $this->getLanguageFolder();
     }
 }
 

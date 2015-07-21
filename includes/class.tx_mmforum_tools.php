@@ -23,6 +23,7 @@
  */
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\Plugin\AbstractPlugin;
 
 /**
  * The class 'tx_mmforum_tools' contains a collection of useful
@@ -35,7 +36,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package    mm_forum
  * @subpackage Includes
  */
-class tx_mmforum_tools extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
+class tx_mmforum_tools extends AbstractPlugin {
 
 	/**
 	 * The TYPO3 database object
@@ -153,7 +154,7 @@ class tx_mmforum_tools extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	 * @param  array  $needle An array of words after which the text shall be cut
 	 * @return string         The cut text
 	 */
-	function textCut($text, $cut, $needle = '') {
+	static function textCut($text, $cut, $needle = '') {
 		if (empty($needle)) {
 			if (strlen($text) > $cut) {
 				$textpos = substr($text, $cut);
@@ -561,6 +562,7 @@ class tx_mmforum_tools extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	 * @param  string $link A relative link
 	 * @return string       The submitted string converted into an absolute link
 	 * @author Martin Helmich <m.helmich@mittwald.de>
+	 * @deprecated
 	 */
 	static function getAbsoluteUrl($link) {
 		if (substr($link, 0, 7) == 'http://' || substr($link, 0, 8) == 'https://')  {

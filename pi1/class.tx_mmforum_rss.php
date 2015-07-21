@@ -77,6 +77,11 @@ class tx_mmforum_rss {
 	var $selectFields = 'p.uid AS post_uid, p.post_time, x.post_text, t.topic_title, f.forum_name, u.';
 
 	/**
+	 * @var tx_mmforum_postparser
+	 */
+	protected $tx_mmforum_postparser;
+
+	/**
 	 * The TYPO3 database object
 	 *
 	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
@@ -88,6 +93,7 @@ class tx_mmforum_rss {
 	 */
 	public function __construct() {
 		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+		$this->tx_mmforum_postparser = GeneralUtility::makeInstance('tx_mmforum_postparser');
 	}
 
 	/**
@@ -165,10 +171,7 @@ class tx_mmforum_rss {
 	 *                        to contain the topic of forum UID.
 	 * @return  void
 	 */
-	function setHTMLHeadData($mode, $param=null) {
-		// If method is called statically, instantiate class
-		#if (!$this instanceof tx_mmforum_rss) {
-		// Workaround. "instanceof" does not work with old PHP versions.
+	public function setHTMLHeadData($mode, $param=null) {
 		if (isset($this->extKey)) {
 			$rssObj = GeneralUtility::makeInstance('tx_mmforum_rss');
 			$rssObj->initialize($this->conf, $this);
@@ -185,7 +188,6 @@ class tx_mmforum_rss {
 			if ($this->conf['rssPID']) {
 				// Compose RSS URL
 				$rssLink = $this->pObj->pi_getPageLink($this->conf['rssPID'], null, $linkParams);
-				$rssLink = $this->pObj->tools->getAbsoluteUrl($rssLink);
 
 				// Include RSS URL in HTML header data
 				$GLOBALS['TSFE']->additionalHeaderData['mm_forum_rss_'.$mode] = '<link rel="alternate" type="application/rss+xml" title="'.$this->pObj->escape($this->getFeedTitle($mode, $param)).'" href="'.$rssLink.'" />';
@@ -310,7 +312,7 @@ class tx_mmforum_rss {
 	 * @return  string       The parsed post text
 	 */
 	function getPostTextComplete($text) {
-		return tx_mmforum_postparser::main($this->pObj,$this->conf,$text,'textparser');
+		return $this->tx_mmforum_postparser->main($this->pObj, $this->conf, $text, 'textparser');
 	}
 
 
@@ -327,7 +329,7 @@ class tx_mmforum_rss {
 			'action'	=> 'list_post',
 			'pid'		=> $post_id
 		);
-		return $this->pObj->escapeURL($this->pObj->tools->getAbsoluteUrl($this->pObj->pi_getPageLink($this->conf['pid_forum'], '', $linkParams)));
+		return $this->pObj->escapeURL($this->pObj->pi_getPageLink($this->conf['pid_forum'], '', $linkParams));
 	}
 
 
@@ -425,7 +427,7 @@ class tx_mmforum_rss {
 			);
 		}
 
-		return $this->pObj->tools->getAbsoluteUrl($this->pObj->pi_getPageLink($this->conf['pid_forum'], '', $linkParams));
+		return $this->pObj->pi_getPageLink($this->conf['pid_forum'], '', $linkParams);
 	}
 
 

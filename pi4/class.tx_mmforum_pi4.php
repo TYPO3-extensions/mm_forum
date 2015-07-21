@@ -77,6 +77,21 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	var $scriptRelPath	= 'pi4/class.tx_mmforum_pi4.php';	// Path to this script relative to the extension dir.
 
 	/**
+	 * @var tx_mmforum_indexing
+	 */
+	protected $tx_mmforum_indexing;
+
+	/**
+	 * @var tx_mmforum_pi1
+	 */
+	protected $tx_mmforum_pi1;
+	public function __construct() {
+		$this->tx_mmforum_indexing = GeneralUtility::makeInstance('tx_mmforum_indexing');
+		$this->tx_mmforum_pi1 = GeneralUtility::makeInstance('tx_mmforum_pi1');
+		parent::__construct();
+	}
+	
+	/**
 	 * The plugin's main functions. Handles indexing and delegates
 	 * output and search tasks to the regarding functions.
 	 * @param  string $content The content
@@ -136,22 +151,21 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 
 		// Index a specific topic
 		if ($param['ind_topic']) {
-			$content .= tx_mmforum_indexing::ind_topic($param['ind_topic'],$conf);
+			$content .= $this->tx_mmforum_indexing->ind_topic($param['ind_topic'],$conf);
 			// TODO echo here?
 			echo $this->cObj->substituteMarker($this->pi_getLL('indexing.topicIndexed'),'###TOPIC###',$param['ind_topic']);
 		}
 		// Checking if an indexing is currently running
 		if ($param['ind_check']) {
-			$content .= tx_mmforum_indexing::ind_check();
+			$content .= $this->tx_mmforum_indexing->ind_check();
 		}
 
 			// Instantiate indexing class
-		$indexing = GeneralUtility::makeInstance('tx_mmforum_indexing'); /* @var $indexing tx_mmforum_indexing */
-		$indexing->conf = $this->conf;
+		$this->tx_mmforum_indexing->conf = $this->conf; // FIXME
 
 		// Indexes all topics currently
 		if ($param['ind_auto']) {
-			if ($indexing->ind_check() == 0) {
+			if ($this->tx_mmforum_indexing->ind_check() == 0) {
 
 				$intern_forums = array ();
 
@@ -178,7 +192,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 				);
 
 				while ($row     = $this->databaseHandle->sql_fetch_assoc($res)) {
-					$content   .= $indexing->ind_topic($row['uid'],$conf);
+					$content   .= $this->tx_mmforum_indexing->ind_topic($row['uid'],$conf);
 					# $content   .= $row['uid'].' **<br />';
 				}
 			} else {
@@ -431,11 +445,11 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			$insertArray = array(
 				'pid'			=> $this->getStoragePID(),
 				'tstamp'        => $GLOBALS['EXEC_TIME'],
-				'cruser_id'     => $GLOBALS['TSFE']->fe_user->user['uid'],
+				'cruser_id'     => (is_array($GLOBALS['TSFE']->fe_user->user)) ? $GLOBALS['TSFE']->fe_user->user['uid'] : 0,
 				'search_string' => $searchstring,
 				'array_string'  => serialize($post_id_array),
 				'search_place'  => $param['search_place'],
-				'solved'        => $param['solved'],
+				'solved'        => (isset($param['solved'])) ? $param['solved'] : '',
 				'search_order'  => $param['search_order'],
 				'groupPost'     => $param['groupPost'],
 				'user_groups'	=> implode(',',$userGroups),
@@ -458,7 +472,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 
 			$post_id_array = $find_array_split[$page];
 			foreach ($post_id_array as $post_id => $values) {
-				$topic_id	= tx_mmforum_pi1::get_topic_id($post_id);
+				$topic_id	= $this->tx_mmforum_pi1->get_topic_id($post_id);
 				$topic_info	= $this->topic_information($topic_id);
 				$post_info	= $this->post_information($post_id);
 
@@ -471,9 +485,10 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 					'pid'   => $post_id,
 					'sword' => addslashes($orgsearchstring)
 				);
-				if (tx_mmforum_pi1::getIsRealURL()) $linkparams['tx_mmforum_pi1']['fid'] = $topic_info['forum_id'];
+				if ($this->tx_mmforum_pi1->getIsRealURL()) $linkparams['tx_mmforum_pi1']['fid'] = $topic_info['forum_id'];
 
 				$post_text  = $this->escape(tx_mmforum_tools::textCut($post_text,350,''));
+				
 				$word_array = explode(" ",$searchstring);
 
 				// Cleaning empty elements
@@ -491,12 +506,13 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 					$post_text = preg_replace("/$word/i", $replace, $post_text);
 				}
 
+				
 				$marker['###TITLE###']      = $this->pi_linkToPage($this->escape($topic_info['topic_title']),$conf['pid_forum'],'',$linkparams);
 				$marker['###SHORTTEXT###']  = $post_text;
 				$dummylinkParams['tx_mmforum_pi1'] = array('action'=>'list_post','tid'=>$topic_id);
-				if (tx_mmforum_pi1::getIsRealURL()) $dummylinkParams['tx_mmforum_pi1']['fid'] = $topic_info['forum_id'];
+				if ($this->tx_mmforum_pi1->getIsRealURL()) $dummylinkParams['tx_mmforum_pi1']['fid'] = $topic_info['forum_id'];
 				#$link = GeneralUtility::getIndpEnv("HTTP_HOST").'/'.$this->pi_getPageLink($conf['pid_forum'],'',$dummylinkParams);
-				$link = tx_mmforum_pi1::getAbsUrl($this->pi_getPageLink($conf['pid_forum'],'',$dummylinkParams));
+				$link = $this->tx_mmforum_pi1->getAbsUrl($this->pi_getPageLink($conf['pid_forum'],'',$dummylinkParams));
 				$link = $this->cObj->stdWrap($link,$conf['postPath.']);
 				$marker['###POSTPATH###']   = $this->pi_linkToPage($link,$conf['pid_forum'],'_self',$linkparams);
 				$marker['###VIEWS###']      = intval($topic_info['topic_views']);
@@ -636,7 +652,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 			$mysql_option   .= ' AND solved = 1 ';
 
 		if (!empty($username)) {
-			 $user_id = tx_mmforum_pi1::get_userid($username);
+			 $user_id = tx_mmforum_tools::get_userid($username);
 			 if (is_numeric($user_id) && $user_id != 0  ) {
 					$mysql_option   .= ' AND post_cruser = '.$user_id;
 			 }
@@ -707,7 +723,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * @return string          The post's text
 	 */
 	function get_posttext($post_id) {
-		return tx_mmforum_indexing::get_posttext($post_id);
+		return $this->tx_mmforum_indexing->get_posttext($post_id);
 	}
 
 	/**
@@ -719,7 +735,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * @return array          An array of search words
 	 */
 	function wordArray ($conf,$string) {
-		return tx_mmforum_indexing::wordArray($conf,$string);
+		return $this->tx_mmforum_indexing->wordArray($conf,$string);
 	}
 
 	/**
@@ -747,7 +763,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * @return string         The cleared string
 	 */
 	function clear_phpBB($string) {
-		return tx_mmforum_indexing::clear_phpBB($string);
+		return $this->tx_mmforum_indexing->clear_phpBB($string);
 	}
 
 	/**
@@ -900,7 +916,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * @return array           The topic record as array
 	 */
 	function topic_information($topic_id) {
-		return tx_mmforum_indexing::topic_information($topic_id);
+		return $this->tx_mmforum_indexing->topic_information($topic_id);
 	}
 
 	/**
@@ -909,7 +925,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * @return array          The post record as array
 	 */
 	function post_information($post_id) {
-		return tx_mmforum_indexing::post_information($post_id);
+		return $this->tx_mmforum_indexing->post_information($post_id);
 	}
 
 	/**
@@ -945,25 +961,26 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 	 * Delivers a MySQL-WHERE query checking the records' PID.
 	 * This allows it to exclusively select records from a very specific list
 	 * of pages.
-	 *
 	 * NOTE: This function is currently partially disabled.
 	 *       Instead of defining the PIDs to be checked via the plugin's Starting
 	 *       Point, the PID is in this version defined in the TS constant
 	 *       plugin.tx_mmforum.storagePID
 	 *
+	 * @param array $conf
 	 * @param   string $tables The list of tables that are queried
-	 * @return  string         The query, following the pattern " AND pid IN (...)"
+	 * @return string The query, following the pattern " AND pid IN (...)"
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-04-03
 	 */
 	function getPidQuery($conf=null, $tables='') {
-		return tx_mmforum_indexing::getPidQuery($conf?$conf:$this->conf,$tables);
+		return $this->tx_mmforum_indexing->getPidQuery($conf?$conf:$this->conf,$tables);
 	}
-
 
 	/**
 	 * Generates a MySQL-query to determine in which boards the current user may read.
-	 * @return string  A MySQL-WHERE-query, beginning with "AND", checking which boards the
+	 *
+	 * @param string $prefix
+	 * @return string A MySQL-WHERE-query, beginning with "AND", checking which boards the
 	 *                 user that is currently logged in may read in.
 	 * @author Martin Helmich <m.helmich@mittwald.de>
 	 */
@@ -973,6 +990,7 @@ class tx_mmforum_pi4 extends tx_mmforum_base {
 
 		$groups = $GLOBALS['TSFE']->fe_user->groupData['uid'];
 		$groups = tx_mmforum_tools::processArray_numeric($groups);
+		$queryParts = array();
 		foreach ($groups as $group) {
 			$queryParts[] = "FIND_IN_SET($group,".$prefix."grouprights_read)";
 		}

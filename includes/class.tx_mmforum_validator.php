@@ -22,22 +22,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  */
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-
-/**
- * [CLASS/FUNCTION INDEX of SCRIPT]
- *
- *
- *
- *   54: class tx_mmforum_validator
- *   66:     function specialChars($text)
- *  115:     function specialChars_URL($url)
- *  132:     function init($conf = null)
- *  145:     function getValidatorObject()
- *
- * TOTAL FUNCTIONS: 4
- * (This index is automatically created/updated by the extension "extdeveval")
- *
- */
+use TYPO3\CMS\Core\SingletonInterface;
 
 /**
  * The validator class is designed to handle all output validating in
@@ -53,7 +38,16 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package    mm_forum
  * @subpackage Includes
  */
-class tx_mmforum_validator {
+class tx_mmforum_validator implements SingletonInterface{
+
+	/**
+	 * @var array
+	 */
+	protected $conf;
+	
+	public function __construct() {
+		$this->conf = $GLOBALS['TSFE']->tmpl->setup['plugin.']['tx_mmforum_pi1.']['validatorSettings.'];
+	}
 
 	/**
 	 * Parses a string for special characters. This is the main protection
@@ -95,7 +89,8 @@ class tx_mmforum_validator {
 			// Replace all specialchars with HTML entities if configured
 		if ($this->conf['replace'] == 'all')
 			return htmlentities($text, $quotes, $charset);
-	    else return htmlspecialchars($text, $quotes, $charset);
+	    else 
+		    return htmlspecialchars($text, $quotes, $charset);
     }
 
 	/**
@@ -147,7 +142,6 @@ class tx_mmforum_validator {
 
 }
 
-	// XClass inclusion
 if (defined("TYPO3_MODE") && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/includes/class.tx_mmforum_validator.php"])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]["XCLASS"]["ext/mm_forum/includes/class.tx_mmforum_validator.php"]);
 }

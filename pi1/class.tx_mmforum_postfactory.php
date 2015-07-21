@@ -45,14 +45,31 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class tx_mmforum_postfactory {
 
 	/**
+	 * @var tx_mmforum_havealook
+	 */
+	protected $tx_mmforum_havealook;
+
+	/**
 	 * The TYPO3 database object
 	 *
 	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
 	 */
 	protected $databaseHandle;
 
+	/**
+	 * @var array
+	 */
+	public $conf;
+
+	/**
+	 * @var tx_mmforum_pi1
+	 */
+	protected $parent;
+	
+	
 	public function __construct() {
 		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+		$this->tx_mmforum_havealook = GeneralUtility::makeInstance('tx_mmforum_havealook');
 	}
 
 	/**
@@ -207,13 +224,13 @@ class tx_mmforum_postfactory {
 
 		// Subscribe the author to the topic
 		if ($subscribe) {
-			tx_mmforum_havealook::addSubscription($this->parent, $topicId, $author);
+			$this->tx_mmforum_havealook->addSubscription($this->parent, $topicId, $author);
 		}
 
 		//added by Cyrill Helg
 		// Send notification email to users who have subscribed the forum where this topic is created
 		if ($notifyForumSubscribers)
-			tx_mmforum_havealook::notifyForumSubscribers($topicId, $forumId, $this->parent);
+			$this->tx_mmforum_havealook->notifyForumSubscribers($topicId, $forumId, $this->parent);
 
 		return $topicId;
 	}
@@ -350,7 +367,8 @@ class tx_mmforum_postfactory {
 			'tstamp'    => $GLOBALS['EXEC_TIME'],
 			'crdate'    => $GLOBALS['EXEC_TIME'],
 			'post_id'   => $postId,
-			'post_text' => $text
+			'post_text' => $text,
+			'cache_text' => $text
 		);
 
 		// Include hooks
@@ -375,8 +393,8 @@ class tx_mmforum_postfactory {
 		// Send notification email to users who have subscribed this topic
 		if ($this->parent != null) {
 			// Subscribe to the topic
-			if ($subscribe) tx_mmforum_havealook::addSubscription($this->parent, $topicId, $author);
-			tx_mmforum_havealook::notifyTopicSubscribers($topicId, $this->parent);
+			if ($subscribe) $this->tx_mmforum_havealook->addSubscription($this->parent, $topicId, $author);
+			$this->tx_mmforum_havealook->notifyTopicSubscribers($topicId, $this->parent);
 		}
 
 		// Set topic for all users to "not read"
