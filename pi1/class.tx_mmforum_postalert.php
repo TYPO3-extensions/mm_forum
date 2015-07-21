@@ -291,8 +291,6 @@ class tx_mmforum_postalert extends tx_mmforum_base {
 					$this->databaseHandle->exec_INSERTquery(' tx_mmforum_post_alert', $insertArray);
 
 					$linkto	= $this->get_pid_link($post_id, GeneralUtility::_GP('sword'),$conf);
-					$linkto = $this->tools->getAbsoluteUrl($linkto);
-
 					HttpUtility::redirect($linkto);
 				}
 			}

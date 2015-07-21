@@ -271,8 +271,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					}
 
 					if ($this->redirectTo) {
-						header('Location: ' . GeneralUtility::locationHeaderUrl($this->redirectTo));
-						exit();
+						HttpUtility::redirect($this->redirectTo);
 					}
 
 					switch ($this->piVars['action']) {
@@ -2388,9 +2387,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						$linkParams[$this->prefixId]['fid'] = $forumId;
 					}
 					$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
-					$link = $this->tools->getAbsoluteUrl($link);
-					header('Location: ' . GeneralUtility::locationHeaderUrl($link . '#pid' . $topic_uid));
-					exit();
+					HttpUtility::redirect($link . '#pid' . $topic_uid);
 				}
 			} else {
 				$this->generateToken();
@@ -2679,10 +2676,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 					);
 
 					$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
-					$link = $this->tools->getAbsoluteUrl($link);
 
-					header('Location: ' . GeneralUtility::locationHeaderUrl($link . '#pid' . $postId));
-					exit();
+					HttpUtility::redirect($link . '#pid' . $postId);
 				}
 			} else {
 				$this->generateToken();
@@ -3248,11 +3243,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				);
 
 				$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
-				$link = $this->tools->getAbsoluteUrl($link);
-
-				header('Location: ' . GeneralUtility::locationHeaderUrl($link . '#pid' . $postId));
-				exit();
-
+				HttpUtility::redirect($link . '#pid' . $postId);
 			} else {
 				// Display post preview
 				if ($this->piVars['button'] == $this->pi_getLL('newPost.preview')) {
@@ -4912,8 +4903,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		// Redirecting visitor back to previous page
 		$ref = GeneralUtility::getIndpEnv('HTTP_REFERER');
 		if ($ref) {
-			$ref = $this->tools->getAbsoluteUrl($ref);
-			\TYPO3\CMS\Core\Utility\HttpUtility::redirect($ref);
+			HttpUtility::redirect($ref);
 		}
 		$content = $this->pi_getLL('board.markedAllRead') . '<br />' . $this->pi_getLL('redirect.error') . '<br />';
 		return $content;
@@ -5103,8 +5093,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'pid'    => 'last'
 		);
 		$linkto = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
-		$linkto = $this->tools->getAbsoluteUrl($linkto);
-		\TYPO3\CMS\Core\Utility\HttpUtility::redirect($linkto);
+		HttpUtility::redirect($linkto);
 	}
 
 	/**
@@ -6192,9 +6181,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				$linkParams[$this->prefixId]['fid'] = $topicData['forum_id'];
 			}
 
-			$link = $this->tools->getAbsoluteUrl($this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams));
-			header('Location: ' . GeneralUtility::locationHeaderUrl($link));
-			exit();
+			$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
+			HttpUtility::redirect($link);
 		} else {
 			return $this->errorMessage($this->conf, $this->pi_getLL('topic-noSolveRights'));
 		}

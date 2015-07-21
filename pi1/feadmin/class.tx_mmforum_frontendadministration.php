@@ -23,7 +23,9 @@
  *                                                                      *
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
+use TYPO3\CMS\Core\Database\DatabaseConnection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
@@ -86,7 +88,7 @@ class tx_mmforum_FrontendAdministration {
 	/**
 	 * The TYPO3 database object
 	 *
-	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 * @var DatabaseConnection
 	 */
 	protected $databaseHandle;
 
@@ -107,7 +109,6 @@ class tx_mmforum_FrontendAdministration {
 	 * @param  Array           $conf   The configuration array for this controller
 	 * @param  tx_mmforum_base $parent The parent object
 	 * @return String                  HTML content
-	 *
 	 */
 	function main($conf, tx_mmforum_base $parent) {
 		$this->initFromParent($conf, $parent);
@@ -134,7 +135,6 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 * @access private
 	 * @return String HTML content
-	 *
 	 */
 	function listAction() {
 		# Handle some basic operations like deleting or sorting forums.
@@ -157,7 +157,7 @@ class tx_mmforum_FrontendAdministration {
 		While($categoryArray = $this->databaseHandle->sql_fetch_assoc($categoryHandle)) {
 
 			$localCategoryTemplate = $categoryTemplate;
-			$categoryMarkers = Array ( '###CATEGORY_ICON###'    => $this->p->getForumIcon($categoryArray, FALSE, FALSE),
+			$categoryMarkers = array ( '###CATEGORY_ICON###'    => $this->p->getForumIcon($categoryArray, FALSE, FALSE),
 				'###CATEGORY_NAME###'    => $this->validator->specialChars($categoryArray['forum_name']),
 				'###CATEGORY_DESC###'    => $this->validator->specialChars($categoryArray['forum_desc']),
 				'###CATEGORY_OPTIONS###' => $this->getForumOptions($categoryArray, $i == 1, $i == $categoryCount) );
@@ -171,7 +171,7 @@ class tx_mmforum_FrontendAdministration {
 			$forumCount = $this->databaseHandle->sql_num_rows($forumHandle); $j = 1;
 			While($forumArray = $this->databaseHandle->sql_fetch_assoc($forumHandle)) {
 
-				$forumMarkers = Array ( '###FORUM_ICON###'    => $this->p->getForumIcon($forumArray, FALSE, FALSE),
+				$forumMarkers = array ( '###FORUM_ICON###'    => $this->p->getForumIcon($forumArray, FALSE, FALSE),
 					'###FORUM_NAME###'    => $this->validator->specialChars($forumArray['forum_name']),
 					'###FORUM_DESC###'    => $this->validator->specialChars($forumArray['forum_desc']),
 					'###FORUM_OPTIONS###' => $this->getForumOptions($forumArray, $j == 1, $j == $forumCount) );
@@ -207,8 +207,7 @@ class tx_mmforum_FrontendAdministration {
 	 * access to every frontend group.
 	 *
 	 * @access private
-	 * @return HTML content
-	 *
+	 * @return string HTML content
 	 */
 	function aclAction() {
 		$forumUid  = intval($this->v['setACLs']);
@@ -229,7 +228,7 @@ class tx_mmforum_FrontendAdministration {
 		$writeGroups     = array_filter(explode(',',$this->tools->getParentUserGroups($forumData['grouprights_write'])),'intval');
 		$moderatorGroups = array_filter(explode(',',$this->tools->getParentUserGroups($forumData['grouprights_mod'])),'intval');
 
-		$marker = Array ( '###ANON_READ_CHECKED###' => (count($readGroups)  > 0) ? '' : 'checked="checked"',
+		$marker = array ( '###ANON_READ_CHECKED###' => (count($readGroups)  > 0) ? '' : 'checked="checked"',
 			'###ALL_READ_CHECKED###'  => (count($readGroups)  > 0) ? '' : 'checked="checked"',
 			'###ALL_WRITE_CHECKED###' => (count($writeGroups) > 0) ? '' : 'checked="checked"',
 			'###FORM_ACTION###'       => $this->p->pi_getPageLink($GLOBALS['TSFE']->id),
@@ -251,7 +250,6 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 * @access private
 	 * @return void
-	 *
 	 */
 	function saveAclAction() {
 		$acls = $this->v['acl'];
@@ -285,7 +283,6 @@ class tx_mmforum_FrontendAdministration {
 	 * @param  Integer $parent         The parent group. NULL for no parent group.
 	 * @param  array   $parentList     A list of all parent groups.
 	 * @return String                  HTML content
-	 *
 	 */
 	function aclGetGroupRow($template, $selectedGroups, $parent=NULL, $parentList=array()) {
 		$where = ($parent == NULL) ? ' AND (subgroup="" OR subgroup IS NULL) ' : ' AND find_in_set('.intval($parent).',subgroup) ';
@@ -340,7 +337,6 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 * @access private
 	 * @return String HTML content
-	 *
 	 */
 	function editAction() {
 		$forumUid = $this->v['newForum'] ? -1 : intval($this->v['editForum']);
@@ -404,7 +400,6 @@ class tx_mmforum_FrontendAdministration {
 	 * @access private
 	 * @return Array An array that contains a status code and validation errors, if
 	 *               some occured.
-	 *
 	 */
 	function saveEditAction() {
 		$forum = $this->v['forum']; $forumUid = intval($this->v['editForum']);
@@ -413,10 +408,10 @@ class tx_mmforum_FrontendAdministration {
 		if (!$this->checkActionAllowance($forum['parent'] == 0 ? 'category' : 'forum', $forumUid == -1 ? 'create' : 'edit'))
 			return $this->displayNoAccessError();
 
-		if ($validationResult['error']) return Array ( 'success'        => FALSE,
+		if ($validationResult['error']) return array ( 'success'        => FALSE,
 			'errors'         => $validationResult['errors'],
 			'overrideValues' => $forum );
-		$saveArray = Array ( 'tstamp'      => $GLOBALS['EXEC_TIME'],
+		$saveArray = array ( 'tstamp'      => $GLOBALS['EXEC_TIME'],
 			'forum_name'  => $forum['name'],
 			'forum_desc'  => $forum['description'],
 			'parentID'    => $forum['parent'],
@@ -428,8 +423,7 @@ class tx_mmforum_FrontendAdministration {
 			$this->databaseHandle->exec_INSERTquery('tx_mmforum_forums', $saveArray);
 		} else $this->databaseHandle->exec_UPDATEquery('tx_mmforum_forums', 'uid='.intval($forumUid), $saveArray);
 
-		return Array ( 'success' => TRUE );
-
+		return array ( 'success' => TRUE );
 	}
 
 
@@ -444,7 +438,6 @@ class tx_mmforum_FrontendAdministration {
 	 * @param  Boolean $isLast  TRUE, if the current forum is the last one in the
 	 *                          list, otherwise FALSE.
 	 * @return String           HTML content
-	 *
 	 */
 	function getForumOptions($forum, $isFirst=FALSE, $isLast=FALSE) {
 
@@ -479,7 +472,6 @@ class tx_mmforum_FrontendAdministration {
 	 *                          is not linked, and the image is in grayscale and
 	 *                          slightly blurred.
 	 * @return String
-	 *
 	 */
 	function getOptionImage($name, $disable=FALSE) {
 		if (!$disable)
@@ -487,12 +479,14 @@ class tx_mmforum_FrontendAdministration {
 				$this->conf['list.']['buttons.'][$name.'.'] );
 		else {
 			$oldConf = $this->conf['list.']['buttons.'][$name.'.'];
-			$newConf = Array ( 'file' => 'GIFBUILDER',
-				'file.' => Array ( 'XY'  => '24,24',
+			$newConf = array (
+				'file' => 'GIFBUILDER',
+				'file.' => array (
+					'XY'  => '24,24',
 					'10'  => 'IMAGE',
-					'10.' => Array ( 'file' => $oldConf['file'] ),
+					'10.' => array ( 'file' => $oldConf['file'] ),
 					'20'  => 'EFFECT',
-					'20.' => Array ( 'value' => 'gamma=1.5 | gray | blur=5' ) ) );
+					'20.' => array ( 'value' => 'gamma=1.5 | gray | blur=5' ) ) );
 			return $this->p->cObj->cObjGetSingle($this->conf['list.']['buttons.'][$name], $newConf);
 		}
 	}
@@ -506,7 +500,6 @@ class tx_mmforum_FrontendAdministration {
 	 * @param  Integer $selectedUid The UID of the forum that is to be marked as
 	 *                              preselected
 	 * @return String               HTML content
-	 *
 	 */
 	function getForumSelectOptionList($selectedUid=NULL) {
 		$content = '';
@@ -531,7 +524,6 @@ class tx_mmforum_FrontendAdministration {
 	 * @access private
 	 * @param  Integer $forumUid The UID of the forum that is to be deleted
 	 * @return Void
-	 *
 	 */
 	function deleteForum($forumUid) {
 		$forumUid = intval($forumUid);
@@ -553,7 +545,6 @@ class tx_mmforum_FrontendAdministration {
 	 * @access private
 	 * @param  Integer $forumUid The UID of the forum that is to be moved.
 	 * @return void|bool
-	 *
 	 */
 	function moveForumUp($forumUid) {
 		$forumData = $this->p->getBoardData($forumUid);
@@ -581,7 +572,6 @@ class tx_mmforum_FrontendAdministration {
 	 * @access private
 	 * @param  Integer $forumUid The UID of the forum that is to be moved.
 	 * @return void|bool
-	 *
 	 */
 	function moveForumDown($forumUid) {
 		$forumData = $this->p->getBoardData($forumUid);
@@ -608,7 +598,6 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 * @param  Integer $parentUid The parent UID of the new forum
 	 * @return Integer            The new sorting value.
-	 *
 	 */
 	function getSortingForNewForum($parentUid = 0) {
 		$res = $this->databaseHandle->exec_SELECTquery('MAX(sorting)+1', 'tx_mmforum_forums', 'deleted=0 AND parentID='.intval($parentUid).' '.$this->p->getStoragePIDQuery());
@@ -634,7 +623,6 @@ class tx_mmforum_FrontendAdministration {
 	 * @param  String $action The action that is to be performed (create, edit,
 	 *                        remove, order, ...)
 	 * @return Boolean        TRUE, if the action is allowed, otherwise FALSE.
-	 *
 	 */
 	function checkActionAllowance($group, $action) {
 		$aclList = $this->conf['acl.']["$group."][$action];
@@ -653,7 +641,6 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 * Displays an error message that denies access to a specific action.
 	 * @return string HTML content
-	 *
 	 */
 	function displayNoAccessError() {
 		return $this->p->errorMessage($this->p->conf, $this->l('access-error'));
@@ -672,10 +659,9 @@ class tx_mmforum_FrontendAdministration {
 	 * @access private
 	 * @param  Array $args Arguments for the redirect URL
 	 * @return Void
-	 *
 	 */
 	function redirectToAction($args) {
-		header('Location: '.tx_mmforum_tools::getAbsoluteUrl($this->p->pi_getPageLink($GLOBALS['TSFE']->id, NULL, array($this->p->prefixId=>$args)))); die();
+		HttpUtility::redirect($this->p->pi_getPageLink($GLOBALS['TSFE']->id, NULL, array($this->p->prefixId=>$args)));
 	}
 
 
@@ -687,7 +673,6 @@ class tx_mmforum_FrontendAdministration {
 	 * @param  String $key     The label key
 	 * @param  String $default Default value
 	 * @return String          The text
-	 *
 	 */
 	function l($key, $default='') {
 		$res = $this->p->pi_getLL('feadmin-'.$key, $key);
@@ -702,7 +687,6 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 * @param  Array $matches Matched text segment
 	 * @return String         Translated text.
-	 *
 	 */
 	function replaceLL($matches) {
 		return $this->l($matches[1], $matches[1]);
@@ -718,7 +702,6 @@ class tx_mmforum_FrontendAdministration {
 	 * @param  Array          $configuration The configuration array
 	 * @param  tx_mmforum_base $parentObject  The parent object
 	 * @return Void
-	 *
 	 */
 	function initFromParent($configuration, $parentObject) {
 		$this->conf =  $configuration['feAdmin.'];

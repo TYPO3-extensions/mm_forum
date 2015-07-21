@@ -515,9 +515,7 @@ class tx_mmforum_base extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		// Redirecting visitor back to previous page
 		$ref = GeneralUtility::getIndpEnv('HTTP_REFERER');
 		if ($ref) {
-			$ref = $this->tools->getAbsoluteUrl($ref);
-			header('Location: ' . GeneralUtility::locationHeaderUrl($ref));
-			exit();
+			HttpUtility::redirect($ref);
 		} else {
 			return false;
 		}

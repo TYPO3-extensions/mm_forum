@@ -353,9 +353,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_pminbox',$where,$val);
 
 			$link = $this->pi_getPageLink($GLOBALS["TSFE"]->id,$target='',array($this->prefixId=>array('folder'=>$this->piVars['folder'])));
-			$link = $this->tools->getAbsoluteUrl($link);
-
-			header('Location: '.$link);
+			HttpUtility::redirect($link);
 		}
 		else {
 			$template = $this->cObj->fileResource($conf['template.']['error_message']);
@@ -649,7 +647,7 @@ class tx_mmforum_pi3 extends tx_mmforum_base {
 
 					// Redirect user to inbox
 					$link = $this->pi_getPageLink($conf['pm_id']);
-					HttpUtility::redirect(tx_mmforum_tools::getAbsoluteUrl($link));
+					HttpUtility::redirect($link);
 
 				// Display an error message in case the recipient does not exist
 				} else {

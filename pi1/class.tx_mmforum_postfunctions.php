@@ -279,9 +279,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				'page'   => $pageNum
 			);
 			$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
-			$link = $this->tools->getAbsoluteUrl($link);
-			header('Location: ' . GeneralUtility::locationHeaderUrl($link));
-			exit();
+			HttpUtility::redirect($link);
 		}
 
 		$templateItem  = trim($this->cObj->getSubpart($templateFile, '###LIST_POSTS###'));
@@ -975,8 +973,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 					'fid'       => $forum_id
 				);
 				$link = $this->pi_getPageLink($GLOBALS['TSFE']->id,'',$linkParams);
-				$link = $this->tools->getAbsoluteUrl($link);
-				header("Location: $link"); die();
+				HttpUtility::redirect($link);
 			} else {
 
 				$this->update_lastpost_forum($forum_id);
@@ -988,8 +985,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 					'pid'       => 'last'
 				);
 				$link = $this->pi_getPageLink($GLOBALS['TSFE']->id,'',$linkParams);
-				$link = $this->tools->getAbsoluteUrl($link);
-				header("Location: $link"); die();
+				HttpUtility::redirect($link);
 			}
 
 		} else {
@@ -1120,9 +1116,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 					'fid'    => $topicData['forum_id']
 				);
 				$link = $this->pi_getPageLink($this->getForumPID(), '', $linkParams);
-				$link = $this->tools->getAbsoluteUrl($link);
-				header('Location: ' . GeneralUtility::locationHeaderUrl($link));
-				exit();
+				HttpUtility::redirect($link);
 			}
 
 			unset($this->piVars['saveAdmin']);
@@ -1220,9 +1214,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		}
 		if ($postId) {
 			$link = $this->get_pid_link($postId, $this->piVars['sword'], $this->conf);
-			$link = $this->tools->getAbsoluteUrl($link);
-			header('Location: ' . GeneralUtility::locationHeaderUrl($link));
-			exit();
+			HttpUtility::redirect($link);
 		}
 	}
 
