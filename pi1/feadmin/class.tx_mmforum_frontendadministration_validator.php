@@ -12,7 +12,24 @@ class tx_mmforum_FrontendAdministration_Validator {
 	 */
 	var $errorStatus = FALSE;
 
+	/**
+	 * @var array
+	 */
 	var $conf = array();
+
+	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
 
 	function validateEditObject($uid, $forum) {
 		$this->validateForumName($forum['name']);
@@ -22,17 +39,23 @@ class tx_mmforum_FrontendAdministration_Validator {
 		return array ( 'error' => $this->errorStatus, 'errors' => $this->errors );
 	}
 
+	/**
+	 * @param $uid
+	 * @param $parentUid
+	 */
 	function validateParentUid($uid, $parentUid) {
-		global $TYPO3_DB;
-
 		# Always validate for new forums.
 		if ($uid == -1) return;
 
-		$res = $TYPO3_DB->exec_SELECTquery('*', 'tx_mmforum_forums', 'parentID='.intval($uid).' AND deleted=0 '.$this->parent->getStoragePIDQuery());
-		if ($TYPO3_DB->sql_num_rows($res) > 0 && $parentUid != 0)
-			$this->addErrorForField('parent', 'no-nested-forums', array($TYPO3_DB->sql_num_rows($res)));
+		$res = $this->databaseHandle->exec_SELECTquery('*', 'tx_mmforum_forums', 'parentID='.intval($uid).' AND deleted=0 '.$this->parent->getStoragePIDQuery());
+		if ($this->databaseHandle->sql_num_rows($res) > 0 && $parentUid != 0)
+			$this->addErrorForField('parent', 'no-nested-forums', array($this->databaseHandle->sql_num_rows($res)));
 	}
 
+	/**
+	 * @param $forumDescription
+	 * @param $parentId
+	 */
 	function validateForumDescription($forumDescription, $parentId) {
 		# Categories do not need a description. Subforums do.
 		if ($parentId == 0) return;
@@ -45,6 +68,9 @@ class tx_mmforum_FrontendAdministration_Validator {
 			$this->addErrorForField('description', 'toolong', array($this->conf['validation.']['description.']['maxLength']));
 	}
 
+	/**
+	 * @param $forumName
+	 */
 	function validateForumName($forumName) {
 		if (!isset($forumName) || strlen($forumName) === 0)
 			$this->addErrorForField('name', 'empty');
@@ -54,6 +80,11 @@ class tx_mmforum_FrontendAdministration_Validator {
 			$this->addErrorForField('name', 'toolong', array($this->conf['validation.']['name.']['maxLength']));
 	}
 
+	/**
+	 * @param $fieldName
+	 * @param $errorCode
+	 * @param array $arguments
+	 */
 	function addErrorForField($fieldName, $errorCode, $arguments=array()) {
 		$this->errors[$fieldName][] = array ('type' => $errorCode, 'args' => $arguments);
 		$this->errorStatus = TRUE;

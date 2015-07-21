@@ -123,12 +123,12 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
      * @return int A new sorting index.
      */
     function getMaxSorting() {
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+        $res = $this->databaseHandle->exec_SELECTquery(
             'MAX(sorting)',
             'tx_mmforum_userfields',
             '1'
         );
-        list($max) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+        list($max) = $this->databaseHandle->sql_fetch_row($res);
         return $max+1;
     }
 
@@ -140,41 +140,41 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
      */
     function saveData() {
         if ($this->ufVars['moveUp']) {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+            $res = $this->databaseHandle->exec_SELECTquery(
                 'uid,sorting',
                 'tx_mmforum_userfields',
                 'uid='.intval($this->ufVars['moveUp']).' AND deleted=0'
             );
-            list($uid_1,$sorting_1) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+            list($uid_1,$sorting_1) = $this->databaseHandle->sql_fetch_row($res);
 
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+            $res = $this->databaseHandle->exec_SELECTquery(
                 'uid,sorting',
                 'tx_mmforum_userfields',
                 'sorting > '.$sorting_1.' AND deleted=0',
                 '',
                 'sorting ASC'
             );
-            list($uid_2,$sorting_2) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+            list($uid_2,$sorting_2) = $this->databaseHandle->sql_fetch_row($res);
 
-            $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_2, array('sorting' => $sorting_1));
-            $GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_1, array('sorting' => $sorting_2));
+            $this->databaseHandle->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_2, array('sorting' => $sorting_1));
+            $this->databaseHandle->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_1, array('sorting' => $sorting_2));
         }
         if ($this->ufVars['moveDown']) {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+            $res = $this->databaseHandle->exec_SELECTquery(
                 'uid,sorting',
                 'tx_mmforum_userfields',
                 'uid='.intval($this->ufVars['moveDown']).' AND deleted=0'
             );
-            list($uid_1,$sorting_1) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+            list($uid_1,$sorting_1) = $this->databaseHandle->sql_fetch_row($res);
 
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+            $res = $this->databaseHandle->exec_SELECTquery(
                 'uid,sorting',
                 'tx_mmforum_userfields',
                 'sorting < '.$sorting_1.' AND deleted=0',
                 '',
                 'sorting DESC'
             );
-            list($uid_2,$sorting_2) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+            list($uid_2,$sorting_2) = $this->databaseHandle->sql_fetch_row($res);
 
 			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_2, array('sorting' => $sorting_1));
 			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_userfields', 'uid='.$uid_1, array('sorting' => $sorting_2));

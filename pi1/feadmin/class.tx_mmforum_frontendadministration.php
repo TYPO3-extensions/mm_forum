@@ -24,6 +24,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!      *
  *                                                                      */
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  *
@@ -41,13 +42,34 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class tx_mmforum_FrontendAdministration {
 
 	/**
-	 * A reference to the parent object, usually an instance of the mm_forum_pi1
+	 * A reference to the parent object, usually an instance of the tx_mmforum_base
 	 * class.
-	 * @var tx_mmforum_pi1
+	 * @var tx_mmforum_base
 	 */
 	var $p;
 
-	
+	/**
+	 * piVars from parent Object
+	 *
+	 * @var array
+	 */
+	protected $v;
+
+	/**
+	 * @var tx_mmforum_tools
+	 */
+	protected $tools;
+
+	/**
+	 * @var tx_mmforum_validator
+	 */
+	protected $validator;
+
+	/**
+	 * @var ContentObjectRenderer
+	 */
+	protected $cObj;
+
 	/**
 	 * A flashmessage that will be displayed over the list view, after a forum was
 	 * saved, deleted, ...
@@ -55,12 +77,26 @@ class tx_mmforum_FrontendAdministration {
 	 */
 	var $flashmessage = NULL;
 
-	
-	/*
-	 * ACTION METHODS
+	/**
+	 * @var tx_mmforum_FrontendAdministration_Validator
 	 */
+	protected $forumValidator;
 
-	
+
+	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
+
 	/**
 	 *
 	 * The main dispatcher method. This method initializes the controller and
@@ -101,8 +137,6 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 */
 	function listAction() {
-		global $TYPO3_DB;
-
 		# Handle some basic operations like deleting or sorting forums.
 		if ( $this->v['moveUp']      ) $this->moveForumUp   ( $this->v['moveUp']      );
 		if ( $this->v['moveDown']    ) $this->moveForumDown ( $this->v['moveDown']    );
@@ -115,12 +149,12 @@ class tx_mmforum_FrontendAdministration {
 
 		# Load all categories from the database.
 		# NOTE: The "hidden" flag is NOT queried on purpose!
-		$categoryHandle = $TYPO3_DB->exec_SELECTquery ( '*', 'tx_mmforum_forums',
+		$categoryHandle = $this->databaseHandle->exec_SELECTquery ( '*', 'tx_mmforum_forums',
 			'parentID=0 AND deleted=0 '.$this->p->getStoragePIDQuery(),
 			'', 'sorting ASC' );
 		$categoryContent = '';
-		$categoryCount = $TYPO3_DB->sql_num_rows($categoryHandle); $i = 1;
-		While($categoryArray = $TYPO3_DB->sql_fetch_assoc($categoryHandle)) {
+		$categoryCount = $this->databaseHandle->sql_num_rows($categoryHandle); $i = 1;
+		While($categoryArray = $this->databaseHandle->sql_fetch_assoc($categoryHandle)) {
 
 			$localCategoryTemplate = $categoryTemplate;
 			$categoryMarkers = Array ( '###CATEGORY_ICON###'    => $this->p->getForumIcon($categoryArray, FALSE, FALSE),
@@ -130,12 +164,12 @@ class tx_mmforum_FrontendAdministration {
 
 			# Load all subforums for the current category from the database.
 			# NOTE: The "hidden" flag is NOT queried on purpose!
-			$forumHandle = $TYPO3_DB->exec_SELECTquery ( '*', 'tx_mmforum_forums',
+			$forumHandle = $this->databaseHandle->exec_SELECTquery ( '*', 'tx_mmforum_forums',
 				'parentID='.$categoryArray['uid'].' AND deleted=0 '.$this->p->getStoragePIDQuery(),
 				'', 'sorting ASC' );
 			$forumContent = '';
-			$forumCount = $TYPO3_DB->sql_num_rows($forumHandle); $j = 1;
-			While($forumArray = $TYPO3_DB->sql_fetch_assoc($forumHandle)) {
+			$forumCount = $this->databaseHandle->sql_num_rows($forumHandle); $j = 1;
+			While($forumArray = $this->databaseHandle->sql_fetch_assoc($forumHandle)) {
 
 				$forumMarkers = Array ( '###FORUM_ICON###'    => $this->p->getForumIcon($forumArray, FALSE, FALSE),
 					'###FORUM_NAME###'    => $this->validator->specialChars($forumArray['forum_name']),
@@ -233,7 +267,7 @@ class tx_mmforum_FrontendAdministration {
 			'grouprights_read'  => $readString,
 			'grouprights_write' => $writeString,
 			'grouprights_mod'   => $modString );
-		$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumUid, $updateArray);
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumUid, $updateArray);
 
 		$this->redirectToAction(array('flashmessage' => base64_encode($this->l('acl-success'))));
 	}
@@ -254,13 +288,11 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 */
 	function aclGetGroupRow($template, $selectedGroups, $parent=NULL, $parentList=array()) {
-		global $TYPO3_DB;
-
 		$where = ($parent == NULL) ? ' AND (subgroup="" OR subgroup IS NULL) ' : ' AND find_in_set('.intval($parent).',subgroup) ';
-		$res = $TYPO3_DB->exec_SELECTquery('*', 'fe_groups', 'deleted=0 '.$this->p->getUserPidQuery('fe_groups').$where);
+		$res = $this->databaseHandle->exec_SELECTquery('*', 'fe_groups', 'deleted=0 '.$this->p->getUserPidQuery('fe_groups').$where);
 
 		$content = '';
-		While($arr = $TYPO3_DB->sql_fetch_assoc($res)) {
+		While($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$groupMarker = array(
 				'###GROUP_NAME###'            => $this->validator->specialChars($arr['title']),
 				'###GROUP_UID###'             => $arr['uid'],
@@ -321,16 +353,14 @@ class tx_mmforum_FrontendAdministration {
 		} elseif ($this->v['forum']['cancel']) $this->redirectToAction(array());
 		else $errors = array();
 
-		global $TYPO3_DB;
-
 		$template = $this->cObj->fileResource($this->conf['templates.']['edit']);
 
 		# Select the forum to be edited. The "hidden" flag is not queried on purpose!
 		if ($forumUid > 0) {
-			$res = $TYPO3_DB->exec_SELECTquery ( 'uid, forum_name AS name, forum_desc AS description, parentID AS parent',
+			$res = $this->databaseHandle->exec_SELECTquery ( 'uid, forum_name AS name, forum_desc AS description, parentID AS parent',
 				'tx_mmforum_forums', 'uid='.$forumUid.' AND deleted=0 '.$this->p->getStoragePIDQuery() );
-			if ($TYPO3_DB->sql_num_rows($res) == 0) return $this->p->errorMessage($this->p->conf, $this->l('error-forumnotfound'));
-			$forumArray = $TYPO3_DB->sql_fetch_assoc($res);
+			if ($this->databaseHandle->sql_num_rows($res) == 0) return $this->p->errorMessage($this->p->conf, $this->l('error-forumnotfound'));
+			$forumArray = $this->databaseHandle->sql_fetch_assoc($res);
 		} else $forumArray = array();
 		if (is_array($this->v['forum'])) $forumArray = array_merge($forumArray, $this->v['forum']);
 
@@ -377,8 +407,6 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 */
 	function saveEditAction() {
-		global $TYPO3_DB;
-
 		$forum = $this->v['forum']; $forumUid = intval($this->v['editForum']);
 		$validationResult = $this->forumValidator->validateEditObject($forumUid, $forum);
 
@@ -397,14 +425,14 @@ class tx_mmforum_FrontendAdministration {
 			$saveArray['pid']     = $this->p->getStoragePID();
 			$saveArray['crdate']  = $GLOBALS['EXEC_TIME'];
 			$saveArray['sorting'] = $this->getSortingForNewForum($forum['parent']);
-			$TYPO3_DB->exec_INSERTquery('tx_mmforum_forums', $saveArray);
-		} else $TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.intval($forumUid), $saveArray);
+			$this->databaseHandle->exec_INSERTquery('tx_mmforum_forums', $saveArray);
+		} else $this->databaseHandle->exec_UPDATEquery('tx_mmforum_forums', 'uid='.intval($forumUid), $saveArray);
 
 		return Array ( 'success' => TRUE );
 
 	}
 
-	
+
 	/**
 	 *
 	 * Generates a list with buttons offering several options for single forums.
@@ -481,24 +509,20 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 */
 	function getForumSelectOptionList($selectedUid=NULL) {
-
-		global $TYPO3_DB;
-
 		$content = '';
-		$res = $TYPO3_DB->exec_SELECTquery('*', 'tx_mmforum_forums', 'deleted=0 AND parentID=0 '.$this->p->getStoragePIDQuery(), '', 'sorting ASC');
+		$res = $this->databaseHandle->exec_SELECTquery('*', 'tx_mmforum_forums', 'deleted=0 AND parentID=0 '.$this->p->getStoragePIDQuery(), '', 'sorting ASC');
 
-		While($arr = $TYPO3_DB->sql_fetch_assoc($res)) {
+		While($arr = $this->databaseHandle->sql_fetch_assoc($res)) {
 			$selected = $arr['uid'] == $selectedUid;
 			$content .= '<option value="'.$arr['uid'].'" '.($selected?'selected="selected"':'').'>'.$this->validator->specialChars($arr['forum_name']).'</option>';
 		} return $content;
-
 	}
 
-	
+
 	/*
 	 * DATA MODEL METHODS
 	 */
-	
+
 
 	/**
 	 *
@@ -510,14 +534,13 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 */
 	function deleteForum($forumUid) {
-		global $TYPO3_DB;
 		$forumUid = intval($forumUid);
 		$forumData = $this->p->getBoardData($forumUid);
-		if (!$this->checkActionAllowance($forumData['parentID']==0?'category':'forum', 'remove')){ 
-			$this->flashmessage = $this->l('access-error'); 
-			return FALSE; 
+		if (!$this->checkActionAllowance($forumData['parentID']==0?'category':'forum', 'remove')){
+			$this->flashmessage = $this->l('access-error');
+			return FALSE;
 		}
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', "uid=$forumUid OR parentID=$forumUid", array('deleted'=>1, 'tstamp'=>$GLOBALS['EXEC_TIME']));
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_forums', "uid=$forumUid OR parentID=$forumUid", array('deleted'=>1, 'tstamp'=>$GLOBALS['EXEC_TIME']));
 		$this->flashmessage = sprintf($this->l('delete-success'), $forumData['forum_name']);
 	}
 
@@ -529,25 +552,24 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 * @access private
 	 * @param  Integer $forumUid The UID of the forum that is to be moved.
-	 * @return Void
+	 * @return void|bool
 	 *
 	 */
 	function moveForumUp($forumUid) {
 		$forumData = $this->p->getBoardData($forumUid);
-		if (!$this->checkActionAllowance($forumData['parentID']==0?'category':'forum', 'order')){ 
-			$this->flashmessage = $this->l('access-error'); 
+		if (!$this->checkActionAllowance($forumData['parentID']==0?'category':'forum', 'order')){
+			$this->flashmessage = $this->l('access-error');
 			return FALSE;
 		}
-		global $TYPO3_DB;
-		$res = $TYPO3_DB->exec_SELECTquery ( 'uid, sorting', 'tx_mmforum_forums',
+		$res = $this->databaseHandle->exec_SELECTquery ( 'uid, sorting', 'tx_mmforum_forums',
 			'deleted=0 AND parentID='.$forumData['parentID'].'
 					                            AND sorting < '.$forumData['sorting'],
 			'', 'sorting DESC', 1 );
-		if ($TYPO3_DB->sql_num_rows($res) == 0) return;
-		list($upperUid, $upperSorting) = $TYPO3_DB->sql_fetch_row($res);
+		if ($this->databaseHandle->sql_num_rows($res) == 0) return;
+		list($upperUid, $upperSorting) = $this->databaseHandle->sql_fetch_row($res);
 
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumData['uid'], array('sorting' => $upperSorting, 'tstamp' => $GLOBALS['EXEC_TIME']));
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$upperUid, array('sorting' => $forumData['sorting'], 'tstamp' => $GLOBALS['EXEC_TIME']));
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumData['uid'], array('sorting' => $upperSorting, 'tstamp' => $GLOBALS['EXEC_TIME']));
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$upperUid, array('sorting' => $forumData['sorting'], 'tstamp' => $GLOBALS['EXEC_TIME']));
 	}
 
 
@@ -558,25 +580,24 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 * @access private
 	 * @param  Integer $forumUid The UID of the forum that is to be moved.
-	 * @return Void
+	 * @return void|bool
 	 *
 	 */
 	function moveForumDown($forumUid) {
 		$forumData = $this->p->getBoardData($forumUid);
-		if (!$this->checkActionAllowance($forumData['parentID']==0?'category':'forum', 'order')) { 
-			$this->flashmessage = $this->l('access-error'); 
-			return FALSE; 
+		if (!$this->checkActionAllowance($forumData['parentID']==0?'category':'forum', 'order')) {
+			$this->flashmessage = $this->l('access-error');
+			return FALSE;
 		}
-		global $TYPO3_DB;
-		$res = $TYPO3_DB->exec_SELECTquery ( 'uid, sorting', 'tx_mmforum_forums',
+		$res = $this->databaseHandle->exec_SELECTquery ( 'uid, sorting', 'tx_mmforum_forums',
 			'deleted=0 AND parentID='.$forumData['parentID'].'
 					                            AND sorting > '.$forumData['sorting'],
 			'', 'sorting ASC', 1 );
-		if ($TYPO3_DB->sql_num_rows($res) == 0) return;
-		list($lowerUid, $lowerSorting) = $TYPO3_DB->sql_fetch_row($res);
+		if ($this->databaseHandle->sql_num_rows($res) == 0) return;
+		list($lowerUid, $lowerSorting) = $this->databaseHandle->sql_fetch_row($res);
 
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumData['uid'], array('sorting' => $lowerSorting, 'tstamp' => $GLOBALS['EXEC_TIME']));
-		$TYPO3_DB->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$lowerUid, array('sorting' => $forumData['sorting'], 'tstamp' => $GLOBALS['EXEC_TIME']));
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$forumData['uid'], array('sorting' => $lowerSorting, 'tstamp' => $GLOBALS['EXEC_TIME']));
+		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_forums', 'uid='.$lowerUid, array('sorting' => $forumData['sorting'], 'tstamp' => $GLOBALS['EXEC_TIME']));
 	}
 
 
@@ -590,16 +611,16 @@ class tx_mmforum_FrontendAdministration {
 	 *
 	 */
 	function getSortingForNewForum($parentUid = 0) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('MAX(sorting)+1', 'tx_mmforum_forums', 'deleted=0 AND parentID='.intval($parentUid).' '.$this->p->getStoragePIDQuery());
-		list($newSorting) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		$res = $this->databaseHandle->exec_SELECTquery('MAX(sorting)+1', 'tx_mmforum_forums', 'deleted=0 AND parentID='.intval($parentUid).' '.$this->p->getStoragePIDQuery());
+		list($newSorting) = $this->databaseHandle->sql_fetch_row($res);
 		return $newSorting;
 	}
 
-	
+
 	/*
 	 * ACCESS VALIDATION
 	 */
-	
+
 
 	/**
 	 *
@@ -638,12 +659,12 @@ class tx_mmforum_FrontendAdministration {
 		return $this->p->errorMessage($this->p->conf, $this->l('access-error'));
 	}
 
-	
+
 	/*
 	 * HELPER METHODS
 	 */
-	
-	
+
+
 	/**
 	 *
 	 * Generates a HTTP redirect to a specific action of this controller.
@@ -695,7 +716,7 @@ class tx_mmforum_FrontendAdministration {
 	 * some objects of the parent object, the tx_mmforum_pi1 class.
 	 *
 	 * @param  Array          $configuration The configuration array
-	 * @param  tx_mmforum_pi1 $parentObject  The parent object
+	 * @param  tx_mmforum_base $parentObject  The parent object
 	 * @return Void
 	 *
 	 */

@@ -47,6 +47,20 @@ class tx_mmforum_userfield {
 
 	/** The prefixId for link generation */
 	var $prefixId = 'tx_mmforum';
+	
+	/**
+	 * The TYPO3 database object
+	 *
+	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
+	 */
+	protected $databaseHandle;
+	
+	/**
+	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
+	 */
+	public function __construct() {
+		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+	}
 
 	/**
 	 * Initializes the object.
@@ -98,7 +112,7 @@ class tx_mmforum_userfield {
 				'tstamp'						=> $GLOBALS['EXEC_TIME'],
 				$this->getLinkedUserField()		=> trim($value)
 			);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('fe_users','uid='.intval($userId),$updateArray);
+			$this->databaseHandle->exec_UPDATEquery('fe_users','uid='.intval($userId),$updateArray);
 
 		/* If the userfield does NOT use a field from the fe_users table
 		 * and there is already a value present in the tx_mmforum_userfields_contents
@@ -108,7 +122,7 @@ class tx_mmforum_userfield {
 				'tstamp'						=> $GLOBALS['EXEC_TIME'],
 				'field_value'					=> $value
 			);
-			$GLOBALS['TYPO3_DB']->exec_UPDATEquery('tx_mmforum_userfields_contents', 'user_id='.intval($userId).' AND field_id='.intval($this->getUID()).' AND deleted=0', $updateArray);
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_userfields_contents', 'user_id='.intval($userId).' AND field_id='.intval($this->getUID()).' AND deleted=0', $updateArray);
 
 		/* If there is no value set for this user, then create a tx_mmforum_userfields_contents
 		 * record now. */
@@ -121,7 +135,7 @@ class tx_mmforum_userfield {
 				'field_id'			=> $this->getUID(),
 				'field_value'		=> $value
 			);
-			$GLOBALS['TYPO3_DB']->exec_INSERTquery('tx_mmforum_userfields_contents', $insertArray);
+			$this->databaseHandle->exec_INSERTquery('tx_mmforum_userfields_contents', $insertArray);
 		}
 	}
 
@@ -136,12 +150,12 @@ class tx_mmforum_userfield {
 	 * @version 2009-02-16
 	 */
 	function isSetForUser($userId) {
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'COUNT(*)',
 			'tx_mmforum_userfields_contents',
 			'user_id='.intval($userId).' AND field_id='.intval($this->getUID()).' AND deleted=0'
 		);
-		list($count) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
+		list($count) = $this->databaseHandle->sql_fetch_row($res);
 
 		return $count > 0;
 	}
@@ -188,30 +202,30 @@ class tx_mmforum_userfield {
 	 * @version 2009-09-09
 	 */
 	function isUnique($value, $field) {
-		$value = $GLOBALS['TYPO3_DB']->fullQuoteStr(trim($value), 'fe_users');
+		$value = $this->databaseHandle->fullQuoteStr(trim($value), 'fe_users');
 		$uid = intval($GLOBALS['TSFE']->fe_user->user['uid']);
 
 		//no user logged in
 		if ($uid === 0) {
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				$field, 'fe_users', $field . ' LIKE ' . $value
 			);
-			return ($GLOBALS['TYPO3_DB']->sql_num_rows($res) < 1);
+			return ($this->databaseHandle->sql_num_rows($res) < 1);
 		}
 
 		//user logged in
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+		$res = $this->databaseHandle->exec_SELECTquery(
 			'uid,' . $field, 'fe_users', $field . ' LIKE ' . $value
 		);
 
-		$count = intval($GLOBALS['TYPO3_DB']->sql_num_rows($res));
+		$count = intval($this->databaseHandle->sql_num_rows($res));
 
 		if ($count === 0) {
 			return true;
 
 		} elseif ($count === 1) {
 			// if the found value is from the current user, return true
-			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			$arr = $this->databaseHandle->sql_fetch_assoc($res);
 			if (intval($arr['uid']) === $uid) {
 				return true;
 			}
@@ -320,11 +334,11 @@ class tx_mmforum_userfield {
 
 		if (is_int($data)) {
 			/* Load record from database */
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+			$res = $this->databaseHandle->exec_SELECTquery(
 				'*', 'tx_mmforum_userfields', 'uid='.intval($data)
 			);
-			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) == 0) return null;
-			$arr = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+			if ($this->databaseHandle->sql_num_rows($res) == 0) return null;
+			$arr = $this->databaseHandle->sql_fetch_assoc($res);
 		} else {
 			$arr = $data;
 		}
