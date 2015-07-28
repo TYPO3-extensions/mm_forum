@@ -99,10 +99,9 @@ $TCA['tx_mmforum_forums'] = array(
 				'size'          => 4,
 				'minitems'      => 0,
 				'maxitems'      => 100,
-
 			)
 		),
-        'grouprights_write' => array(
+		'grouprights_write' => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_forums.forum_grouprights_write',
 			'config'        => array(
@@ -112,10 +111,9 @@ $TCA['tx_mmforum_forums'] = array(
 				'size'          => 4,
 				'minitems'      => 0,
 				'maxitems'      => 100,
-
 			)
 		),
-        'grouprights_mod' => array(
+		'grouprights_mod' => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_forums.forum_grouprights_mod',
 			'config'        => array(
@@ -125,44 +123,43 @@ $TCA['tx_mmforum_forums'] = array(
 				'size'          => 4,
 				'minitems'      => 0,
 				'maxitems'      => 100,
-
 			)
 		),
-       'userrights_read' => array(
-            'exclude'       => 1,
-            'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_forums.forum_userrights_read',
-            'config'        => array(
-                'type'          => 'group',
-                'internal_type' => 'db',
-                'allowed'       => 'fe_users',
-                'size'          => 10,
-                'minitems'      => 0,
-                'maxitems'      => 100,
-            )
-        ),
-        'userrights_write' => array(
+	   'userrights_read' => array(
+			'exclude'       => 1,
+			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_forums.forum_userrights_read',
+			'config'        => array(
+				'type'          => 'group',
+				'internal_type' => 'db',
+				'allowed'       => 'fe_users',
+				'size'          => 10,
+				'minitems'      => 0,
+				'maxitems'      => 100,
+			)
+		),
+		'userrights_write' => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_forums.forum_userrights_write',
 			'config'        => array(
-                'type'          => 'group',
-                'internal_type' => 'db',
-                'allowed'       => 'fe_users',
-                'size'          => 10,
-                'minitems'      => 0,
-                'maxitems'      => 100,
-            )
+				'type'          => 'group',
+				'internal_type' => 'db',
+				'allowed'       => 'fe_users',
+				'size'          => 10,
+				'minitems'      => 0,
+				'maxitems'      => 100,
+			)
 		),
-        'userrights_mod' => array(
+		'userrights_mod' => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_forums.forum_userrights_mod',
 			'config'        => array(
-                'type'          => 'group',
-                'internal_type' => 'db',
-                'allowed'       => 'fe_users',
-                'size'          => 10,
-                'minitems'      => 0,
-                'maxitems'      => 100,
-            )
+				'type'          => 'group',
+				'internal_type' => 'db',
+				'allowed'       => 'fe_users',
+				'size'          => 10,
+				'minitems'      => 0,
+				'maxitems'      => 100,
+			)
 		),
 		'parentID'      => array(
 			'exclude'       => 1,
@@ -335,10 +332,10 @@ $TCA['tx_mmforum_topics'] = array(
 				'type' => 'check'
 			),
 		),
-        'poll_id'       => array(
-            'exclude'       => 1,
-            'label' => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_topics.poll_id',
-            'config' => array(
+		'poll_id'       => array(
+			'exclude'       => 1,
+			'label' => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_topics.poll_id',
+			'config' => array(
 				'type' => 'group',
 				'internal_type' => 'db',
 				'allowed' => 'tx_mmforum_polls',
@@ -346,8 +343,8 @@ $TCA['tx_mmforum_topics'] = array(
 				'minitems' => 0,
 				'maxitems' => 1,
 			),
-        ),
-        'shadow_tid' => array(
+		),
+		'shadow_tid' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_topics.shadow_tid',
 			'config' => array(
@@ -359,7 +356,7 @@ $TCA['tx_mmforum_topics'] = array(
 				'maxitems' => 1
 			),
 		),
-        'shadow_fid' => array(
+		'shadow_fid' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_topics.shadow_fid',
 			'config' => array(
@@ -490,18 +487,18 @@ $TCA['tx_mmforum_posts'] = array(
 				'default' => 0
 			)
 		),
-        'attachment'    => array(
-            'exclude'       => 1,
-            'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_posts.attachment',
-            'config'        => array(
-                'type'          => 'group',
+		'attachment'    => array(
+			'exclude'       => 1,
+			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_posts.attachment',
+			'config'        => array(
+				'type'          => 'group',
 				'internal_type' => 'db',
 				'allowed'       => 'tx_mmforum_attachments',
 				'size'          => 1,
 				'minitems'      => 0,
 				'maxitems'      => 1
-            )
-        ),
+			)
+		),
 		'tx_mmforumsearch_index_write' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_posts.tx_mmforumsearch_index_write',
@@ -1253,13 +1250,12 @@ $TCA['tx_mmforum_userfields'] = array(
  * Table setup for table 'tx_mmforum_attachments'
  */
 $TCA['tx_mmforum_attachments'] = array(
-    'ctrl'          => $TCA['tx_mmforum_attachments']['ctrl'],
-    'interface'     => array(
-        'showRecordFieldList'   => 'hidden,file_type,file_name,file_path,file_size,downloads,post_id'
-    ),
-    'feInterface'   => $TCA['tx_mmforum_attachments']['feInterface'],
-    'columns'       => array(
-        'hidden'        => array(
+	'ctrl'          => $TCA['tx_mmforum_attachments']['ctrl'],
+	'interface'     => array(
+		'showRecordFieldList'   => 'hidden,file_type,file_name,file_path,file_size,downloads,post_id'
+	),
+	'columns'       => array(
+		'hidden'        => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'        => array(
@@ -1297,7 +1293,7 @@ $TCA['tx_mmforum_attachments'] = array(
 			'config'        => array(
 				'type'          => 'input',
 				'size'          => '16',
-                'eval'          => 'int',
+				'eval'          => 'int',
 			)
 		),
 		'downloads'     => array(
@@ -1306,22 +1302,22 @@ $TCA['tx_mmforum_attachments'] = array(
 			'config'        => array(
 				'type'          => 'input',
 				'size'          => '8',
-                'eval'          => 'int',
+				'eval'          => 'int',
 			)
 		),
-        'post_id'       => array(
-            'exclude'       => 1,
-            'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_attachments.post_id',
-            'config'        => array(
-                'type'          => 'group',
-                'internal_type' => 'db',
+		'post_id'       => array(
+			'exclude'       => 1,
+			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_attachments.post_id',
+			'config'        => array(
+				'type'          => 'group',
+				'internal_type' => 'db',
 				'allowed'       => 'tx_mmforum_posts',
 				'size'          => 1,
 				'minitems'      => 1,
 				'maxitems'      => 1
-            )
-        ),
-    ),
+			)
+		),
+	),
 	'types' => array(
 		'0' => array('showitem' => 'hidden;;1;;1-1-1, file_name, file_path, file_type, file_name, file_size, downloads, post_id')
 	),
@@ -1334,13 +1330,12 @@ $TCA['tx_mmforum_attachments'] = array(
  * Table setup for table 'tx_mmforum_polls'
  */
 $TCA['tx_mmforum_polls'] = array(
-    'ctrl'          => $TCA['tx_mmforum_polls']['ctrl'],
-    'interface'     => array(
-        'showRecordFieldList'   => 'hidden,endtime,question,votes'
-    ),
-    'feInterface'   => $TCA['tx_mmforum_polls']['feInterface'],
-    'columns'       => array(
-        'hidden'        => array(
+	'ctrl'          => $TCA['tx_mmforum_polls']['ctrl'],
+	'interface'     => array(
+		'showRecordFieldList'   => 'hidden,endtime,question,votes'
+	),
+	'columns'       => array(
+		'hidden'        => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'        => array(
@@ -1356,7 +1351,7 @@ $TCA['tx_mmforum_polls'] = array(
 				'size'          => '30',
 			)
 		),
-        'endtime'       => array(
+		'endtime'       => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_polls.endtime',
 			'config'        => array(
@@ -1367,16 +1362,16 @@ $TCA['tx_mmforum_polls'] = array(
 				'default'       => '0'
 			)
 		),
-        'votes'         => array(
-            'exclude'       => 1,
-            'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_polls.votes',
-            'config'        => array(
-                'type'          => 'input',
-                'size'          => '8',
-                'eval'          => 'int'
-            )
-        ),
-    ),
+		'votes'         => array(
+			'exclude'       => 1,
+			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_polls.votes',
+			'config'        => array(
+				'type'          => 'input',
+				'size'          => '8',
+				'eval'          => 'int'
+			)
+		),
+	),
 	'types' => array(
 		'0' => array('showitem' => 'hidden;;1;;1-1-1, endtime, question, votes')
 	),
@@ -1389,13 +1384,13 @@ $TCA['tx_mmforum_polls'] = array(
  * Table setup for table 'tx_mmforum_polls_answers'
  */
 $TCA['tx_mmforum_polls_answers'] = array(
-    'ctrl'          => $TCA['tx_mmforum_polls_answers']['ctrl'],
-    'interface'     => array(
-        'showRecordFieldList'   => 'hidden,answer,poll_id,votes'
-    ),
-    'feInterface'   => $TCA['tx_mmforum_polls_answers']['feInterface'],
-    'columns'       => array(
-        'hidden'        => array(
+	'ctrl'          => $TCA['tx_mmforum_polls_answers']['ctrl'],
+	'interface'     => array(
+		'showRecordFieldList'   => 'hidden,answer,poll_id,votes'
+	),
+	'feInterface'   => $TCA['tx_mmforum_polls_answers']['feInterface'],
+	'columns'       => array(
+		'hidden'        => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'        => array(
@@ -1411,28 +1406,28 @@ $TCA['tx_mmforum_polls_answers'] = array(
 				'size'          => '30',
 			)
 		),
-        'poll_id'       => array(
+		'poll_id'       => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_polls_answers.poll_id',
 			'config'        => array(
 				'type'          => 'group',
-                'internal_type' => 'db',
+				'internal_type' => 'db',
 				'allowed'       => 'tx_mmforum_polls',
 				'size'          => 1,
 				'minitems'      => 1,
 				'maxitems'      => 1
 			)
 		),
-        'votes'         => array(
-            'exclude'       => 1,
-            'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_polls_answers.votes',
-            'config'        => array(
-                'type'          => 'input',
-                'size'          => '8',
-                'eval'          => 'int'
-            )
-        ),
-    ),
+		'votes'         => array(
+			'exclude'       => 1,
+			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_polls_answers.votes',
+			'config'        => array(
+				'type'          => 'input',
+				'size'          => '8',
+				'eval'          => 'int'
+			)
+		),
+	),
 	'types' => array(
 		'0' => array('showitem' => 'hidden;;1;;1-1-1, answer, poll_id, votes')
 	),
@@ -1445,13 +1440,12 @@ $TCA['tx_mmforum_polls_answers'] = array(
  * Table setup for table 'tx_mmforum_polls_votes'
  */
 $TCA['tx_mmforum_polls_votes'] = array(
-    'ctrl'          => $TCA['tx_mmforum_polls_votes']['ctrl'],
-    'interface'     => array(
-        'showRecordFieldList'   => 'hidden,poll_id,answer_id,user_id'
-    ),
-    'feInterface'   => $TCA['tx_mmforum_polls_votes']['feInterface'],
-    'columns'       => array(
-        'hidden'        => array(
+	'ctrl'          => $TCA['tx_mmforum_polls_votes']['ctrl'],
+	'interface'     => array(
+		'showRecordFieldList'   => 'hidden,poll_id,answer_id,user_id'
+	),
+	'columns'       => array(
+		'hidden'        => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'        => array(
@@ -1464,38 +1458,38 @@ $TCA['tx_mmforum_polls_votes'] = array(
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_polls_votes.poll_id',
 			'config'        => array(
 				'type'          => 'group',
-                'internal_type' => 'db',
+				'internal_type' => 'db',
 				'allowed'       => 'tx_mmforum_polls',
 				'size'          => 1,
 				'minitems'      => 1,
 				'maxitems'      => 1
 			)
 		),
-        'answer_id'       => array(
+		'answer_id'       => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_polls_votes.answer_id',
 			'config'        => array(
 				'type'          => 'group',
-                'internal_type' => 'db',
+				'internal_type' => 'db',
 				'allowed'       => 'tx_mmforum_polls_answers',
 				'size'          => 1,
 				'minitems'      => 1,
 				'maxitems'      => 1
 			)
 		),
-        'user_id'         => array(
-            'exclude'       => 1,
-            'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_polls_votes.user_id',
-            'config'        => array(
+		'user_id'         => array(
+			'exclude'       => 1,
+			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_polls_votes.user_id',
+			'config'        => array(
 				'type'          => 'group',
-                'internal_type' => 'db',
+				'internal_type' => 'db',
 				'allowed'       => 'fe_users',
 				'size'          => 1,
 				'minitems'      => 1,
 				'maxitems'      => 1
 			)
-        ),
-    ),
+		),
+	),
 	'types' => array(
 		'0' => array('showitem' => 'hidden;;1;;1-1-1, poll_id, answer_id, user_id')
 	),
@@ -1508,13 +1502,12 @@ $TCA['tx_mmforum_polls_votes'] = array(
  * Table setup for table 'tx_mmforum_ranks'
  */
 $TCA['tx_mmforum_ranks'] = array(
-    'ctrl'          => $TCA['tx_mmforum_ranks']['ctrl'],
-    'interface'     => array(
-        'showRecordFieldList'   => 'hidden,title,color,icon,minPosts,special'
-    ),
-    'feInterface'   => $TCA['tx_mmforum_ranks']['feInterface'],
-    'columns'       => array(
-        'hidden'        => array(
+	'ctrl'          => $TCA['tx_mmforum_ranks']['ctrl'],
+	'interface'     => array(
+		'showRecordFieldList'   => 'hidden,title,color,icon,minPosts,special'
+	),
+	'columns'       => array(
+		'hidden'        => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'        => array(
@@ -1535,55 +1528,55 @@ $TCA['tx_mmforum_ranks'] = array(
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_ranks.color',
 			'config'        => array(
 				"type"          => "input",
-                "size"          => "10",
-                'checkbox'      => '1',
-                'default'       => '',
-                "wizards"       => Array(
-                    "_PADDING"      => 2,
-                    "color"         => Array(
-                        "title"         => "Color:",
-                        "type"          => "colorbox",
-                        "dim"           => "12x12",
-                        "tableStyle"    => "border:solid 1px black;",
-                        "script"        => "wizard_colorpicker.php",
-                        "JSopenParams"  => "height=300,width=250,status=0,menubar=0,scrollbars=1",
-                    ),
-                ),
+				"size"          => "10",
+				'checkbox'      => '1',
+				'default'       => '',
+				"wizards"       => Array(
+					"_PADDING"      => 2,
+					"color"         => Array(
+						"title"         => "Color:",
+						"type"          => "colorbox",
+						"dim"           => "12x12",
+						"tableStyle"    => "border:solid 1px black;",
+						"script"        => "wizard_colorpicker.php",
+						"JSopenParams"  => "height=300,width=250,status=0,menubar=0,scrollbars=1",
+					),
+				),
 			)
 		),
-        'icon'          => array(
+		'icon'          => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_ranks.icon',
-            'config'        => array(
-                "type"          => "group",
-                "internal_type" => "file",
-                "allowed"       => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],
-                "max_size"      => 500,
-                "uploadfolder"  => "uploads/tx_mmforum",
-                "show_thumbs"   => 1,
-                "size"          => 1,
-                "minitems"      => 0,
-                "maxitems"      => 1,
-            )
-        ),
-        'minPosts'         => array(
-            'exclude'       => 1,
-            'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_ranks.minPosts',
-            'config'        => array(
-                'type'          => 'input',
-                'size'          => '8',
-                'eval'          => 'int',
-                'checkbox'      => '1'
-            )
-        ),
-        'special'         => array(
-            'exclude'       => 1,
-            'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_ranks.special',
-            'config'        => array(
-                'type'          => 'check',
-            )
-        ),
-    ),
+			'config'        => array(
+				"type"          => "group",
+				"internal_type" => "file",
+				"allowed"       => $GLOBALS["TYPO3_CONF_VARS"]["GFX"]["imagefile_ext"],
+				"max_size"      => 500,
+				"uploadfolder"  => "uploads/tx_mmforum",
+				"show_thumbs"   => 1,
+				"size"          => 1,
+				"minitems"      => 0,
+				"maxitems"      => 1,
+			)
+		),
+		'minPosts'         => array(
+			'exclude'       => 1,
+			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_ranks.minPosts',
+			'config'        => array(
+				'type'          => 'input',
+				'size'          => '8',
+				'eval'          => 'int',
+				'checkbox'      => '1'
+			)
+		),
+		'special'         => array(
+			'exclude'       => 1,
+			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_ranks.special',
+			'config'        => array(
+				'type'          => 'check',
+			)
+		),
+	),
 	'types' => array(
 		'0' => array('showitem' => 'hidden;;1;;1-1-1, title,color,icon,minPosts,special')
 	),
@@ -1596,13 +1589,12 @@ $TCA['tx_mmforum_ranks'] = array(
  * Table setup for table 'tx_mmforum_postqueue'
  */
 $TCA['tx_mmforum_postqueue'] = array(
-    'ctrl'          => $TCA['tx_mmforum_postqueue']['ctrl'],
-    'interface'     => array(
-        'showRecordFieldList'   => 'hidden,topic,topic_forum,topic_title,topic_poll,topic_subscribe,post_parent,post_text,post_user,post_time,post_attachment,post_ip'
-    ),
-    'feInterface'   => $TCA['tx_mmforum_postqueue']['feInterface'],
-    'columns'       => array(
-        'hidden'        => array(
+	'ctrl'          => $TCA['tx_mmforum_postqueue']['ctrl'],
+	'interface'     => array(
+		'showRecordFieldList'   => 'hidden,topic,topic_forum,topic_title,topic_poll,topic_subscribe,post_parent,post_text,post_user,post_time,post_attachment,post_ip'
+	),
+	'columns'       => array(
+		'hidden'        => array(
 			'exclude'       => 1,
 			'label'         => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
 			'config'        => array(
@@ -1622,7 +1614,7 @@ $TCA['tx_mmforum_postqueue'] = array(
 			'label'			=> 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_postqueue.topic_forum',
 			'config'        => array(
 				'type'          => 'group',
-                'internal_type' => 'db',
+				'internal_type' => 'db',
 				'allowed'       => 'tx_mmforum_forums',
 				'size'          => 1,
 				'minitems'      => 0,
@@ -1642,7 +1634,7 @@ $TCA['tx_mmforum_postqueue'] = array(
 			'label'			=> 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_postqueue.topic_poll',
 			'config'        => array(
 				'type'          => 'group',
-                'internal_type' => 'db',
+				'internal_type' => 'db',
 				'allowed'       => 'tx_mmforum_polls',
 				'size'          => 1,
 				'minitems'      => 0,
@@ -1661,7 +1653,7 @@ $TCA['tx_mmforum_postqueue'] = array(
 			'label'			=> 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_postqueue.post_parent',
 			'config'        => array(
 				'type'          => 'group',
-                'internal_type' => 'db',
+				'internal_type' => 'db',
 				'allowed'       => 'tx_mmforum_topics',
 				'size'          => 1,
 				'minitems'      => 0,
@@ -1682,7 +1674,7 @@ $TCA['tx_mmforum_postqueue'] = array(
 			'label'			=> 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_postqueue.post_user',
 			'config'        => array(
 				'type'          => 'group',
-                'internal_type' => 'db',
+				'internal_type' => 'db',
 				'allowed'       => 'fe_users',
 				'size'          => 1,
 				'minitems'      => 1,
@@ -1705,7 +1697,7 @@ $TCA['tx_mmforum_postqueue'] = array(
 			'label'         => 'LLL:EXT:mm_forum/locallang_db.xml:tx_mmforum_postqueue.post_attachment',
 			'config'        => array(
 				'type'          => 'group',
-                'internal_type' => 'db',
+				'internal_type' => 'db',
 				'allowed'       => 'tx_mmforum_attachments',
 				'size'          => 1,
 				'minitems'      => 0,
@@ -1720,7 +1712,7 @@ $TCA['tx_mmforum_postqueue'] = array(
 				'size'          => '30',
 			)
 		),
-    ),
+	),
 	'types' => array(
 		'0' => array('showitem' => 'hidden;;1;;1-1-1, topic,topic_forum,topic_title,topic_poll,topic_subscribe,post_parent,post_text,post_user,post_time,post_attachment,post_ip')
 	),
@@ -1728,4 +1720,3 @@ $TCA['tx_mmforum_postqueue'] = array(
 		'1' => array('showitem' => '')
 	)
 );
-?>

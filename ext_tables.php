@@ -219,9 +219,6 @@ $TCA['tx_mmforum_posts_text'] = array(
 		),
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/comment.png',
-	),
-	'feInterface' => array(
-		'fe_admin_fieldList' => 'hidden, post_text',
 	)
 );
 
@@ -242,9 +239,6 @@ $TCA['tx_mmforum_smilies'] = array(
 		),
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/emoticon.png',
-	),
-	'feInterface' => array(
-		'fe_admin_fieldList' => 'hidden, code, smile_url, emoticon',
 	)
 );
 
@@ -262,9 +256,6 @@ $TCA['tx_mmforum_mailkey'] = array(
 		'default_sortby' => 'ORDER BY crdate',
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/email.png',
-	),
-	'feInterface' => array(
-		'fe_admin_fieldList' => 'code',
 	)
 );
 
@@ -285,9 +276,6 @@ $TCA['tx_mmforum_postsread'] = array(
 		),
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/comment.png',
-	),
-	'feInterface' => array(
-		'fe_admin_fieldList' => 'hidden, user, topic_id, post_id',
 	)
 );
 
@@ -308,9 +296,6 @@ $TCA['tx_mmforum_topicmail'] = array(
 		),
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/email_go.png',
-	),
-	'feInterface' => array(
-		'fe_admin_fieldList' => 'hidden, user_id, topic_id',
 	)
 );
 
@@ -331,9 +316,6 @@ $TCA['tx_mmforum_favorites'] = array(
 		),
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/favorite.png',
-	),
-	'feInterface' => array(
-		'fe_admin_fieldList' => 'hidden, user_id, topic_id',
 	)
 );
 
@@ -354,9 +336,6 @@ $TCA['tx_mmforum_pminbox'] = array(
 		),
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/email.png',
-	),
-	'feInterface' => array(
-		'fe_admin_fieldList' => 'hidden, sendtime, from_uid, from_name, to_uid, to_name, subject, message, read_flg',
 	)
 );
 
@@ -377,9 +356,6 @@ $TCA['tx_mmforum_wordlist'] = array(
 		),
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/words.png',
-	),
-	'feInterface' => array(
-		'fe_admin_fieldList' => 'hidden, word, metaphone',
 	)
 );
 
@@ -400,9 +376,6 @@ $TCA['tx_mmforum_wordmatch'] = array(
 		),
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/words.png',
-	),
-	'feInterface' => array(
-		'fe_admin_fieldList' => 'hidden, word_id, post_id, is_header, topic_id, forum_id, solved, topic_title, topic_views, topic_replies',
 	)
 );
 
@@ -423,9 +396,6 @@ $TCA['tx_mmforum_searchresults'] = array(
 		),
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/find.png',
-	),
-	'feInterface' => array(
-		'fe_admin_fieldList' => 'hidden, search_string, array_string',
 	)
 );
 
@@ -447,9 +417,6 @@ $TCA['tx_mmforum_userfields'] = array(
 		),
 		'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 		'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/custom.png',
-	),
-	'feInterface' => array(
-		'fe_admin_fieldList' => 'hidden, label, config',
 	)
 );
 
@@ -470,9 +437,6 @@ $TCA['tx_mmforum_attachments'] = array(
         ),
         'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 	'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/attach.png',
-    ),
-    'feInterface' => array(
-        'fe_admin_fieldList' => 'hidden, file_type, file_name, file_path, file_size, downloads, post_id'
     )
 );
 
@@ -493,9 +457,6 @@ $TCA['tx_mmforum_polls'] = array(
         ),
         'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 	'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/poll.png',
-    ),
-    'feInterface' => array(
-        'fe_admin_fieldList' => 'hidden, question, endtime, votes'
     )
 );
 
@@ -516,9 +477,6 @@ $TCA['tx_mmforum_polls_answers'] = array(
         ),
         'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 	'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/poll.png',
-    ),
-    'feInterface' => array(
-        'fe_admin_fieldList' => 'hidden, answer, poll_id, votes'
     )
 );
 
@@ -539,9 +497,6 @@ $TCA['tx_mmforum_polls_votes'] = array(
         ),
         'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
         'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/poll.png',
-    ),
-    'feInterface' => array(
-        'fe_admin_fieldList' => 'hidden, poll_id, answer_id, user_id'
     )
 );
 
@@ -562,9 +517,6 @@ $TCA['tx_mmforum_ranks'] = array(
         ),
         'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
         'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/rank.png',
-    ),
-    'feInterface' => array(
-        'fe_admin_fieldList' => 'hidden, icon, title, color, minPosts, special'
     )
 );
 
@@ -585,9 +537,6 @@ $TCA['tx_mmforum_postqueue'] = array(
         ),
         'dynamicConfigFile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY) . 'tca.php',
 	'iconfile'          => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath($_EXTKEY) . 'res/dbicons/comments.png',
-    ),
-    'feInterface' => array(
-        'fe_admin_fieldList' => 'hidden, topic, topic_forum, topic_title, topic_poll, topic_subscribe, post_parent, post_text, post_user, post_time, post_attachment, post_ip'
     )
 );
 

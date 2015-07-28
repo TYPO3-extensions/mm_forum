@@ -23,6 +23,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\HttpUtility;
 
 /**
  * [CLASS/FUNCTION INDEX of SCRIPT]
@@ -57,6 +58,56 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 	/**
+	 * This is here to access the piVars
+	 * @var string
+	 */
+	public $prefixId = 'tx_mmforum_pi1';
+
+	/**
+	 * This is needed to load locallang
+	 * @var string
+	 */
+	public $scriptRelPath = 'pi1/class.tx_mmforum_pi1.php';
+
+
+	/**
+	 * @var tx_mmforum_postparser
+	 */
+	protected $tx_mmforum_postparser;
+	
+	/**
+	 * @var tx_mmforum_rss
+	 */
+	protected $tx_mmforum_rss;
+
+	/**
+	 * @param array $conf
+	 * @param \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj
+	 */
+	public function __construct($conf, $cObj) {
+		$this->injectCObj($cObj);
+		$this->injectConf($conf);
+		
+		$this->tx_mmforum_rss = GeneralUtility::makeInstance('tx_mmforum_rss');
+		$this->tx_mmforum_postparser = GeneralUtility::makeInstance('tx_mmforum_postparser');
+		parent::__construct();
+	}
+
+	/**
+	 * @param \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj
+	 */
+	public function injectCObj($cObj) {
+		$this->cObj = $cObj;
+	}
+
+	/**
+	 * @param $conf
+	 */
+	public function injectConf($conf) {
+		$this->init($conf);
+	}
+	
+	/**
 	 * Lists all posts in a certain topic.
 	 * @param  string $content The plugin content
 	 * @param  array $conf The plugin's configuration vars
@@ -64,25 +115,25 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 	 * @return string          The content
 	 */
 	function list_post($content, $conf, $order) {
-		$templateFile = $this->cObj->fileResource($this->conf['template.']['list_post']);
-		$topicId  = $this->piVars['tid'] = intval($this->piVars['tid']);
+		$templateFile = $this->local_cObj->fileResource($conf['template.']['list_post']);
+		$topicId = intval($this->piVars['tid']);
 		$feUserId = intval($GLOBALS['TSFE']->fe_user->user['uid']);
 
 		// Check authorization
 		if (!$this->getMayRead_topic($topicId)) {
-			return $this->errorMessage($this->conf, $this->pi_getLL('topic.noAccess'));
+			return $this->errorMessage($conf, $this->pi_getLL('topic.noAccess'));
 		}
 
 		$topicData = $this->getTopicData($topicId);
-		tx_mmforum_rss::setHTMLHeadData('forum', $topicData['forum_id']);
-		tx_mmforum_rss::setHTMLHeadData('topic', $topicId);
+		$this->tx_mmforum_rss->setHTMLHeadData('forum', $topicData['forum_id']);
+		$this->tx_mmforum_rss->setHTMLHeadData('topic', $topicId);
 		$this->local_cObj->data = $topicData;
 
 		// Save admin panel changes
-		tx_mmforum_postfunctions::saveAdminChanges($topicData);
+		$this->saveAdminChanges($topicData);
 
 		// Determine sorting mode
-		$orderingMode = $this->conf['list_posts.']['postOrdering'] ? strtoupper($this->conf['list_posts.']['postOrdering']) : 'ASC';
+		$orderingMode = $conf['list_posts.']['postOrdering'] ? strtoupper($conf['list_posts.']['postOrdering']) : 'ASC';
 		$order = strtoupper($order);
 		if (in_array($order, array('ASC','DESC'))) $orderingMode = $order;
 		if (!in_array($orderingMode, array('ASC','DESC'))) $orderingMode = 'ASC';
@@ -115,28 +166,28 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 
 		// redirect to a specific post
 		if ($this->piVars['pid']) {
-			tx_mmforum_postfunctions::redirectToReply($topicId, $this->piVars['pid']);
+			$this->redirectToReply($topicId, $this->piVars['pid']);
 		}
 
 		// generate the marker for the admin panel
 		if (!$conf['slimPostList']) {
-			$adminPanel = tx_mmforum_postfunctions::getAdminPanel($topicData);
+			$adminPanel = $this->getAdminPanel($topicData);
 		}
 		else {
 			$adminPanel = '';
 		}
 
 		// Output post listing START
-		$template = $this->cObj->getSubpart($templateFile, empty($this->conf['LIST_POSTS_BEGIN']) ? '###LIST_POSTS_BEGIN###' : $this->conf['LIST_POSTS_BEGIN']);
+		$template = $this->local_cObj->getSubpart($templateFile, empty($conf['LIST_POSTS_BEGIN']) ? '###LIST_POSTS_BEGIN###' : $conf['LIST_POSTS_BEGIN']);
 		$marker = array(
 			'###LABEL_AUTHOR###'  => $this->pi_getLL('post.author'),
 			'###LABEL_MESSAGE###' => $this->pi_getLL('post.message'),
 			'###ADMIN_PANEL###'   => $adminPanel,
 		);
 		if ($conf['slimPostList']) {
-			$template = $this->cObj->substituteSubpart($template, '###HEADER_SUBPART###', '');
-			$template = $this->cObj->substituteSubpart($template, '###ROOTLINE_CONTAINER###', '');
-		}
+			$template = $this->local_cObj->substituteSubpart($template, '###HEADER_SUBPART###', '');
+			$template = $this->local_cObj->substituteSubpart($template, '###ROOTLINE_CONTAINER###', '');
+		}	
 
 		// Log if topic has been read since last visit
 		if ($feUserId) {
@@ -162,17 +213,17 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		$this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, array('topic_views' => 'topic_views+1'), 'topic_views');
 
 		// Generate page navigation
-		$limitCount = $this->conf['post_limit'];
+		$limitCount = $conf['post_limit'];
 		$marker['###PAGES###'] = $this->pagecount('tx_mmforum_posts', 'topic_id', $topicId, $limitCount);
 
 		// Generate breadcrumb menu
-		if ($this->conf['disableRootline']) {
-			$template = $this->cObj->substituteSubpart($template, '###ROOTLINE_CONTAINER###', '');
+		if ($conf['disableRootline']) {
+			$template = $this->local_cObj->substituteSubpart($template, '###ROOTLINE_CONTAINER###', '');
 		} else {
 			$marker['###FORUMPATH###'] = $this->get_forum_path($topicData['forum_id'], $topicId);
 		}
 
-		$marker['###PAGETITLE###'] = $this->cObj->data['header'];
+		$marker['###PAGETITLE###'] = $this->local_cObj->data['header'];
 		$marker['###TOPICICON###'] = $this->getTopicIcon($topicId);
 
 		// Retrieve topic data again
@@ -182,7 +233,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		// Determine page number
 		if ($this->piVars['page']) {
 			$pageNum = $this->piVars['page'];
-			if ($this->conf['doNotUsePageBrowseExtension']) $pageNum ++;
+			if ($conf['doNotUsePageBrowseExtension']) $pageNum ++;
 		} elseif ($this->piVars['search_pid']) {
 			$res = $this->databaseHandle->exec_SELECTquery(
 				'uid',
@@ -192,6 +243,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				'post_time ' . $orderingMode
 			);
 			$i = 0;
+			$pageNum = 0;
 			while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
 				$i++;
 				if ($row['uid'] == $this->piVars['search_pid']) {
@@ -204,13 +256,14 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		}
 		$forumpath_topic = $this->escape(stripslashes($topicData['topic_title']));
 		$topic_is        = $topicData['topic_is'];
-		$closed = $this->local_cObj->cObjGetSingle($this->conf['list_posts.']['closed'], $this->conf['list_posts.']['closed.']);
-		$prefix = $this->local_cObj->cObjGetSingle($this->conf['list_posts.']['prefix'], $this->conf['list_posts.']['prefix.']);
+		$closed = $this->local_cObj->cObjGetSingle($conf['list_posts.']['closed'], $conf['list_posts.']['closed.']);
+		$prefix = $this->local_cObj->cObjGetSingle($conf['list_posts.']['prefix'], $conf['list_posts.']['prefix.']);
 
 		// Check if solved flag is set
+		// TODO: add marker to template
 		if ($topicData['solved'] == 1) {
 			$imgInfo = array(
-				'src'   => $this->conf['path_img'] . $this->conf['images.']['solved'],
+				'src'   => $conf['path_img'] . $conf['images.']['solved'],
 				'alt'   => $this->pi_getLL('topic.isSolved'),
 				'style' => 'vertical-align: middle;'
 			);
@@ -229,11 +282,13 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		$isTopicRating = $this->isTopicRating();
 		if ($isTopicRating)
 			$marker['###TOPIC_RATING###'] = $isTopicRating ? $this->getRatingDisplay('tx_mmforum_topic', $topicData['uid']) : '';
-		else $template = $this->cObj->substituteSubpart($template, '###SUBP_TOPIC_RATING###', '');
+		else 
+			$template = $this->local_cObj->substituteSubpart($template, '###SUBP_TOPIC_RATING###', '');
 
 		// Display poll
-		if ($topicData['poll_id'] > 0 && $pageNum == 0 && $this->conf['polls.']['enable']) {
-			$marker['###POLL###'] = tx_mmforum_polls::display($topicData['poll_id']);
+		if ($topicData['poll_id'] > 0 && $pageNum == 0 && $conf['polls.']['enable']) {
+			$tx_mmforum_polls = GeneralUtility::makeInstance('tx_mmforum_polls');
+			$marker['###POLL###'] = $tx_mmforum_polls->display($topicData['poll_id']);
 		} else {
 			$marker['###POLL###'] = '';
 		}
@@ -246,7 +301,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			}
 		}
 
-		$content .= $this->cObj->substituteMarkerArray($template, $marker);
+		$content .= $this->local_cObj->substituteMarkerArray($template, $marker);
 
 		// Determine last answering date to allow a user to edit his entry
 		$res = $this->databaseHandle->exec_SELECTquery(
@@ -282,25 +337,23 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			HttpUtility::redirect($link);
 		}
 
-		$templateItem  = trim($this->cObj->getSubpart($templateFile, '###LIST_POSTS###'));
-		$templateFirst = trim($this->cObj->getSubpart($templateFile, '###LIST_POSTS_FIRST###'));
+		$templateItem  = trim($this->local_cObj->getSubpart($templateFile, '###LIST_POSTS###'));
+		$templateFirst = trim($this->local_cObj->getSubpart($templateFile, '###LIST_POSTS_FIRST###'));
 
 		$i = 1;
 		while ($row = $this->databaseHandle->sql_fetch_assoc($postList)) {
-
-			$postMarker = tx_mmforum_postfunctions::getPostListMarkers($row, $topicData, array('even' => ($i++%2)==0));
+			$postMarker = $this->getPostListMarkers($row, $topicData, array('even' => ($i++%2)==0));
 			$postMarker['###ADMIN_PANEL###'] = $adminPanel;
 			if ($row['uid'] == $topicData['topic_first_post_id'] && $templateFirst) {
-				$content .= $this->cObj->substituteMarkerArrayCached($templateFirst, $postMarker);
+				$content .= $this->local_cObj->substituteMarkerArrayCached($templateFirst, $postMarker);
 			} else {
-				$content .= $this->cObj->substituteMarkerArrayCached($templateItem, $postMarker);
+				$content .= $this->local_cObj->substituteMarkerArrayCached($templateItem, $postMarker);
 			}
-
 		}
 
 		// Output post listing END
-		$templateOptions = $this->cObj->getSubpart($templateFile, '###LIST_POSTS_OPTIONEN###');
-		$template        = $this->cObj->getSubpart($templateFile, empty($this->conf['LIST_POSTS_END']) ? '###LIST_POSTS_END###' : $this->conf['LIST_POSTS_END']);
+		$templateOptions = $this->local_cObj->getSubpart($templateFile, '###LIST_POSTS_OPTIONEN###');
+		$template        = $this->local_cObj->getSubpart($templateFile, empty($conf['LIST_POSTS_END']) ? '###LIST_POSTS_END###' : $conf['LIST_POSTS_END']);
 
 		if ((!$topicData['read_flag'] && !$topicData['closed_flag']) || $this->getIsMod($topicData['forum_id']) || $this->getIsAdmin()) {
 			if ($this->getMayWrite_topic($topicId)) {
@@ -320,9 +373,9 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		}
 
 		if ($feUserId) {
-			$marker['###POSTMAILLINK###'] = tx_mmforum_postfunctions::getSubscriptionButton($topicId, $topicData);
-			$marker['###FAVORITELINK###'] = tx_mmforum_postfunctions::getFavoriteButton($topicId, $topicData);
-			$marker['###SOLVEDLINK###']   = tx_mmforum_postfunctions::getSolvedButton($topicId, $topicData);
+			$marker['###POSTMAILLINK###'] = $this->getSubscriptionButton($topicId, $topicData);
+			$marker['###FAVORITELINK###'] = $this->getFavoriteButton($topicId, $topicData);
+			$marker['###SOLVEDLINK###']   = $this->getSolvedButton($topicId, $topicData);
 
 			if ($topicData['topic_poster'] == $feUserId || $this->getIsAdmin() || $this->getIsMod($topicData['forum_id'])) {
 				$linkParams[$this->prefixId] = array(
@@ -356,7 +409,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				$marker   = $_procObj->listPosts_footer($marker, $topicData, $this);
 			}
 		}
-		$content .= $this->cObj->substituteMarkerArray($template, $marker);
+		$content .= $this->local_cObj->substituteMarkerArray($template, $marker);
 		return $content;
 	}
 
@@ -497,20 +550,19 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 	 */
 	function getPostListMarkers($row, $topic, $extra = array()) {
 		list($userData) = $this->databaseHandle->exec_SELECTgetRows('*', 'fe_users', 'uid = ' . $row['poster_id']);
-		$mAp = tx_mmforum_postfunctions::marker_getPostmenuMarker($row, $topic);
+		$mAp = $this->marker_getPostmenuMarker($row, $topic);
 
-		$userSignature = tx_mmforum_postfunctions::marker_getUserSignature($userData);
+		$userSignature = $this->marker_getUserSignature($userData);
 		$marker = array(
 			'###LABEL_AUTHOR###'	=> $extra['###LABEL_AUTHOR###'],
 			'###LABEL_MESSAGE###'	=> $extra['###LABEL_MESSAGE###'],
-			'###ATTACHMENTS###'		=> tx_mmforum_postfunctions::marker_getAttachmentMarker($row,$topic),
-			'###POSTOPTIONS###'		=> tx_mmforum_postfunctions::marker_getPostoptionsMarker($row,$topic),
-
+			'###ATTACHMENTS###'		=> $this->marker_getAttachmentMarker($row,$topic),
+			'###POSTOPTIONS###'		=> $this->marker_getPostoptionsMarker($row,$topic),
 			'###POSTMENU###'		=> implode('', $mAp),
 			'###PROFILEMENU###'		=> $mAp['profilebuttons'],
 			'###MESSAGEMENU###'		=> $mAp['msgbuttons'],
 			'###POSTUSER###'		=> $this->ident_user($row['poster_id'], $this->conf, ($topic['topic_replies'] > 0 ? $topic['topic_poster'] : false)),
-			'###POSTTEXT###'		=> tx_mmforum_postfunctions::marker_getPosttextMarker($row, $topic) . ($this->conf['list_posts.']['appendSignatureToPostText'] ? $userSignature : ''),
+			'###POSTTEXT###'		=> $this->marker_getPosttextMarker($row, $topic) . ($this->conf['list_posts.']['appendSignatureToPostText'] ? $userSignature : ''),
 			'###ANKER###'			=> '<a name="pid' . $row['uid'] . '"></a>',	// deprecated, use "POSTANCHOR"
 			'###POSTANCHOR###'		=> '<a name="pid' . $row['uid'] . '"></a>',
 			'###POSTDATE###'		=> $this->pi_getLL('post.writtenOn').': '.$this->formatDate($row['post_time']),
@@ -546,7 +598,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		$postold = $posttext;
 
 		if ($tstamp > $cache_tstamp || $cache_tstamp == 0) {
-			$posttext = $this->bb2text($posttext,$this->conf);
+			$posttext = $this->tx_mmforum_postparser->main($this, $this->conf, $posttext, 'textparser');
 			$updateArray = array(
 				'cache_tstamp' => $GLOBALS['EXEC_TIME'],
 				'cache_text'   => $posttext
@@ -580,9 +632,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 	function marker_getUserSignature($userData) {
 		$signature = '';
 		if ($userData['tx_mmforum_user_sig']) {
-
 			if ($this->conf['signatureBBCodes']) {
-				$signature = tx_mmforum_postparser::main($this, $this->conf, $userData['tx_mmforum_user_sig'], 'textparser');
+				$signature = $this->tx_mmforum_postparser->main($this, $this->conf, $userData['tx_mmforum_user_sig'], 'textparser');
 			} else {
 				$signature = $this->escape($userData['tx_mmforum_user_sig']);
 				$signature = nl2br($signature);
@@ -633,12 +684,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		}
 
 		if ($user && $user['deleted']=='0') {
-
-			/* Generate profile button */
 			$profile .= $this->createButton('profile','profileView:'.$user['uid'],0,true);
-
-			/* Generate buttons */
-			$profile .= tx_mmforum_postfunctions::getUserButtons($user);
+			$profile .= $this->getUserButtons($user);
 		}
 
 		if ($GLOBALS['TSFE']->fe_user->user['username'] && $user['uid']!=$GLOBALS['TSFE']->fe_user->user['uid'] && !(isset($this->conf['pm_enabled']) && intval($this->conf['pm_enabled']) === 0)){
@@ -651,7 +698,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 					$pmParams['tx_mmforum_pi3']['folder'] = 'inbox';
 					$pmParams['tx_mmforum_pi3']['messid'] = $this->pi_getLL('realurl.pmnew');
 				}
-				$profile .= $this->createButton( 'pm',$pmParams,$this->conf['pm_id'],true);
+				$profile .= $this->createButton('pm',$pmParams,$this->conf['pm_id'],true);
 			}
 
 			$alertParams[$this->prefixId] = array(
@@ -675,7 +722,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 	function marker_getPostoptionsMarker($row,$topic) {
 		$lastpostdate = $topic['_v_last_post_date'];
 
-		if ((($row['poster_id'] == $this->getUserID()) AND ($lastpostdate == $row['post_time']) AND $topic['closed_flag']!=1) OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
+		if ((($row['poster_id'] == $this->getUserID()) AND ($lastpostdate == $row['post_time']) AND $topic['closed_flag']!=1) 
+		    OR $this->getIsAdmin() OR $this->getIsMod($topic['forum_id'])) {
 
 			$linkParams[$this->prefixId] = array(
 				'action'        => 'post_edit',
@@ -924,7 +972,6 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				'topic_last_post_id' => $lastpostid
 			));
 
-
 			// Refresh last post in board view
 
 			// Get last active post in topic
@@ -975,7 +1022,6 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				$link = $this->pi_getPageLink($GLOBALS['TSFE']->id,'',$linkParams);
 				HttpUtility::redirect($link);
 			} else {
-
 				$this->update_lastpost_forum($forum_id);
 				$this->update_lastpost_topic($topic_id);
 
@@ -987,7 +1033,6 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				$link = $this->pi_getPageLink($GLOBALS['TSFE']->id,'',$linkParams);
 				HttpUtility::redirect($link);
 			}
-
 		} else {
 			$template = $this->cObj->fileResource($conf['template.']['error']);
 			$marker = array();
@@ -1042,8 +1087,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				$this->update_lastpost_forum($changeForumId);
 				$this->update_lastpost_forum($oldForumId);
 				$this->update_lastpost_topic($topicId);
-				tx_mmforum_postfunctions::update_forum_posts_n_topics($oldForumId);
-				tx_mmforum_postfunctions::update_forum_posts_n_topics($changeForumId);
+				$this->update_forum_posts_n_topics($oldForumId);
+				$this->update_forum_posts_n_topics($changeForumId);
 
 				// Clearance for new indexing
 				tx_mmforum_indexing::delete_topic_ind_date($topicId);
@@ -1107,9 +1152,9 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 					'poster_id'
 				);
 				while ($row = $this->databaseHandle->sql_fetch_assoc($uRes)) {
-					tx_mmforum_postfunctions::update_user_posts($row['poster_id']);
+					$this->update_user_posts($row['poster_id']);
 				}
-				tx_mmforum_postfunctions::update_forum_posts_n_topics($topicData['forum_id']);
+				$this->update_forum_posts_n_topics($topicData['forum_id']);
 
 				$linkParams[$this->prefixId] = array(
 					'action' => 'list_topic',
@@ -1190,12 +1235,66 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		return $content;
 	}
 
+	/**
+	 * Returns a select box with a tree view of all categories and boards. The
+	 * board of the topic specified in $topic_id is selected.
+	 * @param  int    $topic_id The board containing the topic specified by this UID is
+	 *                          selected.
+	 * @return string           The HTML select box with all categories and boards.
+	 */
+	function get_forumbox($topic_id) {
+		$forum_id = $this->get_forum_id($topic_id);
+
+		$content = '<select class="tx-mmforum-select" name="'.$this->prefixId.'[change_forum_id]" size="12">';
+
+		// Load categories
+		$res = $this->databaseHandle->exec_SELECTquery(
+			'*',
+			'tx_mmforum_forums',
+			'deleted="0"
+			AND hidden="0" AND
+			parentID="0" '.
+			$this->getStoragePIDQuery().
+			$this->getCategoryLimit_query().
+			$this->getMayWrite_forum_query(),
+			'',
+			'sorting ASC'
+		);
+		while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
+			$content .= '<optgroup label="'.$this->escape($row['forum_name']).'">';
+
+			// Load boards
+			$res2 = $this->databaseHandle->exec_SELECTquery(
+				'*',
+				'tx_mmforum_forums',
+				'deleted="0" AND
+				hidden="0" AND
+				parentID="'.$row['uid'].'" '.
+				$this->getStoragePIDQuery().
+				$this->getMayWrite_forum_query(),
+				'',
+				'sorting ASC'
+			);
+			while ($row2 = $this->databaseHandle->sql_fetch_assoc($res2)) {
+				if ($row2['uid'] == $forum_id) {
+					$select = 'selected="selected"';
+				} else {
+					$select = '';
+				}
+
+				$content.= '<option value="'.$this->escape($row2['uid']).'" '.$select.'>'.$this->escape($row2['forum_name']).'</option>';
+			}
+			$content .= '</optgroup>';
+		}
+		$content .= '</select>';
+		return $content;
+	}
 
 	/**
 	 * redirects the page to a specific post
 	 *
-	 * @param	postnumber	the post number of the topic, should be a number or the keyword "last"
-	 * @return	void
+	 * @param int $topicId
+	 * @param int $postId post number of the topic, should be a number or the keyword "last"
 	 */
 	function redirectToReply($topicId, $postId) {
 		if ($postId == 'last') {

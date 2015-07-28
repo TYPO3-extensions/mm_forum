@@ -57,7 +57,7 @@ class tx_mmforum_havealookforum {
 	/**
 	 * Adds a topic to a user's list of email subscriptions.
 	 *
-	 * @param  array  $forumObj The plugin object
+	 * @param  tx_mmforum_pi1  $forumObj The plugin object
 	 * @return string           An error message in case the redirect attempt to
 	 *                          the previous page fails.
 	 */
@@ -91,7 +91,7 @@ class tx_mmforum_havealookforum {
 	/**
 	 * Removes a topic from a user's list of email subscriptions.
 	 *
-	 * @param  array  $forumObj The plugin object
+	 * @param  tx_mmforum_pi1  $forumObj The plugin object
 	 * @return string           An error message in case the redirect attempt to
 	 *                          the previous page fails.
 	 */
