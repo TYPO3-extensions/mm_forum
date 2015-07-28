@@ -226,7 +226,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 
 				$length = ($meta['text']['length']>0) ? 'maxlength="'.$meta['text']['length'].'"' : '';
 
-				$config['input'] = 'HTML';
+				$config['input'] = 'TEXT';
 				$config['input.']['value'] = '<input type="text" name="###USERFIELD_NAME###" value="###USERFIELD_VALUE###" '.$length.' />';
 				break;
 			case 'radio':
@@ -238,11 +238,11 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 						'key.'					=> array(
 							'field'					=> 'fieldvalue'
 						),
-						"$key"					=> 'HTML',
+						"$key"					=> 'TEXT',
 						"$key."					=> array(
 							'value'					=> '<div><input type="radio" name="###USERFIELD_NAME###" checked="checked" value="'.$key.'" /> '.htmlspecialchars($value).'</div>',
 						),
-						"default"					=> 'HTML',
+						"default"					=> 'TEXT',
 						"default."					=> array(
 							'value'					=> '<div><input type="radio" name="###USERFIELD_NAME###" value="'.$key.'" /> '.htmlspecialchars($value).'</div>',
 						)
@@ -261,7 +261,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 				$config['input'] = 'COA';
 				$i = 20;
 
-				$config['input.']['10'] = 'HTML';
+				$config['input.']['10'] = 'TEXT';
 				$config['input.']['10.']['value'] = '<select name="###USERFIELD_NAME###">';
 
 				foreach($meta['select']['value'] as $key=>$value) {
@@ -270,11 +270,11 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 						'key.'					=> array(
 							'field'					=> 'fieldvalue'
 						),
-						"$key"					=> 'HTML',
+						"$key"					=> 'TEXT',
 						"$key."					=> array(
 							'value'					=> '<option value="'.$key.'" selected="selected" /> '.htmlspecialchars($value).'</option>',
 						),
-						"default"					=> 'HTML',
+						"default"					=> 'TEXT',
 						"default."					=> array(
 							'value'					=> '<option value="'.$key.'" /> '.htmlspecialchars($value).'</option>',
 						)
@@ -282,7 +282,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 					$i += 10;
 				}
 
-				$config['input.'][$i] = 'HTML';
+				$config['input.'][$i] = 'TEXT';
 				$config['input.'][$i.'.']['value'] = '</select>';
 
 				$config['output'] = 'CASE';
@@ -293,7 +293,7 @@ class tx_mmforum_userFields extends tx_mmforum_usermanagement {
 				}
 			break;
 			case 'checkbox':
-				$config['input'] = 'HTML';
+				$config['input'] = 'TEXT';
 				$config['input.']['value'] = '<input type="hidden" name="###USERFIELD_NAME###" value="0" /><input type="checkbox" name="###USERFIELD_NAME###" value="1" />';
 
 				$config['output'] = 'CASE';
