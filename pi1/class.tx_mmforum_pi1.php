@@ -598,8 +598,15 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		if ($this->conf['doNotUsePageBrowseExtension']) $currentPage ++;
 
 		$limit = ($limitCount - 1) * ($currentPage) . ',' . $limitCount;
-
-		$topiclist = $this->databaseHandle->exec_SELECTquery(
+                
+                if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['listUnread']['topiclist'])) {
+                    $userFuncRef = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['listUnread']['topiclist'];                                
+                    $params = array();
+                    $params['lastlogin'] = $lastlogin;
+                    $params['limit'] = $limit;
+                    $topiclist = GeneralUtility::callUserFunction($userFuncRef, $params, $this);
+                } else {
+                    $topiclist = $this->databaseHandle->exec_SELECTquery(
 			"distinct tx_mmforum_topics.topic_title,
 			tx_mmforum_topics.topic_is,
 			tx_mmforum_topics.closed_flag,
@@ -624,7 +631,8 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			'',
 			'tx_mmforum_topics.topic_last_post_id desc',
 			$limit
-		);
+                    );
+                }
 
 		if ($this->databaseHandle->sql_num_rows($topiclist)>0) {
 			$template = $this->cObj->fileResource($conf['template.']['list_topic']);
