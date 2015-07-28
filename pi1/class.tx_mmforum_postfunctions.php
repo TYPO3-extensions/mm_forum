@@ -400,7 +400,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				$marker['###SOLVED_TRUE###']		= ($topicData['solved']  ? 'selected="selected"' : '');
 				$marker['###SOLVED_TOPICUID###']	= $topicId;
 				$marker['###ACTION###']				= $this->piVars['action'];
-				$marker['###FORMACTION###']         = $this->escapeURL($this->tools->getAbsoluteUrl($this->pi_getPageLink($GLOBALS['TSFE']->id)));
+				$marker['###FORMACTION###']         = $this->escapeURL($this->pi_getPageLink($GLOBALS['TSFE']->id));
 			} else {
 				$template_option = $this->cObj->substituteSubpart($templateOptions, '###SOLVEDOPTION###', '');
 			}
@@ -1222,7 +1222,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			);
 
 			// Create action link for form
-			$marker['###ACTIONLINK###'] = $this->escapeURL($this->tools->getAbsoluteUrl($this->pi_linkTP_keepPIvars_url()));
+			$marker['###ACTIONLINK###'] = $this->escapeURL($this->pi_linkTP_keepPIvars_url());
 
 			// Generate prefix list
 			$prefixes = GeneralUtility::trimExplode(',', $this->conf['prefixes']);
