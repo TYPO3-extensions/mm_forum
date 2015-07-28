@@ -39,21 +39,6 @@ use TYPO3\CMS\Frontend\Plugin\AbstractPlugin;
 class tx_mmforum_tools extends AbstractPlugin {
 
 	/**
-	 * The TYPO3 database object
-	 *
-	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
-	 */
-	protected $databaseHandle;
-
-	/**
-	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
-	 */
-	public function __construct() {
-		parent::__construct();
-		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
-	}
-
-	/**
 	 * Resizes an image.
 	 * @param  string $image  The original image URL
 	 * @param  int    $width  The desired maximum image width
@@ -97,10 +82,10 @@ class tx_mmforum_tools extends AbstractPlugin {
 	 * @param  int    $userId  The user UID
 	 * @return string          The user name
 	 */
-	function get_username($userId) {
-		$res = $this->databaseHandle->exec_SELECTquery('username', 'fe_users', 'uid = ' . intval($userId));
-		if ($this->databaseHandle->sql_num_rows($res) > 0) {
-			list($username) = $this->databaseHandle->sql_fetch_row($res);
+	static function get_username($userId) {
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('username', 'fe_users', 'uid = ' . intval($userId));
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+			list($username) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 			return $username;
 		} else {
 			return '';
@@ -227,9 +212,9 @@ class tx_mmforum_tools extends AbstractPlugin {
 	 * @author  Martin Helmich <m.helmich@mittwald.de>
 	 * @version 2007-11-24
 	 */
-	function getUserGroup($uid) {
-		$res = $this->databaseHandle->exec_SELECTquery('*', 'fe_groups', 'uid = ' . intval($uid));
-		return $this->databaseHandle->sql_fetch_assoc($res);
+	static function getUserGroup($uid) {
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_groups', 'uid = ' . intval($uid));
+		return $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 	}
 
 		/**
@@ -278,7 +263,7 @@ class tx_mmforum_tools extends AbstractPlugin {
 	 * @return  string        A list of group uids as commaseperated list
 	 * @param   int    $group A group UID or a commaseperated list of group UIDs
 	 */
-	function getParentUserGroupsR($group) {
+	static function getParentUserGroupsR($group) {
 		$result = '';
 		if (strpos($group, ',') !== false) {
 			$groups = GeneralUtility::intExplode(',', $group);
@@ -287,9 +272,9 @@ class tx_mmforum_tools extends AbstractPlugin {
 			}
 		} else {
 			$group = intval($group);
-			$res = $this->databaseHandle->exec_SELECTquery('*', 'fe_groups', 'FIND_IN_SET(' . $group . ', subgroup) AND deleted = 0');
-			if ($this->databaseHandle->sql_num_rows($res)) {
-				$row = $this->databaseHandle->sql_fetch_assoc($res);
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery('*', 'fe_groups', 'FIND_IN_SET(' . $group . ', subgroup) AND deleted = 0');
+			if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+				$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
 				$result = $group . ',' . tx_mmforum_tools::getParentUserGroupsR($row['uid']);
 			} else {
 				$result = $group . ',';
@@ -387,12 +372,12 @@ class tx_mmforum_tools extends AbstractPlugin {
 			if ($GLOBALS['tx_mmforum_tools']['grpCache'][$group]) {
 				$sGroups[] = $GLOBALS['tx_mmforum_tools']['grpCache'][$group];
 			} else {
-				$res = $this->databaseHandle->exec_SELECTquery(
+				$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 					'title',
 					'fe_groups',
 					'uid = ' . intval($group)
 				);
-				list($grouptitle) = $this->databaseHandle->sql_fetch_row($res);
+				list($grouptitle) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 				$GLOBALS['tx_mmforum_tools']['grpCache'][$group] = $grouptitle;
 				$sGroups[] = $grouptitle;
 			}
@@ -473,16 +458,17 @@ class tx_mmforum_tools extends AbstractPlugin {
 	 * @param   string $key The variable key
 	 * @param   mixed $default The default value in case the variable is not found.
 	 * @return mixed|null
+	 * @deprecated not in use
 	 */
 	function getCacheVar($key, $default = null) {
 		$cachedVal = null;
-		$res = $this->databaseHandle->exec_SELECTquery(
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
 			'value',
 			'tx_mmforum_cache',
-			'cache_key = ' . $this->databaseHandle->fullQuoteStr($key, 'tx_mmforum_cache')
+			'cache_key = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($key, 'tx_mmforum_cache')
 		);
-		if ($this->databaseHandle->sql_num_rows($res) > 0) {
-			list($cachedVal) = $this->databaseHandle->sql_fetch_row($res);
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res) > 0) {
+			list($cachedVal) = $GLOBALS['TYPO3_DB']->sql_fetch_row($res);
 		}
 		return ($cachedVal !== null ? unserialize($cachedVal) : $default);
 	}
@@ -494,11 +480,12 @@ class tx_mmforum_tools extends AbstractPlugin {
 	 * @version 2008-06-22
 	 * @param   string $key The variable key
 	 * @return  void
+	 * @deprecated not in use
 	 */
 	function deleteCacheVar($key) {
-		$this->databaseHandle->exec_DELETEquery(
+		$GLOBALS['TYPO3_DB']->exec_DELETEquery(
 			'tx_mmforum_cache',
-			'cache_key = ' . $this->databaseHandle->fullQuoteStr($key, 'tx_mmforum_cache')
+			'cache_key = ' . $GLOBALS['TYPO3_DB']->fullQuoteStr($key, 'tx_mmforum_cache')
 		);
 	}
 
