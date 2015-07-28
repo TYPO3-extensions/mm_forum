@@ -731,7 +731,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnread_listitem'])) {
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listUnread_listitem'] as $_classRef) {
 					$_procObj = & GeneralUtility::getUserObj($_classRef);
-					$marker = $_procObj->listUnread_listitem($marker, $row, $this);
+					$marker = $_procObj->listUnread_listitem($marker, $row, $this, $conf);
 				}
 			}
 
@@ -1474,7 +1474,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_topicItem'])) {
 				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_topicItem'] as $_classRef) {
 					$_procObj = &GeneralUtility::getUserObj($_classRef);
-					$marker = $_procObj->listTopics_topicItem($marker, $row, $this);
+					$marker = $_procObj->listTopics_topicItem($marker, $row, $this, $conf);
 				}
 			}
 
