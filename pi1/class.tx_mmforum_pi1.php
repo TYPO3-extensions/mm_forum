@@ -2727,6 +2727,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 						'tx_mmforum_pi1[tid]'     => $topicId,
 						'tx_mmforum_pi1[pid]'     => $postId
 					);
+                                        
+                                        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_linkParams'])) {
+                                            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['newPost_linkParams'] as $classRef) {
+                                                $procObj = & GeneralUtility::getUserObj($classRef);
+                                                $linkParams = $procObj->newPost_linkParams($linkParams, $this);
+                                            }
+                                        }
 
 					$link = $this->pi_getPageLink($GLOBALS['TSFE']->id, '', $linkParams);
 
