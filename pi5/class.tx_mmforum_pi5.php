@@ -105,7 +105,8 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 	 * @return  string          The content
 	 */
 	function listUserdata ($content) {
-		switch ( GeneralUtility::_GP('action')) {
+                $action = GeneralUtility::_GP('action');
+		switch ($action) {
 			case 'change_data':
 				$this->writeUserdata($content);
 				break;
@@ -115,6 +116,14 @@ class tx_mmforum_pi5 extends tx_mmforum_base {
 			case 'change_pass':
 				$content .= $this->changePassword($this->piVars['newpass1'], $this->piVars['newpass2'], $this->piVars['oldpass']);
 				break;
+                        default:
+                                if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['listUserdata'][$action])) {
+                                    $userFuncRef = $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['listUserdata'][$action];                                
+                                    $params = array();
+                                    $params['content'] = $content;
+                                    $content = GeneralUtility::callUserFunction($userFuncRef, $params, $this);
+                                }
+                        break;
 		}
 
 		$template = $this->cObj->fileResource($this->conf['template']);
