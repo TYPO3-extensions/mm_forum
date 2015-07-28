@@ -1113,6 +1113,13 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			if ($this->piVars['prefix_selected']) {
 				$updateArray['topic_is'] = $this->piVars['prefix_selected'];
 			}
+                        
+                        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['saveAdminChanges_updateArray'])) {
+                            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['saveAdminChanges_updateArray'] as $_classRef) {
+                                $_procObj = &GeneralUtility::getUserObj($_classRef);
+                                $updateArray = $_procObj->saveAdminChanges_updateArray($updateArray, $this);
+                            }
+                        }
 
 			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . $topicId, $updateArray);
 
