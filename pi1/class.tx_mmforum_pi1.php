@@ -1307,6 +1307,13 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 		if ($this->conf['doNotUsePageBrowseExtension']) $currentPage ++;
 
 		$limit = ($limitcount-1)*($currentPage) . ',' . $limitcount;
+                
+                if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_limit'])) {
+                    foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_limit'] as $_classRef) {
+                        $_procObj = & GeneralUtility::getUserObj($_classRef);
+                        $limit = $_procObj->listTopics_header($limitcount, $currentPage, $this);
+                    }
+                }
 
 		$solvedCon = ($this->piVars['hide_solved'] ? ' AND t.solved=0 ' : '');
 		$shadowCon = ($this->conf['enableShadows'] ? '' : ' AND t.shadow_tid=0 ');
