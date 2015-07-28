@@ -1311,7 +1311,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
                 if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_limit'])) {
                     foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listTopics_limit'] as $_classRef) {
                         $_procObj = & GeneralUtility::getUserObj($_classRef);
-                        $limit = $_procObj->listTopics_header($limitcount, $currentPage, $this);
+                        $limit = $_procObj->listTopics_limit($limitcount, $currentPage, $this);
                     }
                 }
 
