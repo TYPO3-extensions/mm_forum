@@ -2972,6 +2972,14 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 				'###CLEAN###'     => $this->pi_getLL('markItUp-Clean'),
 				'###PREVIEW###'   => $this->pi_getLL('markItUp-Preview')
 			);
+                        
+                        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['includeEditorJavaScript_marker'])) {
+                            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['includeEditorJavaScript_marker'] as $_classRef) {
+                                $_procObj = &GeneralUtility::getUserObj($_classRef);
+                                $jsmarker = $_procObj->includeEditorJavaScript_marker($jsmarker, $this);
+                            }
+                        }
+                        
 			$js = "\n".$this->cObj->substituteMarkerArray($this->conf['jQueryEditorJavaScript'], $jsmarker);
 		}
 		if (!empty($this->conf['editorJavaScript'])) {
