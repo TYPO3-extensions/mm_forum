@@ -442,6 +442,13 @@ class tx_mmforum_havealook {
 			'###BOARDNAME###' => $forumObj->conf['boardName'],
 			'###TEAM###'      => $forumObj->conf['teamName']
 		);
+                
+                if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['notifyTopicSubscribers_marker'])) {
+                    foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['notifyTopicSubscribers_marker'] as $_classRef) {
+                        $_procObj = &GeneralUtility::getUserObj($_classRef);
+                        $marker = $_procObj->notifyTopicSubscribers_marker($topicId, $marker, $forumObj);
+                    }
+                }
 
 		// get all users on this topic
 		$res = $this->databaseHandle->exec_SELECTquery(
