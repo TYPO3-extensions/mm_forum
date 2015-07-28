@@ -135,6 +135,14 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 		// Determine sorting mode
 		$orderingMode = $conf['list_posts.']['postOrdering'] ? strtoupper($conf['list_posts.']['postOrdering']) : 'ASC';
 		$order = strtoupper($order);
+                
+                if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listPost_order'])) {
+                    foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['mm_forum']['forum']['listPost_order'] as $_classRef) {
+                        $_procObj = &GeneralUtility::getUserObj($_classRef);
+                        $order = $_procObj->listPost_order($order, $this);
+                    }
+                }
+                
 		if (in_array($order, array('ASC','DESC'))) $orderingMode = $order;
 		if (!in_array($orderingMode, array('ASC','DESC'))) $orderingMode = 'ASC';
 
