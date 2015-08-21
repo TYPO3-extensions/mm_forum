@@ -602,7 +602,7 @@ CREATE TABLE tx_mmforum_postqueue (
 # Table structure for table "tx_mmforum_forummail"
 #
 CREATE TABLE tx_mmforum_forummail (
-	uid int(11) unsigned auto_increment,
+	uid int(11) unsigned NOT NULL auto_increment,
 	pid int(11) unsigned default '0',
 	tstamp int(11) unsigned default '0',
 	crdate int(11) unsigned default '0',
@@ -621,7 +621,7 @@ CREATE TABLE tx_mmforum_forummail (
 # Table structure for table "tx_mmforum_cache"
 #
 CREATE TABLE tx_mmforum_cache (
-	uid int(11) unsigned auto_increment,
+	uid int(11) unsigned NOT NULL auto_increment,
 	tstamp int(11) unsigned default '0',
 	cache_key tinytext NOT NULL,
 	cache_value text NOT NULL,
