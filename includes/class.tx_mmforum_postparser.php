@@ -29,7 +29,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 if ( ExtensionManagementUtility::isLoaded('geshilib')) {
 	include_once ( ExtensionManagementUtility::siteRelPath('geshilib') . 'res/geshi.php' );
 } elseif (!class_exists("GeSHi")) { // Checks if there is an instance of this class already in use!
-	include_once ( ExtensionManagementUtility::extPath('mm_forum') . 'includes/geshi/geshi.php' );
+	include_once ( ExtensionManagementUtility::extPath('mm_forum') . 'res/geshi/geshi.php' );
 }
 
 /**
