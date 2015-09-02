@@ -59,13 +59,13 @@ class tx_mmforum_havealook {
 	 *
 	 * @var \TYPO3\CMS\Core\Database\DatabaseConnection
 	 */
-	protected $databaseHandle;
+	static protected $databaseHandle;
 
 	/**
 	 * Constructor. takes the database handle from $GLOBALS['TYPO3_DB']
 	 */
 	public function __construct() {
-		$this->databaseHandle = $GLOBALS['TYPO3_DB'];
+		self::$databaseHandle = $GLOBALS['TYPO3_DB'];
 	}
 
 	/**
@@ -97,7 +97,7 @@ class tx_mmforum_havealook {
 
 		if ($feUserId && $topicId) {
 			// Executing database operation
-			$this->databaseHandle->exec_DELETEquery(
+			self::$databaseHandle->exec_DELETEquery(
 				'tx_mmforum_topicmail',
 				'user_id = ' . $feUserId . ' AND topic_id = ' . $topicId . $forumObj->getStoragePIDQuery()
 			);
@@ -136,12 +136,12 @@ class tx_mmforum_havealook {
 			if ($forumObj->piVars['deltid']) {
 				$deleleTopicId = intval($forumObj->piVars['deltid']);
 				if ($forumObj->piVars['delmode'] == 'topic') {
-					$this->databaseHandle->exec_DELETEquery(
+					self::$databaseHandle->exec_DELETEquery(
 						'tx_mmforum_topicmail',
 						'user_id = ' . $feUserId . ' AND topic_id = ' . $deleleTopicId . $forumObj->getStoragePIDQuery()
 					);
 				} else {
-					$this->databaseHandle->exec_DELETEquery(
+					self::$databaseHandle->exec_DELETEquery(
 						'tx_mmforum_forummail',
 						'user_id = ' . $feUserId . ' AND forum_id = ' . $deleleTopicId . $forumObj->getStoragePIDQuery()
 					);
@@ -152,13 +152,13 @@ class tx_mmforum_havealook {
 			// Delete several subscriptions (through the checkboxes)
 			if ($forumObj->piVars['havealook_action'] == 'delete') {
 				foreach ((array) $forumObj->piVars['fav_delete']['topic'] as $deleleTopicId) {
-					$this->databaseHandle->exec_DELETEquery(
+					self::$databaseHandle->exec_DELETEquery(
 						'tx_mmforum_topicmail',
 						'user_id = ' . $feUserId . ' AND topic_id = ' . intval($deleleTopicId) . $forumObj->getStoragePIDQuery()
 					);
 				}
 				foreach ((array) $forumObj->piVars['fav_delete']['forum'] as $deleleTopicId) {
-					$this->databaseHandle->exec_DELETEquery(
+					self::$databaseHandle->exec_DELETEquery(
 						'tx_mmforum_forummail',
 						'user_id = ' . $feUserId . ' AND forum_id = ' . intval($deleleTopicId) . $forumObj->getStoragePIDQuery()
 					);
@@ -287,16 +287,16 @@ class tx_mmforum_havealook {
 			}
 
 			$sql .= 'ORDER BY ' . $order;
-			$res = $this->databaseHandle->sql_query($sql);
+			$res = self::$databaseHandle->sql_query($sql);
 
-			if ($this->databaseHandle->sql_num_rows($res) == 0) {
+			if (self::$databaseHandle->sql_num_rows($res) == 0) {
 				$template = $forumObj->cObj->getSubpart($templateFile, '###LIST_HAVEALOOK_EMPTY###');
 				$content .= $forumObj->cObj->substituteMarker($template, '###LLL_HAVEALOOK_EMPTY###', $forumObj->pi_getLL('havealook.empty'));
 			} else {
 				$template = $forumObj->cObj->getSubpart($templateFile, '###LIST_HAVEALOOK###');
 
 				// go through every found subscription
-				while ($row = $this->databaseHandle->sql_fetch_assoc($res)) {
+				while ($row = self::$databaseHandle->sql_fetch_assoc($res)) {
 					if ($row['notify_mode'] == 'topic') {
 						$linkParams[$forumObj->prefixId] = array(
 							'action' => 'list_post',
@@ -382,13 +382,13 @@ class tx_mmforum_havealook {
 		$topicId  = intval($topicId);
 		if ($feUserId && $topicId) {
 			// Executing database operations
-			$res = $this->databaseHandle->exec_SELECTquery(
+			$res = self::$databaseHandle->exec_SELECTquery(
 				'uid',
 				'tx_mmforum_topicmail',
 				'user_id = ' . $feUserId . ' AND topic_id = ' . $topicId . $forumObj->getStoragePIDQuery()
 			);
 
-			if ($this->databaseHandle->sql_num_rows($res) < 1) {
+			if (self::$databaseHandle->sql_num_rows($res) < 1) {
 				$insertData = array(
 					'pid'      => $forumObj->getStoragePID(),
 					'tstamp'   => $GLOBALS['EXEC_TIME'],
@@ -396,7 +396,7 @@ class tx_mmforum_havealook {
 					'topic_id' => $topicId,
 					'user_id'  => $feUserId
 				);
-				return $this->databaseHandle->exec_INSERTquery('tx_mmforum_topicmail', $insertData);
+				return self::$databaseHandle->exec_INSERTquery('tx_mmforum_topicmail', $insertData);
 			} else {
 				// it's already added, so "it worked"
 				return true;
@@ -417,8 +417,8 @@ class tx_mmforum_havealook {
 	 */
 	function notifyTopicSubscribers($topicId, \tx_mmforum_base $forumObj) {
 		$topicId = intval($topicId);
-		$res = $this->databaseHandle->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . $topicId  . $forumObj->getStoragePIDQuery());
-		list($topicName) = $this->databaseHandle->sql_fetch_row($res);
+		$res = self::$databaseHandle->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . $topicId  . $forumObj->getStoragePIDQuery());
+		list($topicName) = self::$databaseHandle->sql_fetch_row($res);
 
 		$template = $forumObj->pi_getLL('ntfMail.text');
 
@@ -452,7 +452,7 @@ class tx_mmforum_havealook {
                 }
 
 		// get all users on this topic
-		$res = $this->databaseHandle->exec_SELECTquery(
+		$res = self::$databaseHandle->exec_SELECTquery(
 			'DISTINCT tx_mmforum_topicmail.user_id, fe_users.email, fe_users.' . $forumObj->getUserNameField(),
 			'tx_mmforum_topicmail, fe_users',
 			'tx_mmforum_topicmail.user_id = fe_users.uid AND tx_mmforum_topicmail.topic_id = ' . $topicId .
@@ -460,7 +460,7 @@ class tx_mmforum_havealook {
 		);
 
 		// loop through each user who subscribed
-		while (list($toUserId, $toEmail, $toUsername) = $this->databaseHandle->sql_fetch_row($res)) {
+		while (list($toUserId, $toEmail, $toUsername) = self::$databaseHandle->sql_fetch_row($res)) {
 			$marker['###USERNAME###'] = $forumObj->escape($toUsername);
 			$mailtext = $forumObj->cObj->substituteMarkerArrayCached($template, $marker);
 
@@ -519,11 +519,11 @@ class tx_mmforum_havealook {
 	 * @author Cyrill Helg
 	 */
 	static function notifyForumSubscribers($topicId, $forumId, \tx_mmforum_base $forumObj) {
-		$res = $this->databaseHandle->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . intval($topicId) . $forumObj->getStoragePIDQuery());
-		list($topicName) = $this->databaseHandle->sql_fetch_row($res);
+		$res = self::$databaseHandle->exec_SELECTquery('topic_title', 'tx_mmforum_topics', 'uid = ' . intval($topicId) . $forumObj->getStoragePIDQuery());
+		list($topicName) = self::$databaseHandle->sql_fetch_row($res);
 
-		$res = $this->databaseHandle->exec_SELECTquery('forum_name, parentID', 'tx_mmforum_forums', 'uid = ' . intval($forumId) . $forumObj->getStoragePIDQuery());
-		list($forumName, $categoryId) = $this->databaseHandle->sql_fetch_row($res);
+		$res = self::$databaseHandle->exec_SELECTquery('forum_name, parentID', 'tx_mmforum_forums', 'uid = ' . intval($forumId) . $forumObj->getStoragePIDQuery());
+		list($forumName, $categoryId) = self::$databaseHandle->sql_fetch_row($res);
 
 		// prepare the template (the variables that don't change all the time need only to be set once)
 		$linkParams[$forumObj->prefixId] = array(
@@ -553,7 +553,7 @@ class tx_mmforum_havealook {
 		);
 
 		// loop through each user who subscribed
-		$res = $this->databaseHandle->exec_SELECTquery(
+		$res = self::$databaseHandle->exec_SELECTquery(
 			'DISTINCT tx_mmforum_forummail.user_id, fe_users.email, fe_users.' . $forumObj->getUserNameField(),
 			'tx_mmforum_forummail, fe_users',
 			'tx_mmforum_forummail.user_id = fe_users.uid AND
@@ -564,7 +564,7 @@ class tx_mmforum_havealook {
 			 tx_mmforum_forummail.user_id != ' . intval($GLOBALS['TSFE']->fe_user->user['uid']) . $forumObj->getStoragePIDQuery('tx_mmforum_forummail')
 		);
 
-		while (list($toUserId, $toEmail, $toUsername) = $this->databaseHandle->sql_fetch_row($res)) {
+		while (list($toUserId, $toEmail, $toUsername) = self::$databaseHandle->sql_fetch_row($res)) {
 			$marker['###USERNAME###'] = $forumObj->escape($toUsername);
 			$mailtext = $forumObj->cObj->substituteMarkerArrayCached($template, $marker);
 
