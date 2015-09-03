@@ -974,7 +974,7 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 			list($lastpostid) = $this->databaseHandle->sql_fetch_row($res);
 
 			// Decrease topic reply counter
-			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics', 'WHERE uid = '.$topic_id, array(
+			$this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics', 'uid = '.$topic_id, array(
 				'tx_mmforumsearch_index_write' => 0,
 				'topic_replies' => 'topic_replies-1',
 				'topic_last_post_id' => $lastpostid
