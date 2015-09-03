@@ -3950,7 +3950,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 	 */
 	function update_lastpost_topic($topicId) {
 		$updateArray = array(
-			'topic_last_post_id' => $this->get_last_post($topicId),
+			'topic_last_post_id' => self::get_last_post($topicId),
 			'tstamp'             => $GLOBALS['EXEC_TIME']
 		);
 		$res = $this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics', 'uid = ' . intval($topicId), $updateArray);

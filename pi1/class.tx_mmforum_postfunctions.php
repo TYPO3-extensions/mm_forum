@@ -1020,8 +1020,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				);
 				$this->databaseHandle->exec_UPDATEquery('tx_mmforum_topics',"shadow_tid='$topic_id'",$updateArray);
 
-				$this->update_lastpost_forum($forum_id);
-				$this->update_lastpost_topic($topic_id);
+				tx_mmforum_pi1::update_lastpost_forum($forum_id);
+				tx_mmforum_pi1::update_lastpost_topic($topic_id);
 
 				$linkParams[$this->prefixId] = array(
 					'action'    => 'list_topic',
@@ -1030,8 +1030,8 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				$link = $this->pi_getPageLink($GLOBALS['TSFE']->id,'',$linkParams);
 				HttpUtility::redirect($link);
 			} else {
-				$this->update_lastpost_forum($forum_id);
-				$this->update_lastpost_topic($topic_id);
+				tx_mmforum_pi1::update_lastpost_forum($forum_id);
+				tx_mmforum_pi1::update_lastpost_topic($topic_id);
 
 				$linkParams[$this->prefixId] = array(
 					'action'    => 'list_post',
@@ -1092,9 +1092,9 @@ class tx_mmforum_postfunctions extends tx_mmforum_base {
 				$this->databaseHandle->exec_UPDATEquery('tx_mmforum_posts',  'topic_id = ' . $topicId, $updateArray);
 
 				// update the posts in the old and the new forum
-				$this->update_lastpost_forum($changeForumId);
-				$this->update_lastpost_forum($oldForumId);
-				$this->update_lastpost_topic($topicId);
+				tx_mmforum_pi1::update_lastpost_forum($changeForumId);
+				tx_mmforum_pi1::update_lastpost_forum($oldForumId);
+				tx_mmforum_pi1::update_lastpost_topic($topicId);
 				$this->update_forum_posts_n_topics($oldForumId);
 				$this->update_forum_posts_n_topics($changeForumId);
 
