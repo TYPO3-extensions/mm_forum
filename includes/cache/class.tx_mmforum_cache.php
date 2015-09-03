@@ -123,7 +123,7 @@ class tx_mmforum_cache implements \TYPO3\CMS\Core\SingletonInterface {
 		else $useMode = 'database';
 
 		/* Compose class name and instantiate */
-		if (isset($GLOBALS['typo3CacheManager'])) {
+		if (isset($this->typo3CacheManager)) {
 			$this->useTYPO3Cache = TRUE;
 
 			if ($useMode == 'database')
