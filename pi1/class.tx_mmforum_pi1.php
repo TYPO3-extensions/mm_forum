@@ -1681,7 +1681,7 @@ class tx_mmforum_pi1 extends tx_mmforum_base {
 			't.uid',
 			'tx_mmforum_topics t, tx_mmforum_forums f, tx_mmforum_forums c, fe_users u',
 			't.deleted = 0 AND t.hidden = 0 AND
-				f.uid = t.forum_id AND c.uid = f.parentID AND t.topic_poster = u.uid' .
+				f.uid = t.forum_id AND c.uid = f.parentID AND t.topic_poster = u.uid ' .
 				$addWhere . $this->getStoragePIDQuery('t,f,c') .
 				$this->getMayRead_forum_query('c') .
 				$this->getMayRead_forum_query('f') .
