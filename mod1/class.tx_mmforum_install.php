@@ -691,7 +691,9 @@ class tx_mmforum_install {
 								'pid' => $add_pid,
 								'setValue' => 'prepend'
 							),
-							'script' => 'wizard_add.php',
+							'module' => array(
+								'name' => 'wizard_add'
+							)
 						)
 					):false
 				)

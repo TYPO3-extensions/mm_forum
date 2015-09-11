@@ -561,7 +561,9 @@ $TCA['tx_mmforum_posts_text'] = array(
 						'type' => 'script',
 						'title' => 'Full screen Rich Text Editing|Formatteret redigering i hele vinduet',
 						'icon' => 'wizard_rte2.gif',
-						'script' => 'wizard_rte.php',
+						'module' => array(
+							'name' => 'wizard_rte'
+						)
 					),
 				),
 			)
@@ -1538,7 +1540,9 @@ $TCA['tx_mmforum_ranks'] = array(
 						"type"          => "colorbox",
 						"dim"           => "12x12",
 						"tableStyle"    => "border:solid 1px black;",
-						"script"        => "wizard_colorpicker.php",
+						"module"		=> array(
+							"name" => "wizard_colorpicker"
+						),
 						"JSopenParams"  => "height=300,width=250,status=0,menubar=0,scrollbars=1",
 					),
 				),
