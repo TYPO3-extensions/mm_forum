@@ -171,7 +171,7 @@ class tx_mmforum_indexing {
 	            'post_crdate'       => $topicData['crdate'],
 	            'post_cruser'       => $topicData['topic_poster'],
 	            'reqUserGroups_f'   => $sFGroups,
-	            'reqUserGruops_c'   => $sCGroups,
+	            'reqUserGroups_c'   => $sCGroups,
 	            'is_header'			=> 1,
 	        );
 
